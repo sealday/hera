@@ -115,6 +115,12 @@ exports.updateUser = (req, res, next) => {
 
     // TODO 这样子分两步会有事务问题吧？ 在只有一个人操作的情况下不会
     user.save().then(() => {
+
+      // TODO 只有管理员自己修改自己的时候会出现这个问题
+      if (user._id == req.session.user._id) {
+        req.session.user = user;
+      }
+
       return res.redirect('/project?info=更新操作员信息成功');
     }).catch(err => {
       next(err);

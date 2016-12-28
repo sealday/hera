@@ -37,7 +37,8 @@ exports.post = (req, res, next) => {
   });
 
   // 初始化对象 Mixed 类型需要自己初始化
-  project.current = {};
+  // TODO 考虑在初始化项目的时候设置物品的剩余量
+  project.current = { '钢管': 0 };
 
   project.save().then(() => {
     res.redirect(`/project?info=添加 ${project.name} 的信息成功`);
