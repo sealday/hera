@@ -1,0 +1,46 @@
+doctype html
+html(lang='zh-CN')
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0')
+    meta(http-equiv='X-UA-Compatible', content='ie=edge')
+    title= title
+    link(rel='stylesheet', href='https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css')
+    link(rel='stylesheet', href='https://cdn.bootcss.com/datatables/1.10.13/css/jquery.dataTables.min.css')
+    //link(rel='stylesheet', href='https://cdn.bootcss.com/datatables/1.10.13/css/dataTables.bootstrap.min.css')
+
+    link(rel='stylesheet', href='/css/style.css')
+  body
+    nav(class='navbar navbar-default navbar-fixed-top')
+      div(class='container-fluid')
+        div(class='navbar-header')
+          button(
+          type='button'
+          class='navbar-toggle collapsed'
+          data-toggle='collapse'
+          data-target='#navbar-menu')
+            span(class='sr-only') Toggle navigation
+            span(class='icon-bar')
+            span(class='icon-bar')
+            span(class='icon-bar')
+          a(class='navbar-brand') 赫拉管理系统
+        div(class='collapse navbar-collapse' id='navbar-menu')
+          ul(class='nav navbar-nav')
+            li(class=page == 'dashboard' ? 'active' : '')
+              a(href='/') 控制面板
+            if user && user.username == 'hera'
+              li(class=page == 'manager' ? 'active' : '')
+                a(href='/project') 管理界面
+          ul(class='nav navbar-nav navbar-right')
+            if user
+              li
+                a(href='/logout') 退出
+              li
+                a= user.profile.name
+
+    div(class='container-fluid')
+      block content
+    script(src='https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js')
+    script(src='https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js')
+    script(src='https://cdn.bootcss.com/datatables/1.10.13/js/jquery.dataTables.min.js')
+    script(src='/js/app.js')

@@ -1,0 +1,15 @@
+extends ../layout
+
+block content
+
+  h2 物料明细填写
+
+  // 保存订单记录
+  p(hidden=true, id='order-id')= id
+
+
+
+
+  div
+    //button(class='btn btn-default action-back') 返回
+    button(class='btn btn-primary pull-right', id='order-detail-next') 下一步

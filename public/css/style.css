@@ -1,0 +1,80 @@
+body {
+  padding-top: 50px;
+  font: 14px "微软雅黑", "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+
+/*
+
+ */
+.table-clean>tbody>tr>td,
+.table-clean>tbody>tr>th,
+.table-clean>tfoot>tr>td,
+.table-clean>tfoot>tr>th,
+.table-clean>thead>tr>td,
+.table-clean>thead>tr>th {
+  border-top: 1px solid white;
+}
+
+.table-bottom-border>tbody>tr>td,
+.table-bottom-border>tbody>tr>th,
+.table-bottom-border>tfoot>tr>td,
+.table-bottom-border>tfoot>tr>th,
+.table-bottom-border>thead>tr>td,
+.table-bottom-border>thead>tr>th {
+  border-bottom: 1px solid black;
+}
+
+.cell-left-border {
+  border-left: 1px solid black;
+}
+
+.cell-right-border {
+  border-right: 1px solid black;
+}
+
+.table-top-border>thead>tr>th {
+  border-top: 1px solid black;
+}
+
+.table-top-border>thead:first-child>tr:first-child>th {
+  border-top: 1px solid black;
+}
+
+/*登录页面*/
+#login-form {
+  margin:  3em auto;
+  max-width: 500px;
+}
+
+/* 物料详情的表格 */
+
+#details-wrapper {
+  margin-top: 2em;
+  margin-bottom: 2em;
+  width: 100%;
+  position: relative;
+}
+
+
+.form-inline label {
+  margin-left: 0.3em;
+  margin-right: 0.3em;
+}
+.form-inline .btn {
+  margin-left: 0.3em;
+  margin-right: 0.3em;
+}
+/*label {*/
+/*}*/
+
+/*.btn {*/
+/*}*/
+
+#order-create-button {
+  margin-top: 1em;
+}

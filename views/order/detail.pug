@@ -1,0 +1,64 @@
+extends ../layout
+
+block content
+
+  h3(class='text-center') 上海创兴建筑设备租赁有限公司
+  h3(class='text-center') 发料单
+
+
+  table(class='table table-clean')
+    tbody
+      tr
+        td 承租单位：
+        td 中建七局
+        td 日期：
+        td 2016-10-12
+        td NO：
+        td 20161010
+      tr
+        td 工程项目：
+        td 林明星
+        td 车号：
+        td 闵A R5678
+        td 车费：
+        td 30
+
+  table(class='table table-bottom-border table-top-border')
+    thead
+      tr
+        th(class='cell-left-border') 名称
+        th(class='cell-left-border') 规格
+        th(class='cell-left-border') 数量
+        th(class='cell-left-border') 小计
+        th(class='cell-left-border') 名称
+        th(class='cell-left-border') 规格
+        th(class='cell-left-border') 数量
+        th(class='cell-left-border') 小计
+        th(class='cell-left-border') 名称
+        th(class='cell-left-border') 规格
+        th(class='cell-left-border') 数量
+        th(class='cell-left-border cell-right-border') 小计
+    tbody
+      each val in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12]
+        tr
+          td(class='cell-left-border') 钢管
+          td 6
+          td 200
+          td 1200
+          td(class='cell-left-border') 钢管
+          td 6
+          td 200
+          td 1200
+          td(class='cell-left-border') 钢管
+          td 6
+          td 200
+          td(class='cell-right-border') 1200
+
+
+  div(class='hidden-print')
+    button(class='btn btn-default action-back') 返回
+    button(class='btn btn-primary pull-right', id='order-submit') 完成
+    a(href='transport', class='btn btn-primary') 填写运输协议
+
+
+
