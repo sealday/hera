@@ -16,6 +16,13 @@ const projectSchema = new Schema({
   current: Mixed,
 });
 
-const Project = mongoose.model('Project', projectSchema);
+// 不适合加在这里
+//projectSchema.pre('save', function(next) {
+//  if (!this.get('current')) {
+//    this.set('current', {});
+//  }
+//  next();
+//});
 
+const Project = mongoose.model('Project', projectSchema);
 module.exports = Project;

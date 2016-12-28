@@ -36,6 +36,9 @@ exports.post = (req, res, next) => {
     project[key] = req.body[key];
   });
 
+  // 初始化对象 Mixed 类型需要自己初始化
+  project.current = {};
+
   project.save().then(() => {
     res.redirect(`/project?info=添加 ${project.name} 的信息成功`);
   }).catch(err => {
