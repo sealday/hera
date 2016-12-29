@@ -35,7 +35,9 @@ $(function () {
 function tableLogic() {
   var dataTable = $('#details').DataTable({
     //responsive: true,
-    select: true,
+    select: {
+      style: 'single'
+    },
     buttons: ['copy', 'excel', 'pdf'],
     data: [],
     columns: [{ title: '名称' }, { title: '规格' }, { title: '数量' }, { title: '小计' }],
@@ -66,8 +68,7 @@ function tableLogic() {
   });
 
   // TODO 当熟悉的时候可以考虑去掉暴露到环境中，不过个人理解是留在这里也是OK的，可以考虑换个名字避免冲突就好
-  //return window.dataTable = dataTable;
-  return dataTable;
+  return window.dataTable = dataTable;
 }
 
 function orderCreate() {
