@@ -170,6 +170,14 @@ function orderCreate() {
   $('#order-create-button').click(function () {
     $('#order-create-form').submit();
   });
+
+
+  // 首页选择项目
+  $('.current-project-a').click(function(e) {
+    e.preventDefault();
+    $('#current-project').text($(this).text());
+    // 切换项目！
+  });
 }
 
 /**

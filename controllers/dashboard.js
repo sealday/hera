@@ -25,14 +25,12 @@ exports.index = (req, res, next) => {
 
     return Promise.all(result);
   }).then(result => {
-    //console.log(result);
     let projects = [];
     for (let i = 0; i < result.length; i += 3) {
       result[i].fromOrders = result[i + 1];
       result[i].toOrders = result[i + 2];
       projects.push(result[i]);
     }
-    //console.log(projects);
     return projects;
   }).then(projects => {
     res.render('index', {

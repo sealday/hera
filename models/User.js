@@ -21,6 +21,7 @@ const userSchema = new mongoose.Schema({
   tokens: Array,
 
   projects: Array, // 保存操作员能操作的项目
+  defaultProject: String,
 
   profile: {
     name: String,
