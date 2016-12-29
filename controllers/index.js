@@ -4,9 +4,11 @@ const router = express.Router();
 const user = require('./user');
 const project = require('./project');
 const dashboard = require('./dashboard');
+const control = require('./control');
 const order = require('./order');
 const orderRouter =  order.router;
 
+// 用户认证中间件
 router.use(user.middleware);
 
 router.get('/', function(req, res, next) {
@@ -32,7 +34,11 @@ router.get('/project/:projectId/order/:id', order.details);
 
 router.use('/order', orderRouter);
 
-router.get('/project', project.index);
+// control 即管理中心
+router.use('/control', control.middleware);
+router.get('/control', control.index);
+
+// 项目管理 API
 router.post('/project/:id', project.updateInfo);
 router.post('/project', project.post);
 router.post('/project/:id/delete', project.delete);

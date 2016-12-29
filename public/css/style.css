@@ -1,16 +1,13 @@
 body {
-  padding-top: 50px;
+  padding-top: 60px;
   font: 14px "微软雅黑", "Lucida Grande", Helvetica, Arial, sans-serif;
+  margin-bottom: 20em;
 }
 
 a {
   color: #00B7FF;
 }
 
-
-/*
-
- */
 .table-clean>tbody>tr>td,
 .table-clean>tbody>tr>th,
 .table-clean>tfoot>tr>td,

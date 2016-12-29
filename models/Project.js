@@ -9,8 +9,11 @@ const Mixed = Schema.Types.Mixed;
 const projectSchema = new Schema({
   name: String,
   fullName: String,
-  contact: String,
-  phone: String,
+  contacts: [{
+    name: String,
+    phone: String
+  }],
+  tel: String, // 公司电话
   address: String,
   comments: String,
   current: Mixed,

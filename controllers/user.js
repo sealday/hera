@@ -3,6 +3,9 @@
  */
 const User = require('../models/User');
 
+/**
+ * 用户中间件
+ */
 exports.middleware = (req, res, next) => {
   req.user = req.session.user;
   res.locals.user = req.session.user;
@@ -12,7 +15,7 @@ exports.middleware = (req, res, next) => {
     return next();
   }
 
-  if (req.path == '/' || req.path == '/login') {
+  if (req.path == '/' || req.path == '/login' || req.path == '/logout') {
     // 访问登录页面不需要检查权限
     return next();
   }
@@ -22,6 +25,9 @@ exports.middleware = (req, res, next) => {
   res.redirect(`/login?error=访问这个页面 ${req.originalUrl} 请先登录`);
 };
 
+/**
+ * 登录页面
+ */
 exports.login = (req, res) => {
   const error = req.query.error || '';
 
@@ -35,11 +41,17 @@ exports.login = (req, res) => {
   });
 };
 
+/**
+ * 处理退出请求
+ */
 exports.logout = (req, res) => {
   req.session.user = null;
   res.redirect('/login?info=您已经成功退出系统！');
 };
 
+/**
+ * 处理登录请求
+ */
 exports.postLogin = (req, res) => {
   const username = req.body['username'] || '';
   const password = req.body['password'] || '';
@@ -78,17 +90,23 @@ exports.postLogin = (req, res) => {
   });
 };
 
+
+/**
+ * 删除用户
+ */
 exports.deleteUser = (req, res, next) => {
   const id = req.params.id;
 
   User.findByIdAndRemove(id).then(() => {
-    res.redirect('/project?info=删除操作员成功！');
+    res.send('删除操作员成功！');
   }).catch(err => {
     next(err);
   });
-
 };
 
+/**
+ * 更新用户
+ */
 exports.updateUser = (req, res, next) => {
   const id = req.params.id;
   let updatedUser = {};
@@ -104,7 +122,7 @@ exports.updateUser = (req, res, next) => {
   delete updatedUser['project'];
 
   User.findById(id).then(user => {
-
+    // 密码特殊处理，如果请求中包含密码则修改密码，否则不修改
     if (updatedUser.password) {
       user.password = updatedUser.password;
     }
@@ -113,30 +131,29 @@ exports.updateUser = (req, res, next) => {
       user[key] = updatedUser[key];
     });
 
-    // TODO 这样子分两步会有事务问题吧？ 在只有一个人操作的情况下不会
-    user.save().then(() => {
-
-      // TODO 只有管理员自己修改自己的时候会出现这个问题
-      if (user._id == req.session.user._id) {
-        req.session.user = user;
-      }
-
-      return res.redirect('/project?info=更新操作员信息成功');
-    }).catch(err => {
-      next(err);
-    });
+    // TODO 使用find and update api
+    return user.save();
+  }).then(user => {
+    // 只有管理员自己修改自己的时候会出现这个问题
+    if (user._id == req.session.user._id) {
+      req.session.user = user;
+    }
+    res.send('更新操作员信息成功！');
   }).catch(err => {
     next(err);
   });
 };
 
+/**
+ * 创建新用户
+ */
 exports.newUser = (req, res, next) => {
   const username = req.body.username || '';
   const password = req.body.password || '';
   const name = req.body.name || '';
   const project = req.body.project || '';
   if (!name || !username || !password || !project) {
-    return res.redirect('/project?error=信息填写不完整');
+    return res.send('信息填写不完整！');
   }
 
   let projects = [];
@@ -153,12 +170,8 @@ exports.newUser = (req, res, next) => {
     user.projects.push(project);
   });
 
-  console.log('添加前的 user ');
-  console.log(user);
-  user.save().then((user) => {
-    console.log('添加后的 user ');
-    console.log(user);
-    return res.redirect('/project?info=添加用户成功！');
+  user.save().then(() => {
+    res.send('添加用户成功！');
   }).catch(err => {
     next(err);
   });

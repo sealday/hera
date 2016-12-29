@@ -27,10 +27,10 @@ html(lang='zh-CN')
         div(class='collapse navbar-collapse' id='navbar-menu')
           ul(class='nav navbar-nav')
             li(class=page == 'dashboard' ? 'active' : '')
-              a(href='/') 控制面板
+              a(href='/') 项目管理
             if user && user.username == 'hera'
-              li(class=page == 'manager' ? 'active' : '')
-                a(href='/project') 管理界面
+              li(class=page == 'control' ? 'active' : '')
+                a(href='/control') 管理中心
           ul(class='nav navbar-nav navbar-right')
             if user
               li
