@@ -71,3 +71,14 @@ a {
   margin-top: 1em;
 }
 
+#details tr.selected {
+  background-color: #ddd;
+}
+
+.project-store {
+  display: none;
+}
+
+.project-store.active {
+  display: block;
+}

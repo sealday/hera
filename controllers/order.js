@@ -106,6 +106,9 @@ exports.create = (req, res, next) => {
   // 我在路径里取的名字是 projectId 我记成了 id
   const id = req.params['projectId'];
 
+  res.locals.info = req.query['info'] || '';
+  res.locals.error = req.query['error'] || '';
+
   Promise.all([
     Tenant.find(),
     Project.find()
@@ -120,12 +123,21 @@ exports.create = (req, res, next) => {
       .filter(project => project.id != id)
       .map(project => project.name);
 
+    let stores = result[1].filter(project => project.type == '基地仓库');
+
+    let defaultToProject = projects[0];
+    if (currentProject.type != '基地仓库') {
+      defaultToProject = stores[0];
+    }
 
     res.render('order/create', {
       title: '调出表填写',
       tenants,
       projects,
-      currentProject
+      currentProject,
+      productTypes: companyData.productTypes,
+      stores,
+      defaultToProject
     });
   }).catch(err => {
     next(err);
@@ -144,6 +156,11 @@ exports.postOrder = (req, res, next) => {
     return res.redirect(req.path + '/create' + '?error=信息填写不完整！');
   }
 
+  const optionalFormKeys = ['comments', 'carFee', 'carNumber'];
+  optionalFormKeys.forEach(k => {
+    orderForm[k] = req.body[k] || '';
+  });
+
 
   if (!Array.isArray(orderForm.entry)) {
     orderForm.entry = [orderForm.entry];
@@ -160,9 +177,9 @@ exports.postOrder = (req, res, next) => {
   });
 
   let order = new Order();
-  formKeys.forEach(k => {
+  for (let k in orderForm) {
     order[k] = orderForm[k];
-  });
+  }
   order.total = total;
   order.username = req.user.username;
 
@@ -217,12 +234,37 @@ exports.details = (req, res, next) => {
       .filter(project => project.id != id)
       .map(project => project.name);
 
-
     res.render('order/details', {
       title: '调拨详单',
       tenants,
       projects,
       currentProject
+    });
+  }).catch(err => {
+    next(err);
+  });
+};
+
+exports.purchaseCreate = (req, res, next) => {
+  const id = req.params['projectId'];
+
+  res.locals.info = req.query['info'] || '';
+  res.locals.error = req.query['error'] || '';
+
+  Promise.all([
+    Tenant.find(),
+    Project.find()
+  ]).then(result => {
+    let tenants = result[0].map(tenant => tenant.name);
+    let currentProject = result[1].find(project => project.id == id);
+    let projects = result[1].map(project => project.name);
+
+    res.render('order/purchase', {
+      title: '采购单填写',
+      tenants,
+      projects,
+      currentProject,
+      productTypes: companyData.productTypes
     });
   }).catch(err => {
     next(err);

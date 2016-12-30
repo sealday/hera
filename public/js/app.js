@@ -30,6 +30,38 @@ $(function () {
   }
 
   orderCreate();
+
+  if (Cookies.get('project.name')) {
+    var name = Cookies.get('project.name');
+    var projectId = Cookies.get('project.id');
+    $('#current-project').html(name + '<span class="caret">');
+
+    $('.project-store').removeClass('active');
+    $('#project-store-' + name).addClass('active');
+
+    $('#order-create-buy-a').attr('href', ('/project/' + projectId + '/purchase/create'));
+    $('#order-create-sell-a').attr('href', ('/project/' + projectId + '/order/create?type=sell'));
+    $('#order-create-out-a').attr('href', ('/project/' + projectId + '/order/create'));
+    $('#order-create-in-a').attr('href', ('/project/' + projectId + '/order/create'));
+  }
+
+  // 首页选择项目
+  $('.current-project-a').click(function(e) {
+    e.preventDefault();
+    var name = $(this).text();
+    var projectId = $(this).attr('data-id');
+    $('#current-project').html(name + '<span class="caret">');
+    // 切换项目！
+    $('.project-store').removeClass('active');
+    $('#project-store-' + name).addClass('active');
+
+    $('#order-create-buy-a').attr('href', ('/project/' + projectId + '/purchase/create'));
+    $('#order-create-sell-a').attr('href', ('/project/' + projectId + '/order/create?type=sell'));
+    $('#order-create-out-a').attr('href', ('/project/' + projectId + '/order/create'));
+    $('#order-create-in-a').attr('href', ('/project/' + projectId + '/order/create'));
+    Cookies.set('project.name', name);
+    Cookies.set('project.id', projectId);
+  });
 });
 
 function tableLogic() {
@@ -40,7 +72,11 @@ function tableLogic() {
     },
     buttons: ['copy', 'excel', 'pdf'],
     data: [],
-    columns: [{ title: '名称' }, { title: '规格' }, { title: '数量' }, { title: '小计' }],
+    columns: [
+      { title: '名称', data: 'name' },
+      { title: '规格', data: 'size' },
+      { title: '数量', data: 'count' },
+      { title: '小计', data: 'total' }],
     language: {
       "decimal": "",
       "emptyTable": "还没有添加数据",
@@ -63,6 +99,11 @@ function tableLogic() {
       "aria": {
         "sortAscending": ": 顺序排列",
         "sortDescending": ": 逆序排列"
+      },
+      select: {
+        cells: " %d 单元格选中 ",
+        columns: " 选中了 %d 列 ",
+        rows: " 选中了 %d 行 "
       }
     }
   });
@@ -119,18 +160,13 @@ function orderCreate() {
 
     orderEntries.push(entry);
 
-    var row = [];
-    row.push(entry.name);
-    row.push(entry.size);
-    row.push(entry.count);
-
     // TODO 计算小计
     if (isNaN(entry.size)) {
-      row.push(entry.total = entry.count.toFixed(2));
+      entry.total = entry.count.toFixed(2);
     } else {
-      row.push(entry.total = (entry.size * entry.count).toFixed(2));
+      entry.total = (entry.size * entry.count).toFixed(2);
     }
-    dataTable.row.add(row).draw(false);
+    dataTable.row.add(entry).draw(false);
 
     // 将内容放入表单中
     // 采用这种方式而不是直接在html中添加，是考虑到后续需要增加删除的功能
@@ -145,18 +181,34 @@ function orderCreate() {
     addForm.find('input[name=size]').focus();
   });
 
+  var productTypesString;
+  var productTypeArray = [];
+  var productTypes = {};
+  if (productTypesString = $('#productTypes').text()) {
+    productTypeArray = JSON.parse(productTypesString);
+    productTypeArray.forEach(productType => {
+      productTypes[productType.name] = productType;
+    });
+    console.log(productTypes);
+  };
+
+  //$('#name').focus(function() {
+  //  var type = $('#type').val();
+  //  if (type == '租赁类') {
+  //
+  //  } else if (type == '耗损类') {
+  //
+  //  }
+  //});
+
   $('#size').focus(function () {
     var name = $('#name').val();
     var size = [];
-    switch (name) {
-      case '钢管':
-        size = [1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 3, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8, 3.9, 4, 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7, 4.8, 4.9, 5, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 5.8, 5.9, 6];
-        break;
-      case '扣件':
-        size = ['十字', '转向', '直接'];
-        break;
-      default:
-        size = [];
+
+    if (productTypes[name.trim()]) {
+      size = productTypes[name.trim()].sizes;
+    } else {
+      size = [];
     }
 
     var sizeList = [];
@@ -172,13 +224,6 @@ function orderCreate() {
     $('#order-create-form').submit();
   });
 
-
-  // 首页选择项目
-  $('.current-project-a').click(function(e) {
-    e.preventDefault();
-    $('#current-project').text($(this).text());
-    // 切换项目！
-  });
 }
 
 /**
@@ -211,7 +256,11 @@ function adminLogic() {
 
     if (confirm('确定要删除操作员' + username + '')) {
       $.post('/user/' + id + '/delete').then(function (data) {
-        location.href = userPath + '?info=' + data;
+        if (data.indexOf('失败') != -1) {
+          location.href = userPath + '?error=' + data;
+        } else {
+          location.href = userPath + '?info=' + data;
+        }
       }, errHandler);
     }
   });
@@ -228,8 +277,6 @@ function adminLogic() {
   var projectPath = '/control';
   // 项目修改
   $('.project-modify-form').submit(function(e) {
-    console.dir(e);
-    debugger;
     e.preventDefault();
     var id = $(this).attr('data-id');
     $.post('/project/' + id, $(this).serialize()).then(function() {

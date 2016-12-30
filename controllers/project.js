@@ -3,7 +3,7 @@
  */
 const Project = require('../models/Project');
 
-const projectKeys = ['name', 'fullName', 'contact.name', 'contact.phone', 'address', 'comments', 'tel'];
+const projectKeys = ['name', 'fullName', 'contact.name', 'contact.phone', 'address', 'comments', 'tel', 'type'];
 /**
  * 创建新项目
  */
@@ -28,8 +28,7 @@ exports.post = (req, res, next) => {
     }
   }
 
-  // TODO 初始化项目所有基础数据 具体有库存的信息交给其他地方的配置处理
-  project.current = { '钢管': 0 };
+  project.initStore();
 
   project.save().then(() => {
     res.send(`添加 ${project.name} 的信息成功`);

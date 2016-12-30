@@ -32,6 +32,7 @@ router.get('/project/:projectId/order/create', order.create);
 router.post('/project/:projectId/order', order.postOrder);
 router.get('/project/:projectId/order/:id', order.details);
 
+router.get('/project/:projectId/purchase/create', order.purchaseCreate);
 router.use('/order', orderRouter);
 
 // control 即管理中心

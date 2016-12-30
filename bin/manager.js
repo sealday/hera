@@ -14,6 +14,7 @@ mongoose
     let user = new User();
     user.username = 'hera';
     user.password = 'hera';
+    user.type = 258;
     user.profile.name = '超级管理员';
     user.save().then(() => {
       console.log('用户名 hera 密码 hera 注册成功');

@@ -9,12 +9,24 @@ const chalk = require('chalk');
 const multer = require('multer');
 const session = require('express-session');
 // const express-validator 可以考虑使用
+const ProductType = require('./models/ProductType');
 
 const index = require('./controllers/index');
 
-// 连接 mongo 数据库
-mongoose.connect('mongodb://localhost/hera');
+// 使用 ES6 的 Promise
 mongoose.Promise = global.Promise;
+// 连接 mongo 数据库
+mongoose
+  .connect('mongodb://localhost/hera')
+  .then(() => {
+    // 读取初始数据
+    global.companyData = {};
+    return ProductType.find();
+  }).then(productTypes => {
+    global.companyData.productTypes = productTypes;
+  }).catch(err => {
+    console.log(err);
+  });
 mongoose.connection.on('error', () => {
   console.log('%s MongoDB connection error. Please make sure MongoDB is running.', chalk.red('✗'));
   process.exit();

@@ -97,6 +97,14 @@ exports.postLogin = (req, res) => {
 exports.deleteUser = (req, res, next) => {
   const id = req.params.id;
 
+  if (req.user.type == '258') {
+    return res.send('删除失败！不能删除系统管理员。')
+  }
+
+  if (req.user._id == id) {
+    return res.send('删除失败！不能删除自己。');
+  }
+
   User.findByIdAndRemove(id).then(() => {
     res.send('删除操作员成功！');
   }).catch(err => {
@@ -113,6 +121,10 @@ exports.updateUser = (req, res, next) => {
   ['username', 'name', 'project', 'password'].forEach(key => {
     updatedUser[key] = req.body[key] || '';
   });
+
+  if (!updatedUser.project) {
+    return res.send('没有选择项目！');
+  }
 
   if (!Array.isArray(updatedUser['project'])) {
     updatedUser['projects'] = [updatedUser['project']];
@@ -148,10 +160,10 @@ exports.updateUser = (req, res, next) => {
  * 创建新用户
  */
 exports.newUser = (req, res, next) => {
-  const username = req.body.username || '';
-  const password = req.body.password || '';
-  const name = req.body.name || '';
-  const project = req.body.project || '';
+  const username = req.body['username'] || '';
+  const password = req.body['password'] || '';
+  const name = req.body['name'] || '';
+  const project = req.body['project'] || '';
   if (!name || !username || !password || !project) {
     return res.send('信息填写不完整！');
   }

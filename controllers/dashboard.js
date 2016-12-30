@@ -2,13 +2,10 @@
  * Created by seal on 27/12/2016.
  */
 
-
 const User = require('../models/User');
 const Project = require('../models/Project');
 const mongoose = require('mongoose');
 const Order = require('../models/Order');
-
-
 
 //TODO 需要处理一下订单的类型
 exports.index = (req, res, next) => {
@@ -36,11 +33,11 @@ exports.index = (req, res, next) => {
     res.render('index', {
       title: '主页' ,
       page: 'dashboard',
-      projects: projects
+      projects: projects,
+      currentProject: projects[0]
     });
   }).catch(err => {
     next(err);
   });
-
 
 };

@@ -22,6 +22,7 @@ const userSchema = new mongoose.Schema({
 
   projects: Array, // 保存操作员能操作的项目
   defaultProject: String,
+  type: Number, // 258 是超级管理员
 
   profile: {
     name: String,
