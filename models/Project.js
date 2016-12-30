@@ -7,7 +7,9 @@ const Schema = mongoose.Schema;
 const Mixed = Schema.Types.Mixed;
 
 const projectSchema = new Schema({
-  name: { type: String, unique: true },
+  name: { type: String, unique: true }, // 项目名称
+  company: String, // 公司名称
+  abbr: String, // 项目简称
   fullName: { type: String, unique: true},
   contacts: [{
     name: String,

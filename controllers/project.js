@@ -3,7 +3,7 @@
  */
 const Project = require('../models/Project');
 
-const projectKeys = ['name', 'fullName', 'contact.name', 'contact.phone', 'address', 'comments', 'tel', 'type'];
+const projectKeys = ['name', 'abbr', 'contact.name', 'contact.phone', 'address', 'comments', 'tel', 'type', 'company'];
 /**
  * 创建新项目
  */
