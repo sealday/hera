@@ -27,6 +27,7 @@ const orderSchema = new Schema({
   carNumber: String,
   carFee: Number,
   username: String,
+  type: String,  // 采购、调拨
 }, { timestamps: true });
 
 const Order = mongoose.model('Order', orderSchema);

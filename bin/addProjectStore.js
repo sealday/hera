@@ -20,24 +20,16 @@ mongoose
     return Project.find();
   })
   .then(projects => {
-    let newProjects = [];
+    let promises = [];
     projects.forEach(project => {
       if (project.store.length == 0) {
         project.initStore();
-        newProjects.push(project);
+        promises.push(project.save());
       }
     });
-    return newProjects;
-  })
-  .then(projects => {
-    let promises = [];
-    projects.forEach(p => {
-      promises.push(Project.findByIdAndUpdate(p._id, {  store: p.store  }));
-    });
-
     return Promise.all(promises);
   })
-  .then(result => {
+  .then(() => {
     console.log('更新成功');
   })
   .catch(err => {

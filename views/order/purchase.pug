@@ -10,14 +10,11 @@ block content
   form(action='../purchase' method='post' id='order-create-form')
     // 这里放隐藏提交的物料数据
     div(class='hidden-content' hidden=true)
-    input(hidden=true name='fromProject' value=currentProject.name)
     div(class='form-horizontal')
       div(class='form-group')
         label(class='control-label col-md-1') 工程项目
-        // TODO 工程项目实现下拉菜单选择，可以输入拼音或者五笔来筛选
         div(class='col-md-3')
-          input(type='text', class='form-control', id='project', name='toProject', list='projects', autocomplete='off')
-          datalist(id='projects')
+          select(name='toProject' class='form-control')
             each val in projects
               option= val
         label(class='control-label col-md-1') 日期

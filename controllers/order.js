@@ -147,7 +147,7 @@ exports.create = (req, res, next) => {
 exports.postOrder = (req, res, next) => {
   let orderForm = {};
   // TODO 我们有没有那种需要填空白单子的需求？
-  const formKeys = ['tenant', 'toProject', 'date', 'entry', 'fromProject'];
+  const formKeys = ['toProject', 'date', 'entry', 'fromProject'];
   formKeys.forEach(k => {
     orderForm[k] = req.body[k] || '';
   });
@@ -182,6 +182,7 @@ exports.postOrder = (req, res, next) => {
   }
   order.total = total;
   order.username = req.user.username;
+  order.type = '调拨';
 
   order.save().then(order => {
     orderForm.entry.forEach(entry => {
@@ -209,7 +210,7 @@ exports.postOrder = (req, res, next) => {
     }
     return Promise.all([fromProject.save(), toProject.save()]);
   }).then(() => {
-    res.redirect('/');
+    res.redirect('./order/create?info=保存成功！');
   }).catch(err => {
     next(err);
   });
@@ -266,6 +267,56 @@ exports.purchaseCreate = (req, res, next) => {
       currentProject,
       productTypes: companyData.productTypes
     });
+  }).catch(err => {
+    next(err);
+  });
+};
+
+exports.postPurchase = (req, res, next) => {
+  let orderForm = {};
+  const formKeys = ['toProject', 'date', 'entry'];
+  formKeys.forEach(k => {
+    orderForm[k] = req.body[k] || '';
+  });
+
+  if (formKeys.some(key => !orderForm[key])) {
+    return res.redirect(req.path + '/create' + '?error=信息填写不完整！');
+  }
+
+  const optionalFormKeys = ['comments', 'carFee', 'carNumber'];
+  optionalFormKeys.forEach(k => {
+    orderForm[k] = req.body[k] || '';
+  });
+
+  if (!Array.isArray(orderForm.entry)) {
+    orderForm.entry = [orderForm.entry];
+  }
+  orderForm.entry = orderForm.entry.map(entry => JSON.parse(entry));
+
+  let total = {};
+  orderForm.entry.forEach(entry => {
+    if (entry.name in total) {
+      total[entry.name] += entry.total * 1;
+    } else {
+      total[entry.name] = entry.total * 1;
+    }
+  });
+
+  let order = new Order();
+  for (let k in orderForm) {
+    order[k] = orderForm[k];
+  }
+  order.total = total;
+  order.username = req.user.username;
+  order.type = '采购';
+
+  order.save().then(order => {
+    orderForm.entry.forEach(entry => {
+      entry.orderId = order._id;
+    });
+    return Product.create(orderForm.entry)
+  }).then(() => {
+    res.redirect('./purchase/create?info=保存成功！');
   }).catch(err => {
     next(err);
   });
