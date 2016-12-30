@@ -1,4 +1,4 @@
-div(class='store-pane' id='project-pane')
+div(class='tab-pane active' id='store-pane')
   each currentProject in projects
     div(class='project-store' + (currentProject == projects[0] ? ' active' : '') id='project-store-' + currentProject.name)
       h2= currentProject.fullName + ' 当前库存'

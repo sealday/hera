@@ -17,6 +17,9 @@ block content
           select(name='toProject' class='form-control')
             each val in projects
               option= val
+        label(class='control-label col-md-1') 对方单位
+        div(class='col-md-3')
+          input(type='text' class='form-control' name='vendor')
         label(class='control-label col-md-1') 日期
         div(class='col-md-3')
           input(type='date', class='form-control', id='date', name='date')
@@ -50,7 +53,12 @@ block content
       input(type='text', class='form-control', name='size', autocomplete='off' list='size-list' id='size')
       datalist(id='size-list')
     div(class='form-group')
+      label(class='control-label') 单价
+      input(type='text', class='form-control', name='price', autocomplete='off' id='price')
+    div(class='form-group')
       label(class='control-label') 数量
       input(type='text', class='form-control', name='count', autocomplete='off')
     button(id='add', class='btn btn-primary') 添加
   button(class='btn btn-default btn-block' id='order-create-button') 创建
+block added_scripts
+  script(src='/js/purchase.js')

@@ -1,0 +1,27 @@
+// 入库记录
+div(class='tab-pane' id='inbound-pane')
+  p 入库记录
+  each project in projects
+    ul(class='list-group')
+      each order in project.toOrders
+        li(class='list-group-item')
+          span= order.fromProject
+  //    div(class='panel-group', id='project-accordion')
+  //      each project in projects
+  //        div(class='panel panel-default')
+  //          div(class='panel-heading')
+  //            h3(class='panel-title')
+  //              a(data-toggle='collapse' data-parent='#project-accordion' href='#' + project._id)= project.name
+  //          div(id=project._id class='panel-collapse collapse out')
+  //            div(class='panel-body')
+  //              h3 调出单
+  //                a(class='btn btn-default pull-right' href='/project/' + project._id + '/order/create') 创建新的出库单
+  //              ul(class='list-group')
+  //                each order in project.fromOrders
+  //                  li(class='list-group-item')
+  //                    span= order.toProject
+  //              h3 调入单
+  //              ul(class='list-group')
+  //                each order in project.toOrders
+  //                  li(class='list-group-item')
+  //                    span= order.fromProject
