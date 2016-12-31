@@ -8,8 +8,8 @@ block content
   div(class='btn-group' style='margin-bottom: 1em;')
     a(class='btn btn-default' href='purchase/create') 采购
     a(class='btn btn-default' href='carrydown/create') 结转
-    a(class='btn btn-default' href='transferOut/create') 发料
-    a(class='btn btn-default' href='transferIn/create') 归料
+    a(class='btn btn-default' href='transferOut/create') 调出
+    a(class='btn btn-default' href='transferIn/create') 调入
     a(class='btn btn-default' href='reject/create') 报废
   div(class='panel panel-default')
     div(class='panel-heading')
@@ -24,7 +24,7 @@ block content
       a(class='list-group-item' href='purchase/') 查看更多
   div(class='panel panel-default')
     div(class='panel-heading')
-      h3(class='panel-title') 最近的发料单
+      h3(class='panel-title') 最近的调出单
     div(class='list-group')
       each order in latestTransferOutOrders
         a(class='list-group-item' href='purchase/' + order.id + '/')
@@ -35,7 +35,7 @@ block content
       a(class='list-group-item' href='purchase/') 查看更多
   div(class='panel panel-default')
     div(class='panel-heading')
-      h3(class='panel-title') 最近的归料单
+      h3(class='panel-title') 最近的调入单
     div(class='list-group')
       each order in latestTransferInOrders
         a(class='list-group-item' href='purchase/' + order.id + '/')
