@@ -10,6 +10,7 @@ const multer = require('multer');
 const session = require('express-session');
 // const express-validator 可以考虑使用
 const ProductType = require('./models/ProductType');
+const Project = require('./models/Project');
 
 const index = require('./controllers/index');
 
@@ -24,6 +25,12 @@ mongoose
     return ProductType.find();
   }).then(productTypes => {
     global.companyData.productTypes = productTypes;
+    return Project.find();
+  }).then(projects => {
+    global.companyData.projects = {};
+    projects.forEach(p => {
+      global.companyData.projects[p.id] = p;
+    });
   }).catch(err => {
     console.log(err);
   });

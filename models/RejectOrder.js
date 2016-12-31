@@ -10,7 +10,7 @@ const Schema = mongoose.Schema;
  * TODO 报废单要进入怎么样的管理呢？
  *
  */
-const PurchaseOrderSchema = new Schema({
+const RejectOrderSchema = new Schema({
   stockRecord: {
     type: Schema.Types.ObjectId,
     ref: 'StockRecord'
@@ -34,6 +34,6 @@ const PurchaseOrderSchema = new Schema({
   }], // 订单项
 }, { timestamps: true });
 
-const PurchaseOrder = mongoose.model('PurchaseOrder', PurchaseOrderSchema);
+const RejectOrder = mongoose.model('RejectOrder', RejectOrderSchema);
 
-module.exports = PurchaseOrder;
+module.exports = RejectOrder;

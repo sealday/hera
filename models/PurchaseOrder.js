@@ -20,7 +20,7 @@ const PurchaseOrderSchema = new Schema({
 
   project: Schema.Types.ObjectId, // 目标项目（为哪个项目采购的）
 
-
+  vendor: String, // 卖家
   originalOrder: String, // 原始单号
   comments: String, // 订单说明内容
   status: String, // 采购单是否已经付款过

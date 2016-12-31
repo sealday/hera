@@ -1,0 +1,20 @@
+extends ../layout
+
+block content
+  ol(class='breadcrumb')
+    li
+      a(href='#') 主页
+    li
+      a(href='../')= current.name + '项目'
+    li(class='active') 采购单
+
+  div(class='panel panel-default')
+    div(class='panel-heading')
+      h3(class='panel-title') 采购单
+    div(class='list-group')
+      each order in purchaseOrders
+        a(class='list-group-item' href='purchase/' + order.id + '/')
+          span= projects[order.project].name + ' '
+          each entry in order.entries
+            span= entry.name + ' '
+          span(class='pull-right')= order.status

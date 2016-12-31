@@ -2,6 +2,7 @@
  * Created by seal on 27/12/2016.
  */
 const User = require('../models/User');
+const Project = require('../models/Project');
 
 /**
  * 用户中间件
@@ -45,8 +46,9 @@ exports.login = (req, res) => {
  * 处理退出请求
  */
 exports.logout = (req, res) => {
-  req.session.user = null;
-  res.redirect('/login?info=您已经成功退出系统！');
+  req.session.destroy(() => {
+    res.redirect('/login?info=您已经成功退出系统！');
+  });
 };
 
 /**
@@ -97,16 +99,16 @@ exports.postLogin = (req, res) => {
 exports.deleteUser = (req, res, next) => {
   const id = req.params.id;
 
-  if (req.user.type == '258') {
-    return res.send('删除失败！不能删除系统管理员。')
-  }
-
-  if (req.user._id == id) {
-    return res.send('删除失败！不能删除自己。');
-  }
-
-  User.findByIdAndRemove(id).then(() => {
-    res.send('删除操作员成功！');
+  User.findById(id).then(u => {
+    if (u.type == '258') {
+      return res.send('删除失败！不能删除系统管理员。');
+    }
+    if (req.user._id == id) {
+      return res.send('删除失败！不能删除自己。');
+    }
+    return User.findByIdAndRemove(id);
+  }).then(() => {
+      res.send('删除操作员成功！');
   }).catch(err => {
     next(err);
   });

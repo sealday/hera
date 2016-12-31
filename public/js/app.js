@@ -1,6 +1,7 @@
 /**
  * Created by seal on 26/12/2016.
  */
+'use strict';
 
 // console.log 总是安全
 (function(global) {
@@ -19,8 +20,6 @@
   while (method = methods.pop()) if (typeof con[method] !== 'function') con[method] = dummy;
   // Using `this` for web workers & supports Browserify / Webpack.
 })(typeof window === 'undefined' ? this : window);
-
-'use strict';
 
 $(function () {
 
@@ -48,35 +47,36 @@ $(function () {
   }
 
   if (Cookies.get('project.name')) {
-    var name = Cookies.get('project.name');
-    var projectId = Cookies.get('project.id');
-    $('#current-project').html(name + '<span class="caret">');
-
-    $('.project-store').removeClass('active');
-    $('#project-store-' + name).addClass('active');
-
-    $('#order-create-buy-a').attr('href', ('/project/' + projectId + '/purchase/create'));
-    $('#order-create-sell-a').attr('href', ('/project/' + projectId + '/order/create?type=sell'));
-    $('#order-create-out-a').attr('href', ('/project/' + projectId + '/order/create'));
-    $('#order-create-in-a').attr('href', ('/project/' + projectId + '/order/create'));
+    //var name = Cookies.get('project.name');
+    //var projectId = Cookies.get('project.id');
+    //$('#current-project').html(name + '<span class="caret">');
+    //
+    //$('.project-store').removeClass('active');
+    //$('#project-store-' + name).addClass('active');
+    //
+    //$('#order-create-buy-a').attr('href', ('/project/' + projectId + '/purchase/create'));
+    //$('#order-create-sell-a').attr('href', ('/project/' + projectId + '/order/create?type=sell'));
+    //$('#order-create-out-a').attr('href', ('/project/' + projectId + '/order/create'));
+    //$('#order-create-in-a').attr('href', ('/project/' + projectId + '/order/create'));
   }
 
   // 首页选择项目
   $('.current-project-a').click(function(e) {
-    e.preventDefault();
-    var name = $(this).text();
-    var projectId = $(this).attr('data-id');
-    $('#current-project').html(name + '<span class="caret">');
-    // 切换项目！
-    $('.project-store').removeClass('active');
-    $('#project-store-' + name).addClass('active');
+    //e.preventDefault();
+    //var name = $(this).text();
+    //var projectId = $(this).attr('data-id');
+    //$('#current-project').html(name + '<span class="caret">');
+    //// 切换项目！
+    //$('.project-store').removeClass('active');
+    //$('#project-store-' + name).addClass('active');
+    //
+    //$('#order-create-buy-a').attr('href', ('/project/' + projectId + '/purchase/create'));
+    //$('#order-create-sell-a').attr('href', ('/project/' + projectId + '/order/create?type=sell'));
+    //$('#order-create-out-a').attr('href', ('/project/' + projectId + '/order/create'));
+    //$('#order-create-in-a').attr('href', ('/project/' + projectId + '/order/create'));
 
-    $('#order-create-buy-a').attr('href', ('/project/' + projectId + '/purchase/create'));
-    $('#order-create-sell-a').attr('href', ('/project/' + projectId + '/order/create?type=sell'));
-    $('#order-create-out-a').attr('href', ('/project/' + projectId + '/order/create'));
-    $('#order-create-in-a').attr('href', ('/project/' + projectId + '/order/create'));
-    Cookies.set('project.name', name);
-    Cookies.set('project.id', projectId);
+    //Cookies.set('project.name', name);
+    //Cookies.set('project.id', projectId);
   });
 });
 
@@ -188,3 +188,46 @@ function errHandler(err) {
   alert('出错了，请稍后重试，或者联系负责！');
   console.log(err);
 }
+
+function generateTable(selector, columns) {
+  var dataTable = $(selector).DataTable({
+    select: {
+      style: 'single'
+    },
+    data: [],
+    columns: columns,
+    language: {
+      "decimal": "",
+      "emptyTable": "还没有添加数据",
+      "info": "总共 _TOTAL_ 条，显示第 _START_ 条 到第 _END_ 条的数据",
+      "infoEmpty": "总共 0 条，显示第 0 条 到第 0 条的数据",
+      "infoFiltered": "(filtered from _MAX_ total entries)",
+      "infoPostFix": "",
+      "thousands": ",",
+      "lengthMenu": "每页显示 _MENU_ 条",
+      "loadingRecords": "加载中...",
+      "processing": "处理中...",
+      "search": "搜索:",
+      "zeroRecords": "没有匹配的记录",
+      "paginate": {
+        "first": "第一页",
+        "last": "最后一页",
+        "next": "下一页",
+        "previous": "上一页"
+      },
+      "aria": {
+        "sortAscending": ": 顺序排列",
+        "sortDescending": ": 逆序排列"
+      },
+      select: {
+        cells: " %d 单元格选中 ",
+        columns: " 选中了 %d 列 ",
+        rows: " 选中了 %d 行 "
+      }
+    }
+  });
+
+  // TODO 当熟悉的时候可以考虑去掉暴露到环境中，不过个人理解是留在这里也是OK的，可以考虑换个名字避免冲突就好
+  return window.dataTable = dataTable;
+}
+

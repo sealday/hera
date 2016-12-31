@@ -1,0 +1,68 @@
+extends ../layout
+
+block content
+  ol(class='breadcrumb')
+    li
+      a(href='#') 主页
+    li(class='active')= current.name + '项目'
+  div(class='btn-group' style='margin-bottom: 1em;')
+    a(class='btn btn-default' href='purchase/create') 采购
+    a(class='btn btn-default' href='carrydown/create') 结转
+    a(class='btn btn-default' href='transferOut/create') 发料
+    a(class='btn btn-default' href='transferIn/create') 归料
+    a(class='btn btn-default' href='reject/create') 报废
+  div(class='panel panel-default')
+    div(class='panel-heading')
+      h3(class='panel-title') 最近的采购单
+    div(class='list-group')
+      each order in latestPurchaseOrders
+        a(class='list-group-item' href='purchase/' + order.id + '/')
+          span= projects[order.project].name + ' '
+          each entry in order.entries
+            span= entry.name + ' '
+          span(class='pull-right')= order.status
+      a(class='list-group-item' href='purchase/') 查看更多
+  div(class='panel panel-default')
+    div(class='panel-heading')
+      h3(class='panel-title') 最近的发料单
+    div(class='list-group')
+      each order in latestTransferOutOrders
+        a(class='list-group-item' href='purchase/' + order.id + '/')
+          span= projects[order.project].name + ' '
+          each entry in order.entries
+            span= entry.name + ' '
+          span(class='pull-right')= order.status
+      a(class='list-group-item' href='purchase/') 查看更多
+  div(class='panel panel-default')
+    div(class='panel-heading')
+      h3(class='panel-title') 最近的归料单
+    div(class='list-group')
+      each order in latestTransferInOrders
+        a(class='list-group-item' href='purchase/' + order.id + '/')
+          span= projects[order.project].name + ' '
+          each entry in order.entries
+            span= entry.name + ' '
+          span(class='pull-right')= order.status
+      a(class='list-group-item' href='purchase/') 查看更多
+  div(class='panel panel-default')
+    div(class='panel-heading')
+      h3(class='panel-title') 最近的报废单
+    div(class='list-group')
+      each order in latestRejectOrders
+        a(class='list-group-item' href='purchase/' + order.id + '/')
+          span= projects[order.project].name + ' '
+          each entry in order.entries
+            span= entry.name + ' '
+          span(class='pull-right')= order.status
+      a(class='list-group-item' href='purchase/') 查看更多
+  div(class='panel panel-default')
+    div(class='panel-heading')
+      h3(class='panel-title') 最近的结转单
+    div(class='list-group')
+      each order in latestCarryDownOrders
+        a(class='list-group-item' href='purchase/' + order.id + '/')
+          span= projects[order.project].name + ' '
+          each entry in order.entries
+            span= entry.name + ' '
+          span(class='pull-right')= order.status
+      a(class='list-group-item' href='purchase/') 查看更多

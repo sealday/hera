@@ -23,15 +23,22 @@ html(lang='zh-CN')
             span(class='icon-bar')
             span(class='icon-bar')
             span(class='icon-bar')
-          a(class='navbar-brand') 赫拉管理系统
+          a(class='navbar-brand' href='/') 赫拉管理系统
         div(class='collapse navbar-collapse' id='navbar-menu')
           ul(class='nav navbar-nav')
-            li(class=page == 'dashboard' ? 'active' : '')
-              a(href='/') 项目管理
+            if user
+              li(class='dropdown')
+                a(data-toggle='dropdown' id='current-project')= current.name
+                  span(class='caret')
+                  ul(class='dropdown-menu')
+                    each project in ownProjects
+                      li
+                        a(href='/project/' + project.id + '/')= project.name
+
+          ul(class='nav navbar-nav navbar-right')
             if user && user.username == 'hera'
               li(class=page == 'control' ? 'active' : '')
                 a(href='/control') 管理中心
-          ul(class='nav navbar-nav navbar-right')
             if user
               li
                 a(href='/logout') 退出

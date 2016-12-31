@@ -1,7 +1,7 @@
 extends ../layout
 
 block content
-  h2 #{currentProject.name} 创建采购单
+  h2 #{current.name} 创建采购单
   if info
     div(class='alert alert-info')= info
   if error
@@ -14,15 +14,19 @@ block content
       div(class='form-group')
         label(class='control-label col-md-1') 工程项目
         div(class='col-md-3')
-          select(name='toProject' class='form-control')
-            each val in projects
-              option= val
+          select(name='project' class='form-control' id='project')
+            each project in projects
+              option(value=project.id)= project.name
         label(class='control-label col-md-1') 对方单位
         div(class='col-md-3')
-          input(type='text' class='form-control' name='vendor')
+          input(type='text' class='form-control' id='vendor' name='vendor')
         label(class='control-label col-md-1') 日期
         div(class='col-md-3')
-          input(type='date', class='form-control', id='date', name='date')
+          input(type='date', class='form-control' id='date' name='date')
+      div(class='form-group')
+        label(class='control-label col-md-1') 原始单号
+        div(class='col-md-3')
+          input(type='text' class='form-control' id='originalOrder' name='originalOrder')
       div(class='form-group')
         label(class='control-label col-md-1') 车号
         div(class='col-md-3')
@@ -44,21 +48,21 @@ block content
         option 耗损类
     div(class='form-group')
       label(class='control-label') 名称
-      input(type='text', class='form-control', name='name', autocomplete='off' list='name-list' id='name')
+      input(type='text' class='form-control' name='name' autocomplete='off' list='name-list' id='name')
       datalist(id='name-list')
         each productType in productTypes
           option= productType.name
     div(class='form-group')
       label(class='control-label') 规格
-      input(type='text', class='form-control', name='size', autocomplete='off' list='size-list' id='size')
+      input(type='text' class='form-control' name='size' autocomplete='off' list='size-list' id='size')
       datalist(id='size-list')
     div(class='form-group')
       label(class='control-label') 单价
-      input(type='text', class='form-control', name='price', autocomplete='off' id='price')
+      input(type='text' class='form-control' name='price' autocomplete='off' id='price')
     div(class='form-group')
       label(class='control-label') 数量
-      input(type='text', class='form-control', name='count', autocomplete='off')
-    button(id='add', class='btn btn-primary') 添加
+      input(type='text' class='form-control' name='count' autocomplete='off' id='count')
+    button(id='add' class='btn btn-primary') 添加
   button(class='btn btn-default btn-block' id='order-create-button') 创建
 block added_scripts
   script(src='/js/purchase.js')

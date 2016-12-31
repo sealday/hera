@@ -11,10 +11,14 @@ const orderRouter =  order.router;
 
 // 用户认证中间件
 router.use(user.middleware);
+// 正在管理项目设置中间件
+router.use(project.middleware);
 
 router.get('/', function(req, res, next) {
   if (req.user) {
-    dashboard.index(req, res, next);
+    res.redirect('/project/' + req.session.current._id + '/');
+    // 暂时不使用 dashboard
+    // dashboard.index(req, res, next);
   } else {
     user.login(req, res);
   }
@@ -29,12 +33,17 @@ router.post('/user/:id', user.updateUser);
 router.post('/user/:id/delete', user.deleteUser);
 
 
+router.use('/project/:projectId', project.middleware2);
 router.get('/project/:projectId/order/create', order.create);
 router.post('/project/:projectId/order', order.postOrder);
 router.get('/project/:projectId/order/:id', order.details);
 
-router.get('/project/:projectId/purchase/create', purchase.purchaseCreate);
-router.post('/project/:projectId/purchase', purchase.postPurchase);
+router.get('/project/:projectId/purchase/create', purchase.create);
+router.get('/project/:projectId/purchase/', purchase.list);
+router.post('/project/:projectId/purchase/', purchase.postPurchase);
+router.get('/project/:projectId/purchase/:id/edit', purchase.edit);
+router.get('/project/:projectId/purchase/:id', purchase.details);
+router.post('/project/:projectId/purchase/:id', purchase.postEdit);
 router.use('/order', orderRouter);
 
 // control 即管理中心
@@ -42,6 +51,7 @@ router.use('/control', control.middleware);
 router.get('/control', control.index);
 
 // 项目管理 API
+router.get('/project/:id', project.index);
 router.post('/project/:id', project.updateInfo);
 router.post('/project', project.post);
 router.post('/project/:id/delete', project.delete);

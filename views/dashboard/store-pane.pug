@@ -1,7 +1,7 @@
 div(class='tab-pane active' id='store-pane')
   each currentProject in projects
     div(class='project-store' + (currentProject == projects[0] ? ' active' : '') id='project-store-' + currentProject.name)
-      h2= currentProject.fullName + ' 当前库存'
+      h2= currentProject.name + ' 当前库存'
       if currentProject
         - var length = Math.ceil(currentProject.store.length / 3)
         - var totalLength = currentProject.store.length
