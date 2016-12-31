@@ -1,14 +1,25 @@
-/**
- * Created by seal on 30/12/2016.
- */
+#!/usr/bin/env node
 
 const mongoose = require('mongoose');
+const User = require('../models/User');
 const ProductType = require('../models/ProductType');
 
-
+// 连接 mongo 数据库
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/hera')
+mongoose
+  .connect('mongodb://localhost/hera')
   .then(() => {
+    console.log('初始化管理员！');
+    let user = new User();
+    user.username = 'hera';
+    user.password = 'hera';
+    user.type = 258; // 超级管理员特权号
+    user.profile.name = '超级管理员';
+    return user.save();
+  }).then(() => {
+    console.log('用户名 hera 密码 hera 注册成功');
+  }).then(() => {
+    console.log('初始化产品数据！');
     return ProductType.create([
       {
         type: '租赁品',
@@ -77,10 +88,8 @@ mongoose.connect('mongodb://localhost/hera')
         unit: '米'
       },
     ]);
-  })
-  .catch(err => {
+  }).catch(err => {
     console.log(err);
-  })
-  .then(() => {
+  }).then(() => {
     mongoose.disconnect();
   });
