@@ -63,7 +63,7 @@ exports.middleware2 = (req, res, next) => {
 };
 
 exports.index = (req, res, next) => {
-  PurchaseOrder.find().limit(5).then(latestPurchaseOrders => {
+  PurchaseOrder.find().where('valid', true).limit(5).then(latestPurchaseOrders => {
     res.locals.latestPurchaseOrders = latestPurchaseOrders;
     return TransferOrder.find().where('fromProject', req.session.current._id).limit(5);
   }).then(latestTransferOutOrders => {

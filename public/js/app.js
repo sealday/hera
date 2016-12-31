@@ -27,9 +27,9 @@ $(function () {
 
   // 创建订单页面
   // 设置默认时间为今天
-  var dateElement = $('#date').get(0);
-  if (dateElement instanceof HTMLInputElement) {
-    dateElement.valueAsDate = new Date();
+  var dateElement = $('#date');
+  if (!dateElement.val()) {
+    dateElement.val(moment(new Date()).format('YYYY-MM-DD'));
   }
 
   // 运输协议填写界面
@@ -191,9 +191,10 @@ function errHandler(err) {
 
 function generateTable(selector, columns) {
   var dataTable = $(selector).DataTable({
-    select: {
-      style: 'single'
-    },
+    //select: {
+    //  style: 'single'
+    //},
+    pageLength: 50,
     data: [],
     columns: columns,
     language: {

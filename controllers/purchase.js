@@ -64,16 +64,8 @@ exports.postPurchase = (req, res, next) => {
   });
 };
 
-exports.edit = (req, res, next) => {
-  next('还未实现');
-};
-
-exports.postEdit = (req, res, next) => {
-  next('还未实现');
-};
-
 exports.list = (req, res, next) => {
-  PurchaseOrder.find()
+  PurchaseOrder.find().where('valid', true)
     .then(purchaseOrders => {
       res.render('purchase/list', {
         purchaseOrders
@@ -81,6 +73,64 @@ exports.list = (req, res, next) => {
     });
 };
 
+exports.middleware = (req, res, next) => {
+  const id = req.params.id;
+  PurchaseOrder.findById(id).then(purchaseOrder => {
+    res.locals.purchaseOrder = purchaseOrder;
+    next();
+  }).catch(err => {
+    next(err);
+  });
+};
+
+exports.edit = (req, res, next) => {
+  res.locals.info = req.query['info'] || '';
+  res.locals.error = req.query['error'] || '';
+
+  res.render('purchase/edit', {
+    productTypes: global.companyData.productTypes
+  });
+};
+
+exports.postEdit = (req, res, next) => {
+    let orderForm = {};
+    const formKeys = ['project', 'date', 'entries', 'vendor'];
+    formKeys.forEach(k => {
+      orderForm[k] = req.body[k] || '';
+    });
+
+    if (formKeys.some(key => !orderForm[key])) {
+      return res.redirect('./edit?error=信息填写不完整！');
+    }
+
+    const optionalFormKeys = ['comments', 'carFee', 'carNumber', 'originalOrder'];
+    optionalFormKeys.forEach(k => {
+      orderForm[k] = req.body[k] || '';
+    });
+
+    // 转换 entry 为数组
+    if (!Array.isArray(orderForm.entries)) {
+      orderForm.entries = [orderForm.entries];
+    }
+    orderForm.entries = orderForm.entries.map(entry => JSON.parse(entry));
+
+    let order = new PurchaseOrder();
+    for (let k in orderForm) {
+      order[k] = orderForm[k];
+    }
+
+    order.username = req.user.username;
+    order.status = res.locals.purchaseOrder.status;
+
+    order.save().then(() => {
+      return PurchaseOrder.findByIdAndUpdate(req.params.id, { valid: false });
+    }).then(() => {
+      res.redirect('./edit?info=更新成功！');
+    }).catch(err => {
+      next(err);
+    });
+};
+
 exports.details = (req, res, next) => {
-  next('还未实现');
+  res.render('purchase/details');
 };

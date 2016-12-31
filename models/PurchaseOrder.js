@@ -25,6 +25,8 @@ const PurchaseOrderSchema = new Schema({
   comments: String, // 订单说明内容
   status: String, // 采购单是否已经付款过
 
+  valid: { type: Boolean, default: true }, // 是否有效
+
   date: Date, // 制单时间
   username: String, // 制单人
 

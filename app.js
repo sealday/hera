@@ -11,6 +11,7 @@ const session = require('express-session');
 // const express-validator 可以考虑使用
 const ProductType = require('./models/ProductType');
 const Project = require('./models/Project');
+const User = require('./models/User');
 
 const index = require('./controllers/index');
 
@@ -31,9 +32,16 @@ mongoose
     projects.forEach(p => {
       global.companyData.projects[p.id] = p;
     });
+    return User.find();
+  }).then(users => {
+    global.companyData.users = {};
+    users.forEach(u => {
+      global.companyData.users[u.id] = u;
+    });
   }).catch(err => {
     console.log(err);
   });
+
 mongoose.connection.on('error', () => {
   console.log('%s MongoDB connection error. Please make sure MongoDB is running.', chalk.red('✗'));
   process.exit();

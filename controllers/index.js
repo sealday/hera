@@ -8,6 +8,12 @@ const control = require('./control');
 const order = require('./order');
 const purchase = require('./purchase');
 const orderRouter =  order.router;
+const moment = require('moment');
+
+router.use((req, res, next) => {
+  res.locals.moment = moment;
+  next();
+});
 
 // 用户认证中间件
 router.use(user.middleware);
@@ -41,6 +47,7 @@ router.get('/project/:projectId/order/:id', order.details);
 router.get('/project/:projectId/purchase/create', purchase.create);
 router.get('/project/:projectId/purchase/', purchase.list);
 router.post('/project/:projectId/purchase/', purchase.postPurchase);
+router.use('/project/:projectId/purchase/:id', purchase.middleware);
 router.get('/project/:projectId/purchase/:id/edit', purchase.edit);
 router.get('/project/:projectId/purchase/:id', purchase.details);
 router.post('/project/:projectId/purchase/:id', purchase.postEdit);

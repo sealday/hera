@@ -9,17 +9,66 @@ function orderCreate() {
     { title: '单价', data: 'price' },
     { title: '数量', data: 'count' },
     { title: '数量小计', data: 'total' },
-    { title: '价格小计', data: 'totalPrice' }
+    { title: '价格小计', data: 'totalPrice' },
+    { title: '', data: 'button'}
   ];
   var dataTable = generateTable('#details', columns);
 
   var addForm = $('#add-form');
   var orderEntries = [];
 
+  $('#order-create-form').find('.hidden-content').find('input').each(function() {
+    var entry = JSON.parse($(this).val());
+    // TODO 计算小计
+    if (isNaN(entry.size)) {
+      entry.total = entry.count.toFixed(2);
+    } else {
+      entry.total = (entry.size * entry.count).toFixed(2);
+    }
+
+    entry.totalPrice = entry.total * entry.price;
+    entry.button = '<button class="btn btn-danger action-delete" ' +
+      'data-name="' + entry.name + '" data-size="' + entry.size +'">删除</button>'
+      //+ '<button class="btn btn-info action-modify" '+
+      //'data-name="' + entry.name + '" data-size="' + entry.size +'">修改</button>';
+    orderEntries.push(entry);
+    dataTable.row.add(entry).draw(false);
+  });
+
+  $('#details').click(function(e) {
+    var name = $(e.target).attr('data-name');
+    var size = $(e.target).attr('data-size');
+    if ($(e.target).hasClass('action-delete')) {
+      for (var i = 0; i < orderEntries.length; i++) {
+        if (orderEntries[i].name == name && orderEntries[i].size == size) {
+          orderEntries.splice(i, 1);
+          break;
+        }
+      }
+      dataTable
+        .row( $(e.target).parents('tr') )
+        .remove()
+        .draw();
+    } else if ($(e.target).hasClass('action-modify')) {
+      var entry;
+      for (var i = 0; i < orderEntries.length; i++) {
+        if (orderEntries[i].name == name && orderEntries[i].size == size) {
+          entry = orderEntries.splice(i, 1);
+          break;
+        }
+      }
+      addForm.find('input[name=type]').val(entry[0].type);
+      addForm.find('input[name=name]').val(entry[0].name);
+      addForm.find('input[name=size]').val(entry[0].size);
+      addForm.find('input[name=price]').val(entry[0].price);
+      addForm.find('input[name=count]').val(entry[0].count);
+    }
+  });
+
   addForm.submit(function (e) {
     e.preventDefault();
 
-    var name = addForm.find('input[name=size]').val();
+    var name = addForm.find('input[name=name]').val();
     var size = addForm.find('input[name=size]').val();
     var count = addForm.find('input[name=count]').val();
 
@@ -65,6 +114,10 @@ function orderCreate() {
     }
 
     entry.totalPrice = entry.total * entry.price;
+    entry.button = '<button class="btn btn-danger action-delete" ' +
+      'data-name="' + entry.name + '" data-size="' + entry.size +'">删除</button>'
+    //+ '<button class="btn btn-info action-modify" '+
+    //'data-name="' + entry.name + '" data-size="' + entry.size +'">修改</button>';
     dataTable.row.add(entry).draw(false);
 
     // 将内容放入表单中

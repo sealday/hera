@@ -152,6 +152,7 @@ exports.updateUser = (req, res, next) => {
     if (user._id == req.session.user._id) {
       req.session.user = user;
     }
+    global.companyData.users[user._id] = user;
     res.send('更新操作员信息成功！');
   }).catch(err => {
     next(err);
@@ -185,6 +186,7 @@ exports.newUser = (req, res, next) => {
   });
 
   user.save().then(() => {
+    global.companyData.users[user._id] = user;
     res.send('添加用户成功！');
   }).catch(err => {
     next(err);
