@@ -4,27 +4,30 @@
 
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const Mixed = Schema.Types.Mixed;
 
 const projectSchema = new Schema({
   name: { type: String, unique: true }, // 项目名称
   company: String, // 公司名称
-  abbr: String, // 项目简称
-  fullName: { type: String, unique: true},
+  abbr:  { type: String, unique: true},  // 项目简称
   contacts: [{
-    name: String,
-    phone: String
+    name: String, // 联系人姓名
+    phone: String // 联系人电话
   }],
-  tel: String, // 公司电话
-  address: String,
-  comments: String,
-  store: [{name: String, size: String, count: Number}],
-  type: String,
+  tel: String, // 项目部电话
+  address: String, // 项目部地址
+  comments: String, // 备注
+  store: [{name: String, size: String, count: Number}], // 库存信息（实时）
+  type: String, // 仓库类型
+
+  base: String, // 关联的基地仓库，用来制作三方的库存记录
 }, { timestamps: true });
 
 // 设置简称字段是索引
 projectSchema.index({ name: 1 });
 
+/**
+ * 使用规格表的数据来进行初始化
+ */
 projectSchema.methods.initStore = function initStore() {
   const project = this;
   const productTypes = global.companyData.productTypes;
@@ -37,13 +40,6 @@ projectSchema.methods.initStore = function initStore() {
       });
     });
   });
-};
-
-// 当规格表发生变化的时候，更新库存
-// 因为数据不能丢失，所以规格表只能增加不能减少
-// 界面上允许删除，但是需要用户自己判断没有相应的内容使用到对应的规格
-projectSchema.methods.updateStore = function updateStore() {
-
 };
 
 const Project = mongoose.model('Project', projectSchema);

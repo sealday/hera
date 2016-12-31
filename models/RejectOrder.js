@@ -16,7 +16,7 @@ const PurchaseOrderSchema = new Schema({
     ref: 'StockRecord'
   },
 
-  project: String, // 哪个项目报废的物品 TODO 只有基地仓库有填写报废的需要？
+  project: Schema.Types.ObjectId, // 哪个项目报废的物品 TODO 只有基地仓库有填写报废的需要？
 
   comments: String, // 订单说明内容
   status: String, // 采购单是否已经付款过

@@ -16,8 +16,8 @@ const TransferOrderSchema = new Schema({
     ref: 'StockRecord'
   },
 
-  fromProject: String, // 出发项目
-  toProject: String, // 到达项目
+  fromProject: Schema.Types.ObjectId, // 出发项目
+  toProject: Schema.Types.ObjectId, // 到达项目
 
   comments: String, // 订单说明内容，对于调拨单，原始单号填写在备注中
   status: String, // 调拨单状态
