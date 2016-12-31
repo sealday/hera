@@ -14,13 +14,14 @@ const StockRecordSchema = new Schema({
   outStock: ObjectId, // 出库仓库
   inStock: ObjectId, // 入库仓库
   entries: [{
-    type: {
+    type: { // 类型
       type: String
     },
-    name: String,
-    size: String,
-    count: Number,
+    name: String, // 名称
+    size: String, // 规格
+    count: Number, // 数量
   }], // 订单项
+  valid: Boolean, // 是否是有效的库存信息
   outDate: Date, // 出库时间
   inDate: Date, // 入库时间
   original: ObjectId, // 最新原始单据

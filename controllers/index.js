@@ -6,6 +6,7 @@ const project = require('./project');
 const dashboard = require('./dashboard');
 const control = require('./control');
 const order = require('./order');
+const purchase = require('./purchase');
 const orderRouter =  order.router;
 
 // 用户认证中间件
@@ -32,8 +33,8 @@ router.get('/project/:projectId/order/create', order.create);
 router.post('/project/:projectId/order', order.postOrder);
 router.get('/project/:projectId/order/:id', order.details);
 
-router.get('/project/:projectId/purchase/create', order.purchaseCreate);
-router.post('/project/:projectId/purchase', order.postPurchase);
+router.get('/project/:projectId/purchase/create', purchase.purchaseCreate);
+router.post('/project/:projectId/purchase', purchase.postPurchase);
 router.use('/order', orderRouter);
 
 // control 即管理中心
