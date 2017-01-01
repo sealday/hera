@@ -27,34 +27,34 @@ block content
       h3(class='panel-title') 最近的调出单
     div(class='list-group')
       each order in latestTransferOutOrders
-        a(class='list-group-item' href='purchase/' + order.id + '/')
-          span= projects[order.project].name + ' '
+        a(class='list-group-item' href='transferOut/' + order.id + '/')
+          span= projects[order.toProject].name + ' '
           each entry in order.entries
             span= entry.name + ' '
           span(class='pull-right')= order.status
-      a(class='list-group-item' href='purchase/') 查看更多
+      a(class='list-group-item' href='transferOut/') 查看更多
   div(class='panel panel-default')
     div(class='panel-heading')
       h3(class='panel-title') 最近的调入单
     div(class='list-group')
       each order in latestTransferInOrders
-        a(class='list-group-item' href='purchase/' + order.id + '/')
-          span= projects[order.project].name + ' '
+        a(class='list-group-item' href='transferIn/' + order.id + '/')
+          span= projects[order.fromProject].name + ' '
           each entry in order.entries
             span= entry.name + ' '
           span(class='pull-right')= order.status
-      a(class='list-group-item' href='purchase/') 查看更多
+      a(class='list-group-item' href='transferIn/') 查看更多
   div(class='panel panel-default')
     div(class='panel-heading')
       h3(class='panel-title') 最近的报废单
     div(class='list-group')
       each order in latestRejectOrders
-        a(class='list-group-item' href='purchase/' + order.id + '/')
-          span= projects[order.project].name + ' '
+        a(class='list-group-item' href='transferOut/' + order.id + '/')
+          span= projects[order.toProject].name + ' '
           each entry in order.entries
             span= entry.name + ' '
           span(class='pull-right')= order.status
-      a(class='list-group-item' href='purchase/') 查看更多
+      a(class='list-group-item' href='transferOut/') 查看更多
   div(class='panel panel-default')
     div(class='panel-heading')
       h3(class='panel-title') 最近的结转单

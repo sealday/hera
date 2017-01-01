@@ -65,10 +65,10 @@ exports.middleware2 = (req, res, next) => {
 exports.index = (req, res, next) => {
   PurchaseOrder.find().where('valid', true).limit(5).then(latestPurchaseOrders => {
     res.locals.latestPurchaseOrders = latestPurchaseOrders;
-    return TransferOrder.find().where('fromProject', req.session.current._id).limit(5);
+    return TransferOrder.find().where('valid', true).where('fromProject', req.session.current._id).limit(5);
   }).then(latestTransferOutOrders => {
     res.locals.latestTransferOutOrders = latestTransferOutOrders;
-    return TransferOrder.find().where('toProject', req.session.current._id).limit(5);
+    return TransferOrder.find().where('valid', true).where('toProject', req.session.current._id).limit(5);
   }).then(latestTransferInOrders => {
     res.locals.latestTransferInOrders = latestTransferInOrders;
     return CarryDownOrder.find().limit(5);

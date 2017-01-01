@@ -1,0 +1,38 @@
+extends ../layout
+
+block content
+  ol(class='breadcrumb')
+    li
+      a(href='/') 主页
+    li
+      a(href='../../')= current.name + '项目'
+    li
+      a(href='../') 采购列表
+    li(class='active') 采购单
+
+  a(class='btn btn-primary' style='margin-bottom: 1em;' href='edit') 编辑
+  if (direction == 'in')
+    p= projects[transferOrder.fromProject].name
+  if (direction == 'out')
+    p= projects[transferOrder.toProject].name
+  p= transferOrder.originalOrder
+  p= transferOrder.comments
+  p= transferOrder.status
+  p= transferOrder.date
+  p= transferOrder.username
+
+  table(class='table')
+    thead
+      tr
+        th 名称
+        th 规格
+        th 数量
+        th 小计
+    tbody
+      each entry in transferOrder.entries
+        tr
+          td= entry.name
+          td= entry.size
+          td= entry.count
+          - var size = isNaN(entry.size) ? 1 : Number(entry.size)
+          td= size * entry.count

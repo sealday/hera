@@ -7,6 +7,7 @@ const dashboard = require('./dashboard');
 const control = require('./control');
 const order = require('./order');
 const purchase = require('./purchase');
+const transfer = require('./transfer');
 const orderRouter =  order.router;
 const moment = require('moment');
 
@@ -38,12 +39,34 @@ router.post('/user', user.newUser);
 router.post('/user/:id', user.updateUser);
 router.post('/user/:id/delete', user.deleteUser);
 
-
+// 处理 projectId 的中间件
 router.use('/project/:projectId', project.middleware2);
+
 router.get('/project/:projectId/order/create', order.create);
 router.post('/project/:projectId/order', order.postOrder);
 router.get('/project/:projectId/order/:id', order.details);
 
+// 调入
+router.use('/project/:projectId/transferIn', transfer.in);
+router.get('/project/:projectId/transferIn/create', transfer.create);
+router.get('/project/:projectId/transferIn/', transfer.list);
+router.post('/project/:projectId/transferIn/', transfer.postPurchase);
+router.use('/project/:projectId/transferIn/:id', transfer.middleware);
+router.get('/project/:projectId/transferIn/:id/edit', transfer.edit);
+router.get('/project/:projectId/transferIn/:id', transfer.details);
+router.post('/project/:projectId/transferIn/:id', transfer.postEdit);
+
+// 调出
+router.use('/project/:projectId/transferOut', transfer.out);
+router.get('/project/:projectId/transferOut/create', transfer.create);
+router.get('/project/:projectId/transferOut/', transfer.list);
+router.post('/project/:projectId/transferOut/', transfer.postPurchase);
+router.use('/project/:projectId/transferOut/:id', transfer.middleware);
+router.get('/project/:projectId/transferOut/:id/edit', transfer.edit);
+router.get('/project/:projectId/transferOut/:id', transfer.details);
+router.post('/project/:projectId/transferOut/:id', transfer.postEdit);
+
+// 采购
 router.get('/project/:projectId/purchase/create', purchase.create);
 router.get('/project/:projectId/purchase/', purchase.list);
 router.post('/project/:projectId/purchase/', purchase.postPurchase);
@@ -51,6 +74,7 @@ router.use('/project/:projectId/purchase/:id', purchase.middleware);
 router.get('/project/:projectId/purchase/:id/edit', purchase.edit);
 router.get('/project/:projectId/purchase/:id', purchase.details);
 router.post('/project/:projectId/purchase/:id', purchase.postEdit);
+
 router.use('/order', orderRouter);
 
 // control 即管理中心

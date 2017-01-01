@@ -28,6 +28,8 @@ const TransferOrderSchema = new Schema({
   date: Date, // 制单时间
   username: String, // 制单人
 
+  valid: { type: Boolean, default: true }, // 是否有效
+
   entries: [{
     type: { // 类型
       type: String
