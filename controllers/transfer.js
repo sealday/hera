@@ -190,7 +190,49 @@ exports.postEdit = (req, res, next) => {
 
 exports.details = (req, res, next) => {
   const direction = req.direction;
+  let transferOrder = res.locals.transferOrder;
+  let entries = { };
+  let total = {};
+
+  transferOrder.entries.forEach(entry => {
+    let result = 0;
+    if (isNaN(entry.size)) {
+      result = entry.count * 1;
+    } else {
+      result = entry.count * entry.size;
+    }
+
+    if (entry.name in entries) {
+      total[entry.name] += result;
+      entries[entry.name].push(entry);
+    } else {
+      entries[entry.name] = [entry];
+      total[entry.name] = result;
+    }
+  });
+
+  let printEntries = [];
+  for (let name in entries) {
+    entries[name].forEach(entry => {
+      printEntries.push({
+        name: entry.name,
+        size: entry.size,
+        count: entry.count
+      });
+    });
+    printEntries.push({
+      name: name,
+      size: '小计',
+      count: total[name]
+    });
+  }
+
+  let columnLength = Math.ceil(printEntries.length / 3);
   res.render('transfer/details', {
-    direction
+    direction,
+    entries,
+    total,
+    printEntries,
+    columnLength
   });
 };

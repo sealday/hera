@@ -28,12 +28,13 @@ html(lang='zh-CN')
           ul(class='nav navbar-nav')
             if user
               li(class='dropdown')
-                a(data-toggle='dropdown' id='current-project' href='#')= current.name
-                  span(class='caret')
-                  ul(class='dropdown-menu')
-                    each project in ownProjects
-                      li
-                        a(href='/project/' + project.id + '/')= project.name
+                if current
+                  a(data-toggle='dropdown' id='current-project' href='#')= current.name
+                    span(class='caret')
+                    ul(class='dropdown-menu')
+                      each project in ownProjects
+                        li
+                          a(href='/project/' + project.id + '/')= project.name
 
           ul(class='nav navbar-nav navbar-right')
             if user && user.username == 'hera'

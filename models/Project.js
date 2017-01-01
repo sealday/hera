@@ -8,7 +8,7 @@ const Schema = mongoose.Schema;
 const projectSchema = new Schema({
   name: { type: String, unique: true }, // 项目名称
   company: String, // 公司名称
-  abbr:  { type: String, unique: true},  // 项目简称
+  abbr: String,  // 项目简称
   contacts: [{
     name: String, // 联系人姓名
     phone: String // 联系人电话

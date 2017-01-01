@@ -4,6 +4,13 @@ body {
   margin-bottom: 20em;
 }
 
+@media print {
+  body {
+    padding-top: 0;
+    margin-bottom: 0;
+  }
+}
+
 a {
   color: #00B7FF;
 }

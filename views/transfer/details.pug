@@ -1,38 +1,101 @@
 extends ../layout
 
 block content
-  ol(class='breadcrumb')
+  ol(class='breadcrumb hidden-print')
     li
       a(href='/') 主页
     li
       a(href='../../')= current.name + '项目'
     li
-      a(href='../') 采购列表
-    li(class='active') 采购单
+      if direction == 'in'
+        a(href='../') 调入列表
+      if direction == 'out'
+        a(href='../') 调出列表
+    if direction == 'in'
+      li(class='active') 调入单
+    if direction == 'out'
+      li(class='active') 调出单
 
-  a(class='btn btn-primary' style='margin-bottom: 1em;' href='edit') 编辑
-  if (direction == 'in')
-    p= projects[transferOrder.fromProject].name
-  if (direction == 'out')
-    p= projects[transferOrder.toProject].name
-  p= transferOrder.originalOrder
-  p= transferOrder.comments
-  p= transferOrder.status
-  p= transferOrder.date
-  p= transferOrder.username
+  a(class='btn btn-primary hidden-print' style='margin-bottom: 1em;' href='edit') 编辑
 
-  table(class='table')
-    thead
-      tr
-        th 名称
-        th 规格
-        th 数量
-        th 小计
+  h3(class='text-center') 上海创兴建筑设备租赁有限公司
+  if direction == 'in'
+    h3(class='text-center') 归料单
+  if direction == 'out'
+    h3(class='text-center') 发料单
+
+  table(class='table table-clean')
     tbody
-      each entry in transferOrder.entries
-        tr
-          td= entry.name
-          td= entry.size
-          td= entry.count
-          - var size = isNaN(entry.size) ? 1 : Number(entry.size)
-          td= size * entry.count
+      tr
+        td 承租单位
+        if (direction == 'in')
+          td= projects[transferOrder.fromProject].company
+        if (direction == 'out')
+          td= projects[transferOrder.toProject].company
+        td 日期
+        td= moment(transferOrder.date).format('YYYY-MM-DD')
+        td 单号
+        td= transferOrder._id
+      tr
+        td 工程项目
+        if (direction == 'in')
+          td= projects[transferOrder.fromProject].name
+        if (direction == 'out')
+          td= projects[transferOrder.toProject].name
+        td 车号
+        td= transferOrder.carNumber
+        td 车费
+        td= transferOrder.carFee
+
+  div(class='row')
+    div(class='col-xs-4')
+      table(class='table')
+        thead
+          tr
+            th 名称
+            th 规格
+            th 数量
+        tbody
+          - var n = 0;
+          while n < columnLength
+            tr
+              td= printEntries[n].name
+              td= printEntries[n].size
+              td= printEntries[n].count
+            - n++;
+    div(class='col-xs-4')
+      table(class='table')
+        thead
+          tr
+            th 名称
+            th 规格
+            th 数量
+        tbody
+          - var n = columnLength;
+          while n < columnLength * 2
+            tr
+              td= printEntries[n].name
+              td= printEntries[n].size
+              td= printEntries[n].count
+            - n++;
+    div(class='col-xs-4')
+      table(class='table')
+        thead
+          tr
+            th 名称
+            th 规格
+            th 数量
+        tbody
+          - var n = columnLength * 2;
+          while n < printEntries.length
+            tr
+              td= printEntries[n].name
+              td= printEntries[n].size
+              td= printEntries[n].count
+            - n++;
+
+  div(class='row')
+    div(class='col-xs-4')
+      p 出租单位（签名）：
+    div(class='col-xs-offset-4 col-xs-4')
+      p 租借单位（签名）：
