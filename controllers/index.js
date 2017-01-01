@@ -8,6 +8,7 @@ const control = require('./control');
 const order = require('./order');
 const purchase = require('./purchase');
 const transfer = require('./transfer');
+const carrydown = require('./carrydown');
 const orderRouter =  order.router;
 const moment = require('moment');
 
@@ -74,6 +75,15 @@ router.use('/project/:projectId/purchase/:id', purchase.middleware);
 router.get('/project/:projectId/purchase/:id/edit', purchase.edit);
 router.get('/project/:projectId/purchase/:id', purchase.details);
 router.post('/project/:projectId/purchase/:id', purchase.postEdit);
+
+// 结转
+router.get('/project/:projectId/carrydown/create', carrydown.create);
+router.get('/project/:projectId/carrydown/', carrydown.list);
+router.post('/project/:projectId/carrydown/', carrydown.postPurchase);
+router.use('/project/:projectId/carrydown/:id', carrydown.middleware);
+router.get('/project/:projectId/carrydown/:id/edit', carrydown.edit);
+router.get('/project/:projectId/carrydown/:id', carrydown.details);
+router.post('/project/:projectId/carrydown/:id', carrydown.postEdit);
 
 router.use('/order', orderRouter);
 

@@ -1,0 +1,60 @@
+extends ../layout
+
+block content
+  ol(class='breadcrumb')
+    li
+      a(href='/') 主页
+    li
+      a(href='../')= current.name + '项目'
+    li
+      a(href='./') 结转列表
+    li(class='active') 结转单填写
+  h2(class='text-center') 创建结转单
+  if info
+    div(class='alert alert-info')= info
+  if error
+    div(class='alert alert-danger')= error
+  p(class='hidden' id='productTypes')= JSON.stringify(productTypes)
+  form(action='../carrydown' method='post' id='order-create-form')
+    // 这里放隐藏提交的物料数据
+    div(class='hidden-content' hidden=true)
+    div(class='form-horizontal')
+      div(class='form-group')
+        label(class='control-label col-md-1') 项目部
+        div(class='col-md-3')
+          select(name='project' class='form-control' id='project')
+            each project in projects
+              option(value=project.id)= project.name
+        label(class='control-label col-md-1') 日期
+        div(class='col-md-3')
+          input(type='date', class='form-control' id='date' name='date')
+      div(class='form-group')
+        label(class='control-label col-md-1') 备注
+        div(class='col-md-11')
+          input(type='text' class='form-control' id='comments' name='comments')
+  div(id='details-wrapper')
+    table(id='details' class="table table-striped table-bordered table-hover dataTable no-footer" cellspacing="0" width="100%")
+  form(class='form-inline' id='add-form')
+    // TODO 下面这些选项的数据，均由数据库提供，浏览器通过ajax请求缓存到storage中
+    div(class='form-group')
+      label(class='control-label') 类型
+      select(class='form-control' name='type' id='type')
+        option 租赁类
+        option 耗损类
+    div(class='form-group')
+      label(class='control-label') 名称
+      input(type='text' class='form-control' name='name' autocomplete='off' list='name-list' id='name')
+      datalist(id='name-list')
+        each productType in productTypes
+          option= productType.name
+    div(class='form-group')
+      label(class='control-label') 规格
+      input(type='text' class='form-control' name='size' autocomplete='off' list='size-list' id='size')
+      datalist(id='size-list')
+    div(class='form-group')
+      label(class='control-label') 数量
+      input(type='text' class='form-control' name='count' autocomplete='off' id='count')
+    button(id='add' class='btn btn-primary') 添加
+  button(class='btn btn-primary btn-block' id='order-create-button') 创建
+block added_scripts
+  script(src='/js/carrydown.js')

@@ -4,7 +4,7 @@
 const Project = require('../models/Project');
 const PurchaseOrder = require('../models/PurchaseOrder');
 const TransferOrder = require('../models/TransferOrder');
-const CarryDownOrder = require('../models/CarryDownOrder');
+const CarrydownOrder = require('../models/CarrydownOrder');
 const RejectOrder = require('../models/RejectOrder');
 
 const projectKeys = [
@@ -71,9 +71,9 @@ exports.index = (req, res, next) => {
     return TransferOrder.find().where('valid', true).where('toProject', req.session.current._id).limit(5);
   }).then(latestTransferInOrders => {
     res.locals.latestTransferInOrders = latestTransferInOrders;
-    return CarryDownOrder.find().limit(5);
-  }).then(latestCarryDownOrders => {
-    res.locals.latestCarryDownOrders = latestCarryDownOrders;
+    return CarrydownOrder.find().limit(5);
+  }).then(latestCarrydownOrders => {
+    res.locals.latestCarrydownOrders = latestCarrydownOrders;
     return RejectOrder.find().limit(5);
   }).then(latestRejectOrders => {
     res.locals.latestRejectOrders = latestRejectOrders;

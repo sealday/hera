@@ -7,7 +7,7 @@ block content
     li(class='active')= current.name + '项目'
   div(class='btn-group' style='margin-bottom: 1em;')
     a(class='btn btn-default' href='purchase/create') 采购
-    a(class='btn btn-default' href='carrydown/create') 结转
+    a(class='btn btn-default' href='carrydown/create') 结转（基础数据通过这个录入）
     a(class='btn btn-default' href='transferOut/create') 调出
     a(class='btn btn-default' href='transferIn/create') 调入
     a(class='btn btn-default' href='reject/create') 报废
@@ -59,10 +59,10 @@ block content
     div(class='panel-heading')
       h3(class='panel-title') 最近的结转单
     div(class='list-group')
-      each order in latestCarryDownOrders
-        a(class='list-group-item' href='purchase/' + order.id + '/')
+      each order in latestCarrydownOrders
+        a(class='list-group-item' href='carrydown/' + order.id + '/')
           span= projects[order.project].name + ' '
           each entry in order.entries
             span= entry.name + ' '
           span(class='pull-right')= order.status
-      a(class='list-group-item' href='purchase/') 查看更多
+      a(class='list-group-item' href='carrydown/') 查看更多
