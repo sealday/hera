@@ -20,11 +20,7 @@ function orderCreate() {
   $('#order-create-form').find('.hidden-content').find('input').each(function() {
     var entry = JSON.parse($(this).val());
     // TODO 计算小计
-    if (isNaN(entry.size)) {
-      entry.total = entry.count.toFixed(2);
-    } else {
-      entry.total = (entry.size * entry.count).toFixed(2);
-    }
+    entry.total = (calculateSize(entry.size) * entry.count).toFixed(2);
 
     entry.totalPrice = entry.total * entry.price;
     entry.button = '<button class="btn btn-danger action-delete" ' +
@@ -107,11 +103,7 @@ function orderCreate() {
     orderEntries.push(entry);
 
     // TODO 计算小计
-    if (isNaN(entry.size)) {
-      entry.total = entry.count.toFixed(2);
-    } else {
-      entry.total = (entry.size * entry.count).toFixed(2);
-    }
+    entry.total = (calculateSize(entry.size) * entry.count).toFixed(2);
 
     entry.totalPrice = entry.total * entry.price;
     entry.button = '<button class="btn btn-danger action-delete" ' +

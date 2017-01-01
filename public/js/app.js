@@ -232,3 +232,11 @@ function generateTable(selector, columns) {
   return window.dataTable = dataTable;
 }
 
+function calculateSize(size) {
+  let sizes = size.split(';');
+  if (isNaN(sizes[sizes.length - 1])) {
+    return 1;
+  } else {
+    return Number(sizes[sizes.length - 1]);
+  }
+}

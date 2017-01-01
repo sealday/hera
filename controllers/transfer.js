@@ -10,6 +10,7 @@ const ProductType = require('../models/ProductType');
 const Order = require('../models/Order');
 const TransferOrder = require('../models/TransferOrder');
 const mongoose = require('mongoose');
+const my = require('../utils/my');
 
 
 exports.in = (req, res, next) => {
@@ -188,6 +189,7 @@ exports.postEdit = (req, res, next) => {
   });
 };
 
+
 exports.details = (req, res, next) => {
   const direction = req.direction;
   let transferOrder = res.locals.transferOrder;
@@ -195,12 +197,7 @@ exports.details = (req, res, next) => {
   let total = {};
 
   transferOrder.entries.forEach(entry => {
-    let result = 0;
-    if (isNaN(entry.size)) {
-      result = entry.count * 1;
-    } else {
-      result = entry.count * entry.size;
-    }
+    let result = entry.count * my.calculateSize(entry.size);
 
     if (entry.name in entries) {
       total[entry.name] += result;
@@ -217,7 +214,7 @@ exports.details = (req, res, next) => {
     entries[name].forEach(entry => {
       printEntries.push({
         name: entry.name,
-        size: entry.size + ' ' + productTypeMap[name].sizeUnit,
+        size: entry.size.split(';').join(' ') + ' ' + productTypeMap[name].sizeUnit,
         count: entry.count + ' ' + productTypeMap[name].countUnit
       });
     });

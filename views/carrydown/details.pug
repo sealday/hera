@@ -31,5 +31,5 @@ block content
           td= entry.name
           td= entry.size
           td= entry.count
-          - var size = isNaN(entry.size) ? 1 : Number(entry.size)
+          - var size = isNaN(entry.size.split(';')[entry.size.split(';').length - 1]) ? 1 : Number(entry.size.split(';')[entry.size.split(';').length - 1])
           td= size * entry.count

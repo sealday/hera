@@ -98,11 +98,8 @@ function orderCreate() {
     orderEntries.push(entry);
 
     // TODO 计算小计
-    if (isNaN(entry.size)) {
-      entry.total = entry.count.toFixed(2);
-    } else {
-      entry.total = (entry.size * entry.count).toFixed(2);
-    }
+    entry.total = (calculateSize(entry.size) * entry.count).toFixed(2);
+
     dataTable.row.add(entry).draw(false);
 
     // 将内容放入表单中
