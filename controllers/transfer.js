@@ -211,23 +211,24 @@ exports.details = (req, res, next) => {
     }
   });
 
+  const productTypeMap = global.companyData.productTypeMap;
   let printEntries = [];
   for (let name in entries) {
     entries[name].forEach(entry => {
       printEntries.push({
         name: entry.name,
-        size: entry.size,
-        count: entry.count
+        size: entry.size + ' ' + productTypeMap[name].sizeUnit,
+        count: entry.count + ' ' + productTypeMap[name].countUnit
       });
     });
     printEntries.push({
       name: name,
       size: '小计',
-      count: total[name]
+      count: total[name] + ' ' + productTypeMap[name].unit
     });
   }
 
-  let columnLength = Math.ceil(printEntries.length / 3);
+  let columnLength = Math.ceil(printEntries.length / 2);
   res.render('transfer/details', {
     direction,
     entries,

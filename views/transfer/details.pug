@@ -27,28 +27,28 @@ block content
   table(class='table table-clean')
     tbody
       tr
-        td 承租单位
+        td 承租单位：
         if (direction == 'in')
           td= projects[transferOrder.fromProject].company
         if (direction == 'out')
           td= projects[transferOrder.toProject].company
-        td 日期
+        td 日期：
         td= moment(transferOrder.date).format('YYYY-MM-DD')
-        td 单号
+        td 单号：
         td= transferOrder._id
       tr
-        td 工程项目
+        td 工程项目：
         if (direction == 'in')
           td= projects[transferOrder.fromProject].name
         if (direction == 'out')
           td= projects[transferOrder.toProject].name
-        td 车号
+        td 车号：
         td= transferOrder.carNumber
-        td 车费
+        td 车费：
         td= transferOrder.carFee
 
   div(class='row')
-    div(class='col-xs-4')
+    div(class='col-xs-6')
       table(class='table')
         thead
           tr
@@ -58,12 +58,27 @@ block content
         tbody
           - var n = 0;
           while n < columnLength
-            tr
+            tr(class=printEntries[n].size == '小计' ? 'row-sum' : '')
               td= printEntries[n].name
               td= printEntries[n].size
               td= printEntries[n].count
             - n++;
-    div(class='col-xs-4')
+          tr
+            td(colspan=3 style='height: 10em;')
+              if direction == 'out'
+                span 说明：如供需双方未签正式合同，本发料单经供需双方代表签字确认后，将作为合同
+                span 及发生业务往来的有效凭证，如已签合同，则成为该合同的组成部分。租用方须核对
+                span 以上产品规格、数量确认后可签字认可。
+              if direction == 'in'
+                span 说明：如供需双方未签正式合同，本归料单经供需双方代表签字确认后，将作为合同
+                span 及发生业务往来的有效凭证，如已签合同，则成为该合同的组成部分。租用方须核对
+                span 以上产品规格、数量确认后可签字认可。
+                span 说明：
+          tr
+            td
+            td
+            td
+    div(class='col-xs-6')
       table(class='table')
         thead
           tr
@@ -72,27 +87,24 @@ block content
             th 数量
         tbody
           - var n = columnLength;
+          while n < printEntries.length
+            tr(class=printEntries[n].size == '小计' ? 'row-sum' : '')
+              td= printEntries[n].name
+              td= printEntries[n].size
+              td= printEntries[n].count
+            - n++;
           while n < columnLength * 2
             tr
-              td= printEntries[n].name
-              td= printEntries[n].size
-              td= printEntries[n].count
+              td &nbsp;
+              td
+              td
             - n++;
-    div(class='col-xs-4')
-      table(class='table')
-        thead
           tr
-            th 名称
-            th 规格
-            th 数量
-        tbody
-          - var n = columnLength * 2;
-          while n < printEntries.length
-            tr
-              td= printEntries[n].name
-              td= printEntries[n].size
-              td= printEntries[n].count
-            - n++;
+            td(colspan=3 style='height: 10em;') 备注
+          tr
+            td
+            td
+            td
 
   div(class='row')
     div(class='col-xs-4')

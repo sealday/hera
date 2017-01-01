@@ -9,6 +9,10 @@ const productTypeSchema = new Schema({
   name: String,
   sizes: [String],
   unit: String,
+  sizeUnit: String,
+  countUnit: String,
+  convert: Number, // 折合数量级
+  convertUnit: String // 折合单位
 });
 
 

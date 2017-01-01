@@ -89,3 +89,8 @@ a {
 .project-store.active {
   display: block;
 }
+
+.row-sum {
+  font-weight: 900;
+  text-decoration: underline;
+}

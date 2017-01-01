@@ -26,6 +26,10 @@ mongoose
     return ProductType.find();
   }).then(productTypes => {
     global.companyData.productTypes = productTypes;
+    global.companyData.productTypeMap = {};
+    productTypes.forEach(type => {
+      global.companyData.productTypeMap[type.name] = type;
+    });
     return Project.find();
   }).then(projects => {
     global.companyData.projects = {};
