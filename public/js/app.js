@@ -46,7 +46,17 @@ $(function () {
     $('#arrival-date').get(0).valueAsDate = tomorrow;
   }
 
-  $('.base-type').change(function(e) {
+
+  var baseTypes = $('.base-type');
+  baseTypes.each(function(_, baseType) {
+    if ($(this).val() == '基地仓库') {
+      $(this).parent().siblings('.connect-base').hide();
+    }
+  });
+  // 初始化隐藏！
+  //$('.base-type').parent().siblings('.connect-base').hide();
+
+  baseTypes.change(function(e) {
     if ($(e.target).val() == '基地仓库') {
       $(e.target).parent().siblings('.connect-base').hide()
     } else {
@@ -54,38 +64,6 @@ $(function () {
     }
   });
 
-  if (Cookies.get('project.name')) {
-    //var name = Cookies.get('project.name');
-    //var projectId = Cookies.get('project.id');
-    //$('#current-project').html(name + '<span class="caret">');
-    //
-    //$('.project-store').removeClass('active');
-    //$('#project-store-' + name).addClass('active');
-    //
-    //$('#order-create-buy-a').attr('href', ('/project/' + projectId + '/purchase/create'));
-    //$('#order-create-sell-a').attr('href', ('/project/' + projectId + '/order/create?type=sell'));
-    //$('#order-create-out-a').attr('href', ('/project/' + projectId + '/order/create'));
-    //$('#order-create-in-a').attr('href', ('/project/' + projectId + '/order/create'));
-  }
-
-  // 首页选择项目
-  $('.current-project-a').click(function(e) {
-    //e.preventDefault();
-    //var name = $(this).text();
-    //var projectId = $(this).attr('data-id');
-    //$('#current-project').html(name + '<span class="caret">');
-    //// 切换项目！
-    //$('.project-store').removeClass('active');
-    //$('#project-store-' + name).addClass('active');
-    //
-    //$('#order-create-buy-a').attr('href', ('/project/' + projectId + '/purchase/create'));
-    //$('#order-create-sell-a').attr('href', ('/project/' + projectId + '/order/create?type=sell'));
-    //$('#order-create-out-a').attr('href', ('/project/' + projectId + '/order/create'));
-    //$('#order-create-in-a').attr('href', ('/project/' + projectId + '/order/create'));
-
-    //Cookies.set('project.name', name);
-    //Cookies.set('project.id', projectId);
-  });
 });
 
 /**

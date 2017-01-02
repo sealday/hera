@@ -32,12 +32,12 @@ div(class='tab-pane' id='project-pane')
               div(class='col-sm-5')
                 input(class='form-control' name='name' type='text' value=project.name required)
             div(class='form-group')
-              label(class='control-label col-sm-2') 项目电话
-              div(class='col-sm-3')
-                input(class='form-control' name='tel' type='text' value=project.tel)
               label(class='control-label col-sm-2') 单位电话
-              div(class='col-sm-5')
+              div(class='col-sm-3')
                 input(class='form-control' name='companyTel' type='text' value=project.abbr)
+              label(class='control-label col-sm-2') 项目电话
+              div(class='col-sm-5')
+                input(class='form-control' name='tel' type='text' value=project.tel)
             div(class='form-group')
               label(class='control-label col-sm-2') 地址
               div(class='col-sm-10')
@@ -63,7 +63,7 @@ div(class='tab-pane' id='project-pane')
             div(class='form-group')
               label(class='control-label col-sm-2') 仓库类型
               div(class='col-sm-2')
-                select(name='type' class='form-control')
+                select(name='type' class='form-control base-type')
                   option(value='项目部仓库' selected=project.type == '项目部仓库') 项目部仓库
                   option(value='基地仓库' selected=project.type == '基地仓库') 基地仓库
                   option(value='第三方仓库' selected=project.type == '第三方仓库') 第三方仓库
@@ -93,12 +93,12 @@ div(class='tab-pane' id='project-pane')
         div(class='col-sm-5')
           input(class='form-control' name='name' type='text' required)
       div(class='form-group')
-        label(class='control-label col-sm-2') 项目电话
-        div(class='col-sm-3')
-          input(class='form-control' name='tel' type='text')
         label(class='control-label col-sm-2') 单位电话
-        div(class='col-sm-5')
+        div(class='col-sm-3')
           input(class='form-control' name='companyTel' type='text')
+        label(class='control-label col-sm-2') 项目电话
+        div(class='col-sm-5')
+          input(class='form-control' name='tel' type='text')
       div(class='form-group')
         label(class='control-label col-sm-2') 地址
         div(class='col-sm-10')
