@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const projectSchema = new Schema({
-  name: { type: String, unique: true }, // 项目名称
+  name: String, // 项目名称
   company: String, // 公司名称
   abbr: String,  // 项目简称
   contacts: [{
@@ -14,6 +14,7 @@ const projectSchema = new Schema({
     phone: String // 联系人电话
   }],
   tel: String, // 项目部电话
+  companyTel: String, // 单位电话
   address: String, // 项目部地址
   comments: String, // 备注
   store: [{name: String, size: String, count: Number}], // 库存信息（实时）

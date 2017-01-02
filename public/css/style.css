@@ -94,3 +94,7 @@ a {
   font-weight: 900;
   text-decoration: underline;
 }
+
+.important-star {
+  color: red;
+}

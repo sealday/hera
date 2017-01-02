@@ -23,19 +23,21 @@ div(class='tab-pane' id='project-pane')
         div(class='panel-body')
           form(class='form-horizontal project-modify-form' data-id=project._id method='post')
             div(class='form-group')
-              label(class='control-label col-sm-2') 项目名称
-              div(class='col-sm-2')
-                input(class='form-control' name='name' type='text' value=project.name)
               label(class='control-label col-sm-2') 单位名称
-              div(class='col-sm-6')
-                input(class='form-control' name='company' type='text' value=project.company)
+                span(class='important-star') (*)
+              div(class='col-sm-3')
+                input(class='form-control' name='company' type='text' value=project.company required)
+              label(class='control-label col-sm-2') 项目名称
+                span(class='important-star') (*)
+              div(class='col-sm-5')
+                input(class='form-control' name='name' type='text' value=project.name required)
             div(class='form-group')
-              label(class='control-label col-sm-2') 简称
-              div(class='col-sm-2')
-                input(class='form-control' name='abbr' type='text' value=project.abbr)
-              label(class='control-label col-sm-2') 项目部电话
-              div(class='col-sm-6')
+              label(class='control-label col-sm-2') 项目电话
+              div(class='col-sm-3')
                 input(class='form-control' name='tel' type='text' value=project.tel)
+              label(class='control-label col-sm-2') 单位电话
+              div(class='col-sm-5')
+                input(class='form-control' name='companyTel' type='text' value=project.abbr)
             div(class='form-group')
               label(class='control-label col-sm-2') 地址
               div(class='col-sm-10')
@@ -44,12 +46,14 @@ div(class='tab-pane' id='project-pane')
               each contact in project.contacts
                 div(class='form-group')
                   label(class='control-label col-sm-2') 联系人
-                  div(class='col-sm-2')
-                    input(class='form-control' name='contact.name' type='text' value=contact.name)
+                    span(class='important-star') (*)
+                  div(class='col-sm-3')
+                    input(class='form-control' name='contact.name' type='text' value=contact.name required)
                   label(class='control-label col-sm-2') 联系人电话
-                  div(class='col-sm-6')
+                    span(class='important-star') (*)
+                  div(class='col-sm-5')
                     div(class='input-group')
-                      input(class='form-control' name='contact.phone' type='text' value=contact.phone)
+                      input(class='form-control' name='contact.phone' type='text' value=contact.phone required)
                       span(class='input-group-btn')
                         a(class='btn btn-default contact-plus-button')
                           span(class='glyphicon glyphicon-plus')
@@ -63,12 +67,13 @@ div(class='tab-pane' id='project-pane')
                   option(value='项目部仓库' selected=project.type == '项目部仓库') 项目部仓库
                   option(value='基地仓库' selected=project.type == '基地仓库') 基地仓库
                   option(value='第三方仓库' selected=project.type == '第三方仓库') 第三方仓库
-              label(class='control-label col-sm-2') 关联基地
-              div(class='col-sm-2')
-                select(name='base' class='form-control')
-                  each p in projects
-                    if p.type == '基地仓库'
-                      option(value=p.id selected=p.id == project.base)= p.name
+              .connect-base
+                label(class='control-label col-sm-offset-1 col-sm-2') 关联基地
+                div(class='col-sm-2')
+                  select(name='base' class='form-control')
+                    each p in projects
+                      if p.type == '基地仓库'
+                        option(value=p.id selected=p.id == project.base)= p.name
             div(class='form-group')
               label(class='control-label col-sm-2') 备注
               div(class='col-sm-10')
@@ -79,19 +84,21 @@ div(class='tab-pane' id='project-pane')
   div(class='collapse' id='project-add-form')
     form(class='form-horizontal' method='post' action='/project')
       div(class='form-group')
-        label(class='control-label col-sm-2') 项目名称
-        div(class='col-sm-2')
-          input(class='form-control' name='name' type='text')
         label(class='control-label col-sm-2') 单位名称
-        div(class='col-sm-6')
-          input(class='form-control' name='company' type='text')
+          span(class='important-star') (*)
+        div(class='col-sm-3')
+          input(class='form-control' name='company' type='text' required)
+        label(class='control-label col-sm-2') 项目名称
+          span(class='important-star') (*)
+        div(class='col-sm-5')
+          input(class='form-control' name='name' type='text' required)
       div(class='form-group')
-        label(class='control-label col-sm-2') 简称
-        div(class='col-sm-2')
-          input(class='form-control' name='abbr' type='text')
-        label(class='control-label col-sm-2') 项目部电话
-        div(class='col-sm-6')
+        label(class='control-label col-sm-2') 项目电话
+        div(class='col-sm-3')
           input(class='form-control' name='tel' type='text')
+        label(class='control-label col-sm-2') 单位电话
+        div(class='col-sm-5')
+          input(class='form-control' name='companyTel' type='text')
       div(class='form-group')
         label(class='control-label col-sm-2') 地址
         div(class='col-sm-10')
@@ -99,12 +106,14 @@ div(class='tab-pane' id='project-pane')
       div(class='contact-group' data-length=1)
         div(class='form-group')
           label(class='control-label col-sm-2') 联系人
-          div(class='col-sm-2')
-            input(class='form-control' name='contact.name' type='text')
+            span(class='important-star') (*)
+          div(class='col-sm-3')
+            input(class='form-control' name='contact.name' type='text' required)
           label(class='control-label col-sm-2') 联系人电话
-          div(class='col-sm-6')
+            span(class='important-star') (*)
+          div(class='col-sm-5')
             div(class='input-group')
-              input(class='form-control' name='contact.phone' type='text')
+              input(class='form-control' name='contact.phone' type='text' required)
               span(class='input-group-btn')
                 a(class='btn btn-default contact-plus-button')
                   span(class='glyphicon glyphicon-plus')
@@ -114,15 +123,17 @@ div(class='tab-pane' id='project-pane')
       div(class='form-group')
         label(class='control-label col-sm-2') 仓库类型
         div(class='col-sm-2')
-          select(name='type' value='project.type' class='form-control')
+          select(name='type' value='project.type' class='form-control base-type')
             option 项目部仓库
             option 基地仓库
             option 第三方仓库
-        div(class='col-sm-2')
-          select(name='base' class='form-control')
-            each project in projects
-              if project.type == '基地仓库'
-                option(value=project.id)= project.name
+        .connect-base
+          label(class='control-label col-sm-offset-1 col-sm-2') 关联仓库
+          div(class='col-sm-2')
+            select(name='base' class='form-control')
+              each project in projects
+                if project.type == '基地仓库'
+                  option(value=project.id)= project.name
       div(class='form-group')
         label(class='control-label col-sm-2') 备注
         div(class='col-sm-10')

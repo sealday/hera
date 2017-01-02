@@ -46,6 +46,14 @@ $(function () {
     $('#arrival-date').get(0).valueAsDate = tomorrow;
   }
 
+  $('.base-type').change(function(e) {
+    if ($(e.target).val() == '基地仓库') {
+      $(e.target).parent().siblings('.connect-base').hide()
+    } else {
+      $(e.target).parent().siblings('.connect-base').show()
+    }
+  });
+
   if (Cookies.get('project.name')) {
     //var name = Cookies.get('project.name');
     //var projectId = Cookies.get('project.id');
