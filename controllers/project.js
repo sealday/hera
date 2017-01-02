@@ -9,14 +9,14 @@ const RejectOrder = require('../models/RejectOrder');
 
 const projectKeys = [
   'name',
-  'abbr',
+  'tel',
   'contact.name',
   'contact.phone',
   'address',
   'comments',
-  'tel',
-  'type',
   'company',
+  'companyTel',
+  'type',
   'base'
 ];
 
