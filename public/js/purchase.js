@@ -2,30 +2,86 @@ $(function() {
   orderCreate();
 });
 
+function getProductTypes() {
+  var productTypesString;
+  var productTypeArray = [];
+  var productTypes = {};
+  if (productTypesString = $('#productTypes').text()) {
+    productTypeArray = JSON.parse(productTypesString);
+    productTypeArray.forEach(productType => {
+      productTypes[productType.name] = productType;
+    });
+  }
+  return productTypes;
+}
+
+// 计算
+function calculateEntry(entry) {
+  entry.total = (calculateSize(entry.size) * entry.count).toFixed(2);
+
+  entry.sum = entry.total * entry.price;
+  entry.button = '<button class="btn btn-danger action-delete" ' +
+    'data-name="' + entry.name + '" data-size="' + entry.size +'">删除</button>'
+
+  if (entry.fee) {
+    if (entry.feeType == '趟') {
+      entry.feeSum = entry.fee * 1;
+      entry.feeCount = 1;
+    } else if (entry.feeType == '吨') {
+      // 计算多少吨
+      entry.feeCount = '待计算';
+      entry.feeSum = entry.fee * 1;
+    }
+
+  } else {
+    entry.fee = 0;
+    entry.feeSum = 0;
+    entry.feeType = '无';
+  }
+
+  entry.mixSum = entry.sum + entry.feeSum;
+  entry.mixPrice = (entry.mixSum / entry.total).toFixed(2);
+}
+
 function orderCreate() {
   var columns = [
     { title: '名称', data: 'name' },
     { title: '规格', data: 'size' },
     { title: '数量', data: 'count' },
     { title: '小计', data: 'total' },
+    { title: '单位', data: 'unit' },
     { title: '单价', data: 'price' },
     { title: '金额', data: 'sum' },
-    { title: '顿/趟', data: 'feeType' },
+    { title: '顿/趟', data: 'feeCount' },
+    { title: '运费单位', data: 'feeType' },
     { title: '运费单价', data: 'fee' },
     { title: '运费', data: 'feeSum' },
-    { title: '合计', data: 'totalSum' },
+    { title: '综合金额', data: 'mixSum' },
+    { title: '综合单价', data: 'mixPrice' },
     { title: '', data: 'button'}
   ];
 
-  var freightGroup = new Vue({
-    el: '#freight-group',
+  var productTypes = getProductTypes();
+
+  var addFormVue = new Vue({
+    el: '#add-form',
     data: {
+      name: '',
       freight: false,
       feeType: '吨',
-      fee: ''
+      fee: '',
+      unit: '',
+      feeCount: 0
+    },
+    watch: {
+      name: function (val, oldVal) {
+        if (productTypes[val]) {
+          addFormVue.unit = productTypes[val].unit;
+        }
+      }
     }
   });
-  window.freightGroup = freightGroup;
+  window.addFormVue = addFormVue;
 
   var dataTable = generateTable('#details', columns);
 
@@ -34,13 +90,9 @@ function orderCreate() {
 
   $('#order-create-form').find('.hidden-content').find('input').each(function() {
     var entry = JSON.parse($(this).val());
-    // TODO 计算小计
-    entry.total = (calculateSize(entry.size) * entry.count).toFixed(2);
 
-    entry.sum = entry.total * entry.price;
-    entry.button = '<button class="btn btn-danger action-delete" ' +
-      'data-name="' + entry.name + '" data-size="' + entry.size +'">删除</button>';
-    orderEntries.push(entry);
+    calculateEntry(entry);
+
     dataTable.row.add(entry).draw(false);
   });
 
@@ -115,30 +167,7 @@ function orderCreate() {
 
     orderEntries.push(entry);
 
-    // TODO 计算小计
-    entry.total = (calculateSize(entry.size) * entry.count).toFixed(2);
-
-    entry.sum = entry.total * entry.price;
-    entry.button = '<button class="btn btn-danger action-delete" ' +
-      'data-name="' + entry.name + '" data-size="' + entry.size +'">删除</button>'
-    //+ '<button class="btn btn-info action-modify" '+
-    //'data-name="' + entry.name + '" data-size="' + entry.size +'">修改</button>';
-
-    if (entry.fee) {
-      if (entry.feeType == '趟') {
-        entry.feeSum = entry.fee * 1;
-      } else if (entry.feeType == '吨') {
-        // 计算多少吨
-        entry.feeSum = entry.fee * 1;
-      }
-
-    } else {
-      entry.fee = 0;
-      entry.feeSum = 0;
-      entry.feeType = '无';
-    }
-
-    entry.totalSum = entry.sum + entry.feeSum;
+    calculateEntry(entry);
 
     dataTable.row.add(entry).draw(false);
 
@@ -156,15 +185,7 @@ function orderCreate() {
     addForm.find('input[name=size]').focus();
   });
 
-  var productTypesString;
-  var productTypeArray = [];
-  var productTypes = {};
-  if (productTypesString = $('#productTypes').text()) {
-    productTypeArray = JSON.parse(productTypesString);
-    productTypeArray.forEach(productType => {
-      productTypes[productType.name] = productType;
-    });
-  };
+  var productTypes = getProductTypes();
 
   $('#size').focus(function () {
     var name = $('#name').val();
