@@ -11,6 +11,9 @@ const transfer = require('./transfer');
 const carrydown = require('./carrydown');
 const orderRouter =  order.router;
 const moment = require('moment');
+const management = require('./management');
+
+router.get('/management', management.index);
 
 router.use((req, res, next) => {
   res.locals.moment = moment;
@@ -96,5 +99,6 @@ router.get('/project/:id', project.index);
 router.post('/project/:id', project.updateInfo);
 router.post('/project', project.post);
 router.post('/project/:id/delete', project.delete);
+
 
 module.exports = router;

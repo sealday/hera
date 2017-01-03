@@ -35,13 +35,9 @@ block content
         label(class='control-label col-md-1') 原始单号
         div(class='col-md-3')
           input(type='text' class='form-control' id='originalOrder' name='originalOrder')
-      div(class='form-group')
         label(class='control-label col-md-1') 车号
         div(class='col-md-3')
           input(type='text' class='form-control' id='carNumber' name='carNumber')
-        label(class='control-label col-md-1') 车费
-        div(class='col-md-3')
-          input(type='text' class='form-control' id='carFee' name='carFee')
         label(class='control-label col-md-1') 备注
         div(class='col-md-3')
           input(type='text' class='form-control' id='comments' name='comments')
@@ -65,11 +61,25 @@ block content
       input(type='text' class='form-control' name='size' autocomplete='off' list='size-list' id='size')
       datalist(id='size-list')
     div(class='form-group')
-      label(class='control-label') 单价
-      input(type='text' class='form-control' name='price' autocomplete='off' id='price')
-    div(class='form-group')
       label(class='control-label') 数量
       input(type='text' class='form-control' name='count' autocomplete='off' id='count')
+    div(class='form-group')
+      label(class='control-label') 单价
+      input(type='text' class='form-control' name='price' autocomplete='off' id='price')
+    #freight-group(style='display: inline')
+      div(class='form-group')
+        label(class='control-label') 运费
+          // 是否计算运费
+          input(type='checkbox' v-model='freight')
+      div(style='display: inline' v-if='freight')
+        div(class='form-group')
+          label(class='control-label') 运费计算方式
+          select(name='feeType' id='feeType' class='form-control' v-model='feeType')
+            option(value='吨') 吨
+            option(value='趟') 趟
+        div(class='form-group')
+          label(class='control-label') 运费单价
+          input(type='text' class='form-control' name='fee' autocomplete='off' id='fee' v-model='fee' required)
     button(id='add' class='btn btn-primary') 添加
   button(class='btn btn-primary btn-block' id='order-create-button') 创建
 block added_scripts

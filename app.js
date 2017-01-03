@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const chalk = require('chalk');
 const multer = require('multer');
 const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 // const express-validator 可以考虑使用
 const ProductType = require('./models/ProductType');
 const Project = require('./models/Project');
@@ -53,6 +54,11 @@ mongoose.connection.on('error', () => {
 
 const app = express();
 
+// 会话保存
+//app.use(express.session({
+//
+//}))
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -69,7 +75,10 @@ app.use(session({
   secret: 'Hera God',
   cookie: {},
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: true,
+  store: new MongoStore({
+    mongooseConnection: mongoose.connection
+  })
 }));
 
 app.use('/', index);

@@ -6,12 +6,27 @@ function orderCreate() {
   var columns = [
     { title: '名称', data: 'name' },
     { title: '规格', data: 'size' },
-    { title: '单价', data: 'price' },
     { title: '数量', data: 'count' },
-    { title: '数量小计', data: 'total' },
-    { title: '价格小计', data: 'totalPrice' },
+    { title: '小计', data: 'total' },
+    { title: '单价', data: 'price' },
+    { title: '金额', data: 'sum' },
+    { title: '顿/趟', data: 'feeType' },
+    { title: '运费单价', data: 'fee' },
+    { title: '运费', data: 'feeSum' },
+    { title: '合计', data: 'totalSum' },
     { title: '', data: 'button'}
   ];
+
+  var freightGroup = new Vue({
+    el: '#freight-group',
+    data: {
+      freight: false,
+      feeType: '吨',
+      fee: ''
+    }
+  });
+  window.freightGroup = freightGroup;
+
   var dataTable = generateTable('#details', columns);
 
   var addForm = $('#add-form');
@@ -22,11 +37,9 @@ function orderCreate() {
     // TODO 计算小计
     entry.total = (calculateSize(entry.size) * entry.count).toFixed(2);
 
-    entry.totalPrice = entry.total * entry.price;
+    entry.sum = entry.total * entry.price;
     entry.button = '<button class="btn btn-danger action-delete" ' +
-      'data-name="' + entry.name + '" data-size="' + entry.size +'">删除</button>'
-      //+ '<button class="btn btn-info action-modify" '+
-      //'data-name="' + entry.name + '" data-size="' + entry.size +'">修改</button>';
+      'data-name="' + entry.name + '" data-size="' + entry.size +'">删除</button>';
     orderEntries.push(entry);
     dataTable.row.add(entry).draw(false);
   });
@@ -105,11 +118,28 @@ function orderCreate() {
     // TODO 计算小计
     entry.total = (calculateSize(entry.size) * entry.count).toFixed(2);
 
-    entry.totalPrice = entry.total * entry.price;
+    entry.sum = entry.total * entry.price;
     entry.button = '<button class="btn btn-danger action-delete" ' +
       'data-name="' + entry.name + '" data-size="' + entry.size +'">删除</button>'
     //+ '<button class="btn btn-info action-modify" '+
     //'data-name="' + entry.name + '" data-size="' + entry.size +'">修改</button>';
+
+    if (entry.fee) {
+      if (entry.feeType == '趟') {
+        entry.feeSum = entry.fee * 1;
+      } else if (entry.feeType == '吨') {
+        // 计算多少吨
+        entry.feeSum = entry.fee * 1;
+      }
+
+    } else {
+      entry.fee = 0;
+      entry.feeSum = 0;
+      entry.feeType = '无';
+    }
+
+    entry.totalSum = entry.sum + entry.feeSum;
+
     dataTable.row.add(entry).draw(false);
 
     // 将内容放入表单中
