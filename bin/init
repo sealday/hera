@@ -88,7 +88,7 @@ mongoose
         unit: '张'
       },
       {
-        type: '租赁品',
+        type: '耗损品',
         name: '架子',
         sizes: ['钢管架', '扣件托盘', '轮扣立杆架', '轮扣横杆架'],
         sizeUnit: '',
