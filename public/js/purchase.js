@@ -52,7 +52,7 @@ function orderCreate() {
     { title: '单位', data: 'unit' },
     { title: '单价', data: 'price' },
     { title: '金额', data: 'sum' },
-    { title: '顿/趟', data: 'feeCount' },
+    { title: '吨/趟', data: 'feeCount' },
     { title: '运费单位', data: 'feeType' },
     { title: '运费单价', data: 'fee' },
     { title: '运费', data: 'feeSum' },
