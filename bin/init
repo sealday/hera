@@ -81,7 +81,15 @@ mongoose
       // TODO
       {
         type: '租赁品',
-        name: '钢笆',
+        name: '钢板钢笆',
+        sizes: ['750*1000有边', '750*1000没边' ],
+        sizeUnit: '',
+        countUnit: '张',
+        unit: '张'
+      },
+      {
+        type: '租赁品',
+        name: '钢筋钢笆',
         sizes: ['750*1000有边', '750*1000没边' ],
         sizeUnit: '',
         countUnit: '张',
