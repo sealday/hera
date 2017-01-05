@@ -66,7 +66,7 @@ div(class='tab-pane active' id='user-pane')
             each project in projects
               label(class='btn btn-default')
                 input(name='project' type='checkbox' value=project.id )
-                | #{project.name}
+                | #{project.company+project.name}
       div(class='form-group')
         div(class='col-sm-offset-10 col-sm-2')
           button(class='btn btn-primary pull-right') 确认增加
