@@ -65,7 +65,7 @@ div(class='tab-pane active' id='user-pane')
           div(class='btn-group' data-toggle='buttons')
             each project in projects
               label(class='btn btn-default')
-                input(name='project' type='checkbox' value=project.id required)
+                input(name='project' type='checkbox' value=project.id )
                 | #{project.name}
       div(class='form-group')
         div(class='col-sm-offset-10 col-sm-2')
