@@ -26,7 +26,7 @@ block content
         div(class='col-md-3')
           select(name='project' class='form-control' id='project')
             each project in projects
-              option(value=project.id selected=carrydownOrder.project == project.id)= project.name
+              option(value=project.id selected=carrydownOrder.project == project.id)= project.company + project.name
         label(class='control-label col-md-1') 日期
         div(class='col-md-3')
           input(type='date', class='form-control' id='date' name='date' value=moment(carrydownOrder.date).format('YYYY-MM-DD'))
