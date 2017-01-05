@@ -9,6 +9,7 @@ const projectSchema = new Schema({
   name: String, // 项目名称
   company: String, // 公司名称
   abbr: String,  // 项目简称
+  completeName: String, // 全称
   contacts: [{
     name: String, // 联系人姓名
     phone: String // 联系人电话
@@ -24,7 +25,13 @@ const projectSchema = new Schema({
 }, { timestamps: true });
 
 // 设置简称字段是索引
-projectSchema.index({ name: 1 });
+projectSchema.index({ completeName: 1 }, { unique: true });
+
+projectSchema.pre('save', function save(next) {
+  const project = this;
+  project.completeName = project.name + project.company;
+  next();
+});
 
 /**
  * 使用规格表的数据来进行初始化
