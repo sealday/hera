@@ -30,6 +30,9 @@ div(class='tab-pane active' id='user-pane')
                   input(name='name' class='form-control' value=user.profile.name)
             div(class='form-group')
               div(class='col-sm-12')
+                p
+                  span 项目权限勾选
+                  span(class='important-star') （*）
                 div(class='btn-group' data-toggle='buttons')
                   each project in projects
                     - var isIn = user.projects.indexOf(project._id) != -1
@@ -45,21 +48,24 @@ div(class='tab-pane active' id='user-pane')
         div(class='col-sm-3')
           div(class='input-group')
             span(class='input-group-addon') 用户名
-            input(name='username' class='form-control')
+            input(name='username' class='form-control' required)
         div(class='col-sm-3')
           div(class='input-group')
             span(class='input-group-addon') 密码
-            input(name='password' class='form-control' type='password')
+            input(name='password' class='form-control' type='password' required)
         div(class='col-sm-3')
           div(class='input-group')
             span(class='input-group-addon') 姓名
-            input(name='name' class='form-control')
+            input(name='name' class='form-control' required)
       div(class='form-group')
         div(class='col-sm-12')
+          p
+            span 项目权限勾选
+            span(class='important-star') （*）
           div(class='btn-group' data-toggle='buttons')
             each project in projects
               label(class='btn btn-default')
-                input(name='project' type='checkbox' value=project.id)
+                input(name='project' type='checkbox' value=project.id required)
                 | #{project.name}
       div(class='form-group')
         div(class='col-sm-offset-10 col-sm-2')

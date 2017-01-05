@@ -36,10 +36,10 @@ block content
           select(name='project' class='form-control' id='project')
             if direction == 'in'
               each project in projects
-                option(value=project.id selected=transferOrder.fromProject == project.id)= project.name
+                option(value=project.id selected=transferOrder.fromProject == project.id)= project.company + project.name
             if direction == 'out'
               each project in projects
-                option(value=project.id selected=transferOrder.toProject == project.id)= project.name
+                option(value=project.id selected=transferOrder.toProject == project.id)= project.company + project.name
         label(class='control-label col-md-1') 日期
         div(class='col-md-3')
           input(type='date', class='form-control' id='date' name='date' value=moment(transferOrder.date).format('YYYY-MM-DD'))

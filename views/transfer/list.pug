@@ -24,12 +24,12 @@ block content
       each order in transferOrders
         a(class='list-group-item' href=order.id + '/')
           if direction == 'in'
-            span= projects[order.fromProject].name + ' '
+            span= projects[order.fromProject].company + projects[order.fromProject].name + ' '
             each entry in order.entries
               span= entry.name + ' '
             span(class='pull-right')= order.status
           if direction == 'out'
-            span= projects[order.toProject].name + ' '
+            span= projects[order.toProject].company + projects[order.toProject].name + ' '
             each entry in order.entries
               span= entry.name + ' '
             span(class='pull-right')= order.status

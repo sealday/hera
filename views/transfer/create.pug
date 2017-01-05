@@ -36,7 +36,7 @@ block content
           select(name='project' class='form-control' id='project')
             each project in projects
               if (project._id != current._id)
-                option(value=project.id)= project.name
+                option(value=project.id)= project.company + project.name
         label(class='control-label col-md-1') 日期
         div(class='col-md-3')
           input(type='date', class='form-control' id='date' name='date')
