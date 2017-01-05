@@ -12,6 +12,7 @@ const carrydown = require('./carrydown');
 const orderRouter =  order.router;
 const moment = require('moment');
 const management = require('./management');
+const store = require('./store');
 
 router.get('/management', management.index);
 
@@ -93,6 +94,9 @@ router.use('/order', orderRouter);
 // control 即管理中心
 router.use('/control', control.middleware);
 router.get('/control', control.index);
+
+// 库存界面
+router.get('/store', store.index);
 
 // 项目管理 API
 router.get('/project/:id', project.index);

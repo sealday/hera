@@ -38,6 +38,8 @@ const PurchaseOrderSchema = new Schema({
     size: String, // 规格
     count: Number, // 数量
     price: Number, // 单价
+    unit: String, // 单位
+    feeCount: String, // 计数方式
   }], // 订单项
 }, { timestamps: true });
 

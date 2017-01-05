@@ -8,7 +8,6 @@ html(lang='zh-CN')
     link(rel='stylesheet', href='https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css')
     //link(rel='stylesheet', href='https://cdn.bootcss.com/datatables/1.10.13/css/jquery.dataTables.min.css')
     link(rel='stylesheet', href='https://cdn.bootcss.com/datatables/1.10.13/css/dataTables.bootstrap.min.css')
-
     link(rel='stylesheet', href='/css/style.css')
   body
     nav(class='navbar navbar-inverse navbar-fixed-top')
@@ -35,6 +34,8 @@ html(lang='zh-CN')
                       each project in ownProjects
                         li
                           a(href='/project/' + project.id + '/')= project.name
+            li
+              a(href='/store/') 库存情况
 
           ul(class='nav navbar-nav navbar-right')
             if user && user.username == 'hera'

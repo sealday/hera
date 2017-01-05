@@ -9,6 +9,7 @@ const Project = require('../models/Project');
 const ProductType = require('../models/ProductType');
 const Order = require('../models/Order');
 const CarrydownOrder = require('../models/CarrydownOrder');
+const StockRecord = require('../models/StockRecord');
 
 /**
  * 结转创建页面
@@ -55,7 +56,17 @@ exports.postPurchase = (req, res, next) => {
 
   order.username = req.user.username;
 
-  order.save().then(() => {
+  let stockRecord = new StockRecord();
+  stockRecord.inStock = order.project;
+  stockRecord.inDate = order.date;
+  stockRecord.entries = order.entries;
+  stockRecord.original = order._id;
+  stockRecord.originals.push(order._id);
+  stockRecord.type = '结转';
+
+  order.stockRecord = stockRecord._id;
+
+  Promise.all([order.save(), stockRecord.save()]).then(() => {
     res.redirect('./carrydown/create?info=保存成功！');
   }).catch(err => {
     next(err);
@@ -119,8 +130,22 @@ exports.postEdit = (req, res, next) => {
 
   order.username = req.user.username;
 
-  order.save().then(() => {
-    return CarrydownOrder.findByIdAndUpdate(req.params.id, { valid: false });
+  CarrydownOrder.findById(req.params.id).then(carryDownOrder => {
+    carryDownOrder.valid = false;
+    const stockRecordId = carryDownOrder.stockRecord;
+    return Promise.all([carryDownOrder.save(),
+      StockRecord.findById(stockRecordId)]);
+  }).then(result => {
+    let stockRecord = result[1];
+    stockRecord.inStock = order.project;
+    stockRecord.inDate = order.date;
+    stockRecord.entries = order.entries;
+    stockRecord.original = order._id;
+    stockRecord.originals.push(order._id);
+    stockRecord.type = '结转';
+
+    order.stockRecord = stockRecord._id;
+    return Promise.all([order.save(), stockRecord.save()]);
   }).then(() => {
     res.redirect('./edit?info=更新成功！');
   }).catch(err => {

@@ -1,0 +1,40 @@
+extends ../layout
+
+block content
+
+
+  p 选择查询的项目
+  form(class='form-inline' action='' method='get')
+    select(name='project' class='form-control')
+      each project in projects
+        option(value=project.id)= project.company + project.name
+    button(type='submit' class='btn btn-primary') 查询
+
+  div
+    if inRecords && outRecords
+      h3 入库记录
+      table(class='table')
+        thead
+          tr
+            th 名称
+            th 规格
+            th 数量
+        tbody
+          each inRecord in inRecords
+            tr
+              td= inRecord._id.name
+              td= inRecord._id.size
+              td= inRecord.sum
+      h3 出库记录
+      table(class='table')
+        thead
+          tr
+            th 名称
+            th 规格
+            th 数量
+        tbody
+          each outRecord in outRecords
+            tr
+              td= outRecord._id.name
+              td= outRecord._id.size
+              td= outRecord.sum

@@ -11,6 +11,7 @@ const Order = require('../models/Order');
 const TransferOrder = require('../models/TransferOrder');
 const mongoose = require('mongoose');
 const my = require('../utils/my');
+const StockRecord = require('../models/StockRecord');
 
 
 exports.in = (req, res, next) => {
@@ -89,7 +90,19 @@ exports.postPurchase = (req, res, next) => {
   order.username = req.user.username;
   order.status = '未确认';
 
-  order.save().then(() => {
+  let stockRecord = new StockRecord();
+  stockRecord.inStock = order.toProject;
+  stockRecord.outStock = order.fromProject;
+  stockRecord.inDate = order.date;
+  stockRecord.outDate = order.date;
+  stockRecord.entries = order.entries;
+  stockRecord.original = order._id;
+  stockRecord.originals.push(order._id);
+  stockRecord.type = '调拨';
+
+  order.stockRecord = stockRecord._id;
+
+  Promise.all([stockRecord.save(), order.save()]).then(() => {
     if (direction == 'in') {
       res.redirect('./transferIn/create?info=保存成功！');
     } else if (direction == 'out') {
@@ -180,8 +193,24 @@ exports.postEdit = (req, res, next) => {
   order.username = req.user.username;
   order.status = res.locals.transferOrder.status;
 
-  order.save().then(() => {
-    return TransferOrder.findByIdAndUpdate(req.params.id, { valid: false });
+  TransferOrder.findById(req.params.id).then(transferOrder => {
+    transferOrder.valid = false;
+    const stockRecordId = transferOrder.stockRecord;
+    return Promise.all([transferOrder.save(),
+      StockRecord.findById(stockRecordId)]);
+  }).then(result => {
+    let stockRecord = result[1];
+    stockRecord.inStock = order.toProject;
+    stockRecord.outStock = order.fromProject;
+    stockRecord.inDate = order.date;
+    stockRecord.outDate = order.date;
+    stockRecord.entries = order.entries;
+    stockRecord.original = order._id;
+    stockRecord.originals.push(order._id);
+    stockRecord.type = '调拨';
+
+    order.stockRecord = stockRecord._id;
+    return Promise.all([order.save(), stockRecord.save()]);
   }).then(() => {
     res.redirect('./edit?info=更新成功！');
   }).catch(err => {

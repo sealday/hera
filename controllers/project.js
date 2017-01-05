@@ -71,7 +71,7 @@ exports.index = (req, res, next) => {
     return TransferOrder.find().where('valid', true).where('toProject', req.session.current._id).limit(5);
   }).then(latestTransferInOrders => {
     res.locals.latestTransferInOrders = latestTransferInOrders;
-    return CarrydownOrder.find().limit(5);
+    return CarrydownOrder.find().where('valid', true).limit(5);
   }).then(latestCarrydownOrders => {
     res.locals.latestCarrydownOrders = latestCarrydownOrders;
     return RejectOrder.find().limit(5);
