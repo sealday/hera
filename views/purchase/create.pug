@@ -24,7 +24,7 @@ block content
         div(class='col-md-3')
           select(name='project' class='form-control' id='project')
             each project in projects
-              option(value=project.id)= project.name
+              option(value=project.id)= project.company + project.name
         label(class='control-label col-md-1') 对方单位
         div(class='col-md-3')
           input(type='text' class='form-control' id='vendor' name='vendor')
