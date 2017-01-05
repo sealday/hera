@@ -35,7 +35,7 @@ div(class='tab-pane active' id='user-pane')
                     - var isIn = user.projects.indexOf(project._id) != -1
                     label(class='btn btn-default ' + (isIn ? 'active' : ''))
                       input(name='project' type='checkbox' value=project.id checked=isIn)
-                      | #{project.name}
+                      | #{project.company+project.name}
             div(class='form-group')
               div(class='col-sm-offset-10 col-sm-2')
                 button(class='btn btn-default') 保存修改
