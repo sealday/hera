@@ -78,7 +78,6 @@ mongoose
         countUnit: '根',
         unit: '米'
       },
-      // TODO
       {
         type: '租赁品',
         name: '钢板钢笆',
@@ -96,7 +95,7 @@ mongoose
         unit: '张'
       },
       {
-        type: '耗损品',
+        type: '工具品',
         name: '架子',
         sizes: ['钢管架', '扣件托盘', '轮扣立杆架', '轮扣横杆架'],
         sizeUnit: '',

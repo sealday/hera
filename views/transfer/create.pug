@@ -49,10 +49,20 @@ block content
           input(type='text' class='form-control' id='carNumber' name='carNumber')
         label(class='control-label col-md-1') 车费
         div(class='col-md-3')
-          input(type='text' class='form-control' id='carFee' name='carFee')
+          input(type='text' class='form-control' id='carFee' name='cost.car')
         label(class='control-label col-md-1') 备注
         div(class='col-md-3')
           input(type='text' class='form-control' id='comments' name='comments')
+      div(class='form-group')
+        label(class='control-label col-md-1') 整理费
+        div(class='col-md-3')
+          input(type='text' class='form-control' name='cost.sort')
+        label(class='control-label col-md-1') 其他费用1
+        div(class='col-md-3')
+          input(type='text' class='form-control' name='cost.other1')
+        label(class='control-label col-md-1') 其他费用2
+        div(class='col-md-3')
+          input(type='text' class='form-control' name='cost.other2')
       div(class='form-group')
         label(style='color: red;') 更多的运输和运费相关内容还未加入
   div(id='details-wrapper')
@@ -64,6 +74,7 @@ block content
       select(class='form-control' name='type' id='type')
         option 租赁类
         option 耗损类
+        option 工具类
     div(class='form-group')
       label(class='control-label') 名称
       input(type='text' class='form-control' name='name' autocomplete='off' list='name-list' id='name')

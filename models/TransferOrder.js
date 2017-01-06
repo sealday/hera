@@ -19,6 +19,8 @@ const TransferOrderSchema = new Schema({
   fromProject: Schema.Types.ObjectId, // 出发项目
   toProject: Schema.Types.ObjectId, // 到达项目
 
+  originalOrder: String, // 原始单位
+
   comments: String, // 订单说明内容，对于调拨单，原始单号填写在备注中
   status: String, // 调拨单状态
 
@@ -29,6 +31,13 @@ const TransferOrderSchema = new Schema({
   username: String, // 制单人
 
   valid: { type: Boolean, default: true }, // 是否有效
+
+  cost: {
+    car: Number, // 车费
+    sort: Number, // 整理
+    other1: Number, // 其他1
+    other2: Number, // 其他2
+  }, // 费用
 
   entries: [{
     type: { // 类型

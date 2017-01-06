@@ -29,41 +29,46 @@ block content
   table(class='table table-clean')
     tbody
       tr
+        td
+        td
+        if transferOrder.originalOrder
+          td.text-right 单号：
+          td.text-center= transferOrder.originalOrder
+        else
+          td.text-right 单号：
+          td.text-center= transferOrder._id
+      tr
         td 承租单位：
         if (direction == 'in')
           td= projects[transferOrder.fromProject].company
         if (direction == 'out')
           td= projects[transferOrder.toProject].company
-        td 日期：
-        td= moment(transferOrder.date).format('YYYY-MM-DD')
-        td 单号：
-        td= transferOrder._id
+        td.text-right 日期：
+        td.text-center= moment(transferOrder.date).format('YYYY-MM-DD')
       tr
         td 工程项目：
         if (direction == 'in')
           td= projects[transferOrder.fromProject].name
         if (direction == 'out')
           td= projects[transferOrder.toProject].name
-        td 车号：
-        td= transferOrder.carNumber
-        td 车费：
-        td= transferOrder.carFee
+        td.text-right 车号：
+        td.text-center= transferOrder.carNumber
 
   div(class='row')
     div(class='col-xs-6')
       table(class='table')
         thead
           tr
-            th 名称
-            th 规格
-            th 数量
+            th.text-right 名称
+            th.text-right 规格
+            th.text-right 数量
         tbody
           - var n = 0;
           while n < columnLength
             tr(class=printEntries[n].size == '小计' ? 'row-sum' : '')
-              td= printEntries[n].name
-              td= printEntries[n].size
-              td= printEntries[n].count
+              td.text-right= printEntries[n].name
+              td.text-right= printEntries[n].size
+              td.text-right= printEntries[n].count
             - n++;
           tr
             td(colspan=3 style='height: 10em;')
@@ -84,16 +89,16 @@ block content
       table(class='table')
         thead
           tr
-            th 名称
-            th 规格
-            th 数量
+            th.text-right 名称
+            th.text-right 规格
+            th.text-right 数量
         tbody
           - var n = columnLength;
           while n < printEntries.length
             tr(class=printEntries[n].size == '小计' ? 'row-sum' : '')
-              td= printEntries[n].name
-              td= printEntries[n].size
-              td= printEntries[n].count
+              td.text-right= printEntries[n].name
+              td.text-right= printEntries[n].size
+              td.text-right= printEntries[n].count
             - n++;
           while n < columnLength * 2
             tr

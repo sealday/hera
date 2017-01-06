@@ -47,6 +47,9 @@ exports.create = (req, res, next) => {
   }
 };
 
+const formKeys = ['project', 'date', 'entries'];
+const optionalFormKeys = ['comments', 'carFee', 'carNumber', 'originalOrder'];
+
 /**
  * 保存调入调出信息
  */
@@ -54,7 +57,6 @@ exports.postPurchase = (req, res, next) => {
   const direction = req.direction;
   const current = res.locals.current;
   let orderForm = {};
-  const formKeys = ['project', 'date', 'entries'];
   formKeys.forEach(k => {
     orderForm[k] = req.body[k] || '';
   });
@@ -63,10 +65,17 @@ exports.postPurchase = (req, res, next) => {
     return res.redirect(req.path + '/create' + '?error=信息填写不完整！');
   }
 
-  const optionalFormKeys = ['comments', 'carFee', 'carNumber', 'originalOrder'];
   optionalFormKeys.forEach(k => {
     orderForm[k] = req.body[k] || '';
   });
+
+  console.log(req.body);
+  orderForm.cost = {
+    car: req.body['cost.car'] || '',
+    sort: req.body['cost.sort'] || '',
+    other1: req.body['cost.other1'] || '',
+    other2: req.body['cost.other2'] || ''
+  };
 
   // 转换 entry 为数组
   if (!Array.isArray(orderForm.entries)) {
@@ -157,7 +166,6 @@ exports.postEdit = (req, res, next) => {
   const direction = req.direction;
   const current = res.locals.current;
   let orderForm = {};
-  const formKeys = ['project', 'date', 'entries'];
   formKeys.forEach(k => {
     orderForm[k] = req.body[k] || '';
   });
@@ -166,10 +174,16 @@ exports.postEdit = (req, res, next) => {
     return res.redirect('./edit?error=信息填写不完整！');
   }
 
-  const optionalFormKeys = ['comments', 'carFee', 'carNumber', 'originalOrder'];
   optionalFormKeys.forEach(k => {
     orderForm[k] = req.body[k] || '';
   });
+
+  orderForm.cost = {
+    car: req.body['cost.car'] || '',
+    sort: req.body['cost.sort'] || '',
+    other1: req.body['cost.other1'] || '',
+    other2: req.body['cost.other2'] || ''
+  };
 
   // 转换 entry 为数组
   if (!Array.isArray(orderForm.entries)) {
@@ -253,6 +267,12 @@ exports.details = (req, res, next) => {
       count: toFixedWithoutTrailingZero(total[name])  + ' ' + productTypeMap[name].unit
     });
   }
+
+  printEntries.push({
+    name: '运费：' + (transferOrder.cost.car || 0),
+    size: '整理费：' + (transferOrder.cost.sort || 0),
+    count: `其他费用1：${transferOrder.cost.other1 || 0} 其他费用2：${transferOrder.cost.other2 || 0}`
+  });
 
   let columnLength = Math.ceil(printEntries.length / 2);
   res.render('transfer/details', {
