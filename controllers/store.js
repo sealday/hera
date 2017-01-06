@@ -3,7 +3,7 @@
  */
 
 
-const project = require('../models/Project');
+const Project = require('../models/Project');
 const StockRecord = require('../models/StockRecord');
 const ObjectId = require('mongoose').Types.ObjectId;
 
@@ -12,7 +12,7 @@ exports.index = (req, res, next) => {
   const projectId = req.query['project'] || '';
 
   if (projectId) {
-    project.find().then(projects => {
+    Project.find().then(projects => {
       res.locals.projects = projects;
       return StockRecord.aggregate([
         {
@@ -56,12 +56,15 @@ exports.index = (req, res, next) => {
       ])
     }).then(result => {
       res.locals.inRecords = result;
+      return Project.findById(projectId);
+    }).then(project => {
+      res.locals.project = project;
       res.render('store/index');
     });
 
 
   } else {
-    project.find().then(projects => {
+    Project.find().then(projects => {
       res.render('store/index', {
         projects
       });
