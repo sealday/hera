@@ -250,7 +250,7 @@ exports.details = (req, res, next) => {
     printEntries.push({
       name: name,
       size: '小计',
-      count: total[name] + ' ' + productTypeMap[name].unit
+      count: toFixedWithoutTrailingZero(total[name])  + ' ' + productTypeMap[name].unit
     });
   }
 
@@ -263,3 +263,9 @@ exports.details = (req, res, next) => {
     columnLength
   });
 };
+
+
+// 保留两位数，去除多余的零
+function toFixedWithoutTrailingZero(num) {
+  return Number(num.toFixed(2)).toString();
+}

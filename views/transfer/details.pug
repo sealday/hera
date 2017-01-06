@@ -16,7 +16,9 @@ block content
     if direction == 'out'
       li(class='active') 调出单
 
-  a(class='btn btn-primary hidden-print' style='margin-bottom: 1em;' href='edit') 编辑
+  .btn-group
+    a(class='btn btn-primary hidden-print' href='edit') 编辑
+    button(class='btn btn-default' onclick='print()') 打印
 
   h3(class='text-center') 上海创兴建筑设备租赁有限公司
   if direction == 'in'
