@@ -40,3 +40,16 @@ block content
               td= outRecord._id.name
               td= outRecord._id.size
               td= outRecord.sum
+      h3 库存
+      table(class='table')
+        thead
+          tr
+            th 名称
+            th 规格
+            th 数量
+        tbody
+          each entry in store
+            tr
+              td= entry.name
+              td= entry.size
+              td= entry.sum

@@ -57,6 +57,46 @@ exports.index = (req, res, next) => {
         ])
       }).then(result => {
         res.locals.inRecords = result;
+
+        const outRecords = res.locals.outRecords.map(record => {
+          return {
+            name: record._id.name,
+            size: record._id.size,
+            sum: record.sum
+          };
+        });
+
+        const inRecords = res.locals.inRecords.map(record => {
+          return {
+            name: record._id.name,
+            size: record._id.size,
+            sum: record.sum
+          };
+        });
+
+        let store = {};
+        outRecords.forEach(record => {
+          const key = record.name + record.size;
+          store[key] = {
+            name: record.name,
+            size: record.size,
+            sum: -record.sum
+          };
+        });
+        inRecords.forEach(record => {
+          const key = record.name + record.size;
+          if (key in store) {
+            store[key].sum += record.sum;
+          } else {
+            store[key] = {
+              name: record.name,
+              size: record.size,
+              sum: record.sum
+            };
+          }
+        });
+        res.locals.store = store;
+
         return Project.findById(projectId);
       }).then(project => {
         res.locals.project = project;
@@ -113,6 +153,47 @@ exports.index = (req, res, next) => {
       ])
     }).then(result => {
       res.locals.inRecords = result;
+
+      const outRecords = res.locals.outRecords.map(record => {
+        return {
+          name: record._id.name,
+          size: record._id.size,
+          sum: record.sum
+        };
+      });
+
+      const inRecords = res.locals.inRecords.map(record => {
+        return {
+          name: record._id.name,
+          size: record._id.size,
+          sum: record.sum
+        };
+      });
+
+      let store = {};
+      outRecords.forEach(record => {
+        const key = record.name + record.size;
+        store[key] = {
+          name: record.name,
+          size: record.size,
+          sum: -record.sum
+        };
+      });
+      inRecords.forEach(record => {
+        const key = record.name + record.size;
+        if (key in store) {
+          store[key].sum += record.sum;
+        } else {
+          store[key] = {
+            name: record.name,
+            size: record.size,
+            sum: record.sum
+          };
+        }
+      });
+      res.locals.store = store;
+
+
       res.locals.project = res.locals.current;
       res.render('store/index');
     });
