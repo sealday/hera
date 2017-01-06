@@ -3,12 +3,13 @@ extends ../layout
 block content
 
 
-  p 选择查询的项目
-  form(class='form-inline' action='' method='get')
-    select(name='project' class='form-control')
-      each p in projects
-        option(value=p.id)= p.company + p.name
-    button(type='submit' class='btn btn-primary') 查询
+  if current.type == '基地仓库'
+    p 选择查询的项目
+    form(class='form-inline' action='' method='get')
+      select(name='project' class='form-control')
+        each p in projects
+          option(value=p.id)= p.company + p.name
+      button(type='submit' class='btn btn-primary') 查询
 
   div
     if inRecords && outRecords
