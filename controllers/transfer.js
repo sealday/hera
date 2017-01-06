@@ -269,9 +269,9 @@ exports.details = (req, res, next) => {
   }
 
   printEntries.push({
-    name: '运费：' + (transferOrder.cost.car || 0),
-    size: '整理费：' + (transferOrder.cost.sort || 0),
-    count: `其他费用1：${transferOrder.cost.other1 || 0} 其他费用2：${transferOrder.cost.other2 || 0}`
+    name: '运费：￥' + (transferOrder.cost.car || 0),
+    size: '整理费：￥' + (transferOrder.cost.sort || 0),
+    count: `其他费用1：￥${transferOrder.cost.other1 || 0} 其他费用2：￥${transferOrder.cost.other2 || 0}`
   });
 
   let columnLength = Math.ceil(printEntries.length / 2);
