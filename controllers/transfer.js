@@ -269,7 +269,13 @@ exports.details = (req, res, next) => {
   }
 
   printEntries.push({
-    name: `运费：￥${transferOrder.cost.car || 0} 整理费：￥${transferOrder.cost.sort || 0}`,
+    name: '',
+    size: `运费：￥${transferOrder.cost.car || 0} `,
+    count: `整理费：￥${transferOrder.cost.sort || 0}`
+  });
+
+  printEntries.push({
+    name: '',
     size: `其他费用1：￥${transferOrder.cost.other1 || 0}`,
     count: `其他费用2：￥${transferOrder.cost.other2 || 0}`
   });
