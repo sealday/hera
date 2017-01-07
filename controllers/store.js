@@ -9,6 +9,7 @@ const ObjectId = require('mongoose').Types.ObjectId;
 
 exports.index = (req, res, next) => {
 
+
   if (res.locals.current && res.locals.current.type == '基地仓库') {
     const projectId = req.query['project'] || '';
 
@@ -100,12 +101,14 @@ exports.index = (req, res, next) => {
         return Project.findById(projectId);
       }).then(project => {
         res.locals.project = project;
+        beforeRender(res);
         res.render('store/index');
       });
 
 
     } else {
       Project.find().then(projects => {
+        beforeRender(res);
         res.render('store/index', {
           projects
         });
@@ -195,7 +198,57 @@ exports.index = (req, res, next) => {
 
 
       res.locals.project = res.locals.current;
+      beforeRender(res);
       res.render('store/index');
     });
   }
 };
+
+function beforeRender(res) {
+  const productTypes = global.companyData.productTypes;
+  let inRecords = res.locals.inRecords || [];
+  let outRecords = res.locals.outRecords || [];
+  let store = res.locals.store || {};
+
+  let inRecordMap = {};
+  inRecords.forEach(inRecord => {
+    inRecordMap[inRecord._id.name + inRecord._id.size] = inRecord;
+  });
+  inRecords = [];
+  productTypes.forEach(productType => {
+    productType.sizes.forEach(size => {
+      const key = productType.name + size;
+      if (key in inRecordMap) {
+        inRecords.push(inRecordMap[key]);
+      }
+    });
+  });
+  res.locals.inRecords = inRecords;
+
+  let outRecordMap = {};
+  outRecords.forEach(outRecord => {
+    outRecordMap[outRecord._id.name + outRecord._id.size] = outRecord;
+  });
+  outRecords = [];
+  productTypes.forEach(productType => {
+    productType.sizes.forEach(size => {
+      const key = productType.name + size;
+      if (key in outRecordMap) {
+        outRecords.push(outRecordMap[key]);
+      }
+    });
+  });
+  res.locals.outRecords = outRecords;
+
+  let storeMap = store;
+  store = [];
+  productTypes.forEach(productType => {
+    productType.sizes.forEach(size => {
+      const key = productType.name + size;
+      if (key in storeMap) {
+        store.push(storeMap[key]);
+      }
+    });
+  });
+  res.locals.store = store;
+}
