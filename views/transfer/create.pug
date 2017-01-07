@@ -33,7 +33,7 @@ block content
       div(class='form-group')
         label(class='control-label col-md-1') 项目部
         div(class='col-md-3')
-          select(name='project' class='form-control' id='project')
+          select(name='project' class='filter-select form-control' id='project')
             each project in projects
               if (project._id != current._id)
                 option(value=project.id)= project.company + project.name

@@ -16,9 +16,9 @@ block content
     if direction == 'out'
       li(class='active') 调出单填写
   if direction == 'in'
-    h2 #{current.name} 创建调出单
+    h2 #{current.name} 编辑调出单
   if direction == 'out'
-    h2 #{current.name} 创建调入单
+    h2 #{current.name} 编辑调入单
   if info
     div(class='alert alert-info')= info
   if error
@@ -33,7 +33,7 @@ block content
       div(class='form-group')
         label(class='control-label col-md-1') 项目部
         div(class='col-md-3')
-          select(name='project' class='form-control' id='project')
+          select(name='project' class='filter-select form-control' id='project')
             if direction == 'in'
               each project in projects
                 option(value=project.id selected=transferOrder.fromProject == project.id)= project.company + project.name

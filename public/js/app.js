@@ -33,6 +33,11 @@ function defaultDate(dateElement) {
 
 $(function () {
 
+  // FIXME 当应用在 form-inline 的 select 控件上时布局出错
+  $('.filter-select').selectpicker({
+    liveSearch: true
+  });
+
   adminLogic();
 
   defaultDate($('#date'));
