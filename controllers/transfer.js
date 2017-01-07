@@ -209,6 +209,8 @@ exports.postEdit = (req, res, next) => {
 
   TransferOrder.findById(req.params.id).then(transferOrder => {
     transferOrder.valid = false;
+    order.hasTransport = transferOrder.hasTransport;
+    order.transport = transferOrder.transport;
     const stockRecordId = transferOrder.stockRecord;
     return Promise.all([transferOrder.save(),
       StockRecord.findById(stockRecordId)]);
@@ -290,6 +292,51 @@ exports.details = (req, res, next) => {
   });
 };
 
+const transportKey = [ 'off-date',
+  'arrival-date',
+  'weight',
+  'price',
+  'payer',
+  'pay-info',
+  'payee',
+  'bank',
+  'delivery-party',
+  'delivery-contact',
+  'delivery-phone',
+  'delivery-address',
+  'receiving-party',
+  'receiving-contact',
+  'receiving-phone',
+  'receiving-address',
+  'carrier-party',
+  'carrier-name',
+  'carrier-phone',
+  'carrier-id',
+  'carrier-car' ];
+
+exports.transport = (req, res, next) => {
+  res.locals.delivery = res.locals.current;
+  Project.findById(res.locals.transferOrder.toProject).then(project => {
+    res.locals.receiving = project;
+    res.render('transfer/transport');
+  }).catch(err => {
+    next(err);
+  });
+};
+
+exports.postTransport = (req, res, next) => {
+  let transport = {};
+  transportKey.forEach(key => {
+    transport[key] = req.body[key];
+  });
+  res.locals.transferOrder.transport = transport;
+  res.locals.transferOrder.hasTransport = true;
+  res.locals.transferOrder.transport.save().then(() => {
+    res.redirect('./');
+  }).catch(err => {
+    next(err);
+  });
+};
 
 // 保留两位数，去除多余的零
 function toFixedWithoutTrailingZero(num) {

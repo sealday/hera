@@ -39,6 +39,29 @@ const TransferOrderSchema = new Schema({
     other2: Number, // 其他2
   }, // 费用
 
+  hasTransport: Boolean, // 是否有运输单
+  transport: { 'off-date': Date,
+    'arrival-date': Date,
+    weight: String,
+    price: String,
+    payer: String,
+    'pay-info': String,
+    payee: String,
+    bank: String,
+    'delivery-party': String,
+    'delivery-contact': String,
+    'delivery-phone': String,
+    'delivery-address': String,
+    'receiving-party': String,
+    'receiving-contact': String,
+    'receiving-phone': String,
+    'receiving-address': String,
+    'carrier-party': String,
+    'carrier-name': String,
+    'carrier-phone': String,
+    'carrier-id': String,
+    'carrier-car': String },
+
   entries: [{
     type: { // 类型
       type: String

@@ -21,31 +21,23 @@
   // Using `this` for web workers & supports Browserify / Webpack.
 })(typeof window === 'undefined' ? this : window);
 
+/**
+ * 设置默认时间 传入一个 jquery 对象
+ * @param dateElement
+ */
+function defaultDate(dateElement) {
+  if (!dateElement.val()) {
+    dateElement.val(moment(new Date()).format('YYYY-MM-DD'));
+  }
+}
+
 $(function () {
 
   adminLogic();
 
-  // 创建订单页面
-  // 设置默认时间为今天
-  var dateElement = $('#date');
-  if (!dateElement.val()) {
-    dateElement.val(moment(new Date()).format('YYYY-MM-DD'));
-  }
-
-  // 运输协议填写界面
-  // 出发日期
-  if ($('#off-date').get(0) instanceof HTMLInputElement) {
-    $('#off-date').get(0).valueAsDate = new Date();
-  }
-
-  // 运输协议填写界面
-  // 到达日期
-  if ($('#arrival-date').get(0) instanceof HTMLInputElement) {
-    var tomorrow = new Date();
-    tomorrow.setHours(tomorrow.getHours() + 24);
-    $('#arrival-date').get(0).valueAsDate = tomorrow;
-  }
-
+  defaultDate($('#date'));
+  defaultDate($('#off-date'));
+  defaultDate($('#arrival-date'));
 
   var baseTypes = $('.base-type');
   baseTypes.each(function(_, baseType) {

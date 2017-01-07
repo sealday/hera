@@ -70,6 +70,8 @@ router.use('/project/:projectId/transferOut/:id', transfer.middleware);
 router.get('/project/:projectId/transferOut/:id/edit', transfer.edit);
 router.get('/project/:projectId/transferOut/:id', transfer.details);
 router.post('/project/:projectId/transferOut/:id', transfer.postEdit);
+router.get('/project/:projectId/transferOut/:id/transport', transfer.transport);
+router.post('/project/:projectId/transferOut/:id/transport', transfer.postTransport);
 
 // 采购
 router.get('/project/:projectId/purchase/create', purchase.create);
