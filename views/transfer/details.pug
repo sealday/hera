@@ -16,14 +16,14 @@ block content
     if direction == 'out'
       li(class='active') 调出单
 
-  .btn-group
-    a(class='btn btn-primary hidden-print' href='edit') 编辑
+  .btn-group.hidden-print
+    a(class='btn btn-primary' href='edit') 编辑
     button(class='btn btn-default' onclick='print()') 打印
     a(class='btn btn-default' href='transport') 运输单
 
   h3(class='text-center') 上海创兴建筑设备租赁有限公司
   if direction == 'in'
-    h3(class='text-center') 归料单
+    h3(class='text-center') 收料单
   if direction == 'out'
     h3(class='text-center') 发料单
 
