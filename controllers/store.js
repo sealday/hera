@@ -206,49 +206,55 @@ exports.index = (req, res, next) => {
 
 function beforeRender(res) {
   const productTypes = global.companyData.productTypes;
-  let inRecords = res.locals.inRecords || [];
-  let outRecords = res.locals.outRecords || [];
-  let store = res.locals.store || {};
+  let inRecords = res.locals.inRecords;
+  let outRecords = res.locals.outRecords;
+  let store = res.locals.store;
 
-  let inRecordMap = {};
-  inRecords.forEach(inRecord => {
-    inRecordMap[inRecord._id.name + inRecord._id.size] = inRecord;
-  });
-  inRecords = [];
-  productTypes.forEach(productType => {
-    productType.sizes.forEach(size => {
-      const key = productType.name + size;
-      if (key in inRecordMap) {
-        inRecords.push(inRecordMap[key]);
-      }
+  if (inRecords) {
+    let inRecordMap = {};
+    inRecords.forEach(inRecord => {
+      inRecordMap[inRecord._id.name + inRecord._id.size] = inRecord;
     });
-  });
-  res.locals.inRecords = inRecords;
+    inRecords = [];
+    productTypes.forEach(productType => {
+      productType.sizes.forEach(size => {
+        const key = productType.name + size;
+        if (key in inRecordMap) {
+          inRecords.push(inRecordMap[key]);
+        }
+      });
+    });
+    res.locals.inRecords = inRecords;
+  }
 
-  let outRecordMap = {};
-  outRecords.forEach(outRecord => {
-    outRecordMap[outRecord._id.name + outRecord._id.size] = outRecord;
-  });
-  outRecords = [];
-  productTypes.forEach(productType => {
-    productType.sizes.forEach(size => {
-      const key = productType.name + size;
-      if (key in outRecordMap) {
-        outRecords.push(outRecordMap[key]);
-      }
+  if (outRecords) {
+    let outRecordMap = {};
+    outRecords.forEach(outRecord => {
+      outRecordMap[outRecord._id.name + outRecord._id.size] = outRecord;
     });
-  });
-  res.locals.outRecords = outRecords;
+    outRecords = [];
+    productTypes.forEach(productType => {
+      productType.sizes.forEach(size => {
+        const key = productType.name + size;
+        if (key in outRecordMap) {
+          outRecords.push(outRecordMap[key]);
+        }
+      });
+    });
+    res.locals.outRecords = outRecords;
+  }
 
-  let storeMap = store;
-  store = [];
-  productTypes.forEach(productType => {
-    productType.sizes.forEach(size => {
-      const key = productType.name + size;
-      if (key in storeMap) {
-        store.push(storeMap[key]);
-      }
+  if (store) {
+    let storeMap = store;
+    store = [];
+    productTypes.forEach(productType => {
+      productType.sizes.forEach(size => {
+        const key = productType.name + size;
+        if (key in storeMap) {
+          store.push(storeMap[key]);
+        }
+      });
     });
-  });
-  res.locals.store = store;
+    res.locals.store = store;
+  }
 }
