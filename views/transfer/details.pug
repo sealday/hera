@@ -16,10 +16,19 @@ block content
     if direction == 'out'
       li(class='active') 调出单
 
+  .hidden-print
+    if info
+      div(class='alert alert-info')= info
+    if error
+      div(class='alert alert-danger')= error
+
   .btn-group.hidden-print
     a(class='btn btn-primary' href='edit') 编辑
     button(class='btn btn-default' onclick='print()') 打印
-    a(class='btn btn-default' href='transport') 运输单
+    if direction == 'out'
+      a(class='btn btn-default' href='transport') 运输单
+    if direction == 'in' && transferOrder.status != '已确认'
+      a(class='btn btn-default' href='check') 审核确认
 
   h3(class='text-center') 上海创兴建筑设备租赁有限公司
   if direction == 'in'

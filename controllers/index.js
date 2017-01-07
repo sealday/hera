@@ -60,6 +60,8 @@ router.use('/project/:projectId/transferIn/:id', transfer.middleware);
 router.get('/project/:projectId/transferIn/:id/edit', transfer.edit);
 router.get('/project/:projectId/transferIn/:id', transfer.details);
 router.post('/project/:projectId/transferIn/:id', transfer.postEdit);
+router.get('/project/:projectId/transferIn/:id/check', transfer.check);
+router.post('/project/:projectId/transferIn/:id/check', transfer.postCheck);
 
 // 调出
 router.use('/project/:projectId/transferOut', transfer.out);

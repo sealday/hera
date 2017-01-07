@@ -1,0 +1,95 @@
+extends ../layout
+
+block content
+  ol(class='breadcrumb')
+    li
+      a(href='/') 主页
+    li
+      a(href='../../')= current.name + '项目'
+    li
+      if direction == 'in'
+        a(href='../') 调入列表
+      if direction == 'out'
+        a(href='../') 调出列表
+    if direction == 'in'
+      li(class='active') 调入单填写
+    if direction == 'out'
+      li(class='active') 调出单填写
+  if direction == 'in'
+    h2 #{current.name} 确认调入单
+  if direction == 'out'
+    h2 #{current.name} 创建调出单
+  if info
+    div(class='alert alert-info')= info
+  if error
+    div(class='alert alert-danger')= error
+  p(class='hidden' id='productTypes')= JSON.stringify(productTypes)
+  form(action='./check'  method='post' id='order-create-form')
+    // 这里放隐藏提交的物料数据
+    div(class='hidden-content' hidden=true)
+      each entry in transferOrder.entries
+        input(name='entries' value=JSON.stringify(entry))
+    div(class='form-horizontal')
+      div(class='form-group')
+        label(class='control-label col-md-1') 项目部
+        div(class='col-md-3')
+          select(name='project' class='form-control' id='project')
+            if direction == 'in'
+              each project in projects
+                option(value=project.id selected=transferOrder.fromProject == project.id)= project.company + project.name
+            if direction == 'out'
+              each project in projects
+                option(value=project.id selected=transferOrder.toProject == project.id)= project.company + project.name
+        label(class='control-label col-md-1') 日期
+        div(class='col-md-3')
+          input(type='date', class='form-control' id='date' name='date' value=moment(transferOrder.date).format('YYYY-MM-DD'))
+        label(class='control-label col-md-1') 原始单号
+        div(class='col-md-3')
+          input(type='text' class='form-control' id='originalOrder' name='originalOrder' value=transferOrder.originalOrder)
+      div(class='form-group')
+        label(class='control-label col-md-1') 车号
+        div(class='col-md-3')
+          input(type='text' class='form-control' id='carNumber' name='carNumber' value=transferOrder.carNumber)
+        label(class='control-label col-md-1') 车费
+        div(class='col-md-3')
+          input(type='text' class='form-control' id='carFee' name='carFee' value=transferOrder.cost.car)
+        label(class='control-label col-md-1') 备注
+        div(class='col-md-3')
+          input(type='text' class='form-control' id='comments' name='comments' value=transferOrder.comments)
+      div(class='form-group')
+        label(class='control-label col-md-1') 整理费
+        div(class='col-md-3')
+          input(type='text' class='form-control' name='cost.sort' value=transferOrder.cost.sort)
+        label(class='control-label col-md-1') 其他费用1
+        div(class='col-md-3')
+          input(type='text' class='form-control' name='cost.other1' value=transferOrder.cost.other1)
+        label(class='control-label col-md-1') 其他费用2
+        div(class='col-md-3')
+          input(type='text' class='form-control' name='cost.other2' value=transferOrder.cost.other2)
+  div(id='details-wrapper')
+    table(id='details' class="table table-striped table-bordered table-hover dataTable no-footer" cellspacing="0" width="100%")
+  form(class='form-inline' id='add-form')
+    // TODO 下面这些选项的数据，均由数据库提供，浏览器通过ajax请求缓存到storage中
+    div(class='form-group')
+      label(class='control-label') 类型
+      select(class='form-control' name='type' id='type')
+        option 租赁类
+        option 耗损类
+        option 工具类
+    div(class='form-group')
+      label(class='control-label') 名称
+      input(type='text' class='form-control' name='name' autocomplete='off' list='name-list' id='name')
+      datalist(id='name-list')
+        each productType in productTypes
+          option= productType.name
+    div(class='form-group')
+      label(class='control-label') 规格
+      input(type='text' class='form-control' name='size' autocomplete='off' list='size-list' id='size')
+      datalist(id='size-list')
+    div(class='form-group')
+      label(class='control-label') 数量
+      input(type='text' class='form-control' name='count' autocomplete='off' id='count')
+    button(id='add' class='btn btn-primary') 添加
+  button(class='btn btn-primary btn-block' id='order-create-button') 确认调入单
+block added_scripts
+  script(src='/js/transfer.js')
