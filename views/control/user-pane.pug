@@ -35,10 +35,11 @@ div(class='tab-pane active' id='user-pane')
                   span(class='important-star') （*）
                 div(class='btn-group' data-toggle='buttons')
                   each project in projects
-                    - var isIn = user.projects.indexOf(project._id) != -1
-                    label(class='btn btn-default ' + (isIn ? 'active' : ''))
-                      input(name='project' type='checkbox' value=project.id checked=isIn)
-                      | #{project.company+project.name}
+                    if project.type != '第三方仓库'
+                      - var isIn = user.projects.indexOf(project._id) != -1
+                      label(class='btn btn-default ' + (isIn ? 'active' : ''))
+                        input(name='project' type='checkbox' value=project.id checked=isIn)
+                        | #{project.company+project.name}
             div(class='form-group')
               div(class='col-sm-offset-10 col-sm-2')
                 button(class='btn btn-default') 保存修改
@@ -64,9 +65,10 @@ div(class='tab-pane active' id='user-pane')
             span(class='important-star') （*）
           div(class='btn-group' data-toggle='buttons')
             each project in projects
-              label(class='btn btn-default')
-                input(name='project' type='checkbox' value=project.id )
-                | #{project.company+project.name}
+              if project.type != '第三方项目'
+                label(class='btn btn-default')
+                  input(name='project' type='checkbox' value=project.id )
+                  | #{project.company+project.name}
       div(class='form-group')
         div(class='col-sm-offset-10 col-sm-2')
           button(class='btn btn-primary pull-right') 确认增加
