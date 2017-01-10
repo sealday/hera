@@ -125,7 +125,7 @@ function orderCreate() {
   var productTypes = {};
   if (productTypesString = $('#productTypes').text()) {
     productTypeArray = JSON.parse(productTypesString);
-    productTypeArray.forEach(productType => {
+    productTypeArray.forEach(function(productType) {
       productTypes[productType.name] = productType;
     });
   };
