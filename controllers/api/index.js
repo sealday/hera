@@ -4,33 +4,22 @@
 const express = require('express');
 const multer = require('multer');
 const upload = multer({ dest: 'public/uploads/'});
+const article = require('./article');
+const file = require('./file');
 
 const router = express.Router();
 const File = require('../../models/File');
 
-router.get('/', (req, res) => {
-  res.send('nothing here');
-});
+router.get('/article', article.list);
 
-router.post('/file', upload.single('file'), (req, res) => {
-  const file = new File(req.file);
-  file.save().then(() => {
-    console.log(req.file);
-    res.send('success');
-  }).catch(err => {
-    next(err);
-  });
-});
+router.get('/file', file.list);
+router.post('/file', upload.single('file'), file.post);
 
-router.get('/file', (req, res) => {
-  File.find().then(files => {
-    res.json(files);
-  }).catch(err => {
-    err.json = true;
-    next(err);
-  });
+// 错误结果用 json 的形式返回
+router.use((err, req, res, next) => {
+  err.json = true;
+  next(err);
 });
-
 
 
 module.exports = router;
