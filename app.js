@@ -13,6 +13,7 @@ const MongoStore = require('connect-mongo')(session);
 const ProductType = require('./models/ProductType');
 const Project = require('./models/Project');
 const User = require('./models/User');
+const compression = require('compression');
 
 const index = require('./controllers/index');
 const apiIndex = require('./controllers/api');
@@ -54,6 +55,9 @@ mongoose.connection.on('error', () => {
 });
 
 const app = express();
+
+// compress all
+app.use(compression());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
