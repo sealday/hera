@@ -66,6 +66,12 @@ class App extends Component {
                 <li>
                   <Link to="/file_manager">文件暂存</Link>
                 </li>
+                <li>
+                  <a href="#">系统基础数据</a>
+                  <ul>
+                    <li><Link to="article">物料数据</Link></li>
+                  </ul>
+                </li>
               </ul>
             </div>
             <button onClick={this.toggleDrawer} type="button" className="App-drawer-toggle"/>

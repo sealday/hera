@@ -7,30 +7,6 @@ import cx from 'classnames';
 import Dropdown from '../components/Dropdown';
 import { Link, IndexLink } from 'react-router';
 
-class Li extends Component {
-  static propTypes = {
-    to: PropTypes.string,
-    onlyActiveOnIndex: PropTypes.bool,
-    children: PropTypes.node
-  };
-
-  static contextTypes = {
-    router: PropTypes.object.isRequired
-  };
-
-  render() {
-    console.dir(this.context);
-    const isActive = this.context.router.isActive(this.props.to, this.props.onlyActiveOnIndex);
-    const LinkComponent = this.props.onlyActiveOnIndex ? IndexLink : Link;
-    const className = isActive ? 'active' : '';
-    return (
-      <li className={className}>
-        <LinkComponent to={this.props.to}>{this.props.children}</LinkComponent>
-      </li>
-    );
-  }
-}
-
 class Navbar extends Component {
   constructor(props) {
     super(props);
@@ -45,6 +21,10 @@ class Navbar extends Component {
     e.preventDefault();
     this.setState(prevState => { return { collapse: !prevState.collapse } });
   }
+
+  static contextTypes = {
+    router: PropTypes.object.isRequired
+  };
 
   render() {
     return (
@@ -80,9 +60,7 @@ class Navbar extends Component {
               <button type="submit" className="btn btn-default">Submit</button>
             </form>
             <ul className="nav navbar-nav navbar-right">
-              {/*<li><a className="active" href="#">超级管理员</a></li>*/}
-              {/*<li className="active"><Link to="profile">超级管理员</Link></li>*/}
-              <Li to="profile">超级管理员</Li>
+              <li className={cx({active: this.context.router.isActive("profile")})}><Link to="profile">超级管理员</Link></li>
             </ul>
           </div>
         </div>
