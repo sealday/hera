@@ -31,6 +31,7 @@ class App extends Component {
         <div className="container-fluid" style={{height: '100%'}}>
           <div className="row" style={{position: 'relative', height: '100%'}}>
             <div className={cx({ 'col-sm-2': true, 'App-drawer': true, 'show': this.state.drawer })}>
+              {/* TODO 这里可以考虑改成数组的形式*/}
               <ul>
                 <li>
                   <a href="#">项目信息</a>
@@ -47,10 +48,12 @@ class App extends Component {
                   </ul>
                 </li>
                 <li>
-                  <a href="#">库存信息</a>
+                  <a href="#">仓库</a>
                   <ul>
-                    <li><a href="#">仓库基本状况</a></li>
-                    <li><a href="#">库存一览</a></li>
+                    <li><Link to="purchase">采购入库</Link></li>
+                    <li><Link to="transfer_out">调拨出库（发料）</Link></li>
+                    <li><Link to="transfer_in">调拨入库（收料）</Link></li>
+                    <li><a href="#">库存信息</a></li>
                   </ul>
                 </li>
                 <li>
@@ -64,7 +67,7 @@ class App extends Component {
                   </ul>
                 </li>
                 <li>
-                  <Link to="/file_manager">文件暂存</Link>
+                  <Link to="/file_manager">文件中转站</Link>
                 </li>
                 <li>
                   <a href="#">系统基础数据</a>

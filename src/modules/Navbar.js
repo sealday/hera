@@ -40,25 +40,6 @@ class Navbar extends Component {
             <a className="navbar-brand" href="#">赫拉管理系统</a>
           </div>
           <div className={cx({collapse: true, 'navbar-collapse': true, in: this.state.collapse})}>
-            <ul className="nav navbar-nav">
-              <li><a href="#">Link <span className="sr-only">(current)</span></a></li>
-              <li><a href="#">Link</a></li>
-              <Dropdown>
-                <li><a href="#">Action</a></li>
-                <li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li>
-                <li role="separator" className="divider"/>
-                <li><a href="#">Separated link</a></li>
-                <li role="separator" className="divider"/>
-                <li><a href="#">fne more separated link</a></li>
-              </Dropdown>
-            </ul>
-            <form className="navbar-form navbar-left">
-              <div className="form-group">
-                <input type="text" className="form-control" placeholder="Search" />
-              </div>
-              <button type="submit" className="btn btn-default">Submit</button>
-            </form>
             <ul className="nav navbar-nav navbar-right">
               <li className={cx({active: this.context.router.isActive("profile")})}><Link to="profile">超级管理员</Link></li>
             </ul>

@@ -18,3 +18,12 @@ html {
 #root {
   height: 100%;
 }
+
+.form-inline .form-group {
+  margin-bottom: 1em;
+  margin-right: 1em;
+}
+
+.form-inline .form-group label{
+  margin-right: 1em;
+}

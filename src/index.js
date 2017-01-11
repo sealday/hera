@@ -5,8 +5,12 @@ import FileManager from './modules/FileManager';
 import Profile from './modules/Profile';
 import Home from './modules/Home';
 import Article from './modules/Article';
+import Purchase from './store/Purchase';
+import TransferIn from './store/TransferIn';
+import TransferOut from './store/TransferOut';
 import { Router, Route, IndexRoute, hashHistory } from 'react-router';
 import 'bootstrap/dist/css/bootstrap.css'
+import 'react-select/dist/react-select.css';
 import './index.css';
 
 ReactDOM.render((
@@ -16,6 +20,9 @@ ReactDOM.render((
       <Route path="file_manager" component={FileManager}/>
       <Route path="profile" component={Profile}/>
       <Route path="article" component={Article}/>
+      <Route path="purchase" component={Purchase}/>
+      <Route path="transfer_in" component={TransferIn}/>
+      <Route path="transfer_out" component={TransferOut}/>
     </Route>
   </Router>
   ), document.getElementById('root')
