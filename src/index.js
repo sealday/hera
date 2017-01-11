@@ -9,8 +9,9 @@ import Purchase from './store/Purchase';
 import TransferIn from './store/TransferIn';
 import TransferOut from './store/TransferOut';
 import { Router, Route, IndexRoute, hashHistory } from 'react-router';
-import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap/dist/css/bootstrap.css';
 import 'react-select/dist/react-select.css';
+import 'react-tagsinput/react-tagsinput.css';
 import './index.css';
 
 ReactDOM.render((

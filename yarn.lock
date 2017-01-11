@@ -4333,6 +4333,10 @@ react-select@^1.0.0-rc.2:
     classnames "^2.2.4"
     react-input-autosize "^1.1.0"
 
+react-tagsinput@^3.14.0:
+  version "3.14.0"
+  resolved "https://registry.yarnpkg.com/react-tagsinput/-/react-tagsinput-3.14.0.tgz#6729f8d5b313ed8fbb35496205ec2a97654af6bc"
+
 "react@^0.14.0 || <15.4.0":
   version "15.3.2"
   resolved "https://registry.yarnpkg.com/react/-/react-15.3.2.tgz#a7bccd2fee8af126b0317e222c28d1d54528d09e"

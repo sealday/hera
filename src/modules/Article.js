@@ -2,6 +2,7 @@
  * Created by seal on 11/01/2017.
  */
 import React, { Component } from 'react';
+import TagsInput from 'react-tagsinput';
 
 /**
  * 基础物料
@@ -25,6 +26,10 @@ class Article extends Component {
   }
 
   componentWillUnmount() {
+
+  }
+
+  handleChange(tags) {
 
   }
 
@@ -55,16 +60,18 @@ class Article extends Component {
             {/*countUnit: '根',*/}
             {/*unit: '米'*/}
           {/*},*/}
-          {this.state.articles.map(article => {
+          {this.state.articles.map((article, index) => {
             return (
               <tr key={article._id}>
                 <td>{article.type}</td>
                 <td>{article.name}</td>
-                <td>{article.sizes.map(size => {
-                  return (
-                    <span key={size} style={{display: 'block'}}>{size}</span>
-                  );
-                })}</td>
+                <td><TagsInput value={article.sizes} onChange={tags => {
+                  this.setState(prevState => {
+                    // TODO 深度克隆对象？
+                    prevState.articles[index].sizes = tags;
+                    return { articles: prevState.articles };
+                  })
+                }} /></td>
                 <td>{article.countUnit}</td>
                 <td>{article.unit}</td>
                 <td> </td>
