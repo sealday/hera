@@ -65,7 +65,7 @@ class Article extends Component {
               <tr key={article._id}>
                 <td>{article.type}</td>
                 <td>{article.name}</td>
-                <td><TagsInput value={article.sizes} onChange={tags => {
+                <td><TagsInput inputProps={{placeholder: "输入新规格"}} value={article.sizes} onChange={tags => {
                   this.setState(prevState => {
                     // TODO 深度克隆对象？
                     prevState.articles[index].sizes = tags;
