@@ -8,6 +8,7 @@ import InputForm from './InputForm';
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
+import $ from 'jquery';
 
 class Purchase extends Component {
   constructor(props) {
@@ -17,15 +18,14 @@ class Purchase extends Component {
     this.state = {
       typeNameMap: {},
       nameArticleMap: {},
-      purchase: {
-        project: 'one',
-        date: moment(),
-        originalOrder: '',
-        comments: '',
-        carNumber: '',
-        vendor: '',
-        entries : [],
-      }
+
+      project: 'one',
+      date: moment(),
+      originalOrder: '',
+      comments: '',
+      carNumber: '',
+      vendor: '',
+      entries : [],
     };
     this.handleAdd = this.handleAdd.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -37,11 +37,9 @@ class Purchase extends Component {
   handleAdd(entry) {
     this.setState(prevState => {
       entry.id = new Date().getTime();
-      prevState.purchase.entries.push(entry);
+      prevState.entries.push(entry);
       return {
-        purchase: {
-          entries: prevState.purchase.entries
-        }
+        entries: prevState.entries
       }
     });
   }
@@ -84,23 +82,36 @@ class Purchase extends Component {
 
   handleProjectChange(e) {
     this.setState({
-      purchase: {
-        project: e.value
-      }
+      project: e.value
     })
   }
 
   handleDateChange(date) {
     this.setState({
-      purchase: {
-        date: date
-      }
+      date: date
     });
   }
 
   handleSubmit(e) {
     e.preventDefault();
-    alert(JSON.stringify(this.state.purchase));
+    console.dir(this.state.date);
+    $.ajax('/api/purchase', {
+      data: JSON.stringify({
+        entries: this.state.entries,
+        project: this.state.project,
+        originalOrder: this.state.originalOrder,
+        comments: this.state.comments,
+        carNumber: this.state.carNumber,
+        date: this.state.date,
+        vendor: this.state.vendor,
+      }),
+      type: 'POST',
+      contentType: 'application/json'
+    }).then(res => {
+      alert(res);
+    }).catch(err => {
+      alert('出错了' + JSON.stringify(err));
+    });
   }
 
   render() {
@@ -123,7 +134,7 @@ class Purchase extends Component {
                   name="project"
                   clearable={false}
                   placeholder="请选择项目"
-                  value={this.state.purchase.project}
+                  value={this.state.project}
                   options={[{ value: "one", label: "one"}, { value: "two", label: "two"}]}
                   onChange={this.handleProjectChange}/>
               </div>
@@ -133,7 +144,7 @@ class Purchase extends Component {
               </div>
               <label className="control-label col-md-1">日期</label>
               <div className="col-md-3">
-                <DatePicker selected={this.state.purchase.date} className="form-control" onChange={this.handleDateChange}/>
+                <DatePicker selected={this.state.date} className="form-control" onChange={this.handleDateChange}/>
               </div>
             </div>
             <div className="form-group">
@@ -154,7 +165,7 @@ class Purchase extends Component {
 
         <InputForm onAdd={this.handleAdd} typeNameMap={this.state.typeNameMap} nameArticleMap={this.state.nameArticleMap} />
         <BootstrapTable
-          data={this.state.purchase.entries}
+          data={this.state.entries}
           selectRow={{ mode: 'checkbox' }}
           options={{ noDataText: '还未添加数据', defaultSortName: 'id', defaultSortOrder: 'desc' }}
           cellEdit={{ mode: 'click', blurToSave: true }} deleteRow>

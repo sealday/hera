@@ -4,6 +4,7 @@
 
 import React, { Component } from 'react';
 import Autocomplete from 'react-autocomplete';
+import { calculateSize, toFixedWithoutTrailingZero } from '../utils';
 
 class InputForm extends Component {
   constructor(props) {
@@ -181,20 +182,6 @@ class InputForm extends Component {
       </form>
     );
   }
-}
-
-function calculateSize(size) {
-  let sizes = size.split(';');
-  if (isNaN(sizes[sizes.length - 1])) {
-    return 1;
-  } else {
-    return Number(sizes[sizes.length - 1]);
-  }
-}
-
-// 保留两位数，去除多余的零
-function toFixedWithoutTrailingZero(num) {
-  return Number(Number(num).toFixed(2)).toString();
 }
 
 let styles = {
