@@ -16,7 +16,7 @@ exports.middleware = (req, res, next) => {
     return next();
   }
 
-  if (req.path == '/' || req.path == '/login' || req.path == '/logout') {
+  if (req.path == '/' || req.path == '/login' || req.path == '/logout' || req.path == '/socket.io/') {
     // 访问登录页面不需要检查权限
     return next();
   }

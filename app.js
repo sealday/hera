@@ -122,5 +122,18 @@ app.use(function(err, req, res, next) {
   }
 });
 
+// 在线人数
+let num = 0;
+app.onSocketConnection = io => {
+  return socket => {
+    num++;
+    io.emit('server:num', num);
+    socket.on('disconnect', function(){
+      num--;
+      io.emit('server:num', num);
+    });
+  };
+};
+
 
 module.exports = app;
