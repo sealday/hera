@@ -27,3 +27,36 @@ html {
 .form-inline .form-group label{
   margin-right: 1em;
 }
+
+
+/*NOTE: this is needed in order to make react-datepicker work with bootstrap's input group / input group addon functionatily*/
+.react-datepicker__input-container {
+  width: 100%;
+  /*NOTE: using table instead of block as it is needed in order to make this element set the height since the input is floating*/
+  display: table;
+}
+
+.form-inline .react-datepicker__input-container {
+  width: auto;
+  display: inline;
+}
+
+.react-datepicker {
+  font-size: 1.3rem !important;
+}
+
+.react-datepicker__current-month {
+  font-size: 1.5rem !important;
+}
+
+.react-datepicker__header {
+  padding-top: 6px !important;
+}
+
+.react-datepicker__navigation {
+  top: 13px !important;
+}
+
+.react-datepicker__day-name, .react-datepicker__day {
+  margin: 0.5rem !important;
+}

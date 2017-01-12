@@ -6,18 +6,31 @@ import React, { Component } from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import Autocomplete from 'react-autocomplete';
 import Select from 'react-select';
+import DatePicker from 'react-datepicker';
+import moment from 'moment';
 
 class Purchase extends Component {
   constructor(props) {
     super(props);
+    // TODO 应该在全局初始化
+    moment.lang('zh-CN');
     this.state = {
       entries       : [],
       typeNameMap   : {},
       nameArticleMap: {},
-      project: 'one'
+      purchase: {
+        project: 'one',
+        date: moment(),
+        originalOrder: '',
+        comments: '',
+        carNumber: '',
+        vendor: ''
+      }
     };
     this.handleAdd = this.handleAdd.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleDateChange = this.handleDateChange.bind(this);
+    this.handleProjectChange = this.handleProjectChange.bind(this);
   }
 
   handleAdd(entry) {
@@ -59,9 +72,27 @@ class Purchase extends Component {
   }
 
   handleChange(e) {
+    if (e.target.name) {
+      this.setState({
+        [e.target.name]: e.target.value
+      });
+    }
+  }
+
+  handleProjectChange(e) {
     this.setState({
-      project: e.value
+      purchase: {
+        project: e.value
+      }
     })
+  }
+
+  handleDateChange(date) {
+    this.setState({
+      purchase: {
+        date: date
+      }
+    });
   }
 
   render() {
@@ -80,34 +111,34 @@ class Purchase extends Component {
             <div className="form-group">
               <label className="control-label col-md-1">工程项目</label>
               <div className="col-md-3">
-                {/*<select className="form-control" name="project" id="project">*/}
-                  {/*<option value="586e30a7a86efadc0fdc3d99">aa</option>*/}
-                  {/*<option value="586e30fea86efadc0fdc3e79">bbbb</option>*/}
-                  {/*<option value="58710c2e2270aefd76044d3f">sdfasdfsdfasdf</option>*/}
-                {/*</select>*/}
-                <Select name="project" value={this.state.project} options={[{ value: "one", label: "one"}, { value: "two", label: "two"}]} onChange={this.handleChange}/>
+                <Select
+                  name="project"
+                  placeholder="请选择项目"
+                  value={this.state.purchase.project}
+                  options={[{ value: "one", label: "one"}, { value: "two", label: "two"}]}
+                  onChange={this.handleProjectChange}/>
               </div>
               <label className="control-label col-md-1">对方单位</label>
               <div className="col-md-3">
-                <input className="form-control" type="text" id="vendor" name="vendor" />
+                <input className="form-control" type="text" name="vendor" onChange={this.handleChange} />
               </div>
               <label className="control-label col-md-1">日期</label>
               <div className="col-md-3">
-                <input className="form-control" type="date" id="date" name="date" />
+                <DatePicker selected={this.state.purchase.date} className="form-control" onChange={this.handleDateChange}/>
               </div>
             </div>
             <div className="form-group">
               <label className="control-label col-md-1">原始单号</label>
               <div className="col-md-3">
-                <input className="form-control" type="text" id="originalOrder" name="originalOrder" />
+                <input className="form-control" type="text" name="originalOrder" onChange={this.handleChange} />
               </div>
               <label className="control-label col-md-1">车号</label>
               <div className="col-md-3">
-                <input className="form-control" type="text" id="carNumber" name="carNumber" />
+                <input className="form-control" type="text" name="carNumber" onChange={this.handleChange} />
               </div>
               <label className="control-label col-md-1">备注</label>
               <div className="col-md-3">
-                <input className="form-control" type="text" id="comments" name="comments" />
+                <input className="form-control" type="text" name="comments" onChange={this.handleChange} />
               </div>
             </div>
           </div>
@@ -188,14 +219,14 @@ class InputForm extends Component {
           this.setState({
             name: '',
             size: '',
-            count: 0
+            count: 0,
           });
           break;
         case 'name':
-          this.setState({
+          this.setState(prevState => ({
             size: '',
-            count: 0
-          });
+            count: 0,
+          }));
           break;
       }
     }
@@ -228,6 +259,11 @@ class InputForm extends Component {
     return article ? article.sizes : [];
   }
 
+  getUnit(name) {
+    const article = this.props.nameArticleMap[name];
+    return article ? article.unit : '';
+  }
+
   render() {
     return (
       <form className="form-inline" onSubmit={this.handleSubmit}>
@@ -250,7 +286,7 @@ class InputForm extends Component {
               getItemValue={item => item}
               shouldItemRender={(name, value) => name.indexOf(value) !== -1}
               onChange={this.handleChange}
-              onSelect={name => this.setState({ name })}
+              onSelect={name => this.setState({ name, unit: this.getUnit(name) })}
               renderItem={(name, isSelected) => (
                 <div
                   key={name}
@@ -259,7 +295,6 @@ class InputForm extends Component {
               )}
             />
           </div>
-          {/*shouldItemRender={(size, value) => size.indexOf(value) !== -1}*/}
           <div className="form-group">
             <label className="control-label">规格</label>
             <Autocomplete

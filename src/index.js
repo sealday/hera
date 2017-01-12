@@ -12,6 +12,7 @@ import { Router, Route, IndexRoute, hashHistory } from 'react-router';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'react-select/dist/react-select.css';
 import 'react-tagsinput/react-tagsinput.css';
+import 'react-datepicker/dist/react-datepicker.css';
 import './index.css';
 
 ReactDOM.render((
