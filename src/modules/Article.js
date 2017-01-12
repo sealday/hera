@@ -3,6 +3,7 @@
  */
 import React, { Component } from 'react';
 import TagsInput from 'react-tagsinput';
+import $ from 'jquery';
 
 /**
  * 基础物料
@@ -16,20 +17,23 @@ class Article extends Component {
   }
 
   componentDidMount() {
-    fetch('/api/article').then(res => res.json())
+    $.get('/api/article')
       .then(articles => {
         this.setState({articles});
       })
       .catch(err => {
         alert(JSON.stringify(err));
       });
+    //fetch('/api/article').then(res => res.json())
+    //  .then(articles => {
+    //    this.setState({articles});
+    //  })
+    //  .catch(err => {
+    //    alert(JSON.stringify(err));
+    //  });
   }
 
   componentWillUnmount() {
-
-  }
-
-  handleChange(tags) {
 
   }
 
