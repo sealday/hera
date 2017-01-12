@@ -1,5 +1,5 @@
 {
-  "name": "HeraFrontend",
+  "name": "hera-frontend",
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
@@ -21,7 +21,7 @@
     "react-toastr": "^2.8.2",
     "socket.io-client": "^1.7.2"
   },
-  "homepage": "http://myname.github.io/system",
+  "homepage": "http://sealday.github.io/system",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
