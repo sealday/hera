@@ -6,6 +6,9 @@ import Navbar from './modules/Navbar';
 import 'whatwg-fetch';
 import 'bluebird';
 import './App.css';
+import io from 'socket.io-client';
+
+const socket = io();
 
 class App extends Component {
   constructor(props) {
@@ -27,7 +30,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Navbar/>
+        <Navbar socket={socket}/>
         <div className="container-fluid" style={{height: '100%'}}>
           <div className="row" style={{position: 'relative', height: '100%'}}>
             <div className={cx({ 'col-sm-2': true, 'App-drawer': true, 'show': this.state.drawer })}>

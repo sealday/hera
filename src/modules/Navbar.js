@@ -12,9 +12,20 @@ class Navbar extends Component {
     super(props);
     this.state = {
       dropdown: false,
-      collapse: false
+      collapse: false,
+      num: 0
     };
     this.toggleCollapse = this.toggleCollapse.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.socket.on('server:num', num => {
+      this.setState({num});
+    });
+  }
+
+  componentWillUnmount() {
+
   }
 
   toggleCollapse(e) {
@@ -41,6 +52,7 @@ class Navbar extends Component {
           </div>
           <div className={cx({collapse: true, 'navbar-collapse': true, in: this.state.collapse})}>
             <ul className="nav navbar-nav navbar-right">
+              <li><a href="#" onClick={ e => e.preventDefault() }>当前在线人数{this.state.num}</a></li>
               <li className={cx({active: this.context.router.isActive("profile")})}><Link to="profile">超级管理员</Link></li>
             </ul>
           </div>
