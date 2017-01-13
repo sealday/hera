@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import Navbar from './modules/Navbar';
 import './App.css';
 import io from 'socket.io-client';
+import { ajax } from './utils';
 
 const socket = io();
 

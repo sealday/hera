@@ -116,13 +116,7 @@ class Purchase extends Component {
   render() {
     return (
       <div>
-        <ol className="breadcrumb">
-          <li><a href="#">主页</a></li>
-          <li><a href="#">a项目</a></li>
-          <li><a href="#">采购列表</a></li>
-          <li className="active">采购单填写</li>
-        </ol>
-        <h2>a 创建采购单</h2>
+        <h2>创建采购单</h2>
         <form onSubmit={this.handleSubmit}>
           <div className="hidden-content" hidden=""></div>
           <div className="form-horizontal">
