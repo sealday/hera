@@ -16,7 +16,7 @@ const User = require('./models/User');
 const compression = require('compression');
 
 const index = require('./controllers/index');
-const apiIndex = require('./controllers/api');
+const apiIndex = require('./api');
 
 // 使用 ES6 的 Promise
 mongoose.Promise = global.Promise;

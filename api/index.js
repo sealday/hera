@@ -9,7 +9,7 @@ const file = require('./file');
 const purchase = require('./purchase');
 
 const router = express.Router();
-const File = require('../../models/File');
+const File = require('../models/File');
 
 router.get('/article', article.list);
 

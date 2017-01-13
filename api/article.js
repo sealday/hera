@@ -1,7 +1,7 @@
 /**
  * Created by seal on 11/01/2017.
  */
-const ProductType = require('../../models/ProductType');
+const ProductType = require('../models/ProductType');
 
 exports.list = (req, res, next) => {
   ProductType.find().then(articles => {

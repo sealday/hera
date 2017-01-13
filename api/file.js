@@ -1,7 +1,7 @@
 /**
  * Created by seal on 11/01/2017.
  */
-const File = require('../../models/File');
+const File = require('../models/File');
 
 exports.post =  (req, res, next) => {
   const file = new File(req.file);

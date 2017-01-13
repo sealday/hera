@@ -4,12 +4,12 @@
 
 const express = require('express');
 
-const Product = require('../../models/Product');
-const Tenant = require('../../models/Tenant');
-const Project = require('../../models/Project');
-const ProductType = require('../../models/ProductType');
-const Order = require('../../models/Order');
-const PurchaseOrder = require('../../models/PurchaseOrder');
+const Product = require('../models/Product');
+const Tenant = require('../models/Tenant');
+const Project = require('../models/Project');
+const ProductType = require('../models/ProductType');
+const Order = require('../models/Order');
+const PurchaseOrder = require('../models/PurchaseOrder');
 
 /**
  * 采购创建页面
