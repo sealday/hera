@@ -6,7 +6,7 @@ import React, { Component } from 'react';
 import Autocomplete from 'react-autocomplete';
 import { calculateSize, toFixedWithoutTrailingZero } from '../utils';
 
-export default class InputForm extends Component {
+export default class TransferInputForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -150,30 +150,6 @@ export default class InputForm extends Component {
           <div className="form-group">
             <label className="control-label">数量</label>
             <input type="text" name="count" autoComplete="off" className="form-control" value={this.state.count} onChange={this.handleChange}/>
-          </div>
-          <div className="form-group">
-            <label className="control-label">单位</label>
-            <input type="text" name="unit" autoComplete="off" className="form-control" value={this.state.unit} onChange={this.handleChange}/>
-          </div>
-          <div className="form-group">
-            <label className="control-label">单价</label>
-            <input type="text" name="price" autoComplete="off" className="form-control" value={this.state.price} onChange={this.handleChange} />
-          </div>
-          <div className="form-group">
-            <label className="control-label">
-              是否有运费 <input type="checkbox" name="freightChecked" checked={this.state.freightChecked} onChange={this.handleChange} />
-            </label>
-          </div>
-          <div className="form-group" style={{display: this.state.freightChecked? 'inline-block' : 'none'}}>
-            <input name="freightCount" className="form-control" value={this.state.freightCount} onChange={this.handleChange} />
-            <select name="freightUnit" className="form-control" value={this.state.freightUnit} onChange={this.handleChange}>
-              <option value="吨">吨</option>
-              <option value="趟">趟</option>
-            </select>
-          </div>
-          <div className="form-group" style={{display: this.state.freightChecked? 'inline-block' : 'none'}}>
-            <label className="control-label">运费单价</label>
-            <input type="text" name="freightPrice" autoComplete="off" required="required" className="form-control" value={this.state.freightPrice} onChange={this.handleChange} />
           </div>
           <div className="form-group">
             <button className="btn btn-primary">添加</button>

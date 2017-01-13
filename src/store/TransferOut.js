@@ -3,154 +3,210 @@
  */
 
 import React, { Component } from 'react';
+import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+import InputForm from './TransferInputForm';
+import Select from 'react-select';
+import DatePicker from 'react-datepicker';
+import moment from 'moment';
+import { ajax } from '../utils';
 
-class TransferOut extends Component {
+export default class TransferOut extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      typeNameMap: {},
+      nameArticleMap: {},
+      projects: [],
+
+      project: '',
+      date: moment(),
+      originalOrder: '',
+      comments: '',
+      carNumber: '',
+      carFee: '',
+      sortFee: '',
+      other1Fee: '',
+      other2Fee: '',
+      entries : [],
+    };
+    this.handleAdd = this.handleAdd.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleDateChange = this.handleDateChange.bind(this);
+    this.handleProjectChange = this.handleProjectChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+
+    this.store = window.store;
+    this.unsubscribes = [];
+  }
+
+  handleAdd(entry) {
+    this.setState(prevState => {
+      entry._id = new Date().getTime();
+      prevState.entries.push(entry);
+      return {
+        entries: prevState.entries
+      }
+    });
+  }
+
+  componentDidMount() {
+    this.unsubscribes[0] = this.store.subscribe(() => {
+      let articles = this.store.getState().articles;
+      this.transformArticle(articles);
+    });
+    this.unsubscribes[1] = this.store.subscribe(() => {
+      let projects = this.store.getState().projects;
+      this.setState({projects});
+    });
+
+    let projects = this.store.getState().projects;
+    this.setState({projects});
+    this.transformArticle(this.store.getState().articles);
+  }
+
+  componentWillUnmount() {
+    this.unsubscribes[0]();
+    this.unsubscribes[1]();
+  }
+
+  transformArticle(articles) {
+    let typeNameMap = {
+      租赁类: [],
+      消耗类: [],
+      工具类: []
+    };
+    let nameArticleMap = {};
+    articles.forEach(article => {
+      typeNameMap[article.type].push(article.name);
+      nameArticleMap[article.name] = article;
+    });
+
+    this.setState({
+      typeNameMap,
+      nameArticleMap
+    });
+  }
+
+  handleChange(e) {
+    if (e.target.name) {
+      this.setState({
+        [e.target.name]: e.target.value
+      });
+    }
+  }
+
+  handleProjectChange(e) {
+    this.setState({
+      project: e.value
+    })
+  }
+
+  handleDateChange(date) {
+    this.setState({
+      date: date
+    });
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+    console.dir(this.state.date);
+    ajax('/api/transfer_out', {
+      data: JSON.stringify({
+        entries: this.state.entries,
+        project: this.state.project,
+        originalOrder: this.state.originalOrder,
+        comments: this.state.comments,
+        carNumber: this.state.carNumber,
+        date: this.state.date,
+        fee: {
+          car: this.state.carFee,
+          sort: this.state.sortFee,
+          other1: this.state.other1Fee,
+          other2: this.state.other2Fee,
+        }
+      }),
+      method: 'POST',
+      contentType: 'application/json'
+    }).then(res => {
+      alert(res);
+    }).catch(err => {
+      alert('出错了' + JSON.stringify(err));
+    });
+  }
+
   render() {
     return (
       <div>
-        <ol className="breadcrumb">
-          <li><a href="/">主页</a></li>
-          <li><a href="../">a项目</a></li>
-          <li><a href="./">调出列表</a></li>
-          <li className="active">调出单填写</li>
-        </ol>
-        <h2 className="active">调出单创建</h2>
-        <form action="../transferOut" method="post" id="order-create-form">
+        <h2>创建调拨出库单</h2>
+        <form onSubmit={this.handleSubmit}>
           <div className="hidden-content" hidden=""></div>
           <div className="form-horizontal">
             <div className="form-group">
               <label className="control-label col-md-1">项目部</label>
               <div className="col-md-3">
-                <select className="filter-select form-control" name="project" id="project" style={{display: 'none'}}><option value="586e30fea86efadc0fdc3e79">bbbb</option><option value="58710c2e2270aefd76044d3f">sdfasdfsdfasdf</option></select>
-                <div className="btn-group bootstrap-select filter-select form-control">
-                  <button type="button" className="btn dropdown-toggle form-control selectpicker btn-default" data-toggle="dropdown" data-id="project" title="bbbb"><span className="filter-option pull-left">bbbb</span>&nbsp;<span className="caret"></span></button>
-                  <div className="dropdown-menu open">
-                    <div className="bs-searchbox">
-                      <input type="text" className="form-control" autocomplete="off" />
-                    </div>
-                    <ul className="dropdown-menu inner selectpicker" role="menu">
-                      <li data-original-index="0" className="selected"><a tabindex="0" className="" data-normalized-text="&lt;span className=&quot;text&quot;&gt;bbbb&lt;/span&gt;" data-tokens="null"><span className="text">bbbb</span><span className="glyphicon glyphicon-ok check-mark"></span></a></li>
-                      <li data-original-index="1"><a tabindex="0" className="" data-normalized-text="&lt;span className=&quot;text&quot;&gt;sdfasdfsdfasdf&lt;/span&gt;" data-tokens="null"><span className="text">sdfasdfsdfasdf</span><span className="glyphicon glyphicon-ok check-mark"></span></a></li>
-                    </ul>
-                  </div>
-                </div>
+                <Select
+                  name="project"
+                  clearable={false}
+                  placeholder="请选择项目"
+                  value={this.state.project}
+                  options={this.state.projects.map(project => ({ value: project._id, label: project.company + project.name }))}
+                  onChange={this.handleProjectChange}/>
               </div>
               <label className="control-label col-md-1">日期</label>
               <div className="col-md-3">
-                <input className="form-control" type="date" id="date" name="date" />
+                <DatePicker selected={this.state.date} className="form-control" onChange={this.handleDateChange}/>
               </div>
               <label className="control-label col-md-1">原始单号</label>
               <div className="col-md-3">
-                <input className="form-control" type="text" id="originalOrder" name="originalOrder" />
+                <input className="form-control" type="text" name="originalOrder" onChange={this.handleChange} />
               </div>
             </div>
             <div className="form-group">
               <label className="control-label col-md-1">车号</label>
               <div className="col-md-3">
-                <input className="form-control" type="text" id="carNumber" name="carNumber" />
+                <input className="form-control" type="text" name="carNumber" onChange={this.handleChange} />
               </div>
-              <label className="control-label col-md-1">车费</label>
+              <label className="control-label col-md-1">运费</label>
               <div className="col-md-3">
-                <input className="form-control" type="text" id="carFee" name="cost.car" />
+                <input className="form-control" type="text" name="carFee" onChange={this.handleChange} />
               </div>
               <label className="control-label col-md-1">备注</label>
               <div className="col-md-3">
-                <input className="form-control" type="text" id="comments" name="comments" />
+                <input className="form-control" type="text" name="comments" onChange={this.handleChange} />
               </div>
             </div>
             <div className="form-group">
-              <label className="control-label col-md-1">整理费</label>
+              <label className="control-label col-md-1">整理费用</label>
               <div className="col-md-3">
-                <input className="form-control" type="text" name="cost.sort" />
+                <input className="form-control" type="text" name="sortFee" onChange={this.handleChange} />
               </div>
               <label className="control-label col-md-1">其他费用1</label>
               <div className="col-md-3">
-                <input className="form-control" type="text" name="cost.other1" />
+                <input className="form-control" type="text" name="other1Fee" onChange={this.handleChange} />
               </div>
               <label className="control-label col-md-1">其他费用2</label>
               <div className="col-md-3">
-                <input className="form-control" type="text" name="cost.other2" />
+                <input className="form-control" type="text" name="other2Fee" onChange={this.handleChange} />
               </div>
             </div>
           </div>
+
+          <InputForm onAdd={this.handleAdd} typeNameMap={this.state.typeNameMap} nameArticleMap={this.state.nameArticleMap} />
+          <BootstrapTable
+            data={this.state.entries}
+            selectRow={{ mode: 'checkbox' }}
+            options={{ noDataText: '还未添加数据', defaultSortName: '_id', defaultSortOrder: 'desc' }}
+            cellEdit={{ mode: 'click', blurToSave: true }} deleteRow>
+            <TableHeaderColumn dataField="_id" isKey={true} hidden={true}>id</TableHeaderColumn>
+            <TableHeaderColumn dataField="type">类型</TableHeaderColumn>
+            <TableHeaderColumn dataField="name">名称</TableHeaderColumn>
+            <TableHeaderColumn dataField="size">规格</TableHeaderColumn>
+            <TableHeaderColumn dataField="count">数量</TableHeaderColumn>
+            <TableHeaderColumn dataField="total">小计</TableHeaderColumn>
+          </BootstrapTable>
+          <button className="btn btn-primary btn-block">创建</button>
         </form>
-        <div id="details-wrapper">
-          <div id="details_wrapper" className="dataTables_wrapper form-inline dt-bootstrap no-footer">
-            <div className="row">
-              <div className="col-sm-6">
-                <div className="dataTables_length" id="details_length">
-                  <label>每页显示 <select name="details_length" aria-controls="details" className="form-control input-sm"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> 条</label>
-                </div>
-              </div>
-              <div className="col-sm-6">
-                <div id="details_filter" className="dataTables_filter">
-                  <label>搜索:<input type="search" className="form-control input-sm" placeholder="" aria-controls="details" /></label>
-                </div>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-sm-12">
-                <table className="table table-striped table-bordered table-hover dataTable no-footer" id="details" cellspacing="0" width="100%" role="grid" aria-describedby="details_info" style={{width: '100%'}}>
-                  <thead>
-                  <tr role="row">
-                    <th className="sorting_asc" tabindex="0" aria-controls="details" rowspan="1" colspan="1" aria-sort="ascending" aria-label="名称: 逆序排列"  >名称</th>
-                    <th className="sorting" tabindex="0" aria-controls="details" rowspan="1" colspan="1" aria-label="规格: 顺序排列"  >规格</th>
-                    <th className="sorting" tabindex="0" aria-controls="details" rowspan="1" colspan="1" aria-label="数量: 顺序排列"  >数量</th>
-                    <th className="sorting" tabindex="0" aria-controls="details" rowspan="1" colspan="1" aria-label="小计: 顺序排列"  >小计</th>
-                    <th className="sorting" tabindex="0" aria-controls="details" rowspan="1" colspan="1" aria-label="操作: 顺序排列"  >操作</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr className="odd">
-                    <td valign="top" colspan="5" className="dataTables_empty">还没有添加数据</td>
-                  </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-sm-5">
-                <div className="dataTables_info" id="details_info" role="status" aria-live="polite">
-                  总共 0 条，显示第 0 条 到第 0 条的数据
-                  <span className="select-info"><span className="select-item"> 选中了 0 行 </span><span className="select-item"> 选中了 0 列 </span><span className="select-item"> 0 单元格选中 </span></span>
-                </div>
-              </div>
-              <div className="col-sm-7">
-                <div className="dataTables_paginate paging_simple_numbers" id="details_paginate">
-                  <ul className="pagination">
-                    <li className="paginate_button previous disabled" id="details_previous"><a href="#" aria-controls="details" data-dt-idx="0" tabindex="0">上一页</a></li>
-                    <li className="paginate_button next disabled" id="details_next"><a href="#" aria-controls="details" data-dt-idx="1" tabindex="0">下一页</a></li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <form className="form-inline" id="add-form">
-          <div className="form-group">
-            <label className="control-label">类型</label>
-            <select className="form-control" name="type" id="type"><option>租赁类</option><option>耗损类</option><option>工具类</option></select>
-          </div>
-          <div className="form-group">
-            <label className="control-label">名称</label>
-            <input className="form-control" type="text" name="name" autocomplete="off" list="name-list" id="name" />
-            <datalist id="name-list"><option>扣件</option><option>套筒</option><option>顶丝</option><option>轮扣</option><option>钢笆</option><option>架子</option><option>钢管</option><option>工字钢</option><option>槽钢</option><option>方管</option></datalist>
-          </div>
-          <div className="form-group">
-            <label className="control-label">规格</label>
-            <input className="form-control" type="text" name="size" autocomplete="off" list="size-list" id="size" />
-            <datalist id="size-list"></datalist>
-          </div>
-          <div className="form-group">
-            <label className="control-label">数量</label>
-            <input className="form-control" type="text" name="count" autocomplete="off" id="count" />
-          </div>
-          <button className="btn btn-primary" id="add">添加</button>
-        </form>
-        <button className="btn btn-primary btn-block" id="order-create-button">创建</button>
       </div>
     );
   }
 }
-
-export default TransferOut;

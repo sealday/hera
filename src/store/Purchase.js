@@ -10,11 +10,9 @@ import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import { ajax } from '../utils';
 
-class Purchase extends Component {
+export default class Purchase extends Component {
   constructor(props) {
     super(props);
-    // TODO 应该在全局初始化
-    moment.locale('zh-CN');
     this.state = {
       typeNameMap: {},
       nameArticleMap: {},
@@ -33,6 +31,9 @@ class Purchase extends Component {
     this.handleDateChange = this.handleDateChange.bind(this);
     this.handleProjectChange = this.handleProjectChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+
+    this.store = window.store;
+    this.unsubscribes = [];
   }
 
   handleAdd(entry) {
@@ -46,18 +47,23 @@ class Purchase extends Component {
   }
 
   componentDidMount() {
-    window.store.subscribe(() => {
-      let articles = window.store.getState().articles;
+    this.unsubscribes[0] = this.store.subscribe(() => {
+      let articles = this.store.getState().articles;
       this.transformArticle(articles);
     });
-    window.store.subscribe(() => {
-      let projects = window.store.getState().projects;
+    this.unsubscribes[1] = this.store.subscribe(() => {
+      let projects = this.store.getState().projects;
       this.setState({projects});
     });
 
-    let projects = window.store.getState().projects;
+    let projects = this.store.getState().projects;
     this.setState({projects});
-    this.transformArticle(window.store.getState().articles);
+    this.transformArticle(this.store.getState().articles);
+  }
+
+  componentWillUnmount() {
+    this.unsubscribes[0]();
+    this.unsubscribes[1]();
   }
 
   transformArticle(articles) {
@@ -76,10 +82,6 @@ class Purchase extends Component {
       typeNameMap,
       nameArticleMap
     });
-  }
-
-  componentWillUnmount() {
-
   }
 
   handleChange(e) {
@@ -132,7 +134,7 @@ class Purchase extends Component {
           <div className="hidden-content" hidden=""></div>
           <div className="form-horizontal">
             <div className="form-group">
-              <label className="control-label col-md-1">工程项目</label>
+              <label className="control-label col-md-1">项目部</label>
               <div className="col-md-3">
                 <Select
                   name="project"
@@ -195,5 +197,3 @@ class Purchase extends Component {
     );
   }
 }
-
-export default Purchase;

@@ -6,6 +6,9 @@ import './App.css';
 import io from 'socket.io-client';
 import { ajax } from './utils';
 import { createStore } from 'redux';
+import moment from 'moment';
+
+moment.locale('zh-CN');
 
 const initialState = {
   projects: [],
