@@ -2,6 +2,7 @@
  * Created by seal on 10/01/2017.
  */
 import React, { Component } from 'react';
+import { ajax } from '../utils';
 import 'whatwg-fetch';
 
 class FileManager extends Component {
@@ -18,24 +19,44 @@ class FileManager extends Component {
     e.preventDefault();
     let data = new FormData();
     data.append('file', this.fileInput.files[0]);
+    console.dir(this.fileInput.files[0]);
+    console.dir(data);
     this.setState({
       message: '上传文件中'
     });
-    fetch('/api/file', {
+
+    //fetch('/api/file', {
+    //  method: 'POST',
+    //  body: data,
+    //  credentials: "same-origin"
+    //}).then(res => {
+    //  return res.text()
+    //}).then(res => {
+    //  this.setState({
+    //    message: '文件上传成功'
+    //  });
+    //  this.updateFilelist();
+    //}).catch(err => {
+    //  this.setState({
+    //    message: '文件上传失败：' + err
+    //  });
+    //});
+
+    ajax('/api/file', {
       method: 'POST',
-      body: data
-    }).then(res => res.text())
-      .then(res => {
-        this.setState({
-          message: '文件上传成功'
-        });
-        this.updateFilelist();
-      })
-      .catch(err => {
-        this.setState({
-          message: '文件上传失败：' + err
-        });
+      data: data,
+      processData: false,
+      contentType: false,
+    }).then(res => {
+      this.setState({
+        message: '文件上传成功'
       });
+      this.updateFilelist();
+    }).catch(err => {
+      this.setState({
+        message: '文件上传失败：' + JSON.stringify(err)
+      });
+    });
   }
 
   componentDidMount() {
@@ -47,17 +68,14 @@ class FileManager extends Component {
   }
 
   updateFilelist() {
-    fetch('/api/file')
-      .then(res => res.json())
-      .then(files => {
-        this.setState({
-          files: files
-        })
-        console.log(files);
-      })
-      .catch(err => {
+    ajax('/api/file').then(files => {
+      this.setState({
+        files: files
+      });
+      console.log(files);
+    }).catch(err => {
         console.log(err);
-      })
+    });
   }
 
   render() {

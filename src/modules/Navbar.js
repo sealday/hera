@@ -36,7 +36,7 @@ class Navbar extends Component {
     }).then(res => {
     }).catch(err => {
     }).then(() => {
-      location.href = "/login.html";
+      location.href = "login.html";
     });
   }
 

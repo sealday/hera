@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import cx from 'classnames';
-import Dropdown from './components/Dropdown';
 import { Link } from 'react-router';
 import Navbar from './modules/Navbar';
-import 'whatwg-fetch';
-import 'bluebird';
 import './App.css';
 import io from 'socket.io-client';
 
