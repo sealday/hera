@@ -8,7 +8,7 @@ import InputForm from './InputForm';
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
-import $ from 'jquery';
+import { ajax } from '../utils';
 
 class Purchase extends Component {
   constructor(props) {
@@ -45,24 +45,23 @@ class Purchase extends Component {
   }
 
   componentDidMount() {
-    fetch('/api/article').then(res => res.json())
-      .then(articles => {
-        let typeNameMap = {
-          租赁类: [],
-          消耗类: [],
-          工具类: []
-        };
-        let nameArticleMap = {};
-        articles.forEach(article => {
-          typeNameMap[article.type].push(article.name);
-          nameArticleMap[article.name] = article;
-        });
+    ajax('/api/article').then(articles => {
+      let typeNameMap = {
+        租赁类: [],
+        消耗类: [],
+        工具类: []
+      };
+      let nameArticleMap = {};
+      articles.forEach(article => {
+        typeNameMap[article.type].push(article.name);
+        nameArticleMap[article.name] = article;
+      });
 
-        this.setState({
-          typeNameMap,
-          nameArticleMap
-        });
-      })
+      this.setState({
+        typeNameMap,
+        nameArticleMap
+      });
+    })
       .catch(err => {
         alert('出错了：' + JSON.stringify(err));
       });
@@ -95,7 +94,7 @@ class Purchase extends Component {
   handleSubmit(e) {
     e.preventDefault();
     console.dir(this.state.date);
-    $.ajax('/api/purchase', {
+    ajax('/api/purchase', {
       data: JSON.stringify({
         entries: this.state.entries,
         project: this.state.project,
@@ -105,7 +104,7 @@ class Purchase extends Component {
         date: this.state.date,
         vendor: this.state.vendor,
       }),
-      type: 'POST',
+      method: 'POST',
       contentType: 'application/json'
     }).then(res => {
       alert(res);
