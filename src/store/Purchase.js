@@ -36,7 +36,7 @@ class Purchase extends Component {
 
   handleAdd(entry) {
     this.setState(prevState => {
-      entry.id = new Date().getTime();
+      entry._id = new Date().getTime();
       prevState.entries.push(entry);
       return {
         entries: prevState.entries
@@ -167,9 +167,9 @@ class Purchase extends Component {
         <BootstrapTable
           data={this.state.entries}
           selectRow={{ mode: 'checkbox' }}
-          options={{ noDataText: '还未添加数据', defaultSortName: 'id', defaultSortOrder: 'desc' }}
+          options={{ noDataText: '还未添加数据', defaultSortName: '_id', defaultSortOrder: 'desc' }}
           cellEdit={{ mode: 'click', blurToSave: true }} deleteRow>
-          <TableHeaderColumn dataField="id" isKey={true} hidden={true}>id</TableHeaderColumn>
+          <TableHeaderColumn dataField="_id" isKey={true} hidden={true}>id</TableHeaderColumn>
           <TableHeaderColumn dataField="type">类型</TableHeaderColumn>
           <TableHeaderColumn dataField="name">名称</TableHeaderColumn>
           <TableHeaderColumn dataField="size">规格</TableHeaderColumn>
