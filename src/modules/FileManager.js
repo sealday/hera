@@ -3,7 +3,6 @@
  */
 import React, { Component } from 'react';
 import { ajax } from '../utils';
-import 'whatwg-fetch';
 
 class FileManager extends Component {
   constructor(props) {
@@ -24,23 +23,6 @@ class FileManager extends Component {
     this.setState({
       message: '上传文件中'
     });
-
-    //fetch('/api/file', {
-    //  method: 'POST',
-    //  body: data,
-    //  credentials: "same-origin"
-    //}).then(res => {
-    //  return res.text()
-    //}).then(res => {
-    //  this.setState({
-    //    message: '文件上传成功'
-    //  });
-    //  this.updateFilelist();
-    //}).catch(err => {
-    //  this.setState({
-    //    message: '文件上传失败：' + err
-    //  });
-    //});
 
     ajax('/api/file', {
       method: 'POST',
