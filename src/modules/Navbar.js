@@ -4,8 +4,8 @@
 
 import React, { Component, PropTypes } from 'react';
 import cx from 'classnames';
-import Dropdown from '../components/Dropdown';
 import { Link, IndexLink } from 'react-router';
+import { ajax } from '../utils';
 
 class Navbar extends Component {
   constructor(props) {
@@ -16,6 +16,7 @@ class Navbar extends Component {
       num: 0
     };
     this.toggleCollapse = this.toggleCollapse.bind(this);
+    this.logout = this.logout.bind(this);
   }
 
   componentDidMount() {
@@ -26,6 +27,17 @@ class Navbar extends Component {
 
   componentWillUnmount() {
 
+  }
+
+  logout() {
+    // TODO 这里出错？？？ 总是重定向到首页
+    ajax('/api/logout', {
+      method: 'POST'
+    }).then(res => {
+    }).catch(err => {
+    }).then(() => {
+      location.href = "/login.html";
+    });
   }
 
   toggleCollapse(e) {
@@ -53,6 +65,7 @@ class Navbar extends Component {
           <div className={cx({collapse: true, 'navbar-collapse': true, in: this.state.collapse})}>
             <ul className="nav navbar-nav navbar-right">
               <li><a href="#" onClick={ e => e.preventDefault() }>当前在线人数{this.state.num}</a></li>
+              <li><a href="#" onClick={this.logout}>登出</a></li>
               <li className={cx({active: this.context.router.isActive("profile")})}><Link to="profile">超级管理员</Link></li>
             </ul>
           </div>
