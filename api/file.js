@@ -4,13 +4,18 @@
 const File = require('../models/File');
 
 exports.post =  (req, res, next) => {
-  const file = new File(req.file);
-
-  file.save().then(() => {
-    res.send('success');
-  }).catch(err => {
-    next(err);
-  });
+  if (req.file)  {
+    const file = new File(req.file);
+    file.save().then(() => {
+      res.send('success');
+    }).catch(err => {
+      next(err);
+    });
+  } else {
+    next({
+      message: '没有提交文件！'
+    })
+  }
 };
 
 exports.list = (req, res, next) => {

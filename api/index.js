@@ -8,8 +8,17 @@ const article = require('./article');
 const file = require('./file');
 const purchase = require('./purchase');
 
+const User = require('../models/User');
+const middleware = require('./middleware');
+const user = require('./user');
+
 const router = express.Router();
 const File = require('../models/File');
+
+router.use(middleware.user);
+router.post('/login', user.login);
+router.post('/logout', user.logout);
+router.get('/is_login', user.isLogin);
 
 router.get('/article', article.list);
 
@@ -17,12 +26,5 @@ router.get('/file', file.list);
 router.post('/file', upload.single('file'), file.post);
 
 router.post('/purchase', purchase.postPurchase);
-
-// 错误结果用 json 的形式返回
-router.use((err, req, res, next) => {
-  err.json = true;
-  next(err);
-});
-
 
 module.exports = router;
