@@ -72,8 +72,8 @@ class App extends Component {
                 <li>
                   <a href="#">项目信息</a>
                   <ul>
-                    <li><a href="#">新建项目</a></li>
-                    <li><a href="#">项目列表</a></li>
+                    <li><Link to="project_create">新建项目</Link></li>
+                    <li><Link to="project">项目列表</Link></li>
                   </ul>
                 </li>
                 <li>
@@ -89,7 +89,6 @@ class App extends Component {
                     <li><Link to="purchase">采购入库</Link></li>
                     <li><Link to="transfer_out">调拨出库（发料）</Link></li>
                     <li><Link to="transfer_in">调拨入库（收料）</Link></li>
-                    <li><a href="#">库存信息</a></li>
                   </ul>
                 </li>
                 <li>

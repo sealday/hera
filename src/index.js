@@ -9,6 +9,8 @@ import Article from './modules/Article';
 import Purchase from './store/Purchase';
 import TransferIn from './store/TransferIn';
 import TransferOut from './store/TransferOut';
+import Project from './project/Project';
+import ProjectCreate from './project/ProjectCreate';
 import { Router, Route, IndexRoute, hashHistory } from 'react-router';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'react-select/dist/react-select.css';
@@ -24,6 +26,8 @@ ajax('/api/is_login').then(() => {
         <Route path="/" component={App}>
           <IndexRoute component={Home}/>
           <Route path="file_manager" component={FileManager}/>
+          <Route path="project" component={Project}/>
+          <Route path="project_create" component={ProjectCreate}/>
           <Route path="profile" component={Profile}/>
           <Route path="article" component={Article}/>
           <Route path="purchase" component={Purchase}/>
