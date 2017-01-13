@@ -5,6 +5,38 @@ import Navbar from './modules/Navbar';
 import './App.css';
 import io from 'socket.io-client';
 import { ajax } from './utils';
+import { createStore } from 'redux';
+
+const initialState = {
+  projects: [],
+  articles: [],
+};
+
+window.store = createStore((state = initialState, action) => {
+  switch (action.type) {
+    case "UPDATE_PROJECTS":
+      const projects = action.projects;
+      return {...state, projects};
+    case "UPDATE_ARTICLES":
+      const articles = action.articles;
+      return {...state, articles};
+    default:
+      return state;
+  }
+});
+
+// 初始化数据
+ajax('/api/project').then(projects => {
+  window.store.dispatch({ type: "UPDATE_PROJECTS", projects });
+}).catch(res => {
+  alert('出错了' + JSON.stringify(res));
+});
+
+ajax('/api/article').then(articles => {
+  window.store.dispatch({ type: 'UPDATE_ARTICLES', articles })
+}).catch(res => {
+  alert('出错了' + JSON.stringify(res));
+});
 
 const socket = io();
 

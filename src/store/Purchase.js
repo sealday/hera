@@ -14,12 +14,13 @@ class Purchase extends Component {
   constructor(props) {
     super(props);
     // TODO 应该在全局初始化
-    moment.lang('zh-CN');
+    moment.locale('zh-CN');
     this.state = {
       typeNameMap: {},
       nameArticleMap: {},
+      projects: [],
 
-      project: 'one',
+      project: '',
       date: moment(),
       originalOrder: '',
       comments: '',
@@ -45,26 +46,36 @@ class Purchase extends Component {
   }
 
   componentDidMount() {
-    ajax('/api/article').then(articles => {
-      let typeNameMap = {
-        租赁类: [],
-        消耗类: [],
-        工具类: []
-      };
-      let nameArticleMap = {};
-      articles.forEach(article => {
-        typeNameMap[article.type].push(article.name);
-        nameArticleMap[article.name] = article;
-      });
+    window.store.subscribe(() => {
+      let articles = window.store.getState().articles;
+      this.transformArticle(articles);
+    });
+    window.store.subscribe(() => {
+      let projects = window.store.getState().projects;
+      this.setState({projects});
+    });
 
-      this.setState({
-        typeNameMap,
-        nameArticleMap
-      });
-    })
-      .catch(err => {
-        alert('出错了：' + JSON.stringify(err));
-      });
+    let projects = window.store.getState().projects;
+    this.setState({projects});
+    this.transformArticle(window.store.getState().articles);
+  }
+
+  transformArticle(articles) {
+    let typeNameMap = {
+      租赁类: [],
+      消耗类: [],
+      工具类: []
+    };
+    let nameArticleMap = {};
+    articles.forEach(article => {
+      typeNameMap[article.type].push(article.name);
+      nameArticleMap[article.name] = article;
+    });
+
+    this.setState({
+      typeNameMap,
+      nameArticleMap
+    });
   }
 
   componentWillUnmount() {
@@ -128,7 +139,7 @@ class Purchase extends Component {
                   clearable={false}
                   placeholder="请选择项目"
                   value={this.state.project}
-                  options={[{ value: "one", label: "one"}, { value: "two", label: "two"}]}
+                  options={this.state.projects.map(project => ({ value: project._id, label: project.company + project.name }))}
                   onChange={this.handleProjectChange}/>
               </div>
               <label className="control-label col-md-1">对方单位</label>

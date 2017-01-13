@@ -19,6 +19,7 @@
     "react-select": "^1.0.0-rc.2",
     "react-tagsinput": "^3.14.0",
     "react-toastr": "^2.8.2",
+    "redux": "^3.6.0",
     "socket.io-client": "^1.7.2"
   },
   "homepage": "http://sealday.github.io/system",
