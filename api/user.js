@@ -4,7 +4,7 @@
 
 const User = require('../models/User');
 
-exports.login = (req, res) => {
+exports.login = (req, res, next) => {
   const username = req.body['username'] || '';
   const password = req.body['password'] || '';
 
@@ -48,3 +48,37 @@ exports.logout = (req, res) => {
     res.send('登出成功！');
   });
 };
+
+exports.list = (req, res, next) => {
+  User.find().then(users => {
+    res.json({
+      data: {
+        users
+      }
+    })
+  }).catch(err => {
+    next(err)
+  })
+}
+
+exports.create = (req, res, next) => {
+  let user = new User(req.body)
+  user.save().then(() => {
+    res.json({
+      message: '创建用户成功'
+    })
+  }).catch(err => {
+    next(err)
+  })
+}
+
+exports.update = (req, res, next) => {
+  let _id = req.body._id
+  User.findByIdAndUpdate(_id, req.body).then(() => {
+    res.json({
+      message: '更新用户成功'
+    })
+  }).catch(err => {
+    next(err)
+  })
+}

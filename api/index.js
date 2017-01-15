@@ -23,6 +23,8 @@ router.get('/is_login', user.isLogin);
 
 router.get('/article', article.list);
 router.get('/project', project.list);
+router.post('/project', project.create)
+router.post('/project_update', project.update)
 
 router.get('/file', file.list);
 router.post('/file', upload.single('file'), file.post);
