@@ -8,11 +8,17 @@ import Home from './modules/Home';
 import Article from './modules/Article';
 import Purchase from './store/Purchase';
 import TransferIn from './store/TransferIn';
+import TransferInTable from './report/TransferInTable'
 import Operator from './people/Operator'
 import OperatorCreate from './people/OperatorCreate'
 import TransferOut from './store/TransferOut';
+import TransferOutTable from './report/TransferOutTable'
+
 import Project from './project/Project';
 import ProjectCreate from './project/ProjectCreate';
+import BaseStore from './project/BaseStore'
+import OtherStore from './project/OtherStore'
+
 import { Router, Route, IndexRoute, hashHistory } from 'react-router';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'react-select/dist/react-select.css';
@@ -93,13 +99,20 @@ ajax('/api/is_login').then(() => {
           <Route path="file_manager" component={FileManager}/>
           <Route path="operator" component={Operator}/>
           <Route path="operator_create" component={OperatorCreate}/>
+
           <Route path="project" component={Project}/>
           <Route path="project_create" component={ProjectCreate}/>
+          <Route path="base_store" component={BaseStore}/>
+          <Route path="other_store" component={OtherStore}/>
+
           <Route path="profile" component={Profile}/>
           <Route path="article" component={Article}/>
           <Route path="purchase" component={Purchase}/>
           <Route path="transfer_in" component={TransferIn}/>
           <Route path="transfer_out" component={TransferOut}/>
+          <Route path="transfer_in_table" component={TransferInTable}/>
+          <Route path="transfer_out_table" component={TransferOutTable}/>
+
         </Route>
       </Router>
     </Provider>

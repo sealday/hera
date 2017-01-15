@@ -31,20 +31,6 @@ class App extends Component {
               {/* TODO 这里可以考虑改成数组的形式*/}
               <ul>
                 <li>
-                  <a href="#">项目信息</a>
-                  <ul>
-                    <li><Link to="project_create">新建项目</Link></li>
-                    <li><Link to="project">项目列表</Link></li>
-                  </ul>
-                </li>
-                <li>
-                  <a href="#">人员信息</a>
-                  <ul>
-                    <li><Link to="operator_create">新增操作员</Link></li>
-                    <li><Link to="operator">操作员列表</Link></li>
-                  </ul>
-                </li>
-                <li>
                   <a href="#">仓库</a>
                   <ul>
                     <li><Link to="purchase">采购入库</Link></li>
@@ -55,8 +41,8 @@ class App extends Component {
                 <li>
                   <a href="#">报表</a>
                   <ul>
-                    <li><a href="#">入库明细表</a></li>
-                    <li><a href="#">出库明细表</a></li>
+                    <li><Link to="transfer_in_table">入库明细表</Link></li>
+                    <li><Link to="transfer_out_table">出库明细表</Link></li>
                     <li><a href="#">费用明细表</a></li>
                     <li><a href="#">财务收款明细表</a></li>
                     <li><a href="#">财务付款明细表</a></li>
@@ -69,6 +55,22 @@ class App extends Component {
                   <a href="#">系统基础数据</a>
                   <ul>
                     <li><Link to="article">物料数据</Link></li>
+                  </ul>
+                </li>
+                <li>
+                  <a href="#">项目信息</a>
+                  <ul>
+                    <li><Link to="project_create">新建项目</Link></li>
+                    <li><Link to="project">项目列表</Link></li>
+                    {/*<li><Link to="base_store">基地仓库</Link></li>*/}
+                    {/*<li><Link to="other_store">同行</Link></li>*/}
+                  </ul>
+                </li>
+                <li>
+                  <a href="#">人员信息</a>
+                  <ul>
+                    <li><Link to="operator_create">新增操作员</Link></li>
+                    <li><Link to="operator">操作员列表</Link></li>
                   </ul>
                 </li>
               </ul>
