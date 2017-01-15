@@ -2,7 +2,6 @@
  * Created by seal on 15/01/2017.
  */
 import React, { Component } from 'react'
-import { ajax } from '../utils'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 

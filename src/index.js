@@ -46,6 +46,8 @@ const initialState = {
   users: [],
   outRecords: [],
   outRecordsRequestStatus: 'IDLE', // IDLE NEED_REQUEST REQUESTING
+  inRecords: [],
+  inRecordsRequestStatus: 'IDLE', // IDLE NEED_REQUEST REQUESTING
 };
 
 const store = createStore((state = initialState, action) => {
@@ -80,6 +82,12 @@ const store = createStore((state = initialState, action) => {
     case 'REQUEST_OUT_RECORDS':
       const outRecordsRequestStatus = action.status
       return {...state, outRecordsRequestStatus}
+    case 'UPDATE_IN_RECORDS':
+      const inRecords = action.records
+      return {...state, inRecords}
+    case 'REQUEST_IN_RECORDS':
+      const inRecordsRequestStatus = action.status
+      return {...state, inRecordsRequestStatus}
     default:
       return state;
   }
@@ -135,6 +143,30 @@ ajax('/api/is_login').then(() => {
       }).catch(err => {
         alert('出错了！获取出库数据' + JSON.stringify(err))
         store.dispatch({ type: 'REQUEST_OUT_RECORDS', status: 'IDLE' })
+      })
+    }
+  })
+
+  store.subscribe(() => {
+    if (store.getState().inRecordsRequestStatus != 'NEED_REQUEST') return
+    if (store.getState().projects.length == 0) return
+
+    const bases = store.getState().projects.filter(project => project.type == '基地仓库')
+    const inStock = bases.length > 0 ? bases[0]._id : ''
+
+    if (inStock) {
+      store.dispatch({ type: 'REQUEST_IN_RECORDS', status: 'REQUESTING' })
+      ajax('/api/transfer', {
+        data: {
+          inStock: inStock
+        }
+      }).then(res => {
+        const records = res.data.records
+        store.dispatch({ type: 'UPDATE_IN_RECORDS', records })
+        store.dispatch({ type: 'REQUEST_IN_RECORDS', status: 'IDLE' })
+      }).catch(err => {
+        alert('出错了！获取出库数据' + JSON.stringify(err))
+        store.dispatch({ type: 'REQUEST_IN_RECORDS', status: 'IDLE' })
       })
     }
   })
