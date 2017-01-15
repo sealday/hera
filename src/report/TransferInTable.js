@@ -13,6 +13,13 @@ class TransferInTable extends Component {
   componentWillUnmount() {
 
   }
+
+  getFullname = (record) => {
+    return record.outStock
+      ? this.props.projectIdMap[record.outStock].company + this.props.projectIdMap[record.outStock].name
+      : '无'
+  }
+
   render() {
     let alert = false
 
@@ -30,6 +37,7 @@ class TransferInTable extends Component {
         <table className="table">
           <thead>
           <tr>
+            <th>类型</th>
             <th>项目部</th>
             <th>调拨单状态</th>
             <th>详情</th>
@@ -38,7 +46,8 @@ class TransferInTable extends Component {
           <tbody>
           {this.props.records.map(record => (
             <tr key={record._id}>
-              <td>{this.props.projectIdMap[record.outStock].company + this.props.projectIdMap[record.outStock].name}</td>
+              <td>{record.type}</td>
+              <td>{this.getFullname(record)}</td>
               <td>{record.status}</td>
               <td><Link onClick={() => {
                 this.props.dispatch({ type: 'UPDATE_RECORDS_CACHE', record })

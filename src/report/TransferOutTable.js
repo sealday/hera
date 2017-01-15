@@ -30,6 +30,7 @@ class TransferOutTable extends Component {
         <table className="table">
           <thead>
           <tr>
+            <th>类型</th>
             <th>项目部</th>
             <th>调拨单状态</th>
             <th>详情</th>
@@ -38,6 +39,7 @@ class TransferOutTable extends Component {
           <tbody>
           {this.props.records.map(record => (
             <tr key={record._id}>
+              <td>{record.type}</td>
               <td>{this.props.projectIdMap[record.inStock].company + this.props.projectIdMap[record.inStock].name}</td>
               <td>{record.status}</td>
               <td><Link onClick={() => {

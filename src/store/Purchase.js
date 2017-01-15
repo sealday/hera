@@ -23,50 +23,45 @@ class Purchase extends Component {
       vendor: '',
       entries : [],
     };
-    this.handleAdd = this.handleAdd.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleDateChange = this.handleDateChange.bind(this);
-    this.handleProjectChange = this.handleProjectChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleAdd(entry) {
+  handleAdd = (entry) => {
     this.setState(prevState => {
       entry._id = new Date().getTime();
       prevState.entries.push(entry);
       return {
         entries: prevState.entries
       }
-    });
+    })
   }
 
-  handleChange(e) {
+  handleChange = (e) => {
     if (e.target.name) {
       this.setState({
         [e.target.name]: e.target.value
-      });
+      })
     }
   }
 
-  handleProjectChange(e) {
+  handleProjectChange = (e) => {
     this.setState({
       project: e.value
     })
   }
 
-  handleDateChange(date) {
+  handleDateChange = (date) => {
     this.setState({
       date: date
-    });
+    })
   }
 
-  handleSubmit(e) {
+  handleSubmit = (e) => {
     e.preventDefault();
     console.dir(this.state.date);
     ajax('/api/purchase', {
       data: JSON.stringify({
         entries: this.state.entries,
-        project: this.state.project,
+        inStock: this.state.project,
         originalOrder: this.state.originalOrder,
         comments: this.state.comments,
         carNumber: this.state.carNumber,
@@ -76,7 +71,7 @@ class Purchase extends Component {
       method: 'POST',
       contentType: 'application/json'
     }).then(res => {
-      alert(res);
+      alert(res.message);
     }).catch(err => {
       alert('出错了' + JSON.stringify(err));
     });
