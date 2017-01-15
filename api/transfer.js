@@ -7,10 +7,15 @@ const HistoryRecord = require('../models/Record').HistoryRecord
 
 exports.list = (req, res, next) => {
 
-  res.json({
-    message: '查询成功'
+  Record.find(req.query).then(records => {
+    res.json({
+      data: {
+        records
+      }
+    })
+  }).catch(err => {
+    next(err)
   })
-
 }
 
 /*
@@ -22,6 +27,7 @@ exports.create = (req, res, next) => {
 
   record.type = historyRecord.type = '调拨'
   record.order = historyRecord.order = record._id
+  record.status = historyRecord.status = '未确认'
 
   Promise.all([record.save(), historyRecord.save()]).then(() => {
     res.json({
