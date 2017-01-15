@@ -52,3 +52,19 @@ exports.detail = (req, res, next) => {
     next(err)
   })
 }
+
+exports.update = (req, res, next) => {
+  Record.findById(req.params.id).then(record => {
+    Object.assign(record, req.body)
+    return record.save()
+  }).then(record => {
+    res.json({
+      message: '更新调拨单成功！',
+      data: {
+        record
+      }
+    })
+  }).catch(err => {
+    next(err)
+  })
+}
