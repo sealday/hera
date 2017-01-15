@@ -4,6 +4,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
+import shortid from 'shortid'
 
 class TransferInTable extends Component {
   componentDidMount() {
@@ -17,6 +18,8 @@ class TransferInTable extends Component {
   getFullname = (record) => {
     return record.outStock
       ? this.props.projectIdMap[record.outStock].company + this.props.projectIdMap[record.outStock].name
+      : record.vendor
+      ? record.vendor
       : '无'
   }
 
@@ -38,8 +41,9 @@ class TransferInTable extends Component {
           <thead>
           <tr>
             <th>类型</th>
-            <th>项目部</th>
-            <th>调拨单状态</th>
+            <th>来自</th>
+            <th>内容预览</th>
+            <th>状态</th>
             <th>详情</th>
           </tr>
           </thead>
@@ -48,6 +52,13 @@ class TransferInTable extends Component {
             <tr key={record._id}>
               <td>{record.type}</td>
               <td>{this.getFullname(record)}</td>
+              <td>{record.entries.map(entry => (
+                <p key={shortid.generate()}>
+                  <span style={{marginRight: '1em'}}>{entry.name}</span>
+                  <span style={{marginRight: '1em'}}>{entry.size}</span>
+                  <span>{entry.count}</span>
+                </p>
+              ))}</td>
               <td>{record.status}</td>
               <td><Link onClick={() => {
                 this.props.dispatch({ type: 'UPDATE_RECORDS_CACHE', record })
