@@ -5,7 +5,11 @@ const ProductType = require('../models/ProductType');
 
 exports.list = (req, res, next) => {
   ProductType.find().then(articles => {
-    res.json(articles);
+    res.json({
+      data: {
+        articles
+      }
+    });
   }).catch(err => {
     next(err);
   });

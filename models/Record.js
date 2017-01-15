@@ -13,6 +13,7 @@ const RecordSchema = new Schema({
   vendor: String, // 对方单位，采购单和销售单专用
   comments: String, // 备注
   status: String, // 状态 采购单用来说明是否付款过
+  order: Schema.Types.ObjectId, // 单号
   originalOrder: String, // 原始单号
 
   entries: [{

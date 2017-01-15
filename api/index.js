@@ -12,6 +12,7 @@ const User = require('../models/User');
 const middleware = require('./middleware');
 const user = require('./user');
 const project = require('./project');
+const transfer = require('./transfer')
 
 const router = express.Router();
 const File = require('../models/File');
@@ -21,10 +22,16 @@ router.post('/login', user.login);
 router.post('/logout', user.logout);
 router.get('/is_login', user.isLogin);
 
+router.get('/user', user.list)
+router.post('/user', user.create)
+router.post('/user_update', user.update)
+
 router.get('/article', article.list);
 router.get('/project', project.list);
 router.post('/project', project.create)
 router.post('/project_update', project.update)
+
+router.post('/transfer', transfer.create)
 
 router.get('/file', file.list);
 router.post('/file', upload.single('file'), file.post);
