@@ -32,3 +32,21 @@ export function ajax(url, settings) {
     }
   });
 }
+
+export function transformArticle(articles) {
+  let typeNameMap = {
+    租赁类: [],
+    消耗类: [],
+    工具类: []
+  };
+  let nameArticleMap = {};
+  articles.forEach(article => {
+    typeNameMap[article.type].push(article.name);
+    nameArticleMap[article.name] = article;
+  });
+
+  return {
+    typeNameMap,
+    nameArticleMap
+  };
+}

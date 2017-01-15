@@ -8,16 +8,13 @@ import InputForm from './TransferInputForm';
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
-import { ajax } from '../utils';
+import { ajax, transformArticle } from '../utils';
+import { connect } from 'react-redux'
 
-export default class TransferOut extends Component {
+class TransferOut extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      typeNameMap: {},
-      nameArticleMap: {},
-      projects: [],
-
       project: '',
       date: moment(),
       originalOrder: '',
@@ -149,7 +146,7 @@ export default class TransferOut extends Component {
                   clearable={false}
                   placeholder="请选择项目"
                   value={this.state.project}
-                  options={this.state.projects.map(project => ({ value: project._id, label: project.company + project.name }))}
+                  options={this.props.projects.map(project => ({ value: project._id, label: project.company + project.name }))}
                   onChange={this.handleProjectChange}/>
               </div>
               <label className="control-label col-md-1">日期</label>
@@ -191,7 +188,7 @@ export default class TransferOut extends Component {
             </div>
           </div>
 
-          <InputForm onAdd={this.handleAdd} typeNameMap={this.state.typeNameMap} nameArticleMap={this.state.nameArticleMap} />
+          <InputForm onAdd={this.handleAdd} typeNameMap={this.props.typeNameMap} nameArticleMap={this.props.nameArticleMap} />
           <BootstrapTable
             data={this.state.entries}
             selectRow={{ mode: 'checkbox' }}
@@ -210,3 +207,13 @@ export default class TransferOut extends Component {
     );
   }
 }
+
+const mapStateToProps = state => {
+  const props = transformArticle(state.articles)
+  return {
+    ...props,
+    projects: state.projects
+  }
+}
+
+export default connect(mapStateToProps)(TransferOut)

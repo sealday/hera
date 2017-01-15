@@ -8,9 +8,10 @@ import InputForm from './TransferInputForm';
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
-import { ajax } from '../utils';
+import { ajax, transformArticle } from '../utils';
+import { connect } from 'react-redux'
 
-export default class TransferIn extends Component {
+class TransferIn extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -210,3 +211,13 @@ export default class TransferIn extends Component {
     );
   }
 }
+
+const mapStateToProps = state => {
+  const props = transformArticle(state.articles)
+  return {
+    ...props,
+    projects: state.projects
+  }
+}
+
+export default connect(mapStateToProps)(TransferIn)
