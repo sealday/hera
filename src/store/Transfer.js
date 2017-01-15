@@ -12,17 +12,33 @@ import moment from 'moment';
 class Transfer extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      outDate: moment(),
-      originalOrder: '',
-      comments: '',
-      carNumber: '',
-      carFee: '',
-      sortFee: '',
-      other1Fee: '',
-      other2Fee: '',
-      entries : [],
-    };
+
+    let record = this.props.record
+    if (record) {
+      this.state = {
+        outDate: moment(record.outDate),
+        originalOrder: record.originalOrder,
+        comments: record.comments,
+        carNumber: record.carNumber,
+        carFee: record.fee.car,
+        sortFee: record.fee.sort,
+        other1Fee: record.fee.other1,
+        other2Fee: record.fee.other2,
+        entries : record.entries,
+      };
+    } else {
+      this.state = {
+        outDate: moment(),
+        originalOrder: '',
+        comments: '',
+        carNumber: '',
+        carFee: '',
+        sortFee: '',
+        other1Fee: '',
+        other2Fee: '',
+        entries : [],
+      };
+    }
 
   }
 
@@ -68,9 +84,11 @@ class Transfer extends Component {
   }
 
   render() {
+    let action = this.props.record ? '编辑' : '创建'
+
     return (
       <div>
-        <h2>创建{this.props.orderName}</h2>
+        <h2>{action}{this.props.orderName}</h2>
         <div>
           <div className="form-horizontal">
             <div className="form-group">
@@ -90,35 +108,35 @@ class Transfer extends Component {
               </div>
               <label className="control-label col-md-1">原始单号</label>
               <div className="col-md-3">
-                <input className="form-control" type="text" name="originalOrder" onChange={this.handleChange} />
+                <input className="form-control" type="text" name="originalOrder" onChange={this.handleChange} value={this.state.originalOrder} />
               </div>
             </div>
             <div className="form-group">
               <label className="control-label col-md-1">车号</label>
               <div className="col-md-3">
-                <input className="form-control" type="text" name="carNumber" onChange={this.handleChange} />
+                <input className="form-control" type="text" name="carNumber" onChange={this.handleChange} value={this.state.carNumber} />
               </div>
               <label className="control-label col-md-1">运费</label>
               <div className="col-md-3">
-                <input className="form-control" type="text" name="carFee" onChange={this.handleChange} />
+                <input className="form-control" type="text" name="carFee" onChange={this.handleChange} value={this.state.carFee} />
               </div>
               <label className="control-label col-md-1">备注</label>
               <div className="col-md-3">
-                <input className="form-control" type="text" name="comments" onChange={this.handleChange} />
+                <input className="form-control" type="text" name="comments" onChange={this.handleChange} value={this.state.comments} />
               </div>
             </div>
             <div className="form-group">
               <label className="control-label col-md-1">整理费用</label>
               <div className="col-md-3">
-                <input className="form-control" type="text" name="sortFee" onChange={this.handleChange} />
+                <input className="form-control" type="text" name="sortFee" onChange={this.handleChange} value={this.state.sortFee} />
               </div>
               <label className="control-label col-md-1">其他费用1</label>
               <div className="col-md-3">
-                <input className="form-control" type="text" name="other1Fee" onChange={this.handleChange} />
+                <input className="form-control" type="text" name="other1Fee" onChange={this.handleChange} value={this.state.other1Fee} />
               </div>
               <label className="control-label col-md-1">其他费用2</label>
               <div className="col-md-3">
-                <input className="form-control" type="text" name="other2Fee" onChange={this.handleChange} />
+                <input className="form-control" type="text" name="other2Fee" onChange={this.handleChange} value={this.state.other2Fee} />
               </div>
             </div>
           </div>
@@ -136,7 +154,7 @@ class Transfer extends Component {
             <TableHeaderColumn dataField="count">数量</TableHeaderColumn>
             <TableHeaderColumn dataField="total">小计</TableHeaderColumn>
           </BootstrapTable>
-          <button className="btn btn-primary btn-block" onClick={this.handleSubmit}>创建</button>
+          <button className="btn btn-primary btn-block" onClick={this.handleSubmit}>{action}</button>
         </div>
       </div>
     );

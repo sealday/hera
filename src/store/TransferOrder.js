@@ -6,11 +6,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import moment from 'moment'
 import { ajax, calculateSize, toFixedWithoutTrailingZero } from '../utils'
+import { Link } from 'react-router'
 
 class TransferOrder extends Component {
 
   render() {
-    // FIXME 需要处理直接通过路径进入这个页面
     const id = this.props.params.recordId
     const record = this.props.recordIdMap[id]
     const projectIdMap = this.props.projectIdMap
@@ -122,7 +122,7 @@ class TransferOrder extends Component {
     return (
         <div className="container-fluid">
           <div className="btn-group hidden-print">
-            <a className="btn btn-primary" href="edit">编辑</a>
+            <Link className="btn btn-primary" to={`/transfer_out/${record._id}`}>编辑</Link>
             <button className="btn btn-default" onClick={() => print()}>打印</button>
             <a className="btn btn-default" href="check">审核确认</a>
           </div>
@@ -195,7 +195,7 @@ class TransferOrder extends Component {
                 <tbody>
                 {rightPart}
                 <tr>
-                  <td colSpan="3" style={{height: '10em'}}>备注</td>
+                  <td colSpan="3" style={{height: '10em'}}>备注 {record.commentst }</td>
                 </tr>
                 <tr>
                   <td/>
