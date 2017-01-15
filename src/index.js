@@ -13,6 +13,7 @@ import Operator from './people/Operator'
 import OperatorCreate from './people/OperatorCreate'
 import TransferOut from './store/TransferOut';
 import TransferOutTable from './report/TransferOutTable'
+import TransferOrder from './store/TransferOrder'
 
 import Project from './project/Project';
 import ProjectCreate from './project/ProjectCreate';
@@ -36,8 +37,10 @@ import moment from 'moment';
 moment.locale('zh-CN');
 
 const initialState = {
+  base: {},
   projects: [],
   projectIdMap: {},
+  recordIdMap: {},
   articles: [],
   num: 0,
   users: [],
@@ -50,13 +53,21 @@ const store = createStore((state = initialState, action) => {
     case "UPDATE_PROJECTS":
       const projects = action.projects;
       const projectIdMap = {}
+      let base = {}
       projects.forEach(project => {
         projectIdMap[project._id] = project
+        if (project.type == '基地仓库') {
+          base = project
+        }
       })
-      return {...state, projects, projectIdMap};
+      return {...state, projects, projectIdMap, base};
     case "UPDATE_ARTICLES":
       const articles = action.articles;
       return {...state, articles};
+    case 'UPDATE_RECORDS_CACHE':
+      const record = action.record
+      const recordIdMap = {...state.recordIdMap, [record._id]: record}
+      return {...state, recordIdMap}
     case 'UPDATE_NUM':
       const num  = action.num
       return {...state, num}
@@ -105,13 +116,14 @@ ajax('/api/is_login').then(() => {
   });
 
   store.subscribe(() => {
-    if (store.getState().outRecordsRequestStatus != 'REQUESTING') return
+    if (store.getState().outRecordsRequestStatus != 'NEED_REQUEST') return
     if (store.getState().projects.length == 0) return
 
     const bases = store.getState().projects.filter(project => project.type == '基地仓库')
     const outStock = bases.length > 0 ? bases[0]._id : ''
 
     if (outStock) {
+      store.dispatch({ type: 'REQUEST_OUT_RECORDS', status: 'REQUESTING' })
       ajax('/api/transfer', {
         data: {
           outStock: outStock
@@ -146,9 +158,8 @@ ajax('/api/is_login').then(() => {
           <Route path="purchase" component={Purchase}/>
           <Route path="transfer_in" component={TransferIn}/>
           <Route path="transfer_out" component={TransferOut}/>
-          <Route path="transfer_in_table" component={TransferInTable} onEnter={(nextState, replace, callback) => {
-            callback()
-          }}/>
+          <Route path="transfer_in_table" component={TransferInTable} />
+          <Route path="transfer_order/:recordId" component={TransferOrder}/>
           <Route path="transfer_out_table" component={TransferOutTable} />
 
         </Route>

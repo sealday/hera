@@ -80,7 +80,7 @@ class TransferOut extends Component {
       method: 'POST',
       contentType: 'application/json'
     }).then(res => {
-      alert(res.message);
+      this.props.router.push(`transfer_order/${res.data.record._id}`)
     }).catch(err => {
       alert('出错了' + JSON.stringify(err));
     });

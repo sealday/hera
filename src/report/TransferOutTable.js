@@ -4,10 +4,11 @@
 import React, { Component } from 'react'
 import { ajax } from '../utils'
 import { connect } from 'react-redux'
+import { Link } from 'react-router'
 
 class TransferOutTable extends Component {
   componentDidMount() {
-    this.props.dispatch({ type: 'REQUEST_OUT_RECORDS', status: 'REQUESTING' })
+    this.props.dispatch({ type: 'REQUEST_OUT_RECORDS', status: 'NEED_REQUEST' })
   }
 
   componentWillUnmount() {
@@ -32,6 +33,7 @@ class TransferOutTable extends Component {
           <tr>
             <th>项目部</th>
             <th>调拨单状态</th>
+            <th>详情</th>
           </tr>
           </thead>
           <tbody>
@@ -39,6 +41,9 @@ class TransferOutTable extends Component {
             <tr key={record._id}>
               <td>{this.props.projectIdMap[record.inStock].company + this.props.projectIdMap[record.inStock].name}</td>
               <td>{record.status}</td>
+              <td><Link onClick={() => {
+                this.props.dispatch({ type: 'UPDATE_RECORDS_CACHE', record })
+              }} to={ `transfer_order/${record._id}`}>进入详情</Link></td>
             </tr>
           ))}
           </tbody>
