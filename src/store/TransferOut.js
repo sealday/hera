@@ -90,8 +90,7 @@ class TransferOut extends Component {
     return (
       <div>
         <h2>创建调拨出库单</h2>
-        <form onSubmit={this.handleSubmit}>
-          <div className="hidden-content" hidden=""></div>
+        <div>
           <div className="form-horizontal">
             <div className="form-group">
               <label className="control-label col-md-1">项目部</label>
@@ -156,8 +155,8 @@ class TransferOut extends Component {
             <TableHeaderColumn dataField="count">数量</TableHeaderColumn>
             <TableHeaderColumn dataField="total">小计</TableHeaderColumn>
           </BootstrapTable>
-          <button className="btn btn-primary btn-block">创建</button>
-        </form>
+          <button className="btn btn-primary btn-block" onClick={this.handleSubmit}>创建</button>
+        </div>
       </div>
     );
   }
