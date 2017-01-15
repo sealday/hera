@@ -3,7 +3,7 @@
  */
 
 import React, { Component } from 'react';
-import Autocomplete from 'react-autocomplete';
+import Select, { Creatable } from 'react-select';
 import { calculateSize, toFixedWithoutTrailingZero } from '../utils';
 
 export default class InputForm extends Component {
@@ -56,14 +56,23 @@ export default class InputForm extends Component {
             count: 0,
           });
           break;
-        case 'name':
-          this.setState(prevState => ({
-            size: '',
-            count: 0,
-          }));
-          break;
       }
     }
+  }
+
+  handleNameChange = (name) => {
+    this.setState(prevState => ({
+      name: name.value,
+      size: '',
+      count: 0,
+    }));
+  }
+
+  handleSizeChange = (size) => {
+    this.setState(prevState => ({
+      size: size.value,
+      count: 0,
+    }));
   }
 
   handleSubmit(e) {
@@ -114,37 +123,24 @@ export default class InputForm extends Component {
           </div>
           <div className="form-group">
             <label className="control-label">名称</label>
-            <Autocomplete
+            <Select
+              name="name"
+              clearable={false}
+              placeholder=""
               value={this.state.name}
-              inputProps={{ name: "name", className: 'form-control'}}
-              items={this.getNames(this.state.type)}
-              getItemValue={item => item}
-              shouldItemRender={(name, value) => name.indexOf(value) !== -1}
-              onChange={this.handleChange}
-              onSelect={name => this.setState({ name, unit: this.getUnit(name) })}
-              renderItem={(name, isSelected) => (
-                <div
-                  key={name}
-                  style={ isSelected ? styles.highlightedItem : styles.item }
-                >{name}</div>
-              )}
+              options={this.getNames(this.state.type).map(name => ({ value: name, label: name }))}
+              onChange={this.handleNameChange}
             />
           </div>
           <div className="form-group">
             <label className="control-label">规格</label>
-            <Autocomplete
+            <Select
+              name="size"
+              clearable={false}
+              placeholder=""
               value={this.state.size}
-              inputProps={{ name: "size", className: 'form-control'}}
-              items={this.getSizes(this.state.name)}
-              getItemValue={item => item}
-              onChange={this.handleChange}
-              onSelect={size => this.setState({ size })}
-              renderItem={(size, isSelected) => (
-                <div
-                  key={size}
-                  style={ isSelected ? styles.highlightedItem : styles.item }
-                >{size}</div>
-              )}
+              options={this.getSizes(this.state.name).map(size => ({ value: size, label: size}))}
+              onChange={this.handleSizeChange}
             />
           </div>
           <div className="form-group">
@@ -183,21 +179,3 @@ export default class InputForm extends Component {
     );
   }
 }
-
-let styles = {
-  item: {
-    padding: '2px 6px',
-    cursor: 'default'
-  },
-
-  highlightedItem: {
-    color: 'white',
-    background: 'hsl(200, 50%, 50%)',
-    padding: '2px 6px',
-    cursor: 'default'
-  },
-
-  menu: {
-    border: 'solid 1px #ccc'
-  }
-};

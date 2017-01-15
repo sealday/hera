@@ -119,3 +119,23 @@ html {
 .table-top-border>thead:first-child>tr:first-child>th {
   border-top: 1px solid black;
 }
+
+/* 修复 Select 在内联form的情况下的问题 */
+/*.form-inline .Select {*/
+  /*display: inline-block;*/
+  /*vertical-align: middle;*/
+/*}*/
+
+/*.form-inline  .Select-control {*/
+  /*width: 10em;*/
+/*}*/
+@media (min-width: 768px)  {
+  .form-inline .Select {
+    display: inline-block;
+    width: auto;
+    vertical-align: middle;
+  }
+  .form-inline .Select-control {
+    width: 10em;
+  }
+}
