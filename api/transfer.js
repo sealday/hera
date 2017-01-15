@@ -29,9 +29,24 @@ exports.create = (req, res, next) => {
   record.order = historyRecord.order = record._id
   record.status = historyRecord.status = '未确认'
 
-  Promise.all([record.save(), historyRecord.save()]).then(() => {
+  Promise.all([record.save(), historyRecord.save()]).then(([record]) => {
     res.json({
-      message: '创建调拨单成功！'
+      message: '创建调拨单成功！',
+      data: {
+        record
+      }
+    })
+  }).catch(err => {
+    next(err)
+  })
+}
+
+exports.detail = (req, res, next) => {
+  Record.findById(req.params.id).then(record => {
+    res.json({
+      data: {
+        record
+      }
     })
   }).catch(err => {
     next(err)
