@@ -11,6 +11,7 @@ const purchase = require('./purchase');
 const User = require('../models/User');
 const middleware = require('./middleware');
 const user = require('./user');
+const project = require('./project');
 
 const router = express.Router();
 const File = require('../models/File');
@@ -21,6 +22,7 @@ router.post('/logout', user.logout);
 router.get('/is_login', user.isLogin);
 
 router.get('/article', article.list);
+router.get('/project', project.list);
 
 router.get('/file', file.list);
 router.post('/file', upload.single('file'), file.post);
