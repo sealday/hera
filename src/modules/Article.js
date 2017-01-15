@@ -3,33 +3,12 @@
  */
 import React, { Component } from 'react';
 import TagsInput from 'react-tagsinput';
-import { ajax } from '../utils';
+import { connect } from 'react-redux'
 
 /**
  * 基础物料
  */
 class Article extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      articles: []
-    };
-  }
-
-  componentDidMount() {
-    ajax('/api/article', {
-      method: 'GET'
-    }).then(articles => {
-      this.setState({articles});
-    }).catch(err => {
-      alert(JSON.stringify(err));
-    });
-  }
-
-  componentWillUnmount() {
-
-  }
-
   render() {
     return (
       <div>
@@ -49,7 +28,7 @@ class Article extends Component {
           </tr>
           </thead>
           <tbody>
-          {this.state.articles.map((article, index) => {
+          {this.props.articles.map((article, index) => {
             return (
               <tr key={article._id}>
                 <td>{article.type}</td>
@@ -74,4 +53,10 @@ class Article extends Component {
   }
 }
 
-export default Article;
+const mapStateToProps = state => {
+  return {
+    articles: state.articles
+  }
+}
+
+export default connect(mapStateToProps)(Article);

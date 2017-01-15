@@ -6,27 +6,17 @@ import React, { Component, PropTypes } from 'react';
 import cx from 'classnames';
 import { Link, IndexLink } from 'react-router';
 import { ajax } from '../utils';
+import { connect } from 'react-redux'
 
 class Navbar extends Component {
   constructor(props) {
     super(props);
     this.state = {
       dropdown: false,
-      collapse: false,
-      num: 0
+      collapse: false
     };
     this.toggleCollapse = this.toggleCollapse.bind(this);
     this.logout = this.logout.bind(this);
-  }
-
-  componentDidMount() {
-    this.props.socket.on('server:num', num => {
-      this.setState({num});
-    });
-  }
-
-  componentWillUnmount() {
-
   }
 
   logout() {
@@ -64,7 +54,7 @@ class Navbar extends Component {
           </div>
           <div className={cx({collapse: true, 'navbar-collapse': true, in: this.state.collapse})}>
             <ul className="nav navbar-nav navbar-right">
-              <li><a href="#" onClick={ e => e.preventDefault() }>当前在线人数{this.state.num}</a></li>
+              <li><a href="#" onClick={ e => e.preventDefault() }>当前在线人数{this.props.num}</a></li>
               <li><a href="#" onClick={this.logout}>登出</a></li>
               <li className={cx({active: this.context.router.isActive("profile")})}><Link to="profile">超级管理员</Link></li>
             </ul>
@@ -75,4 +65,10 @@ class Navbar extends Component {
   }
 }
 
-export default Navbar;
+const mapStateToProps = state => {
+  return {
+    num: state.num
+  }
+}
+
+export default connect(mapStateToProps)(Navbar)

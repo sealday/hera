@@ -18,8 +18,6 @@ class FileManager extends Component {
     e.preventDefault();
     let data = new FormData();
     data.append('file', this.fileInput.files[0]);
-    console.dir(this.fileInput.files[0]);
-    console.dir(data);
     this.setState({
       message: '上传文件中'
     });

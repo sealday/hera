@@ -3,31 +3,9 @@
  */
 
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
 
 class Project extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      projects: []
-    };
-
-    this.store = window.store;
-  }
-
-  componentDidMount() {
-    this.unsubscribe = this.store.subscribe(() => {
-      let projects = this.store.getState().projects;
-      this.setState({projects});
-    });
-
-    let projects = this.store.getState().projects;
-    this.setState({projects});
-  }
-
-  componentWillUnmount() {
-    this.unsubscribe();
-  }
-
   render() {
     return (
       <div>
@@ -45,7 +23,7 @@ class Project extends Component {
           </tr>
           </thead>
           <tbody>
-          {this.state.projects.map(project => (
+          {this.props.projects.map(project => (
             <tr key={project._id}>
               <td>{project.company}</td>
               <td>{project.companyTel}</td>
@@ -60,7 +38,6 @@ class Project extends Component {
                   </p>
                 ))}
               </td>
-              {/*<td>{project.contacts}</td>*/}
               <td>{project.type}</td>
               <td>{project.comments}</td>
             </tr>
@@ -72,4 +49,10 @@ class Project extends Component {
   }
 }
 
-export default Project;
+const mapStateToProps = state => {
+  return {
+    projects: state.projects
+  }
+}
+
+export default connect(mapStateToProps)(Project);

@@ -3,45 +3,6 @@ import cx from 'classnames';
 import { Link } from 'react-router';
 import Navbar from './modules/Navbar';
 import './App.css';
-import io from 'socket.io-client';
-import { ajax } from './utils';
-import { createStore } from 'redux';
-import moment from 'moment';
-
-moment.locale('zh-CN');
-
-const initialState = {
-  projects: [],
-  articles: [],
-};
-
-window.store = createStore((state = initialState, action) => {
-  switch (action.type) {
-    case "UPDATE_PROJECTS":
-      const projects = action.projects;
-      return {...state, projects};
-    case "UPDATE_ARTICLES":
-      const articles = action.articles;
-      return {...state, articles};
-    default:
-      return state;
-  }
-});
-
-// 初始化数据
-ajax('/api/project').then(projects => {
-  window.store.dispatch({ type: "UPDATE_PROJECTS", projects });
-}).catch(res => {
-  alert('出错了' + JSON.stringify(res));
-});
-
-ajax('/api/article').then(articles => {
-  window.store.dispatch({ type: 'UPDATE_ARTICLES', articles })
-}).catch(res => {
-  alert('出错了' + JSON.stringify(res));
-});
-
-const socket = io();
 
 class App extends Component {
   constructor(props) {
@@ -63,7 +24,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Navbar socket={socket}/>
+        <Navbar/>
         <div className="container-fluid" style={{height: '100%'}}>
           <div className="row" style={{position: 'relative', height: '100%'}}>
             <div className={cx({ 'col-sm-2': true, 'App-drawer': true, 'show': this.state.drawer })}>
@@ -79,8 +40,8 @@ class App extends Component {
                 <li>
                   <a href="#">人员信息</a>
                   <ul>
-                    <li><a href="#">新增人员</a></li>
-                    <li><a href="#">人员列表</a></li>
+                    <li><Link to="operator_create">新增操作员</Link></li>
+                    <li><Link to="operator">操作员列表</Link></li>
                   </ul>
                 </li>
                 <li>

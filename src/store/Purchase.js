@@ -9,8 +9,9 @@ import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import { ajax } from '../utils';
+import { connect } from 'react-redux'
 
-export default class Purchase extends Component {
+class Purchase extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -197,3 +198,7 @@ export default class Purchase extends Component {
     );
   }
 }
+
+
+
+export default Purchase
