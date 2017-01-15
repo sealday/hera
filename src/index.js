@@ -37,16 +37,23 @@ moment.locale('zh-CN');
 
 const initialState = {
   projects: [],
+  projectIdMap: {},
   articles: [],
   num: 0,
   users: [],
+  outRecords: [],
+  outRecordsRequestStatus: 'IDLE', // IDLE NEED_REQUEST REQUESTING
 };
 
 const store = createStore((state = initialState, action) => {
   switch (action.type) {
     case "UPDATE_PROJECTS":
       const projects = action.projects;
-      return {...state, projects};
+      const projectIdMap = {}
+      projects.forEach(project => {
+        projectIdMap[project._id] = project
+      })
+      return {...state, projects, projectIdMap};
     case "UPDATE_ARTICLES":
       const articles = action.articles;
       return {...state, articles};
@@ -56,6 +63,12 @@ const store = createStore((state = initialState, action) => {
     case 'UPDATE_USERS':
       const users = action.users
       return {...state, users}
+    case 'UPDATE_OUT_RECORDS':
+      const outRecords = action.records
+      return {...state, outRecords}
+    case 'REQUEST_OUT_RECORDS':
+      const outRecordsRequestStatus = action.status
+      return {...state, outRecordsRequestStatus}
     default:
       return state;
   }
@@ -91,6 +104,29 @@ ajax('/api/is_login').then(() => {
     store.dispatch({ type: 'UPDATE_NUM',  num })
   });
 
+  store.subscribe(() => {
+    if (store.getState().outRecordsRequestStatus != 'REQUESTING') return
+    if (store.getState().projects.length == 0) return
+
+    const bases = store.getState().projects.filter(project => project.type == '基地仓库')
+    const outStock = bases.length > 0 ? bases[0]._id : ''
+
+    if (outStock) {
+      ajax('/api/transfer', {
+        data: {
+          outStock: outStock
+        }
+      }).then(res => {
+        const records = res.data.records
+        store.dispatch({ type: 'UPDATE_OUT_RECORDS', records })
+        store.dispatch({ type: 'REQUEST_OUT_RECORDS', status: 'IDLE' })
+      }).catch(err => {
+        alert('出错了！获取出库数据' + JSON.stringify(err))
+        store.dispatch({ type: 'REQUEST_OUT_RECORDS', status: 'IDLE' })
+      })
+    }
+  })
+
   ReactDOM.render((
     <Provider store={store}>
       <Router history={hashHistory}>
@@ -110,8 +146,10 @@ ajax('/api/is_login').then(() => {
           <Route path="purchase" component={Purchase}/>
           <Route path="transfer_in" component={TransferIn}/>
           <Route path="transfer_out" component={TransferOut}/>
-          <Route path="transfer_in_table" component={TransferInTable}/>
-          <Route path="transfer_out_table" component={TransferOutTable}/>
+          <Route path="transfer_in_table" component={TransferInTable} onEnter={(nextState, replace, callback) => {
+            callback()
+          }}/>
+          <Route path="transfer_out_table" component={TransferOutTable} />
 
         </Route>
       </Router>
