@@ -15,10 +15,6 @@ class TransferIn extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      typeNameMap: {},
-      nameArticleMap: {},
-      projects: [],
-
       project: '',
       date: moment(),
       originalOrder: '',
@@ -47,44 +43,6 @@ class TransferIn extends Component {
       return {
         entries: prevState.entries
       }
-    });
-  }
-
-  componentDidMount() {
-    this.unsubscribes[0] = this.store.subscribe(() => {
-      let articles = this.store.getState().articles;
-      this.transformArticle(articles);
-    });
-    this.unsubscribes[1] = this.store.subscribe(() => {
-      let projects = this.store.getState().projects;
-      this.setState({projects});
-    });
-
-    let projects = this.store.getState().projects;
-    this.setState({projects});
-    this.transformArticle(this.store.getState().articles);
-  }
-
-  componentWillUnmount() {
-    this.unsubscribes[0]();
-    this.unsubscribes[1]();
-  }
-
-  transformArticle(articles) {
-    let typeNameMap = {
-      租赁类: [],
-      消耗类: [],
-      工具类: []
-    };
-    let nameArticleMap = {};
-    articles.forEach(article => {
-      typeNameMap[article.type].push(article.name);
-      nameArticleMap[article.name] = article;
-    });
-
-    this.setState({
-      typeNameMap,
-      nameArticleMap
     });
   }
 
@@ -150,7 +108,7 @@ class TransferIn extends Component {
                   clearable={false}
                   placeholder="请选择项目"
                   value={this.state.project}
-                  options={this.state.projects.map(project => ({ value: project._id, label: project.company + project.name }))}
+                  options={this.props.projects.map(project => ({ value: project._id, label: project.company + project.name }))}
                   onChange={this.handleProjectChange}/>
               </div>
               <label className="control-label col-md-1">日期</label>
@@ -192,7 +150,7 @@ class TransferIn extends Component {
             </div>
           </div>
 
-          <InputForm onAdd={this.handleAdd} typeNameMap={this.state.typeNameMap} nameArticleMap={this.state.nameArticleMap} />
+          <InputForm onAdd={this.handleAdd} typeNameMap={this.props.typeNameMap} nameArticleMap={this.props.nameArticleMap} />
           <BootstrapTable
             data={this.state.entries}
             selectRow={{ mode: 'checkbox' }}

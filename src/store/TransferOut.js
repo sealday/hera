@@ -15,8 +15,8 @@ class TransferOut extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      project: '',
-      date: moment(),
+      inStock: '', // 调出进入的仓库
+      outDate: moment(), //
       originalOrder: '',
       comments: '',
       carNumber: '',
@@ -26,17 +26,10 @@ class TransferOut extends Component {
       other2Fee: '',
       entries : [],
     };
-    this.handleAdd = this.handleAdd.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleDateChange = this.handleDateChange.bind(this);
-    this.handleProjectChange = this.handleProjectChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
 
-    this.store = window.store;
-    this.unsubscribes = [];
   }
 
-  handleAdd(entry) {
+  handleAdd = (entry) => {
     this.setState(prevState => {
       entry._id = new Date().getTime();
       prevState.entries.push(entry);
@@ -46,45 +39,7 @@ class TransferOut extends Component {
     });
   }
 
-  componentDidMount() {
-    this.unsubscribes[0] = this.store.subscribe(() => {
-      let articles = this.store.getState().articles;
-      this.transformArticle(articles);
-    });
-    this.unsubscribes[1] = this.store.subscribe(() => {
-      let projects = this.store.getState().projects;
-      this.setState({projects});
-    });
-
-    let projects = this.store.getState().projects;
-    this.setState({projects});
-    this.transformArticle(this.store.getState().articles);
-  }
-
-  componentWillUnmount() {
-    this.unsubscribes[0]();
-    this.unsubscribes[1]();
-  }
-
-  transformArticle(articles) {
-    let typeNameMap = {
-      租赁类: [],
-      消耗类: [],
-      工具类: []
-    };
-    let nameArticleMap = {};
-    articles.forEach(article => {
-      typeNameMap[article.type].push(article.name);
-      nameArticleMap[article.name] = article;
-    });
-
-    this.setState({
-      typeNameMap,
-      nameArticleMap
-    });
-  }
-
-  handleChange(e) {
+  handleChange = (e) => {
     if (e.target.name) {
       this.setState({
         [e.target.name]: e.target.value
@@ -92,29 +47,29 @@ class TransferOut extends Component {
     }
   }
 
-  handleProjectChange(e) {
+  handleProjectChange = (e) => {
     this.setState({
-      project: e.value
+      inStock: e.value
     })
   }
 
-  handleDateChange(date) {
+  handleDateChange = (date) => {
     this.setState({
-      date: date
+      outDate: date
     });
   }
 
-  handleSubmit(e) {
+  handleSubmit = (e) => {
     e.preventDefault();
-    console.dir(this.state.date);
-    ajax('/api/transfer_out', {
+    ajax('/api/transfer', {
       data: JSON.stringify({
         entries: this.state.entries,
-        project: this.state.project,
+        inStock: this.state.inStock,
+        outStock: this.props.outStock,
         originalOrder: this.state.originalOrder,
         comments: this.state.comments,
         carNumber: this.state.carNumber,
-        date: this.state.date,
+        outDate: this.state.outDate,
         fee: {
           car: this.state.carFee,
           sort: this.state.sortFee,
@@ -125,7 +80,7 @@ class TransferOut extends Component {
       method: 'POST',
       contentType: 'application/json'
     }).then(res => {
-      alert(res);
+      alert(res.message);
     }).catch(err => {
       alert('出错了' + JSON.stringify(err));
     });
@@ -145,13 +100,13 @@ class TransferOut extends Component {
                   name="project"
                   clearable={false}
                   placeholder="请选择项目"
-                  value={this.state.project}
+                  value={this.state.inStock}
                   options={this.props.projects.map(project => ({ value: project._id, label: project.company + project.name }))}
                   onChange={this.handleProjectChange}/>
               </div>
               <label className="control-label col-md-1">日期</label>
               <div className="col-md-3">
-                <DatePicker selected={this.state.date} className="form-control" onChange={this.handleDateChange}/>
+                <DatePicker selected={this.state.outDate} className="form-control" onChange={this.handleDateChange}/>
               </div>
               <label className="control-label col-md-1">原始单号</label>
               <div className="col-md-3">
@@ -210,8 +165,11 @@ class TransferOut extends Component {
 
 const mapStateToProps = state => {
   const props = transformArticle(state.articles)
+  const bases = state.projects.filter(project => project.type == '基地仓库')
+  const outStock = bases.length > 0 ? bases[0]._id : ''
   return {
     ...props,
+    outStock,
     projects: state.projects
   }
 }
