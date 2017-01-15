@@ -91,6 +91,11 @@ class TransferOrder extends Component {
       )
     }
 
+    // TODO 这里不应该会出现 fee，如果出现就是错误的了
+    if (!record.fee) {
+      console.warn('调拨单费用不应该是null')
+    }
+    record.fee = record.fee || {}
     printEntries.push(
       <tr key={key++} className="text-right">
         <td />
