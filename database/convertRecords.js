@@ -25,6 +25,7 @@ mongoose.connect('mongodb://localhost/hera').then(() => {
     record.status = historyRecord.status = order.status
     record.entries = historyRecord.entries = order.entries
     record.username = historyRecord.username = order.username
+    record.type = historyRecord.type = "调拨"
 
     if (order.hasTransport) {
       record.hasTransport = historyRecord.hasTransport = order.hasTransport
