@@ -35,16 +35,19 @@ class TransferOrder extends Component {
     let orderName = ''
     let company = ''
     let name = ''
+    let direction = ''
 
     // 判断是收料单还是发料单
     if (record.inStock == base._id) {
       // 入库是基地，是收料单
       orderName = '收料单'
+      direction = 'in'
       company = projectIdMap[record.outStock].company
       name = projectIdMap[record.outStock].name
     } else if (record.outStock == base._id) {
       // 出库是基地，是发料单
       orderName = '发料单'
+      direction = 'out'
       company = projectIdMap[record.inStock].company
       name = projectIdMap[record.inStock].name
     } else {
@@ -122,7 +125,7 @@ class TransferOrder extends Component {
     return (
         <div className="container-fluid">
           <div className="btn-group hidden-print">
-            <Link className="btn btn-primary" to={`/transfer_out/${record._id}`}>编辑</Link>
+            <Link className="btn btn-primary" to={`/transfer_${direction}/${record._id}`}>编辑</Link>
             <button className="btn btn-default" onClick={() => print()}>打印</button>
             <a className="btn btn-default" href="check">审核确认</a>
           </div>
