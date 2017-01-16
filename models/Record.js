@@ -10,6 +10,7 @@ const RecordSchema = new Schema({
   outStock: Schema.Types.ObjectId, // 出库仓库
   inStock: Schema.Types.ObjectId, // 入库仓库
 
+  username: String, // 填单子的人
   vendor: String, // 对方单位，采购单和销售单专用
   comments: String, // 备注
   status: String, // 状态 采购单用来说明是否付款过
@@ -48,7 +49,7 @@ const RecordSchema = new Schema({
     other2: Number, // 其他2
   },
 
-  hasTransport: Boolean, // 是否有对应运输单
+  hasTransport: { type: Boolean, default: false }, // 是否有对应运输单
   transport: { 'off-date': Date,
     'arrival-date': Date, // 到达日期
     weight: String, // 重量
