@@ -17,6 +17,8 @@ const transfer = require('./transfer')
 const router = express.Router();
 const File = require('../models/File');
 
+const store = require('./store')
+
 router.use(middleware.user);
 router.post('/login', user.login);
 router.post('/logout', user.logout);
@@ -38,6 +40,8 @@ router.post('/transfer', transfer.create)
 
 router.get('/file', file.list);
 router.post('/file', upload.single('file'), file.post);
+
+router.get('/store/:id', store.queryAll)
 
 router.post('/purchase', purchase.postPurchase);
 
