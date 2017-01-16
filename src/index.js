@@ -16,7 +16,7 @@ import TransferOutTable from './report/TransferOutTable'
 import TransferOrder from './store/TransferOrder'
 import TransferOutEdit from './store/TransferOutEdit'
 import TransferInEdit from './store/TransferInEdit'
-
+import Store from './report/Store'
 import Project from './project/Project';
 import ProjectCreate from './project/ProjectCreate';
 import BaseStore from './project/BaseStore'
@@ -192,12 +192,13 @@ ajax('/api/is_login').then(() => {
           <Route path="purchase" component={Purchase}/>
           <Route path="transfer_in" component={TransferIn}/>
           <Route path="transfer_out" component={TransferOut}/>
-          <Route path="transfer_in_table" component={TransferInTable} />
           <Route path="transfer_order/:recordId" component={TransferOrder}/>
           <Route path="transfer_out/:recordId" component={TransferOutEdit}/>
           <Route path="transfer_in/:recordId" component={TransferInEdit}/>
-          <Route path="transfer_out_table" component={TransferOutTable} />
 
+          <Route path="transfer_in_table" component={TransferInTable} />
+          <Route path="transfer_out_table" component={TransferOutTable} />
+          <Route path="store" component={Store} />
         </Route>
       </Router>
     </Provider>

@@ -41,6 +41,7 @@ class App extends Component {
                 <li>
                   <a href="#">报表</a>
                   <ul>
+                    <li><Link to="store">当前库存信息</Link></li>
                     <li><Link to="transfer_in_table">入库明细表</Link></li>
                     <li><Link to="transfer_out_table">出库明细表</Link></li>
                     <li><a href="#">费用明细表</a></li>
