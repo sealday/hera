@@ -77,6 +77,11 @@ class Purchase extends Component {
     });
   }
 
+  onDeleteRow = (rows) => {
+    let entries = this.state.entries.filter(entry => rows.indexOf(entry._id) != -1)
+    this.setState({entries})
+  }
+
   render() {
     return (
       <div>
@@ -124,7 +129,7 @@ class Purchase extends Component {
         <BootstrapTable
           data={this.state.entries}
           selectRow={{ mode: 'checkbox' }}
-          options={{ noDataText: '还未添加数据', defaultSortName: '_id', defaultSortOrder: 'desc' }}
+          options={{ noDataText: '还未添加数据', defaultSortName: '_id', defaultSortOrder: 'desc', onDeleteRow: this.onDeleteRow }}
           cellEdit={{ mode: 'click', blurToSave: true }} deleteRow>
           <TableHeaderColumn dataField="_id" isKey={true} hidden={true}>id</TableHeaderColumn>
           <TableHeaderColumn dataField="type">类型</TableHeaderColumn>
