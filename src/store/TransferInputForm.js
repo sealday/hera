@@ -13,11 +13,11 @@ export default class TransferInputForm extends Component {
       type: '租赁类',
       name: '',
       size: '',
-      count: 0,
+      count: '',
       total: '',
       unit: '',
-      price: 0,
-      sum: 0,
+      price: '',
+      sum: '',
       freightChecked: false,
       freightCount: 0,
       freightUnit: '吨',
@@ -53,7 +53,7 @@ export default class TransferInputForm extends Component {
           this.setState({
             name: '',
             size: '',
-            count: 0,
+            count: '',
           });
           break;
       }
@@ -64,14 +64,14 @@ export default class TransferInputForm extends Component {
     this.setState(prevState => ({
       name: name.value,
       size: '',
-      count: 0,
+      count: '',
     }));
   }
 
   handleSizeChange = (size) => {
     this.setState(prevState => ({
       size: size.value,
-      count: 0,
+      count: '',
     }));
   }
 

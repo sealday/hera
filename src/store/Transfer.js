@@ -84,7 +84,8 @@ class Transfer extends Component {
   }
 
   onDeleteRow = (rows) => {
-    let entries = this.state.entries.filter(entry => rows.indexOf(entry._id) != -1)
+    // 找出所有不在被删除的项目
+    let entries = this.state.entries.filter(entry => rows.indexOf(entry._id) == -1)
     this.setState({entries})
   }
 
