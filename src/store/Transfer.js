@@ -83,6 +83,11 @@ class Transfer extends Component {
     })
   }
 
+  handleCancel = (e) => {
+    e.preventDefault()
+    this.props.router.goBack()
+  }
+
   onDeleteRow = (rows) => {
     // 找出所有不在被删除的项目
     let entries = this.state.entries.filter(entry => rows.indexOf(entry._id) == -1)
@@ -90,11 +95,14 @@ class Transfer extends Component {
   }
 
   render() {
+    let cancel = '取消'
     let action = this.props.record ? '编辑' : '创建'
+    let actionBtn = this.props.record ? '完成编辑' : '创建'
+
 
     return (
       <div>
-        <h2>{action}{this.props.orderName}</h2>
+         <h2>{action}{this.props.orderName}</h2>
         <div>
           <div className="form-horizontal">
             <div className="form-group">
@@ -160,7 +168,14 @@ class Transfer extends Component {
             <TableHeaderColumn dataField="count">数量</TableHeaderColumn>
             <TableHeaderColumn dataField="total">小计</TableHeaderColumn>
           </BootstrapTable>
-          <button className="btn btn-primary btn-block" onClick={this.handleSubmit}>{action}</button>
+          <div className="row">
+            <div className="col-md-6">
+              <button className="btn btn-default btn-block" onClick={this.handleCancel}>{cancel}</button>
+            </div>
+            <div className="col-md-6">
+              <button className="btn btn-primary btn-block" onClick={this.handleSubmit}>{actionBtn}</button>
+            </div>
+          </div>
         </div>
       </div>
     );
