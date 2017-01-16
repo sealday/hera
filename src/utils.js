@@ -27,6 +27,7 @@ export function ajax(url, settings) {
   return $.ajax(url, settings).catch(res => {
     if (res.status == 401) {
       location.href = 'login.html';
+      throw res;
     } else {
       throw res;
     }
