@@ -131,34 +131,52 @@ class TransferOrder extends Component {
           </div>
           <h3 className="text-center">上海创兴建筑设备租赁有限公司</h3>
           <h3 className="text-center">{orderName}</h3>
-          <table className="table table-clean">
-            <tbody>
-            <tr>
-              <td/>
-              <td/>
-              <td className="text-right">单号：</td>
-              <td className="text-center">{record._id}</td>
-            </tr>
-            <tr>
-              <td/>
-              <td/>
-              <td className="text-right">原始单号：</td>
-              <td className="text-center">{record.originalOrder}</td>
-            </tr>
-            <tr>
-              <td>承租单位：</td>
-              <td>{company}</td>
-              <td className="text-right">日期：</td>
-              <td className="text-center">{moment(record.outDate).format('YYYY-MM-DD')}</td>
-            </tr>
-            <tr>
-              <td>工程项目：</td>
-              <td>{name}</td>
-              <td className="text-right">车号：</td>
-              <td className="text-center">{record.carNumber}</td>
-            </tr>
-            </tbody>
-          </table>
+          <div className="row">
+            <div className="col-xs-6">
+              <table className="table table-clean">
+                <tbody>
+                <tr>
+                  <td>{'\u00a0'}</td>
+                  <td/>
+                </tr>
+                <tr>
+                  <td>{'\u00a0'}</td>
+                  <td/>
+                </tr>
+                <tr>
+                  <td className="text-left">承租单位：</td>
+                  <td className="text-center">{company}</td>
+                </tr>
+                <tr>
+                  <td className="text-left">工程项目：</td>
+                  <td className="text-center">{name}</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+            <div className="col-xs-6">
+              <table className="table table-clean">
+                <tbody>
+                <tr>
+                  <td className="text-left">单号：</td>
+                  <td className="text-center">{record._id}</td>
+                </tr>
+                <tr>
+                  <td className="text-left">原始单号：</td>
+                  <td className="text-center">{record.originalOrder}</td>
+                </tr>
+                <tr>
+                  <td className="text-left">日期：</td>
+                  <td className="text-center">{moment(record.outDate).format('YYYY-MM-DD')}</td>
+                </tr>
+                <tr>
+                  <td className="text-left">车号：</td>
+                  <td className="text-center">{record.carNumber}</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
           <div className="row">
             <div className="col-xs-6">
               <table className="table text-right">
