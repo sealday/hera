@@ -15,6 +15,7 @@ exports.postPurchase = (req, res, next) => {
   record.type = historyRecord.type = '采购'
   record.order = historyRecord.order = record._id
   record.status = historyRecord.status = '未支付'
+  record.username = historyRecord.username = req.session.user.username
 
   Promise.all([record.save(), historyRecord.save()]).then(([record]) => {
     res.json({

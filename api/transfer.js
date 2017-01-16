@@ -28,6 +28,7 @@ exports.create = (req, res, next) => {
   record.type = historyRecord.type = '调拨'
   record.order = historyRecord.order = record._id
   record.status = historyRecord.status = '未确认'
+  record.username = historyRecord.username = req.session.user.username
 
   Promise.all([record.save(), historyRecord.save()]).then(([record]) => {
     res.json({
@@ -56,8 +57,13 @@ exports.detail = (req, res, next) => {
 exports.update = (req, res, next) => {
   Record.findById(req.params.id).then(record => {
     Object.assign(record, req.body)
-    return record.save()
-  }).then(record => {
+    let historyRecord = new HistoryRecord(req.body)
+    historyRecord.type = '调拨'
+    historyRecord.order = record._id
+    historyRecord.status  = record.status
+    record.username = historyRecord.username = req.session.user.username
+    return Promise.all([record.save(), historyRecord.save()])
+  }).then(([record, historyRecord]) => {
     res.json({
       message: '更新调拨单成功！',
       data: {
