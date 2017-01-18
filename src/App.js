@@ -56,6 +56,8 @@ class App extends Component {
                   <a href="#">系统基础数据</a>
                   <ul>
                     <li><Link to="article">物料数据</Link></li>
+                    <li><Link to="operator_create">新增操作员</Link></li>
+                    <li><Link to="operator">操作员列表</Link></li>
                   </ul>
                 </li>
                 <li>
@@ -63,15 +65,10 @@ class App extends Component {
                   <ul>
                     <li><Link to="project_create">新建项目</Link></li>
                     <li><Link to="project">项目列表</Link></li>
+                    <li><Link>员工档案</Link></li>
+                    <li><Link>考勤表</Link></li>
                     {/*<li><Link to="base_store">基地仓库</Link></li>*/}
                     {/*<li><Link to="other_store">同行</Link></li>*/}
-                  </ul>
-                </li>
-                <li>
-                  <a href="#">人员信息</a>
-                  <ul>
-                    <li><Link to="operator_create">新增操作员</Link></li>
-                    <li><Link to="operator">操作员列表</Link></li>
                   </ul>
                 </li>
               </ul>
