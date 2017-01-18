@@ -26,8 +26,6 @@ export default class TransferInputForm extends Component {
       mixPrice: 0,
       mixSum: 0
     };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   static propTypes = {
@@ -36,7 +34,7 @@ export default class TransferInputForm extends Component {
     typeNameMap: React.PropTypes.object.isRequired
   };
 
-  handleChange(e) {
+  handleChange = (e) => {
     if (e.target.name) {
       if (e.target.type == 'checkbox') {
         this.setState({
@@ -75,9 +73,8 @@ export default class TransferInputForm extends Component {
     }));
   }
 
-  handleSubmit(e) {
+  handleSubmit = (e) => {
     e.preventDefault();
-    e.stopPropagation();
 
     this.setState(prevState => {
       let state = prevState;
@@ -89,9 +86,14 @@ export default class TransferInputForm extends Component {
       state.mixSum = toFixedWithoutTrailingZero(state.freight + state.sum);
       state.mixPrice = toFixedWithoutTrailingZero(state.mixSum / state.total);
 
-      this.props.onAdd(state);
+      this.props.onAdd({...state});
+      state.size = ''
+      state.count = ''
       return state;
     });
+
+    this.refs.size.focus()
+
   }
 
   getNames(type) {
@@ -125,6 +127,7 @@ export default class TransferInputForm extends Component {
             <label className="control-label">名称</label>
               <Select
                 name="name"
+                ref="name"
                 clearable={false}
                 placeholder=""
                 value={this.state.name}
@@ -136,6 +139,13 @@ export default class TransferInputForm extends Component {
             <label className="control-label">规格</label>
             <Select
               name="size"
+              ref="size"
+              onInputKeyDown={event => {
+                // 退格 8 TODO 考虑怎么将退格键结合上去
+                if (event.keyCode == 37) { // 方向左键
+                  this.refs.name.focus()
+                }
+              }}
               clearable={false}
               placeholder=""
               value={this.state.size}
@@ -145,7 +155,13 @@ export default class TransferInputForm extends Component {
           </div>
           <div className="form-group">
             <label className="control-label">数量</label>
-            <input type="text" name="count" autoComplete="off" className="form-control" value={this.state.count} onChange={this.handleChange}/>
+            <input
+              onKeyDown={event => {
+                if (event.keyCode == 37) { // 方向左键
+                  this.refs.size.focus()
+                }
+              }}
+              type="text" name="count" autoComplete="off" className="form-control" value={this.state.count} onChange={this.handleChange}/>
           </div>
           <div className="form-group">
             <button className="btn btn-primary">添加</button>
