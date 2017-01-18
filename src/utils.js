@@ -34,6 +34,10 @@ export function ajax(url, settings) {
   });
 }
 
+export function makeKeyFromNameSize(name, size) {
+  return isNaN(size) ? name + size : name + Number(size)
+}
+
 export function transformArticle(articles) {
   let typeNameMap = {
     租赁类: [],

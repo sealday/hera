@@ -2,7 +2,7 @@
  * Created by seal on 16/01/2017.
  */
 import React, { Component } from 'react';
-import { ajax, toFixedWithoutTrailingZero, calculateSize  } from '../utils'
+import { ajax, toFixedWithoutTrailingZero, calculateSize, makeKeyFromNameSize } from '../utils'
 import { connect } from 'react-redux'
 import Select from 'react-select'
 
@@ -33,11 +33,11 @@ class Store extends Component {
         const outRecords = res.data.outRecords
         let inRecordMap = {}
         inRecords.forEach(record => {
-          inRecordMap[record._id.name + record._id.size] = record.sum
+          inRecordMap[makeKeyFromNameSize(record._id.name, record._id.size)] = record.sum
         })
         let outRecordMap = {}
         outRecords.forEach(record => {
-          outRecordMap[record._id.name + record._id.size] = record.sum
+          outRecordMap[makeKeyFromNameSize(record._id.name, record._id.size)] = record.sum
         })
 
         let records = []
@@ -48,7 +48,7 @@ class Store extends Component {
           let outTotal = 0
           let total = 0
           article.sizes.forEach(size => {
-            const key = article.name + size
+            const key = makeKeyFromNameSize(article.name, size)
             let value = {}
             let exists = false
             if (key in inRecordMap) {
