@@ -4,6 +4,7 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
+import { Link } from 'react-router'
 
 class Project extends Component {
   render() {
@@ -20,6 +21,7 @@ class Project extends Component {
             <th>联系人</th>
             <th>仓库类型</th>
             <th>备注</th>
+            <th>操作</th>
           </tr>
           </thead>
           <tbody>
@@ -40,6 +42,9 @@ class Project extends Component {
               </td>
               <td>{project.type}</td>
               <td>{project.comments}</td>
+              <td>
+                <Link to={`/project/${project._id}/edit`} >编辑</Link>
+              </td>
             </tr>
           ))}
           </tbody>

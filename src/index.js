@@ -19,6 +19,7 @@ import TransferInEdit from './store/TransferInEdit'
 import Store from './report/Store'
 import Project from './project/Project';
 import ProjectCreate from './project/ProjectCreate';
+import ProjectEdit from './project/ProjectEdit'
 import BaseStore from './project/BaseStore'
 import OtherStore from './project/OtherStore'
 
@@ -184,6 +185,7 @@ ajax('/api/is_login').then(() => {
 
           <Route path="project" component={Project}/>
           <Route path="project_create" component={ProjectCreate}/>
+          <Route path="project/:id/edit" component={ProjectEdit}/>
           <Route path="base_store" component={BaseStore}/>
           <Route path="other_store" component={OtherStore}/>
 

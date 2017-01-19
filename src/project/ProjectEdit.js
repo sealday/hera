@@ -5,7 +5,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import shortid from 'shortid'
-import {   } from 'immutable'
 
 class ProjectEdit extends Component {
   constructor(props) {
@@ -25,7 +24,8 @@ class ProjectEdit extends Component {
           name: '',
           phone: '',
         }
-      ]
+      ],
+      loading: true
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -86,23 +86,32 @@ class ProjectEdit extends Component {
   }
 
   componentWillReceiveProps(props) {
-    if (props.projects.length == 1) return
-    const projects = props.projects.filter(p => this.props.params.id == p._id)
+    let projects = props.projects.filter(project => project._id == this.props.router.params.id)
     if (projects.length == 1) {
-      const project = projects[0]
-      let contacts = JSON.stringify(projects)
+      let project = {
+        ...props.projects[0]
+      }
+      let contacts = []
+      project.contacts.forEach(contact => {
+        contacts.push({
+          ...contact,
+          key: shortid.generate()
+        })
+      })
+      project.contacts = contacts
       this.setState({
-        ...projects[0],
-        contacts: [...projects[0].contacts]
+        ...project,
+        loading: false
       })
     }
   }
 
   render() {
-    if (!this.props.projects[this.props.params.id]) {
+
+    if (this.state.loading) {
       return (
         <div className="alert alert-info">
-          <p>请求数据中，请稍后</p>
+          <p>正在加载中，请稍候，如果等待时间过长，刷新一下重试</p>
         </div>
       )
     }
