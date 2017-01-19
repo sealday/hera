@@ -7,6 +7,10 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router'
 
 class Project extends Component {
+  handleDelete = (e, project) => {
+    e.preventDefault()
+    confirm(`确认要删除 ${project.company} ${project.name} `)
+  }
   render() {
     return (
       <div>
@@ -44,6 +48,7 @@ class Project extends Component {
               <td>{project.comments}</td>
               <td>
                 <Link to={`/project/${project._id}/edit`} >编辑</Link>
+                <a href="#" onClick={e => this.handleDelete(e, project)}>删除</a>
               </td>
             </tr>
           ))}
