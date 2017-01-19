@@ -61,7 +61,7 @@ class ProjectEdit extends Component {
 
   handleContactAdd() {
     this.setState(prevState => ({
-      contacts: [...prevState.contacts, { key: new Date().getTime(), name: '', phone: '' }]
+      contacts: [...prevState.contacts, { key: shortid.generate(), name: '', phone: '' }]
     }));
   }
 
