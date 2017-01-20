@@ -6,6 +6,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import shortid from 'shortid'
 import Contact from './Contact'
+import { ajax } from '../utils'
 
 class ProjectEdit extends Component {
   constructor(props) {
@@ -44,8 +45,23 @@ class ProjectEdit extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
+    ajax('/api/project/' + this.props.params.id, {
+      data: JSON.stringify(this.state),
+      method: 'POST',
+      contentType: 'application/json'
+    }).then(res => {
+      alert(res.message + "\n稍后将自动跳转到项目列表")
+      ajax('/api/project').then(res => {
+        const projects = res.data.projects
+        this.props.dispatch({ type: "UPDATE_PROJECTS", projects });
+        this.props.router.push('/project')
+      }).catch(res => {
+        alert('更新项目列表出错' + JSON.stringify(res));
+      });
 
-    alert(JSON.stringify(this.state));
+    }).catch(err => {
+      alert(`更新项目出错了！${JSON.stringify(err)}`)
+    })
   }
 
   handleContactChange(key, name, value) {

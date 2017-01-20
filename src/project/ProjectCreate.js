@@ -4,6 +4,8 @@
 
 import React, { Component } from 'react';
 import Contact from './Contact'
+import { ajax } from '../utils'
+import { connect } from 'react-redux'
 
 class ProjectCreate extends Component {
   constructor(props) {
@@ -41,8 +43,23 @@ class ProjectCreate extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
+    ajax('/api/project', {
+      data: JSON.stringify(this.state),
+      method: 'POST',
+      contentType: 'application/json'
+    }).then(res => {
+      alert(res.message + "\n稍后将自动跳转到项目列表")
+      ajax('/api/project').then(res => {
+        const projects = res.data.projects
+        this.props.dispatch({ type: "UPDATE_PROJECTS", projects });
+        this.props.router.push('/project')
+      }).catch(res => {
+        alert('更新项目列表出错' + JSON.stringify(res));
+      });
 
-    alert(JSON.stringify(this.state));
+    }).catch(err => {
+      alert(`创建项目出错了！${JSON.stringify(err)}`)
+    })
   }
 
   handleContactChange(key, name, value) {
@@ -136,7 +153,7 @@ class ProjectCreate extends Component {
           </div>
           <div className="form-group">
             <div className="col-sm-offset-10 col-sm-2">
-              <button className="btn btn-default btn-primary">保存修改</button>
+              <button className="btn btn-default btn-primary">创建</button>
             </div>
           </div>
         </form>
@@ -145,4 +162,4 @@ class ProjectCreate extends Component {
   }
 }
 
-export default ProjectCreate;
+export default connect()(ProjectCreate);
