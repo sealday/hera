@@ -50,7 +50,7 @@ class Project extends Component {
                   <td>{contact.phone}</td>
                   <td rowSpan={rowSpan}>{project.type}</td>
                   <td rowSpan={rowSpan}>{project.comments}</td>
-                  <td>
+                  <td rowSpan={rowSpan}>
                     <Link to={`/project/${project._id}/edit`} >编辑</Link>
                     <a href="#" onClick={e => this.handleDelete(e, project)}>删除</a>
                   </td>

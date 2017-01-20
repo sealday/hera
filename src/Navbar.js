@@ -5,7 +5,7 @@
 import React, { Component, PropTypes } from 'react';
 import cx from 'classnames';
 import { Link, IndexLink } from 'react-router';
-import { ajax } from '../utils';
+import { ajax } from './utils';
 import { connect } from 'react-redux'
 
 class Navbar extends Component {

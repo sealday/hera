@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import cx from 'classnames';
 import { Link } from 'react-router';
-import Navbar from './modules/Navbar';
+import Navbar from './Navbar';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group' // ES6
 import './App.css';
 

@@ -1,29 +1,23 @@
+// 使用 bluebird 的 promise 实现
+// TODO 需要测试下实际中浏览器的兼容性
 import 'bluebird';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
-import FileManager from './modules/FileManager';
-import Profile from './modules/Profile';
-import Home from './modules/Home';
-import Article from './modules/Article';
-import Purchase from './store/Purchase';
-import TransferIn from './store/TransferIn';
-import TransferInTable from './report/TransferInTable'
-import Operator from './people/Operator'
-import OperatorCreate from './people/OperatorCreate'
-import TransferOut from './store/TransferOut';
-import TransferOutTable from './report/TransferOutTable'
-import TransferOrder from './store/TransferOrder'
-import TransferOutEdit from './store/TransferOutEdit'
-import TransferInEdit from './store/TransferInEdit'
-import Store from './report/Store'
-import Project from './project/Project';
-import ProjectCreate from './project/ProjectCreate';
-import ProjectEdit from './project/ProjectEdit'
-import BaseStore from './project/BaseStore'
-import OtherStore from './project/OtherStore'
+import { createStore } from 'redux';
+import { Provider } from 'react-redux'
 
+import App from './App';
+import Home from './Home';
+import Article from './system/Article';
+
+import { FileManager } from './file'
+import { Operator, OperatorCreate } from './people'
+import { Purchase, TransferIn, TransferInEdit, TransferOut, TransferOutEdit, TransferOrder} from './store'
+import { TransferInTable, TransferOutTable, Store } from './report'
+import { Project, ProjectCreate, ProjectEdit, BaseStore, OtherStore } from './project'
 import { Router, Route, IndexRoute, hashHistory } from 'react-router';
+
+// css 除非是模块自己的，否则直接在这里进行全局 import
 import 'bootstrap/dist/css/bootstrap.css';
 import 'react-select/dist/react-select.css';
 import 'react-tagsinput/react-tagsinput.css';
@@ -32,12 +26,9 @@ import 'animate.css'
 import './index.css';
 import { ajax } from './utils';
 import io from 'socket.io-client';
-import { createStore } from 'redux';
-import { Provider } from 'react-redux'
 
-
+// 初始化 moment 时间属性
 import moment from 'moment';
-
 moment.locale('zh-CN');
 
 const initialState = {
@@ -190,7 +181,6 @@ ajax('/api/is_login').then(() => {
           <Route path="base_store" component={BaseStore}/>
           <Route path="other_store" component={OtherStore}/>
 
-          <Route path="profile" component={Profile}/>
           <Route path="article" component={Article}/>
           <Route path="purchase" component={Purchase}/>
           <Route path="transfer_in" component={TransferIn}/>
