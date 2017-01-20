@@ -7,6 +7,7 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 import { ajax, calculateSize, toFixedWithoutTrailingZero } from '../utils'
 import { Link } from 'react-router'
+import { getShortOrder } from '../utils'
 
 class TransferOrder extends Component {
 
@@ -159,7 +160,7 @@ class TransferOrder extends Component {
                 <tbody>
                 <tr>
                   <td className="text-left">单号：</td>
-                  <td className="text-center">{record._id}</td>
+                  <td className="text-center">{getShortOrder(record._id)}</td>
                 </tr>
                 <tr>
                   <td className="text-left">原始单号：</td>

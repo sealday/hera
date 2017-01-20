@@ -17,6 +17,9 @@ export function toFixedWithoutTrailingZero(num) {
   return Number(Number(num).toFixed(2)).toString();
 }
 
+export function getShortOrder(id) {
+  return Number.parseInt(id.slice(4, 8), 16) + '-' + Number.parseInt(id.slice(22, 24), 16)
+}
 
 /**
  *

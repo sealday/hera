@@ -6,6 +6,7 @@ import { Link } from 'react-router'
 import Select from 'react-select'
 import moment from 'moment'
 import DatePicker from 'react-datepicker';
+import { getShortOrder } from '../utils'
 
 class TransferTable extends Component {
   constructor(props) {
@@ -196,6 +197,7 @@ class TransferTable extends Component {
           <thead>
           <tr>
             <th className="text-center">类型</th>
+            <th className="text-center">单号</th>
             <th className="text-center">时间</th>
             <th className="text-center">{name}</th>
             <th className="text-center" colSpan="3">内容</th>
@@ -212,6 +214,7 @@ class TransferTable extends Component {
               return (
                 <tr key={record._id}>
                   <td rowSpan={rowSpan}>{record.type}</td>
+                  <td rowSpan={rowSpan}>{getShortOrder(record._id)}</td>
                   <td rowSpan={rowSpan}>{moment(record.outDate).format('YYYY-MM-DD')}</td>
                   <td rowSpan={rowSpan}>{this.props.projectIdMap[record.inStock].company + this.props.projectIdMap[record.inStock].name}</td>
                   <th>名称</th>
