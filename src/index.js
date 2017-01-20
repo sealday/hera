@@ -8,8 +8,8 @@ import { Provider } from 'react-redux'
 
 import App from './App';
 import Home from './Home';
-import Article from './system/Article';
 
+import { Article } from './system'
 import { FileManager } from './file'
 import { Operator, OperatorCreate } from './people'
 import { Purchase, TransferIn, TransferInEdit, TransferOut, TransferOutEdit, TransferOrder} from './store'
