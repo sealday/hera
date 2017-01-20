@@ -31,7 +31,7 @@ router.post('/user_update', user.update)
 router.get('/article', article.list);
 router.get('/project', project.list);
 router.post('/project', project.create)
-router.post('/project_update', project.update)
+router.post('/project/:id', project.update)
 
 router.get('/transfer', transfer.list)
 router.get('/transfer/:id', transfer.detail)
