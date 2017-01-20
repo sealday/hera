@@ -139,3 +139,11 @@ html {
     width: 10em;
   }
 }
+
+.nav-enter {
+  animation: 0.5s fadeIn ease;
+}
+
+.nav-leave {
+  animation: 0.3s fadeOut ease;
+}
