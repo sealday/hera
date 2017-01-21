@@ -22,12 +22,21 @@ class TransferTable extends Component {
     }
   }
 
+  getName = (record) => {
+    if (record.type == '采购') {
+      return record.vendor
+    } else if (record.type == '调拨') {
+      const projectIdMap = this.props.projectIdMap
+      return projectIdMap[record[this.props.stock]].company + projectIdMap[record[this.props.stock]].name
+    }
+  }
+
   getOptions() {
     const projectIdMap = this.props.projectIdMap
     const records = this.props.records
     return [{ value: '全部', label: '全部'}].concat(records.map(record => ({
       value: record[this.props.stock],
-      label: projectIdMap[record[this.props.stock]].company + projectIdMap[record[this.props.stock]].name
+      label: this.getName(record)
     })))
   }
 
@@ -216,7 +225,7 @@ class TransferTable extends Component {
                   <td rowSpan={rowSpan}>{record.type}</td>
                   <td rowSpan={rowSpan}>{getShortOrder(record._id)}</td>
                   <td rowSpan={rowSpan}>{moment(record.outDate).format('YYYY-MM-DD')}</td>
-                  <td rowSpan={rowSpan}>{this.props.projectIdMap[record[this.props.stock]].company + this.props.projectIdMap[record[this.props.stock]].name}</td>
+                  <td rowSpan={rowSpan}>{this.getName(record)}</td>
                   <th>名称</th>
                   <th>规格</th>
                   <th>数量</th>

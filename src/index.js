@@ -160,7 +160,7 @@ ajax('/api/is_login').then(() => {
         store.dispatch({ type: 'UPDATE_IN_RECORDS', records })
         store.dispatch({ type: 'REQUEST_IN_RECORDS', status: 'IDLE' })
       }).catch(err => {
-        alert('出错了！获取出库数据' + JSON.stringify(err))
+        alert('出错了！获取入库数据' + JSON.stringify(err))
         store.dispatch({ type: 'REQUEST_IN_RECORDS', status: 'IDLE' })
       })
     }
