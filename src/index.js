@@ -3,8 +3,10 @@
 import 'bluebird';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore } from 'redux';
+import { createStore, combineReducers } from 'redux';
+import { reducer as formReducer } from 'redux-form'
 import { Provider } from 'react-redux'
+import * as reducers from './reducers'
 
 import App from './App';
 import Home from './Home';
@@ -45,48 +47,11 @@ const initialState = {
   inRecordsRequestStatus: 'IDLE', // IDLE NEED_REQUEST REQUESTING
 };
 
-const store = createStore((state = initialState, action) => {
-  switch (action.type) {
-    case "UPDATE_PROJECTS":
-      const projects = action.projects;
-      const projectIdMap = {}
-      let base = {}
-      projects.forEach(project => {
-        projectIdMap[project._id] = project
-        if (project.type == '基地仓库') {
-          base = project
-        }
-      })
-      return {...state, projects, projectIdMap, base};
-    case "UPDATE_ARTICLES":
-      const articles = action.articles;
-      return {...state, articles};
-    case 'UPDATE_RECORDS_CACHE':
-      const record = action.record
-      const recordIdMap = {...state.recordIdMap, [record._id]: record}
-      return {...state, recordIdMap}
-    case 'UPDATE_NUM':
-      const num  = action.num
-      return {...state, num}
-    case 'UPDATE_USERS':
-      const users = action.users
-      return {...state, users}
-    case 'UPDATE_OUT_RECORDS':
-      const outRecords = action.records
-      return {...state, outRecords}
-    case 'REQUEST_OUT_RECORDS':
-      const outRecordsRequestStatus = action.status
-      return {...state, outRecordsRequestStatus}
-    case 'UPDATE_IN_RECORDS':
-      const inRecords = action.records
-      return {...state, inRecords}
-    case 'REQUEST_IN_RECORDS':
-      const inRecordsRequestStatus = action.status
-      return {...state, inRecordsRequestStatus}
-    default:
-      return state;
-  }
-});
+
+const store = createStore(combineReducers({
+  ...reducers,
+  formReducer
+}))
 
 // 在显示之前，先确定当前的用户已经登录！
 ajax('/api/is_login').then(() => {
