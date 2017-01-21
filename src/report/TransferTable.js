@@ -26,8 +26,8 @@ class TransferTable extends Component {
     const projectIdMap = this.props.projectIdMap
     const records = this.props.records
     return [{ value: '全部', label: '全部'}].concat(records.map(record => ({
-      value: record.inStock,
-      label: projectIdMap[record.inStock].company + projectIdMap[record.inStock].name
+      value: record[this.props.stock],
+      label: projectIdMap[record[this.props.stock]].company + projectIdMap[record[this.props.stock]].name
     })))
   }
 
@@ -51,7 +51,7 @@ class TransferTable extends Component {
   getRecords = () => {
     let records = this.props.records
     if (this.state.project !== '全部') {
-      records = records.filter(record => record.inStock == this.state.project)
+      records = records.filter(record => record[this.props.stock]== this.state.project)
     }
     records = records.filter(record => this.state.startDate < moment(record.outDate) && moment(this.state.endDate).add(1, 'day') > moment(record.outDate))
     if (this.state.name !== '全部') {
@@ -122,9 +122,9 @@ class TransferTable extends Component {
   }
 
   render() {
-    if (this.props.direction == '出库') {
+    if (this.props.stock == 'inStock') {
       name = '发往'
-    } else if (this.props.direction == '入库') {
+    } else if (this.props.stock == 'outStock') {
       name = '来自'
     }
     return (
@@ -216,7 +216,7 @@ class TransferTable extends Component {
                   <td rowSpan={rowSpan}>{record.type}</td>
                   <td rowSpan={rowSpan}>{getShortOrder(record._id)}</td>
                   <td rowSpan={rowSpan}>{moment(record.outDate).format('YYYY-MM-DD')}</td>
-                  <td rowSpan={rowSpan}>{this.props.projectIdMap[record.inStock].company + this.props.projectIdMap[record.inStock].name}</td>
+                  <td rowSpan={rowSpan}>{this.props.projectIdMap[record[this.props.stock]].company + this.props.projectIdMap[record[this.props.stock]].name}</td>
                   <th>名称</th>
                   <th>规格</th>
                   <th>数量</th>

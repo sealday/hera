@@ -31,7 +31,7 @@ class TransferOutTable extends Component {
       <div>
         {alert}
         <TransferTable
-          direction="出库"
+          stock="inStock"
           {...this.props}
         />
       </div>
