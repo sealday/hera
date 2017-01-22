@@ -40,13 +40,13 @@ class TransferOutTable extends Component {
 }
 
 const mapStateToProps = state => {
-  const bases = state.projects.filter(project => project.type == '基地仓库')
+  const bases = state.projects.projects.filter(project => project.type == '基地仓库')
   const outStock = bases.length > 0 ? bases[0]._id : ''
   return {
     outStock,
     records: state.outRecords,
-    projects: state.projects,
-    projectIdMap: state.projectIdMap,
+    projects: state.projects.projects,
+    projectIdMap: state.projects.projectIdMap,
     status: state.outRecordsRequestStatus,
     articles: state.articles,
     ...transformArticle(state.articles)

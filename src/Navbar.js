@@ -4,7 +4,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import cx from 'classnames';
-import { Link, IndexLink } from 'react-router';
+import { Link } from 'react-router';
 import { ajax } from './utils';
 import { connect } from 'react-redux'
 
@@ -15,11 +15,9 @@ class Navbar extends Component {
       dropdown: false,
       collapse: false
     };
-    this.toggleCollapse = this.toggleCollapse.bind(this);
-    this.logout = this.logout.bind(this);
   }
 
-  logout() {
+  logout = () => {
     // TODO 这里出错？？？ 总是重定向到首页
     ajax('/api/logout', {
       method: 'POST'
@@ -30,7 +28,7 @@ class Navbar extends Component {
     });
   }
 
-  toggleCollapse(e) {
+  toggleCollapse = e => {
     e.preventDefault();
     this.setState(prevState => { return { collapse: !prevState.collapse } });
   }
@@ -67,7 +65,7 @@ class Navbar extends Component {
 
 const mapStateToProps = state => {
   return {
-    num: state.num
+    num: state.system.online
   }
 }
 

@@ -4,12 +4,12 @@
 import React, { Component } from 'react';
 import TagsInput from 'react-tagsinput';
 import { connect } from 'react-redux'
+import { UPDATE_ARTICLE_SIZES } from '../actionTypes'
 
 /**
  * 基础物料
  */
-class Article extends Component {
-  render() {
+function Article ({articles, dispatch}){
     return (
       <div>
         <p>说明，1根 0.4米 的钢管，其中"根"是数量单位，"米"是规格单位</p>
@@ -28,17 +28,13 @@ class Article extends Component {
           </tr>
           </thead>
           <tbody>
-          {this.props.articles.map((article, index) => {
+          {articles.valueSeq().map(article => {
             return (
               <tr key={article._id}>
                 <td>{article.type}</td>
                 <td>{article.name}</td>
                 <td><TagsInput inputProps={{placeholder: "输入新规格"}} value={article.sizes} onChange={tags => {
-                  this.setState(prevState => {
-                    // TODO 深度克隆对象？
-                    prevState.articles[index].sizes = tags;
-                    return { articles: prevState.articles };
-                  })
+                  dispatch({ type: UPDATE_ARTICLE_SIZES, data: { id: article._id, sizes: tags }})
                 }} /></td>
                 <td>{article.countUnit}</td>
                 <td>{article.unit}</td>
@@ -50,12 +46,11 @@ class Article extends Component {
         </table>
       </div>
     );
-  }
 }
 
 const mapStateToProps = state => {
   return {
-    articles: state.articles
+    articles: state.system.articles
   }
 }
 

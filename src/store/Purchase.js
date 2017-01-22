@@ -159,7 +159,7 @@ const mapStateToProps = state => {
   const props = transformArticle(state.articles)
   return {
     ...props,
-    projects: state.projects
+    projects: state.projects.projects
   }
 }
 

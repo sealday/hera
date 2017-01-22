@@ -3,8 +3,14 @@
  */
 
 import * as actionTypes from './actionTypes'
+import { Map } from 'immutable'
+import { SystemRecord, ProjectRecord, ArticleRecord, UserRecord } from './records'
 
-export function projects(state = {}, action) {
+export function projects(state = {
+  projects: [],
+  base: '',
+  projectIdMap: {}
+}, action) {
   switch (action.type) {
     case actionTypes.UPDATE_PROJECTS:
       const projects = action.projects;
@@ -12,11 +18,45 @@ export function projects(state = {}, action) {
       let base = {}
       projects.forEach(project => {
         projectIdMap[project._id] = project
-        if (project.type == '基地仓库') {
+        if (project.type === '基地仓库') {
           base = project
         }
       })
       return {...state, projects, projectIdMap, base};
+    default:
+      return state
+  }
+}
+
+export function system(state = SystemRecord(), action) {
+  switch (action.type) {
+    case actionTypes.SYSTEM_LOADED:
+      let base = new ProjectRecord(action.data.base)
+      let projects = new Map().withMutations(projects => {
+        action.data.projects.forEach(project => {
+          projects.set(project._id, new ProjectRecord(project))
+        })
+      })
+      let articles = new Map().withMutations(articles => {
+        action.data.articles.forEach(article => {
+          articles.set(article._id, new ArticleRecord(article))
+        })
+      })
+
+      let users = new Map().withMutations(users => {
+        action.data.users.forEach(user => {
+          users.set(user._id, new UserRecord(user))
+        })
+      })
+
+      return state.set('base', base)
+        .set('projects', projects)
+        .set('articles', articles)
+        .set('users', users)
+    case actionTypes.ONLINE_USER_CHANGE:
+      return state.set('online', action.data)
+    case actionTypes.UPDATE_ARTICLE_SIZES:
+      return state.updateIn(['articles', action.data.id], article => article.set('sizes', action.data.sizes))
     default:
       return state
   }

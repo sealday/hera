@@ -7,6 +7,7 @@ import { createStore, combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form'
 import { Provider } from 'react-redux'
 import * as reducers from './reducers'
+import * as actionTypes from './actionTypes'
 
 import App from './App';
 import Home from './Home';
@@ -33,61 +34,25 @@ import io from 'socket.io-client';
 import moment from 'moment';
 moment.locale('zh-CN');
 
-const initialState = {
-  base: {},
-  projects: [],
-  projectIdMap: {},
-  recordIdMap: {},
-  articles: [],
-  num: 0,
-  users: [],
-  outRecords: [],
-  outRecordsRequestStatus: 'IDLE', // IDLE NEED_REQUEST REQUESTING
-  inRecords: [],
-  inRecordsRequestStatus: 'IDLE', // IDLE NEED_REQUEST REQUESTING
-};
-
-
+//noinspection JSUnresolvedVariable,JSUnresolvedFunction
 const store = createStore(combineReducers({
   ...reducers,
-  formReducer
-}))
+  form: formReducer
+}), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
 
-// 在显示之前，先确定当前的用户已经登录！
-ajax('/api/is_login').then(() => {
-  // 初始化数据
-  ajax('/api/project').then(res => {
-    const projects = res.data.projects
-    store.dispatch({ type: "UPDATE_PROJECTS", projects });
-  }).catch(res => {
-    alert('出错了' + JSON.stringify(res));
-  });
-
-  ajax('/api/article').then(res => {
-    const articles = res.data.articles
-    store.dispatch({ type: 'UPDATE_ARTICLES', articles })
-  }).catch(res => {
-    alert('出错了' + JSON.stringify(res));
-  });
-
-  ajax('/api/user').then(res => {
-    const users = res.data.users
-    store.dispatch({ type: 'UPDATE_USERS', users })
-  }).catch(res => {
-    alert('出错了！' + JSON.stringify(res))
-  })
-
+ajax('/api/load').then(res => {
+  store.dispatch({ type: actionTypes.SYSTEM_LOADED, data: res.data })
   const socket = io();
 
   socket.on('server:num', num => {
-    store.dispatch({ type: 'UPDATE_NUM',  num })
+    store.dispatch({ type: actionTypes.ONLINE_USER_CHANGE,  data: num})
   });
 
   store.subscribe(() => {
-    if (store.getState().outRecordsRequestStatus != 'NEED_REQUEST') return
-    if (store.getState().projects.length == 0) return
+    if (store.getState().outRecordsRequestStatus !== 'NEED_REQUEST') return
+    if (store.getState().projects.length === 0) return
 
-    const bases = store.getState().projects.filter(project => project.type == '基地仓库')
+    const bases = store.getState().projects.projects.filter(project => project.type === '基地仓库')
     const outStock = bases.length > 0 ? bases[0]._id : ''
 
     if (outStock) {
@@ -108,10 +73,10 @@ ajax('/api/is_login').then(() => {
   })
 
   store.subscribe(() => {
-    if (store.getState().inRecordsRequestStatus != 'NEED_REQUEST') return
-    if (store.getState().projects.length == 0) return
+    if (store.getState().inRecordsRequestStatus !== 'NEED_REQUEST') return
+    if (store.getState().projects.length === 0) return
 
-    const bases = store.getState().projects.filter(project => project.type == '基地仓库')
+    const bases = store.getState().projects.projects.filter(project => project.type === '基地仓库')
     const inStock = bases.length > 0 ? bases[0]._id : ''
 
     if (inStock) {

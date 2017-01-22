@@ -35,13 +35,12 @@ class TransferInTable extends Component {
 }
 
 const mapStateToProps = state => {
-  const bases = state.projects.filter(project => project.type == '基地仓库')
-  const inStock = bases.length > 0 ? bases[0]._id : ''
+  const inStock = state.projects.base ? state.projects.base._id : ''
   return {
     inStock,
     records: state.inRecords,
-    projects: state.projects,
-    projectIdMap: state.projectIdMap,
+    projects: state.projects.projects,
+    projectIdMap: state.projects.projectIdMap,
     status: state.inRecordsRequestStatus,
     articles: state.articles,
     ...transformArticle(state.articles)

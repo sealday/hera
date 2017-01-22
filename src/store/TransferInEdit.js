@@ -88,14 +88,14 @@ class TransferInEdit extends Component {
 
 const mapStateToProps = state => {
   const props = transformArticle(state.articles)
-  const bases = state.projects.filter(project => project.type == '基地仓库')
+  const bases = state.projects.projects.filter(project => project.type == '基地仓库')
   const inStock = bases.length > 0 ? bases[0]._id : ''
   return {
     ...props,
     inStock,
-    recordIdMap: state.recordIdMap,
-    projectIdMap: state.projectIdMap,
-    projects: state.projects
+    recordIdMap: state.projects.recordIdMap,
+    projectIdMap: state.projects.projectIdMap,
+    projects: state.projects.projects
   }
 }
 

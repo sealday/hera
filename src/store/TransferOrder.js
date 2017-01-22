@@ -244,7 +244,7 @@ class TransferOrder extends Component {
 const mapStateToProps = state => {
   return {
     recordIdMap: state.recordIdMap,
-    projectIdMap: state.projectIdMap,
+    projectIdMap: state.projects.projectIdMap,
     articles: state.articles,
     base: state.base
   }
