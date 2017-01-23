@@ -3,6 +3,8 @@
  */
 
 const User = require('../models/User');
+const ProductType = require('../models/ProductType')
+const Project = require('../models/Project')
 
 exports.login = (req, res, next) => {
   const username = req.body['username'] || '';
@@ -35,10 +37,38 @@ exports.login = (req, res, next) => {
   });
 };
 
+// 判断是否登录，因为有中间件拦截，所以这里不需要做特别的事情
 exports.isLogin = (req, res) => {
-  // 不需要做什么事情，只需要返回200，没有登录的话，会由中间件拦截！
-  res.end();
+  res.end()
 };
+
+// 初始化数据
+// 加载系统初始化数据
+// 包括项目信息、基地数据、用户数据以及
+exports.load = (req, res, next) => {
+  Promise.all([
+    ProductType.find(),
+    Project.find(),
+    User.find()
+  ]).then(([articles, projects, users]) => {
+
+    // TODO 这里暂定为第一个找到第一个找到的为基地
+    const bases = projects.filter(project => project.type === '基地仓库')
+    const base = bases.length > 0 ? bases[0] : null
+
+    res.json({
+      message: '加载成功！',
+      data: {
+        articles,
+        projects,
+        users,
+        base
+      }
+    })
+  }).catch(err => {
+    next(err)
+  })
+}
 
 exports.logout = (req, res) => {
   req.session.destroy(err => {

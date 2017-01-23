@@ -23,6 +23,7 @@ router.use(middleware.user);
 router.post('/login', user.login);
 router.post('/logout', user.logout);
 router.get('/is_login', user.isLogin);
+router.get('/load', user.load);
 
 router.get('/user', user.list)
 router.post('/user', user.create)
