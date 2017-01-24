@@ -3,7 +3,8 @@
 import 'bluebird';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore, combineReducers } from 'redux';
+import { createStore, combineReducers, compose, applyMiddleware } from 'redux';
+import thunkMiddleware from 'redux-thunk'
 import { reducer as formReducer } from 'redux-form'
 import { Provider } from 'react-redux'
 import * as reducers from './reducers'
@@ -34,11 +35,15 @@ import './index.css';
 import moment from 'moment';
 moment.locale('zh-CN');
 
-//noinspection JSUnresolvedVariable,JSUnresolvedFunction
+//noinspection JSUnresolvedVariable
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
 const store = createStore(combineReducers({
   ...reducers,
   form: formReducer
-}), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+}), composeEnhancers(
+  applyMiddleware(thunkMiddleware)
+))
 
 ajax('/api/load').then(res => {
   store.dispatch({ type: actionTypes.SYSTEM_LOADED, data: res.data })
