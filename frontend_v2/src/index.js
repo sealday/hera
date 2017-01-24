@@ -15,7 +15,16 @@ import Home from './Home';
 
 import { Article, Operator, OperatorCreate } from './system'
 import { FileManager } from './file'
-import { Purchase, TransferIn, TransferInEdit, TransferOut, TransferOutEdit, TransferOrder} from './store'
+import {
+  Purchase,
+  TransferIn,
+  TransferInEdit,
+  TransferOut,
+  TransferOutEdit,
+  TransferOrder,
+  TransportOrder,
+  TransportOrderEdit
+} from './store'
 import { TransferInTable, TransferOutTable, Store } from './report'
 import { Project, ProjectCreate, ProjectEdit } from './project'
 import { Router, Route, IndexRoute, hashHistory } from 'react-router';
@@ -73,6 +82,9 @@ ajax('/api/load').then(res => {
           <Route path="transfer_order/:recordId" component={TransferOrder}/>
           <Route path="transfer_out/:recordId" component={TransferOutEdit}/>
           <Route path="transfer_in/:recordId" component={TransferInEdit}/>
+
+          <Route path="transport/:id" component={TransportOrder}/>
+          <Route path="transport/:id/edit" component={TransportOrderEdit}/>
 
           <Route path="transfer_in_table" component={TransferInTable} />
           <Route path="transfer_out_table" component={TransferOutTable} />

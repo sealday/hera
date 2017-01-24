@@ -10,3 +10,6 @@ export { default as TransferIn } from './TransferIn';
 export { default as TransferInEdit } from './TransferInEdit'
 
 export { default as TransferOrder } from './TransferOrder'
+
+export { default as TransportOrderEdit } from './TransportOrderEdit'
+export { default as TransportOrder } from './TransportOrder'

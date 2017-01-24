@@ -11,6 +11,11 @@ import { getShortOrder } from '../utils'
 
 class TransferOrder extends Component {
 
+  handleTransport = () => {
+    this.props.router.push(`/transport/${this.props.params.recordId}`)
+  }
+
+
   render() {
     const id = this.props.params.recordId
     const record = this.props.recordIdMap[id]
@@ -127,7 +132,9 @@ class TransferOrder extends Component {
     return (
         <div className="container-fluid">
           <div className="btn-group hidden-print">
+            <button className="btn btn-default" onClick={() => this.props.router.goBack()}>返回</button>
             <Link className="btn btn-primary" to={`/transfer_${direction}/${record._id}`}>编辑</Link>
+            <button className="btn btn-default" onClick={this.handleTransport}>运输单</button>
             <button className="btn btn-default" onClick={() => print()}>打印</button>
             <a className="btn btn-default" href="check">审核确认</a>
           </div>
