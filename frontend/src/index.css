@@ -1,0 +1,149 @@
+* {
+  border-radius: 0 !important;
+}
+
+.navbar {
+  margin-bottom: 0;
+  border: none;
+}
+
+body {
+  font: 14px "微软雅黑", "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+body {
+  height: 100%;
+}
+
+html {
+  height: 100%;
+}
+
+#root {
+  height: 100%;
+}
+
+.form-inline .form-group {
+  margin-bottom: 1em;
+  margin-right: 1em;
+}
+
+.form-inline .form-group label{
+  margin-right: 1em;
+}
+
+
+/*NOTE: this is needed in order to make react-datepicker work with bootstrap's input group / input group addon functionatily*/
+.react-datepicker__input-container {
+  width: 100%;
+  /*NOTE: using table instead of block as it is needed in order to make this element set the height since the input is floating*/
+  display: table;
+}
+
+.form-inline .react-datepicker__input-container {
+  width: auto;
+  display: inline;
+}
+
+.react-datepicker {
+  font-size: 1.3rem !important;
+}
+
+.react-datepicker__current-month {
+  font-size: 1.5rem !important;
+}
+
+.react-datepicker__header {
+  padding-top: 6px !important;
+}
+
+.react-datepicker__navigation {
+  top: 13px !important;
+}
+
+.react-datepicker__day-name, .react-datepicker__day {
+  margin: 0.5rem !important;
+}
+
+.important-star {
+  color: red;
+}
+
+@media print {
+  body {
+    padding-top: 0;
+    margin-bottom: 0;
+  }
+
+  .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+    padding: 0;
+    /*line-height: 1.2;*/
+  }
+}
+
+.row-sum {
+  font-weight: 900;
+  text-decoration: underline;
+}
+
+.table-clean>tbody>tr>td,
+.table-clean>tbody>tr>th,
+.table-clean>tfoot>tr>td,
+.table-clean>tfoot>tr>th,
+.table-clean>thead>tr>td,
+.table-clean>thead>tr>th {
+  border-top: 1px solid white;
+}
+
+.table-bottom-border>tbody>tr>td,
+.table-bottom-border>tbody>tr>th,
+.table-bottom-border>tfoot>tr>td,
+.table-bottom-border>tfoot>tr>th,
+.table-bottom-border>thead>tr>td,
+.table-bottom-border>thead>tr>th {
+  border-bottom: 1px solid black;
+}
+
+.cell-left-border {
+  border-left: 1px solid black;
+}
+
+.cell-right-border {
+  border-right: 1px solid black;
+}
+
+.table-top-border>thead>tr>th {
+  border-top: 1px solid black;
+}
+
+.table-top-border>thead:first-child>tr:first-child>th {
+  border-top: 1px solid black;
+}
+
+/* 修复 Select 在内联form的情况下的问题 */
+/*.form-inline .Select {*/
+  /*display: inline-block;*/
+  /*vertical-align: middle;*/
+/*}*/
+
+/*.form-inline  .Select-control {*/
+  /*width: 10em;*/
+/*}*/
+@media (min-width: 768px)  {
+  .form-inline .Select {
+    display: inline-block;
+    width: auto;
+    vertical-align: middle;
+  }
+  .form-inline .Select-control {
+    width: 10em;
+  }
+}
+
+.nav-enter {
+  animation: 0.8s fadeIn ease;
+}
+
+.nav-leave {
+  animation: 0.6s fadeOut ease;
+}
