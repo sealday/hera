@@ -8,7 +8,7 @@ import thunkMiddleware from 'redux-thunk'
 import { reducer as formReducer } from 'redux-form'
 import { Provider } from 'react-redux'
 import * as reducers from './reducers'
-import * as actionTypes from './actions'
+import { systemLoaded, updateOnlineUser } from './actions'
 
 import App from './App';
 import Home from './Home';
@@ -17,7 +17,7 @@ import { Article, Operator, OperatorCreate } from './system'
 import { FileManager } from './file'
 import { Purchase, TransferIn, TransferInEdit, TransferOut, TransferOutEdit, TransferOrder} from './store'
 import { TransferInTable, TransferOutTable, Store } from './report'
-import { Project, ProjectCreate, ProjectEdit, BaseStore, OtherStore } from './project'
+import { Project, ProjectCreate, ProjectEdit } from './project'
 import { Router, Route, IndexRoute, hashHistory } from 'react-router';
 
 import { ajax } from './utils';
@@ -46,60 +46,12 @@ const store = createStore(combineReducers({
 ))
 
 ajax('/api/load').then(res => {
-  store.dispatch({ type: actionTypes.SYSTEM_LOADED, data: res.data })
+  store.dispatch(systemLoaded(res.data))
   const socket = io();
 
   socket.on('server:num', num => {
-    store.dispatch({ type: actionTypes.ONLINE_USER_CHANGE,  data: num})
+    store.dispatch(updateOnlineUser(num))
   });
-
-  store.subscribe(() => {
-    if (store.getState().outRecordsRequestStatus !== 'NEED_REQUEST') return
-    if (store.getState().projects.length === 0) return
-
-    const bases = store.getState().projects.projects.filter(project => project.type === '基地仓库')
-    const outStock = bases.length > 0 ? bases[0]._id : ''
-
-    if (outStock) {
-      store.dispatch({ type: 'REQUEST_OUT_RECORDS', status: 'REQUESTING' })
-      ajax('/api/transfer', {
-        data: {
-          outStock: outStock
-        }
-      }).then(res => {
-        const records = res.data.records
-        store.dispatch({ type: 'UPDATE_OUT_RECORDS', records })
-        store.dispatch({ type: 'REQUEST_OUT_RECORDS', status: 'IDLE' })
-      }).catch(err => {
-        alert('出错了！获取出库数据' + JSON.stringify(err))
-        store.dispatch({ type: 'REQUEST_OUT_RECORDS', status: 'IDLE' })
-      })
-    }
-  })
-
-  store.subscribe(() => {
-    if (store.getState().inRecordsRequestStatus !== 'NEED_REQUEST') return
-    if (store.getState().projects.length === 0) return
-
-    const bases = store.getState().projects.projects.filter(project => project.type === '基地仓库')
-    const inStock = bases.length > 0 ? bases[0]._id : ''
-
-    if (inStock) {
-      store.dispatch({ type: 'REQUEST_IN_RECORDS', status: 'REQUESTING' })
-      ajax('/api/transfer', {
-        data: {
-          inStock: inStock
-        }
-      }).then(res => {
-        const records = res.data.records
-        store.dispatch({ type: 'UPDATE_IN_RECORDS', records })
-        store.dispatch({ type: 'REQUEST_IN_RECORDS', status: 'IDLE' })
-      }).catch(err => {
-        alert('出错了！获取入库数据' + JSON.stringify(err))
-        store.dispatch({ type: 'REQUEST_IN_RECORDS', status: 'IDLE' })
-      })
-    }
-  })
 
   ReactDOM.render((
     <Provider store={store}>
@@ -113,8 +65,6 @@ ajax('/api/load').then(res => {
           <Route path="project" component={Project}/>
           <Route path="project_create" component={ProjectCreate}/>
           <Route path="project/:id/edit" component={ProjectEdit}/>
-          <Route path="base_store" component={BaseStore}/>
-          <Route path="other_store" component={OtherStore}/>
 
           <Route path="article" component={Article}/>
           <Route path="purchase" component={Purchase}/>

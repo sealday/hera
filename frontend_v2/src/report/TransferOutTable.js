@@ -5,27 +5,22 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { transformArticle } from '../utils'
 import TransferTable from './TransferTable'
+import { requestOutRecords } from '../actions'
 
 
 class TransferOutTable extends Component {
   componentDidMount() {
-    this.props.dispatch({ type: 'REQUEST_OUT_RECORDS', status: 'NEED_REQUEST' })
+    this.props.dispatch(requestOutRecords())
   }
 
   render() {
-    let alert = false
-
-    if (this.props.status === 'REQUESTING') {
-      alert = (
-        <div className="alert alert-info">
-          正在请求出库单列表，请稍后
-        </div>
-      )
-    }
-
     return (
       <div>
-        {alert}
+        {this.props.fetching && (
+          <div className="alert alert-info">
+            <p>正在请求出库单列表</p>
+          </div>
+        )}
         <TransferTable
           stock="inStock"
           {...this.props}
@@ -36,16 +31,13 @@ class TransferOutTable extends Component {
 }
 
 const mapStateToProps = state => {
-  const bases = state.projects.projects.filter(project => project.type === '基地仓库')
-  const outStock = bases.length > 0 ? bases[0]._id : ''
   return {
-    outStock,
-    records: state.outRecords,
-    projects: state.projects.projects,
-    projectIdMap: state.projects.projectIdMap,
-    status: state.outRecordsRequestStatus,
-    articles: state.articles,
-    ...transformArticle(state.articles)
+    outStock: state.system.base._id,
+    records: state.store.in,
+    projects: state.system.projects,
+    fetching: state.store.fetching_out,
+    articles: state.system.articles.toArray(),
+    ...transformArticle(state.system.articles.toArray())
   }
 }
 

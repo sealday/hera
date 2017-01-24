@@ -45,3 +45,11 @@ export const SystemRecord = Record({
   users: Map(),
   base: ProjectRecord()
 })
+
+export const StoreRecord = Record({
+  records: Map(),
+  in: [],
+  out: [],
+  fetching_in: false,
+  fetching_out: false
+})

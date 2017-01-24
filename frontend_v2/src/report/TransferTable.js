@@ -26,8 +26,9 @@ class TransferTable extends Component {
     if (record.type === '采购') {
       return record.vendor
     } else if (record.type === '调拨') {
-      const projectIdMap = this.props.projectIdMap
-      return projectIdMap[record[this.props.stock]].company + projectIdMap[record[this.props.stock]].name
+      const projects = this.props.projects
+      const { company, name } = projects.get(record[this.props.stock])
+      return company + name
     }
   }
 
@@ -40,7 +41,8 @@ class TransferTable extends Component {
   }
 
   getNameOptions() {
-    return [{ value: '全部', label: '全部' }].concat(this.props.articles.map(article => ({ value: article.name, label: article.name })))
+    const articles = this.props.articles
+    return [{ value: '全部', label: '全部' }].concat(articles.map(article => ({ value: article.name, label: article.name })))
   }
 
   getSizeOptions() {

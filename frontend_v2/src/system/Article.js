@@ -30,7 +30,7 @@ function Article ({articles, dispatch}){
           <tbody>
           {articles.valueSeq().map(article => {
             return (
-              <tr key={article._id}>
+              <tr key={article.name}>
                 <td>{article.type}</td>
                 <td>{article.name}</td>
                 <td><TagsInput inputProps={{placeholder: "输入新规格"}} value={article.sizes} onChange={sizes => {

@@ -5,26 +5,21 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import TransferTable from './TransferTable'
 import { transformArticle } from '../utils'
+import { requestInRecords } from '../actions'
 
 class TransferInTable extends Component {
   componentDidMount() {
-    this.props.dispatch({ type: 'REQUEST_IN_RECORDS', status: 'NEED_REQUEST' })
+    this.props.dispatch(requestInRecords())
   }
 
   render() {
-    let alert = false
-
-    if (this.props.status === 'REQUESTING') {
-      alert = (
-        <div className="alert alert-info">
-          正在请求入库单列表，请稍后
-        </div>
-      )
-    }
-
     return (
       <div>
-        {alert}
+        {this.props.fetching && (
+          <div className="alert alert-info">
+            <p>正在请求入库单列表</p>
+          </div>
+        )}
         <TransferTable
           stock="outStock"
           {...this.props}
@@ -35,15 +30,13 @@ class TransferInTable extends Component {
 }
 
 const mapStateToProps = state => {
-  const inStock = state.projects.base ? state.projects.base._id : ''
   return {
-    inStock,
-    records: state.inRecords,
-    projects: state.projects.projects,
-    projectIdMap: state.projects.projectIdMap,
-    status: state.inRecordsRequestStatus,
-    articles: state.articles,
-    ...transformArticle(state.articles)
+    inStock: state.system.base._id,
+    records: state.store.in,
+    projects: state.system.projects,
+    fetching: state.store.fetching_in,
+    articles: state.system.articles.toArray(),
+    ...transformArticle(state.system.articles.toArray())
   }
 }
 
