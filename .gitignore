@@ -14,7 +14,7 @@ results
 tmp
 
 #Build
-public/css/main.css
+server/public/css/main.css
 
 # API keys and secrets
 .env
@@ -31,5 +31,5 @@ bower_components
 .DS_Store
 Thumbs.db
 
-public/system
-public/uploads
+server/public/system
+server/public/uploads
