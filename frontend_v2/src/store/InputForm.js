@@ -3,7 +3,7 @@
  */
 
 import React, { Component } from 'react';
-import Select, { Creatable } from 'react-select';
+import Select from 'react-select';
 import { calculateSize, toFixedWithoutTrailingZero } from '../utils';
 
 export default class InputForm extends Component {
@@ -38,7 +38,7 @@ export default class InputForm extends Component {
 
   handleChange(e) {
     if (e.target.name) {
-      if (e.target.type == 'checkbox') {
+      if (e.target.type === 'checkbox') {
         this.setState({
           [e.target.name]: e.target.checked
         });
@@ -48,14 +48,12 @@ export default class InputForm extends Component {
         });
       }
 
-      switch (e.target.name) {
-        case 'type':
-          this.setState({
-            name: '',
-            size: '',
-            count: 0,
-          });
-          break;
+      if (e.target.name === 'type') {
+        this.setState({
+          name: '',
+          size: '',
+          count: 0,
+        });
       }
     }
   }

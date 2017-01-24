@@ -32,6 +32,7 @@ export const UserRecord = Record({
   _id: '',
   username: '',
   password: '',
+  projects: [],
   profile: {
     name: ''
   }

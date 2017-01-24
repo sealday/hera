@@ -39,13 +39,13 @@ class TransferOrder extends Component {
     let direction = ''
 
     // 判断是收料单还是发料单
-    if (record.inStock == base._id) {
+    if (record.inStock === base._id) {
       // 入库是基地，是收料单
       orderName = '收料单'
       direction = 'in'
       company = projectIdMap[record.outStock].company
       name = projectIdMap[record.outStock].name
-    } else if (record.outStock == base._id) {
+    } else if (record.outStock === base._id) {
       // 出库是基地，是发料单
       orderName = '发料单'
       direction = 'out'
@@ -77,7 +77,8 @@ class TransferOrder extends Component {
 
     let printEntries = []
     for (let name in entries) {
-      entries[name].forEach(entry => {
+      /*eslint guard-for-in: off*/
+      entries[name].forEach(entry => { /*eslint no-loop-func: off */
         printEntries.push(
           <tr className="text-right" key={key++}>
             <td>{entry.name}</td>
@@ -116,7 +117,7 @@ class TransferOrder extends Component {
       </tr>
     );
 
-    if (printEntries.length % 2 != 0) {
+    if (printEntries.length % 2 !== 0) {
       printEntries.push(<tr key={key++}><td>{'\u00a0'}</td><td/><td/></tr>)
     }
 

@@ -68,7 +68,7 @@ class ProjectEdit extends Component {
     this.setState(prevState => {
       let contacts = [...prevState.contacts];
       for (let i = 0; i < contacts.length; i++) {
-        if (contacts[i].key == key) {
+        if (contacts[i].key === key) {
           contacts[i][name] = value;
         }
       }
@@ -83,13 +83,13 @@ class ProjectEdit extends Component {
   }
 
   handleContactRemove(key) {
-    if (this.state.contacts.length == 1) {
+    if (this.state.contacts.length === 1) {
       return;
     }
     this.setState(prevState => {
       let contacts = [...prevState.contacts];
       for (let i = 0; i < contacts.length; i++) {
-        if (contacts[i].key == key) {
+        if (contacts[i].key === key) {
           contacts.splice(i, 1);
         }
       }
@@ -103,8 +103,8 @@ class ProjectEdit extends Component {
   }
 
   componentWillReceiveProps(props) {
-    let projects = props.projects.filter(project => project._id == this.props.router.params.id)
-    if (projects.length == 1) {
+    let projects = props.projects.filter(project => project._id === this.props.router.params.id)
+    if (projects.length === 1) {
       let project = {
         ...projects[0]
       }

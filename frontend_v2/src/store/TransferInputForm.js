@@ -3,7 +3,7 @@
  */
 
 import React, { Component } from 'react';
-import Select, { Creatable } from 'react-select';
+import Select from 'react-select';
 import { calculateSize, toFixedWithoutTrailingZero } from '../utils';
 
 export default class TransferInputForm extends Component {
@@ -36,7 +36,7 @@ export default class TransferInputForm extends Component {
 
   handleChange = (e) => {
     if (e.target.name) {
-      if (e.target.type == 'checkbox') {
+      if (e.target.type === 'checkbox') {
         this.setState({
           [e.target.name]: e.target.checked
         });
@@ -46,14 +46,12 @@ export default class TransferInputForm extends Component {
         });
       }
 
-      switch (e.target.name) {
-        case 'type':
-          this.setState({
-            name: '',
-            size: '',
-            count: '',
-          });
-          break;
+      if (e.target.name === 'type') {
+        this.setState({
+          name: '',
+          size: '',
+          count: '',
+        });
       }
     }
   }
@@ -142,7 +140,7 @@ export default class TransferInputForm extends Component {
               ref="size"
               onInputKeyDown={event => {
                 // 退格 8 TODO 考虑怎么将退格键结合上去
-                if (event.keyCode == 37) { // 方向左键
+                if (event.keyCode === 37) { // 方向左键
                   this.refs.name.focus()
                 }
               }}
@@ -157,7 +155,7 @@ export default class TransferInputForm extends Component {
             <label className="control-label">数量</label>
             <input
               onKeyDown={event => {
-                if (event.keyCode == 37) { // 方向左键
+                if (event.keyCode === 37) { // 方向左键
                   this.refs.size.focus()
                 }
               }}

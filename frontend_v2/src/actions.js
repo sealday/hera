@@ -16,3 +16,22 @@ export const SYSTEM_LOADED = 'SYSTEM_LOADED'
 export const ONLINE_USER_CHANGE = 'ONLINE_USER_CHANGE'
 export const UPDATE_ARTICLE_SIZES = 'UPDATE_ARTICLE_SIZES'
 export const REMOVE_PROJECT = 'REMOVE_PROJECT'
+
+
+export function updateArticleSizes(id, sizes) {
+  return {
+    type: UPDATE_ARTICLE_SIZES,
+    data: {
+      id,
+      sizes
+    }
+  }
+}
+
+
+export function removeProject(id) {
+  return {
+    type: REMOVE_PROJECT,
+    data: id
+  }
+}

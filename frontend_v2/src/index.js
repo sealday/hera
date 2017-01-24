@@ -7,18 +7,20 @@ import { createStore, combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form'
 import { Provider } from 'react-redux'
 import * as reducers from './reducers'
-import * as actionTypes from './actionTypes'
+import * as actionTypes from './actions'
 
 import App from './App';
 import Home from './Home';
 
-import { Article } from './system'
+import { Article, Operator, OperatorCreate } from './system'
 import { FileManager } from './file'
-import { Operator, OperatorCreate } from './people'
 import { Purchase, TransferIn, TransferInEdit, TransferOut, TransferOutEdit, TransferOrder} from './store'
 import { TransferInTable, TransferOutTable, Store } from './report'
 import { Project, ProjectCreate, ProjectEdit, BaseStore, OtherStore } from './project'
 import { Router, Route, IndexRoute, hashHistory } from 'react-router';
+
+import { ajax } from './utils';
+import io from 'socket.io-client';
 
 // css 除非是模块自己的，否则直接在这里进行全局 import
 import 'bootstrap/dist/css/bootstrap.css';
@@ -27,8 +29,6 @@ import 'react-tagsinput/react-tagsinput.css';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'animate.css'
 import './index.css';
-import { ajax } from './utils';
-import io from 'socket.io-client';
 
 // 初始化 moment 时间属性
 import moment from 'moment';

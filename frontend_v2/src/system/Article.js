@@ -1,10 +1,10 @@
 /**
  * Created by seal on 11/01/2017.
  */
-import React, { Component } from 'react';
+import React from 'react';
 import TagsInput from 'react-tagsinput';
 import { connect } from 'react-redux'
-import { UPDATE_ARTICLE_SIZES } from '../actionTypes'
+import { updateArticleSizes } from '../actions'
 
 /**
  * 基础物料
@@ -33,8 +33,8 @@ function Article ({articles, dispatch}){
               <tr key={article._id}>
                 <td>{article.type}</td>
                 <td>{article.name}</td>
-                <td><TagsInput inputProps={{placeholder: "输入新规格"}} value={article.sizes} onChange={tags => {
-                  dispatch({ type: UPDATE_ARTICLE_SIZES, data: { id: article._id, sizes: tags }})
+                <td><TagsInput inputProps={{placeholder: "输入新规格"}} value={article.sizes} onChange={sizes => {
+                  dispatch(updateArticleSizes(article._id, sizes))
                 }} /></td>
                 <td>{article.countUnit}</td>
                 <td>{article.unit}</td>

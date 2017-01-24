@@ -2,7 +2,7 @@
  * Created by seal on 21/01/2017.
  */
 
-import * as actionTypes from './actionTypes'
+import * as actionTypes from './actions'
 import { Map } from 'immutable'
 import { SystemRecord, ProjectRecord, ArticleRecord, UserRecord } from './records'
 

@@ -23,16 +23,15 @@ class TransferTable extends Component {
   }
 
   getName = (record) => {
-    if (record.type == '采购') {
+    if (record.type === '采购') {
       return record.vendor
-    } else if (record.type == '调拨') {
+    } else if (record.type === '调拨') {
       const projectIdMap = this.props.projectIdMap
       return projectIdMap[record[this.props.stock]].company + projectIdMap[record[this.props.stock]].name
     }
   }
 
   getOptions() {
-    const projectIdMap = this.props.projectIdMap
     const records = this.props.records
     return [{ value: '全部', label: '全部'}].concat(records.map(record => ({
       value: record[this.props.stock],
@@ -45,7 +44,7 @@ class TransferTable extends Component {
   }
 
   getSizeOptions() {
-    if (this.state.name == '全部' || !this.props.nameArticleMap[this.state.name]) {
+    if (this.state.name === '全部' || !this.props.nameArticleMap[this.state.name]) {
       return [{ value: '全部', label: '全部' }]
     } else {
       return [{ value: '全部', label: '全部' }].concat(this.props.nameArticleMap[this.state.name].sizes.map(size => (
@@ -60,19 +59,19 @@ class TransferTable extends Component {
   getRecords = () => {
     let records = this.props.records
     if (this.state.project !== '全部') {
-      records = records.filter(record => record[this.props.stock]== this.state.project)
+      records = records.filter(record => record[this.props.stock] === this.state.project)
     }
     records = records.filter(record => this.state.startDate < moment(record.outDate) && moment(this.state.endDate).add(1, 'day') > moment(record.outDate))
     if (this.state.name !== '全部') {
-      records = records.filter(record => record.entries.some(entry => this.state.name == entry.name))
+      records = records.filter(record => record.entries.some(entry => this.state.name === entry.name))
     }
     if (this.state.size !== '全部') {
-      records = records.filter(record => record.entries.some(entry => this.state.size == entry.size))
+      records = records.filter(record => record.entries.some(entry => this.state.size === entry.size))
     }
     if (this.state.endCount !== '') {
       records = records.filter(record => record.entries.some(entry => entry.count <= this.state.endCount))
     }
-    if (this.state.startCount != '') {
+    if (this.state.startCount !== '') {
       records = records.filter(record => record.entries.some(entry => this.state.startCount <= entry.count))
     }
 
@@ -131,9 +130,10 @@ class TransferTable extends Component {
   }
 
   render() {
-    if (this.props.stock == 'inStock') {
+    let name
+    if (this.props.stock === 'inStock') {
       name = '发往'
-    } else if (this.props.stock == 'outStock') {
+    } else if (this.props.stock === 'outStock') {
       name = '来自'
     }
     return (

@@ -21,12 +21,12 @@ class Operator extends Component {
           </thead>
           <tbody>
           {this.props.users.map(user => (
-            <tr>
+            <tr key={user._id}>
               <td>{user.username}</td>
               <td>******</td>
               <td>{user.profile.name}</td>
               <th>{user.projects.map(projectId => (
-                <p>{projectId}</p>
+                <p key={projectId}>{projectId}</p>
               ))}</th>
             </tr>
           ))}
@@ -39,7 +39,7 @@ class Operator extends Component {
 
 const mapStateToProps = state => {
   return {
-    users: state.users
+    users: state.system.users.valueSeq()
   }
 }
 

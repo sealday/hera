@@ -14,7 +14,7 @@ class TransferInTable extends Component {
   render() {
     let alert = false
 
-    if (this.props.status == 'REQUESTING') {
+    if (this.props.status === 'REQUESTING') {
       alert = (
         <div className="alert alert-info">
           正在请求入库单列表，请稍后

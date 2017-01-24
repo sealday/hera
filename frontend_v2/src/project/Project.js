@@ -2,10 +2,10 @@
  * Created by seal on 13/01/2017.
  */
 
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
-import { REMOVE_PROJECT } from '../actionTypes'
+import { removeProject } from '../actions'
 
 function Project({projects, onDeleteClick}) {
   return (
@@ -31,7 +31,7 @@ function Project({projects, onDeleteClick}) {
         <tbody>
         {projects.valueSeq().map(project => (
           project.contacts.map((contact, index) => {
-            if (index == 0) {
+            if (index === 0) {
               const rowSpan = project.contacts.length
               return (
                 <tr key={project._id}>
@@ -78,7 +78,7 @@ const mapDispatchToProps = dispatch => {
       e.preventDefault()
       if (confirm(`确定要删除项目 ${project.company} ${project.name}`)) {
         alert('暂时不支持删除项目！')
-        dispatch({ type: REMOVE_PROJECT, data: project._id })
+        dispatch(removeProject(project._id))
       }
     }
   }

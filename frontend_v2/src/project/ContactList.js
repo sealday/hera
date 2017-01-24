@@ -9,7 +9,7 @@ class ContactList extends Component {
   handleContactChange = (key, name, value) => {
     let contacts = [...this.props.input.value]
     for (let i = 0; i < contacts.length; i++) {
-      if (contacts[i].key == key) {
+      if (contacts[i].key === key) {
         contacts[i] = {
           ...contacts[i],
           [name]: value
@@ -26,12 +26,12 @@ class ContactList extends Component {
   }
 
   handleContactRemove = (key) => {
-    if (this.props.input.value.length == 1) {
+    if (this.props.input.value.length === 1) {
       return;
     }
     let contacts = [...this.props.input.value];
     for (let i = 0; i < contacts.length; i++) {
-      if (contacts[i].key == key) {
+      if (contacts[i].key === key) {
         contacts.splice(i, 1);
       }
     }

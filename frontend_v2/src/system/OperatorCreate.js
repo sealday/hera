@@ -31,6 +31,8 @@ class OperatorCreate extends Component {
           }
         })
         break
+      default:
+        console.error('出错了')
     }
   }
 
