@@ -15,10 +15,17 @@ class WorkerCheckin extends Component {
         super(props);
         this.state={
             date:moment(),
-           imgFile:{
+            imgFile:{
                file:'',
                imagePreviewUrl:''
            }
+        }
+    }
+    handleChange=(e)=>{
+        if (e.target.name){
+            this.setState({
+                [e.target.name]:e.target.value
+            });
         }
     }
     handleSubmit=(e)=>{
@@ -57,42 +64,42 @@ class WorkerCheckin extends Component {
                     <div className="form-group">
                         <label htmlFor="" className="col-md-1 control-label">姓名</label>
                         <div className="col-md-3">
-                            <input type="text" className="form-control"/>
+                            <input type="text" name="name" className="form-control" onChange={this.handleChange}/>
                         </div>
                         <label htmlFor="" className="col-md-1 control-label">性别</label>
                         <div className="col-md-3">
-                            <input type="text" className="form-control"/>
+                            <input type="text" className="form-control" name="sex" onChange={this.handleChange}/>
                         </div>
                         <label htmlFor="" className="col-md-1 control-label">年龄</label>
                         <div className="col-md-3">
-                            <input type="text" className="form-control"/>
+                            <input type="text" className="form-control" name="age" onChange={this.handleChange}/>
                         </div>
                     </div>
                     <div className="form-group">
                         <label htmlFor="" className="col-md-1 control-label">工种</label>
                         <div className="col-md-3">
-                            <input type="text" className="form-control"/>
+                            <input type="text" className="form-control" name="workcategory" onChange={this.handleChange}/>
                         </div>
                         <label htmlFor="" className="col-md-1 control-label">出生年月</label>
                         <div className="col-md-3">
-                            <DatePicker selected={this.state.date} className="form-control"/>
+                            <DatePicker selected={this.state.date} className="form-control" onChange={this.handleChange}/>
                         </div>
                         <label htmlFor="" className="col-md-1 control-label">联系电话</label>
 
                         <div className="col-md-3">
-                            <input type="tel" className="form-control"/>
+                            <input type="tel" className="form-control" name="phonenumber" onChange={this.handleChange}/>
                         </div>
                     </div>
                     <div className="form-group">
                         <label htmlFor="" className="col-md-1 control-label">身份证号</label>
                         <div className="col-md-3">
-                            <input type="number" className="form-control"/>
+                            <input type="number" className="form-control" name="idcard" onChange={this.handleChange}/>
                         </div>
                     </div>
                     <div className="form-group">
                         <label htmlFor="" className="col-md-1 control-label">家庭住址</label>
                         <div className="col-md-5">
-                            <input type="text" className="form-control"/>
+                            <input type="text" className="form-control" name="address" onChange={this.handleChange}/>
                         </div>
                     </div>
                     <div className="form-group">
