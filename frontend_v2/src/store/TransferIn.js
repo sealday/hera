@@ -47,13 +47,10 @@ class TransferIn extends Component {
 }
 
 const mapStateToProps = state => {
-  const props = transformArticle(state.articles)
-  const bases = state.projects.projects.filter(project => project.type === '基地仓库')
-  const inStock = bases.length > 0 ? bases[0]._id : ''
   return {
-    ...props,
-    inStock,
-    projects: state.projects.projects
+    ...transformArticle(state.system.articles.toArray()),
+    inStock: state.system.base._id,
+    projects: state.system.projects.toArray()
   }
 }
 

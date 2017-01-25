@@ -47,13 +47,10 @@ class TransferOut extends Component {
 }
 
 const mapStateToProps = state => {
-  const props = transformArticle(state.articles)
-  const bases = state.projects.projects.filter(project => project.type === '基地仓库')
-  const outStock = bases.length > 0 ? bases[0]._id : ''
   return {
-    ...props,
-    outStock,
-    projects: state.projects.projects
+    outStock: state.system.base._id,
+    ...transformArticle(state.system.articles.toArray()),
+    projects: state.system.projects.toArray()
   }
 }
 
