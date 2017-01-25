@@ -156,10 +156,9 @@ class Purchase extends Component {
 }
 
 const mapStateToProps = state => {
-  const props = transformArticle(state.articles)
   return {
-    ...props,
-    projects: state.projects.projects
+    ...transformArticle(state.system.articles.toArray()),
+    projects: state.system.projects.toArray()
   }
 }
 
