@@ -4,14 +4,7 @@
 import React, { Component } from 'react';
 import { reduxForm, Field } from 'redux-form'
 import ContactList from './ContactList'
-
-const Input = ({ input }) => (
-  <input {...input} className="form-control" />
-)
-
-const Select = ({ input, children }) => (
-  <select {...input} className="form-control" >{children}</select>
-)
+import { Input, Select } from '../components'
 
 class ProjectForm extends Component {
   render() {
