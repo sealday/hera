@@ -20,38 +20,44 @@ class App extends Component {
               {/* TODO 这里可以考虑改成数组的形式*/}
               <ul>
                 <li>
-                  <a href="#" onClick={e => { e.preventDefault(); props.dispatch(toggleMenu('store')) }}>仓库</a>
+                  <a href="#" onClick={e => { e.preventDefault(); props.dispatch(toggleMenu('store')) }}>仓库操作</a>
                   <ReactCSSTransitionGroup
                     transitionName="nav"
                     transitionEnterTimeout={500}
                     transitionLeaveTimeout={300}>
                     {props.nav.store && <ul>
                       <li><Link to="purchase">采购入库</Link></li>
+                      <li><Link to="">销售出库</Link></li>
                       <li><Link to="transfer_out">调拨出库（发料）</Link></li>
                       <li><Link to="transfer_in">调拨入库（收料）</Link></li>
+                      <li><Link to="">盘点盈余入库</Link></li>
+                      <li><Link to="">盘点盈余出库</Link></li>
+                      <li><Link to="">运输单</Link></li>
                     </ul>}
                   </ReactCSSTransitionGroup>
                 </li>
                 <li>
-                  <a href="#" onClick={e => { e.preventDefault(); props.dispatch(toggleMenu('report'))}}>报表</a>
+                  <a href="#" onClick={e => { e.preventDefault(); props.dispatch(toggleMenu('report'))}}>仓库查询</a>
                   <ReactCSSTransitionGroup
                     transitionName="nav"
                     transitionEnterTimeout={500}
                     transitionLeaveTimeout={300}>
                     {props.nav.report && <ul>
+                      <li><Link to="transfer_in_table">采购明细表</Link></li>
+                      <li><Link to="transfer_out_table">销售出库明细表</Link></li>
+                      <li><Link to="transfer_in_table">调拨入库明细表（收料）</Link></li>
+                      <li><Link to="transfer_out_table">调拨出库明细表（发料）</Link></li>
+                      <li><Link to="#">盘点盈余入库明细表</Link></li>
+                      <li><Link to="#">盘点亏损出库明细表</Link></li>
                       <li><Link to="store">库存</Link></li>
-                      <li><Link to="transfer_in_table">入库明细表</Link></li>
-                      <li><Link to="transfer_out_table">出库明细表</Link></li>
-                      <li><a href="#">费用明细表</a></li>
-                      <li><a href="#">财务收款明细表</a></li>
-                      <li><a href="#">财务付款明细表</a></li></ul>}
+                    </ul>}
                   </ReactCSSTransitionGroup>
                 </li>
                 <li>
                   <Link to="/file_manager">文件中转站</Link>
                 </li>
                 <li>
-                  <a href="#" onClick={e => { e.preventDefault(); props.dispatch(toggleMenu('system'))}}>系统基础数据</a>
+                  <a href="#" onClick={e => { e.preventDefault(); props.dispatch(toggleMenu('system'))}}>系统</a>
                   <ReactCSSTransitionGroup
                     transitionName="nav"
                     transitionEnterTimeout={500}
@@ -74,6 +80,8 @@ class App extends Component {
                       <li><Link to="project">项目列表</Link></li>
                       <li><Link to="">员工档案</Link></li>
                       <li><Link to="">考勤表</Link></li>
+                      <li><Link to="">工资卡</Link></li>
+                      <li><Link to="">进场登记卡</Link></li>
                     </ul>}
                   </ReactCSSTransitionGroup>
                 </li>
