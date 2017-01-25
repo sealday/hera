@@ -93,7 +93,7 @@ class App extends Component {
                     transitionLeaveTimeout={300}>
                     {this.state.nav.system && <ul>
                       <li><Link to="article">物料数据</Link></li>
-                      <li><Link to="operator_create">新增操作员</Link></li>
+                      <li><Link to="operator/create">新增操作员</Link></li>
                       <li><Link to="operator">操作员列表</Link></li>
                     </ul>}
                   </ReactCSSTransitionGroup>

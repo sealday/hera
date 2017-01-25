@@ -4,6 +4,7 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
+import { Link } from 'react-router'
 
 class Operator extends Component {
   render() {
@@ -17,6 +18,7 @@ class Operator extends Component {
             <th>密码</th>
             <th>姓名</th>
             <th>项目权限</th>
+            <th>操作</th>
           </tr>
           </thead>
           <tbody>
@@ -25,9 +27,14 @@ class Operator extends Component {
               <td>{user.username}</td>
               <td>******</td>
               <td>{user.profile.name}</td>
-              <th>{user.projects.map(projectId => (
+              <td>{user.projects.map(projectId => (
                 <p key={projectId}>{projectId}</p>
-              ))}</th>
+              ))}</td>
+              <td>
+                <Link to={`/operator/${user._id}/edit`}>编辑</Link>
+                <br />
+                <Link to="">删除</Link>
+              </td>
             </tr>
           ))}
           </tbody>

@@ -13,7 +13,12 @@ import { systemLoaded, updateOnlineUser } from './actions'
 import App from './App';
 import Home from './Home';
 
-import { Article, Operator, OperatorCreate } from './system'
+import {
+  Article,
+  Operator,
+  OperatorCreate,
+  OperatorEdit,
+} from './system'
 import { FileManager } from './file'
 import {
   Purchase,
@@ -69,7 +74,8 @@ ajax('/api/load').then(res => {
           <IndexRoute component={Home}/>
           <Route path="file_manager" component={FileManager}/>
           <Route path="operator" component={Operator}/>
-          <Route path="operator_create" component={OperatorCreate}/>
+          <Route path="operator/create" component={OperatorCreate}/>
+          <Route path="operator/:id/edit" component={OperatorEdit}/>
 
           <Route path="project" component={Project}/>
           <Route path="project_create" component={ProjectCreate}/>
