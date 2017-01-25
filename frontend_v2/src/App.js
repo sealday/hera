@@ -85,6 +85,9 @@ class App extends Component {
                     </ul>}
                   </ReactCSSTransitionGroup>
                 </li>
+                <li>
+                  <Link to="/worker_checkin">进场劳务人员登记</Link>
+                </li>
               </ul>
             </div>
             <button onClick={e => props.dispatch(toggleNav())} type="button" className="App-drawer-toggle"/>
