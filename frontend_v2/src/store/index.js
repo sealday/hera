@@ -13,3 +13,5 @@ export { default as TransferOrder } from './TransferOrder'
 
 export { default as TransportOrderEdit } from './TransportOrderEdit'
 export { default as TransportOrder } from './TransportOrder'
+
+export { default as TransferCreate } from './TransferCreate'
