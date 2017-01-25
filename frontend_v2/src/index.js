@@ -28,7 +28,8 @@ import {
   TransferOutEdit,
   TransferOrder,
   TransportOrder,
-  TransportOrderEdit
+  TransportOrderEdit,
+  TransferCreate,
 } from './store'
 import { TransferInTable, TransferOutTable, Store } from './report'
 import { Project, ProjectCreate, ProjectEdit,WorkerCheckin } from './project'
@@ -85,6 +86,7 @@ ajax('/api/load').then(res => {
 
           <Route path="article" component={Article}/>
           <Route path="purchase" component={Purchase}/>
+          <Route path="transfer/create" component={TransferCreate}/>
           <Route path="transfer_in" component={TransferIn}/>
           <Route path="transfer_out" component={TransferOut}/>
           <Route path="transfer_order/:recordId" component={TransferOrder}/>
