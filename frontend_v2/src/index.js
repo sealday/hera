@@ -31,7 +31,7 @@ import {
   TransportOrderEdit
 } from './store'
 import { TransferInTable, TransferOutTable, Store } from './report'
-import { Project, ProjectCreate, ProjectEdit } from './project'
+import { Project, ProjectCreate, ProjectEdit,WorkerCheckin } from './project'
 import { Router, Route, IndexRoute, hashHistory } from 'react-router';
 
 import { ajax } from './utils';
@@ -73,6 +73,8 @@ ajax('/api/load').then(res => {
         <Route path="/" component={App}>
           <IndexRoute component={Home}/>
           <Route path="file_manager" component={FileManager}/>
+            {/*劳务人员登记*/}
+          <Route path="/worker_checkin" component={WorkerCheckin}/>
           <Route path="operator" component={Operator}/>
           <Route path="operator/create" component={OperatorCreate}/>
           <Route path="operator/:id/edit" component={OperatorEdit}/>
