@@ -21,6 +21,13 @@ class WorkerCheckin extends Component {
            }
         }
     }
+
+    handleDateChange=(date)=>{
+        this.setState({
+            date:date
+        })
+        }
+
     handleChange=(e)=>{
         if (e.target.name){
             this.setState({
@@ -28,8 +35,7 @@ class WorkerCheckin extends Component {
             });
         }
     }
-    handleSubmit=(e)=>{
-        e.preventDefault();
+    handleSubmit=(e)=>{        e.preventDefault();
 
     }
 
@@ -82,7 +88,7 @@ class WorkerCheckin extends Component {
                         </div>
                         <label htmlFor="" className="col-md-1 control-label">出生年月</label>
                         <div className="col-md-3">
-                            <DatePicker selected={this.state.date} className="form-control" onChange={this.handleChange}/>
+                            <DatePicker selected={this.state.date} className="form-control" onChange={this.handleDateChange}/>
                         </div>
                         <label htmlFor="" className="col-md-1 control-label">联系电话</label>
 
