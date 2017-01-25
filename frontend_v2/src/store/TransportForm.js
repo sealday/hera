@@ -119,7 +119,7 @@ class TransportForm extends Component {
           </div>
         </div>
         <div className="form-group">
-          <button className="btn btn-primary btn-block">提交</button>
+          <button className="btn btn-primary btn-block">保存</button>
         </div>
       </form>
     );
