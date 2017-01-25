@@ -53,3 +53,12 @@ export const StoreRecord = Record({
   fetching_in: false,
   fetching_out: false
 })
+
+export const NavRecord = Record({
+  drawer: false, // 左侧菜单是否显示（在小屏幕情况下）
+
+  store: true,
+  report: true,
+  system: false,
+  project: false,
+})

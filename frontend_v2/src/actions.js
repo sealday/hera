@@ -74,3 +74,15 @@ export const requestOutRecords = () => (dispatch, getState) => {
     })
   }
 }
+
+export const TOGGLE_NAV = 'TOGGLE_NAV'
+export const TOGGLE_MENU = 'TOGGLE_MENU'
+
+export const toggleNav = () => ({
+  type: TOGGLE_NAV
+})
+
+export const toggleMenu = (name) => ({
+  type: TOGGLE_MENU,
+  data: name
+})

@@ -9,7 +9,8 @@ import {
   ProjectRecord,
   ArticleRecord,
   UserRecord,
-  StoreRecord
+  StoreRecord,
+  NavRecord,
 } from './records'
 
 export function system(state = new SystemRecord(), action) {
@@ -76,6 +77,18 @@ export function store(state = new StoreRecord(), action) {
         })
       })).set('out', outRecords)
         .set('fetching_out', false)
+    default:
+      return state
+  }
+}
+
+export function nav(state = new NavRecord(), action) {
+  switch (action.type) {
+    case actionTypes.TOGGLE_NAV:
+      return state.set('drawer', !state.drawer)
+    case actionTypes.TOGGLE_MENU:
+      const name = action.data
+      return state.set(name, !state[name])
     default:
       return state
   }
