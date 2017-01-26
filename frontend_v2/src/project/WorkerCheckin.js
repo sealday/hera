@@ -3,14 +3,24 @@
  */
 import React, {Component} from 'react';
 import {reduxForm,Field} from 'redux-form'
-
 import {Input,DatePicker} from '../components';
 import moment from 'moment';
 
 
 class WorkerCheckin extends Component{
+    constructor(props){
+        super(props)
+        this.state = {
+            infolist:[]
+        }
+    }
+
+
     handleSubmit=(data)=>{
-        alert(data)
+        this.setState(preState=>({
+            infolist:preState.infolist.concat(data)
+        }))
+
     }
     render(){
         return (
@@ -18,10 +28,42 @@ class WorkerCheckin extends Component{
                 <WorkerCheckinForm
                 onSubmit = {this.handleSubmit}
                 />
+                <InfoList infolist = {this.state.infolist}/>
             </div>
         )
     }
 }
+const InfoList = (props)=>(
+    <table className="table">
+        <thead>
+        <tr>
+            <th>姓名</th>
+            <th>性别</th>
+            <th>年龄</th>
+            <th>工种</th>
+            <th>出生年月</th>
+            <th>联系电话</th>
+            <th>身份证号</th>
+            <th>家庭住址</th>
+        </tr>
+        </thead>
+        <tbody>
+        {props.infolist.map(info=>(
+            <tr key={info.idcard}>
+                <td>{info.username}</td>
+                <td>{info.age}</td>
+                <td>{info.sex}</td>
+                <td>{info.phonenumber}</td>
+                <td>{info.workcategory}</td>
+                <td>{moment(info.date).format('YYYY-MM-DD')}</td>
+                <td>{info.idcard}</td>
+                <td>{info.address}</td>
+            </tr>
+        ))}
+        </tbody>
+    </table>
+)
+
 class WorkerCheckinForm extends Component {
     constructor(props) {
         super(props);
