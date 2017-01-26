@@ -62,3 +62,9 @@ export const NavRecord = Record({
   system: false,
   project: false,
 })
+
+export const PostRecord = Record({
+  posting: false,
+
+  data: null
+})

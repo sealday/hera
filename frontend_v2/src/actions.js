@@ -89,3 +89,23 @@ export const toggleMenu = (name) => ({
   type: TOGGLE_MENU,
   data: name
 })
+
+export const POST_TRANSFER = 'POST_TRANSFER'
+export const POST_TRANSFER_SUCCESS = 'POST_TRANSFER_SUCCESS'
+export const POST_TRANSFER_FAILURE = 'POST_TRANSFER_FAILURE'
+
+export const postTransfer = (record) => (dispatch, getState) => {
+  if (!getState().postTransfer.posting) {
+    dispatch({ type: POST_TRANSFER })
+    ajax('/api/transfer', {
+      data: JSON.stringify(record),
+      method: 'POST',
+      contentType: 'application/json'
+    }).then(res => {
+      dispatch({ type: POST_TRANSFER_SUCCESS, data: res.data })
+    }).catch(err => {
+      dispatch({ type: POST_TRANSFER_FAILURE })
+      alert('出错了' + JSON.stringify(err));
+    });
+  }
+}
