@@ -29,3 +29,5 @@ export const FilterSelect = ({ input, options, placeholder }) => {
   />
 }
 
+export { default as Notification } from './Notification'
+

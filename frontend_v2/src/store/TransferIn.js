@@ -3,8 +3,9 @@
  */
 
 import React, { Component } from 'react';
-import { ajax, transformArticle } from '../utils';
+import {  transformArticle } from '../utils';
 import { connect } from 'react-redux'
+import { postTransfer } from '../actions'
 
 import Transfer from './Transfer'
 
@@ -28,20 +29,16 @@ class TransferIn extends Component {
       inStock: this.props.inStock,
       outStock: this.state.outStock
     }
-    ajax('/api/transfer', {
-      data: JSON.stringify(record),
-      method: 'POST',
-      contentType: 'application/json'
-    }).then(res => {
-      this.props.router.push(`transfer_order/${res.data.record._id}`)
-    }).catch(err => {
-      alert('出错了' + JSON.stringify(err));
-    });
+    this.props.dispatch(postTransfer(record))
   }
 
   render() {
     return (
-      <Transfer orderName="调拨入库单" stock={this.state.outStock} onSubmit={this.handleSubmit} onProjectChange={this.handleProjectChange} {...this.props} />
+      <div>
+        {this.props.postTransfer.posting && <p>请求中</p>}
+        {this.props.postTransfer.data && <p>{this.props.postTransfer.data.record._id}</p>}
+        <Transfer orderName="调拨入库单" stock={this.state.outStock} onSubmit={this.handleSubmit} onProjectChange={this.handleProjectChange} {...this.props} />
+      </div>
     )
   }
 }
@@ -50,7 +47,8 @@ const mapStateToProps = state => {
   return {
     ...transformArticle(state.system.articles.toArray()),
     inStock: state.system.base._id,
-    projects: state.system.projects.toArray()
+    projects: state.system.projects.toArray(),
+    postTransfer: state.postTransfer
   }
 }
 

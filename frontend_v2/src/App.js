@@ -6,6 +6,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group' // ES6
 import { connect } from 'react-redux'
 import { toggleMenu, toggleNav } from './actions'
 import './App.css';
+import { Notification } from './components'
 
 class App extends Component {
   render() {
@@ -13,6 +14,7 @@ class App extends Component {
     const props = this.props
     return (
       <div className="App">
+        <Notification/>
         <Navbar/>
         <div className="container-fluid" style={{height: '100%'}}>
           <div className="row" style={{position: 'relative', height: '100%'}}>
