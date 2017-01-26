@@ -14,6 +14,30 @@ export const REMOVE_PROJECT = 'REMOVE_PROJECT'
 
 import { ajax } from './utils'
 
+export const NEW_NOTIFY = 'NEW_NOTIFY'
+export const DELETE_NOTIFY = 'DELETE_NOTIFY'
+
+export const deleteNotify = key => ({
+  type: DELETE_NOTIFY,
+  data: key
+})
+
+export const newNotify = (title, msg, time, theme) => dispatch => {
+  const key = Date.now()
+  dispatch({ type: NEW_NOTIFY, data: {
+    key, title, msg, time, theme
+  }})
+  // 时间到自动删除
+  setTimeout(() => {
+    dispatch(deleteNotify(key))
+  }, time)
+}
+
+// notification helper function
+export const newSuccessNotify = (title, msg, time) => newNotify(title, msg, time, 'success')
+export const newErrorNotify = (title, msg, time) => newNotify(title, msg, time, 'error')
+export const newInfoNotify = (title, msg, time) => newNotify(title, msg, time, 'info')
+
 export const updateArticleSizes = (id, sizes) => ({
   type: UPDATE_ARTICLE_SIZES,
   data: {
@@ -113,27 +137,3 @@ export const postTransfer = (record) => (dispatch, getState) => {
     });
   }
 }
-
-export const NEW_NOTIFY = 'NEW_NOTIFY'
-export const DELETE_NOTIFY = 'DELETE_NOTIFY'
-
-export const deleteNotify = key => ({
-  type: DELETE_NOTIFY,
-  data: key
-})
-
-export const newNotify = (title, msg, time, theme) => dispatch => {
-  const key = Date.now()
-  dispatch({ type: NEW_NOTIFY, data: {
-    key, title, msg, time, theme
-  }})
-  // 时间到自动删除
-  setTimeout(() => {
-    dispatch(deleteNotify(key))
-  }, time)
-}
-
-// notification helper function
-export const newSuccessNotify = (title, msg, time) => newNotify(title, msg, time, 'success')
-export const newErrorNotify = (title, msg, time) => newNotify(title, msg, time, 'error')
-export const newInfoNotify = (title, msg, time) => newNotify(title, msg, time, 'info')
