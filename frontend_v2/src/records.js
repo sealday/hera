@@ -43,7 +43,8 @@ export const SystemRecord = Record({
   projects: Map(),
   articles: Map(),
   users: Map(),
-  base: ProjectRecord()
+  base: ProjectRecord(),
+  notifications: Map(),
 })
 
 export const StoreRecord = Record({
