@@ -69,6 +69,10 @@ export function store(state = new StoreRecord(), action) {
         })
       })).set('in', inRecords)
         .set('fetching_in', false)
+    case actionTypes.FETCH_IN_RECORDS_FAILS:
+      return state.set('fetching_in', false)
+    case actionTypes.FETCH_OUT_RECORDS_FAILS:
+      return state.set('fetching_out', false)
     case actionTypes.RECEIVED_OUT_RECORDS:
       const outRecords = action.data
       return state.set('records', state.records.withMutations(cache => {
