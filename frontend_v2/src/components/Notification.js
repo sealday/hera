@@ -18,7 +18,7 @@ const Notification = ({ items, dispatch }) => (
   </div>
 )
 
-const Item = ({ id, hide, key, title, theme, msg }) => (
+const Item = ({ id, hide, title, theme, msg }) => (
   <div className={`notify-item ${theme}`} onClick={() => hide(id)}>
     <p className="notify-title">{title}</p>
     <p className="notify-body">{msg}</p>
