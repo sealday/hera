@@ -16,11 +16,6 @@ class TransferOutTable extends Component {
   render() {
     return (
       <div>
-        {this.props.fetching && (
-          <div className="alert alert-info">
-            <p>正在请求出库单列表</p>
-          </div>
-        )}
         <TransferTable
           stock="inStock"
           {...this.props}

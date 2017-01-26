@@ -11,6 +11,7 @@ import {
   UserRecord,
   StoreRecord,
   NavRecord,
+  PostRecord,
 } from './records'
 
 export function system(state = new SystemRecord(), action) {
@@ -42,6 +43,12 @@ export function system(state = new SystemRecord(), action) {
       return state.set('online', action.data)
     case actionTypes.UPDATE_ARTICLE_SIZES:
       return state.updateIn(['articles', action.data.id], article => article.set('sizes', action.data.sizes))
+    case actionTypes.NEW_NOTIFY:
+      const item = action.data
+      return state.update('notifications', notifications => notifications.set(item.key, item))
+    case actionTypes.DELETE_NOTIFY:
+      const key = action.data
+      return state.update('notifications', notifications => notifications.delete(key))
     default:
       return state
   }
@@ -69,6 +76,10 @@ export function store(state = new StoreRecord(), action) {
         })
       })).set('in', inRecords)
         .set('fetching_in', false)
+    case actionTypes.FETCH_IN_RECORDS_FAILS:
+      return state.set('fetching_in', false)
+    case actionTypes.FETCH_OUT_RECORDS_FAILS:
+      return state.set('fetching_out', false)
     case actionTypes.RECEIVED_OUT_RECORDS:
       const outRecords = action.data
       return state.set('records', state.records.withMutations(cache => {
@@ -89,6 +100,19 @@ export function nav(state = new NavRecord(), action) {
     case actionTypes.TOGGLE_MENU:
       const name = action.data
       return state.set(name, !state[name])
+    default:
+      return state
+  }
+}
+
+export function postTransfer(state = new PostRecord(), action) {
+  switch (action.type) {
+    case actionTypes.POST_TRANSFER:
+      return state.set('posting', true)
+    case actionTypes.POST_TRANSFER_SUCCESS:
+      return state.set('posting', false).set('data', action.data)
+    case actionTypes.POST_TRANSFER_FAILURE:
+      return state.set('posting', false)
     default:
       return state
   }
