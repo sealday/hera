@@ -12,12 +12,6 @@ export const ONLINE_USER_CHANGE = 'ONLINE_USER_CHANGE'
 export const UPDATE_ARTICLE_SIZES = 'UPDATE_ARTICLE_SIZES'
 export const REMOVE_PROJECT = 'REMOVE_PROJECT'
 
-export const REQUEST_IN_RECORDS =  'REQUEST_IN_RECORDS'
-export const RECEIVED_IN_RECORDS =  'RECEIVED_IN_RECORDS'
-
-export const REQUEST_OUT_RECORDS = 'REQUEST_OUT_RECORDS'
-export const RECEIVED_OUT_RECORDS =  'RECEIVED_OUT_RECORDS'
-
 import { ajax } from './utils'
 
 export const updateArticleSizes = (id, sizes) => ({
@@ -43,6 +37,9 @@ export const updateOnlineUser = (num) => ({
   data: num
 })
 
+export const REQUEST_IN_RECORDS =  'REQUEST_IN_RECORDS'
+export const RECEIVED_IN_RECORDS =  'RECEIVED_IN_RECORDS'
+export const FETCH_IN_RECORDS_FAILS =  'FETCH_IN_RECORDS_FAILS'
 
 export const requestInRecords = () => (dispatch, getState) => {
   // 不产生重复的请求
@@ -55,10 +52,15 @@ export const requestInRecords = () => (dispatch, getState) => {
     }).then(res => {
       dispatch({ type: RECEIVED_IN_RECORDS, data: res.data.records })
     }).catch(err => {
+      dispatch({ type: FETCH_IN_RECORDS_FAILS })
       alert('出错了！获取出库数据' + JSON.stringify(err))
     })
   }
 }
+
+export const REQUEST_OUT_RECORDS = 'REQUEST_OUT_RECORDS'
+export const RECEIVED_OUT_RECORDS =  'RECEIVED_OUT_RECORDS'
+export const FETCH_OUT_RECORDS_FAILS = 'FETCH_OUT_RECORDS_FAILS'
 
 export const requestOutRecords = () => (dispatch, getState) => {
   if (!getState().store.fetching_out) {
@@ -70,6 +72,7 @@ export const requestOutRecords = () => (dispatch, getState) => {
     }).then(res => {
       dispatch({ type: RECEIVED_OUT_RECORDS, data: res.data.records })
     }).catch(err => {
+      dispatch({ type: FETCH_OUT_RECORDS_FAILS })
       alert('出错了！获取出库数据' + JSON.stringify(err))
     })
   }
