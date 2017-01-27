@@ -5,16 +5,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import moment from 'moment'
-import { ajax, calculateSize, toFixedWithoutTrailingZero } from '../utils'
+import { ajax, calculateSize, toFixedWithoutTrailingZero, getShortOrder } from '../utils'
 import { Link } from 'react-router'
-import { getShortOrder } from '../utils'
 
 class TransferOrder extends Component {
 
   handleTransport = () => {
     this.props.router.push(`/transport/${this.props.params.recordId}`)
   }
-
 
   render() {
     const id = this.props.params.recordId
@@ -251,10 +249,10 @@ class TransferOrder extends Component {
 
 const mapStateToProps = state => {
   return {
-    recordIdMap: state.recordIdMap,
-    projectIdMap: state.projects.projectIdMap,
-    articles: state.articles,
-    base: state.base
+    recordIdMap: state.store.records.toObject(),
+    projectIdMap: state.system.projects.toObject(),
+    articles: state.system.articles.toArray(),
+    base: state.system.base
   }
 }
 
