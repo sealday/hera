@@ -88,6 +88,13 @@ export function store(state = new StoreRecord(), action) {
         })
       })).set('out', outRecords)
         .set('fetching_out', false)
+    case actionTypes.REQUEST_RECORD:
+      return state.set('requesting', true)
+    case actionTypes.REQUEST_RECORD_SUCCESS:
+      const record = action.data
+      return state.set('requesting', false).update('records', records => records.set(record._id, record))
+    case actionTypes.REQUEST_RECORD_FAILURE:
+      return state.set('requesting', false)
     default:
       return state
   }

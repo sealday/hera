@@ -137,3 +137,24 @@ export const postTransfer = (record) => (dispatch, getState) => {
     });
   }
 }
+
+export const REQUEST_RECORD = 'REQUEST_RECORD'
+export const REQUEST_RECORD_SUCCESS = 'REQUEST_RECORD_SUCCESS'
+export const REQUEST_RECORD_FAILURE = 'REQUEST_RECORD_FAILURE'
+
+export const requestRecord = (id) => (dispatch, getState) => {
+  if (!getState().requesting) {
+    dispatch({ type: REQUEST_RECORD })
+    dispatch(newInfoNotify('提示', '正在请求记录', 2000))
+    ajax(`/api/transfer/${id}`).then(res => {
+      const record = res.data.record
+      dispatch({ type: REQUEST_RECORD_SUCCESS, data: record })
+      dispatch(newSuccessNotify('提示', '请求记录成功', 2000))
+    }).catch(err => {
+      dispatch({ type: REQUEST_RECORD_FAILURE })
+      dispatch(newErrorNotify('警告', '请求记录失败', 2000))
+      throw err
+    })
+  }
+}
+
