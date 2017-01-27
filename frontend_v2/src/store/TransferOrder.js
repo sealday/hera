@@ -5,13 +5,24 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import moment from 'moment'
-import { ajax, calculateSize, toFixedWithoutTrailingZero, getShortOrder } from '../utils'
+import { calculateSize, toFixedWithoutTrailingZero, getShortOrder } from '../utils'
 import { Link } from 'react-router'
+import { requestRecord } from '../actions'
 
 class TransferOrder extends Component {
 
   handleTransport = () => {
     this.props.router.push(`/transport/${this.props.params.recordId}`)
+  }
+
+  componentDidMount() {
+    const id = this.props.params.recordId
+    const record = this.props.recordIdMap[id]
+    const projectIdMap = this.props.projectIdMap
+
+    if (!record || !projectIdMap) {
+      this.props.dispatch(requestRecord(id))
+    }
   }
 
   render() {
@@ -21,12 +32,6 @@ class TransferOrder extends Component {
 
     // 假设本地缓存中没有则进行一次网络请求
     if (!record || !projectIdMap) {
-      ajax(`/api/transfer/${id}`).then(res => {
-        const record = res.data.record
-        this.props.dispatch({ type: 'UPDATE_RECORDS_CACHE', record })
-      }).catch(err => {
-        alert('请求调拨单失败，请尝试刷新页面' + JSON.stringify(err))
-      })
       return (
         <div className="alert alert-info">
           <p>请求数据中，请稍后</p>

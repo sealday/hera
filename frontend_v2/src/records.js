@@ -49,6 +49,7 @@ export const SystemRecord = Record({
 
 export const StoreRecord = Record({
   records: Map(),
+  requesting: false,
   in: [],
   out: [],
   fetching_in: false,
