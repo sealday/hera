@@ -24,9 +24,12 @@ exports.list = (req, res, next) => {
  */
 exports.create = (req, res, next) => {
   let project = new Project(req.body);
-  project.save().then(() => {
+  project.save().then(project => {
     res.json({
-      message: '保存成功'
+      message: '保存成功',
+      data: {
+        project
+      }
     })
   }).catch(err => {
     next(err);
@@ -38,9 +41,12 @@ exports.create = (req, res, next) => {
  */
 exports.update = (req, res, next) => {
   const id = req.params.id
-  Project.findByIdAndUpdate(id, req.body).then(() => {
+  Project.findByIdAndUpdate(id, req.body).then(project => {
     res.json({
-      message: '更新成功'
+      message: '更新成功',
+      data: {
+        project
+      }
     })
   }).catch(err => {
     next(err)
