@@ -7,6 +7,7 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 import TransportForm from './TransportForm'
 import { ajax } from '../utils'
+import { updateRecord } from '../actions'
 
 class TransportOrderEdit extends Component {
   constructor(props) {
@@ -74,7 +75,7 @@ class TransportOrderEdit extends Component {
       contentType: 'application/json'
     }).then(res => {
       // 更新缓存中的数据
-      this.props.dispatch({ type: 'UPDATE_RECORDS_CACHE', record: res.data.record })
+      this.props.dispatch(updateRecord(res.data.record))
       this.props.router.push(`/transport/${res.data.record._id}`)
     }).catch(err => {
       alert('出错了' + JSON.stringify(err));
