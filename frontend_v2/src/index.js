@@ -89,7 +89,7 @@ ajax('/api/load').then(res => {
           <Route path="transfer/create" component={TransferCreate}/>
           <Route path="transfer_in" component={TransferIn}/>
           <Route path="transfer_out" component={TransferOut}/>
-          <Route path="transfer_order/:recordId" component={TransferOrder}/>
+          <Route path="transfer/:recordId" component={TransferOrder}/>
           <Route path="transfer_out/:recordId" component={TransferOutEdit}/>
           <Route path="transfer_in/:recordId" component={TransferInEdit}/>
 
