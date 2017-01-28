@@ -148,7 +148,8 @@ export const requestRecord = (id) => (dispatch, getState) => {
     dispatch(newInfoNotify('提示', '正在请求记录', 2000))
     ajax(`/api/transfer/${id}`).then(res => {
       const record = res.data.record
-      dispatch({ type: REQUEST_RECORD_SUCCESS, data: record })
+      dispatch({ type: REQUEST_RECORD_SUCCESS })
+      dispatch(updateRecord(record))
       dispatch(newSuccessNotify('提示', '请求记录成功', 2000))
     }).catch(err => {
       dispatch({ type: REQUEST_RECORD_FAILURE })
@@ -158,3 +159,9 @@ export const requestRecord = (id) => (dispatch, getState) => {
   }
 }
 
+export const UPDATE_RECORD =  'UPDATE_RECORD'
+
+export const updateRecord = record => ({
+  type: UPDATE_RECORD,
+  data: record
+})

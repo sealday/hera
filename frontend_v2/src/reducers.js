@@ -91,10 +91,12 @@ export function store(state = new StoreRecord(), action) {
     case actionTypes.REQUEST_RECORD:
       return state.set('requesting', true)
     case actionTypes.REQUEST_RECORD_SUCCESS:
-      const record = action.data
-      return state.set('requesting', false).update('records', records => records.set(record._id, record))
+      return state.set('requesting', false)
     case actionTypes.REQUEST_RECORD_FAILURE:
       return state.set('requesting', false)
+    case actionTypes.UPDATE_RECORD:
+      const record = action.data
+      return state.update('records', records => records.set(record._id, record))
     default:
       return state
   }
