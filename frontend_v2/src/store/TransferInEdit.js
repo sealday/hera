@@ -12,13 +12,13 @@ class TransferInEdit extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      outStock: '', // 调入出去的仓库
+      outStock: props.outStock, // 调入出去的仓库
     };
   }
 
   componentDidMount() {
     const id = this.props.params.recordId
-    const record = this.props.recordIdMap[id]
+    const record = this.props.record
     const projectIdMap = this.props.projectIdMap
 
     if (!record || !projectIdMap) {
@@ -49,15 +49,14 @@ class TransferInEdit extends Component {
     }).then(res => {
       // 更新缓存中的数据
       this.props.dispatch({ type: 'UPDATE_RECORDS_CACHE', record: res.data.record })
-      this.props.router.push(`transfer_order/${res.data.record._id}`)
+      this.props.router.push(`/transfer/${res.data.record._id}`)
     }).catch(err => {
       alert('出错了' + JSON.stringify(err));
     });
   }
 
   render() {
-    const id = this.props.params.recordId
-    const record = this.props.recordIdMap[id]
+    const record = this.props.record
     const projectIdMap = this.props.projectIdMap
 
     if (!record || !projectIdMap) {
@@ -81,14 +80,18 @@ class TransferInEdit extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, props) => {
+  const id = props.params.recordId
+  const record = state.store.records.get(id)
+  const outStock = record ? record.outStock : null
   return {
     ...transformArticle(state.system.articles.toArray()),
-    recordIdMap: state.store.records.toObject(),
+    record,
     projectIdMap: state.system.projects.toObject(),
     projects: state.system.projects.toArray(),
     articles: state.system.articles.toArray(),
-    base: state.system.base
+    inStock: state.system.base._id,
+    outStock
   }
 }
 
