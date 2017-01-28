@@ -237,7 +237,7 @@ class TransferTable extends Component {
                   <td rowSpan={rowSpan}>
                     <Link onClick={() => {
                       this.props.dispatch({ type: 'UPDATE_RECORDS_CACHE', record })
-                    }} to={ `transfer_order/${record._id}`}>详情</Link>
+                    }} to={ `/transfer/${record._id}`}>详情</Link>
                     <br/>
                     <Link onClick={() => {
                       this.props.dispatch({ type: 'UPDATE_RECORDS_CACHE', record })
