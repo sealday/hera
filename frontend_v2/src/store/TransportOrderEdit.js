@@ -45,22 +45,30 @@ class TransportOrderEdit extends Component {
     }
 
     const record = this.props.recordIdMap[this.props.params.id]
-    const projects = this.props.projects
-    const inStock = projects[record.inStock]
-    const outStock = projects[record.outStock]
+    if (record.hasTransport) {
+      this.setState({
+        ...record.transport,
+        'off-date': moment(record.transport['off-date']),
+        'arrival-date': moment(record.transport['arrival-date']),
+      })
+    } else {
+      const projects = this.props.projects
+      const inStock = projects[record.inStock]
+      const outStock = projects[record.outStock]
 
-    this.setState({
-      'off-date'         : moment(record.outDate).startOf('day'),
-      'arrival-date'     : moment(record.outDate).startOf('day').add(1, 'day'), // 到达日期
-      'delivery-party'   : outStock.company + outStock.name, // 发货单位
-      'delivery-contact' : outStock.contacts[0].name, // 发货人
-      'delivery-phone'   : outStock.contacts[0].phone, // 发货人电话
-      'delivery-address' : outStock.address, // 发货地址
-      'receiving-party'  : inStock.company + inStock.name, // 收货单位
-      'receiving-contact': inStock.contacts[0].name, // 收货联系
-      'receiving-phone'  : inStock.contacts[0].phone, // 收货人电话
-      'receiving-address': inStock.address, // 收货地址
-    })
+      this.setState({
+        'off-date'         : moment(record.outDate).startOf('day'),
+        'arrival-date'     : moment(record.outDate).startOf('day').add(1, 'day'), // 到达日期
+        'delivery-party'   : outStock.company + outStock.name, // 发货单位
+        'delivery-contact' : outStock.contacts[0].name, // 发货人
+        'delivery-phone'   : outStock.contacts[0].phone, // 发货人电话
+        'delivery-address' : outStock.address, // 发货地址
+        'receiving-party'  : inStock.company + inStock.name, // 收货单位
+        'receiving-contact': inStock.contacts[0].name, // 收货联系
+        'receiving-phone'  : inStock.contacts[0].phone, // 收货人电话
+        'receiving-address': inStock.address, // 收货地址
+      })
+    }
   }
 
   handleCancel = e => {
