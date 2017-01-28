@@ -37,6 +37,7 @@ router.post('/project/:id', project.update)
 router.get('/transfer', transfer.list)
 router.get('/transfer/:id', transfer.detail)
 router.post('/transfer/:id', transfer.update)
+router.post('/transfer/:id/transport', transfer.updateTransport)
 router.post('/transfer', transfer.create)
 
 router.get('/file', file.list);
