@@ -14,6 +14,7 @@ const ProductType = require('./models/ProductType');
 const Project = require('./models/Project');
 const User = require('./models/User');
 const compression = require('compression');
+const service = require('./service')
 
 const index = require('./controllers/index');
 const apiIndex = require('./api');
@@ -113,18 +114,15 @@ app.use(function(err, req, res, next) {
   })
 });
 
-// 在线人数
-let num = 0;
 app.onSocketConnection = io => {
   return socket => {
-    num++;
-    io.emit('server:num', num);
+    service.num++;
+    io.emit('server:num', service.num);
     socket.on('disconnect', function(){
-      num--;
-      io.emit('server:num', num);
+      service.num--;
+      io.emit('server:num', service.num);
     });
   };
 };
-
 
 module.exports = app;
