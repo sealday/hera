@@ -54,5 +54,16 @@ exports.update = (req, res, next) => {
 }
 
 /*
-获取单个项目的详细信息，这一个暂时不必要，列出所有项目里面包含了这个信息
+获取单个项目的详细信息
  */
+exports.detail = (req, res, next) => {
+  Project.findById(req.params.id).then(project => {
+    res.json({
+      data: {
+        project
+      }
+    })
+  }).catch(err => {
+    next(err)
+  })
+}
