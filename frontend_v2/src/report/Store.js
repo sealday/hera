@@ -27,7 +27,6 @@ class Store extends Component {
   }
 
   getRecords = (stock) => {
-    console.log('----')
     const inRecords = stock.inRecords
     const outRecords = stock.outRecords
     let inRecordMap = {}
