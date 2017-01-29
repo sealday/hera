@@ -18,7 +18,6 @@ const RecordSchema = new Schema({
   originalOrder: String, // 原始单号
 
   entries: [{
-    _id: String, // 由客户端生成，服务器端不实用这个字段
     type: { // 类型
       type: String
     },
