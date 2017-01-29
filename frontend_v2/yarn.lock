@@ -4485,6 +4485,10 @@ react-redux@^5.0.2:
     lodash-es "^4.2.0"
     loose-envify "^1.1.0"
 
+react-router-redux@^4.0.7:
+  version "4.0.7"
+  resolved "http://registry.npm.taobao.org/react-router-redux/download/react-router-redux-4.0.7.tgz#9b1fde4e70106c50f47214e12bdd888cfb96e2a6"
+
 react-router@^3.0.0:
   version "3.0.2"
   resolved "http://registry.npm.taobao.org/react-router/download/react-router-3.0.2.tgz#5a19156678810e01d81901f9c0fef63284b8a514"
