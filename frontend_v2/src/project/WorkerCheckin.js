@@ -26,7 +26,7 @@ class WorkerCheckin extends Component{
         return (
             <div>
                 <WorkerCheckinForm
-                onSubmit = {this.handleSubmit}
+                onSubmit={this.handleSubmit}
                 />
                 <InfoList infolist = {this.state.infolist}/>
             </div>
@@ -98,7 +98,7 @@ class WorkerCheckinForm extends Component {
                     <div className="form-group">
                         <label htmlFor="" className="col-md-1 control-label">姓名</label>
                         <div className="col-md-3">
-                            <Field name = "username" component={Input} />
+                            <Field name="username" component={Input} />
                         </div>
                         <label htmlFor="" className="col-md-1 control-label">性别</label>
                         <div className="col-md-3">

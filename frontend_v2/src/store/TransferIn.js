@@ -37,7 +37,13 @@ class TransferIn extends Component {
       <div>
         {this.props.postTransfer.posting && <p>请求中</p>}
         {this.props.postTransfer.data && <p>{this.props.postTransfer.data.record._id}</p>}
-        <Transfer orderName="调拨入库单" stock={this.state.outStock} onSubmit={this.handleSubmit} onProjectChange={this.handleProjectChange} {...this.props} />
+        <Transfer
+          orderName="调拨入库单"
+          stock={this.state.outStock}
+          onSubmit={this.handleSubmit}
+          onProjectChange={this.handleProjectChange}
+          {...this.props}
+        />
       </div>
     )
   }

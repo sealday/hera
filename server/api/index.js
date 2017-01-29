@@ -32,11 +32,13 @@ router.post('/user_update', user.update)
 router.get('/article', article.list);
 router.get('/project', project.list);
 router.post('/project', project.create)
+router.get('/project/:id', project.detail)
 router.post('/project/:id', project.update)
 
 router.get('/transfer', transfer.list)
 router.get('/transfer/:id', transfer.detail)
 router.post('/transfer/:id', transfer.update)
+router.post('/transfer/:id/transport', transfer.updateTransport)
 router.post('/transfer', transfer.create)
 
 router.get('/file', file.list);

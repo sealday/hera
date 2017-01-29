@@ -24,9 +24,12 @@ exports.list = (req, res, next) => {
  */
 exports.create = (req, res, next) => {
   let project = new Project(req.body);
-  project.save().then(() => {
+  project.save().then(project => {
     res.json({
-      message: '保存成功'
+      message: '保存成功',
+      data: {
+        project
+      }
     })
   }).catch(err => {
     next(err);
@@ -38,9 +41,12 @@ exports.create = (req, res, next) => {
  */
 exports.update = (req, res, next) => {
   const id = req.params.id
-  Project.findByIdAndUpdate(id, req.body).then(() => {
+  Project.findByIdAndUpdate(id, req.body, { new: true }).then(project => {
     res.json({
-      message: '更新成功'
+      message: '更新成功',
+      data: {
+        project
+      }
     })
   }).catch(err => {
     next(err)
@@ -48,5 +54,16 @@ exports.update = (req, res, next) => {
 }
 
 /*
-获取单个项目的详细信息，这一个暂时不必要，列出所有项目里面包含了这个信息
+获取单个项目的详细信息
  */
+exports.detail = (req, res, next) => {
+  Project.findById(req.params.id).then(project => {
+    res.json({
+      data: {
+        project
+      }
+    })
+  }).catch(err => {
+    next(err)
+  })
+}

@@ -1,0 +1,8 @@
+mousetrack on
+split
+split
+screen -t server bash -c 'cd server/;nodemon bin/www'
+focus
+screen -t bash bash
+focus
+screen -t frontend bash -c 'cd frontend_v2/;yes | yarn start'

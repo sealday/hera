@@ -13,6 +13,7 @@ export const UPDATE_ARTICLE_SIZES = 'UPDATE_ARTICLE_SIZES'
 export const REMOVE_PROJECT = 'REMOVE_PROJECT'
 
 import { ajax } from './utils'
+import { push } from 'react-router-redux'
 
 export const NEW_NOTIFY = 'NEW_NOTIFY'
 export const DELETE_NOTIFY = 'DELETE_NOTIFY'
@@ -20,6 +21,19 @@ export const DELETE_NOTIFY = 'DELETE_NOTIFY'
 export const deleteNotify = key => ({
   type: DELETE_NOTIFY,
   data: key
+})
+
+export const UPDATE_RECORD =  'UPDATE_RECORD'
+export const UPDATE_PROJECT = 'UPDATE_PROJECT'
+
+export const updateRecord = record => ({
+  type: UPDATE_RECORD,
+  data: record
+})
+
+export const updateProject = project => ({
+  type: UPDATE_PROJECT,
+  data: project
 })
 
 export const newNotify = (title, msg, time, theme) => dispatch => {
@@ -135,5 +149,76 @@ export const postTransfer = (record) => (dispatch, getState) => {
       dispatch({ type: POST_TRANSFER_FAILURE })
       alert('出错了' + JSON.stringify(err));
     });
+  }
+}
+
+export const REQUEST_RECORD = 'REQUEST_RECORD'
+export const REQUEST_RECORD_SUCCESS = 'REQUEST_RECORD_SUCCESS'
+export const REQUEST_RECORD_FAILURE = 'REQUEST_RECORD_FAILURE'
+
+export const requestRecord = (id) => (dispatch, getState) => {
+  if (!getState().requesting) {
+    dispatch({ type: REQUEST_RECORD })
+    dispatch(newInfoNotify('提示', '正在请求记录', 2000))
+    ajax(`/api/transfer/${id}`).then(res => {
+      const record = res.data.record
+      dispatch({ type: REQUEST_RECORD_SUCCESS })
+      dispatch(updateRecord(record))
+      dispatch(newSuccessNotify('提示', '请求记录成功', 2000))
+    }).catch(err => {
+      dispatch({ type: REQUEST_RECORD_FAILURE })
+      dispatch(newErrorNotify('警告', '请求记录失败', 2000))
+      throw err
+    })
+  }
+}
+
+export const POST_PROJECT = 'POST_PROJECT'
+export const POST_PROJECT_SUCCESS = 'POST_PROJECT_SUCCESS'
+export const POST_PROJECT_FAILURE = 'POST_PROJECT_FAILURE'
+
+export const postProject = (project) => (dispatch, getState) => {
+  if (!getState().postProject.posting) {
+    dispatch({ type: POST_PROJECT })
+    dispatch(newInfoNotify('提示', '正在保存项目信息', 2000))
+    ajax('/api/project', {
+      data: JSON.stringify(project),
+      method: 'POST',
+      contentType: 'application/json'
+    }).then(res => {
+      dispatch({ type: POST_PROJECT_SUCCESS })
+      dispatch({ type: UPDATE_PROJECT, data: res.data.project })
+      dispatch(newSuccessNotify('提示', '保存项目信息成功', 2000))
+      dispatch(push(`/project?id=${res.data.project._id}`))
+    }).catch(err => {
+      dispatch({ type: POST_PROJECT_FAILURE })
+      dispatch(newSuccessNotify('出错', '保存项目信息出错', 2000))
+      console.error(err)
+    })
+  }
+}
+
+export const ALTER_PROJECT = 'ALTER_PROJECT'
+export const ALTER_PROJECT_SUCCESS = 'ALTER_PROJECT_SUCCESS'
+export const ALTER_PROJECT_FAILURE = 'ALTER_PROJECT_FAILURE'
+
+export const alterProject = (project) => (dispatch, getState) => {
+  if (!getState().alterProject.posting) {
+    dispatch({ type: ALTER_PROJECT })
+    dispatch(newInfoNotify('提示', '正在保存项目信息', 2000))
+    ajax(`/api/project/${project._id}`, {
+      data: JSON.stringify(project),
+      method: 'POST',
+      contentType: 'application/json'
+    }).then(res => {
+      dispatch({ type: ALTER_PROJECT_SUCCESS })
+      dispatch({ type: UPDATE_PROJECT, data: res.data.project })
+      dispatch(newSuccessNotify('提示', '保存项目信息成功', 2000))
+      dispatch(push(`/project?id=${res.data.project._id}`))
+    }).catch(err => {
+      dispatch({ type: ALTER_PROJECT_FAILURE })
+      dispatch(newSuccessNotify('出错', '保存项目信息出错', 2000))
+      console.error(err)
+    })
   }
 }
