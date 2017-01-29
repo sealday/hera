@@ -3,7 +3,7 @@
  */
 
 import * as actionTypes from './actions'
-import { Map } from 'immutable'
+import { Map, OrderedMap } from 'immutable'
 import {
   SystemRecord,
   ArticleRecord,
@@ -22,7 +22,7 @@ export function system(state = new SystemRecord(), action) {
           projects.set(project._id, project)
         })
       })
-      let articles = new Map().withMutations(articles => {
+      let articles = new OrderedMap().withMutations(articles => {
         action.data.articles.forEach(article => {
           articles.set(article.name, new ArticleRecord(article))
         })
