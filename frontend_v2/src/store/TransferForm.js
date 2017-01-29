@@ -39,7 +39,7 @@ const EntryTable = connect(
       const entry = fields.get(index)
       return fixed(entry.count * calculateSize(entry.size))
     } catch (e) {
-      return '错误的输入'
+      return '错误'
     }
   }
 
@@ -48,7 +48,7 @@ const EntryTable = connect(
     for (let i = 0; i < fields.length; i++) {
       let entry = fields.get(i)
       let total = getTotal(i)
-      total = total === '错误的输入' ? 0 : total
+      total = total === '错误' ? 0 : total
 
       if (!entry.name) break // name 没填写的时候直接跳出
 
@@ -72,6 +72,10 @@ const EntryTable = connect(
     return total
   }
 
+  const getStock = () => {
+    return 0
+  }
+
   return (
     <div className="panel panel-default">
       <table className="table table-bordered">
@@ -82,6 +86,7 @@ const EntryTable = connect(
           <th>规格</th>
           <th>数量</th>
           <th>小计</th>
+          <th>库存</th>
           <th>
             <button
               type="button"
@@ -118,6 +123,7 @@ const EntryTable = connect(
             </td>
             <td><Field name={`${entry}.count`} component={Input}/></td>
             <td>{getTotal(index)}</td>
+            <td>{getStock()}</td>
             <td>
               <button
                 type="button"
@@ -215,7 +221,8 @@ TransferForm = reduxForm({
 })(TransferForm)
 
 const mapStateToProps = state => ({
-  projects: state.system.projects.toArray()
+  projects: state.system.projects.toArray(),
+  stocks: state.store.stocks,
 })
 
 
