@@ -18,8 +18,15 @@ import {
   Operator,
   OperatorCreate,
   OperatorEdit,
+  Project,
+  ProjectCreate,
+  ProjectEdit,
 } from './system'
-import { FileManager } from './file'
+
+import {
+  FileManager
+} from './file'
+
 import {
   Purchase,
   TransferIn,
@@ -31,9 +38,23 @@ import {
   TransportOrderEdit,
   TransferCreate,
 } from './store'
-import { TransferInTable, TransferOutTable, Store } from './report'
-import { Project, ProjectCreate, ProjectEdit,WorkerCheckin } from './project'
-import { Router, Route, IndexRoute, hashHistory } from 'react-router';
+
+import {
+  TransferInTable,
+  TransferOutTable,
+  Store,
+} from './report'
+
+import {
+  WorkerCheckin,
+} from './project'
+
+import {
+  Router,
+  Route,
+  IndexRoute,
+  hashHistory
+} from 'react-router';
 
 import { ajax } from './utils';
 import io from 'socket.io-client';
