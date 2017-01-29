@@ -3,7 +3,6 @@
  */
 
 import React, { Component } from 'react';
-import { ajax } from '../utils'
 import { connect } from 'react-redux'
 import ProjectForm from './ProjectForm'
 import { postProject } from '../actions'
@@ -19,13 +18,14 @@ class ProjectCreate extends Component {
         key: Date.now(),
         name: '',
         phone: '',
-      }
-      ],
+      }],
       type: '项目部仓库'}
     return (
       <div>
-        <ProjectForm initialValues={initialValues}
-                     onSubmit={this.handleSubmit}
+        <h2>录入项目信息</h2>
+        <ProjectForm
+          initialValues={initialValues}
+          onSubmit={this.handleSubmit}
         />
       </div>
     )

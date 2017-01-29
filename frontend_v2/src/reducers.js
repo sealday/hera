@@ -6,7 +6,6 @@ import * as actionTypes from './actions'
 import { Map } from 'immutable'
 import {
   SystemRecord,
-  ProjectRecord,
   ArticleRecord,
   UserRecord,
   StoreRecord,
@@ -17,10 +16,10 @@ import {
 export function system(state = new SystemRecord(), action) {
   switch (action.type) {
     case actionTypes.SYSTEM_LOADED:
-      let base = new ProjectRecord(action.data.base)
+      let base = action.data.base
       let projects = new Map().withMutations(projects => {
         action.data.projects.forEach(project => {
-          projects.set(project._id, new ProjectRecord(project))
+          projects.set(project._id, project)
         })
       })
       let articles = new Map().withMutations(articles => {
@@ -136,6 +135,19 @@ export function postProject(state = new PostRecord(), action) {
     case actionTypes.POST_PROJECT_SUCCESS:
       return state.set('posting', false)
     case actionTypes.POST_PROJECT_FAILURE:
+      return state.set('posting', false)
+    default:
+      return state
+  }
+}
+
+export function alterProject(state = new PostRecord(), action) {
+  switch (action.type) {
+    case actionTypes.ALTER_PROJECT:
+      return state.set('posting', true)
+    case actionTypes.ALTER_PROJECT_SUCCESS:
+      return state.set('posting', false)
+    case actionTypes.ALTER_PROJECT_FAILURE:
       return state.set('posting', false)
     default:
       return state
