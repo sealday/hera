@@ -15,13 +15,6 @@ class Store extends Component {
     }
   }
 
-  componentDidMount() {
-  }
-
-  componentWillUnmount() {
-
-  }
-
   handleProjectChange = (project) => {
     this.setState({ project: project })
   }

@@ -44,7 +44,7 @@ class Transfer extends Component {
 
   handleAdd = (entry) => {
     this.setState(prevState => {
-      entry._id = new Date().getTime();
+      entry.key = Date.now();
       prevState.entries.push(entry);
       return {
         entries: prevState.entries
@@ -159,9 +159,9 @@ class Transfer extends Component {
           <BootstrapTable
             data={this.state.entries}
             selectRow={{ mode: 'checkbox' }}
-            options={{ noDataText: '还未添加数据', defaultSortName: '_id', defaultSortOrder: 'desc', onDeleteRow: this.onDeleteRow }}
+            options={{ noDataText: '还未添加数据', defaultSortName: 'key', defaultSortOrder: 'desc', onDeleteRow: this.onDeleteRow }}
             cellEdit={{ mode: 'click', blurToSave: true }} deleteRow>
-            <TableHeaderColumn dataField="_id" isKey={true} hidden={true}>id</TableHeaderColumn>
+            <TableHeaderColumn dataField="key" isKey={true} hidden={true}>key</TableHeaderColumn>
             <TableHeaderColumn dataField="type">类型</TableHeaderColumn>
             <TableHeaderColumn dataField="name">名称</TableHeaderColumn>
             <TableHeaderColumn dataField="size">规格</TableHeaderColumn>
