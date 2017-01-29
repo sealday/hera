@@ -222,3 +222,28 @@ export const alterProject = (project) => (dispatch, getState) => {
     })
   }
 }
+
+export const REQUEST_STORE = 'REQUEST_STORE'
+export const REQUEST_STORE_SUCCESS = 'REQUEST_STORE_SUCCESS'
+export const REQUEST_STORE_FAILURE = 'REQUEST_STORE_FAILURE'
+export const UPDATE_STORE = 'UPDATE_STORE'
+
+export const requestStore = (stockId) => (dispatch, getState) => {
+  if (!getState().requestStore.posting.get(stockId)) {
+    dispatch({ type: REQUEST_STORE, data: stockId })
+    dispatch(newInfoNotify('提示', '正在请求库存信息', 2000))
+    ajax(`/api/store/${stockId}`).then(res => {
+      dispatch({ type: REQUEST_STORE_SUCCESS, data: stockId })
+      dispatch({ type: UPDATE_STORE, data: {
+        id: stockId,
+        inRecords: res.data.inRecords,
+        outRecords: res.data.outRecords,
+      }})
+      dispatch(newSuccessNotify('提示', '请求库存信息成功', 2000))
+    }).catch(err => {
+      dispatch({ type: REQUEST_STORE_FAILURE, data: stockId })
+      dispatch(newErrorNotify('提示', '请求库存信息失败', 2000))
+      console.error(err)
+    })
+  }
+}
