@@ -23,6 +23,19 @@ export const deleteNotify = key => ({
   data: key
 })
 
+export const UPDATE_RECORD =  'UPDATE_RECORD'
+export const UPDATE_PROJECT = 'UPDATE_PROJECT'
+
+export const updateRecord = record => ({
+  type: UPDATE_RECORD,
+  data: record
+})
+
+export const updateProject = project => ({
+  type: UPDATE_PROJECT,
+  data: project
+})
+
 export const newNotify = (title, msg, time, theme) => dispatch => {
   const key = Date.now()
   dispatch({ type: NEW_NOTIFY, data: {
@@ -160,19 +173,6 @@ export const requestRecord = (id) => (dispatch, getState) => {
   }
 }
 
-export const UPDATE_RECORD =  'UPDATE_RECORD'
-export const UPDATE_PROJECT = 'UPDATE_PROJECT'
-
-export const updateRecord = record => ({
-  type: UPDATE_RECORD,
-  data: record
-})
-
-export const updateProject = project => ({
-  type: UPDATE_PROJECT,
-  data: project
-})
-
 export const POST_PROJECT = 'POST_PROJECT'
 export const POST_PROJECT_SUCCESS = 'POST_PROJECT_SUCCESS'
 export const POST_PROJECT_FAILURE = 'POST_PROJECT_FAILURE'
@@ -192,6 +192,32 @@ export const postProject = (project) => (dispatch, getState) => {
       dispatch(push(`/project?id=${res.data.project._id}`))
     }).catch(err => {
       dispatch({ type: POST_PROJECT_FAILURE })
+      dispatch(newSuccessNotify('出错', '保存项目信息出错', 2000))
+      console.error(err)
+    })
+  }
+}
+
+export const ALTER_PROJECT = 'ALTER_PROJECT'
+export const ALTER_PROJECT_SUCCESS = 'ALTER_PROJECT_SUCCESS'
+export const ALTER_PROJECT_FAILURE = 'ALTER_PROJECT_FAILURE'
+
+
+export const alterProject = (project) => (dispatch, getState) => {
+  if (!getState().alterProject.posting) {
+    dispatch({ type: ALTER_PROJECT })
+    dispatch(newInfoNotify('提示', '正在保存项目信息', 2000))
+    ajax(`/api/project/${project._id}`, {
+      data: JSON.stringify(project),
+      method: 'POST',
+      contentType: 'application/json'
+    }).then(res => {
+      dispatch({ type: ALTER_PROJECT_SUCCESS })
+      dispatch({ type: UPDATE_PROJECT, data: res.data.project })
+      dispatch(newSuccessNotify('提示', '保存项目信息成功', 2000))
+      dispatch(push(`/project?id=${res.data.project._id}`))
+    }).catch(err => {
+      dispatch({ type: ALTER_PROJECT_FAILURE })
       dispatch(newSuccessNotify('出错', '保存项目信息出错', 2000))
       console.error(err)
     })
