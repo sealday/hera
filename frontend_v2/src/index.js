@@ -9,6 +9,7 @@ import { reducer as formReducer } from 'redux-form'
 import { Provider } from 'react-redux'
 import * as reducers from './reducers'
 import { systemLoaded, updateOnlineUser } from './actions'
+import { syncHistoryWithStore, routerReducer, routerMiddleware } from 'react-router-redux'
 
 import App from './App';
 import Home from './Home';
@@ -76,9 +77,10 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const store = createStore(combineReducers({
   ...reducers,
-  form: formReducer
+  form: formReducer,
+  routing: routerReducer,
 }), composeEnhancers(
-  applyMiddleware(thunkMiddleware)
+  applyMiddleware(routerMiddleware(hashHistory),thunkMiddleware)
 ))
 
 ajax('/api/load').then(res => {
@@ -91,7 +93,7 @@ ajax('/api/load').then(res => {
 
   ReactDOM.render((
     <Provider store={store}>
-      <Router history={hashHistory}>
+      <Router history={syncHistoryWithStore(hashHistory, store)}>
         <Route path="/" component={App}>
           <IndexRoute component={Home}/>
           <Route path="file_manager" component={FileManager}/>

@@ -34,7 +34,6 @@ export function system(state = new SystemRecord(), action) {
           users.set(user._id, new UserRecord(user))
         })
       })
-
       return state.set('base', base)
         .set('projects', projects)
         .set('articles', articles)
@@ -49,6 +48,9 @@ export function system(state = new SystemRecord(), action) {
     case actionTypes.DELETE_NOTIFY:
       const key = action.data
       return state.update('notifications', notifications => notifications.delete(key))
+    case actionTypes.UPDATE_PROJECT:
+      const project = action.data
+      return state.update('projects', projects => projects.set(project._id, project))
     default:
       return state
   }
@@ -121,6 +123,19 @@ export function postTransfer(state = new PostRecord(), action) {
     case actionTypes.POST_TRANSFER_SUCCESS:
       return state.set('posting', false).set('data', action.data)
     case actionTypes.POST_TRANSFER_FAILURE:
+      return state.set('posting', false)
+    default:
+      return state
+  }
+}
+
+export function postProject(state = new PostRecord(), action) {
+  switch (action.type) {
+    case actionTypes.POST_PROJECT:
+      return state.set('posting', true)
+    case actionTypes.POST_PROJECT_SUCCESS:
+      return state.set('posting', false)
+    case actionTypes.POST_PROJECT_FAILURE:
       return state.set('posting', false)
     default:
       return state

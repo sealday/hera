@@ -6,26 +6,11 @@ import React, { Component } from 'react';
 import { ajax } from '../utils'
 import { connect } from 'react-redux'
 import ProjectForm from './ProjectForm'
+import { postProject } from '../actions'
 
 class ProjectCreate extends Component {
-  handleSubmit = (data) => {
-    ajax('/api/project', {
-      data: JSON.stringify(data),
-      method: 'POST',
-      contentType: 'application/json'
-    }).then(res => {
-      alert(res.message + "\n稍后将自动跳转到项目列表")
-      //ajax('/api/project').then(res => {
-      //  const projects = res.data.projects
-      //  this.props.dispatch({ type: "UPDATE_PROJECTS", projects });
-      //  this.props.router.push('/project')
-      //}).catch(res => {
-      //  alert('更新项目列表出错' + JSON.stringify(res));
-      //});
-
-    }).catch(err => {
-      alert(`创建项目出错了！${JSON.stringify(err)}`)
-    })
+  handleSubmit = (project) => {
+    this.props.dispatch(postProject(project))
   }
 
   render() {
