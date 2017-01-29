@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const service = require('../service')
 
 /**
  * 仓库记录
@@ -75,6 +76,15 @@ const RecordSchema = new Schema({
   valid: { type: Boolean, default: true }, // 是否有效，通常用来删除时标记为无效
   type: String,  // 采购、调拨、销售、报废、结转
 }, { timestamps: true }); // 时间戳反映真正的制单时间（以录入系统为准）
+
+RecordSchema.pre('save', function (next) {
+
+  // 使缓存无效
+  service.invalidStockCache(this.inStock)
+  service.invalidStockCache(this.outStock)
+
+  next()
+})
 
 const Record = mongoose.model('Record', RecordSchema);
 const HistoryRecord = mongoose.model('HistoryRecord', RecordSchema);

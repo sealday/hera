@@ -4,6 +4,7 @@
 const Project = require('../models/Project');
 const Record = require('../models/Record').Record;
 const ObjectId = require('mongoose').Types.ObjectId;
+const service = require('../service')
 
 /**
  * 查询指定 project 的库存
@@ -55,8 +56,11 @@ function queryAll(projectId) {
 
 exports.queryAll = (req, res, next) => {
   if (req.params.id) {
-    queryAll(req.params.id).then(([inRecords, outRecords]) => {
-      console.log(inRecords)
+
+    if (service.isValidStockCache(req.params.id)) {
+      console.log('缓存命中')
+      let inRecords = service.stock[req.params.id].inRecords
+      let outRecords = service.stock[req.params.id].outRecords
       res.json({
         message: '查询成功',
         data: {
@@ -64,9 +68,20 @@ exports.queryAll = (req, res, next) => {
           outRecords
         }
       })
-    }).catch(err => {
-      next(err)
-    })
+    } else {
+      queryAll(req.params.id).then(([inRecords, outRecords]) => {
+        service.refreshStockCache(req.params.id, inRecords, outRecords)
+        res.json({
+          message: '查询成功',
+          data   : {
+            inRecords,
+            outRecords
+          }
+        })
+      }).catch(err => {
+        next(err)
+      })
+    }
   } else {
     res.status(400).json({
       message: '错误的请求格式'
