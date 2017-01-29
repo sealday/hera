@@ -6,10 +6,15 @@ import React, { Component } from 'react';
 import TransferForm from './TransferForm'
 
 class TransferCreate extends Component {
+  handleSubmit = (data) => {
+    //throw new Error('---')
+    alert(JSON.stringify(data))
+  }
+
   render() {
     return (
       <div>
-        <TransferForm/>
+        <TransferForm onSubmit={this.handleSubmit}/>
       </div>
     );
   }
