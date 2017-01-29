@@ -146,11 +146,9 @@ class Store extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    projects: state.projects,
-    articles: state.articles,
-  }
-}
+const mapStateToProps = state => ({
+  projects: state.system.projects.toArray(),
+  articles: state.system.articles.toArray(),
+})
 
 export default connect(mapStateToProps)(Store);
