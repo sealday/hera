@@ -6,7 +6,6 @@ import * as actionTypes from './actions'
 import { Map } from 'immutable'
 import {
   SystemRecord,
-  ProjectRecord,
   ArticleRecord,
   UserRecord,
   StoreRecord,
@@ -17,10 +16,10 @@ import {
 export function system(state = new SystemRecord(), action) {
   switch (action.type) {
     case actionTypes.SYSTEM_LOADED:
-      let base = new ProjectRecord(action.data.base)
+      let base = action.data.base
       let projects = new Map().withMutations(projects => {
         action.data.projects.forEach(project => {
-          projects.set(project._id, new ProjectRecord(project))
+          projects.set(project._id, project)
         })
       })
       let articles = new Map().withMutations(articles => {
@@ -34,7 +33,6 @@ export function system(state = new SystemRecord(), action) {
           users.set(user._id, new UserRecord(user))
         })
       })
-
       return state.set('base', base)
         .set('projects', projects)
         .set('articles', articles)
@@ -49,6 +47,9 @@ export function system(state = new SystemRecord(), action) {
     case actionTypes.DELETE_NOTIFY:
       const key = action.data
       return state.update('notifications', notifications => notifications.delete(key))
+    case actionTypes.UPDATE_PROJECT:
+      const project = action.data
+      return state.update('projects', projects => projects.set(project._id, project))
     default:
       return state
   }
@@ -88,6 +89,15 @@ export function store(state = new StoreRecord(), action) {
         })
       })).set('out', outRecords)
         .set('fetching_out', false)
+    case actionTypes.REQUEST_RECORD:
+      return state.set('requesting', true)
+    case actionTypes.REQUEST_RECORD_SUCCESS:
+      return state.set('requesting', false)
+    case actionTypes.REQUEST_RECORD_FAILURE:
+      return state.set('requesting', false)
+    case actionTypes.UPDATE_RECORD:
+      const record = action.data
+      return state.update('records', records => records.set(record._id, record))
     default:
       return state
   }
@@ -112,6 +122,32 @@ export function postTransfer(state = new PostRecord(), action) {
     case actionTypes.POST_TRANSFER_SUCCESS:
       return state.set('posting', false).set('data', action.data)
     case actionTypes.POST_TRANSFER_FAILURE:
+      return state.set('posting', false)
+    default:
+      return state
+  }
+}
+
+export function postProject(state = new PostRecord(), action) {
+  switch (action.type) {
+    case actionTypes.POST_PROJECT:
+      return state.set('posting', true)
+    case actionTypes.POST_PROJECT_SUCCESS:
+      return state.set('posting', false)
+    case actionTypes.POST_PROJECT_FAILURE:
+      return state.set('posting', false)
+    default:
+      return state
+  }
+}
+
+export function alterProject(state = new PostRecord(), action) {
+  switch (action.type) {
+    case actionTypes.ALTER_PROJECT:
+      return state.set('posting', true)
+    case actionTypes.ALTER_PROJECT_SUCCESS:
+      return state.set('posting', false)
+    case actionTypes.ALTER_PROJECT_FAILURE:
       return state.set('posting', false)
     default:
       return state

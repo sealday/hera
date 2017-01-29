@@ -74,3 +74,20 @@ exports.update = (req, res, next) => {
     next(err)
   })
 }
+
+exports.updateTransport = (req, res, next) => {
+  Record.findById(req.params.id).then(record => {
+    Object.assign(record.transport, req.body)
+    record.hasTransport = true
+    return record.save()
+  }).then(record => {
+    res.json({
+      message: '保存运输单成功',
+      data: {
+        record
+      }
+    })
+  }).catch(err => {
+    next(err)
+  })
+}

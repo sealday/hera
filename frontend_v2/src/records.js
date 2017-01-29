@@ -4,18 +4,6 @@
 
 import { Map, Record, List } from 'immutable'
 
-export const ProjectRecord = Record({
-  _id: '',
-  name: '',
-  company: '',
-  contacts: [],
-  tel: '',
-  companyTel: '',
-  address: '',
-  comments: '',
-  type: ''
-})
-
 export const ArticleRecord = Record({
   _id: '',
   type: '',
@@ -43,12 +31,13 @@ export const SystemRecord = Record({
   projects: Map(),
   articles: Map(),
   users: Map(),
-  base: ProjectRecord(),
+  base: {},
   notifications: Map(),
 })
 
 export const StoreRecord = Record({
   records: Map(),
+  requesting: false,
   in: [],
   out: [],
   fetching_in: false,

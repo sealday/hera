@@ -9,6 +9,7 @@ import { reducer as formReducer } from 'redux-form'
 import { Provider } from 'react-redux'
 import * as reducers from './reducers'
 import { systemLoaded, updateOnlineUser } from './actions'
+import { syncHistoryWithStore, routerReducer, routerMiddleware } from 'react-router-redux'
 
 import App from './App';
 import Home from './Home';
@@ -18,8 +19,15 @@ import {
   Operator,
   OperatorCreate,
   OperatorEdit,
+  Project,
+  ProjectCreate,
+  ProjectEdit,
 } from './system'
-import { FileManager } from './file'
+
+import {
+  FileManager
+} from './file'
+
 import {
   Purchase,
   TransferIn,
@@ -31,9 +39,23 @@ import {
   TransportOrderEdit,
   TransferCreate,
 } from './store'
-import { TransferInTable, TransferOutTable, Store } from './report'
-import { Project, ProjectCreate, ProjectEdit,WorkerCheckin } from './project'
-import { Router, Route, IndexRoute, hashHistory } from 'react-router';
+
+import {
+  TransferInTable,
+  TransferOutTable,
+  Store,
+} from './report'
+
+import {
+  WorkerCheckin,
+} from './project'
+
+import {
+  Router,
+  Route,
+  IndexRoute,
+  hashHistory
+} from 'react-router';
 
 import { ajax } from './utils';
 import io from 'socket.io-client';
@@ -55,9 +77,10 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const store = createStore(combineReducers({
   ...reducers,
-  form: formReducer
+  form: formReducer,
+  routing: routerReducer,
 }), composeEnhancers(
-  applyMiddleware(thunkMiddleware)
+  applyMiddleware(routerMiddleware(hashHistory),thunkMiddleware)
 ))
 
 ajax('/api/load').then(res => {
@@ -70,7 +93,7 @@ ajax('/api/load').then(res => {
 
   ReactDOM.render((
     <Provider store={store}>
-      <Router history={hashHistory}>
+      <Router history={syncHistoryWithStore(hashHistory, store)}>
         <Route path="/" component={App}>
           <IndexRoute component={Home}/>
           <Route path="file_manager" component={FileManager}/>
@@ -89,7 +112,7 @@ ajax('/api/load').then(res => {
           <Route path="transfer/create" component={TransferCreate}/>
           <Route path="transfer_in" component={TransferIn}/>
           <Route path="transfer_out" component={TransferOut}/>
-          <Route path="transfer_order/:recordId" component={TransferOrder}/>
+          <Route path="transfer/:recordId" component={TransferOrder}/>
           <Route path="transfer_out/:recordId" component={TransferOutEdit}/>
           <Route path="transfer_in/:recordId" component={TransferInEdit}/>
 
