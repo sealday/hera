@@ -11,6 +11,7 @@ import {
   StoreRecord,
   NavRecord,
   PostRecord,
+  PostRecords
 } from './records'
 
 export function system(state = new SystemRecord(), action) {
@@ -98,6 +99,9 @@ export function store(state = new StoreRecord(), action) {
     case actionTypes.UPDATE_RECORD:
       const record = action.data
       return state.update('records', records => records.set(record._id, record))
+    case actionTypes.UPDATE_STORE:
+      const stock = action.data
+      return state.update('stocks', stocks => stocks.set(stock.id, stock))
     default:
       return state
   }
@@ -149,6 +153,19 @@ export function alterProject(state = new PostRecord(), action) {
       return state.set('posting', false)
     case actionTypes.ALTER_PROJECT_FAILURE:
       return state.set('posting', false)
+    default:
+      return state
+  }
+}
+
+export function requestStore(state = new PostRecords(), action) {
+  switch (action.type) {
+    case actionTypes.REQUEST_STORE:
+      return state.update('posting', posting => posting.set(action.data, true))
+    case actionTypes.REQUEST_STORE_SUCCESS:
+      return state.update('posting', posting => posting.set(action.data, false))
+    case actionTypes.REQUEST_STORE_FAILURE:
+      return state.update('posting', posting => posting.set(action.data, false))
     default:
       return state
   }
