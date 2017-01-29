@@ -41,7 +41,7 @@ exports.create = (req, res, next) => {
  */
 exports.update = (req, res, next) => {
   const id = req.params.id
-  Project.findByIdAndUpdate(id, req.body).then(project => {
+  Project.findByIdAndUpdate(id, req.body, { new: true }).then(project => {
     res.json({
       message: '更新成功',
       data: {

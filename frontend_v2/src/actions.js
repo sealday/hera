@@ -202,7 +202,6 @@ export const ALTER_PROJECT = 'ALTER_PROJECT'
 export const ALTER_PROJECT_SUCCESS = 'ALTER_PROJECT_SUCCESS'
 export const ALTER_PROJECT_FAILURE = 'ALTER_PROJECT_FAILURE'
 
-
 export const alterProject = (project) => (dispatch, getState) => {
   if (!getState().alterProject.posting) {
     dispatch({ type: ALTER_PROJECT })
