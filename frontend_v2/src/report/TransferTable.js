@@ -219,11 +219,11 @@ class TransferTable extends Component {
           </tr>
           </thead>
           <tbody>
-          {this.getRecords().map(record => {
+          {this.getRecords().map((record, index) => {
             if (record.entries) {
               const rowSpan = record.entries.length + 1
               return (
-                <tr key={record._id}>
+                <tr key={index}>
                   <td rowSpan={rowSpan}>{record.type}</td>
                   <td rowSpan={rowSpan}>{getShortOrder(record._id)}</td>
                   <td rowSpan={rowSpan}>{moment(record.outDate).format('YYYY-MM-DD')}</td>
@@ -247,7 +247,7 @@ class TransferTable extends Component {
               )
             } else {
               return (
-                <tr key={record._id}>
+                <tr key={index}>
                   <td>{record.name}</td>
                   <td>{record.size}</td>
                   <td>{record.count}</td>
