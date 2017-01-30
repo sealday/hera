@@ -4,6 +4,8 @@
 
 import React from 'react'
 import { connect } from 'react-redux'
+import Select from 'react-select'
+import { selectStore } from './actions'
 
 class CurrentStore extends React.Component {
   constructor(props) {
@@ -26,6 +28,14 @@ class CurrentStore extends React.Component {
     })
   }
 
+  onBaseSelect = () => {
+    this.props.dispatch(selectStore(this.props.system.projects.get(this.state.base)))
+  }
+
+  onProjectSelect = () => {
+    this.props.dispatch(selectStore(this.props.system.projects.get(this.state.project)))
+  }
+
   render() {
     const props = this.props
     return (
@@ -40,7 +50,7 @@ class CurrentStore extends React.Component {
               clearable={false}
               options={props.system.projects.filter(project => project.type === '基地仓库').toArray().map(project => ({ value: project._id, label: project.company + project.name}))}
             />
-            <button className="btn btn-default btn-block">总部管理</button>
+            <button className="btn btn-default btn-block" onClick={this.onBaseSelect}>总部管理</button>
           </div>
           <div className="col-xs-6">
             <Select
@@ -50,7 +60,7 @@ class CurrentStore extends React.Component {
               clearable={false}
               options={props.system.projects.filter(project => project.type === '项目部仓库').toArray().map(project => ({ value: project._id, label: project.company + project.name}))}
             />
-            <button className="btn btn-default btn-block">项目部管理</button>
+            <button className="btn btn-default btn-block" onClick={this.onProjectSelect}>项目部管理</button>
           </div>
         </div>
       </div>

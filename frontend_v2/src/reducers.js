@@ -51,6 +51,8 @@ export function system(state = new SystemRecord(), action) {
     case actionTypes.UPDATE_PROJECT:
       const project = action.data
       return state.update('projects', projects => projects.set(project._id, project))
+    case actionTypes.SELECT_STORE:
+      return state.set('store', action.data)
     default:
       return state
   }
