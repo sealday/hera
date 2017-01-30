@@ -18,7 +18,7 @@ class App extends Component {
         <Navbar/>
         <div className="container-fluid" style={{height: '100%'}}>
           <div className="row" style={{position: 'relative', height: '100%'}}>
-            <div className={cx({ 'col-sm-2': true, 'App-drawer': true, 'show': props.drawer })}>
+            <div className={cx({ 'col-sm-2': true, 'App-drawer': true, 'show': props.nav.drawer})}>
               {/* TODO 这里可以考虑改成数组的形式*/}
               <ul>
                 <li>
