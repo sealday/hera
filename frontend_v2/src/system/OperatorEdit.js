@@ -23,6 +23,7 @@ class OperatorEdit extends Component {
     return (
       <div>
         <button className="btn btn-default" onClick={e => this.props.router.goBack()}>取消</button>
+        <h2>操作员编辑</h2>
         <OperatorForm
           initialValues={initialValues}
           onSubmit={this.handleSubmit} />
