@@ -17,3 +17,5 @@ const WorkerSchema = new Schema({
     picture:String//身份证照片
 })
 
+const Worker = mongoose.model('Worker', WorkerSchema);
+module.exports = Worker;

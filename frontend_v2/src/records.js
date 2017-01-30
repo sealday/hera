@@ -58,3 +58,9 @@ export const PostRecord = Record({
 
   data: null
 })
+
+export const WorkerRecord = Record({
+  posting:false,
+
+  data:[]
+})

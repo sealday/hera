@@ -173,6 +173,31 @@ export const requestRecord = (id) => (dispatch, getState) => {
   }
 }
 
+export const UPDATE_WORKERIN = 'UPDATE_WORKERIN'
+export const POST_WORKERIN = 'POST_WORKERIN'
+export const POST_WORKERIN_SUCCESS = 'POST_WORKERIN_SUCCESS'
+export const POST_WORKERIN_FAILURE = 'POST_WORKERIN_FAILUER'
+
+export const postWorkerCheckin = (workerin)=>(dispatch,getState)=>{
+  if (!getState().postWorkerCheckin.posting){
+    dispatch({type:POST_WORKERIN})
+    dispatch(newInfoNotify('提示','正在保存工人信息',2000))
+    ajax('/api/workercheckin',{
+      data:JSON.stringify(workerin),
+      method:'POST',
+      contentType:'application/json'
+    }).then(res=>{
+        dispatch({ type: POST_WORKERIN_SUCCESS,data:res.data.workerinfo })
+        dispatch(newSuccessNotify('提示', '保存工人信息成功', 2000))
+    }).catch(err=>{
+      console.log(err)
+      dispatch({type:POST_WORKERIN_FAILURE,data:err})
+      dispatch(newErrorNotify('警告','保存工人信息失败',2000))
+        throw err
+    })
+  }
+}
+
 export const POST_PROJECT = 'POST_PROJECT'
 export const POST_PROJECT_SUCCESS = 'POST_PROJECT_SUCCESS'
 export const POST_PROJECT_FAILURE = 'POST_PROJECT_FAILURE'
@@ -192,7 +217,7 @@ export const postProject = (project) => (dispatch, getState) => {
       dispatch(push(`/project?id=${res.data.project._id}`))
     }).catch(err => {
       dispatch({ type: POST_PROJECT_FAILURE })
-      dispatch(newSuccessNotify('出错', '保存项目信息出错', 2000))
+      dispatch(newErrorNotify('出错', '保存项目信息出错', 2000))
       console.error(err)
     })
   }

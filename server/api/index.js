@@ -12,6 +12,7 @@ const User = require('../models/User');
 const middleware = require('./middleware');
 const user = require('./user');
 const project = require('./project');
+const  workercheckin = require('./worker')
 const transfer = require('./transfer')
 
 const router = express.Router();
@@ -34,6 +35,12 @@ router.get('/project', project.list);
 router.post('/project', project.create)
 router.get('/project/:id', project.detail)
 router.post('/project/:id', project.update)
+
+router.post('/workercheckin',workercheckin.create)
+router.post('/workercheckin:id',workercheckin.update);
+router.get('/workercheckin',workercheckin.list);
+router.delete('/workercheckin:id',workercheckin.delete)
+
 
 router.get('/transfer', transfer.list)
 router.get('/transfer/:id', transfer.detail)
