@@ -247,3 +247,14 @@ export const requestStore = (stockId) => (dispatch, getState) => {
     })
   }
 }
+
+export const SELECT_STORE = 'SELECT_STORE'
+
+export const selectStore = (store) => {
+  localStorage.setItem('store', JSON.stringify(store))
+
+  return {
+    type: SELECT_STORE,
+    data: store
+  }
+}
