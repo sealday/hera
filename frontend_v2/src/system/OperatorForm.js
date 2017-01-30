@@ -23,7 +23,7 @@ class OperatorForm extends Component {
             <Field name="profile.name" component={Input} />
           </div>
           <div className="form-group">
-            <button className="btn btn-primary">创建操作员</button>
+            <button className="btn btn-primary btn-block">创建操作员</button>
           </div>
         </form>
       </div>
