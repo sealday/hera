@@ -33,6 +33,7 @@ export const SystemRecord = Record({
   users: Map(),
   base: {},
   notifications: Map(),
+  stock: {}, // 选择的仓库
 })
 
 export const StoreRecord = Record({

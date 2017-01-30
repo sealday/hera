@@ -2,7 +2,7 @@
  * Created by seal on 16/01/2017.
  */
 import React, { Component } from 'react';
-import { ajax, toFixedWithoutTrailingZero, calculateSize, makeKeyFromNameSize } from '../utils'
+import { toFixedWithoutTrailingZero, calculateSize, makeKeyFromNameSize } from '../utils'
 import { connect } from 'react-redux'
 import Select from 'react-select'
 import { requestStore } from '../actions'
