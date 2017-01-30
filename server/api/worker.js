@@ -18,10 +18,14 @@ exports.list = (req,res,next)=>{
 
 
 exports.create = (req,res,next)=>{
-    let worker = new Worker(req.body);
+    const workerinfo = req.body;
+    let worker = new Worker(workerinfo);
     worker.save().then(()=>{
         res.json({
-            message:'保存成功'
+            message:'保存成功',
+            data:{
+                workerinfo
+            }
         })
     }).catch(err=>{
         next(err);
