@@ -302,6 +302,30 @@ export const network = (name) => ({
     data: name
   },
   shouldProceed(state) {
-    return state.get(name)
+    return !state.networks.get(name)
   }
 })
+
+export const STORE_SEARCH = 'STORE_SEARCH'
+
+export const storeSearch = condition => (dispatch, getState) => {
+  console.log('---')
+  const search = network(STORE_SEARCH)
+  if (search.shouldProceed(getState())) {
+    dispatch(search.begin)
+    dispatch(newInfoNotify('提示', '正在根据给定条件搜索仓库明细', 2000))
+    ajax('/api/store/search', {
+      data: {
+        condition: JSON.stringify(condition)
+      }
+    }).then(res => {
+      dispatch(search.endSuccess)
+      dispatch({ type: STORE_SEARCH, data: res.data.search })
+      dispatch(newSuccessNotify('提示', '搜索仓库明细成功！', 2000))
+    }).catch(err => {
+      dispatch(search.endFailure)
+      dispatch(newErrorNotify('错误', '搜索仓库明细失败！', 2000))
+      throw err
+    })
+  }
+}

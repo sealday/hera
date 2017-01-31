@@ -5,10 +5,12 @@
 import React from 'react'
 import SearchForm from './SearchForm'
 import SearchTable from './SearchTable'
+import { connect } from 'react-redux'
+import { storeSearch } from '../actions'
 
 class Search extends React.Component {
-  search = data => {
-    alert(JSON.stringify(data))
+  search = condition => {
+    this.props.dispatch(storeSearch(condition))
   }
 
   render() {
@@ -22,4 +24,4 @@ class Search extends React.Component {
   }
 }
 
-export default Search
+export default connect()(Search)

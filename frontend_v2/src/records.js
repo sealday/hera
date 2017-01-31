@@ -44,6 +44,7 @@ export const StoreRecord = Record({
   fetching_in: false,
   fetching_out: false,
   stocks: new Map(),
+  search: [], // 搜索结果
 })
 
 export const NavRecord = Record({
