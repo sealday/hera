@@ -4,4 +4,5 @@
 
 export { default as TransferInTable } from './TransferInTable'
 export { default as TransferOutTable } from './TransferOutTable'
+export { default as Search }  from './Search'
 export { default as Store } from './Store'

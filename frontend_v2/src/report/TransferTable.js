@@ -6,7 +6,6 @@ import { Link } from 'react-router'
 import Select from 'react-select'
 import moment from 'moment'
 import DatePicker from 'react-datepicker';
-import { getShortOrder } from '../utils'
 
 class TransferTable extends Component {
   constructor(props) {

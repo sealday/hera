@@ -3,6 +3,8 @@
  */
 
 import $ from 'jquery';
+import pinyin from 'pinyin'
+import fuzzysearch from 'fuzzysearch'
 
 /**
  * 计算规格的数值表达
@@ -85,3 +87,12 @@ export function transformArticle(articles) {
     nameArticleMap
   };
 }
+
+export const filterOption = (option, filter) => {
+  return fuzzysearch(filter, option.pinyin) || fuzzysearch(filter, option.label)
+}
+
+export const getPinyin = (chinese) => {
+  return pinyin(chinese, {style: pinyin.STYLE_NORMAL, heteronym: true}).map(array => array.join('')).join('')
+}
+
