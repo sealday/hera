@@ -27,7 +27,7 @@ class TransferTable extends Component {
       return record.vendor
     } else if (record.type === '调拨') {
       const projects = this.props.projects
-      const { company, name } = projects.get(record[this.props.stock])
+      const { company, name } = projects.get(record[this.props.stock]) || {company:'数据出错，请联系管理员',name:'数据出错，请联系管理员'}
       return company + name
     }
   }

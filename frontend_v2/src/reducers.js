@@ -11,7 +11,8 @@ import {
   StoreRecord,
   NavRecord,
   PostRecord,
-  PostRecords
+  PostRecords,
+  WorkerRecord
 } from './records'
 
 export function system(state = new SystemRecord(), action) {
@@ -121,6 +122,18 @@ export function nav(state = new NavRecord(), action) {
   }
 }
 
+export function postWorkerCheckin(state= new WorkerRecord(),action) {
+    switch (action.type){
+        case actionTypes.POST_WORKERIN:
+            return state.set('posting',true);
+        case actionTypes.POST_WORKERIN_SUCCESS:
+            return state.set('posting',false).update('data',data => data.concat(action.data));
+        case actionTypes.POST_WORKERIN_FAILURE:
+            return state.set('posting',false);
+        default:
+            return state
+    }
+}
 export function postTransfer(state = new PostRecord(), action) {
   switch (action.type) {
     case actionTypes.POST_TRANSFER:
