@@ -13,11 +13,11 @@ import { Link } from 'react-router'
  */
 class SearchTable extends React.Component {
   render() {
+    const { search, projects } = this.props
     const getProjectName = id => {
       const project = projects.get(id)
       return project ? project.company + project.name : '';
     }
-    const { search, projects } = this.props
     return (
       <table className="table table-bordered">
         <thead>

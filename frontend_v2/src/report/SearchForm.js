@@ -4,7 +4,7 @@
 
 import React from 'react'
 import { reduxForm, Field, formValueSelector } from 'redux-form'
-import { FilterSelect, DatePicker } from '../components'
+import { FilterSelect, DatePicker, Input } from '../components'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import { getPinyin, filterOption, transformArticle } from '../utils'
@@ -110,10 +110,10 @@ class TransferSearchForm extends React.Component {
           </div>
           <label className="control-label col-md-1">数量范围</label>
           <div className="col-md-1">
-            <Field name="startCount" className="form-control" component="input"/>
+            <Field name="startCount" className="form-control" component={Input}/>
           </div>
           <div className="col-md-1">
-            <Field name="endCount" className="form-control" component="input" />
+            <Field name="endCount" className="form-control" component={Input} />
           </div>
         </div>
         <div className="form-group">
