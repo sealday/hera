@@ -64,3 +64,9 @@ export const PostRecord = Record({
 export const PostRecords = Record({
   posting: new Map()
 })
+
+export const WorkerRecord = Record({
+  posting:false,
+
+  data:[]
+})

@@ -5,7 +5,6 @@
 const User = require('../models/User');
 const ProductType = require('../models/ProductType')
 const Project = require('../models/Project')
-
 exports.login = (req, res, next) => {
   const username = req.body['username'] || '';
   const password = req.body['password'] || '';
@@ -49,7 +48,7 @@ exports.load = (req, res, next) => {
   Promise.all([
     ProductType.find(),
     Project.find(),
-    User.find()
+    User.find(),
   ]).then(([articles, projects, users]) => {
 
     // TODO 这里暂定为第一个找到第一个找到的为基地
