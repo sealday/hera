@@ -242,7 +242,7 @@ export const alterProject = (project) => (dispatch, getState) => {
       dispatch(push(`/project?id=${res.data.project._id}`))
     }).catch(err => {
       dispatch({ type: ALTER_PROJECT_FAILURE })
-      dispatch(newSuccessNotify('出错', '保存项目信息出错', 2000))
+      dispatch(newErrorNotify('出错', '保存项目信息出错', 2000))
       console.error(err)
     })
   }
@@ -309,7 +309,6 @@ export const network = (name) => ({
 export const STORE_SEARCH = 'STORE_SEARCH'
 
 export const storeSearch = condition => (dispatch, getState) => {
-  console.log('---')
   const search = network(STORE_SEARCH)
   if (search.shouldProceed(getState())) {
     dispatch(search.begin)
