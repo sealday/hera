@@ -185,3 +185,15 @@ export function requestStore(state = new PostRecords(), action) {
       return state
   }
 }
+
+export function networks(state = new Map(), action) {
+  switch (action.type) {
+    case actionTypes.NETWORK_BEGIN:
+      return state.set(action.data, true)
+    case actionTypes.NETWORK_END_SUCCESS:
+    case actionTypes.NETWORK_END_FAILURE:
+      return state.set(action.data, false)
+    default:
+      return state
+  }
+}

@@ -283,3 +283,25 @@ export const selectStore = (store) => {
     data: store
   }
 }
+
+export const NETWORK_BEGIN = 'NETWORK_BEGIN'
+export const NETWORK_END_SUCCESS = 'NETWORK_END_SUCCESS'
+export const NETWORK_END_FAILURE = 'NETWORK_END_FAILURE'
+
+export const network = (name) => ({
+  begin: {
+    type: NETWORK_BEGIN,
+    data: name
+  },
+  endSuccess: {
+    type: NETWORK_END_SUCCESS,
+    data: name
+  },
+  endFailure: {
+    type: NETWORK_END_FAILURE,
+    data: name
+  },
+  shouldProceed(state) {
+    return state.get(name)
+  }
+})
