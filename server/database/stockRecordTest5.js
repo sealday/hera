@@ -1,5 +1,6 @@
 /**
  * Created by seal on 31/12/2016.
+ * 找出没有定义时间的记录
  */
 
 const mongoose = require('mongoose');
@@ -20,7 +21,10 @@ connection.then(() => {
   return Record.aggregate([
     {
       $match: {
-          outStock: ObjectId(outStock),
+//          outStock: ObjectId(outStock),
+          outDate: {
+              $exists: false
+          }
 //          outDate: {
 //              $gt: new Date('2017-01-14')
 //          }
