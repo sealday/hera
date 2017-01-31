@@ -22,10 +22,13 @@ class Store extends Component {
     this.setState({ project: project })
   }
 
-  handleClick = (e) => {
+  query = (e) => {
     e.preventDefault()
     if (this.state.project) {
       this.props.dispatch(requestStore(this.state.project.value))
+      this.setState({
+        showing: new Map() // 重置状态显示
+      })
     }
   }
 
@@ -153,7 +156,7 @@ class Store extends Component {
     return (
       <div>
         <h2>仓库实时查询</h2>
-        <form className="row" onSubmit={this.handleClick}>
+        <form className="row" onSubmit={this.query}>
           <div className="col-md-10">
             <Select
               name="project"
