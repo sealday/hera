@@ -51,7 +51,7 @@ class TransferSearchForm extends React.Component {
   }
 
   render() {
-    const { handleSubmit, projects, startDate, endDate } = this.props
+    const { handleSubmit, projects, startDate, endDate, reset } = this.props
     return (
       <form onSubmit={handleSubmit} className="form-horizontal">
         <div className="form-group">
@@ -119,6 +119,9 @@ class TransferSearchForm extends React.Component {
         <div className="form-group">
           <div className="col-md-offset-6 col-md-2">
             <button type="submit" className="btn btn-primary btn-block">查询</button>
+          </div>
+          <div className="col-md-2">
+            <button type="reset" className="btn btn-primary btn-block" onClick={e => reset()}>重置</button>
           </div>
         </div>
       </form>
