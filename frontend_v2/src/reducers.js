@@ -3,7 +3,7 @@
  */
 
 import * as actionTypes from './actions'
-import { Map } from 'immutable'
+import { Map, OrderedMap } from 'immutable'
 import {
   SystemRecord,
   ArticleRecord,
@@ -11,6 +11,7 @@ import {
   StoreRecord,
   NavRecord,
   PostRecord,
+  PostRecords,
   WorkerRecord
 } from './records'
 
@@ -23,7 +24,7 @@ export function system(state = new SystemRecord(), action) {
           projects.set(project._id, project)
         })
       })
-      let articles = new Map().withMutations(articles => {
+      let articles = new OrderedMap().withMutations(articles => {
         action.data.articles.forEach(article => {
           articles.set(article.name, new ArticleRecord(article))
         })
@@ -51,6 +52,8 @@ export function system(state = new SystemRecord(), action) {
     case actionTypes.UPDATE_PROJECT:
       const project = action.data
       return state.update('projects', projects => projects.set(project._id, project))
+    case actionTypes.SELECT_STORE:
+      return state.set('store', action.data)
     default:
       return state
   }
@@ -99,6 +102,9 @@ export function store(state = new StoreRecord(), action) {
     case actionTypes.UPDATE_RECORD:
       const record = action.data
       return state.update('records', records => records.set(record._id, record))
+    case actionTypes.UPDATE_STORE:
+      const stock = action.data
+      return state.update('stocks', stocks => stocks.set(stock.id, stock))
     default:
       return state
   }
@@ -154,7 +160,6 @@ export function postProject(state = new PostRecord(), action) {
   }
 }
 
-
 export function alterProject(state = new PostRecord(), action) {
   switch (action.type) {
     case actionTypes.ALTER_PROJECT:
@@ -163,6 +168,19 @@ export function alterProject(state = new PostRecord(), action) {
       return state.set('posting', false)
     case actionTypes.ALTER_PROJECT_FAILURE:
       return state.set('posting', false)
+    default:
+      return state
+  }
+}
+
+export function requestStore(state = new PostRecords(), action) {
+  switch (action.type) {
+    case actionTypes.REQUEST_STORE:
+      return state.update('posting', posting => posting.set(action.data, true))
+    case actionTypes.REQUEST_STORE_SUCCESS:
+      return state.update('posting', posting => posting.set(action.data, false))
+    case actionTypes.REQUEST_STORE_FAILURE:
+      return state.update('posting', posting => posting.set(action.data, false))
     default:
       return state
   }

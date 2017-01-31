@@ -7,6 +7,7 @@ import cx from 'classnames';
 import { Link } from 'react-router';
 import { ajax } from './utils';
 import { connect } from 'react-redux'
+import { selectStore } from './actions'
 
 class Navbar extends Component {
   constructor(props) {
@@ -52,6 +53,7 @@ class Navbar extends Component {
           </div>
           <div className={cx({collapse: true, 'navbar-collapse': true, in: this.state.collapse})}>
             <ul className="nav navbar-nav navbar-right">
+              <li><a href="#" onClick={ e => { e.preventDefault(); this.props.dispatch(selectStore(false))} }>其他仓库</a></li>
               <li><a href="#" onClick={ e => e.preventDefault() }>当前在线人数{this.props.num}</a></li>
               <li><a href="#" onClick={this.logout}>登出</a></li>
               <li className={cx({active: this.context.router.isActive("profile")})}><Link to="profile">超级管理员</Link></li>

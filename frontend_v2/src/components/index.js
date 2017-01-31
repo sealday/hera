@@ -18,9 +18,9 @@ export const DatePicker = ({ input }) => (
 )
 
 export const FilterSelect = ({ input, options, placeholder }) => {
-  const {onChange, value} = input
-  console.log(value)
+  const {onChange, value, onFocus} = input
   return <ReactSelect
+    onFocus={onFocus}
     value={value}
     placeholder={placeholder}
     onChange={e => onChange(e.value)}

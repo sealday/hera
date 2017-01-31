@@ -8,8 +8,9 @@ import thunkMiddleware from 'redux-thunk'
 import { reducer as formReducer } from 'redux-form'
 import { Provider } from 'react-redux'
 import * as reducers from './reducers'
-import { systemLoaded, updateOnlineUser } from './actions'
+import { systemLoaded, updateOnlineUser, selectStore } from './actions'
 import { syncHistoryWithStore, routerReducer, routerMiddleware } from 'react-router-redux'
+import { logger } from './middlewares'
 
 import App from './App';
 import Home from './Home';
@@ -80,7 +81,7 @@ const store = createStore(combineReducers({
   form: formReducer,
   routing: routerReducer,
 }), composeEnhancers(
-  applyMiddleware(routerMiddleware(hashHistory),thunkMiddleware)
+  applyMiddleware(thunkMiddleware, routerMiddleware(hashHistory), logger)
 ))
 
 ajax('/api/load').then(res => {
@@ -90,6 +91,11 @@ ajax('/api/load').then(res => {
   socket.on('server:num', num => {
     store.dispatch(updateOnlineUser(num))
   });
+
+  const store_ = JSON.parse(localStorage.getItem('store'))
+  if (store_) {
+    store.dispatch(selectStore(store_))
+  }
 
   ReactDOM.render((
     <Provider store={store}>
