@@ -225,7 +225,7 @@ class TransferTable extends Component {
               return (
                 <tr key={index}>
                   <td rowSpan={rowSpan}>{record.type}</td>
-                  <td rowSpan={rowSpan}>{getShortOrder(record._id)}</td>
+                  <td rowSpan={rowSpan}>{record.number}</td>
                   <td rowSpan={rowSpan}>{moment(record.outDate).format('YYYY-MM-DD')}</td>
                   <td rowSpan={rowSpan}>{this.getName(record)}</td>
                   <th>名称</th>

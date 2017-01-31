@@ -72,6 +72,8 @@ const RecordSchema = new Schema({
     'carrier-id': String, // 司机身份证号码
     'carrier-car': String , // 车牌号
   },
+
+  number: Number, // 订单编号
   
   valid: { type: Boolean, default: true }, // 是否有效，通常用来删除时标记为无效
   type: String,  // 采购、调拨、销售、报废、结转

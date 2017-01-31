@@ -28,7 +28,7 @@ class TransferOutTable extends Component {
 const mapStateToProps = state => {
   return {
     outStock: state.system.base._id,
-    records: state.store.in,
+    records: state.store.out,
     projects: state.system.projects,
     fetching: state.store.fetching_out,
     articles: state.system.articles.toArray(),
