@@ -24,7 +24,7 @@ const connection = mongoose.connect('mongodb://localhost/hera');
 
 let start = null;
 connection.then(() => {
-  let outStock = '58673d42becccdd61d4074fe';
+  let outStock = '586df7fe2d256304867ab346';
 
   start = new Date();
 
@@ -41,9 +41,17 @@ connection.then(() => {
           name: '$entries.name',
           size: '$entries.size'
         },
-        sum_of_it: {
+        sum: {
           $sum: '$entries.count'
         }
+      }
+    },
+    {
+      $project: {
+        name: '$_id.name',
+        size: '$_id.size',
+        _id: 0,
+        sum: '$sum',
       }
     }
   ]);
