@@ -232,7 +232,7 @@ class TransferTable extends Component {
                   <th>数量</th>
                   <td rowSpan={rowSpan}>{record.status}</td>
                   <td rowSpan={rowSpan}>{record.username}</td>
-                  <td rowSpan={rowSpan}>{moment(record.updatedAt).format('YYYY-MM-DD')}</td>
+                  <td rowSpan={rowSpan}>{moment(record.createdAt).format('YYYY-MM-DD')}</td>
                   <td rowSpan={rowSpan}>
                     <Link onClick={() => {
                       this.props.dispatch({ type: 'UPDATE_RECORDS_CACHE', record })

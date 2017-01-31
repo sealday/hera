@@ -95,7 +95,7 @@ class TransferSearchForm extends React.Component {
                    filterOption={filterOption}
                    options={this.getNameOptions()}
                    normalize={(value, previousValue) => {
-                     if (previousValue != value) {
+                     if (previousValue !== value) {
                        this.props.change('size', '')
                      }
                      return value

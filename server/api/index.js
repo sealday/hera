@@ -51,6 +51,7 @@ router.post('/transfer', transfer.create)
 router.get('/file', file.list);
 router.post('/file', upload.single('file'), file.post);
 
+router.get('/store/search', store.search)
 router.get('/store/:id', store.queryAll)
 
 router.post('/purchase', purchase.postPurchase);
