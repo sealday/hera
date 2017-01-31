@@ -5,8 +5,15 @@ import React from 'react'
 import ReactDatePicker from 'react-datepicker'
 import ReactSelect from 'react-select'
 
+const errorStyle = {
+  borderColor: '#a94442',
+  boxShadow: 'inset 0 1px 1px rgba(0, 0, 0, .075)'
+}
+
 export const Input = ({ input, meta: { touched, error, warning }, ...custom }) => (
-  <input {...input} className="form-control" {...custom} />
+  <input {...input} className="form-control" {...custom}
+    style={touched && error ? errorStyle : null}
+  />
 )
 
 export const Select = ({ input, children }) => (
