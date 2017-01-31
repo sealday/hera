@@ -131,7 +131,7 @@ class Store extends Component {
         record.entries.forEach((record, recordIndex) => {
           let typeLine
           let nameLine
-          if (recordIndex == 0) {
+          if (recordIndex === 0) {
             typeLine = <td rowSpan={rowSpan}/>
             nameLine = <td rowSpan={rowSpan}/>
           }

@@ -5,8 +5,8 @@ import React from 'react'
 import ReactDatePicker from 'react-datepicker'
 import ReactSelect from 'react-select'
 
-export const Input = ({ input }) => (
-  <input {...input} className="form-control" />
+export const Input = ({ input, meta: { touched, error, warning }, ...custom }) => (
+  <input {...input} className="form-control" {...custom} />
 )
 
 export const Select = ({ input, children }) => (
