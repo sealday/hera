@@ -96,3 +96,14 @@ export const getPinyin = (chinese) => {
   return pinyin(chinese, {style: pinyin.STYLE_NORMAL, heteronym: true}).map(array => array.join('')).join('')
 }
 
+let formatNumber_
+
+if (Intl) {
+  formatNumber_ = (number) => {
+    return isNaN(number) ? '' : new Intl.NumberFormat().format(number)
+  }
+} else {
+  formatNumber_ = number => number
+}
+
+export const formatNumber = formatNumber_

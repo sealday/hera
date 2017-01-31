@@ -2,17 +2,19 @@
  * Created by seal on 16/01/2017.
  */
 import React, { Component } from 'react';
-import { toFixedWithoutTrailingZero, calculateSize, makeKeyFromNameSize } from '../utils'
+import { toFixedWithoutTrailingZero, calculateSize, makeKeyFromNameSize, getPinyin, filterOption, formatNumber } from '../utils'
 import { connect } from 'react-redux'
 import Select from 'react-select'
 import { requestStore } from '../actions'
+import { Map } from 'immutable'
 
 class Store extends Component {
   constructor(props) {
     super(props)
     this.state = {
       records: [],
-      project: ''
+      project: '',
+      showing: new Map()
     }
   }
 
@@ -20,7 +22,8 @@ class Store extends Component {
     this.setState({ project: project })
   }
 
-  handleClick = () => {
+  handleClick = (e) => {
+    e.preventDefault()
     if (this.state.project) {
       this.props.dispatch(requestStore(this.state.project.value))
     }
@@ -38,13 +41,19 @@ class Store extends Component {
       outRecordMap[makeKeyFromNameSize(record._id.name, record._id.size)] = record.sum
     })
 
-    let records = []
+    let records = [] // [{ total, entries }]
     const articles = this.props.articles
     articles.forEach(article => {
       // 算每一项
       let inTotal = 0
       let outTotal = 0
       let total = 0
+
+      let record = {
+        total: null,
+        entries: []
+      }
+
       article.sizes.forEach(size => {
         const key = makeKeyFromNameSize(article.name, size)
         let value = {}
@@ -64,7 +73,7 @@ class Store extends Component {
 
         if (exists) {
           value.total = toFixedWithoutTrailingZero((value.inTotal || 0) - (value.outTotal || 0))
-          records.push({
+          record.entries.push({
             type: article.type,
             name: article.name,
             size: size,
@@ -75,15 +84,16 @@ class Store extends Component {
       // 计算合计
       if (inTotal > 0 || outTotal > 0) {
         total = toFixedWithoutTrailingZero(inTotal - outTotal)
-        records.push({
+        record.total = {
           type: article.type,
           name: article.name,
-          inTotal,
-          outTotal,
+          inTotal: toFixedWithoutTrailingZero(inTotal),
+          outTotal: toFixedWithoutTrailingZero(outTotal),
           total
-        })
-      }
+        }
 
+        records.push(record)
+      }
     })
     return records
   }
@@ -91,25 +101,79 @@ class Store extends Component {
   render() {
     let project = this.state.project.value
     let stocks = this.props.stocks
+
+    let recordsTable = []
+    if (project && stocks.get(project)) {
+      const records = this.getRecords(stocks.get(project))
+
+      records.forEach((record, index) => {
+        recordsTable.push(
+          <tr key={index} onClick={e => {
+            this.setState(state => ({
+              showing: state.showing.update(record.total.name, showing => !showing)
+            }))
+          }}>
+            <th>{record.total.type}</th>
+            <th>{record.total.name}</th>
+            <th>{record.total.size}</th>
+            <th>{formatNumber(record.total.in)}</th>
+            <th>{formatNumber(record.total.inTotal)}</th>
+            <th>{formatNumber(record.total.out)}</th>
+            <th>{formatNumber(record.total.outTotal)}</th>
+            <th>{formatNumber(record.total.total)}</th>
+          </tr>
+        )
+
+        const rowSpan = record.entries.length
+        record.entries.forEach((record, recordIndex) => {
+          let typeLine
+          let nameLine
+          if (recordIndex == 0) {
+            typeLine = <td rowSpan={rowSpan}/>
+            nameLine = <td rowSpan={rowSpan}/>
+          }
+
+          recordsTable.push(
+            // 设计不显示时样式为 none
+            <tr key={index + ',' + recordIndex} style={{display: this.state.showing.get(record.name) ? 'table-row' : 'none'}}>
+              {typeLine}
+              {nameLine}
+              <td>{record.size}</td>
+              <td>{formatNumber(record.in)}</td>
+              <td>{formatNumber(record.inTotal)}</td>
+              <td>{formatNumber(record.out)}</td>
+              <td>{formatNumber(record.outTotal)}</td>
+              <td>{formatNumber(record.total)}</td>
+            </tr>
+          )
+        })
+      })
+    }
+
     return (
       <div>
         <h2>仓库实时查询</h2>
-        <div className="row">
+        <form className="row" onSubmit={this.handleClick}>
           <div className="col-md-10">
             <Select
               name="project"
               clearable={false}
               placeholder="选择要查询的仓库"
               value={this.state.project}
-              options={this.props.projects.map(project => ({ value: project._id, label: project.company + project.name }))}
+              options={this.props.projects.map(project => ({
+                value: project._id,
+                label: project.company + project.name,
+                pinyin: getPinyin(project.company + project.name)
+              }))}
+              filterOption={filterOption}
               onChange={this.handleProjectChange}
             />
           </div>
           <div className="col-md-2">
-            <button className="btn btn-primary btn-block" onClick={this.handleClick}>查询</button>
+            <button className="btn btn-primary btn-block">查询</button>
           </div>
-        </div>
-        <table className="table">
+        </form>
+        <table className="table table-bordered table-hover">
           <thead>
           <tr>
             <th>类型</th>
@@ -123,18 +187,7 @@ class Store extends Component {
           </tr>
           </thead>
           <tbody>
-          {project && stocks.get(project) && this.getRecords(stocks.get(project)).map(record => (
-            <tr>
-              <td>{record.type}</td>
-              <td>{record.name}</td>
-              <td>{record.size}</td>
-              <td>{record.in}</td>
-              <td>{record.inTotal}</td>
-              <td>{record.out}</td>
-              <td>{record.outTotal}</td>
-              <td>{record.total}</td>
-            </tr>
-          ))}
+          {recordsTable}
           </tbody>
         </table>
       </div>
