@@ -13,12 +13,13 @@ export const Select = ({ input, children }) => (
   <select {...input} className="form-control" >{children}</select>
 )
 
-export const DatePicker = ({ input }) => (
-  <ReactDatePicker selected={input.value} className="form-control" onChange={date => input.onChange(date)} />
+export const DatePicker = ({ input, ...custom }) => (
+  <ReactDatePicker selected={input.value} className="form-control" onChange={date => input.onChange(date)} {...custom} />
 )
 
-export const FilterSelect = ({ input, options, placeholder }) => {
-  const {onChange, value, onFocus} = input
+export const FilterSelect = ({ input, options, ...custom }) => {
+  const {onChange, value, onFocus } = input
+  const { placeholder, filterOption } = custom
   return <ReactSelect
     onFocus={onFocus}
     value={value}
@@ -26,6 +27,7 @@ export const FilterSelect = ({ input, options, placeholder }) => {
     onChange={e => onChange(e.value)}
     clearable={false}
     options={options}
+    filterOption={filterOption}
   />
 }
 

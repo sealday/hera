@@ -45,6 +45,7 @@ import {
   TransferInTable,
   TransferOutTable,
   Store,
+  Search,
 } from './report'
 
 import {
@@ -113,6 +114,7 @@ ajax('/api/load').then(res => {
           <Route path="project_create" component={ProjectCreate}/>
           <Route path="project/:id/edit" component={ProjectEdit}/>
 
+          <Route path="search" component={Search}/>
           <Route path="article" component={Article}/>
           <Route path="purchase" component={Purchase}/>
           <Route path="transfer/create" component={TransferCreate}/>
