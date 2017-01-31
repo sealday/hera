@@ -13,7 +13,10 @@ class OperatorCreate extends Component {
 
   render() {
     return (
-      <OperatorForm onSubmit={this.handleSubmit} />
+      <div>
+        <h2>新增操作员</h2>
+        <OperatorForm onSubmit={this.handleSubmit} />
+      </div>
     )
   }
 }

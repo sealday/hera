@@ -7,8 +7,12 @@ import { connect } from 'react-redux'
 import { toggleMenu, toggleNav } from './actions'
 import './App.css';
 import { Notification } from './components'
+import CurrentStore from './CurrentStore'
 
 class App extends Component {
+  isStoreSelected() {
+    return this.props.system.store
+  }
   render() {
     // TODO 考虑整理下目录，让目录由配置文件生成，而不是现在纯粹手写，纯粹手写需要在很多地方修改，容易出错，而且看起来不方便，并且重复工作太多
     const props = this.props
@@ -16,9 +20,10 @@ class App extends Component {
       <div className="App">
         <Notification/>
         <Navbar/>
+        {this.isStoreSelected() && (
         <div className="container-fluid" style={{height: '100%'}}>
           <div className="row" style={{position: 'relative', height: '100%'}}>
-            <div className={cx({ 'col-sm-2': true, 'App-drawer': true, 'show': props.drawer })}>
+            <div className={cx({ 'col-sm-2': true, 'App-drawer': true, 'show': props.nav.drawer})}>
               {/* TODO 这里可以考虑改成数组的形式*/}
               <ul>
                 <li>
@@ -96,6 +101,10 @@ class App extends Component {
             </div>
           </div>
         </div>
+        )}
+        {!this.isStoreSelected() && (
+          <CurrentStore/>
+        )}
       </div>
     );
   }
@@ -103,7 +112,8 @@ class App extends Component {
 
 const mapStateToProps = state => {
   return {
-    nav: state.nav
+    nav: state.nav,
+    system: state.system,
   }
 }
 

@@ -70,13 +70,12 @@ export function makeKeyFromNameSize(name, size) {
  * @returns {{typeNameMap: {租赁类: Array, 消耗类: Array, 工具类: Array}, nameArticleMap: {}}}
  */
 export function transformArticle(articles) {
-  let typeNameMap = {
-    租赁类: [],
-    消耗类: [],
-    工具类: []
-  };
+  let typeNameMap = {};
   let nameArticleMap = {};
   articles.forEach(article => {
+    if (!typeNameMap[article.type]) {
+      typeNameMap[article.type] = []
+    }
     typeNameMap[article.type].push(article.name);
     nameArticleMap[article.name] = article;
   });

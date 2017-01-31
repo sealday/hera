@@ -2,9 +2,10 @@
  * Created by seal on 16/01/2017.
  */
 import React, { Component } from 'react';
-import { ajax, toFixedWithoutTrailingZero, calculateSize, makeKeyFromNameSize } from '../utils'
+import { toFixedWithoutTrailingZero, calculateSize, makeKeyFromNameSize } from '../utils'
 import { connect } from 'react-redux'
 import Select from 'react-select'
+import { requestStore } from '../actions'
 
 class Store extends Component {
   constructor(props) {
@@ -15,86 +16,81 @@ class Store extends Component {
     }
   }
 
-  componentDidMount() {
-  }
-
-  componentWillUnmount() {
-
-  }
-
   handleProjectChange = (project) => {
     this.setState({ project: project })
   }
 
   handleClick = () => {
     if (this.state.project) {
-      ajax(`/api/store/${this.state.project.value}`).then(res => {
-        const inRecords = res.data.inRecords
-        const outRecords = res.data.outRecords
-        let inRecordMap = {}
-        inRecords.forEach(record => {
-          inRecordMap[makeKeyFromNameSize(record._id.name, record._id.size)] = record.sum
-        })
-        let outRecordMap = {}
-        outRecords.forEach(record => {
-          outRecordMap[makeKeyFromNameSize(record._id.name, record._id.size)] = record.sum
-        })
-
-        let records = []
-        const articles = this.props.articles
-        articles.forEach(article => {
-          // 算每一项
-          let inTotal = 0
-          let outTotal = 0
-          let total = 0
-          article.sizes.forEach(size => {
-            const key = makeKeyFromNameSize(article.name, size)
-            let value = {}
-            let exists = false
-            if (key in inRecordMap) {
-              value.in = inRecordMap[key]
-              value.inTotal = toFixedWithoutTrailingZero(inRecordMap[key] * calculateSize(size))
-              inTotal += Number(value.inTotal)
-              exists = true
-            }
-            if (key in outRecordMap) {
-              value.out = outRecordMap[key]
-              value.outTotal = toFixedWithoutTrailingZero(outRecordMap[key] * calculateSize(size))
-              outTotal += Number(value.outTotal)
-              exists = true
-            }
-
-            if (exists) {
-              value.total = toFixedWithoutTrailingZero((value.inTotal || 0) - (value.outTotal || 0))
-              records.push({
-                type: article.type,
-                name: article.name,
-                size: size,
-                ...value
-              })
-            }
-          })
-          // 计算合计
-          if (inTotal > 0 || outTotal > 0) {
-            total = toFixedWithoutTrailingZero(inTotal - outTotal)
-            records.push({
-              type: article.type,
-              name: article.name,
-              inTotal,
-              outTotal,
-              total
-            })
-          }
-
-        })
-        this.setState({ records })
-      }).catch(err => {
-        alert('出错了！' + JSON.stringify(err))
-      })
+      this.props.dispatch(requestStore(this.state.project.value))
     }
   }
 
+  getRecords = (stock) => {
+    const inRecords = stock.inRecords
+    const outRecords = stock.outRecords
+    let inRecordMap = {}
+    inRecords.forEach(record => {
+      inRecordMap[makeKeyFromNameSize(record._id.name, record._id.size)] = record.sum
+    })
+    let outRecordMap = {}
+    outRecords.forEach(record => {
+      outRecordMap[makeKeyFromNameSize(record._id.name, record._id.size)] = record.sum
+    })
+
+    let records = []
+    const articles = this.props.articles
+    articles.forEach(article => {
+      // 算每一项
+      let inTotal = 0
+      let outTotal = 0
+      let total = 0
+      article.sizes.forEach(size => {
+        const key = makeKeyFromNameSize(article.name, size)
+        let value = {}
+        let exists = false
+        if (key in inRecordMap) {
+          value.in = inRecordMap[key]
+          value.inTotal = toFixedWithoutTrailingZero(inRecordMap[key] * calculateSize(size))
+          inTotal += Number(value.inTotal)
+          exists = true
+        }
+        if (key in outRecordMap) {
+          value.out = outRecordMap[key]
+          value.outTotal = toFixedWithoutTrailingZero(outRecordMap[key] * calculateSize(size))
+          outTotal += Number(value.outTotal)
+          exists = true
+        }
+
+        if (exists) {
+          value.total = toFixedWithoutTrailingZero((value.inTotal || 0) - (value.outTotal || 0))
+          records.push({
+            type: article.type,
+            name: article.name,
+            size: size,
+            ...value
+          })
+        }
+      })
+      // 计算合计
+      if (inTotal > 0 || outTotal > 0) {
+        total = toFixedWithoutTrailingZero(inTotal - outTotal)
+        records.push({
+          type: article.type,
+          name: article.name,
+          inTotal,
+          outTotal,
+          total
+        })
+      }
+
+    })
+    return records
+  }
+
   render() {
+    let project = this.state.project.value
+    let stocks = this.props.stocks
     return (
       <div>
         <h2>仓库实时查询</h2>
@@ -127,7 +123,7 @@ class Store extends Component {
           </tr>
           </thead>
           <tbody>
-          {this.state.records.map(record => (
+          {project && stocks.get(project) && this.getRecords(stocks.get(project)).map(record => (
             <tr>
               <td>{record.type}</td>
               <td>{record.name}</td>
@@ -146,11 +142,10 @@ class Store extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    projects: state.projects,
-    articles: state.articles,
-  }
-}
+const mapStateToProps = state => ({
+  projects: state.system.projects.toArray(),
+  articles: state.system.articles.toArray(),
+  stocks: state.store.stocks,
+})
 
 export default connect(mapStateToProps)(Store);

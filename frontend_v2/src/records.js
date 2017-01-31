@@ -33,6 +33,7 @@ export const SystemRecord = Record({
   users: Map(),
   base: {},
   notifications: Map(),
+  store: false, // 选择的仓库
 })
 
 export const StoreRecord = Record({
@@ -41,7 +42,8 @@ export const StoreRecord = Record({
   in: [],
   out: [],
   fetching_in: false,
-  fetching_out: false
+  fetching_out: false,
+  stocks: new Map(),
 })
 
 export const NavRecord = Record({
@@ -57,6 +59,10 @@ export const PostRecord = Record({
   posting: false,
 
   data: null
+})
+
+export const PostRecords = Record({
+  posting: new Map()
 })
 
 export const WorkerRecord = Record({

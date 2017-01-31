@@ -14,6 +14,7 @@ class TransferCreate extends Component {
   render() {
     return (
       <div>
+        <h2>发料单录入</h2>
         <TransferForm onSubmit={this.handleSubmit}/>
       </div>
     );
