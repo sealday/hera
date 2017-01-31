@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const service = require('../service')
+const Counter = require('./Counter')
 
 /**
  * 仓库记录
  * TODO 建立合适的索引加速查询
- * 
  */
-const RecordSchema = new Schema({
+const recordSchema = {
   outStock: Schema.Types.ObjectId, // 出库仓库
   inStock: Schema.Types.ObjectId, // 入库仓库
 
@@ -34,7 +34,7 @@ const RecordSchema = new Schema({
     freightPrice: Number, // 运费单价
     freight: Number, // 运费
     mixPrice: Number, // 综合单价
-    mixSum: Number, // 综合金额 
+    mixSum: Number, // 综合金额
   }], // 订单项
 
   outDate: Date, // 出库时间
@@ -74,10 +74,13 @@ const RecordSchema = new Schema({
   },
 
   number: Number, // 订单编号
-  
+
   valid: { type: Boolean, default: true }, // 是否有效，通常用来删除时标记为无效
   type: String,  // 采购、调拨、销售、报废、结转
-}, { timestamps: true }); // 时间戳反映真正的制单时间（以录入系统为准）
+}
+
+const RecordSchema = new Schema(recordSchema, { timestamps: true }); // 时间戳反映真正的制单时间（以录入系统为准）
+const HistoryRecordSchema = new Schema(recordSchema, { timestamps: true }); // 时间戳反映真正的制单时间（以录入系统为准）
 
 RecordSchema.pre('save', function (next) {
 
@@ -85,11 +88,20 @@ RecordSchema.pre('save', function (next) {
   service.invalidStockCache(this.inStock)
   service.invalidStockCache(this.outStock)
 
-  next()
+  if (!this.number) {
+    // 初始化单号
+    Counter.findByIdAndUpdate('record', {$inc: {seq: 1}}, {new: true}).then(counter => {
+      this.number = counter.seq
+      next()
+    })
+  } else {
+    // 编辑时不更新单号
+    next()
+  }
 })
 
 const Record = mongoose.model('Record', RecordSchema);
-const HistoryRecord = mongoose.model('HistoryRecord', RecordSchema);
+const HistoryRecord = mongoose.model('HistoryRecord', HistoryRecordSchema);
 
 exports.Record = Record;
 exports.HistoryRecord = HistoryRecord;
