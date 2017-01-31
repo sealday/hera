@@ -24,28 +24,30 @@ connection.then(() => {
       $unwind: '$entries'
     },
     {
+      $match: {
+        'entries.name': '钢管',
+        'entries.size': '4.2'
+      },
+    },
+    {
       $project: {
+        // 默认包含了id
+        outStock: '$outStock',
+        inStock: '$inStock',
+        outDate: '$outDate',
         name: '$entries.name',
         size: '$entries.size',
         count: '$entries.count',
-      }
-    },
-    {
-      $match: {
-        name: {
-//          $in: ['钢管', '方管', '工字钢', '槽钢']
-          $in: ['轮扣']
-        },
+        number: '$number',
+        type: '$type'
+        //recordId: '$recordId'
       }
     }
-  ]);
+  ])
 }).then(results => {
   let end = new Date() - start;
-  results.forEach(entry => {
-    if (entry.size.length < 6) {
-      console.log(entry.size.length)
-    }
-  })
+  console.log(results)
+  console.log(results.length)
   console.log('一共耗时 %d 毫秒', end);
 }).catch(err => {
   console.log(err);
