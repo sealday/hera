@@ -123,6 +123,7 @@ export function requestWorkerlist(state= new WorkerRecord(),action) {
         case actionTypes.POST_WORKERIN:
             return state.set('posting',true);
         case actionTypes.POST_WORKERIN_SUCCESS:
+
             return state.set('posting',false).update('data',data => data.concat(action.data));
         case actionTypes.POST_WORKERIN_FAILURE:
             return state.set('posting',false);
