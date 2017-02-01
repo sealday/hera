@@ -109,3 +109,5 @@ if (Intl) {
 export const formatNumber = formatNumber_
 
 export const total = (count, size) => toFixedWithoutTrailingZero(count * calculateSize(size))
+
+export  * as validator  from './validator'
