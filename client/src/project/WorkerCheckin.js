@@ -27,7 +27,7 @@ class WorkerCheckin extends Component{
                 <WorkerCheckinForm
                 onSubmit={this.handleSubmit}
                 />
-                <InfoList infolist = {this.props.workers}/>
+                <InfoList infolist={this.props.workers}/>
             </div>
         )
     }
