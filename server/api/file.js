@@ -7,7 +7,6 @@ exports.post =  (req, res, next) => {
   if (req.file)  {
     const file = new File(req.file);
     file.save().then(() => {
-      res.send('success');
       res.json({
         message: 'success'
       })
