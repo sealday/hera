@@ -5,7 +5,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import moment from 'moment'
-import { calculateSize, toFixedWithoutTrailingZero, getShortOrder } from '../utils'
+import { calculateSize, toFixedWithoutTrailingZero } from '../utils'
 import { Link } from 'react-router'
 import { requestRecord } from '../actions'
 
@@ -39,7 +39,7 @@ class TransferOrder extends Component {
       )
     }
 
-    const base = this.props.base
+    const store = this.props.store
 
     let orderName = ''
     let company = ''
@@ -47,13 +47,13 @@ class TransferOrder extends Component {
     let direction = ''
 
     // 判断是收料单还是发料单
-    if (record.inStock === base._id) {
+    if (record.inStock === store._id) {
       // 入库是基地，是收料单
       orderName = '收料单'
       direction = 'in'
       company = projectIdMap[record.outStock].company
       name = projectIdMap[record.outStock].name
-    } else if (record.outStock === base._id) {
+    } else if (record.outStock === store._id) {
       // 出库是基地，是发料单
       orderName = '发料单'
       direction = 'out'
@@ -136,7 +136,7 @@ class TransferOrder extends Component {
         <div className="container-fluid">
           <div className="btn-group hidden-print">
             <button className="btn btn-default" onClick={() => this.props.router.goBack()}>返回</button>
-            <Link className="btn btn-primary" to={`/transfer_${direction}/${record._id}`}>编辑</Link>
+            <Link className="btn btn-primary" to={`/transfer/${direction}/${record._id}/edit`}>编辑</Link>
             <button className="btn btn-default" onClick={this.handleTransport}>运输单</button>
             <button className="btn btn-default" onClick={() => print()}>打印</button>
             <a className="btn btn-default" href="check">审核确认</a>
@@ -171,7 +171,7 @@ class TransferOrder extends Component {
                 <tbody>
                 <tr>
                   <td className="text-left">单号：</td>
-                  <td className="text-center">{getShortOrder(record._id)}</td>
+                  <td className="text-center">{record.number}</td>
                 </tr>
                 <tr>
                   <td className="text-left">原始单号：</td>
@@ -257,7 +257,7 @@ const mapStateToProps = state => {
     recordIdMap: state.store.records.toObject(),
     projectIdMap: state.system.projects.toObject(),
     articles: state.system.articles.toArray(),
-    base: state.system.base
+    store: state.system.store
   }
 }
 

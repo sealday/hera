@@ -71,17 +71,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use('/uploads/', (req, res, next) => {
-  const filename = req.query['filename'] || '';
-  if (filename) {
-    req.url = `/${filename}`;
-    next();
-  } else {
-    next('error');
-  }
-});
-
 app.use(express.static(path.join(__dirname, 'public')));
+service.root = __dirname
 
 app.use(session({
   secret: 'Hera God',
