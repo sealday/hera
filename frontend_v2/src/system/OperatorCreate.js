@@ -16,8 +16,12 @@ class OperatorCreate extends Component {
   render() {
     return (
       <div>
-        <h2>新增操作员</h2>
-        <OperatorForm onSubmit={this.handleSubmit} />
+        <button className="btn btn-default" onClick={e => this.props.router.goBack()}>取消</button>
+        <h2 className="page-header">新增操作员</h2>
+        <OperatorForm
+          onSubmit={this.handleSubmit}
+          btnName="创建"
+        />
       </div>
     )
   }
