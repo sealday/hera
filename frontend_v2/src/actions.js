@@ -328,3 +328,51 @@ export const storeSearch = condition => (dispatch, getState) => {
     })
   }
 }
+
+export const OPERATOR_CREATE = 'OPERATOR_CREATE' // 网络请求 action
+export const OPERATOR_UPDATE = 'OPERATOR_UPDATE' // 网络请求 action
+export const NEW_OPERATOR = 'NEW_OPERATOR' // 接收到数据的 action
+
+export const createOperator = operator => (dispatch, getState) => {
+  const networking = network(OPERATOR_CREATE)
+  if (networking.shouldProceed(getState())) {
+    dispatch(networking.begin)
+    dispatch(newInfoNotify('提示', '正在创建操作员', 2000))
+    ajax('/api/user', {
+      data: JSON.stringify(operator),
+      method: 'POST',
+      contentType: 'application/json'
+    }).then(res => {
+      dispatch(networking.endSuccess)
+      dispatch({ type: NEW_OPERATOR, data: res.data.user })
+      dispatch(newSuccessNotify('提示', '创建操作员成功！', 2000))
+      dispatch(push('/operator'))
+    }).catch(err => {
+      dispatch(networking.endFailure)
+      dispatch(newErrorNotify('错误', '创建操作员失败！', 2000))
+      throw err
+    })
+  }
+}
+
+export const updateOperator = operator => (dispatch, getState) => {
+  const networking = network(OPERATOR_UPDATE)
+  if (networking.shouldProceed(getState())) {
+    dispatch(networking.begin)
+    dispatch(newInfoNotify('提示', '正在更新操作员', 2000))
+    ajax(`/api/user/${operator._id}`, {
+      data: JSON.stringify(operator),
+      method: 'POST',
+      contentType: 'application/json'
+    }).then(res => {
+      dispatch(networking.endSuccess)
+      dispatch({ type: NEW_OPERATOR, data: res.data.user })
+      dispatch(newSuccessNotify('提示', '更新操员成功！', 2000))
+      dispatch(push('/operator'))
+    }).catch(err => {
+      dispatch(networking.endFailure)
+      dispatch(newErrorNotify('错误', '更新操作员失败！', 2000))
+      throw err
+    })
+  }
+}

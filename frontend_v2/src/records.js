@@ -2,29 +2,7 @@
  * Created by seal on 22/01/2017.
  */
 
-import { Map, Record, List } from 'immutable'
-
-export const ArticleRecord = Record({
-  _id: '',
-  type: '',
-  name: '',
-  sizes: List(),
-  unit: '',
-  sizeUnit: '',
-  countUnit: '',
-  convert: 1,
-  convertUnit: '',
-})
-
-export const UserRecord = Record({
-  _id: '',
-  username: '',
-  password: '',
-  projects: [],
-  profile: {
-    name: ''
-  }
-})
+import { Map, Record } from 'immutable'
 
 export const SystemRecord = Record({
   online: 0,
