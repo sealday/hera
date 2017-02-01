@@ -31,12 +31,11 @@ import {
 
 import {
   Purchase,
-  TransferInEdit,
-  TransferOutEdit,
   TransferOrder,
   TransportOrder,
   TransportOrderEdit,
   TransferCreate,
+  TransferEdit,
 } from './store'
 
 import {
@@ -118,8 +117,7 @@ ajax('/api/load').then(res => {
           {/* direction 表示调拨的方向 取值为 in 和 out  */}
           <Route path="transfer/:direction/create" component={TransferCreate}/>
           <Route path="transfer/:recordId" component={TransferOrder}/>
-          <Route path="transfer_out/:recordId" component={TransferOutEdit}/>
-          <Route path="transfer_in/:recordId" component={TransferInEdit}/>
+          <Route path="transfer/:direction/:id/edit" component={TransferEdit}/>
 
           <Route path="transport/:id" component={TransportOrder}/>
           <Route path="transport/:id/edit" component={TransportOrderEdit}/>
