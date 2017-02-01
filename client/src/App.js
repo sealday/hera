@@ -52,12 +52,12 @@ class App extends Component {
                     {props.nav.report && <ul>
                       <li><Link to="/search">仓库明细检索</Link></li>
                       <li><Link to="/store">仓库库存查询</Link></li>
-                      <li><Link to="transfer_in_table">采购入库明细表</Link></li>
-                      <li><Link to="transfer_out_table">销售出库明细表</Link></li>
-                      <li><Link to="transfer_in_table">调拨入库明细表（收料）</Link></li>
-                      <li><Link to="transfer_out_table">调拨出库明细表（发料）</Link></li>
-                      <li><Link to="#">盘点盈余入库明细表</Link></li>
-                      <li><Link to="#">盘点亏损出库明细表</Link></li>
+                      <li><Link to="/purchase_table">采购入库明细表</Link></li>
+                      <li><Link to="/sell_table">销售出库明细表</Link></li>
+                      <li><Link to="/transfer_in_table">调拨入库明细表（收料）</Link></li>
+                      <li><Link to="/transfer_out_table">调拨出库明细表（发料）</Link></li>
+                      <li><Link to="/">盘点盈余入库明细表</Link></li>
+                      <li><Link to="/">盘点亏损出库明细表</Link></li>
                     </ul>}
                   </ReactCSSTransitionGroup>
                 </li>

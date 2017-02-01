@@ -111,6 +111,11 @@ exports.search = (req, res, next) => {
       }
     }
 
+    // 记录类型
+    if (condition.type) {
+      match['type'] = condition.type
+    }
+
     // 约束最小数量
     if (condition.startCount) {
       match['entries.count']['$gte'] = Number(condition.startCount)
@@ -156,7 +161,8 @@ exports.search = (req, res, next) => {
           size: '$entries.size',
           count: '$entries.count',
           number: '$number',
-          type: '$type'
+          type: '$type',
+          vendor: '$vendor'
           //recordId: '$recordId'
         }
       }
