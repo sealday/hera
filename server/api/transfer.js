@@ -55,9 +55,12 @@ exports.detail = (req, res, next) => {
 }
 
 exports.update = (req, res, next) => {
+  let transfer = req.body
+  delete transfer._id // 删除 _id 否则正在创建历史记录时会出问题
+
   Record.findById(req.params.id).then(record => {
-    Object.assign(record, req.body)
-    let historyRecord = new HistoryRecord(req.body)
+    Object.assign(record, transfer)
+    let historyRecord = new HistoryRecord(transfer)
     historyRecord.type = '调拨'
     historyRecord.order = record._id
     historyRecord.status  = record.status
