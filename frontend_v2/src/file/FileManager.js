@@ -58,6 +58,11 @@ class FileManager extends Component {
     });
   }
 
+  isImage(filename) {
+    const last = filename.toLowerCase().substr(-3, 3)
+    return last === 'jpg' || last === 'png'
+  }
+
   render() {
     return (
       <div>
@@ -69,13 +74,14 @@ class FileManager extends Component {
             <p>{this.state.message}</p>
           </div>
         </form>
-        <table style={{maxWidth: '1024px'}} className="table">
+        <table className="table table-responsive">
           <thead>
           <tr>
             <th>文件名</th>
             <th>文件类型</th>
             <th>文件大小</th>
             <th>下载链接</th>
+            <th>图片预览</th>
           </tr>
           </thead>
           <tbody>
@@ -86,6 +92,13 @@ class FileManager extends Component {
                 <td>{file.mimetype}</td>
                 <td>{file.size}</td>
                 <td><a href={`/api/file/${file.originalname}?id=${file.filename}`}>下载</a></td>
+                <td>
+                  {this.isImage(file.originalname) && (
+                    <img width={40} height={40}
+                         src={`/api/file/${file.originalname}?id=${file.filename}`}
+                    />
+                  )}
+                </td>
               </tr>
             );
           })}
