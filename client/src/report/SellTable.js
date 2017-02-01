@@ -3,21 +3,20 @@
  */
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { transformArticle } from '../utils'
 import TransferTable from './TransferTable'
-import { requestOutRecords } from '../actions'
+import { transformArticle } from '../utils'
+import { requestInRecords } from '../actions'
 
-
-class TransferOutTable extends Component {
+class TransferInTable extends Component {
   componentDidMount() {
-    this.props.dispatch(requestOutRecords())
+    this.props.dispatch(requestInRecords())
   }
 
   render() {
     return (
       <div>
         <TransferTable
-          stock="inStock"
+          stock="outStock"
           {...this.props}
         />
       </div>
@@ -27,14 +26,14 @@ class TransferOutTable extends Component {
 
 const mapStateToProps = state => {
   return {
-    outStock: state.system.base._id,
-    records: state.store.out.filter(record => record.type == '调拨'),
+    inStock: state.system.base._id,
+    records: state.store.in.filter(record => record.type == '销售'),
     projects: state.system.projects,
-    fetching: state.store.fetching_out,
+    fetching: state.store.fetching_in,
     articles: state.system.articles.toArray(),
     ...transformArticle(state.system.articles.toArray())
   }
 }
 
 
-export default connect(mapStateToProps)(TransferOutTable)
+export default connect(mapStateToProps)(TransferInTable)
