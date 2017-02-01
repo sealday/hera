@@ -112,18 +112,38 @@ export function nav(state = new NavRecord(), action) {
   }
 }
 
-export function postWorkerCheckin(state= new WorkerRecord(),action) {
+export function requestWorkerlist(state= new WorkerRecord(),action) {
     switch (action.type){
+        case actionTypes.REQUEST_WORKERS_SUCCESS:
+            return state.set('requesting',false).update('data',data=>data.concat(action.data));
+        case actionTypes.REQUEST_WORKERS:
+            return state.set('requesting',true);
+        case actionTypes.REQUEST_WORKERS_FAILURE:
+            return state.set('requesting',false);
         case actionTypes.POST_WORKERIN:
             return state.set('posting',true);
         case actionTypes.POST_WORKERIN_SUCCESS:
             return state.set('posting',false).update('data',data => data.concat(action.data));
         case actionTypes.POST_WORKERIN_FAILURE:
             return state.set('posting',false);
+        case actionTypes.ALTER_WORKER:
+          return state.set('posting',true)
+        case actionTypes.ALTER_WORKER_SUCCESS:
+          const worker = action.data;
+          const workers = state.get('data');
+            workers.forEach((w,i)=>{
+              if (w._id === worker._id){
+                workers[i]= worker
+              }
+            })
+            return state.set('posting',false).set('data',workers)
+        case actionTypes.ALTER_WORKER_FAILURE:
+          return state.set('posting',false)
         default:
-            return state
+          return state;
     }
 }
+
 export function postTransfer(state = new PostRecord(), action) {
   switch (action.type) {
     case actionTypes.POST_TRANSFER:

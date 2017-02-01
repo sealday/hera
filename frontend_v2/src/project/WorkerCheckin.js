@@ -5,14 +5,15 @@ import React, {Component} from 'react';
 import moment from 'moment';
 import WorkerCheckinForm from './WorkerCheckinForm'
 import { connect } from 'react-redux'
-
+import { Link } from 'react-router'
 import {postWorkerCheckin} from  '../actions';
+import {requestWorkerlist} from '../actions'
+
 class WorkerCheckin extends Component{
-    constructor(props){
-        super(props)
 
+    componentDidMount() {
+        this.props.dispatch(requestWorkerlist())
     }
-
 
     handleSubmit=(data)=>{
 
@@ -22,6 +23,7 @@ class WorkerCheckin extends Component{
     render(){
         return (
             <div>
+                <h2>劳务人员进场登记</h2>
                 <WorkerCheckinForm
                 onSubmit={this.handleSubmit}
                 />
@@ -42,20 +44,22 @@ const InfoList = (props)=>(
             <th>联系电话</th>
             <th>身份证号</th>
             <th>家庭住址</th>
+            <th>操作</th>
         </tr>
         </thead>
         <tbody>
         {
             props.infolist.map(info=>(
             <tr key={info._id}>
-                <td>{info.username}</td>
+                <td>{info.name}</td>
+                <td>{info.gender}</td>
                 <td>{info.age}</td>
-                <td>{info.sex}</td>
-                <td>{info.phonenumber}</td>
-                <td>{info.workcategory}</td>
-                <td>{moment(info.date).format('YYYY-MM-DD')}</td>
+                <td>{info.category}</td>
+                <td>{moment(info.birthday).format('YYYY-MM-DD')}</td>
+                <td>{info.phone}</td>
                 <td>{info.idcard}</td>
                 <td>{info.address}</td>
+                <td><Link to={`/worker/${info._id}/edit`}>编辑</Link><Link to={`/worker/${info._id}/edit`}>删除</Link></td>
             </tr>
         ))}
         </tbody>
@@ -63,7 +67,7 @@ const InfoList = (props)=>(
 )
 
 const mapStateToProps = state =>{
-    let w = state.postWorkerCheckin.data || [];
+    let w = state.requestWorkerlist.data;
     return {
         workers:w
     }

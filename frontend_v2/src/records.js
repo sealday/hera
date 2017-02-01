@@ -47,6 +47,7 @@ export const PostRecords = Record({
 
 export const WorkerRecord = Record({
   posting:false,
+  requesting:false  ,
 
   data:[]
 })
