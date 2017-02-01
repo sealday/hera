@@ -2,7 +2,7 @@
  * Created by seal on 16/01/2017.
  */
 import React, { Component } from 'react';
-import { toFixedWithoutTrailingZero, calculateSize, makeKeyFromNameSize, getPinyin, filterOption, formatNumber } from '../utils'
+import { toFixedWithoutTrailingZero, calculateSize, makeKeyFromNameSize, filterOption, formatNumber } from '../utils'
 import { connect } from 'react-redux'
 import Select from 'react-select'
 import { requestStore } from '../actions'
@@ -166,7 +166,7 @@ class Store extends Component {
               options={this.props.projects.map(project => ({
                 value: project._id,
                 label: project.company + project.name,
-                pinyin: getPinyin(project.company + project.name)
+                pinyin: project.pinyin
               }))}
               filterOption={filterOption}
               onChange={this.handleProjectChange}
