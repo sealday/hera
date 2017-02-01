@@ -31,9 +31,7 @@ import {
 
 import {
   Purchase,
-  TransferIn,
   TransferInEdit,
-  TransferOut,
   TransferOutEdit,
   TransferOrder,
   TransportOrder,
@@ -117,9 +115,8 @@ ajax('/api/load').then(res => {
           <Route path="search" component={Search}/>
           <Route path="article" component={Article}/>
           <Route path="purchase" component={Purchase}/>
-          <Route path="transfer/create" component={TransferCreate}/>
-          <Route path="transfer_in" component={TransferIn}/>
-          <Route path="transfer_out" component={TransferOut}/>
+          {/* direction 表示调拨的方向 取值为 in 和 out  */}
+          <Route path="transfer/:direction/create" component={TransferCreate}/>
           <Route path="transfer/:recordId" component={TransferOrder}/>
           <Route path="transfer_out/:recordId" component={TransferOutEdit}/>
           <Route path="transfer_in/:recordId" component={TransferInEdit}/>
