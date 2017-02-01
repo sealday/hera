@@ -11,25 +11,16 @@ const userSchema = new mongoose.Schema({
   passwordResetToken: String,
   passwordResetExpires: Date,
 
-  facebook: String,
-  twitter: String,
-  google: String,
-  github: String,
-  instagram: String,
-  linkedin: String,
-  steam: String,
-  tokens: Array,
+  role: String, // 保存角色信息，系统管理员、基地管理员、项目部管理员
+  managed: Array, // 当前管理的项目，只针对项目部管理员设立
+  comments: String, // 关于这个角色的备注
 
-  projects: Array, // 保存操作员能操作的项目
+  projects: Array, // 暂时不用，拟定用来保存常用项目列表
   defaultProject: String,
   type: Number, // 258 是超级管理员
 
   profile: {
     name: String,
-    gender: String,
-    location: String,
-    website: String,
-    picture: String
   },
 
 }, { timestamps: true });

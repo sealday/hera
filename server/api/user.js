@@ -91,10 +91,18 @@ exports.list = (req, res, next) => {
 }
 
 exports.create = (req, res, next) => {
+  if (!req.body.username || !req.body.password || !req.body.profile || !req.body.role) {
+    return res.status(400).json({
+      message: '表单填写不完整'
+    })
+  }
   let user = new User(req.body)
-  user.save().then(() => {
+  user.save().then(user => {
     res.json({
-      message: '创建用户成功'
+      message: '创建用户成功',
+      data: {
+        user
+      }
     })
   }).catch(err => {
     next(err)
@@ -102,10 +110,13 @@ exports.create = (req, res, next) => {
 }
 
 exports.update = (req, res, next) => {
-  let _id = req.body._id
-  User.findByIdAndUpdate(_id, req.body).then(() => {
+  let id = req.params.id
+  User.findByIdAndUpdate(id, req.body, { new: true }).then(user => {
     res.json({
-      message: '更新用户成功'
+      message: '更新用户成功',
+      data: {
+        user
+      }
     })
   }).catch(err => {
     next(err)

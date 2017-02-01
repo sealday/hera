@@ -6,8 +6,6 @@ import * as actionTypes from './actions'
 import { Map, OrderedMap } from 'immutable'
 import {
   SystemRecord,
-  ArticleRecord,
-  UserRecord,
   StoreRecord,
   NavRecord,
   PostRecord,
@@ -18,23 +16,11 @@ import {
 export function system(state = new SystemRecord(), action) {
   switch (action.type) {
     case actionTypes.SYSTEM_LOADED:
-      let base = action.data.base
-      let projects = new Map().withMutations(projects => {
-        action.data.projects.forEach(project => {
-          projects.set(project._id, project)
-        })
-      })
-      let articles = new OrderedMap().withMutations(articles => {
-        action.data.articles.forEach(article => {
-          articles.set(article.name, new ArticleRecord(article))
-        })
-      })
+      const base = action.data.base
+      const projects = new Map(action.data.projects.map(project => [project._id, project]))
+      const users = new Map(action.data.users.map(user => [user._id, user]))
+      const articles = new OrderedMap(action.data.articles.map(article => [article._id, article]))
 
-      let users = new Map().withMutations(users => {
-        action.data.users.forEach(user => {
-          users.set(user._id, new UserRecord(user))
-        })
-      })
       return state.set('base', base)
         .set('projects', projects)
         .set('articles', articles)
@@ -42,7 +28,7 @@ export function system(state = new SystemRecord(), action) {
     case actionTypes.ONLINE_USER_CHANGE:
       return state.set('online', action.data)
     case actionTypes.UPDATE_ARTICLE_SIZES:
-      return state.updateIn(['articles', action.data.id], article => article.set('sizes', action.data.sizes))
+      return state.updateIn(['articles', action.data.id], article => ({ ...article, sizes: action.data.sizes }) )
     case actionTypes.NEW_NOTIFY:
       const item = action.data
       return state.update('notifications', notifications => notifications.set(item.key, item))
@@ -54,6 +40,8 @@ export function system(state = new SystemRecord(), action) {
       return state.update('projects', projects => projects.set(project._id, project))
     case actionTypes.SELECT_STORE:
       return state.set('store', action.data)
+    case actionTypes.NEW_OPERATOR:
+      return state.setIn(['users', action.data._id], action.data)
     default:
       return state
   }
@@ -105,6 +93,8 @@ export function store(state = new StoreRecord(), action) {
     case actionTypes.UPDATE_STORE:
       const stock = action.data
       return state.update('stocks', stocks => stocks.set(stock.id, stock))
+    case actionTypes.STORE_SEARCH:
+      return state.set('search', action.data)
     default:
       return state
   }
@@ -140,16 +130,12 @@ export function requestWorkerlist(state= new WorkerRecord(),action) {
           return state.set('posting',true)
         case actionTypes.ALTER_WORKER_SUCCESS:
           const worker = action.data;
-          console.log(JSON.stringify(worker))
           const workers = state.get('data');
-          console.log(JSON.stringify(workers))
             workers.forEach((w,i)=>{
-              if (w._id === worker.id){
+              if (w._id === worker._id){
                 workers[i]= worker
               }
             })
-            console.log(JSON.stringify(workers))
-
             return state.set('posting',false).set('data',workers)
         case actionTypes.ALTER_WORKER_FAILURE:
           return state.set('posting',false)
@@ -205,6 +191,18 @@ export function requestStore(state = new PostRecords(), action) {
       return state.update('posting', posting => posting.set(action.data, false))
     case actionTypes.REQUEST_STORE_FAILURE:
       return state.update('posting', posting => posting.set(action.data, false))
+    default:
+      return state
+  }
+}
+
+export function networks(state = new Map(), action) {
+  switch (action.type) {
+    case actionTypes.NETWORK_BEGIN:
+      return state.set(action.data, true)
+    case actionTypes.NETWORK_END_SUCCESS:
+    case actionTypes.NETWORK_END_FAILURE:
+      return state.set(action.data, false)
     default:
       return state
   }
