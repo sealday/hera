@@ -92,10 +92,6 @@ export const filterOption = (option, filter) => {
   return fuzzysearch(filter, option.pinyin) || fuzzysearch(filter, option.label)
 }
 
-export const getPinyin = (chinese) => {
-  return pinyin(chinese, {style: pinyin.STYLE_NORMAL, heteronym: true}).map(array => array.join('')).join('')
-}
-
 let formatNumber_
 
 if (Intl) {
