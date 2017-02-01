@@ -85,7 +85,7 @@ class FileManager extends Component {
                 <td>{file.originalname}</td>
                 <td>{file.mimetype}</td>
                 <td>{file.size}</td>
-                <td><a href={`/uploads/${file.originalname}?filename=${file.filename}`}>下载</a></td>
+                <td><a href={`/api/file/${file.originalname}?id=${file.filename}`}>下载</a></td>
               </tr>
             );
           })}
