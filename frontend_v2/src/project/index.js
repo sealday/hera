@@ -3,4 +3,4 @@
  */
 
 export { default as WorkerCheckin } from './WorkerCheckin'
-
+export { default as WorkerCheckinEdit} from './WorkerCheckinEdit'

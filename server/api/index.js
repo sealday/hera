@@ -37,7 +37,7 @@ router.get('/project/:id', project.detail)
 router.post('/project/:id', project.update)
 
 router.post('/workercheckin',workercheckin.create)
-router.post('/workercheckin:id',workercheckin.update);
+router.post('/workercheckin/:id',workercheckin.update);
 router.get('/workercheckin',workercheckin.list);
 router.delete('/workercheckin:id',workercheckin.delete)
 

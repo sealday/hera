@@ -34,9 +34,14 @@ exports.create = (req,res,next)=>{
 
 exports.update = (req,res,next)=>{
     const id = req.params.id;
-    Worker.findByIdAndUpdate(id,req.body).then(()=>{
+    const workerinfo = req.body
+
+    Worker.findByIdAndUpdate(id,req.body,{new:true}).then(()=>{
         res.json({
-            message:'更新成功'
+            message:'更新成功',
+            data: {
+                workerinfo
+            }
         })
     }).catch(err=>{
         next(err);
