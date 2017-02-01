@@ -19,6 +19,7 @@ class TransportOrderEdit extends Component {
       weight             : '', // 重量
       price              : '', // 价格
       payer              : '', // 付款方
+      payDate            : null, // 付款日期
       'pay-info'         : '', // 付款信息
       payee              : '', // 收款人
       bank               : '', // 银行
@@ -50,6 +51,7 @@ class TransportOrderEdit extends Component {
         ...record.transport,
         'off-date': moment(record.transport['off-date']),
         'arrival-date': moment(record.transport['arrival-date']),
+        payDate: record.transport.payDate && moment(record.transport.payDate)
       })
     } else {
       const projects = this.props.projects

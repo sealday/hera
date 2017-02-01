@@ -55,6 +55,7 @@ const recordSchema = {
     weight: String, // 重量
     price: String, // 价格
     payer: String, // 付款方
+    payDate: Date, // 付款日期
     'pay-info': String, // 付款信息
     payee: String, // 收款人
     bank: String, // 银行
