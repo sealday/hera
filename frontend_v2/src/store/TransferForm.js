@@ -7,7 +7,7 @@ import React, { Component } from 'react';
 import { reduxForm, Field, FieldArray } from 'redux-form'
 import { Input, DatePicker, FilterSelect, Select } from '../components'
 import { connect } from 'react-redux'
-import { transformArticle, calculateSize, toFixedWithoutTrailingZero as fixed } from '../utils'
+import { transformArticle, calculateSize, toFixedWithoutTrailingZero as fixed, validator } from '../utils'
 import moment from 'moment'
 
 const EntryTable = connect(
@@ -109,6 +109,7 @@ const EntryTable = connect(
                 name={`${entry}.name`}
                 component={FilterSelect}
                 options={getNameOptions(fields.get(index).type)}
+                validate={validator.required}
                 placeholder="名称"
               />
             </td>
@@ -117,10 +118,11 @@ const EntryTable = connect(
                 name={`${entry}.size`}
                 component={FilterSelect}
                 options={getSizeOptions(fields.get(index).name)}
+                validate={validator.required}
                 placeholder="规格"
               />
             </td>
-            <td><Field name={`${entry}.count`} component={Input}/></td>
+            <td><Field name={`${entry}.count`} component={Input} validate={validator.required}/></td>
             <td>{getTotal(index)}</td>
             <td>
               <button
@@ -156,6 +158,7 @@ class TransferForm extends Component {
             <Field
               name="project"
               component={FilterSelect}
+              validate={validator.required}
               options={this.props.projects.map(project => ({ value: project._id, label: project.company + project.name }))}
               placeholder="请选择项目" />
           </div>
