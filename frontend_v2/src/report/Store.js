@@ -13,7 +13,7 @@ class Store extends Component {
     super(props)
     this.state = {
       records: [],
-      project: '',
+      project: props.store._id,
       showing: new Map()
     }
   }
@@ -202,6 +202,7 @@ const mapStateToProps = state => ({
   projects: state.system.projects.toArray(),
   articles: state.system.articles.toArray(),
   stocks: state.store.stocks,
+  store: state.system.store,
 })
 
 export default connect(mapStateToProps)(Store);
