@@ -66,6 +66,7 @@ class TransferCreate extends Component {
 
     return (
       <div>
+        <button className="btn btn-default hidden-print" onClick={e => this.props.router.goBack()}>返回</button>
         <h2 className="page-header">{pageTitle}</h2>
         <TransferForm
           onSubmit={this.handleSubmit}
