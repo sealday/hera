@@ -4,12 +4,14 @@
 
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const pinyin = require('pinyin')
 
 const projectSchema = new Schema({
   name: String, // 项目名称
   company: String, // 公司名称
   abbr: String,  // 项目简称
   completeName: String, // 全称
+  pinyin: String, // 公司名称加项目简称的拼音
   contacts: [{
     name: String, // 联系人姓名
     phone: String // 联系人电话
@@ -49,6 +51,12 @@ projectSchema.methods.initStore = function initStore() {
     });
   });
 };
+
+projectSchema.pre('save', function(next) {
+  this.pinyin = pinyin(this.company + this.name,
+    {style: pinyin.STYLE_NORMAL, heteronym: true}).map(array => array.join('')).join('')
+  next()
+})
 
 const Project = mongoose.model('Project', projectSchema);
 module.exports = Project;

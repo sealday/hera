@@ -7,7 +7,7 @@ import { reduxForm, Field, formValueSelector } from 'redux-form'
 import { FilterSelect, DatePicker, Input } from '../components'
 import { connect } from 'react-redux'
 import moment from 'moment'
-import { getPinyin, filterOption, transformArticle } from '../utils'
+import { filterOption, transformArticle } from '../utils'
 
 /**
  * 搜索用的表单
@@ -17,14 +17,14 @@ class TransferSearchForm extends React.Component {
   defaultOption = {
     value: '',
     label: '全部',
-    pinyin: getPinyin('全部')
+    pinyin: 'quanbu'
   }
 
   getStockOptions = projects => {
     return [this.defaultOption].concat(projects.map(project => ({
       value: project._id,
       label: project.company + project.name,
-      pinyin: getPinyin(project.company + project.name)
+      pinyin: project.pinyin
     })))
   }
 
@@ -33,7 +33,7 @@ class TransferSearchForm extends React.Component {
     return [this.defaultOption].concat(articles.map(article => ({
       value: article.name,
       label: article.name,
-      pinyin: getPinyin(article.name)
+      pinyin: article.pinyin
     })))
   }
 

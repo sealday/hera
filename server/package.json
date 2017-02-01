@@ -22,6 +22,7 @@
     "morgan": "~1.7.0",
     "multer": "^1.2.1",
     "node-uuid": "^1.4.7",
+    "pinyin": "^2.8.0",
     "pug": "~2.0.0-beta6",
     "serve-favicon": "~2.3.0",
     "socket.io": "^1.7.2"
