@@ -189,7 +189,7 @@ export const alterWorker = (worker)=>(dispatch,getState)=>{
       const workerinfo = res.data.workerinfo;
       dispatch({type:ALTER_WORKER_SUCCESS,data:workerinfo})
       dispatch(newSuccessNotify('提示','修改工人信息成功',2000))
-      dispatch(push(`/workercheckin?id=${workerinfo._id}`))
+      dispatch(push(`/worker_checkin`))
       }).catch(err=>{
       dispatch({type:ALTER_WORKER_FAILURE})
       dispatch(newErrorNotify('警告','修改工人信息失败',2000))
