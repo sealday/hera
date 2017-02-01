@@ -4,7 +4,7 @@
 
 import React from 'react'
 import { reduxForm, Field, formValueSelector } from 'redux-form'
-import { FilterSelect, DatePicker, Input } from '../components'
+import { FilterSelect, DatePicker, Input, Select } from '../components'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import { filterOption, transformArticle } from '../utils'
@@ -66,6 +66,18 @@ class TransferSearchForm extends React.Component {
             <Field name="inStock" component={FilterSelect} placeholder="仓库" options={this.getStockOptions(projects)}
                    filterOption={filterOption}
             />
+          </div>
+          <label className="control-label col-md-1">记录类型</label>
+          <div className="col-md-2">
+            <Field name="type"
+                   component={Select}
+                   placeholder="类型"
+            >
+              <option value=''>全部</option>
+              <option>采购</option>
+              <option>销售</option>
+              <option>调拨</option>
+            </Field>
           </div>
         </div>
         <div className="form-group">
