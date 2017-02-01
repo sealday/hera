@@ -28,7 +28,7 @@ router.get('/load', user.load);
 
 router.get('/user', user.list)
 router.post('/user', user.create)
-router.post('/user_update', user.update)
+router.post('/user/:id', user.update)
 
 router.get('/article', article.list);
 router.get('/project', project.list);

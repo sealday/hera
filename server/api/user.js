@@ -102,8 +102,8 @@ exports.create = (req, res, next) => {
 }
 
 exports.update = (req, res, next) => {
-  let _id = req.body._id
-  User.findByIdAndUpdate(_id, req.body).then(() => {
+  let id = req.params.id
+  User.findByIdAndUpdate(id, req.body).then(() => {
     res.json({
       message: '更新用户成功'
     })
