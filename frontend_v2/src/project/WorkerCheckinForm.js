@@ -35,16 +35,15 @@ class WorkerCheckinForm extends Component {
         return (
             <div>
                 <form onSubmit={this.props.handleSubmit}>
-                    <h2>劳务人员进场登记</h2>
                     <div className="form-horizontal">
                         <div className="form-group">
                             <label htmlFor="" className="col-md-1 control-label">姓名</label>
                             <div className="col-md-3">
-                                <Field name="username" component={Input} />
+                                <Field name="name" component={Input} />
                             </div>
                             <label htmlFor="" className="col-md-1 control-label">性别</label>
                             <div className="col-md-3">
-                                <Field  name="sex"component={Input} />
+                                <Field  name="gender"component={Input} />
                             </div>
                             <label htmlFor="" className="col-md-1 control-label">年龄</label>
                             <div className="col-md-3">
@@ -54,16 +53,16 @@ class WorkerCheckinForm extends Component {
                         <div className="form-group">
                             <label htmlFor="" className="col-md-1 control-label">工种</label>
                             <div className="col-md-3">
-                                <Field  component={Input} name="workcategory" />
+                                <Field  component={Input} name="category" />
                             </div>
                             <label htmlFor="" className="col-md-1 control-label">出生年月</label>
                             <div className="col-md-3">
-                                <Field name="date"  component={DatePicker}/>
+                                <Field name="birthday"  component={DatePicker} />
                             </div>
                             <label htmlFor="" className="col-md-1 control-label">联系电话</label>
 
                             <div className="col-md-3">
-                                <Field  component={Input} name="phonenumber" />
+                                <Field  component={Input} name="phone" />
                             </div>
                         </div>
                         <div className="form-group">
@@ -96,7 +95,7 @@ class WorkerCheckinForm extends Component {
 WorkerCheckinForm = reduxForm({
     form:'WorkerCheckinForm',
     initialValues:{
-        date:moment()
+        birthday:moment()
     }
 })(WorkerCheckinForm)
 

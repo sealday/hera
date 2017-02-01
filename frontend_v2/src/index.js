@@ -47,6 +47,7 @@ import {
 
 import {
   WorkerCheckin,
+  WorkerCheckinEdit
 } from './project'
 
 import {
@@ -102,7 +103,9 @@ ajax('/api/load').then(res => {
           <IndexRoute component={Home}/>
           <Route path="file_manager" component={FileManager}/>
             {/*劳务人员登记*/}
-          <Route path="/worker_checkin" component={WorkerCheckin}/>
+          <Route path="worker_checkin" component={WorkerCheckin}/>
+          <Route path="worker/:id/edit" component={WorkerCheckinEdit}/>
+
           <Route path="operator" component={Operator}/>
           <Route path="operator/create" component={OperatorCreate}/>
           <Route path="operator/:id/edit" component={OperatorEdit}/>
