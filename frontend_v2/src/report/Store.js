@@ -19,13 +19,13 @@ class Store extends Component {
   }
 
   handleProjectChange = (project) => {
-    this.setState({ project: project })
+    this.setState({ project: project.value })
   }
 
   query = (e) => {
     e.preventDefault()
     if (this.state.project) {
-      this.props.dispatch(requestStore(this.state.project.value))
+      this.props.dispatch(requestStore(this.state.project))
       this.setState({
         showing: new Map() // 重置状态显示
       })
@@ -102,7 +102,7 @@ class Store extends Component {
   }
 
   render() {
-    let project = this.state.project.value
+    let project = this.state.project
     let stocks = this.props.stocks
 
     let recordsTable = []
