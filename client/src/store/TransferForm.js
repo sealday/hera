@@ -72,9 +72,9 @@ const EntryTable = connect(
     return total
   }
 
-  const getStock = () => {
-    return 0
-  }
+  //const getStock = () => {
+  //  return 0
+  //}
 
   return (
     <div className="panel panel-default">

@@ -96,6 +96,7 @@ class FileManager extends Component {
                   {this.isImage(file.originalname) && (
                     <img width={40} height={40}
                          src={`/api/file/${file.originalname}?id=${file.filename}`}
+                         role="presentation"
                     />
                   )}
                 </td>
