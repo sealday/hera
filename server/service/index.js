@@ -7,6 +7,8 @@ exports.io = null
 exports.sockets = []
 exports.stock = {} // { ObjectId: { valid, inRecords, outRecords} }
 
+exports.root = null // 项目根路径，由 app 文件设置
+
 exports.invalidStockCache = (stockId) => {
   if (exports.stock[stockId]) {
     exports.stock[stockId].valid = false

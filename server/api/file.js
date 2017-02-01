@@ -2,6 +2,8 @@
  * Created by seal on 11/01/2017.
  */
 const File = require('../models/File');
+const path = require('path')
+const service = require('../service')
 
 exports.post =  (req, res, next) => {
   if (req.file)  {
@@ -27,3 +29,7 @@ exports.list = (req, res, next) => {
     next(err);
   });
 };
+
+exports.download = (req, res, next) => {
+  res.sendFile(path.join(service.root, 'public/uploads/', req.query.id));
+}

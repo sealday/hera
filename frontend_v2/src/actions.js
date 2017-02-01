@@ -2,6 +2,9 @@
  * Created by seal on 21/01/2017.
  */
 
+import { ajax } from './utils'
+import { push } from 'react-router-redux'
+
 export const UPDATE_PROJECTS = 'UPDATE_PROJECTS'
 export const UPDATE_ARTICLES =  'UPDATE_ARTICLES'
 export const UPDATE_RECORDS_CACHE =  'UPDATE_RECORDS_CACHE'
@@ -11,9 +14,6 @@ export const SYSTEM_LOADED = 'SYSTEM_LOADED'
 export const ONLINE_USER_CHANGE = 'ONLINE_USER_CHANGE'
 export const UPDATE_ARTICLE_SIZES = 'UPDATE_ARTICLE_SIZES'
 export const REMOVE_PROJECT = 'REMOVE_PROJECT'
-
-import { ajax } from './utils'
-import { push } from 'react-router-redux'
 
 export const NEW_NOTIFY = 'NEW_NOTIFY'
 export const DELETE_NOTIFY = 'DELETE_NOTIFY'
@@ -131,26 +131,6 @@ export const toggleMenu = (name) => ({
   type: TOGGLE_MENU,
   data: name
 })
-
-export const POST_TRANSFER = 'POST_TRANSFER'
-export const POST_TRANSFER_SUCCESS = 'POST_TRANSFER_SUCCESS'
-export const POST_TRANSFER_FAILURE = 'POST_TRANSFER_FAILURE'
-
-export const postTransfer = (record) => (dispatch, getState) => {
-  if (!getState().postTransfer.posting) {
-    dispatch({ type: POST_TRANSFER })
-    ajax('/api/transfer', {
-      data: JSON.stringify(record),
-      method: 'POST',
-      contentType: 'application/json'
-    }).then(res => {
-      dispatch({ type: POST_TRANSFER_SUCCESS, data: res.data })
-    }).catch(err => {
-      dispatch({ type: POST_TRANSFER_FAILURE })
-      alert('出错了' + JSON.stringify(err));
-    });
-  }
-}
 
 export const REQUEST_RECORD = 'REQUEST_RECORD'
 export const REQUEST_RECORD_SUCCESS = 'REQUEST_RECORD_SUCCESS'
@@ -415,5 +395,53 @@ export const updateOperator = operator => (dispatch, getState) => {
       dispatch(newErrorNotify('错误', '更新操作员失败！', 2000))
       throw err
     })
+  }
+}
+
+export const POST_TRANSFER = 'POST_TRANSFER'
+
+export const postTransfer = (record) => (dispatch, getState) => {
+  const networking = network(POST_TRANSFER)
+  if (networking.shouldProceed(getState())) {
+    dispatch(networking.begin)
+    dispatch(newInfoNotify('提示', '正在创建调拨单', 2000))
+    ajax('/api/transfer', {
+      data: JSON.stringify(record),
+      method: 'POST',
+      contentType: 'application/json'
+    }).then(res => {
+      dispatch(networking.endSuccess)
+      dispatch(updateRecord(res.data.record))
+      dispatch(newSuccessNotify('提示', '创建调拨单成功！', 2000))
+      dispatch(push(`/transfer/${res.data.record._id}`))
+    }).catch(err => {
+      dispatch(networking.endFailure)
+      dispatch(newErrorNotify('错误', '创建调拨单失败！', 2000))
+      throw err
+    });
+  }
+}
+
+export const UPDATE_TRANSFER = 'UPDATE_TRANSFER'
+
+export const updateTransfer = (record) => (dispatch, getState) => {
+  const networking = network(UPDATE_TRANSFER)
+  if (networking.shouldProceed(getState())) {
+    dispatch(networking.begin)
+    dispatch(newInfoNotify('提示', '正在更新调拨单', 2000))
+    ajax(`/api/transfer/${record._id}`, {
+      data: JSON.stringify(record),
+      method: 'POST',
+      contentType: 'application/json'
+    }).then(res => {
+      dispatch(networking.endSuccess)
+      dispatch(updateRecord(res.data.record))
+      dispatch(newSuccessNotify('提示', '更新调拨单成功！', 2000))
+      dispatch(push(`/transfer/${res.data.record._id}`))
+    }).catch(err => {
+      dispatch(networking.endFailure)
+      dispatch(newErrorNotify('错误', '更新调拨单失败！', 2000))
+      throw err
+    });
   }
 }
