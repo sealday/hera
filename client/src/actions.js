@@ -4,6 +4,8 @@
 
 import { ajax } from './utils'
 import { push } from 'react-router-redux'
+import {reset} from 'redux-form'
+
 
 export const UPDATE_PROJECTS = 'UPDATE_PROJECTS'
 export const UPDATE_ARTICLES =  'UPDATE_ARTICLES'
@@ -210,6 +212,7 @@ export const postWorkerCheckin = (workerin)=>(dispatch,getState)=>{
       method:'POST',
       contentType:'application/json'
     }).then(res=>{
+      dispatch(reset('WorkerCheckinForm'))
         dispatch({ type: POST_WORKERIN_SUCCESS,data:res.data.workerinfo })
         dispatch(newSuccessNotify('提示', '保存工人信息成功', 2000))
     }).catch(err=>{
