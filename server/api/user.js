@@ -92,9 +92,12 @@ exports.list = (req, res, next) => {
 
 exports.create = (req, res, next) => {
   let user = new User(req.body)
-  user.save().then(() => {
+  user.save().then(user => {
     res.json({
-      message: '创建用户成功'
+      message: '创建用户成功',
+      data: {
+        user
+      }
     })
   }).catch(err => {
     next(err)
@@ -103,9 +106,12 @@ exports.create = (req, res, next) => {
 
 exports.update = (req, res, next) => {
   let id = req.params.id
-  User.findByIdAndUpdate(id, req.body).then(() => {
+  User.findByIdAndUpdate(id, req.body, { new: true }).then(user => {
     res.json({
-      message: '更新用户成功'
+      message: '更新用户成功',
+      data: {
+        user
+      }
     })
   }).catch(err => {
     next(err)
