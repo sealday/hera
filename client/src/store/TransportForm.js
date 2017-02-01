@@ -41,6 +41,12 @@ class TransportForm extends Component {
           </div>
         </div>
         <div className="form-group">
+          <label className="col-sm-2 control-label">付款日期</label>
+          <div className="col-sm-4">
+            <Field name="payDate" component={DatePicker}/>
+          </div>
+        </div>
+        <div className="form-group">
           <label className="col-sm-2 control-label">收款人</label>
           <div className="col-sm-4">
             <Field name="payee" component={Input}/>

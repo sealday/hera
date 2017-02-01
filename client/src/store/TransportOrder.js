@@ -72,7 +72,7 @@ class TransportOrder extends Component {
           <tr>
             <th rowSpan="2">付款方式及收款人信息</th>
             <th>付款日期</th>
-            <td colSpan="2"></td>
+            <td colSpan="2">{transport.payDate && moment(transport.payDate).format('YYYY-MM-DD')}</td>
             <th>付款方</th>
             <td colSpan="2">{transport.payer}</td>
           </tr>
