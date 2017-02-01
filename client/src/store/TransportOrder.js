@@ -34,6 +34,7 @@ class TransportOrder extends Component {
       return  (
         <div>
           <h2>还未填写运输单！</h2>
+          <button className="btn btn-default hidden-print" onClick={this.handleBack}>返回</button>
           <button className="btn btn-primary hidden-print" onClick={this.handleEdit}>填写运输单</button>
         </div>
       )
