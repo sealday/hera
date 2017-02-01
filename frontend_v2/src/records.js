@@ -32,6 +32,7 @@ export const NavRecord = Record({
   report: true,
   system: false,
   project: false,
+  file: false
 })
 
 export const PostRecord = Record({
