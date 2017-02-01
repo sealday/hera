@@ -5,11 +5,17 @@
 import React, { Component } from 'react';
 import OperatorForm from './OperatorForm'
 import { connect } from 'react-redux'
+import { updateOperator } from '../actions'
 
 class OperatorEdit extends Component {
 
-  handleSubmit = (data) => {
-    alert(JSON.stringify(data))
+  handleSubmit = (operator) => {
+    this.props.dispatch(updateOperator(
+      {
+        ...operator,
+        _id: this.props.params.id
+      }
+    ))
   }
 
   render() {
