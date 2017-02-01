@@ -380,3 +380,27 @@ export const postTransfer = (record) => (dispatch, getState) => {
     });
   }
 }
+
+export const UPDATE_TRANSFER = 'UPDATE_TRANSFER'
+
+export const updateTransfer = (record) => (dispatch, getState) => {
+  const networking = network(UPDATE_TRANSFER)
+  if (networking.shouldProceed(getState())) {
+    dispatch(networking.begin)
+    dispatch(newInfoNotify('提示', '正在更新调拨单', 2000))
+    ajax(`/api/transfer/${record._id}`, {
+      data: JSON.stringify(record),
+      method: 'POST',
+      contentType: 'application/json'
+    }).then(res => {
+      dispatch(networking.endSuccess)
+      dispatch(updateRecord(res.data.record))
+      dispatch(newSuccessNotify('提示', '更新调拨单成功！', 2000))
+      dispatch(push(`/transfer/${res.data.record._id}`))
+    }).catch(err => {
+      dispatch(networking.endFailure)
+      dispatch(newErrorNotify('错误', '更新调拨单失败！', 2000))
+      throw err
+    });
+  }
+}
