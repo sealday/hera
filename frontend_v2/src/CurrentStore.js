@@ -39,29 +39,27 @@ class CurrentStore extends React.Component {
   render() {
     const props = this.props
     return (
-      <div>
-        <h2>管理入口</h2>
-        <div className="row">
-          <div className="col-xs-6">
-            <Select
-              value={this.state.base}
-              placeholder='选择仓库'
-              onChange={e => this.onBaseChange(e.value)}
-              clearable={false}
-              options={props.system.projects.filter(project => project.type === '基地仓库').toArray().map(project => ({ value: project._id, label: project.company + project.name}))}
-            />
-            <button className="btn btn-default btn-block" onClick={this.onBaseSelect}>总部管理</button>
-          </div>
-          <div className="col-xs-6">
-            <Select
-              value={this.state.project}
-              placeholder='选择项目'
-              onChange={e => this.onProjectChange(e.value)}
-              clearable={false}
-              options={props.system.projects.filter(project => project.type === '项目部仓库').toArray().map(project => ({ value: project._id, label: project.company + project.name}))}
-            />
-            <button className="btn btn-default btn-block" onClick={this.onProjectSelect}>项目部管理</button>
-          </div>
+      <div style={{maxWidth: '500px', margin: '0 auto'}}>
+        <h2 className="page-header">仓库选择</h2>
+        <div>
+          <Select
+            value={this.state.base}
+            placeholder='选择仓库'
+            onChange={e => this.onBaseChange(e.value)}
+            clearable={false}
+            options={props.system.projects.filter(project => project.type === '基地仓库').toArray().map(project => ({ value: project._id, label: project.company + project.name}))}
+          />
+          <button style={{marginTop: '1em'}} className="btn btn-primary btn-block" onClick={this.onBaseSelect}>基地管理</button>
+        </div>
+        <div style={{marginTop: '2em'}}>
+          <Select
+            value={this.state.project}
+            placeholder='选择项目'
+            onChange={e => this.onProjectChange(e.value)}
+            clearable={false}
+            options={props.system.projects.filter(project => project.type === '项目部仓库').toArray().map(project => ({ value: project._id, label: project.company + project.name}))}
+          />
+          <button style={{marginTop: '1em'}} className="btn btn-primary btn-block" onClick={this.onProjectSelect}>项目部管理</button>
         </div>
       </div>
     )
