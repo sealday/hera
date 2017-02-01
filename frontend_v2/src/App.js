@@ -62,7 +62,15 @@ class App extends Component {
                   </ReactCSSTransitionGroup>
                 </li>
                 <li>
-                  <Link to="/file_manager">文件中转站</Link>
+                  <a href="#" onClick={e => { e.preventDefault(); props.dispatch(toggleMenu('file'))}}>文件</a>
+                  <ReactCSSTransitionGroup
+                    transitionName="nav"
+                    transitionEnterTimeout={500}
+                    transitionLeaveTimeout={300}>
+                    {props.nav.file && <ul>
+                      <li><Link to="/file_manager">文件管理</Link></li>
+                    </ul>}
+                  </ReactCSSTransitionGroup>
                 </li>
                 <li>
                   <a href="#" onClick={e => { e.preventDefault(); props.dispatch(toggleMenu('system'))}}>系统</a>
