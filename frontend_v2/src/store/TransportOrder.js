@@ -14,7 +14,7 @@ class TransportOrder extends Component {
   }
 
   handleBack = () => {
-    this.props.router.goBack()
+    this.props.router.push(`/transfer/${this.props.params.id}`)
   }
 
   componentDidMount() {

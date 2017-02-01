@@ -94,8 +94,8 @@ class TransportOrderEdit extends Component {
     if (this.state['delivery-party']) {
       return (
         <div>
+          <button className="btn btn-default" onClick={this.handleCancel}>取消编辑</button>
           <h2>
-            <button className="btn btn-default" onClick={this.handleCancel}>取消编辑</button>
             <span>运输单编辑</span>
           </h2>
           <TransportForm
