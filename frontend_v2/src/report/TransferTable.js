@@ -238,9 +238,11 @@ class TransferTable extends Component {
                       this.props.dispatch({ type: 'UPDATE_RECORDS_CACHE', record })
                     }} to={ `/transfer/${record._id}`}>详情</Link>
                     <br/>
+                    {record.hasTransport && (
                     <Link onClick={() => {
-                      this.props.dispatch({ type: 'UPDATE_RECORDS_CACHE', record })
+                      this.props.dispatch({type: 'UPDATE_RECORDS_CACHE', record})
                     }} to={ `/transport/${record._id}`}>运输单</Link>
+                      )}
                   </td>
                 </tr>
               )
