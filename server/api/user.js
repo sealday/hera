@@ -91,6 +91,11 @@ exports.list = (req, res, next) => {
 }
 
 exports.create = (req, res, next) => {
+  if (!req.body.username || !req.body.password || !req.body.profile || !req.body.role) {
+    return res.status(400).json({
+      message: '表单填写不完整'
+    })
+  }
   let user = new User(req.body)
   user.save().then(user => {
     res.json({
