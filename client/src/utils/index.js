@@ -3,7 +3,6 @@
  */
 
 import $ from 'jquery';
-import pinyin from 'pinyin'
 import fuzzysearch from 'fuzzysearch'
 
 /**
