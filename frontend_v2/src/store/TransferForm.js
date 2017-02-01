@@ -86,7 +86,6 @@ const EntryTable = connect(
           <th>规格</th>
           <th>数量</th>
           <th>小计</th>
-          <th>库存</th>
           <th>
             <button
               type="button"
@@ -123,7 +122,6 @@ const EntryTable = connect(
             </td>
             <td><Field name={`${entry}.count`} component={Input}/></td>
             <td>{getTotal(index)}</td>
-            <td>{getStock()}</td>
             <td>
               <button
                 type="button"
