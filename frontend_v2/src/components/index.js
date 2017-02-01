@@ -24,10 +24,11 @@ export const DatePicker = ({ input, ...custom }) => (
   <ReactDatePicker selected={input.value} className="form-control" onChange={date => input.onChange(date)} {...custom} />
 )
 
-export const FilterSelect = ({ input, options, ...custom }) => {
+export const FilterSelect = ({ input, options, ...custom, meta: { touched, error, warning } }) => {
   const {onChange, value, onFocus } = input
   const { placeholder, filterOption } = custom
   return <ReactSelect
+    style={touched && error ? errorStyle : null}
     onFocus={onFocus}
     value={value}
     placeholder={placeholder}
