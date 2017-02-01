@@ -6,7 +6,6 @@ import { Link } from 'react-router'
 import Select from 'react-select'
 import moment from 'moment'
 import DatePicker from 'react-datepicker';
-import { getShortOrder } from '../utils'
 
 class TransferTable extends Component {
   constructor(props) {
@@ -233,7 +232,7 @@ class TransferTable extends Component {
                   <th>数量</th>
                   <td rowSpan={rowSpan}>{record.status}</td>
                   <td rowSpan={rowSpan}>{record.username}</td>
-                  <td rowSpan={rowSpan}>{moment(record.updatedAt).format('YYYY-MM-DD')}</td>
+                  <td rowSpan={rowSpan}>{moment(record.createdAt).format('YYYY-MM-DD')}</td>
                   <td rowSpan={rowSpan}>
                     <Link onClick={() => {
                       this.props.dispatch({ type: 'UPDATE_RECORDS_CACHE', record })

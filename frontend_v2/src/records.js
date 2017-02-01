@@ -2,29 +2,7 @@
  * Created by seal on 22/01/2017.
  */
 
-import { Map, Record, List } from 'immutable'
-
-export const ArticleRecord = Record({
-  _id: '',
-  type: '',
-  name: '',
-  sizes: List(),
-  unit: '',
-  sizeUnit: '',
-  countUnit: '',
-  convert: 1,
-  convertUnit: '',
-})
-
-export const UserRecord = Record({
-  _id: '',
-  username: '',
-  password: '',
-  projects: [],
-  profile: {
-    name: ''
-  }
-})
+import { Map, Record } from 'immutable'
 
 export const SystemRecord = Record({
   online: 0,
@@ -44,6 +22,7 @@ export const StoreRecord = Record({
   fetching_in: false,
   fetching_out: false,
   stocks: new Map(),
+  search: [], // 搜索结果
 })
 
 export const NavRecord = Record({
@@ -53,6 +32,7 @@ export const NavRecord = Record({
   report: true,
   system: false,
   project: false,
+  file: false
 })
 
 export const PostRecord = Record({

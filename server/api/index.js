@@ -28,7 +28,7 @@ router.get('/load', user.load);
 
 router.get('/user', user.list)
 router.post('/user', user.create)
-router.post('/user_update', user.update)
+router.post('/user/:id', user.update)
 
 router.get('/article', article.list);
 router.get('/project', project.list);
@@ -51,6 +51,7 @@ router.post('/transfer', transfer.create)
 router.get('/file', file.list);
 router.post('/file', upload.single('file'), file.post);
 
+router.get('/store/search', store.search)
 router.get('/store/:id', store.queryAll)
 
 router.post('/purchase', purchase.postPurchase);

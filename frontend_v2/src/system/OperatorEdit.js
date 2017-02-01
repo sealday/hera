@@ -5,28 +5,36 @@
 import React, { Component } from 'react';
 import OperatorForm from './OperatorForm'
 import { connect } from 'react-redux'
+import { updateOperator } from '../actions'
 
 class OperatorEdit extends Component {
 
-  handleSubmit = (data) => {
-    alert(JSON.stringify(data))
+  handleSubmit = (operator) => {
+    this.props.dispatch(updateOperator(
+      {
+        ...operator,
+        _id: this.props.params.id
+      }
+    ))
   }
 
   render() {
     const id = this.props.params.id
     const user = this.props.users.get(id)
     const initialValues = {
-      username: user.username,
-      profile: user.profile
+      ...user,
+      password: undefined
     }
 
     return (
       <div>
         <button className="btn btn-default" onClick={e => this.props.router.goBack()}>取消</button>
-        <h2>操作员编辑</h2>
+        <h2 className="page-header">操作员编辑</h2>
         <OperatorForm
           initialValues={initialValues}
-          onSubmit={this.handleSubmit} />
+          onSubmit={this.handleSubmit}
+          btnName="保存"
+        />
       </div>
     )
   }
