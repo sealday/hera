@@ -105,5 +105,10 @@ export const formatNumber = formatNumber_
 
 export const total = (count, size) => toFixedWithoutTrailingZero(count * calculateSize(size))
 
+/**
+ * 返回为数字的total，且传入的参数形式是对象，这个方法理应更经常使用
+ */
+export const total_ = ({count, size}) => count * calculateSize(size)
+
 import * as validator from './validator'
 export { validator }

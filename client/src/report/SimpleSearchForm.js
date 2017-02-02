@@ -56,25 +56,13 @@ class SimpleSearchForm extends React.Component {
       <form onSubmit={handleSubmit} className="form-horizontal">
         <div className="form-group">
           <label className="control-label col-md-1">项目部</label>
-          <div className="col-md-2">
+          <div className="col-md-5">
             <Field name="other"
                    component={FilterSelect}
                    placeholder="仓库"
                    options={this.getStockOptions(projects)}
                    filterOption={filterOption}
             />
-          </div>
-          <label className="control-label col-md-1">记录类型</label>
-          <div className="col-md-2">
-            <Field name="type"
-                   component={Select}
-                   placeholder="类型"
-            >
-              <option value=''>全部</option>
-              <option>采购</option>
-              <option>销售</option>
-              <option>调拨</option>
-            </Field>
           </div>
         </div>
         <div className="form-group">
