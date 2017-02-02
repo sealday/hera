@@ -16,7 +16,6 @@ class WorkerCheckin extends Component{
     }
 
     handleSubmit=(data)=>{
-
         this.props.dispatch(postWorkerCheckin(data));
 
     }
