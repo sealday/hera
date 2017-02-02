@@ -53,6 +53,7 @@ router.post('/file', upload.single('file'), file.post);
 router.get('/file/:filename', file.download)
 
 router.get('/store/search', store.search)
+router.get('/store/simple_search', store.simpleSearch)
 router.get('/store/:id', store.queryAll)
 
 router.post('/purchase', purchase.postPurchase);
