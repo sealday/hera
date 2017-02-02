@@ -50,7 +50,6 @@ class SimpleSearchTable extends React.Component {
           <th>项目部</th>
           <th>出入库 </th>
           <th>订单内容</th>
-          <th>小计</th>
           <th/>
         </tr>
         </thead>
@@ -63,7 +62,6 @@ class SimpleSearchTable extends React.Component {
             {/* 当没有公司情况的时候，会有对方单位，当两个都没有的时候，属于上年结转的单据 */}
             <td>{getDirection(entry)}</td>
             <td>{getTotal(entry.entries)}</td>
-            <td></td>
             <td>
               <Link to={`/transfer/${entry._id}`}>查看详情</Link>
             </td>
