@@ -55,15 +55,12 @@ class SimpleSearchForm extends React.Component {
     return (
       <form onSubmit={handleSubmit} className="form-horizontal">
         <div className="form-group">
-          <label className="control-label col-md-1">从</label>
+          <label className="control-label col-md-1">项目部</label>
           <div className="col-md-2">
-            <Field name="outStock" component={FilterSelect} placeholder="仓库" options={this.getStockOptions(projects)}
-                   filterOption={filterOption}
-            />
-          </div>
-          <label className="control-label col-md-1">发往</label>
-          <div className="col-md-2">
-            <Field name="inStock" component={FilterSelect} placeholder="仓库" options={this.getStockOptions(projects)}
+            <Field name="other"
+                   component={FilterSelect}
+                   placeholder="仓库"
+                   options={this.getStockOptions(projects)}
                    filterOption={filterOption}
             />
           </div>
@@ -99,34 +96,11 @@ class SimpleSearchForm extends React.Component {
                    endDate={endDate}
             />
           </div>
-        </div>
-        <div className="form-group">
-          <label className="control-label col-md-1">名称</label>
-          <div className="col-md-2">
-            <Field name="name" component={FilterSelect} placeholder="名称"
-                   filterOption={filterOption}
-                   options={this.getNameOptions()}
-                   normalize={(value, previousValue) => {
-                     if (previousValue !== value) {
-                       this.props.change('size', '')
-                     }
-                     return value
-                   }}
-            />
-          </div>
-          <label className="control-label col-md-1">规格</label>
-          <div className="col-md-2">
-            <Field name="size" component={FilterSelect} placeholder="规格"
-                   options={this.getSizeOptions()}
-            />
-          </div>
-          <label className="control-label col-md-1">数量范围</label>
-          <div className="col-md-1">
-            <Field name="startCount" className="form-control" component={Input}/>
-          </div>
-          <div className="col-md-1">
-            <Field name="endCount" className="form-control" component={Input} />
-          </div>
+          <a href="#" className="col-md-1" onClick={e => {
+            e.preventDefault()
+            this.props.change('startDate', moment().startOf('year'))
+            this.props.change('endDate', moment().startOf('day'))
+          }} style={{paddingTop: '7px'}}>今年</a>
         </div>
         <div className="form-group">
           <div className="col-md-offset-6 col-md-2">
