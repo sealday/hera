@@ -45,6 +45,7 @@ import {
   SellTable,
   Store,
   Search,
+  SimpleSearch,
 } from './report'
 
 import {
@@ -117,6 +118,7 @@ ajax('/api/load').then(res => {
           <Route path="project/:id/edit" component={ProjectEdit}/>
 
           <Route path="search" component={Search}/>
+          <Route path="simple_search" component={SimpleSearch}/>
           <Route path="article" component={Article}/>
           <Route path="purchase" component={Purchase}/>
           {/* direction 表示调拨的方向 取值为 in 和 out  */}
