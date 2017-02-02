@@ -105,5 +105,5 @@ export const formatNumber = formatNumber_
 
 export const total = (count, size) => toFixedWithoutTrailingZero(count * calculateSize(size))
 
-import * as __validator__ from './validator'
-export { __validator__ as validator }
+import * as validator from './validator'
+export { validator }
