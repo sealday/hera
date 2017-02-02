@@ -91,6 +91,12 @@ class SimpleSearchForm extends React.Component {
           }} style={{paddingTop: '7px'}}>今年</a>
         </div>
         <div className="form-group">
+          <label className="control-label col-md-1">车号</label>
+          <div className="col-md-2">
+            <Field name="carNumber" className="form-control" component={Input} />
+          </div>
+        </div>
+        <div className="form-group">
           <div className="col-md-offset-6 col-md-2">
             <button type="submit" className="btn btn-primary btn-block">查询</button>
           </div>
