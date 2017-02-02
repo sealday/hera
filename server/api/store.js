@@ -241,24 +241,7 @@ exports.simpleSearch = (req, res, next) => {
 
     Record.aggregate([
       {
-        $unwind: '$entries'
-      },
-      {
         $match: match
-      },
-      {
-        $project: {
-          // 默认包含了id
-          outStock: '$outStock',
-          inStock: '$inStock',
-          outDate: '$outDate',
-          name: '$entries.name',
-          size: '$entries.size',
-          count: '$entries.count',
-          number: '$number',
-          type: '$type',
-          vendor: '$vendor'
-        }
       }
     ]).then(search => {
       res.json({
