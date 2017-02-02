@@ -183,3 +183,95 @@ exports.search = (req, res, next) => {
     })
   }
 }
+
+/**
+ *
+ * 主要根据对方单位名称搜索仓库信息
+ *
+ * query.condition 是一个 JSON 字符串
+ *
+ * 包含字段
+ * other：表示对方单位、仓库
+ * startDate: 开始时间
+ * endDate: 结束时间
+ *
+ */
+exports.simpleSearch = (req, res, next) => {
+  let condition = req.query['condition']
+
+  if (condition) {
+    condition = JSON.parse(condition)
+
+    let match = {
+      outDate: {
+        $gte: new Date(condition.startDate),
+        $lt: new Date(condition.endDate)
+      },
+      'entries.count': {
+        $gte: 0
+      }
+    }
+
+
+    let id, vendor
+    if (condition.other) {
+      // 使用 try catch 来判断是不是 store
+      try {
+        id = ObjectId(other)
+      } catch (e) {
+        // 不能转换成 ObjectId 则是vendor
+        vendor = other
+      }
+    }
+
+    // 需要查询对方仓库 调拨单
+    if (id) {
+      match['$or'] = [
+        { outStock: id },
+        { inStock: id },
+      ]
+    }
+
+    // 需要查询对方单位 采购销售
+    if (vendor) {
+      match['vendor'] = vendor
+    }
+
+    Record.aggregate([
+      {
+        $unwind: '$entries'
+      },
+      {
+        $match: match
+      },
+      {
+        $project: {
+          // 默认包含了id
+          outStock: '$outStock',
+          inStock: '$inStock',
+          outDate: '$outDate',
+          name: '$entries.name',
+          size: '$entries.size',
+          count: '$entries.count',
+          number: '$number',
+          type: '$type',
+          vendor: '$vendor'
+        }
+      }
+    ]).then(search => {
+      res.json({
+        message: '查询成功！',
+        data: {
+          search
+        }
+      })
+
+    }).catch(err => {
+      next(err)
+    })
+  } else {
+    res.status(400).json({
+      message: '错误的请求格式'
+    })
+  }
+}
