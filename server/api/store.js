@@ -212,15 +212,16 @@ exports.simpleSearch = (req, res, next) => {
       }
     }
 
+    console.log(condition.other)
 
     let id, vendor
     if (condition.other) {
       // 使用 try catch 来判断是不是 store
       try {
-        id = ObjectId(other)
+        id = ObjectId(condition.other)
       } catch (e) {
         // 不能转换成 ObjectId 则是vendor
-        vendor = other
+        vendor = condition.other
       }
     }
 
@@ -236,6 +237,7 @@ exports.simpleSearch = (req, res, next) => {
     if (vendor) {
       match['vendor'] = vendor
     }
+    console.log(id)
 
     Record.aggregate([
       {

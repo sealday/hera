@@ -14,18 +14,19 @@ import { Link } from 'react-router'
 class SimpleSearchTable extends React.Component {
   render() {
     const { search, projects } = this.props
-    const getProjectName = id => {
-      const project = projects.get(id)
-      return project ? project.company + project.name : '';
-    }
+
+    // FIXME 只考虑了 销售、调拨、采购 三种情况
+    const getDirection = entry => entry.type === '调拨'
+      ? entry.inStock === this.props.store._id ? '入库' : '出库'
+      : entry.type === '销售' ? '出库' : '入库'
+
     return (
       <table className="table table-bordered">
         <thead>
         <tr>
           <th>时间</th>
           <th>订单号</th>
-          <th>从</th>
-          <th>到</th>
+          <th>出入库 </th>
           <th>名称</th>
           <th>规格</th>
           <th>数量</th>
@@ -39,8 +40,7 @@ class SimpleSearchTable extends React.Component {
             <th>{moment(entry.outDate).format('YYYY-MM-DD')}</th>
             <td>{entry.number}</td>
             {/* 当没有公司情况的时候，会有对方单位，当两个都没有的时候，属于上年结转的单据 */}
-            <td>{getProjectName(entry.outStock) || entry.vendor}</td>
-            <td>{getProjectName(entry.inStock) || entry.vendor}</td>
+            <td>{getDirection(entry)}</td>
             <td>{entry.name}</td>
             <td>{entry.size}</td>
             <td>{entry.count}</td>
@@ -57,8 +57,9 @@ class SimpleSearchTable extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  search: state.store.search,
-  projects: state.system.projects
+  search: state.store.simpleSearch,
+  projects: state.system.projects,
+  store: state.system.store,
 })
 
 export default connect(mapStateToProps)(SimpleSearchTable)

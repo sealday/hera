@@ -448,3 +448,26 @@ export const updateTransfer = (record) => (dispatch, getState) => {
     });
   }
 }
+
+export const SIMPLE_SEARCH = 'SIMPLE_SEARCH'
+
+export const simpleSearch = condition => (dispatch, getState) => {
+  const search = network(SIMPLE_SEARCH)
+  if (search.shouldProceed(getState())) {
+    dispatch(search.begin)
+    dispatch(newInfoNotify('提示', '正在根据给定条件搜索仓库', 2000))
+    ajax('/api/store/simple_search', {
+      data: {
+        condition: JSON.stringify(condition)
+      }
+    }).then(res => {
+      dispatch(search.endSuccess)
+      dispatch({ type: SIMPLE_SEARCH, data: res.data.search })
+      dispatch(newSuccessNotify('提示', '搜索仓库成功！', 2000))
+    }).catch(err => {
+      dispatch(search.endFailure)
+      dispatch(newErrorNotify('错误', '搜索仓库失败！', 2000))
+      throw err
+    })
+  }
+}

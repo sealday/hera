@@ -6,12 +6,12 @@ import React from 'react'
 import SearchForm from './SimpleSearchForm'
 import SearchTable from './SimpleSearchTable'
 import { connect } from 'react-redux'
-import { storeSearch } from '../actions'
+import { simpleSearch } from '../actions'
 import moment from 'moment'
 
 class Search extends React.Component {
   search = condition => {
-    this.props.dispatch(storeSearch({
+    this.props.dispatch(simpleSearch({
       ...condition,
       endDate: moment(condition.endDate).add(1, 'day')
     }))

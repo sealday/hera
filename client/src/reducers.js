@@ -95,6 +95,8 @@ export function store(state = new StoreRecord(), action) {
       return state.update('stocks', stocks => stocks.set(stock.id, stock))
     case actionTypes.STORE_SEARCH:
       return state.set('search', action.data)
+    case actionTypes.SIMPLE_SEARCH:
+      return state.set('simpleSearch', action.data)
     default:
       return state
   }

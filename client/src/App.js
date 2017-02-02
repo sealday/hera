@@ -50,7 +50,7 @@ class App extends Component {
                     transitionEnterTimeout={500}
                     transitionLeaveTimeout={300}>
                     {props.nav.report && <ul>
-                      <li><Link to="/simple_search">仓库往来查询</Link></li>
+                      <li><Link to="/simple_search">仓库出入库查询</Link></li>
                       <li><Link to="/search">仓库明细检索</Link></li>
                       <li><Link to="/store">仓库库存查询</Link></li>
                       <li><Link to="/purchase_table">采购入库明细表</Link></li>
