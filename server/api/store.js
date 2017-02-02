@@ -212,6 +212,11 @@ exports.simpleSearch = (req, res, next) => {
       }
     }
 
+    // 查询车号
+    if (condition.carNumber) {
+      match['carNumber'] = condition.carNumber
+    }
+
     console.log(condition.other)
 
     let id, vendor
