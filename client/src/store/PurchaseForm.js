@@ -86,6 +86,16 @@ const EntryTable = connect(
           <th>规格</th>
           <th>数量</th>
           <th>小计</th>
+          <th>单位</th>
+          <th>单价</th>
+          <th>金额</th>
+          <th>吨/趟</th>
+          <th>运费单位</th>
+          <th>运费单价</th>
+          <th>运费</th>
+          <th>综合单价</th>
+          <th>综合金额</th>
+          <th>备注</th>
           <th>
             <button
               type="button"
@@ -124,6 +134,16 @@ const EntryTable = connect(
             </td>
             <td><Field name={`${entry}.count`} component={Input} validate={validator.required}/></td>
             <td>{getTotal(index)}</td>
+            <td><Field name={`${entry}.unit`} component={Input}/></td>
+            <td><Field name={`${entry}.price`} component={Input}/></td>
+            <td><Field name={`${entry}.sum`} component={Input}/></td>
+            <td><Field name={`${entry}.freightCount`} component={Input}/></td>
+            <td><Field name={`${entry}.freightUnit`} component={Input}/></td>
+            <td><Field name={`${entry}.freightPrice`} component={Input}/></td>
+            <td><Field name={`${entry}.freight`} component={Input}/></td>
+            <td><Field name={`${entry}.mixPrice`} component={Input}/></td>
+            <td><Field name={`${entry}.mixSum`} component={Input}/></td>
+            <td><Field name={`${entry}.comments`} component={Input}/></td>
             <td>
               <button
                 type="button"

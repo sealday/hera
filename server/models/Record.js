@@ -35,6 +35,7 @@ const recordSchema = {
     freight: Number, // 运费
     mixPrice: Number, // 综合单价
     mixSum: Number, // 综合金额
+    comments: String, // 备注
   }], // 订单项
 
   outDate: Date, // 出库时间
