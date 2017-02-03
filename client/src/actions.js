@@ -155,6 +155,28 @@ export const requestRecord = (id) => (dispatch, getState) => {
   }
 }
 
+export const DELETE_WORKER = 'DELETE_WORKER'
+export const DELETE_WORKER_SUCCESS = 'DELETE_WORKER_SUCCESS'
+export const DELETE_WORKER_FAILURE = 'DELETE_WORKER_FAILURE'
+
+export const removeWorker =(id)=>(dispatch,getState)=>{
+  if(!getState().requestWorkerlist.posting){
+    dispatch({type:DELETE_WORKER});
+    dispatch(newInfoNotify('提示','正在删除',2000))
+      ajax(`api/workercheckin/${id}/delete`,{
+          method: 'POST',
+          contentType: 'application/json'
+      }).then(res=>{
+        dispatch({type:DELETE_WORKER_SUCCESS,data:id})
+        dispatch(newSuccessNotify('提示','删除成功',2000))
+        dispatch(push(`/worker_checkin`))
+      }).catch(err=>{
+        dispatch({type:DELETE_WORKER_FAILURE})
+        dispatch(newErrorNotify('警告','删除失败',2000))
+      })
+  }
+}
+
 export const REQUEST_WORKERS = 'REQUEST_WORKERS'
 export const REQUEST_WORKERS_SUCCESS='REQUEST_WORKERS_SUCCESS'
 export const REQUEST_WORKERS_FAILURE = 'REQUEST_WORKERS_FAILURE'
@@ -183,7 +205,7 @@ export const alterWorker = (worker)=>(dispatch,getState)=>{
     if(!getState().requestWorkerlist.posting){
       dispatch({type:ALTER_WORKER})
       dispatch(newInfoNotify('提示','正在修改工人信息',2000))
-      ajax(`/api/workercheckin/${worker._id}`,{
+      ajax(`/api/workercheckin/${worker._id}/edit`,{
           data: JSON.stringify(worker),
           method: 'POST',
           contentType: 'application/json'

@@ -6,8 +6,7 @@ import moment from 'moment';
 import WorkerCheckinForm from './WorkerCheckinForm'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
-import {postWorkerCheckin} from  '../actions';
-import {requestWorkerlist} from '../actions'
+import {postWorkerCheckin,removeWorker,requestWorkerlist} from  '../actions';
 
 class WorkerCheckin extends Component{
 
@@ -19,6 +18,13 @@ class WorkerCheckin extends Component{
         this.props.dispatch(postWorkerCheckin(data));
 
     }
+
+    onDeleteClick=(e,worker)=>{
+        e.preventDefault()
+        if (confirm(`确定要删除工人 ${worker.name}`)) {
+            this.props.dispatch(removeWorker(worker._id));
+        }
+    }
     render(){
         return (
             <div>
@@ -26,7 +32,7 @@ class WorkerCheckin extends Component{
                 <WorkerCheckinForm
                 onSubmit={this.handleSubmit}
                 />
-                <InfoList infolist={this.props.workers}/>
+                <InfoList infolist={this.props.workers} onDeleteClick={ this.onDeleteClick}/>
             </div>
         )
     }
@@ -58,7 +64,8 @@ const InfoList = (props)=>(
                 <td>{info.phone}</td>
                 <td>{info.idcard}</td>
                 <td>{info.address}</td>
-                <td><Link to={`/worker/${info._id}/edit`}>编辑</Link><Link to={`/worker/${info._id}/edit`}>删除</Link></td>
+                <td><Link to={`/worker/${info._id}/edit`}>编辑</Link>
+                    <a href={`/worker/${info._id}/delete`} onClick={e=>props.onDeleteClick(e,info)}>删除</a></td>
             </tr>
         ))}
         </tbody>
@@ -71,4 +78,7 @@ const mapStateToProps = state =>{
         workers:w
     }
 }
+
+
+
 export default connect(mapStateToProps)(WorkerCheckin)
