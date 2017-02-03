@@ -210,3 +210,15 @@ export function networks(state = new Map(), action) {
       return state
   }
 }
+
+/**
+ * 网络请求结果
+ */
+export function results(state = new Map(), action) {
+  switch (action.type) {
+    case actionTypes.SAVE_RESULTS:
+      return state.set(action.data.key, action.data.result)
+    default:
+      return state
+  }
+}

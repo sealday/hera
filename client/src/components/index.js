@@ -10,11 +10,18 @@ const errorStyle = {
   boxShadow: 'inset 0 1px 1px rgba(0, 0, 0, .075)'
 }
 
-export const Input = ({ input, meta: { touched, error, warning }, ...custom }) => (
+export const Input = ({ input, meta: { touched, error, warning }, style, ...custom }) => {
+  if (touched && error) {
+      style = {
+      ...style,
+      ...errorStyle,
+    }
+  }
+  return (
   <input {...input} className="form-control" {...custom}
-    style={touched && error ? errorStyle : null}
+    style={style}
   />
-)
+)}
 
 export const Select = ({ input, children }) => (
   <select {...input} className="form-control" >{children}</select>
@@ -24,11 +31,19 @@ export const DatePicker = ({ input, ...custom }) => (
   <ReactDatePicker selected={input.value} className="form-control" onChange={date => input.onChange(date)} {...custom} />
 )
 
-export const FilterSelect = ({ input, options, ...custom, meta: { touched, error, warning } }) => {
+export const FilterSelect = ({ input, options, style, ...custom, meta: { touched, error, warning } }) => {
   const {onChange, value, onFocus } = input
   const { placeholder, filterOption } = custom
+
+  if (touched && error) {
+    style = {
+      ...style,
+      ...errorStyle,
+    }
+  }
+
   return <ReactSelect
-    style={touched && error ? errorStyle : null}
+    style={style}
     onFocus={onFocus}
     value={value}
     placeholder={placeholder}
