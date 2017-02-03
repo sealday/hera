@@ -133,9 +133,9 @@ class TransferTable extends Component {
   render() {
     let name
     if (this.props.stock === 'inStock') {
-      name = '发往'
+      name = '入库'
     } else if (this.props.stock === 'outStock') {
-      name = '来自'
+      name = '出库'
     }
     return (
       <div>
