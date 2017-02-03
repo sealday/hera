@@ -224,11 +224,6 @@ exports.simpleSearch = (req, res, next) => {
       match['carNumber'] = condition.carNumber
     }
 
-    // 查询单号
-    if (condition.number) {
-      match['number'] = Number(condition.number)
-    }
-
     // 查询原始单号
     if (condition.originalOrder) {
       match['originalOrder'] = condition.originalOrder
@@ -261,6 +256,13 @@ exports.simpleSearch = (req, res, next) => {
     // 需要查询对方单位 采购销售
     if (vendor) {
       match['vendor'] = vendor
+    }
+
+    // 查询单号 当按单号查询的时候，忽略其他条件
+    if (condition.number) {
+      match = {
+        number: Number(condition.number)
+      }
     }
 
     Record.aggregate([
