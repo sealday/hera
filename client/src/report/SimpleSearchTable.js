@@ -47,7 +47,8 @@ class SimpleSearchTable extends React.Component {
         <tr>
           <th>时间</th>
           <th>车号</th>
-          <th>订单号</th>
+          <th>单号</th>
+          <th>原始单号</th>
           <th>项目部</th>
           <th>出入库 </th>
           <th>订单内容</th>
@@ -60,6 +61,7 @@ class SimpleSearchTable extends React.Component {
             <td>{moment(entry.outDate).format('YYYY-MM-DD')}</td>
             <td>{entry.carNumber}</td>
             <td>{entry.number}</td>
+            <td>{entry.originalOrder}</td>
             <td>{getDirection(entry) === '出库' ? getProjectName(entry.inStock) : getProjectName(entry.outStock) || entry.vendor}</td>
             {/* 当没有公司情况的时候，会有对方单位，当两个都没有的时候，属于上年结转的单据 */}
             <td>{getDirection(entry)}</td>

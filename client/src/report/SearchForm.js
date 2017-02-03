@@ -55,13 +55,13 @@ class TransferSearchForm extends React.Component {
     return (
       <form onSubmit={handleSubmit} className="form-horizontal">
         <div className="form-group">
-          <label className="control-label col-md-1">从</label>
+          <label className="control-label col-md-1">出库</label>
           <div className="col-md-2">
             <Field name="outStock" component={FilterSelect} placeholder="仓库" options={this.getStockOptions(projects)}
                    filterOption={filterOption}
             />
           </div>
-          <label className="control-label col-md-1">发往</label>
+          <label className="control-label col-md-1">入库</label>
           <div className="col-md-2">
             <Field name="inStock" component={FilterSelect} placeholder="仓库" options={this.getStockOptions(projects)}
                    filterOption={filterOption}
