@@ -57,19 +57,44 @@ class TransferSearchForm extends React.Component {
     })
 
     const { handleSubmit, projects, startDate, endDate, reset, fieldname } = this.props
+
+
+    let showingProject
+    if (fieldname === '入库' || fieldname === '出库') {
+      showingProject = true
+    }
+
+    let showingVendor
+    if (fieldname === '对方单位') {
+      showingVendor = true
+    }
+
     return (
       <form onSubmit={handleSubmit} className="form-inline">
-        <div className="form-group">
-          <label className="control-label" style={labelStyle(2)}>{fieldname}</label>
-          <Field
-            name="other"
-            style={{width: '26em'}}
-            component={FilterSelect}
-            placeholder="仓库"
-            options={this.getStockOptions(projects)}
-            filterOption={filterOption}
-          />
-        </div>
+        {showingVendor &&
+          <div className="form-group">
+            <label className="control-label" style={labelStyle(2)}>对方单位</label>
+            <Field
+              name="other"
+              style={{width: '26em'}}
+              component={Input}
+              placeholder="对方单位"
+            />
+          </div>
+        }
+        {showingProject &&
+          <div className="form-group">
+            <label className="control-label" style={labelStyle(2)}>{fieldname}</label>
+            <Field
+              name="other"
+              style={{width: '26em'}}
+              component={FilterSelect}
+              placeholder="仓库"
+              options={this.getStockOptions(projects)}
+              filterOption={filterOption}
+            />
+          </div>
+        }
         <div className="form-group">
           <label className="control-label" style={labelStyle(4)}>开始日期</label>
           <Field
