@@ -153,7 +153,7 @@ html {
   animation: 0.6s fadeOut ease;
 }
 
-/* 采购销售暂定 */
+/* 采购、销售页面的样式设置 */
 #purchase-table th,
 #purchase-table td {
   padding-left: 2px;
