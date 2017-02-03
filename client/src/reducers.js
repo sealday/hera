@@ -95,6 +95,8 @@ export function store(state = new StoreRecord(), action) {
       return state.update('stocks', stocks => stocks.set(stock.id, stock))
     case actionTypes.STORE_SEARCH:
       return state.set('search', action.data)
+    case actionTypes.SIMPLE_SEARCH:
+      return state.set('simpleSearch', action.data)
     default:
       return state
   }
@@ -212,6 +214,18 @@ export function networks(state = new Map(), action) {
     case actionTypes.NETWORK_END_SUCCESS:
     case actionTypes.NETWORK_END_FAILURE:
       return state.set(action.data, false)
+    default:
+      return state
+  }
+}
+
+/**
+ * 网络请求结果
+ */
+export function results(state = new Map(), action) {
+  switch (action.type) {
+    case actionTypes.SAVE_RESULTS:
+      return state.set(action.data.key, action.data.result)
     default:
       return state
   }

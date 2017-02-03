@@ -24,8 +24,8 @@ class SearchTable extends React.Component {
         <tr>
           <th>时间</th>
           <th>订单号</th>
-          <th>从</th>
-          <th>到</th>
+          <th>出库</th>
+          <th>入库</th>
           <th>名称</th>
           <th>规格</th>
           <th>数量</th>

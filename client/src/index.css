@@ -45,6 +45,11 @@ html {
   display: inline;
 }
 
+/* TODO 查看一下这个修改会不会引起其他地方的布局问题 */
+.form-inline .react-datepicker__input-container input {
+  width: 8em;
+}
+
 .react-datepicker {
   font-size: 1.3rem !important;
 }
