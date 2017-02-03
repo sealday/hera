@@ -191,6 +191,7 @@ exports.search = (req, res, next) => {
  * query.condition 是一个 JSON 字符串
  *
  * 包含字段
+ * self: 表示当前仓库
  * other：表示对方单位、仓库
  * startDate: 开始时间
  * endDate: 结束时间
@@ -201,6 +202,12 @@ exports.simpleSearch = (req, res, next) => {
 
   if (condition) {
     condition = JSON.parse(condition)
+
+    if (!condition.self) {
+      return res.status(400).json({
+        message: '请求的参数不正确！'
+      })
+    }
 
     let match = {
       outDate: {
@@ -217,8 +224,6 @@ exports.simpleSearch = (req, res, next) => {
       match['carNumber'] = condition.carNumber
     }
 
-    console.log(condition.other)
-
     let id, vendor
     if (condition.other) {
       // 使用 try catch 来判断是不是 store
@@ -233,8 +238,13 @@ exports.simpleSearch = (req, res, next) => {
     // 需要查询对方仓库 调拨单
     if (id) {
       match['$or'] = [
-        { outStock: id },
-        { inStock: id },
+        { outStock: id, inStock: ObjectId(condition.self) },
+        { inStock: id, outStock: ObjectId(condition.self) },
+      ]
+    } else {
+      match['$or'] = [
+        { id, inStock: ObjectId(condition.self) },
+        { outStock: ObjectId(condition.self) },
       ]
     }
 
@@ -242,7 +252,6 @@ exports.simpleSearch = (req, res, next) => {
     if (vendor) {
       match['vendor'] = vendor
     }
-    console.log(id)
 
     Record.aggregate([
       {
