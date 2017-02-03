@@ -33,8 +33,8 @@ class App extends Component {
                     transitionEnterTimeout={500}
                     transitionLeaveTimeout={300}>
                     {props.nav.store && <ul>
-                      <li><Link to="purchase">采购入库</Link></li>
-                      <li><Link to="">销售出库</Link></li>
+                      <li><Link to="/purchase/in/create">采购入库</Link></li>
+                      <li><Link to="/purchase/out/create">销售出库</Link></li>
                       <li><Link to="/transfer/out/create">调拨出库（发料）</Link></li>
                       <li><Link to="/transfer/in/create">调拨入库（收料）</Link></li>
                       <li><Link to="/">盘点盈余入库</Link></li>
