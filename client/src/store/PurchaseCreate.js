@@ -3,7 +3,7 @@
  */
 
 import React, { Component } from 'react';
-import TransferForm from './TransferForm'
+import PurchaseForm from './PurchaseForm'
 import { connect } from 'react-redux'
 import { postTransfer } from '../actions'
 
@@ -41,7 +41,7 @@ class PurchaseCreate extends Component {
     return (
       <div>
         <h2 className="page-header">{pageTitle}</h2>
-        <TransferForm onSubmit={this.handleSubmit}/>
+        <PurchaseForm onSubmit={this.handleSubmit}/>
       </div>
     );
   }
