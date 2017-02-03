@@ -27,7 +27,7 @@ class TransferInTable extends Component {
 const mapStateToProps = state => {
   return {
     inStock: state.system.base._id,
-    records: state.store.in.filter(record => record.type == '销售'),
+    records: state.store.in.filter(record => record.type === '销售'),
     projects: state.system.projects,
     fetching: state.store.fetching_in,
     articles: state.system.articles.toArray(),
