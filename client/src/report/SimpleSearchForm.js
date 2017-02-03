@@ -95,6 +95,14 @@ class SimpleSearchForm extends React.Component {
           <div className="col-md-2">
             <Field name="carNumber" className="form-control" component={Input} />
           </div>
+          <label className="control-label col-md-1">单号</label>
+          <div className="col-md-2">
+            <Field name="number" className="form-control" component={Input} />
+          </div>
+          <label className="control-label col-md-1">原始单号</label>
+          <div className="col-md-2">
+            <Field name="originalOrder" className="form-control" component={Input} />
+          </div>
         </div>
         <div className="form-group">
           <div className="col-md-offset-6 col-md-2">

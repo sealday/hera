@@ -224,6 +224,16 @@ exports.simpleSearch = (req, res, next) => {
       match['carNumber'] = condition.carNumber
     }
 
+    // 查询单号
+    if (condition.number) {
+      match['number'] = Number(condition.number)
+    }
+
+    // 查询原始单号
+    if (condition.originalOrder) {
+      match['originalOrder'] = condition.originalOrder
+    }
+
     let id, vendor
     if (condition.other) {
       // 使用 try catch 来判断是不是 store
