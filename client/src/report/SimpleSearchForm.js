@@ -4,7 +4,7 @@
 
 import React from 'react'
 import { reduxForm, Field, formValueSelector } from 'redux-form'
-import { FilterSelect, DatePicker, Input, Select } from '../components'
+import { FilterSelect, DatePicker, Input } from '../components'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import { filterOption, transformArticle } from '../utils'
@@ -12,7 +12,7 @@ import { filterOption, transformArticle } from '../utils'
 /**
  * 搜索用的表单
  */
-class TransferSearchForm extends React.Component {
+class SimpleSearchForm extends React.Component {
 
   defaultOption = {
     value: '',
@@ -55,29 +55,14 @@ class TransferSearchForm extends React.Component {
     return (
       <form onSubmit={handleSubmit} className="form-horizontal">
         <div className="form-group">
-          <label className="control-label col-md-1">出库</label>
-          <div className="col-md-2">
-            <Field name="outStock" component={FilterSelect} placeholder="仓库" options={this.getStockOptions(projects)}
+          <label className="control-label col-md-1">项目部</label>
+          <div className="col-md-5">
+            <Field name="other"
+                   component={FilterSelect}
+                   placeholder="仓库"
+                   options={this.getStockOptions(projects)}
                    filterOption={filterOption}
             />
-          </div>
-          <label className="control-label col-md-1">入库</label>
-          <div className="col-md-2">
-            <Field name="inStock" component={FilterSelect} placeholder="仓库" options={this.getStockOptions(projects)}
-                   filterOption={filterOption}
-            />
-          </div>
-          <label className="control-label col-md-1">记录类型</label>
-          <div className="col-md-2">
-            <Field name="type"
-                   component={Select}
-                   placeholder="类型"
-            >
-              <option value=''>全部</option>
-              <option>采购</option>
-              <option>销售</option>
-              <option>调拨</option>
-            </Field>
           </div>
         </div>
         <div className="form-group">
@@ -99,33 +84,36 @@ class TransferSearchForm extends React.Component {
                    endDate={endDate}
             />
           </div>
+          <div className="col-md-6">
+            <a href="#" onClick={e => {
+              e.preventDefault()
+              this.props.change('startDate', moment().startOf('year'))
+              this.props.change('endDate', moment().startOf('day'))
+            }} style={{paddingTop: '7px', display: 'inline-block'}}>今年</a>
+            <a href="#" onClick={e => {
+              e.preventDefault()
+              this.props.change('startDate', moment().startOf('day').add('month', -1))
+              this.props.change('endDate', moment().startOf('day'))
+            }} style={{paddingTop: '7px', display: 'inline-block', marginLeft: '1em'}}>最近一个月</a>
+            <a href="#" onClick={e => {
+              e.preventDefault()
+              this.props.change('startDate', moment().startOf('day').add('month', -2))
+              this.props.change('endDate', moment().startOf('day'))
+            }} style={{paddingTop: '7px', display: 'inline-block', marginLeft: '1em'}}>两个月</a>
+          </div>
         </div>
         <div className="form-group">
-          <label className="control-label col-md-1">名称</label>
+          <label className="control-label col-md-1">车号</label>
           <div className="col-md-2">
-            <Field name="name" component={FilterSelect} placeholder="名称"
-                   filterOption={filterOption}
-                   options={this.getNameOptions()}
-                   normalize={(value, previousValue) => {
-                     if (previousValue !== value) {
-                       this.props.change('size', '')
-                     }
-                     return value
-                   }}
-            />
+            <Field name="carNumber" className="form-control" component={Input} />
           </div>
-          <label className="control-label col-md-1">规格</label>
+          <label className="control-label col-md-1">单号</label>
           <div className="col-md-2">
-            <Field name="size" component={FilterSelect} placeholder="规格"
-                   options={this.getSizeOptions()}
-            />
+            <Field name="number" className="form-control" component={Input} />
           </div>
-          <label className="control-label col-md-1">数量范围</label>
-          <div className="col-md-1">
-            <Field name="startCount" className="form-control" component={Input}/>
-          </div>
-          <div className="col-md-1">
-            <Field name="endCount" className="form-control" component={Input} />
+          <label className="control-label col-md-1">原始单号</label>
+          <div className="col-md-2">
+            <Field name="originalOrder" className="form-control" component={Input} />
           </div>
         </div>
         <div className="form-group">
@@ -141,16 +129,16 @@ class TransferSearchForm extends React.Component {
   }
 }
 
-TransferSearchForm = reduxForm({
-  form: 'transferSearch',
+SimpleSearchForm = reduxForm({
+  form: 'simpleSearchForm',
   initialValues: {
     startDate: moment().startOf('day'),
     endDate: moment().startOf('day')
   }
-})(TransferSearchForm)
+})(SimpleSearchForm)
 
 
-const selector = formValueSelector('transferSearch')
+const selector = formValueSelector('simpleSearchForm')
 const mapStateToProps = state => {
   const articles = state.system.articles.toArray()
   return {
@@ -163,6 +151,6 @@ const mapStateToProps = state => {
   }
 }
 
-TransferSearchForm = connect(mapStateToProps)(TransferSearchForm)
+SimpleSearchForm = connect(mapStateToProps)(SimpleSearchForm)
 
-export default TransferSearchForm
+export default SimpleSearchForm

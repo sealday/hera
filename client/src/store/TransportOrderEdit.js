@@ -69,6 +69,7 @@ class TransportOrderEdit extends Component {
         'receiving-contact': inStock.contacts[0].name, // 收货联系
         'receiving-phone'  : inStock.contacts[0].phone, // 收货人电话
         'receiving-address': inStock.address, // 收货地址
+        'carrier-car': record.carNumber,
       })
     }
   }

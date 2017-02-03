@@ -1,39 +1,41 @@
 /**
  * Created by seal on 15/01/2017.
  */
-import React, { Component } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
-import TransferTable from './TransferTable'
-import { transformArticle } from '../utils'
-import { requestInRecords } from '../actions'
+import Table from './DetailsTable'
+import SearchForm from './DetailsSearchForm'
+import moment from 'moment'
+import { queryStore } from '../actions'
 
-class TransferInTable extends Component {
-  componentDidMount() {
-    this.props.dispatch(requestInRecords())
+class TransferOutTable extends React.Component {
+
+  query = condition => {
+    this.props.dispatch(queryStore('调拨入库明细', {
+      ...condition,
+      self: this.props.store._id,
+      endDate: moment(condition.endDate).add(1, 'day')
+    }))
   }
 
   render() {
     return (
       <div>
-        <TransferTable
-          stock="outStock"
-          {...this.props}
-        />
+        <h2 className="page-header">调拨入库明细</h2>
+        <SearchForm fieldname="出库" form="调拨出库明细" onSubmit={this.query}/>
+        <Table name="出库" records={this.props.records}/>
       </div>
     );
   }
 }
 
 const mapStateToProps = state => {
+  const store = state.system.store
+  const records = state.results.get('调拨入库明细', [])
+
   return {
-    inStock: state.system.base._id,
-    records: state.store.in.filter(record => record.type == '调拨'),
-    projects: state.system.projects,
-    fetching: state.store.fetching_in,
-    articles: state.system.articles.toArray(),
-    ...transformArticle(state.system.articles.toArray())
+    records: records.filter(record => record.inStock === store._id && record.type === '调拨'),
+    store,
   }
 }
-
-
-export default connect(mapStateToProps)(TransferInTable)
+export default connect(mapStateToProps)(TransferOutTable)

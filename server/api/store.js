@@ -183,3 +183,106 @@ exports.search = (req, res, next) => {
     })
   }
 }
+
+/**
+ *
+ * 主要根据对方单位名称搜索仓库信息
+ *
+ * query.condition 是一个 JSON 字符串
+ *
+ * 包含字段
+ * self: 表示当前仓库
+ * other：表示对方单位、仓库
+ * startDate: 开始时间
+ * endDate: 结束时间
+ *
+ */
+exports.simpleSearch = (req, res, next) => {
+  let condition = req.query['condition']
+
+  if (condition) {
+    condition = JSON.parse(condition)
+
+    if (!condition.self) {
+      return res.status(400).json({
+        message: '请求的参数不正确！'
+      })
+    }
+
+    let match = {
+      outDate: {
+        $gte: new Date(condition.startDate),
+        $lt: new Date(condition.endDate)
+      },
+      'entries.count': {
+        $gte: 0
+      }
+    }
+
+    // 查询车号
+    if (condition.carNumber) {
+      match['carNumber'] = condition.carNumber
+    }
+
+    // 查询原始单号
+    if (condition.originalOrder) {
+      match['originalOrder'] = condition.originalOrder
+    }
+
+    let id, vendor
+    if (condition.other) {
+      // 使用 try catch 来判断是不是 store
+      try {
+        id = ObjectId(condition.other)
+      } catch (e) {
+        // 不能转换成 ObjectId 则是vendor
+        vendor = condition.other
+      }
+    }
+
+    // 需要查询对方仓库 调拨单
+    if (id) {
+      match['$or'] = [
+        { outStock: id, inStock: ObjectId(condition.self) },
+        { inStock: id, outStock: ObjectId(condition.self) },
+      ]
+    } else {
+      match['$or'] = [
+        { id, inStock: ObjectId(condition.self) },
+        { outStock: ObjectId(condition.self) },
+      ]
+    }
+
+    // 需要查询对方单位 采购销售
+    if (vendor) {
+      match['vendor'] = vendor
+    }
+
+    // 查询单号 当按单号查询的时候，忽略其他条件
+    if (condition.number) {
+      match = {
+        number: Number(condition.number)
+      }
+    }
+
+    Record.aggregate([
+      {
+        $match: match
+      }
+    ]).then(search => {
+      res.json({
+        message: '查询成功！',
+        data: {
+          search
+        }
+      })
+
+    }).catch(err => {
+      next(err)
+    })
+  } else {
+    res.status(400).json({
+      message: '错误的请求格式'
+    })
+  }
+}
