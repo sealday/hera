@@ -36,6 +36,10 @@ import {
   TransportOrderEdit,
   TransferCreate,
   TransferEdit,
+
+  PurchaseCreate, // 采购创建
+  PurchaseEdit, // 采购编辑
+  PurchaseOrder, // 采购查看
 } from './store'
 
 import {
@@ -128,6 +132,10 @@ ajax('/api/load').then(res => {
           <Route path="record/:id" component={Record}/>
 
           <Route path="transfer/:direction/:id/edit" component={TransferEdit}/>
+
+          <Route path="purchase/:direction/create" component={PurchaseCreate}/>
+          <Route path="purchase/:recordId" component={PurchaseOrder}/>
+          <Route path="purchase/:direction/:id/edit" component={PurchaseEdit}/>
 
           <Route path="transport/:id" component={TransportOrder}/>
           <Route path="transport/:id/edit" component={TransportOrderEdit}/>
