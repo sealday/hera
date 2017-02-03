@@ -7,7 +7,7 @@ import React, { Component } from 'react';
 import { reduxForm, Field, FieldArray } from 'redux-form'
 import { Input, DatePicker, FilterSelect, Select } from '../components'
 import { connect } from 'react-redux'
-import { transformArticle, calculateSize, toFixedWithoutTrailingZero as fixed, validator } from '../utils'
+import { transformArticle,total_, toFixedWithoutTrailingZero as fixed, validator } from '../utils'
 import moment from 'moment'
 
 const EntryTable = connect(
@@ -37,10 +37,43 @@ const EntryTable = connect(
   const getTotal = (index) => {
     try {
       const entry = fields.get(index)
-      return fixed(entry.count * calculateSize(entry.size))
+      const total = total_(entry)
+      return isNaN(total) ? false : fixed(total)
     } catch (e) {
-      return '错误'
+      return false
     }
+  }
+
+  // 下面进行数字计算的函数的原则是，如果能算出数字，返回数字，否则返回 false
+  // 除不尽的情况下不处理
+  const getUnit = (index) => {
+    const entry = fields.get(index)
+    const article = nameArticleMap[entry.name]
+    return article ? article.unit : false
+  }
+
+  const getSum = (index) => {
+    const entry = fields.get(index)
+    const sum = getTotal(index) * entry.price
+    return isNaN(sum) ? false : sum
+  }
+
+  const getFreight = (index) => {
+    const entry = fields.get(index)
+    const freight = entry.freightPrice * entry.freightCount
+    return isNaN(freight) ? false : freight
+  }
+
+  const getMixPrice = (index) => {
+    const total = getTotal(index)
+    return total ? getMixSum(index) / total : false
+  }
+
+  const getMixSum = (index) => {
+    const sum = getSum(index)
+    const freight = getFreight(index)
+    const mixSum = (sum ? sum : 0) + (freight ? freight: 0)
+    return mixSum ? mixSum : false
   }
 
   const getReport = () => {
@@ -48,7 +81,7 @@ const EntryTable = connect(
     for (let i = 0; i < fields.length; i++) {
       let entry = fields.get(i)
       let total = getTotal(i)
-      total = total === '错误' ? 0 : total
+      total = total ? 0 : total
 
       if (!entry.name) break // name 没填写的时候直接跳出
 
@@ -72,13 +105,9 @@ const EntryTable = connect(
     return total
   }
 
-  //const getStock = () => {
-  //  return 0
-  //}
-
   return (
     <div className="panel panel-default">
-      <table className="table table-bordered">
+      <table className="table table-bordered" id="purchase-table">
         <thead>
         <tr>
           <th>类型</th>
@@ -102,19 +131,20 @@ const EntryTable = connect(
               onClick={add}
               className="btn btn-default">增加</button>
           </th>
+          <th/>
         </tr>
         </thead>
         <tbody>
         {fields.map((entry, index) =>
           <tr key={index}>
-            <td>
+            <td style={{minWidth: '6em'}}>
               <Field name={`${entry}.type`} component={Select}>
                 {Object.keys(typeNameMap).map((type, index) => (
                   <option key={index}>{type}</option>
                 ))}
               </Field>
             </td>
-            <td>
+            <td style={{minWidth: '7em'}}>
               <Field
                 name={`${entry}.name`}
                 component={FilterSelect}
@@ -123,7 +153,7 @@ const EntryTable = connect(
                 placeholder="名称"
               />
             </td>
-            <td>
+            <td style={{minWidth: '11em'}}>
               <Field
                 name={`${entry}.size`}
                 component={FilterSelect}
@@ -133,22 +163,29 @@ const EntryTable = connect(
               />
             </td>
             <td><Field name={`${entry}.count`} component={Input} validate={validator.required}/></td>
-            <td>{getTotal(index)}</td>
-            <td><Field name={`${entry}.unit`} component={Input}/></td>
+            <td>{fixed(getTotal(index))}</td>
+            <td>{getUnit(index)}</td>
             <td><Field name={`${entry}.price`} component={Input}/></td>
-            <td><Field name={`${entry}.sum`} component={Input}/></td>
+            <td>{fixed(getSum(index))}</td>
             <td><Field name={`${entry}.freightCount`} component={Input}/></td>
-            <td><Field name={`${entry}.freightUnit`} component={Input}/></td>
+            <td style={{minWidth: '5em'}}>
+              <Field name={`${entry}.freightUnit`} component={Select}>
+                <option>吨</option>
+                <option>趟</option>
+              </Field>
+            </td>
             <td><Field name={`${entry}.freightPrice`} component={Input}/></td>
-            <td><Field name={`${entry}.freight`} component={Input}/></td>
-            <td><Field name={`${entry}.mixPrice`} component={Input}/></td>
-            <td><Field name={`${entry}.mixSum`} component={Input}/></td>
+            <td>{fixed(getFreight(index))}</td>
+            <td>{fixed(getMixPrice(index))}</td>
+            <td>{fixed(getMixSum(index))}</td>
             <td><Field name={`${entry}.comments`} component={Input}/></td>
             <td>
               <button
                 type="button"
                 onClick={add}
                 className="btn btn-default">增加</button>
+            </td>
+            <td>
               <button
                 type="button"
                 className="btn btn-danger"
