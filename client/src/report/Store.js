@@ -155,25 +155,27 @@ class Store extends Component {
 
     return (
       <div>
-        <h2>仓库实时查询</h2>
-        <form className="row" onSubmit={this.query}>
-          <div className="col-md-10">
-            <Select
-              name="project"
-              clearable={false}
-              placeholder="选择要查询的仓库"
-              value={this.state.project}
-              options={this.props.projects.map(project => ({
-                value: project._id,
-                label: project.company + project.name,
-                pinyin: project.pinyin
-              }))}
-              filterOption={filterOption}
-              onChange={this.handleProjectChange}
-            />
-          </div>
-          <div className="col-md-2">
-            <button className="btn btn-primary btn-block">查询</button>
+        <h2 className="page-header">仓库实时查询</h2>
+        <form className="form-horizontal" onSubmit={this.query}>
+          <div className="form-group">
+            <div className="col-md-10">
+              <Select
+                name="project"
+                clearable={false}
+                placeholder="选择要查询的仓库"
+                value={this.state.project}
+                options={this.props.projects.map(project => ({
+                  value: project._id,
+                  label: project.company + project.name,
+                  pinyin: project.pinyin
+                }))}
+                filterOption={filterOption}
+                onChange={this.handleProjectChange}
+              />
+            </div>
+            <div className="col-md-2">
+              <button className="btn btn-primary btn-block">查询</button>
+            </div>
           </div>
         </form>
         <table className="table table-bordered table-hover">

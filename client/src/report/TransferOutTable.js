@@ -16,6 +16,7 @@ class TransferOutTable extends Component {
   render() {
     return (
       <div>
+        <h2 className="page-header">调拨出库明细</h2>
         <TransferTable
           stock="inStock"
           {...this.props}
