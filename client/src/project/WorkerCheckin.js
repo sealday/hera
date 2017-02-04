@@ -38,7 +38,7 @@ class WorkerCheckin extends Component{
     }
 }
 const InfoList = (props)=>(
-    <table className="table">
+    <table className="table table-bordered">
         <thead>
         <tr>
             <th>姓名</th>

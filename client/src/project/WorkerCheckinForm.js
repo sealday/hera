@@ -86,7 +86,9 @@ class WorkerCheckinForm extends Component {
                         </div>
 
                     </div>
+                  <div className="form-group">
                     <button className="btn btn-primary btn-block">提交</button>
+                  </div>
                 </form>
             </div>
         )
