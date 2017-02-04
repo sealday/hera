@@ -2,11 +2,11 @@
  * Created by seal on 25/01/2017.
  */
 
-import React, { Component } from 'react';
+import React from 'react'
 import { reduxForm, Field } from 'redux-form'
-import { DatePicker, Input } from '../components'
+import { DatePicker, Input, Select } from '../components'
 
-class TransportForm extends Component {
+class TransportForm extends React.Component {
   render() {
     return (
       <form className="form-horizontal" onSubmit={this.props.handleSubmit}>
@@ -33,7 +33,10 @@ class TransportForm extends Component {
         <div className="form-group">
           <label className="col-sm-2 control-label">付款方</label>
           <div className="col-sm-4">
-            <Field name="payer" component={Input}/>
+            <Field name="payer" component={Select}>
+              <option>{this.props.optionA}</option>
+              <option>{this.props.optionB}</option>
+            </Field>
           </div>
           <label className="col-sm-2 control-label">付款约定</label>
           <div className="col-sm-4">

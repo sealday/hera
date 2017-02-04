@@ -23,7 +23,7 @@ class App extends Component {
         {this.isStoreSelected() && (
         <div className="container-fluid" style={{height: '100%'}}>
           <div className="row" style={{position: 'relative', height: '100%'}}>
-            <div className={cx({ 'col-sm-2': true, 'App-drawer': true, 'show': props.nav.drawer})}>
+            <div className={cx({ 'col-sm-2': true, 'App-drawer': true, 'show': props.nav.drawer, 'hidden-print': true})}>
               {/* TODO 这里可以考虑改成数组的形式*/}
               <ul>
                 <li>
