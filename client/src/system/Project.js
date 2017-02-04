@@ -55,8 +55,8 @@ class Project extends React.Component {
                     <td rowSpan={rowSpan}>{project.type}</td>
                     <td rowSpan={rowSpan}>{project.comments}</td>
                     <td rowSpan={rowSpan}>
-                      <Link to={`/project/${project._id}/edit`} >编辑</Link>
-                      <a href="#" onClick={e => onDeleteClick(e, project )}>删除</a>
+                      <Link className='btn btn-default' to={`/project/${project._id}/edit`} >编辑</Link>
+                      <a className="btn btn-danger" href="#" onClick={e => onDeleteClick(e, project )}>删除</a>
                     </td>
                   </tr>
                 )
