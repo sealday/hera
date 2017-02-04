@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import { deleteNotify } from '../actions'
 
 const Notification = ({ items, dispatch }) => (
-  <div className="notify-container">
+  <div className="notify-container hidden-print">
     {items.valueSeq().map(item => (
       <Item
         id={item.key}

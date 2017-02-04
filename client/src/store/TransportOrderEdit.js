@@ -105,6 +105,8 @@ class TransportOrderEdit extends Component {
           <TransportForm
             onSubmit={this.handleSubmit}
             initialValues={this.state}
+            optionA={this.state['delivery-party']}
+            optionB={this.state['receiving-party']}
           />
         </div>
       )

@@ -119,27 +119,23 @@ class TransferOrder extends React.Component {
             <button className="btn btn-default" onClick={() => print()}>打印</button>
             <a className="btn btn-default" href="check">审核确认</a>
           </div>
-          <h3 className="text-center">上海创兴建筑设备租赁有限公司</h3>
-          <h3 className="text-center">{orderName}</h3>
+          <h4 className="text-center">上海创兴建筑设备租赁有限公司</h4>
+          <h4 className="text-center">{orderName}</h4>
           <div className="row">
             <div className="col-xs-6">
               <table className="table table-clean">
                 <tbody>
                 <tr>
                   <td>{'\u00a0'}</td>
-                  <td/>
                 </tr>
                 <tr>
                   <td>{'\u00a0'}</td>
-                  <td/>
                 </tr>
                 <tr>
-                  <td className="text-left">承租单位：</td>
-                  <td className="text-center">{company}</td>
+                  <td className="text-left">承租单位：{company}</td>
                 </tr>
                 <tr>
-                  <td className="text-left">工程项目：</td>
-                  <td className="text-center">{name}</td>
+                  <td className="text-left">工程项目：{name}</td>
                 </tr>
                 </tbody>
               </table>
@@ -148,20 +144,16 @@ class TransferOrder extends React.Component {
               <table className="table table-clean">
                 <tbody>
                 <tr>
-                  <td className="text-left">单号：</td>
-                  <td className="text-center">{record.number}</td>
+                  <td className="text-left">单号：{record.number}</td>
                 </tr>
                 <tr>
-                  <td className="text-left">原始单号：</td>
-                  <td className="text-center">{record.originalOrder}</td>
+                  <td className="text-left">原始单号：{record.originalOrder}</td>
                 </tr>
                 <tr>
-                  <td className="text-left">日期：</td>
-                  <td className="text-center">{moment(record.outDate).format('YYYY-MM-DD')}</td>
+                  <td className="text-left">日期：{moment(record.outDate).format('YYYY-MM-DD')}</td>
                 </tr>
                 <tr>
-                  <td className="text-left">车号：</td>
-                  <td className="text-center">{record.carNumber}</td>
+                  <td className="text-left">车号：{record.carNumber}</td>
                 </tr>
                 </tbody>
               </table>
@@ -180,11 +172,11 @@ class TransferOrder extends React.Component {
                 <tbody>
                 {leftPart}
                 <tr>
-                  <td colSpan="3" style={{height: '10em'}} className="text-left">
+                  <td colSpan="3" style={{height: '7em'}} className="text-left">
                     <span>说明：如供需双方未签正式合同，本{orderName}经供需双方代表签字确认后，将作为合同</span>
                     <span>及发生业务往来的有效凭证，如已签合同，则成为该合同的组成部分。租用方须核对</span>
                     <span>以上产品规格、数量确认后可签字认可。</span>
-                    <span>说明：</span></td>
+                  </td>
                 </tr>
                 <tr>
                   <td/>
@@ -206,7 +198,7 @@ class TransferOrder extends React.Component {
                 <tbody>
                 {rightPart}
                 <tr>
-                  <td colSpan="3" style={{height: '10em'}}>备注 {record.commentst }</td>
+                  <td colSpan="3" style={{height: '7em'}}>备注 {record.comments }</td>
                 </tr>
                 <tr>
                   <td/>
@@ -219,9 +211,12 @@ class TransferOrder extends React.Component {
           </div>
           <div className="row">
             <div className="col-xs-4">
+              <p>制单人：{record.username}</p>
+            </div>
+            <div className="col-xs-4">
               <p>出租单位（签名）：</p>
             </div>
-            <div className="col-xs-offset-4 col-xs-4">
+            <div className="col-xs-4">
               <p>租借单位（签名）：</p>
             </div>
           </div>
