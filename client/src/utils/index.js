@@ -7,15 +7,16 @@ import fuzzysearch from 'fuzzysearch'
 
 /**
  * 计算规格的数值表达
- * @param size
+ * @param sizeStr
  * @returns {number}
  */
-export function calculateSize(size) {
-  let sizes = size.split(';');
-  if (isNaN(sizes[sizes.length - 1])) {
+export function calculateSize(sizeStr) {
+  if (!sizeStr) return 1 // 未定义、空等情况返回1
+  let size = sizeStr.split(';').pop();
+  if (isNaN(size)) {
     return 1;
   } else {
-    return Number(sizes[sizes.length - 1]);
+    return Number(size);
   }
 }
 
