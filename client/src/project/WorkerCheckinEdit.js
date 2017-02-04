@@ -21,7 +21,7 @@ class WorkerCheckinEdit extends Component {
                 <h2>劳务人员进场登记编辑</h2>
                 <WorkerCheckinForm
                     onSubmit={this.handleSubmit}
-                    initialValues={{...this.props.worker,birthday:moment(this.props.worker.birthday)}}
+                    initialValues={{...this.props.worker,birthday:moment(this.props.worker.birthday),jointime:moment(this.props.worker.jointime)}}
                 />
             </div>
         )
