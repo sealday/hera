@@ -46,7 +46,7 @@ class SearchTable extends React.Component {
             <td>{entry.count}</td>
             <td>{total(entry.count, entry.size)}</td>
             <td>
-              <Link to={`/transfer/${entry._id}`}>查看详情</Link>
+              <Link to={`/record/${entry._id}`}>查看详情</Link>
             </td>
           </tr>
         ))}
