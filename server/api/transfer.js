@@ -22,17 +22,34 @@ exports.list = (req, res, next) => {
 客户端传来 inStock 和 outStock，这里不判断是调入还是调出
  */
 exports.create = (req, res, next) => {
+
   let record = new Record(req.body)
   let historyRecord = new HistoryRecord(req.body)
 
-  record.type = historyRecord.type = '调拨'
+  // FIXME 考虑使用更合理的字段，比如 type
+  if (record.vendor) { // 如果有填写对方单位（vendor）字段，那么就属于采购和销售
+    if (record.inStock) {
+      record.type = historyRecord.type = '采购'
+      record.status = historyRecord.status = '未支付'
+    } else if (record.outStock) {
+      record.type = historyRecord.type = '销售'
+      record.status = historyRecord.status = '未支付'
+    } else {
+      return res.status(400).json({
+        message: '请求参数有误！'
+      })
+    }
+  } else {
+    record.type = historyRecord.type = '调拨'
+    record.status = historyRecord.status = '未确认'
+  }
+
   record.order = historyRecord.order = record._id
-  record.status = historyRecord.status = '未确认'
   record.username = historyRecord.username = req.session.user.username
 
   Promise.all([record.save(), historyRecord.save()]).then(([record]) => {
     res.json({
-      message: '创建调拨单成功！',
+      message: '创建' + record.type + '单成功！',
       data: {
         record
       }
@@ -61,14 +78,13 @@ exports.update = (req, res, next) => {
   Record.findById(req.params.id).then(record => {
     Object.assign(record, transfer)
     let historyRecord = new HistoryRecord(transfer)
-    historyRecord.type = '调拨'
     historyRecord.order = record._id
     historyRecord.status  = record.status
     record.username = historyRecord.username = req.session.user.username
     return Promise.all([record.save(), historyRecord.save()])
-  }).then(([record, historyRecord]) => {
+  }).then(([record]) => {
     res.json({
-      message: '更新调拨单成功！',
+      message: '更新' + record.type +'成功！',
       data: {
         record
       }
