@@ -28,7 +28,7 @@ export const Select = ({ input, children }) => (
 )
 
 export const DatePicker = ({ input, ...custom }) => (
-  <ReactDatePicker selected={input.value} className="form-control" onChange={date => input.onChange(date)} {...custom} />
+  <ReactDatePicker selected={input.value} className="form-control" onChange={date => input.onChange(date)} autoComplete="off" {...custom} />
 )
 
 export const FilterSelect = ({ input, options, style, ...custom, meta: { touched, error, warning } }) => {
