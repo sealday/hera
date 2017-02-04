@@ -38,7 +38,7 @@ const EntryTable = connect(
     try {
       const entry = fields.get(index)
       const total = total_(entry)
-      return isNaN(total) ? false : fixed(total)
+      return isNaN(total) ? false : total
     } catch (e) {
       return false
     }
@@ -81,7 +81,7 @@ const EntryTable = connect(
     for (let i = 0; i < fields.length; i++) {
       let entry = fields.get(i)
       let total = getTotal(i)
-      total = total ? 0 : total
+      total = total ? total : 0
 
       if (!entry.name) break // name 没填写的时候直接跳出
 
