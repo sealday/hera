@@ -109,7 +109,7 @@ class App extends Component {
                     transitionEnterTimeout={500}
                     transitionLeaveTimeout={300}>
                     {props.nav.finance && <ul>
-                      <li><Link to=""></Link></li>
+                      <li><Link to="">运费结算查询</Link></li>
                     </ul>}
                   </ReactCSSTransitionGroup>
                 </li>
