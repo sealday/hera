@@ -438,7 +438,7 @@ export const postTransfer = (record) => (dispatch, getState) => {
       dispatch(networking.endSuccess)
       dispatch(updateRecord(res.data.record))
       dispatch(newSuccessNotify('提示', '创建调拨单成功！', 2000))
-      dispatch(push(`/transfer/${res.data.record._id}`))
+      dispatch(push(`/record/${res.data.record._id}`))
     }).catch(err => {
       dispatch(networking.endFailure)
       dispatch(newErrorNotify('错误', '创建调拨单失败！', 2000))

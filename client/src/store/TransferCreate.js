@@ -41,7 +41,7 @@ class TransferCreate extends Component {
     return (
       <div>
         <h2 className="page-header">{pageTitle}</h2>
-        <TransferForm onSubmit={this.handleSubmit}/>
+        <TransferForm onSubmit={this.handleSubmit} form={pageTitle}/>
       </div>
     );
   }
