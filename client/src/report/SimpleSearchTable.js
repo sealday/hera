@@ -99,7 +99,7 @@ class SimpleSearchTable extends React.Component {
               <td>{getDirection(entry)}</td>
               <td>{entry.totalString}</td>
               <td>
-                <Link to={`/transfer/${entry._id}`}>查看详情</Link>
+                <Link to={`/record/${entry._id}`}>查看详情</Link>
               </td>
             </tr>
           ))}

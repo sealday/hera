@@ -2,44 +2,21 @@
  * Created by seal on 15/01/2017.
  */
 
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux'
 import moment from 'moment'
 import { calculateSize, toFixedWithoutTrailingZero } from '../utils'
 import { Link } from 'react-router'
-import { requestRecord } from '../actions'
 
-class TransferOrder extends Component {
+class TransferOrder extends React.Component {
 
   handleTransport = () => {
-    this.props.router.push(`/transport/${this.props.params.recordId}`)
-  }
-
-  componentDidMount() {
-    const id = this.props.params.recordId
-    const record = this.props.recordIdMap[id]
-    const projectIdMap = this.props.projectIdMap
-
-    if (!record || !projectIdMap) {
-      this.props.dispatch(requestRecord(id))
-    }
+    const { router } = this.props
+    router.push(`/transport/${this.props.params.id}`)
   }
 
   render() {
-    const id = this.props.params.recordId
-    const record = this.props.recordIdMap[id]
-    const projectIdMap = this.props.projectIdMap
-
-    // 假设本地缓存中没有则进行一次网络请求
-    if (!record || !projectIdMap) {
-      return (
-        <div className="alert alert-info">
-          <p>请求数据中，请稍后</p>
-        </div>
-      )
-    }
-
-    const store = this.props.store
+    const { record, store, projects, articles, router } = this.props
 
     let orderName = ''
     let company = ''
@@ -48,19 +25,20 @@ class TransferOrder extends Component {
 
     // 判断是收料单还是发料单
     if (record.inStock === store._id) {
-      // 入库是基地，是收料单
+      // 入库是当前操作仓库时，是收料单
       orderName = '收料单'
       direction = 'in'
-      company = projectIdMap[record.outStock].company
-      name = projectIdMap[record.outStock].name
+      company = projects.get(record.outStock).company
+      name = projects.get(record.outStock).name
     } else if (record.outStock === store._id) {
-      // 出库是基地，是发料单
+      // 出库是当前操作仓库时，是发料单
       orderName = '发料单'
       direction = 'out'
-      company = projectIdMap[record.inStock].company
-      name = projectIdMap[record.inStock].name
+      company = projects.get(record.inStock).company
+      name = projects.get(record.inStock).name
     } else {
-      // TODO 考虑路径上加以区别，否则当属于项目部之间调货的时候就没有办法处理了
+      // 当两者都不是的时候，属于非法访问
+      return <div>非法访问</div>
     }
 
     let entries = {}
@@ -79,7 +57,7 @@ class TransferOrder extends Component {
     });
 
     let productTypeMap = {}
-    this.props.articles.forEach(article => {
+    articles.forEach(article => {
       productTypeMap[article.name] = article
     })
 
@@ -135,7 +113,7 @@ class TransferOrder extends Component {
     return (
         <div className="container-fluid">
           <div className="btn-group hidden-print">
-            <button className="btn btn-default" onClick={() => this.props.router.goBack()}>返回</button>
+            <button className="btn btn-default" onClick={() => router.goBack()}>返回</button>
             <Link className="btn btn-primary" to={`/transfer/${direction}/${record._id}/edit`}>编辑</Link>
             <button className="btn btn-default" onClick={this.handleTransport}>运输单</button>
             <button className="btn btn-default" onClick={() => print()}>打印</button>
@@ -252,13 +230,10 @@ class TransferOrder extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    recordIdMap: state.store.records.toObject(),
-    projectIdMap: state.system.projects.toObject(),
+const mapStateToProps = state => ({
+    projects: state.system.projects,
     articles: state.system.articles.toArray(),
     store: state.system.store
-  }
-}
+})
 
 export default connect(mapStateToProps)(TransferOrder)

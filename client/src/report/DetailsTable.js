@@ -72,7 +72,7 @@ class TransferTable extends React.Component {
                   <td rowSpan={rowSpan}>
                     <Link onClick={() => {
                       this.props.dispatch({ type: 'UPDATE_RECORDS_CACHE', record })
-                    }} to={ `/transfer/${record._id}`}>详情</Link>
+                    }} to={ `/record/${record._id}`}>详情</Link>
                     <br/>
                     {record.hasTransport && (
                     <Link onClick={() => {
