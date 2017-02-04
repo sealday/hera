@@ -7,7 +7,7 @@ import React, { Component } from 'react';
 import { reduxForm, Field, FieldArray } from 'redux-form'
 import { Input, DatePicker, FilterSelect, Select } from '../components'
 import { connect } from 'react-redux'
-import { transformArticle, calculateSize, toFixedWithoutTrailingZero as fixed, validator } from '../utils'
+import { filterOption, transformArticle, calculateSize, toFixedWithoutTrailingZero as fixed, validator } from '../utils'
 import moment from 'moment'
 
 const EntryTable = connect(
@@ -25,7 +25,7 @@ const EntryTable = connect(
   }
 
   const getNameOptions = (type) => {
-    return typeNameMap[type].map(name => ({ value: name, label: name }))
+    return typeNameMap[type].map(name => ({ value: name, label: name, pinyin: nameArticleMap[name].pinyin }))
   }
 
   const getSizeOptions = (name) => {
@@ -72,10 +72,6 @@ const EntryTable = connect(
     return total
   }
 
-  //const getStock = () => {
-  //  return 0
-  //}
-
   return (
     <div className="panel panel-default">
       <table className="table table-bordered">
@@ -110,6 +106,7 @@ const EntryTable = connect(
                 component={FilterSelect}
                 options={getNameOptions(fields.get(index).type)}
                 validate={validator.required}
+                filterOption={filterOption}
                 placeholder="名称"
               />
             </td>
@@ -118,7 +115,6 @@ const EntryTable = connect(
                 name={`${entry}.size`}
                 component={FilterSelect}
                 options={getSizeOptions(fields.get(index).name)}
-                validate={validator.required}
                 placeholder="规格"
               />
             </td>
