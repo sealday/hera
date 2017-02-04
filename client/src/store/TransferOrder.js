@@ -11,8 +11,8 @@ import { Link } from 'react-router'
 class TransferOrder extends React.Component {
 
   handleTransport = () => {
-    const { router } = this.props
-    router.push(`/transport/${this.props.params.id}`)
+    const { router, record } = this.props
+    router.push(`/transport/${record._id}`)
   }
 
   render() {

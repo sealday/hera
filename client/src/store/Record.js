@@ -19,7 +19,7 @@ class Record extends React.Component {
   }
 
   render() {
-    const { id, records } = this.props
+    const { id, records, router } = this.props
     const record = records.get(id)
 
     // 假设本地缓存中没有则进行一次网络请求
@@ -32,7 +32,7 @@ class Record extends React.Component {
     }
 
     if (record.type === '调拨') {
-      return <TransferOrder record={record}/>
+      return <TransferOrder record={record} router={router}/>
     } else {
       return <div>暂时没有详情</div>
     }
