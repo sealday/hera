@@ -5,7 +5,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { requestRecord } from '../actions'
-import { toFixedWithoutTrailingZero } from '../utils'
+import { toFixedWithoutTrailingZero as fixed, transformArticle, total_ } from '../utils'
 import moment from 'moment'
 
 class TransportOrder extends Component {
@@ -25,7 +25,7 @@ class TransportOrder extends Component {
   }
 
   render() {
-    const record = this.props.record
+    const { record, nameArticleMap } = this.props
     if (!record) {
       return <div>请求运输单！</div>
     }
@@ -41,6 +41,29 @@ class TransportOrder extends Component {
     }
 
     const transport = record.transport
+
+    // 计算货物名称及数量
+    const getContent = () => {
+      let result = []
+      record.entries.forEach(entry => {
+        const {unit, sizeUnit, countUnit} = nameArticleMap[entry.name]
+        result.push(`${entry.name}${entry.size}${sizeUnit} × ${entry.count}${countUnit} = ${fixed(total_(entry))}${unit}`)
+      })
+      return result
+    }
+
+    const getTable = () => {
+      let result = []
+      const content = getContent()
+      for (let i = 0; i < content.length; i += 3) {
+        result.push(<tr key={i / 3}>
+          <td>{content[i]}</td>
+          <td>{content[i + 1]}</td>
+          <td>{content[i + 2]}</td>
+        </tr>)
+      }
+      return result
+    }
 
     return (
       <div>
@@ -58,7 +81,12 @@ class TransportOrder extends Component {
           </tr>
           <tr>
             <th>货物名称及数量</th>
-            <td colSpan="6"></td>
+            <td colSpan="6">
+              <table style={{fontSize: '11px', width: '100%'}}>
+                <thead/>
+                <tbody>{getTable()}</tbody>
+              </table>
+            </td>
           </tr>
           <tr>
             <th>单价</th>
@@ -67,7 +95,7 @@ class TransportOrder extends Component {
             <td>{transport.weight}</td>
             <th>（元）</th>
             <th>金额</th>
-            <td>{toFixedWithoutTrailingZero(transport.price * transport.weight)}</td>
+            <td>{fixed(transport.price * transport.weight)}</td>
           </tr>
           <tr>
             <th rowSpan="2">付款方式及收款人信息</th>
@@ -79,7 +107,7 @@ class TransportOrder extends Component {
           <tr>
             <th>收款人</th>
             <td>{transport.payee}</td>
-            <td colSpan="4">{transport.bank}</td>
+            <td colSpan="4">{transport.bank} {transport.account}</td>
           </tr>
           <tr>
             <th>说明</th>
@@ -142,7 +170,8 @@ const mapStateToProps = (state, props) => {
   const record = state.store.records.get(id)
   return {
     record,
-    id
+    id,
+    ...transformArticle(state.system.articles.toArray()),
   }
 }
 
