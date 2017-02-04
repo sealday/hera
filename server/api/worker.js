@@ -5,7 +5,7 @@
 const Worker = require('../models/Worker')
 
 exports.list = (req,res,next)=>{
-    Worker.find().then(workers=>{
+    Worker.find({valid:true}).then(workers=>{
         res.json({
             data:{
                 workers
@@ -18,9 +18,11 @@ exports.list = (req,res,next)=>{
 
 
 exports.create = (req,res,next)=>{
-    const workerinfo = req.body;
-    let worker = new Worker(workerinfo);
-    worker.save().then(()=>{
+    const workerreq = req.body;
+    let worker = new Worker(workerreq);
+    worker.set("valid",true)
+
+    worker.save().then(workerinfo=>{
         res.json({
             message:'保存成功',
             data:{
@@ -50,7 +52,7 @@ exports.update = (req,res,next)=>{
 
 exports.delete =(req,res,next)=>{
     const id = req.params.id;
-    Worker.findByIdAndRemove(id).then(()=>{
+    Worker.findByIdAndUpdate(id,{valid:false}).then(()=>{
         res.json({
             message:'删除成功'
         })
