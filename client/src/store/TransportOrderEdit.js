@@ -22,7 +22,8 @@ class TransportOrderEdit extends Component {
       payDate            : null, // 付款日期
       'pay-info'         : '', // 付款信息
       payee              : '', // 收款人
-      bank               : '', // 银行
+      bank               : '', // 收款人开户行
+      account            : '', // 收款人账号
       'delivery-party'   : '', // 发货单位
       'delivery-contact' : '', // 发货人
       'delivery-phone'   : '', // 发货人电话

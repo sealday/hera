@@ -58,7 +58,8 @@ const recordSchema = {
     payDate: Date, // 付款日期
     'pay-info': String, // 付款信息
     payee: String, // 收款人
-    bank: String, // 银行
+    bank: String, // 收款人开户行
+    account: String, // 收款人账号
     'delivery-party': String, // 发货单位
     'delivery-contact': String, // 发货人
     'delivery-phone': String, // 发货人电话
