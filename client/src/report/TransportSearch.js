@@ -25,7 +25,7 @@ class Search extends React.Component {
     const { records } = this.props
     return (
       <div>
-        <h3 className="page-header">输入搜索条件</h3>
+        <h3 className="page-header">运输单查询</h3>
         <SearchForm onSubmit={this.search}/>
         <SearchTable search={records} />
       </div>
