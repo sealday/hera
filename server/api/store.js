@@ -219,6 +219,11 @@ exports.simpleSearch = (req, res, next) => {
       }
     }
 
+    // 查询运输单
+    if (condition.hasTransport) {
+      match['hasTransport'] = true
+    }
+
     // 查询车号
     if (condition.carNumber) {
       match['carNumber'] = condition.carNumber

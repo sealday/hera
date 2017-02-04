@@ -135,6 +135,7 @@ class TransferOrder extends Component {
     return (
         <div className="container-fluid">
           <div className="btn-group hidden-print">
+            <button className="btn btn-default" onClick={() => this.props.router.goBack()}>返回</button>
             <Link className="btn btn-primary" to={`/transfer/${direction}/${record._id}/edit`}>编辑</Link>
             <button className="btn btn-default" onClick={this.handleTransport}>运输单</button>
             <button className="btn btn-default" onClick={() => print()}>打印</button>

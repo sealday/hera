@@ -39,7 +39,6 @@ class App extends Component {
                       <li><Link to="/transfer/in/create">调拨入库（收料）</Link></li>
                       <li><Link to="/">盘点盈余入库</Link></li>
                       <li><Link to="/">盘点盈余出库</Link></li>
-                      <li><Link to="/">运输单</Link></li>
                     </ul>}
                   </ReactCSSTransitionGroup>
                 </li>
@@ -57,6 +56,7 @@ class App extends Component {
                       <li><Link to="/sell_table">销售出库明细表</Link></li>
                       <li><Link to="/transfer_in_table">调拨入库明细表（收料）</Link></li>
                       <li><Link to="/transfer_out_table">调拨出库明细表（发料）</Link></li>
+                      <li><Link to="/transport_table">运输单查询</Link></li>
                       <li><Link to="/">盘点盈余入库明细表</Link></li>
                       <li><Link to="/">盘点亏损出库明细表</Link></li>
                     </ul>}
