@@ -215,6 +215,7 @@ class TransferForm extends Component {
 }
 
 TransferForm = reduxForm({
+  form: 'transfer',
   initialValues: {
     outDate: moment()
   }
