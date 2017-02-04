@@ -102,6 +102,17 @@ class App extends Component {
                     </ul>}
                   </ReactCSSTransitionGroup>
                 </li>
+                <li>
+                  <a href="#" onClick={e => { e.preventDefault(); props.dispatch(toggleMenu('finance'))}}>财务</a>
+                  <ReactCSSTransitionGroup
+                    transitionName="nav"
+                    transitionEnterTimeout={500}
+                    transitionLeaveTimeout={300}>
+                    {props.nav.finance && <ul>
+                      <li><Link to=""></Link></li>
+                    </ul>}
+                  </ReactCSSTransitionGroup>
+                </li>
 
               </ul>
             </div>
