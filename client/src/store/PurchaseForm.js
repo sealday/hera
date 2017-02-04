@@ -219,41 +219,27 @@ class TransferForm extends Component {
               options={this.props.projects.map(project => ({ value: project._id, label: project.company + project.name }))}
               placeholder="请选择项目" />
           </div>
+          <label className="control-label col-md-1">对方单位</label>
+          <div className="col-md-3">
+            <Field name="vendor" component={Input}/>
+          </div>
           <label className="control-label col-md-1">日期</label>
           <div className="col-md-3">
             <Field name="outDate" component={DatePicker}/>
           </div>
+        </div>
+        <div className="form-group">
           <label className="control-label col-md-1">原始单号</label>
           <div className="col-md-3">
             <Field name="originalOrder" component={Input}/>
           </div>
-        </div>
-        <div className="form-group">
           <label className="control-label col-md-1">车号</label>
           <div className="col-md-3">
             <Field name="carNumber" component={Input}/>
           </div>
-          <label className="control-label col-md-1">运费</label>
-          <div className="col-md-3">
-            <Field name="fee.car" component={Input}/>
-          </div>
           <label className="control-label col-md-1">备注</label>
           <div className="col-md-3">
             <Field name="comments" component={Input}/>
-          </div>
-        </div>
-        <div className="form-group">
-          <label className="control-label col-md-1">整理费用</label>
-          <div className="col-md-3">
-            <Field name="fee.sort" component={Input}/>
-          </div>
-          <label className="control-label col-md-1">其他费用1</label>
-          <div className="col-md-3">
-            <Field name="fee.other1" component={Input}/>
-          </div>
-          <label className="control-label col-md-1">其他费用2</label>
-          <div className="col-md-3">
-            <Field name="fee.other2" component={Input}/>
           </div>
         </div>
         <div className="form-group">
