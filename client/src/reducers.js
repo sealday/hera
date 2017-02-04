@@ -117,7 +117,7 @@ export function nav(state = new NavRecord(), action) {
 export function requestWorkerlist(state= new WorkerRecord(),action) {
     switch (action.type){
         case actionTypes.REQUEST_WORKERS_SUCCESS:
-            return state.set('requesting',false).update('data',data=>data.concat(action.data));
+            return state.set('requesting',false).set('data',action.data);
         case actionTypes.REQUEST_WORKERS:
             return state.set('requesting',true);
         case actionTypes.REQUEST_WORKERS_FAILURE:
@@ -125,7 +125,6 @@ export function requestWorkerlist(state= new WorkerRecord(),action) {
         case actionTypes.POST_WORKERIN:
             return state.set('posting',true);
         case actionTypes.POST_WORKERIN_SUCCESS:
-
             return state.set('posting',false).update('data',data => data.concat(action.data));
         case actionTypes.POST_WORKERIN_FAILURE:
             return state.set('posting',false);
@@ -141,6 +140,15 @@ export function requestWorkerlist(state= new WorkerRecord(),action) {
             })
             return state.set('posting',false).set('data',workers)
         case actionTypes.ALTER_WORKER_FAILURE:
+          return state.set('posting',false)
+        case actionTypes.DELETE_WORKER:
+          return state.set('posting',true)
+        case actionTypes.DELETE_WORKER_SUCCESS:
+          const id = action.data;
+          const workerlist = state.get('data');
+          const newworkers = workerlist.filter(obj =>obj._id != id);
+          return state.set('posting',false).set('data',newworkers)
+        case actionTypes.DELETE_WORKER_FAILURE:
           return state.set('posting',false)
         default:
           return state;

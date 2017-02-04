@@ -14,7 +14,8 @@ const WorkerSchema = new Schema({
     phone:String,//电话号码
     category:String,//工种
     birthday:Date,//出生日期
-    picture:String//身份证照片
+    picture:String,//身份证照片
+    valid:Boolean //身份是否有效
 })
 
 const Worker = mongoose.model('Worker', WorkerSchema);
