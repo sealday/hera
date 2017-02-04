@@ -6,6 +6,7 @@ import React, {Component} from 'react';
 import {reduxForm,Field} from 'redux-form'
 import {Input,DatePicker} from '../components';
 import moment from 'moment';
+import {validator} from '../utils'
 class WorkerCheckinForm extends Component {
   constructor(props) {
     super(props);
@@ -38,42 +39,46 @@ class WorkerCheckinForm extends Component {
               <div className="form-group">
                   <label htmlFor="" className="col-md-1 control-label">姓名</label>
                   <div className="col-md-3">
-                      <Field name="name" component={Input} />
+                      <Field name="name" component={Input} validate={validator.required}/>
                   </div>
                   <label htmlFor="" className="col-md-1 control-label">性别</label>
                   <div className="col-md-3">
-                      <Field  name="gender"component={Input} />
+                      <Field  name="gender"component={Input} validate={validator.required} />
                   </div>
                   <label htmlFor="" className="col-md-1 control-label">年龄</label>
                   <div className="col-md-3">
-                      <Field  component={Input} name="age" />
+                      <Field  component={Input} name="age" validate={validator.isNum }/>
                   </div>
               </div>
               <div className="form-group">
                   <label htmlFor="" className="col-md-1 control-label">工种</label>
                   <div className="col-md-3">
-                      <Field  component={Input} name="category" />
+                      <Field  component={Input} name="category" validate={validator.required}/>
                   </div>
                   <label htmlFor="" className="col-md-1 control-label">出生年月</label>
                   <div className="col-md-3">
-                      <Field name="birthday"  component={DatePicker} />
+                      <Field name="birthday"  component={DatePicker} validate={validator.required}/>
                   </div>
                   <label htmlFor="" className="col-md-1 control-label">联系电话</label>
 
                   <div className="col-md-3">
-                      <Field  component={Input} name="phone" />
+                      <Field  component={Input} name="phone" validate={validator.required}/>
                   </div>
               </div>
               <div className="form-group">
                   <label htmlFor="" className="col-md-1 control-label">身份证号</label>
                   <div className="col-md-3">
-                      <Field  component={Input} name="idcard" />
+                      <Field  component={Input} name="idcard" validate={validator.required}/>
+                  </div>
+                  <label htmlFor="" className="col-md-1 control-label">进场时间</label>
+                  <div className="col-md-3">
+                      <Field  component={DatePicker} name="jointime" validate={validator.required}/>
                   </div>
               </div>
               <div className="form-group">
                   <label htmlFor="" className="col-md-1 control-label">家庭住址</label>
                   <div className="col-md-5">
-                      <Field  component={Input} name="address" />
+                      <Field  component={Input} name="address" validate={validator.required} />
                   </div>
               </div>
               <div className="form-group">
@@ -98,7 +103,8 @@ class WorkerCheckinForm extends Component {
 WorkerCheckinForm = reduxForm({
   form:'WorkerCheckinForm',
   initialValues:{
-    birthday:moment()
+    birthday:moment(),
+      jointime:moment()
   }
 })(WorkerCheckinForm)
 

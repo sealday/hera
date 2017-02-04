@@ -48,6 +48,7 @@ const InfoList = (props)=>(
             <th>出生年月</th>
             <th>联系电话</th>
             <th>身份证号</th>
+            <th>进场时间</th>
             <th>家庭住址</th>
             <th>操作</th>
         </tr>
@@ -63,6 +64,7 @@ const InfoList = (props)=>(
                 <td>{moment(info.birthday).format('YYYY-MM-DD')}</td>
                 <td>{info.phone}</td>
                 <td>{info.idcard}</td>
+                <td>{moment(info.jointime).format('YYYY-MM-DD')}</td>
                 <td>{info.address}</td>
                 <td><Link to={`/worker/${info._id}/edit`}>编辑</Link>
                     <a href={`/worker/${info._id}/delete`} onClick={e=>props.onDeleteClick(e,info)}>删除</a></td>

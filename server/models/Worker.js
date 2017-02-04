@@ -15,7 +15,8 @@ const WorkerSchema = new Schema({
     category:String,//工种
     birthday:Date,//出生日期
     picture:String,//身份证照片
-    valid:Boolean //身份是否有效
+    valid:Boolean ,//身份是否有效
+    jointime:Date
 })
 
 const Worker = mongoose.model('Worker', WorkerSchema);

@@ -3,3 +3,4 @@
  */
 
 export const required = value => value ? undefined : '不能为空'
+export const isNum = value => isNaN(value) ? '请输入数字' : undefined
