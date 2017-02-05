@@ -64,16 +64,16 @@ const EntryTable = connect(
     return isNaN(freight) ? false : freight
   }
 
-  const getMixPrice = (index) => {
-    const total = getTotal(index)
-    return total ? getMixSum(index) / total : false
-  }
-
   const getMixSum = (index) => {
     const sum = getSum(index)
     const freight = getFreight(index)
     const mixSum = (sum ? sum : 0) + (freight ? freight: 0)
     return mixSum ? mixSum : false
+  }
+
+  const getMixPrice = (index) => {
+    const total = getTotal(index)
+    return total ? getMixSum(index) / total : false
   }
 
   const getReport = () => {
