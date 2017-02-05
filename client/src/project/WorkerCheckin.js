@@ -9,6 +9,10 @@ import { Link } from 'react-router'
 import {postWorkerCheckin,removeWorker,requestWorkerlist} from  '../actions';
 
 class WorkerCheckin extends Component{
+    getProject = (id)=>{
+        let {company,name}= this.props.projects.filter(obj=>obj._id ===id)[0]
+        return company+name
+    }
 
     componentDidMount() {
         this.props.dispatch(requestWorkerlist())
@@ -31,8 +35,9 @@ class WorkerCheckin extends Component{
                 <h2>劳务人员进场登记</h2>
                 <WorkerCheckinForm
                 onSubmit={this.handleSubmit}
+                projects = {this.props.projects}
                 />
-                <InfoList infolist={this.props.workers} onDeleteClick={ this.onDeleteClick}/>
+                <InfoList infolist={this.props.workers} onDeleteClick={ this.onDeleteClick} getProject={this.getProject}/>
             </div>
         )
     }
@@ -49,6 +54,7 @@ const InfoList = (props)=>(
             <th>联系电话</th>
             <th>身份证号</th>
             <th>进场时间</th>
+            <th>所属项目</th>
             <th>家庭住址</th>
             <th>操作</th>
         </tr>
@@ -65,6 +71,7 @@ const InfoList = (props)=>(
                 <td>{info.phone}</td>
                 <td>{info.idcard}</td>
                 <td>{moment(info.jointime).format('YYYY-MM-DD')}</td>
+                <td>{props.getProject(info.project)}</td>
                 <td>{info.address}</td>
                 <td><Link to={`/worker/${info._id}/edit`}>编辑</Link>
                     <a href={`/worker/${info._id}/delete`} onClick={e=>props.onDeleteClick(e,info)}>删除</a></td>
@@ -74,10 +81,13 @@ const InfoList = (props)=>(
     </table>
 )
 
+
 const mapStateToProps = state =>{
     let w = state.requestWorkerlist.data;
+
     return {
-        workers:w
+        workers:w,
+        projects:state.system.projects.toArray()
     }
 }
 

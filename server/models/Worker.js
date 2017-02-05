@@ -5,6 +5,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+
 const WorkerSchema = new Schema({
     name:String,//姓名
     age:Number,//年龄
@@ -16,7 +17,8 @@ const WorkerSchema = new Schema({
     birthday:Date,//出生日期
     picture:String,//身份证照片
     valid:Boolean ,//身份是否有效
-    jointime:Date
+    jointime:Date,//进场时间
+    project:Schema.Types.ObjectId//所属项目id
 })
 
 const Worker = mongoose.model('Worker', WorkerSchema);
