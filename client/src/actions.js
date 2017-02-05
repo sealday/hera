@@ -390,7 +390,7 @@ export const updateTransfer = (record) => (dispatch, getState) => {
   if (networking.shouldProceed(getState())) {
     dispatch(networking.begin)
     dispatch(newInfoNotify('提示', '正在更新调拨单', 2000))
-    ajax(`/api/transfer/${record._id}`, {
+    ajax(`/api/record/${record._id}`, {
       data: JSON.stringify(record),
       method: 'POST',
       contentType: 'application/json'
@@ -418,7 +418,7 @@ export const requestRecord = (id) => (dispatch, getState) => {
   if (networking.shouldProceed(getState())) {
     dispatch(networking.begin)
     dispatch(newInfoNotify('提示', '正在请求记录详情', 2000))
-    ajax(`/api/transfer/${id}`).then(res => {
+    ajax(`/api/record/${id}`).then(res => {
       const record = res.data.record
       dispatch(networking.endSuccess)
       dispatch(updateRecord(record))
