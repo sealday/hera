@@ -43,7 +43,7 @@ class TransportOrderEdit extends Component {
   componentDidMount() {
     // 假设本地没有这个缓存，那么属于直接访问这个页面的情况，这时候跳转到订单页面
     if (!this.props.recordIdMap[this.props.params.id]) {
-      this.props.router.push(`/transport/${this.props.params.id}`)
+      this.props.router.replace(`/transport/${this.props.params.id}`)
     }
 
     const record = this.props.recordIdMap[this.props.params.id]
@@ -118,14 +118,14 @@ class TransportOrderEdit extends Component {
   }
 
   handleSubmit = data => {
-    ajax(`/api/transfer/${this.props.params.id}/transport`, {
+    ajax(`/api/record/${this.props.params.id}/transport`, {
       data: JSON.stringify(data),
       method: 'POST',
       contentType: 'application/json'
     }).then(res => {
       // 更新缓存中的数据
       this.props.dispatch(updateRecord(res.data.record))
-      this.props.router.push(`/transport/${res.data.record._id}`)
+      this.props.router.goBack()
     }).catch(err => {
       alert('出错了' + JSON.stringify(err));
     });
