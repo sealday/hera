@@ -18,14 +18,20 @@ const EntryTable = connect(
   const add = () => {
     if (fields.length > 0) {
       let name = fields.get(fields.length - 1).name
-      fields.push({ type: '租赁类', name })
+      let type = fields.get(fields.length - 1).type
+      fields.push({ type, name })
     } else {
       fields.push({ type: '租赁类' })
     }
   }
 
   const getNameOptions = (type) => {
-    return typeNameMap[type].map(name => ({ value: name, label: name, pinyin: nameArticleMap[name].pinyin }))
+    if (typeNameMap[type]) {
+      return typeNameMap[type].map(name => ({value: name, label: name, pinyin: nameArticleMap[name].pinyin}))
+    } else {
+      return []
+    }
+
   }
 
   const getSizeOptions = (name) => {
