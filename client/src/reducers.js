@@ -49,12 +49,6 @@ export function system(state = new SystemRecord(), action) {
 
 export function store(state = new StoreRecord(), action) {
   switch (action.type) {
-    case actionTypes.REQUEST_RECORD:
-      return state.set('requesting', true)
-    case actionTypes.REQUEST_RECORD_SUCCESS:
-      return state.set('requesting', false)
-    case actionTypes.REQUEST_RECORD_FAILURE:
-      return state.set('requesting', false)
     case actionTypes.UPDATE_RECORD:
       const record = action.data
       return state.update('records', records => records.set(record._id, record))

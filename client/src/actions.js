@@ -83,27 +83,6 @@ export const toggleMenu = (name) => ({
   data: name
 })
 
-export const REQUEST_RECORD = 'REQUEST_RECORD'
-export const REQUEST_RECORD_SUCCESS = 'REQUEST_RECORD_SUCCESS'
-export const REQUEST_RECORD_FAILURE = 'REQUEST_RECORD_FAILURE'
-
-export const requestRecord = (id) => (dispatch, getState) => {
-  if (!getState().requesting) {
-    dispatch({ type: REQUEST_RECORD })
-    dispatch(newInfoNotify('提示', '正在请求记录', 2000))
-    ajax(`/api/transfer/${id}`).then(res => {
-      const record = res.data.record
-      dispatch({ type: REQUEST_RECORD_SUCCESS })
-      dispatch(updateRecord(record))
-      dispatch(newSuccessNotify('提示', '请求记录成功', 2000))
-    }).catch(err => {
-      dispatch({ type: REQUEST_RECORD_FAILURE })
-      dispatch(newErrorNotify('警告', '请求记录失败', 2000))
-      throw err
-    })
-  }
-}
-
 export const DELETE_WORKER = 'DELETE_WORKER'
 export const DELETE_WORKER_SUCCESS = 'DELETE_WORKER_SUCCESS'
 export const DELETE_WORKER_FAILURE = 'DELETE_WORKER_FAILURE'
@@ -374,6 +353,10 @@ export const updateOperator = operator => (dispatch, getState) => {
 
 export const POST_TRANSFER = 'POST_TRANSFER'
 
+/**
+ * 创建新的出入库记录
+ * @param record
+ */
 export const postTransfer = (record) => (dispatch, getState) => {
   const networking = network(POST_TRANSFER)
   if (networking.shouldProceed(getState())) {
@@ -398,6 +381,10 @@ export const postTransfer = (record) => (dispatch, getState) => {
 
 export const UPDATE_TRANSFER = 'UPDATE_TRANSFER'
 
+/**
+ * 更新出入库记录
+ * @param record
+ */
 export const updateTransfer = (record) => (dispatch, getState) => {
   const networking = network(UPDATE_TRANSFER)
   if (networking.shouldProceed(getState())) {
@@ -417,6 +404,30 @@ export const updateTransfer = (record) => (dispatch, getState) => {
       dispatch(newErrorNotify('错误', '更新调拨单失败！', 2000))
       throw err
     });
+  }
+}
+
+export const REQUEST_RECORD = 'REQUEST_RECORD'
+
+/**
+ * 请求出入库记录
+ * @param id
+ */
+export const requestRecord = (id) => (dispatch, getState) => {
+  const networking = network(REQUEST_RECORD)
+  if (networking.shouldProceed(getState())) {
+    dispatch(networking.begin)
+    dispatch(newInfoNotify('提示', '正在请求记录详情', 2000))
+    ajax(`/api/transfer/${id}`).then(res => {
+      const record = res.data.record
+      dispatch(networking.endSuccess)
+      dispatch(updateRecord(record))
+      dispatch(newSuccessNotify('提示', '请求记录详情成功', 2000))
+    }).catch(err => {
+      dispatch(networking.endFailure)
+      dispatch(newErrorNotify('警告', '请求记录详情失败', 2000))
+      throw err
+    })
   }
 }
 
