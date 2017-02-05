@@ -23,6 +23,19 @@ export const Input = ({ input, meta: { touched, error, warning }, style, ...cust
   />
 )}
 
+export const TextArea = ({ input, meta: { touched, error, warning }, style, ...custom }) => {
+  if (touched && error) {
+    style = {
+      ...style,
+      ...errorStyle,
+    }
+  }
+  return (
+    <textarea {...input} className="form-control" {...custom}
+           style={style}
+    />
+  )}
+
 export const Select = ({ input, children }) => (
   <select {...input} className="form-control" >{children}</select>
 )

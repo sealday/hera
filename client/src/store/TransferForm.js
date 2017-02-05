@@ -5,7 +5,7 @@
 //noinspection JSUnresolvedVariable
 import React, { Component } from 'react';
 import { reduxForm, Field, FieldArray } from 'redux-form'
-import { Input, DatePicker, FilterSelect, Select } from '../components'
+import { Input, DatePicker, FilterSelect, Select, TextArea } from '../components'
 import { connect } from 'react-redux'
 import { filterOption, transformArticle, calculateSize, toFixedWithoutTrailingZero as fixed, validator } from '../utils'
 import moment from 'moment'
@@ -97,13 +97,18 @@ const EntryTable = connect(
               onClick={add}
               className="btn btn-default">增加</button>
           </th>
+          <th/>
         </tr>
         </thead>
         <tbody>
         {fields.map((entry, index) =>
           <tr key={index}>
             <td>
-              <Field name={`${entry}.type`} component={Select}>
+              <Field
+                name={`${entry}.type`}
+                component={Select}
+                style={{minWidth: '6em'}}
+              >
                 {Object.keys(typeNameMap).map((type, index) => (
                   <option key={index}>{type}</option>
                 ))}
@@ -117,6 +122,7 @@ const EntryTable = connect(
                 validate={validator.required}
                 filterOption={filterOption}
                 placeholder="名称"
+                style={{minWidth: '7em'}}
               />
             </td>
             <td>
@@ -125,6 +131,7 @@ const EntryTable = connect(
                 component={FilterSelect}
                 options={getSizeOptions(fields.get(index).name)}
                 placeholder="规格"
+                style={{minWidth: '11em'}}
               />
             </td>
             <td><Field name={`${entry}.count`} component={Input} validate={validator.required}/></td>
@@ -135,6 +142,8 @@ const EntryTable = connect(
                 type="button"
                 onClick={add}
                 className="btn btn-default">增加</button>
+            </td>
+            <td>
               <button
                 type="button"
                 className="btn btn-danger"
@@ -186,10 +195,6 @@ class TransferForm extends Component {
           <div className="col-md-3">
             <Field name="fee.car" component={Input}/>
           </div>
-          <label className="control-label col-md-1">备注</label>
-          <div className="col-md-3">
-            <Field name="comments" component={Input}/>
-          </div>
         </div>
         <div className="form-group">
           <label className="control-label col-md-1">整理费用</label>
@@ -208,6 +213,12 @@ class TransferForm extends Component {
         <div className="form-group">
           <div className="col-md-12">
             <FieldArray name="entries" component={EntryTable}/>
+          </div>
+        </div>
+        <div className="form-group">
+          <label className="control-label col-md-1">备注</label>
+          <div className="col-md-11">
+            <Field name="comments" component={TextArea}/>
           </div>
         </div>
         <div className="form-group">
