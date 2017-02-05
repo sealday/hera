@@ -108,96 +108,96 @@ mongoose
       name: '切割机',
       sizes: [],
       sizeUnit: '',
-      countUnit: '个',
-      unit: '个'
+      countUnit: '台',
+      unit: '台'
     },
     {
       type: '工具类',
       name: '电焊机',
       sizes: [],
       sizeUnit: '',
-      countUnit: '个',
-      unit: '个'
+      countUnit: '台',
+      unit: '台'
     },
     {
       type: '工具类',
       name: '扣件机',
       sizes: [],
       sizeUnit: '',
-      countUnit: '个',
-      unit: '个'
+      countUnit: '台',
+      unit: '台'
     },
     {
       type: '工具类',
       name: '叉车',
       sizes: [],
       sizeUnit: '',
-      countUnit: '个',
-      unit: '个'
+      countUnit: '辆',
+      unit: '辆'
     },
     {
       type: '工具类',
       name: '电脑',
       sizes: [],
       sizeUnit: '',
-      countUnit: '个',
-      unit: '个'
+      countUnit: '台',
+      unit: '台'
     },
     {
       type: '工具类',
       name: '打印机',
       sizes: [],
       sizeUnit: '',
-      countUnit: '个',
-      unit: '个'
+      countUnit: '台',
+      unit: '台'
     },
     {
       type: '工具类',
       name: '斗车',
       sizes: [],
       sizeUnit: '',
-      countUnit: '个',
-      unit: '个'
+      countUnit: '辆',
+      unit: '辆'
     },
     {
       type: '工具类',
       name: '三轮电动车',
       sizes: [],
       sizeUnit: '',
-      countUnit: '个',
-      unit: '个'
+      countUnit: '辆',
+      unit: '辆'
     },
     {
       type: '工具类',
       name: '木工锯',
       sizes: [],
       sizeUnit: '',
-      countUnit: '个',
-      unit: '个'
+      countUnit: '台',
+      unit: '台'
     },
     {
       type: '工具类',
       name: '电动扳手',
       sizes: [],
       sizeUnit: '',
-      countUnit: '个',
-      unit: '个'
+      countUnit: '台',
+      unit: '台'
     },
     {
       type: '工具类',
       name: '冲击钻',
       sizes: [],
       sizeUnit: '',
-      countUnit: '个',
-      unit: '个'
+      countUnit: '台',
+      unit: '台'
     },
     {
       type: '工具类',
       name: '电钻',
       sizes: [],
       sizeUnit: '',
-      countUnit: '个',
-      unit: '个'
+      countUnit: '台',
+      unit: '台'
     },
   ]);
 }).then(() => {
