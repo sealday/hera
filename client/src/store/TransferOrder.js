@@ -134,12 +134,6 @@ class TransferOrder extends React.Component {
               <table className="table table-clean">
                 <tbody>
                 <tr>
-                  <td>{'\u00a0'}</td>
-                </tr>
-                <tr>
-                  <td>{'\u00a0'}</td>
-                </tr>
-                <tr>
                   <td className="text-left">承租单位：{company}</td>
                 </tr>
                 <tr>
@@ -152,16 +146,12 @@ class TransferOrder extends React.Component {
               <table className="table table-clean">
                 <tbody>
                 <tr>
-                  <td className="text-left">单号：{record.number}</td>
-                </tr>
-                <tr>
-                  <td className="text-left">原始单号：{record.originalOrder}</td>
-                </tr>
-                <tr>
                   <td className="text-left">日期：{moment(record.outDate).format('YYYY-MM-DD')}</td>
+                  <td className="text-left">流水号：{record.number}</td>
                 </tr>
                 <tr>
                   <td className="text-left">车号：{record.carNumber}</td>
+                  <td className="text-left">原始单号：{record.originalOrder}</td>
                 </tr>
                 </tbody>
               </table>
