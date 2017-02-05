@@ -26,6 +26,8 @@ const EntryTable = connect(
   }
 
   const getNameOptions = (type) => {
+    // 因为有的旧数据存在分类问题，所以这里加一个判断空的处理
+    // 尽管我们可以把所有数据问题都解决掉，但是不可否认，我已经检查过一遍数据却还存在这个问题，所以还有隐含的问题
     if (typeNameMap[type]) {
       return typeNameMap[type].map(name => ({value: name, label: name, pinyin: nameArticleMap[name].pinyin}))
     } else {
