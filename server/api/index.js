@@ -6,14 +6,13 @@ const multer = require('multer');
 const upload = multer({ dest: 'public/uploads/'});
 const article = require('./article');
 const file = require('./file');
-const purchase = require('./purchase');
 
 const User = require('../models/User');
 const middleware = require('./middleware');
 const user = require('./user');
 const project = require('./project');
 const  workercheckin = require('./worker')
-const transfer = require('./transfer')
+const record = require('./record')
 
 const router = express.Router();
 const File = require('../models/File');
@@ -42,11 +41,11 @@ router.get('/workercheckin',workercheckin.list);
 router.post('/workercheckin/:id/delete',workercheckin.delete)
 
 
-router.get('/transfer', transfer.list)
-router.get('/transfer/:id', transfer.detail)
-router.post('/transfer/:id', transfer.update)
-router.post('/transfer/:id/transport', transfer.updateTransport)
-router.post('/transfer', transfer.create)
+router.get('/transfer', record.list)
+router.get('/transfer/:id', record.detail)
+router.post('/transfer/:id', record.update)
+router.post('/transfer/:id/transport', record.updateTransport)
+router.post('/transfer', record.create)
 
 router.get('/file', file.list);
 router.post('/file', upload.single('file'), file.post);
@@ -55,7 +54,5 @@ router.get('/file/:filename', file.download)
 router.get('/store/search', store.search)
 router.get('/store/simple_search', store.simpleSearch)
 router.get('/store/:id', store.queryAll)
-
-router.post('/purchase', purchase.postPurchase);
 
 module.exports = router;
