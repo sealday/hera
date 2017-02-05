@@ -63,7 +63,7 @@ export function ajax(url, settings) {
  * @returns {*}
  */
 export function makeKeyFromNameSize(name, size) {
-  return isNaN(size) ? name + size : name + Number(size)
+  return isNaN(size) ? name + (size ? size : '') : name + Number(size) // 增加处理undefined的情况
 }
 
 /**
