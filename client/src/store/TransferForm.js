@@ -195,12 +195,12 @@ class TransferForm extends Component {
           <div className="col-md-3">
             <Field name="fee.car" component={Input}/>
           </div>
-        </div>
-        <div className="form-group">
           <label className="control-label col-md-1">整理费用</label>
           <div className="col-md-3">
             <Field name="fee.sort" component={Input}/>
           </div>
+        </div>
+        <div className="form-group">
           <label className="control-label col-md-1">其他费用1</label>
           <div className="col-md-3">
             <Field name="fee.other1" component={Input}/>
@@ -211,14 +211,14 @@ class TransferForm extends Component {
           </div>
         </div>
         <div className="form-group">
-          <div className="col-md-12">
-            <FieldArray name="entries" component={EntryTable}/>
-          </div>
-        </div>
-        <div className="form-group">
           <label className="control-label col-md-1">备注</label>
           <div className="col-md-11">
             <Field name="comments" component={TextArea}/>
+          </div>
+        </div>
+        <div className="form-group">
+          <div className="col-md-12">
+            <FieldArray name="entries" component={EntryTable}/>
           </div>
         </div>
         <div className="form-group">
