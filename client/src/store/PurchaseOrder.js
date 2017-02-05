@@ -2,262 +2,230 @@
  * Created by seal on 15/01/2017.
  */
 
-import React, { Component } from 'react';
+import React from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
-import { calculateSize, toFixedWithoutTrailingZero } from '../utils'
+import { toFixedWithoutTrailingZero as fixed, total_ } from '../utils'
 import { Link } from 'react-router'
-import { requestRecord } from '../actions'
 
-class PurchaseOrder extends Component {
+class PurchaseOrder extends React.Component {
 
   handleTransport = () => {
-    this.props.router.push(`/transport/${this.props.params.recordId}`)
-  }
-
-  componentDidMount() {
-    const id = this.props.params.recordId
-    const record = this.props.recordIdMap[id]
-    const projectIdMap = this.props.projectIdMap
-
-    if (!record || !projectIdMap) {
-      this.props.dispatch(requestRecord(id))
-    }
+    const { router, record } = this.props
+    router.push(`/transport/${record._id}`)
   }
 
   render() {
-    const id = this.props.params.recordId
-    const record = this.props.recordIdMap[id]
-    const projectIdMap = this.props.projectIdMap
-
-    // 假设本地缓存中没有则进行一次网络请求
-    if (!record || !projectIdMap) {
-      return (
-        <div className="alert alert-info">
-          <p>请求数据中，请稍后</p>
-        </div>
-      )
-    }
-
-    const store = this.props.store
+    const { record, store, projects, articles, router } = this.props
 
     let orderName = ''
     let company = ''
+    let companyLabel = '承租单位'
     let name = ''
+    let nameLabel = '工程项目'
     let direction = ''
+
+    let outLabel = '出租单位'
+    let inLabel = '租借单位'
+
+    let signer = '租用方'
 
     // 判断是收料单还是发料单
     if (record.inStock === store._id) {
-      // 入库是基地，是收料单
+      // 入库是当前操作仓库时，是入库单
       orderName = '收料单'
       direction = 'in'
-      company = projectIdMap[record.outStock].company
-      name = projectIdMap[record.outStock].name
+      if (record.type === '调拨') {
+        company = projects.get(record.outStock).company
+        name = projects.get(record.outStock).name
+      } else if (record.type === '采购') {
+        orderName = '采购入库单'
+        outLabel = '出售单位'
+        inLabel = '采购项目'
+        companyLabel = '出售单位'
+        company = record.vendor
+        nameLabel = '采购项目'
+        signer = '出售方'
+        name = projects.get(record.inStock).company + projects.get(record.inStock).name
+      }
     } else if (record.outStock === store._id) {
-      // 出库是基地，是发料单
-      orderName = '发料单'
+      // 出库是当前操作仓库时，是出库单
+      orderName = '出库单'
       direction = 'out'
-      company = projectIdMap[record.inStock].company
-      name = projectIdMap[record.inStock].name
+      if (record.type === '调拨') {
+        company = projects.get(record.inStock).company
+        name = projects.get(record.inStock).name
+      } else if (record.type === '销售') {
+        orderName = '销售出库单'
+        outLabel = '出售项目'
+        inLabel = '采购单位'
+        companyLabel = '采购单位'
+        company = record.vendor
+        nameLabel = '出售项目'
+        signer = '采购方'
+        name = projects.get(record.outStock).company + projects.get(record.outStock).name
+      }
     } else {
-      // TODO 考虑路径上加以区别，否则当属于项目部之间调货的时候就没有办法处理了
+      // FIXME 当两者都不是的时候，属于非法访问
+      return <div>非法访问</div>
     }
 
     let entries = {}
-    let total = {}
-    let key = 0; // 这里 key 不会影响性能，我们只显示，不会过滤任何一个字段，也不会重新排序等等
+    let total = {} // 数量和
+    let sum = {} // 金额
+    let amount = 0 // 总金额
     record.entries.forEach(entry => {
-      let result = entry.count * calculateSize(entry.size);
+      let result = total_(entry)
 
       if (entry.name in entries) {
-        total[entry.name] += result;
-        entries[entry.name].push(entry);
+        entries[entry.name].push(entry)
+        total[entry.name] += result
+        sum[entry.name] += entry.price ? result * entry.price : 0
       } else {
-        entries[entry.name] = [entry];
-        total[entry.name] = result;
+        entries[entry.name] = [entry]
+        total[entry.name] = result
+        sum[entry.name] = entry.price ? result * entry.price : 0
       }
-    });
+    })
 
     let productTypeMap = {}
-    this.props.articles.forEach(article => {
+    articles.forEach(article => {
       productTypeMap[article.name] = article
     })
 
     let printEntries = []
     for (let name in entries) {
       /*eslint guard-for-in: off*/
-      entries[name].forEach(entry => { /*eslint no-loop-func: off */
-        printEntries.push(
-          <tr className="text-right" key={key++}>
-            <td>{entry.name}</td>
-            <td>{entry.size.split(';').join(' ') + ' ' + productTypeMap[name].sizeUnit}</td>
-            <td>{entry.count + ' ' + productTypeMap[name].countUnit}</td>
-          </tr>
-        )
-      })
+      printEntries = printEntries.concat(entries[name].map(entry => [
+        entry.name,
+        entry.size ? entry.size.split(';').join(' ') + ' ' + productTypeMap[name].sizeUnit : '',
+        entry.count + ' ' + productTypeMap[name].countUnit,
+        fixed(total_(entry)) + productTypeMap[name].unit,
+        entry.price ? '￥' + entry.price : '',
+        entry.price ? '￥' + fixed(total_(entry) * entry.price) : '',
+        entry.comments,
+      ]))
+
+      amount += sum[name] // 计算总金额
+
       printEntries.push(
-        <tr className="row-sum text-right" key={key++}>
-          <td>{name}</td>
-          <td>小计</td>
-          <td>{toFixedWithoutTrailingZero(total[name])  + ' ' + productTypeMap[name].unit}</td>
-        </tr>
+        [
+          name,
+          '',
+          '',
+          fixed(total[name])  + ' ' + productTypeMap[name].unit,
+          '',
+          '￥' + fixed(sum[name]),
+          '',
+        ]
       )
     }
 
-    // TODO 这里不应该会出现 fee，如果出现就是错误的了
-    if (!record.fee) {
-      console.warn('调拨单费用不应该是null')
-    }
-    record.fee = record.fee || {}
-    printEntries.push(
-      <tr key={key++} className="text-right">
-        <td />
-        <td>{`运费：￥${record.fee.car || 0} `}</td>
-        <td>{`整理费：￥${record.fee.sort || 0}`}</td>
-      </tr>
-    );
-
-    printEntries.push(
-      <tr key={key++} className="text-right">
-        <td/>
-        <td>{`其他费用1：￥${record.fee.other1 || 0}`}</td>
-        <td>{`其他费用2：￥${record.fee.other2 || 0}`}</td>
-      </tr>
-    );
+    printEntries.push(['', '', '', '', '总金额', '￥' + fixed(amount), ''])
 
     if (printEntries.length % 2 !== 0) {
-      printEntries.push(<tr key={key++}><td>{'\u00a0'}</td><td/><td/></tr>)
+      printEntries.push(['', '', '', '', '', '', ''])
     }
 
-    const leftPart = printEntries.slice(0, printEntries.length / 2)
-    const rightPart = printEntries.slice(printEntries.length / 2, printEntries.length)
+    let rows = []
+    const half = printEntries.length / 2
+    for (let i = 0; i < half; i++) {
+      rows.push(printEntries[i].concat(printEntries[i + half]))
+    }
 
     return (
-        <div className="container-fluid">
-          <div className="btn-group hidden-print">
-            <Link className="btn btn-primary" to={`/transfer/${direction}/${record._id}/edit`}>编辑</Link>
-            <button className="btn btn-default" onClick={this.handleTransport}>运输单</button>
-            <button className="btn btn-default" onClick={() => print()}>打印</button>
-            <a className="btn btn-default" href="check">审核确认</a>
-          </div>
-          <h3 className="text-center">上海创兴建筑设备租赁有限公司</h3>
-          <h3 className="text-center">{orderName}</h3>
-          <div className="row">
-            <div className="col-xs-6">
-              <table className="table table-clean">
-                <tbody>
-                <tr>
-                  <td>{'\u00a0'}</td>
-                  <td/>
-                </tr>
-                <tr>
-                  <td>{'\u00a0'}</td>
-                  <td/>
-                </tr>
-                <tr>
-                  <td className="text-left">承租单位：</td>
-                  <td className="text-center">{company}</td>
-                </tr>
-                <tr>
-                  <td className="text-left">工程项目：</td>
-                  <td className="text-center">{name}</td>
-                </tr>
-                </tbody>
-              </table>
-            </div>
-            <div className="col-xs-6">
-              <table className="table table-clean">
-                <tbody>
-                <tr>
-                  <td className="text-left">单号：</td>
-                  <td className="text-center">{record.number}</td>
-                </tr>
-                <tr>
-                  <td className="text-left">原始单号：</td>
-                  <td className="text-center">{record.originalOrder}</td>
-                </tr>
-                <tr>
-                  <td className="text-left">日期：</td>
-                  <td className="text-center">{moment(record.outDate).format('YYYY-MM-DD')}</td>
-                </tr>
-                <tr>
-                  <td className="text-left">车号：</td>
-                  <td className="text-center">{record.carNumber}</td>
-                </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-xs-6">
-              <table className="table text-right">
-                <thead>
-                <tr>
-                  <th className="text-right">名称</th>
-                  <th className="text-right">规格</th>
-                  <th className="text-right">数量</th>
-                </tr>
-                </thead>
-                <tbody>
-                {leftPart}
-                <tr>
-                  <td colSpan="3" style={{height: '10em'}} className="text-left">
-                    <span>说明：如供需双方未签正式合同，本{orderName}经供需双方代表签字确认后，将作为合同</span>
-                    <span>及发生业务往来的有效凭证，如已签合同，则成为该合同的组成部分。租用方须核对</span>
-                    <span>以上产品规格、数量确认后可签字认可。</span>
-                    <span>说明：</span></td>
-                </tr>
-                <tr>
-                  <td/>
-                  <td/>
-                  <td/>
-                </tr>
-                </tbody>
-              </table>
-            </div>
-            <div className="col-xs-6">
-              <table className="table">
-                <thead>
-                <tr>
-                  <th className="text-right">名称</th>
-                  <th className="text-right">规格</th>
-                  <th className="text-right">数量</th>
-                </tr>
-                </thead>
-                <tbody>
-                {rightPart}
-                <tr>
-                  <td colSpan="3" style={{height: '10em'}}>备注 {record.commentst }</td>
-                </tr>
-                <tr>
-                  <td/>
-                  <td/>
-                  <td/>
-                </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-xs-4">
-              <p>出租单位（签名）：</p>
-            </div>
-            <div className="col-xs-offset-4 col-xs-4">
-              <p>租借单位（签名）：</p>
-            </div>
-          </div>
+      <div>
+        <div className="btn-group hidden-print">
+          <button className="btn btn-default" onClick={() => router.goBack()}>返回</button>
+          {record.type === '调拨' &&
+          <Link className="btn btn-primary" to={`/transfer/${direction}/${record._id}/edit`}>编辑</Link>
+          }
+          {record.type === '销售' &&
+          <Link className="btn btn-primary" to={`/purchase/out/${record._id}/edit`}>编辑</Link>
+          }
+          {record.type === '采购' &&
+          <Link className="btn btn-primary" to={`/purchase/in/${record._id}/edit`}>编辑</Link>
+          }
+          <button className="btn btn-default" onClick={this.handleTransport}>运输单</button>
+          <button className="btn btn-default" onClick={() => print()}>打印</button>
+          <a className="btn btn-default" href="check">审核确认</a>
         </div>
+        <h4 className="text-center">上海创兴建筑设备租赁有限公司</h4>
+        <h4 className="text-center">{orderName}</h4>
+        <table style={{tableLayout: 'fixed', fontSize: '11px', width: '100%'}}>
+          <colgroup>
+            <col style={{width: '50%'}}/>
+          </colgroup>
+          <tbody>
+          <tr>
+            <td>{companyLabel}：{company}</td>
+            <td>日期：{moment(record.outDate).format('YYYY-MM-DD')}</td>
+            <td>流水号：{record.number}</td>
+          </tr>
+          <tr>
+            <td>{nameLabel}：{name}</td>
+            <td>车号：{record.carNumber}</td>
+            <td>原始单号：{record.originalOrder}</td>
+          </tr>
+          </tbody>
+        </table>
+        <table className="table table-bordered" style={{tableLayout: 'fixed', fontSize: '9px', marginBottom: '0'}}>
+          <thead>
+          <tr>
+            <th className="text-right">名称</th>
+            <th className="text-right">规格</th>
+            <th className="text-right">数量</th>
+            <th className="text-right">小计</th>
+            <th className="text-right">单价</th>
+            <th className="text-right">金额</th>
+            <th className="text-right">备注</th>
+            <th className="text-right">名称</th>
+            <th className="text-right">规格</th>
+            <th className="text-right">数量</th>
+            <th className="text-right">小计</th>
+            <th className="text-right">单价</th>
+            <th className="text-right">金额</th>
+            <th className="text-right">备注</th>
+          </tr>
+          </thead>
+          <tbody>
+          {rows.map((row, index) => (
+            <tr className="text-right" key={index}>
+              {row.map((col, index) => (
+                <td key={index}>{col}</td>
+              ))}
+            </tr>
+          ))}
+          <tr>
+            <td colSpan="7" >
+              <span>说明：如供需双方未签正式合同，本{orderName}经供需双方代表签字确认后，将作为合同</span>
+              <span>及发生业务往来的有效凭证，如已签合同，则成为该合同的组成部分。{signer}须核对</span>
+              <span>以上产品规格、数量确认后可签字认可。</span>
+            </td>
+            <td colSpan="7">
+              备注 {record.comments}
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <table style={{tableLayout: 'fixed', fontSize: '11px', width: '100%'}}>
+          <tbody>
+          <tr>
+            <td>制单人：{record.username}</td>
+            <td>{outLabel}（签名）：</td>
+            <td>{inLabel}（签名）：</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
     );
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    recordIdMap: state.store.records.toObject(),
-    projectIdMap: state.system.projects.toObject(),
-    articles: state.system.articles.toArray(),
-    store: state.system.store
-  }
-}
+const mapStateToProps = state => ({
+  projects: state.system.projects,
+  articles: state.system.articles.toArray(),
+  store: state.system.store,
+})
 
 export default connect(mapStateToProps)(PurchaseOrder)
