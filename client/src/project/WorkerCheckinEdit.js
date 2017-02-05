@@ -21,6 +21,8 @@ class WorkerCheckinEdit extends Component {
                 <h2>劳务人员进场登记编辑</h2>
                 <WorkerCheckinForm
                     onSubmit={this.handleSubmit}
+                    projects = {this.props.projects}
+
                     initialValues={{...this.props.worker,birthday:moment(this.props.worker.birthday),jointime:moment(this.props.worker.jointime)}}
                 />
             </div>
@@ -36,7 +38,8 @@ const mapStateToProps = (state,props)=>{
       return worker._id === props.params.id;
   })
     return {
-        worker:worker[0]
+        worker:worker[0],
+        projects:state.system.projects.toArray()
     }
 }
 export default connect(mapStateToProps)(WorkerCheckinEdit)
