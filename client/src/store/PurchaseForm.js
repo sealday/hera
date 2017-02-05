@@ -158,7 +158,6 @@ const EntryTable = connect(
                 name={`${entry}.size`}
                 component={FilterSelect}
                 options={getSizeOptions(fields.get(index).name)}
-                validate={validator.required}
                 placeholder="规格"
               />
             </td>
@@ -221,7 +220,7 @@ class TransferForm extends Component {
           </div>
           <label className="control-label col-md-1">对方单位</label>
           <div className="col-md-3">
-            <Field name="vendor" component={Input}/>
+            <Field name="vendor" component={Input} validate={validator.required}/>
           </div>
           <label className="control-label col-md-1">日期</label>
           <div className="col-md-3">
@@ -249,7 +248,7 @@ class TransferForm extends Component {
         </div>
         <div className="form-group">
           <div className="col-md-12">
-            <button type="submit" className="btn btn-primary btn-block">提交</button>
+            <button type="submit" className="btn btn-primary btn-block">保存</button>
           </div>
         </div>
       </form>

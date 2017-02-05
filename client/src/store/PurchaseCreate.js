@@ -6,27 +6,28 @@ import React, { Component } from 'react';
 import PurchaseForm from './PurchaseForm'
 import { connect } from 'react-redux'
 import { postTransfer } from '../actions'
+import moment from 'moment'
 
 class PurchaseCreate extends Component {
-  handleSubmit = (transfer) => {
+  handleSubmit = (record) => {
     const { direction } = this.props.params
-    if (direction === 'in') { // 入库单
+    if (direction === 'in') { // 采购单
       this.props.dispatch(postTransfer({
-        ...transfer,
-        outStock: transfer.project,
-        inStock: this.props.store._id
+        ...record,
+        inStock: record.project,
+        type: '采购',
       }))
-    } else if (direction === 'out') {
+    } else if (direction === 'out') { // 销售单
       this.props.dispatch(postTransfer({
-        ...transfer,
-        inStock: transfer.project,
-        outStock: this.props.store._id
+        ...record,
+        outStock: record.project,
+        type: '销售',
       }))
     }
   }
 
   render() {
-    const { direction } = this.props.params
+    const { store, params: { direction } } = this.props
     let pageTitle
     if (direction === 'out') {
       pageTitle = '销售出库'
@@ -41,7 +42,13 @@ class PurchaseCreate extends Component {
     return (
       <div>
         <h2 className="page-header">{pageTitle}</h2>
-        <PurchaseForm onSubmit={this.handleSubmit}/>
+        <PurchaseForm
+          initialValues={{
+            project: store._id,
+            outDate: moment(),
+          }}
+          onSubmit={this.handleSubmit}
+        />
       </div>
     );
   }

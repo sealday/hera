@@ -210,7 +210,7 @@ class TransferForm extends Component {
         </div>
         <div className="form-group">
           <div className="col-md-12">
-            <button type="submit" className="btn btn-primary btn-block">提交</button>
+            <button type="submit" className="btn btn-primary btn-block">保存</button>
           </div>
         </div>
       </form>
