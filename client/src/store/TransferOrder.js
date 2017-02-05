@@ -122,7 +122,15 @@ class TransferOrder extends React.Component {
         <div className="container-fluid">
           <div className="btn-group hidden-print">
             <button className="btn btn-default" onClick={() => router.goBack()}>返回</button>
+            {record.type === '调拨' &&
             <Link className="btn btn-primary" to={`/transfer/${direction}/${record._id}/edit`}>编辑</Link>
+            }
+            {record.type === '销售' &&
+            <Link className="btn btn-primary" to={`/purchase/out/${record._id}/edit`}>编辑</Link>
+            }
+            {record.type === '采购' &&
+            <Link className="btn btn-primary" to={`/purchase/in/${record._id}/edit`}>编辑</Link>
+            }
             <button className="btn btn-default" onClick={this.handleTransport}>运输单</button>
             <button className="btn btn-default" onClick={() => print()}>打印</button>
             <a className="btn btn-default" href="check">审核确认</a>
