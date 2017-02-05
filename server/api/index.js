@@ -41,11 +41,11 @@ router.get('/workercheckin',workercheckin.list);
 router.post('/workercheckin/:id/delete',workercheckin.delete)
 
 
-router.get('/transfer', record.list)
-router.get('/transfer/:id', record.detail)
-router.post('/transfer/:id', record.update)
-router.post('/transfer/:id/transport', record.updateTransport)
-router.post('/transfer', record.create)
+router.get('/record', record.list)
+router.get('/record/:id', record.detail)
+router.post('/record/:id', record.update)
+router.post('/record/:id/transport', record.updateTransport)
+router.post('/record', record.create)
 
 router.get('/file', file.list);
 router.post('/file', upload.single('file'), file.post);
