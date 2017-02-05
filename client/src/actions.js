@@ -3,7 +3,7 @@
  */
 
 import { ajax } from './utils'
-import { push } from 'react-router-redux'
+import { push, goBack } from 'react-router-redux'
 import { reset } from 'redux-form'
 
 export const SYSTEM_LOADED = 'SYSTEM_LOADED'
@@ -398,7 +398,8 @@ export const updateTransfer = (record) => (dispatch, getState) => {
       dispatch(networking.endSuccess)
       dispatch(updateRecord(res.data.record))
       dispatch(newSuccessNotify('提示', '更新调拨单成功！', 2000))
-      dispatch(push(`/record/${res.data.record._id}`))
+      // FIXME 为了保证用户可以直接通过返回回到查询界面，这里没有使用 push
+      dispatch(goBack())
     }).catch(err => {
       dispatch(networking.endFailure)
       dispatch(newErrorNotify('错误', '更新调拨单失败！', 2000))
