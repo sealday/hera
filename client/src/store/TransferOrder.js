@@ -2,7 +2,7 @@
  * Created by seal on 15/01/2017.
  */
 
-import React from 'react';
+import React from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import { toFixedWithoutTrailingZero as fixed, total_ } from '../utils'
@@ -116,18 +116,18 @@ class TransferOrder extends React.Component {
       record.fee = record.fee || {}
       printEntries.push(
         [
-          '',
-          `运费：￥${record.fee.car || 0} `,
-          `整理费：￥${record.fee.sort || 0}`,
-          '',
+          '运费：',
+          `￥${record.fee.car || 0} `,
+          '整理费：',
+          `￥${record.fee.sort || 0}`,
         ]
       );
       printEntries.push(
         [
-          '',
-          `其他费用1：￥${record.fee.other1 || 0}`,
-          `其他费用2：￥${record.fee.other2 || 0}`,
-          '',
+          '其他费用1：',
+          `￥${record.fee.other1 || 0}`,
+          `其他费用2：`,
+          `￥${record.fee.other2 || 0}`,
         ]
       );
     }
@@ -228,7 +228,7 @@ class TransferOrder extends React.Component {
 const mapStateToProps = state => ({
   projects: state.system.projects,
   articles: state.system.articles.toArray(),
-  store: state.system.store
+  store: state.system.store,
 })
 
 export default connect(mapStateToProps)(TransferOrder)
