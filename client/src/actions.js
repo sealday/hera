@@ -71,51 +71,6 @@ export const updateOnlineUser = (num) => ({
   data: num
 })
 
-export const REQUEST_IN_RECORDS =  'REQUEST_IN_RECORDS'
-export const RECEIVED_IN_RECORDS =  'RECEIVED_IN_RECORDS'
-export const FETCH_IN_RECORDS_FAILS =  'FETCH_IN_RECORDS_FAILS'
-
-export const requestInRecords = () => (dispatch, getState) => {
-  // 不产生重复的请求
-  if (!getState().store.fetching_in) {
-    dispatch({ type: REQUEST_IN_RECORDS })
-    dispatch(newInfoNotify('提示', '正在请求入库数据', 2000))
-    return ajax('/api/transfer', {
-      data: {
-        inStock: getState().system.base._id
-      }
-    }).then(res => {
-      dispatch({ type: RECEIVED_IN_RECORDS, data: res.data.records })
-      dispatch(newSuccessNotify('提示', '请求入库数据成功', 2000))
-    }).catch(err => {
-      dispatch({ type: FETCH_IN_RECORDS_FAILS })
-      dispatch(newErrorNotify('警告', '请求入库数据失败' + JSON.stringify(err), 2000))
-    })
-  }
-}
-
-export const REQUEST_OUT_RECORDS = 'REQUEST_OUT_RECORDS'
-export const RECEIVED_OUT_RECORDS =  'RECEIVED_OUT_RECORDS'
-export const FETCH_OUT_RECORDS_FAILS = 'FETCH_OUT_RECORDS_FAILS'
-
-export const requestOutRecords = () => (dispatch, getState) => {
-  if (!getState().store.fetching_out) {
-    dispatch({ type: REQUEST_OUT_RECORDS })
-    dispatch(newInfoNotify('提示', '正在请求出库数据', 2000))
-    return ajax('/api/transfer', {
-      data: {
-        outStock: getState().system.base._id
-      }
-    }).then(res => {
-      dispatch({ type: RECEIVED_OUT_RECORDS, data: res.data.records })
-      dispatch(newSuccessNotify('提示', '请求出库数据成功', 2000))
-    }).catch(err => {
-      dispatch({ type: FETCH_OUT_RECORDS_FAILS })
-      dispatch(newErrorNotify('警告', '请求出库数据失败' + JSON.stringify(err), 2000))
-    })
-  }
-}
-
 export const TOGGLE_NAV = 'TOGGLE_NAV'
 export const TOGGLE_MENU = 'TOGGLE_MENU'
 
