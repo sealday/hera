@@ -49,38 +49,6 @@ export function system(state = new SystemRecord(), action) {
 
 export function store(state = new StoreRecord(), action) {
   switch (action.type) {
-    case actionTypes.REQUEST_IN_RECORDS:
-      if (state.fetching_in) {
-        return state
-      } else {
-        return state.set('fetching_in', true)
-      }
-    case actionTypes.REQUEST_OUT_RECORDS:
-      if (state.fetching_out) {
-        return state
-      } else {
-        return state.set('fetching_out', true)
-      }
-    case actionTypes.RECEIVED_IN_RECORDS:
-      const inRecords = action.data
-      return state.set('records', state.records.withMutations(cache => {
-        inRecords.forEach(record => {
-          cache.set(record._id, record)
-        })
-      })).set('in', inRecords)
-        .set('fetching_in', false)
-    case actionTypes.FETCH_IN_RECORDS_FAILS:
-      return state.set('fetching_in', false)
-    case actionTypes.FETCH_OUT_RECORDS_FAILS:
-      return state.set('fetching_out', false)
-    case actionTypes.RECEIVED_OUT_RECORDS:
-      const outRecords = action.data
-      return state.set('records', state.records.withMutations(cache => {
-        outRecords.forEach(record => {
-          cache.set(record._id, record)
-        })
-      })).set('out', outRecords)
-        .set('fetching_out', false)
     case actionTypes.REQUEST_RECORD:
       return state.set('requesting', true)
     case actionTypes.REQUEST_RECORD_SUCCESS:
