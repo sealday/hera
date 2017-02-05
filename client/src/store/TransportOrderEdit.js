@@ -58,18 +58,55 @@ class TransportOrderEdit extends Component {
       const projects = this.props.projects
       const inStock = projects[record.inStock]
       const outStock = projects[record.outStock]
+      let deliveryParty
+      let deliveryPhone
+      let deliveryContact
+      let deliveryAddress
+      let receivingParty
+      let receivingPhone
+      let receivingContact
+      let receivingAddress
+
+      switch (record.type) {
+        case '销售':
+          deliveryParty = outStock.company + outStock.name
+          deliveryContact = outStock.contacts[0].name
+          deliveryPhone = outStock.contacts[0].phone
+          deliveryAddress = outStock.address
+          receivingParty = record.vendor
+          break
+        case '采购':
+          deliveryParty = record.vendor
+          receivingParty = inStock.company + inStock.name
+          receivingContact = inStock.contacts[0].name
+          receivingPhone = inStock.contacts[0].phone
+          receivingAddress = inStock.address
+          break
+        case'调拨':
+          receivingParty = inStock.company + inStock.name
+          receivingContact = inStock.contacts[0].name
+          receivingPhone = inStock.contacts[0].phone
+          receivingAddress = inStock.address
+          deliveryParty = outStock.company + outStock.name
+          deliveryContact = outStock.contacts[0].name
+          deliveryPhone = outStock.contacts[0].phone
+          deliveryAddress = outStock.address
+          break
+        default:
+          throw '不支持的订单类型'
+      }
 
       this.setState({
         'off-date'         : moment(record.outDate).startOf('day'),
         'arrival-date'     : moment(record.outDate).startOf('day').add(1, 'day'), // 到达日期
-        'delivery-party'   : outStock.company + outStock.name, // 发货单位
-        'delivery-contact' : outStock.contacts[0].name, // 发货人
-        'delivery-phone'   : outStock.contacts[0].phone, // 发货人电话
-        'delivery-address' : outStock.address, // 发货地址
-        'receiving-party'  : inStock.company + inStock.name, // 收货单位
-        'receiving-contact': inStock.contacts[0].name, // 收货联系
-        'receiving-phone'  : inStock.contacts[0].phone, // 收货人电话
-        'receiving-address': inStock.address, // 收货地址
+        'delivery-party'   : deliveryParty, // 发货单位
+        'delivery-contact' : deliveryContact, // 发货人
+        'delivery-phone'   : deliveryPhone, // 发货人电话
+        'delivery-address' : deliveryAddress, // 发货地址
+        'receiving-party'  : receivingParty, // 收货单位
+        'receiving-contact': receivingContact, // 收货联系
+        'receiving-phone'  : receivingPhone, // 收货人电话
+        'receiving-address': receivingAddress, // 收货地址
         'carrier-car': record.carNumber,
       })
     }
