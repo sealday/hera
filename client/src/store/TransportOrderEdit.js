@@ -93,7 +93,7 @@ class TransportOrderEdit extends Component {
           deliveryAddress = outStock.address
           break
         default:
-          throw '不支持的订单类型'
+          throw new Error('不支持的订单类型')
       }
 
       this.setState({
