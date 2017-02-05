@@ -76,7 +76,7 @@ class TransferOrder extends React.Component {
         printEntries.push(
           <tr className="text-right" key={key++}>
             <td>{entry.name}</td>
-            <td>{entry.size.split(';').join(' ') + ' ' + productTypeMap[name].sizeUnit}</td>
+            <td>{entry.size ? entry.size.split(';').join(' ') + ' ' + productTypeMap[name].sizeUnit : ''}</td>
             <td>{entry.count + ' ' + productTypeMap[name].countUnit}</td>
           </tr>
         )
