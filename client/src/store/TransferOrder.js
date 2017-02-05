@@ -20,19 +20,33 @@ class TransferOrder extends React.Component {
 
     let orderName = ''
     let company = ''
+    let companyLabel = '承租单位'
     let name = ''
+    let nameLabel = '工程项目'
     let direction = ''
+
+    let outLabel = '出租单位'
+    let inLabel = '租借单位'
+
+    let signer = '租用方'
 
     // 判断是收料单还是发料单
     if (record.inStock === store._id) {
       // 入库是当前操作仓库时，是入库单
       orderName = '收料单'
       direction = 'in'
-      if (record.type === '销售') {
+      if (record.type === '调拨') {
         company = projects.get(record.outStock).company
         name = projects.get(record.outStock).name
-      } else {
-
+      } else if (record.type === '采购') {
+        orderName = '采购入库单'
+        outLabel = '出售单位'
+        inLabel = '采购项目'
+        companyLabel = '出售单位'
+        company = record.vendor
+        nameLabel = '采购项目'
+        signer = '出售方'
+        name = projects.get(record.inStock).company + projects.get(record.inStock).name
       }
     } else if (record.outStock === store._id) {
       // 出库是当前操作仓库时，是出库单
@@ -42,7 +56,14 @@ class TransferOrder extends React.Component {
         company = projects.get(record.inStock).company
         name = projects.get(record.inStock).name
       } else if (record.type === '销售') {
-
+        orderName = '销售出库单'
+        outLabel = '出售项目'
+        inLabel = '采购单位'
+        companyLabel = '采购单位'
+        company = record.vendor
+        nameLabel = '出售项目'
+        signer = '采购方'
+        name = projects.get(record.outStock).company + projects.get(record.outStock).name
       }
     } else {
       // FIXME 当两者都不是的时候，属于非法访问
@@ -142,10 +163,10 @@ class TransferOrder extends React.Component {
               <table className="table table-clean">
                 <tbody>
                 <tr>
-                  <td className="text-left">承租单位：{company}</td>
+                  <td className="text-left">{companyLabel}：{company}</td>
                 </tr>
                 <tr>
-                  <td className="text-left">工程项目：{name}</td>
+                  <td className="text-left">{nameLabel}：{name}</td>
                 </tr>
                 </tbody>
               </table>
@@ -180,7 +201,7 @@ class TransferOrder extends React.Component {
                 <tr>
                   <td colSpan="3" style={{height: '7em'}} className="text-left">
                     <span>说明：如供需双方未签正式合同，本{orderName}经供需双方代表签字确认后，将作为合同</span>
-                    <span>及发生业务往来的有效凭证，如已签合同，则成为该合同的组成部分。租用方须核对</span>
+                    <span>及发生业务往来的有效凭证，如已签合同，则成为该合同的组成部分。{signer}须核对</span>
                     <span>以上产品规格、数量确认后可签字认可。</span>
                   </td>
                 </tr>
@@ -220,10 +241,10 @@ class TransferOrder extends React.Component {
               <p>制单人：{record.username}</p>
             </div>
             <div className="col-xs-4">
-              <p>出租单位（签名）：</p>
+              <p>{outLabel}（签名）：</p>
             </div>
             <div className="col-xs-4">
-              <p>租借单位（签名）：</p>
+              <p>{inLabel}（签名）：</p>
             </div>
           </div>
         </div>
