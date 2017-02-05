@@ -5,7 +5,7 @@
 //noinspection JSUnresolvedVariable
 import React, { Component } from 'react';
 import { reduxForm, Field, FieldArray } from 'redux-form'
-import { Input, DatePicker, FilterSelect, Select } from '../components'
+import { Input, DatePicker, FilterSelect, Select, TextArea } from '../components'
 import { connect } from 'react-redux'
 import { transformArticle,total_, toFixedWithoutTrailingZero as fixed, validator } from '../utils'
 import moment from 'moment'
@@ -236,9 +236,11 @@ class TransferForm extends Component {
           <div className="col-md-3">
             <Field name="carNumber" component={Input}/>
           </div>
+        </div>
+        <div className="form-group">
           <label className="control-label col-md-1">备注</label>
-          <div className="col-md-3">
-            <Field name="comments" component={Input}/>
+          <div className="col-md-11">
+            <Field name="comments" component={TextArea}/>
           </div>
         </div>
         <div className="form-group">
