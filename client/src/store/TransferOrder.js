@@ -112,25 +112,27 @@ class TransferOrder extends React.Component {
     }
 
     // TODO 这里不应该会出现 fee，如果出现就是错误的了
-    if (!record.fee) {
-      console.warn('调拨单费用不应该是null')
-    }
-    record.fee = record.fee || {}
-    printEntries.push(
-      <tr key={key++} className="text-right">
-        <td />
-        <td>{`运费：￥${record.fee.car || 0} `}</td>
-        <td>{`整理费：￥${record.fee.sort || 0}`}</td>
-      </tr>
-    );
+    if (record.type === '调拨') {
+      if (!record.fee) {
+        console.warn('调拨单费用不应该是null')
+      }
+      record.fee = record.fee || {}
+      printEntries.push(
+        <tr key={key++} className="text-right">
+          <td />
+          <td>{`运费：￥${record.fee.car || 0} `}</td>
+          <td>{`整理费：￥${record.fee.sort || 0}`}</td>
+        </tr>
+      );
 
-    printEntries.push(
-      <tr key={key++} className="text-right">
-        <td/>
-        <td>{`其他费用1：￥${record.fee.other1 || 0}`}</td>
-        <td>{`其他费用2：￥${record.fee.other2 || 0}`}</td>
-      </tr>
-    );
+      printEntries.push(
+        <tr key={key++} className="text-right">
+          <td/>
+          <td>{`其他费用1：￥${record.fee.other1 || 0}`}</td>
+          <td>{`其他费用2：￥${record.fee.other2 || 0}`}</td>
+        </tr>
+      );
+    }
 
     if (printEntries.length % 2 !== 0) {
       printEntries.push(<tr key={key++}><td>{'\u00a0'}</td><td/><td/></tr>)
