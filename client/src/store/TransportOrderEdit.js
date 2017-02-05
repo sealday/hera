@@ -108,6 +108,7 @@ class TransportOrderEdit extends Component {
         'receiving-phone'  : receivingPhone, // 收货人电话
         'receiving-address': receivingAddress, // 收货地址
         'carrier-car': record.carNumber,
+        'payer': deliveryParty,
       })
     }
   }
