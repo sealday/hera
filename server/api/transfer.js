@@ -26,25 +26,25 @@ exports.create = (req, res, next) => {
   let record = new Record(req.body)
   let historyRecord = new HistoryRecord(req.body)
 
-  // FIXME 考虑使用更合理的字段，比如 type
-  if (record.vendor) { // 如果有填写对方单位（vendor）字段，那么就属于采购和销售
-    if (record.inStock) {
-      record.type = historyRecord.type = '采购'
+  switch (record.type) {
+    case '采购':
       record.status = historyRecord.status = '未支付'
-    } else if (record.outStock) {
-      record.type = historyRecord.type = '销售'
+      break
+    case '销售':
       record.status = historyRecord.status = '未支付'
-    } else {
+      break
+    case '调拨':
+      record.status = historyRecord.status = '未确认'
+      break
+    default:
       return res.status(400).json({
         message: '请求参数有误！'
       })
-    }
-  } else {
-    record.type = historyRecord.type = '调拨'
-    record.status = historyRecord.status = '未确认'
   }
 
+  // 内部单号
   record.order = historyRecord.order = record._id
+  // 制单人
   record.username = historyRecord.username = req.session.user.username
 
   Promise.all([record.save(), historyRecord.save()]).then(([record]) => {
@@ -72,15 +72,21 @@ exports.detail = (req, res, next) => {
 }
 
 exports.update = (req, res, next) => {
-  let transfer = req.body
-  delete transfer._id // 删除 _id 否则正在创建历史记录时会出问题
+  let recordBody = req.body
+  delete recordBody._id // 删除 _id 否则正在创建历史记录时会出问题（允许客户端提交 _id 但是进行忽略)
+
+  if (!req.params.id) {
+    return res.status(400).json({
+      message: '请求参数有误！'
+    })
+  }
 
   Record.findById(req.params.id).then(record => {
-    Object.assign(record, transfer)
-    let historyRecord = new HistoryRecord(transfer)
-    historyRecord.order = record._id
-    historyRecord.status  = record.status
-    record.username = historyRecord.username = req.session.user.username
+    Object.assign(record, recordBody) // 对有提交的选项进行部分更新
+    let historyRecord = new HistoryRecord(recordBody)
+    historyRecord.order = record._id // 保存内部单号，对历史记录和当前记录进行关联
+    historyRecord.status  = record.status // 更新最新的状态
+    record.username = historyRecord.username = req.session.user.username // TODO 制单人为最新编辑的人
     return Promise.all([record.save(), historyRecord.save()])
   }).then(([record]) => {
     res.json({
@@ -97,7 +103,7 @@ exports.update = (req, res, next) => {
 exports.updateTransport = (req, res, next) => {
   Record.findById(req.params.id).then(record => {
     Object.assign(record.transport, req.body)
-    record.hasTransport = true
+    record.hasTransport = true // 标记存在运输单
     return record.save()
   }).then(record => {
     res.json({
