@@ -70,14 +70,10 @@ class TransferTable extends React.Component {
                   <td rowSpan={rowSpan}>{record.username}</td>
                   <td rowSpan={rowSpan}>{moment(record.createdAt).format('YYYY-MM-DD')}</td>
                   <td rowSpan={rowSpan}>
-                    <Link onClick={() => {
-                      this.props.dispatch({ type: 'UPDATE_RECORDS_CACHE', record })
-                    }} to={ `/record/${record._id}`}>详情</Link>
+                    <Link to={ `/record/${record._id}`}>详情</Link>
                     <br/>
                     {record.hasTransport && (
-                    <Link onClick={() => {
-                      this.props.dispatch({type: 'UPDATE_RECORDS_CACHE', record})
-                    }} to={ `/transport/${record._id}`}>运输单</Link>
+                    <Link to={ `/transport/${record._id}`}>运输单</Link>
                       )}
                   </td>
                 </tr>

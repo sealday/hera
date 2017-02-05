@@ -4,13 +4,7 @@
 
 import { ajax } from './utils'
 import { push } from 'react-router-redux'
-import {reset} from 'redux-form'
-
-
-export const UPDATE_PROJECTS = 'UPDATE_PROJECTS'
-export const UPDATE_ARTICLES =  'UPDATE_ARTICLES'
-export const UPDATE_RECORDS_CACHE =  'UPDATE_RECORDS_CACHE'
-export const UPDATE_USERS = 'UPDATE_USERS'
+import { reset } from 'redux-form'
 
 export const SYSTEM_LOADED = 'SYSTEM_LOADED'
 export const ONLINE_USER_CHANGE = 'ONLINE_USER_CHANGE'
