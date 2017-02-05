@@ -2,28 +2,25 @@
  * Created by seal on 25/01/2017.
  */
 
-import React, { Component } from 'react';
-import TransferForm from './TransferForm'
+import React from 'react'
+import PurchaseForm from './PurchaseForm'
 import { connect } from 'react-redux'
 import { updateTransfer, requestRecord } from '../actions'
 import moment from 'moment'
 
-class TransferCreate extends Component {
-  handleSubmit = (transfer) => {
+class PurchaseEdit extends React.Component {
+
+  handleSubmit = (record) => {
     const { direction } = this.props.params
-    if (direction === 'in') { // 入库单
+    if (direction === 'in') { // 采购单
       this.props.dispatch(updateTransfer({
-        ...transfer,
-        _id: this.props.params.id,
-        outStock: transfer.project,
-        inStock: this.props.store._id
+        ...record,
+        inStock: record.project,
       }))
-    } else if (direction === 'out') {
+    } else if (direction === 'out') { // 销售单
       this.props.dispatch(updateTransfer({
-        ...transfer,
-        _id: this.props.params.id,
-        inStock: transfer.project,
-        outStock: this.props.store._id
+        ...record,
+        outStock: record.project,
       }))
     }
   }
@@ -40,11 +37,11 @@ class TransferCreate extends Component {
     let pageTitle
     let stock
     if (direction === 'out') {
-      pageTitle = '调拨出库（发料）'
-      stock = 'inStock'
-    } else if (direction === 'in') {
-      pageTitle = '调拨入库（收料）'
+      pageTitle = '销售出库'
       stock = 'outStock'
+    } else if (direction === 'in') {
+      pageTitle = '采购入库'
+      stock = 'inStock'
     } else {
       return <div className="alert alert-danger">
         <p>你访问的页面不正确</p>
@@ -61,16 +58,16 @@ class TransferCreate extends Component {
     record = {
       ...record,
       project: record[stock],
-      outDate: moment(record.outDate)
+      outDate: moment(record.outDate),
     }
 
     return (
       <div>
         <button className="btn btn-default hidden-print" onClick={e => this.props.router.goBack()}>返回</button>
         <h2 className="page-header">{pageTitle}</h2>
-        <TransferForm
-          onSubmit={this.handleSubmit}
+        <PurchaseForm
           initialValues={record}
+          onSubmit={this.handleSubmit}
         />
       </div>
     );
@@ -82,4 +79,4 @@ const mapStateToProps = state => ({
   records: state.store.records, // Immutable Map
 })
 
-export default connect(mapStateToProps)(TransferCreate);
+export default connect(mapStateToProps)(PurchaseEdit);
