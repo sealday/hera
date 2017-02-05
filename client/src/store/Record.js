@@ -34,9 +34,9 @@ class Record extends React.Component {
     if (record.type === '调拨') {
       return <TransferOrder record={record} router={router}/>
     } else if (record.type === '销售') {
-      return <div>销售单</div>
+      return <TransferOrder record={record} router={router}/>
     } else if (record.type === '采购') {
-      return <div>采购单</div>
+      return <TransferOrder record={record} router={router}/>
     } else {
       return <div>暂时不支持显示 {record.type} 类型的详情</div>
     }

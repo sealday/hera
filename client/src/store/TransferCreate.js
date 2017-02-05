@@ -14,13 +14,15 @@ class TransferCreate extends Component {
       this.props.dispatch(postTransfer({
         ...transfer,
         outStock: transfer.project,
-        inStock: this.props.store._id
+        inStock: this.props.store._id,
+        type: '调拨',
       }))
-    } else if (direction === 'out') {
+    } else if (direction === 'out') { // 出库单
       this.props.dispatch(postTransfer({
         ...transfer,
         inStock: transfer.project,
-        outStock: this.props.store._id
+        outStock: this.props.store._id,
+        type: '调拨'
       }))
     }
   }

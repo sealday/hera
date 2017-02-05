@@ -25,19 +25,27 @@ class TransferOrder extends React.Component {
 
     // 判断是收料单还是发料单
     if (record.inStock === store._id) {
-      // 入库是当前操作仓库时，是收料单
+      // 入库是当前操作仓库时，是入库单
       orderName = '收料单'
       direction = 'in'
-      company = projects.get(record.outStock).company
-      name = projects.get(record.outStock).name
+      if (record.type === '销售') {
+        company = projects.get(record.outStock).company
+        name = projects.get(record.outStock).name
+      } else {
+
+      }
     } else if (record.outStock === store._id) {
-      // 出库是当前操作仓库时，是发料单
-      orderName = '发料单'
+      // 出库是当前操作仓库时，是出库单
+      orderName = '出库单'
       direction = 'out'
-      company = projects.get(record.inStock).company
-      name = projects.get(record.inStock).name
+      if (record.type === '调拨') {
+        company = projects.get(record.inStock).company
+        name = projects.get(record.inStock).name
+      } else if (record.type === '销售') {
+
+      }
     } else {
-      // 当两者都不是的时候，属于非法访问
+      // FIXME 当两者都不是的时候，属于非法访问
       return <div>非法访问</div>
     }
 

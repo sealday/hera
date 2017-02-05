@@ -361,19 +361,19 @@ export const postTransfer = (record) => (dispatch, getState) => {
   const networking = network(POST_TRANSFER)
   if (networking.shouldProceed(getState())) {
     dispatch(networking.begin)
-    dispatch(newInfoNotify('提示', '正在创建调拨单', 2000))
-    ajax('/api/transfer', {
+    dispatch(newInfoNotify('提示', '创建中', 2000))
+    ajax('/api/record', {
       data: JSON.stringify(record),
       method: 'POST',
       contentType: 'application/json'
     }).then(res => {
       dispatch(networking.endSuccess)
       dispatch(updateRecord(res.data.record))
-      dispatch(newSuccessNotify('提示', '创建调拨单成功！', 2000))
+      dispatch(newSuccessNotify('提示', '创建成功！', 2000))
       dispatch(push(`/record/${res.data.record._id}`))
     }).catch(err => {
       dispatch(networking.endFailure)
-      dispatch(newErrorNotify('错误', '创建调拨单失败！', 2000))
+      dispatch(newErrorNotify('错误', '创建失败！', 3000))
       throw err
     });
   }
@@ -396,7 +396,7 @@ export const updateTransfer = (record) => (dispatch, getState) => {
       contentType: 'application/json'
     }).then(res => {
       dispatch(networking.endSuccess)
-      dispatch(updateRecord(res.data.record))
+      dispatch(updateRecord(res.data.record)) // 更新出入库记录缓存
       dispatch(newSuccessNotify('提示', '更新调拨单成功！', 2000))
       // FIXME 为了保证用户可以直接通过返回回到查询界面，这里没有使用 push
       dispatch(goBack())
@@ -420,9 +420,8 @@ export const requestRecord = (id) => (dispatch, getState) => {
     dispatch(networking.begin)
     dispatch(newInfoNotify('提示', '正在请求记录详情', 2000))
     ajax(`/api/record/${id}`).then(res => {
-      const record = res.data.record
       dispatch(networking.endSuccess)
-      dispatch(updateRecord(record))
+      dispatch(updateRecord(res.data.record)) // 更新出入库记录缓存
       dispatch(newSuccessNotify('提示', '请求记录详情成功', 2000))
     }).catch(err => {
       dispatch(networking.endFailure)
