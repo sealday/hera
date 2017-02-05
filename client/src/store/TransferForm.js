@@ -90,6 +90,7 @@ const EntryTable = connect(
           <th>规格</th>
           <th>数量</th>
           <th>小计</th>
+          <th>备注</th>
           <th>
             <button
               type="button"
@@ -128,6 +129,7 @@ const EntryTable = connect(
             </td>
             <td><Field name={`${entry}.count`} component={Input} validate={validator.required}/></td>
             <td>{getTotal(index)}</td>
+            <td><Field name={`${entry}.comments`} component={Input}/></td>
             <td>
               <button
                 type="button"
