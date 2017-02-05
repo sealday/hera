@@ -5,9 +5,9 @@
 //noinspection JSUnresolvedVariable
 import React, { Component } from 'react';
 import { reduxForm, Field, FieldArray } from 'redux-form'
-import { Input, DatePicker, FilterSelect, Select } from '../components'
+import { Input, DatePicker, FilterSelect, Select, TextArea } from '../components'
 import { connect } from 'react-redux'
-import { transformArticle,total_, toFixedWithoutTrailingZero as fixed, validator } from '../utils'
+import { transformArticle,total_, toFixedWithoutTrailingZero as fixed, validator, filterOption } from '../utils'
 import moment from 'moment'
 
 const EntryTable = connect(
@@ -25,7 +25,14 @@ const EntryTable = connect(
   }
 
   const getNameOptions = (type) => {
-    return typeNameMap[type].map(name => ({ value: name, label: name }))
+    // 因为有的旧数据存在分类问题，所以这里加一个判断空的处理
+    // 尽管我们可以把所有数据问题都解决掉，但是不可否认，我已经检查过一遍数据却还存在这个问题，所以还有隐含的问题
+    if (typeNameMap[type]) {
+      return typeNameMap[type].map(name => ({value: name, label: name, pinyin: nameArticleMap[name].pinyin}))
+    } else {
+      return []
+    }
+
   }
 
   const getSizeOptions = (name) => {
@@ -64,16 +71,16 @@ const EntryTable = connect(
     return isNaN(freight) ? false : freight
   }
 
-  const getMixPrice = (index) => {
-    const total = getTotal(index)
-    return total ? getMixSum(index) / total : false
-  }
-
   const getMixSum = (index) => {
     const sum = getSum(index)
     const freight = getFreight(index)
     const mixSum = (sum ? sum : 0) + (freight ? freight: 0)
     return mixSum ? mixSum : false
+  }
+
+  const getMixPrice = (index) => {
+    const total = getTotal(index)
+    return total ? getMixSum(index) / total : false
   }
 
   const getReport = () => {
@@ -151,6 +158,7 @@ const EntryTable = connect(
                 options={getNameOptions(fields.get(index).type)}
                 validate={validator.required}
                 placeholder="名称"
+                filterOption={filterOption}
               />
             </td>
             <td style={{minWidth: '11em'}}>
@@ -236,9 +244,11 @@ class TransferForm extends Component {
           <div className="col-md-3">
             <Field name="carNumber" component={Input}/>
           </div>
+        </div>
+        <div className="form-group">
           <label className="control-label col-md-1">备注</label>
-          <div className="col-md-3">
-            <Field name="comments" component={Input}/>
+          <div className="col-md-11">
+            <Field name="comments" component={TextArea}/>
           </div>
         </div>
         <div className="form-group">

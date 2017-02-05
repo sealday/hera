@@ -57,6 +57,7 @@ class Store extends Component {
         entries: []
       }
 
+      // 如果有规格数据的话
       article.sizes.forEach(size => {
         const key = makeKeyFromNameSize(article.name, size)
         let value = {}
@@ -84,6 +85,37 @@ class Store extends Component {
           })
         }
       })
+
+      // 如果没有规格数据，比如电脑
+      if (article.sizes.length === 0) {
+        const size = undefined
+        const key = makeKeyFromNameSize(article.name, size)
+        let value = {}
+        let exists = false
+        if (key in inRecordMap) {
+          value.in = inRecordMap[key]
+          value.inTotal = toFixedWithoutTrailingZero(inRecordMap[key] * calculateSize(size))
+          inTotal += Number(value.inTotal)
+          exists = true
+        }
+        if (key in outRecordMap) {
+          value.out = outRecordMap[key]
+          value.outTotal = toFixedWithoutTrailingZero(outRecordMap[key] * calculateSize(size))
+          outTotal += Number(value.outTotal)
+          exists = true
+        }
+
+        if (exists) {
+          value.total = toFixedWithoutTrailingZero((value.inTotal || 0) - (value.outTotal || 0))
+          record.entries.push({
+            type: article.type,
+            name: article.name,
+            size: size,
+            ...value
+          })
+        }
+      }
+
       // 计算合计
       if (inTotal > 0 || outTotal > 0) {
         total = toFixedWithoutTrailingZero(inTotal - outTotal)

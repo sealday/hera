@@ -108,96 +108,325 @@ mongoose
       name: '切割机',
       sizes: [],
       sizeUnit: '',
-      countUnit: '个',
-      unit: '个'
+      countUnit: '台',
+      unit: '台'
     },
     {
       type: '工具类',
       name: '电焊机',
       sizes: [],
       sizeUnit: '',
-      countUnit: '个',
-      unit: '个'
+      countUnit: '台',
+      unit: '台'
     },
     {
       type: '工具类',
       name: '扣件机',
       sizes: [],
       sizeUnit: '',
-      countUnit: '个',
-      unit: '个'
+      countUnit: '台',
+      unit: '台'
     },
     {
       type: '工具类',
       name: '叉车',
       sizes: [],
       sizeUnit: '',
-      countUnit: '个',
-      unit: '个'
+      countUnit: '辆',
+      unit: '辆'
     },
     {
       type: '工具类',
       name: '电脑',
       sizes: [],
       sizeUnit: '',
-      countUnit: '个',
-      unit: '个'
+      countUnit: '台',
+      unit: '台'
     },
     {
       type: '工具类',
       name: '打印机',
       sizes: [],
       sizeUnit: '',
-      countUnit: '个',
-      unit: '个'
+      countUnit: '台',
+      unit: '台'
     },
     {
       type: '工具类',
       name: '斗车',
       sizes: [],
       sizeUnit: '',
-      countUnit: '个',
-      unit: '个'
+      countUnit: '辆',
+      unit: '辆'
     },
     {
       type: '工具类',
       name: '三轮电动车',
       sizes: [],
       sizeUnit: '',
-      countUnit: '个',
-      unit: '个'
+      countUnit: '辆',
+      unit: '辆'
     },
     {
       type: '工具类',
       name: '木工锯',
       sizes: [],
       sizeUnit: '',
-      countUnit: '个',
-      unit: '个'
+      countUnit: '台',
+      unit: '台'
     },
     {
       type: '工具类',
       name: '电动扳手',
       sizes: [],
       sizeUnit: '',
-      countUnit: '个',
-      unit: '个'
+      countUnit: '台',
+      unit: '台'
     },
     {
       type: '工具类',
       name: '冲击钻',
       sizes: [],
       sizeUnit: '',
-      countUnit: '个',
-      unit: '个'
+      countUnit: '台',
+      unit: '台'
     },
     {
       type: '工具类',
       name: '电钻',
       sizes: [],
       sizeUnit: '',
-      countUnit: '个',
-      unit: '个'
+      countUnit: '台',
+      unit: '台'
+    },
+    {
+      "type": "损耗类",
+      "name": "阻燃安全网",
+      sizes: [
+        "6000*2000",
+        "6000*1800",
+        "6000*1200"
+      ],
+      "sizeUnit": "",
+      "countUnit": "张",
+      "unit": "张"
+    },
+    {
+      "type": "损耗类",
+      "name": "普通安全网",
+      sizes: [
+        "6000*2000",
+        "6000*1800",
+        "6000*1200"
+      ],
+      "sizeUnit": "",
+      "countUnit": "张",
+      "unit": "张"
+    },
+    {
+      "type": "损耗类",
+      "name": "挑网",
+      sizes: ["6000*3000"],
+      "sizeUnit": "",
+      "countUnit": "张",
+      "unit": "张"
+    },
+    {
+      "type": "损耗类",
+      "name": "隔离网",
+      sizes: ["6000*500"],
+      "sizeUnit": "",
+      "countUnit": "张",
+      "unit": "张"
+    },
+    {
+      "type": "损耗类",
+      "name": "电梯网",
+      sizes: ["2500*2500"],
+      "sizeUnit": "",
+      "countUnit": "张",
+      "unit": "张"
+    },
+    {
+      "type": "损耗类",
+      "name": "油漆",
+      sizes: [
+        "50KG黄色水漆",
+        "13KG黄色油漆",
+        "50KG白色水漆",
+        "25KG白色水漆",
+        "13KG白色油漆",
+        "50KG红色水漆",
+        "25KG红色水漆",
+        "13KG红色油漆",
+        "20KG黑色水漆",
+        "13KG黑色油漆",
+        "50KG铁红水漆",
+        "13KG铁红油漆",
+        "13KG松香水"
+      ],
+      "sizeUnit": "",
+      "countUnit": "桶",
+      "unit": "桶"
+    },
+    {
+      "type": "损耗类",
+      "name": "滚筒",
+      sizes: [],
+      "sizeUnit": "",
+      "countUnit": "支",
+      "unit": "支"
+    },
+    {
+      "type": "损耗类",
+      "name": "机油",
+      sizes: [],
+      "sizeUnit": "",
+      "countUnit": "公斤",
+      "unit": "公斤"
+    },
+    {
+      "type": "损耗类",
+      "name": "柴油",
+      sizes: [],
+      "sizeUnit": "",
+      "countUnit": "公斤",
+      "unit": "公斤"
+    },
+    {
+      "type": "损耗类",
+      "name": "废铁",
+      sizes: [],
+      "sizeUnit": "",
+      "countUnit": "公斤",
+      "unit": "公斤"
+    },
+    {
+      "type": "损耗类",
+      "name": "铁线",
+      sizes: [],
+      "sizeUnit": "",
+      "countUnit": "公斤",
+      "unit": "公斤"
+    },
+    {
+      "type": "损耗类",
+      "name": "铁钉",
+      sizes: [],
+      "sizeUnit": "",
+      "countUnit": "公斤",
+      "unit": "公斤"
+    },
+    {
+      "type": "损耗类",
+      "name": "扣件螺丝",
+      sizes: [],
+      "sizeUnit": "",
+      "countUnit": "套",
+      "unit": "套"
+    },
+    {
+      "type": "损耗类",
+      "name": "钢丝绳",
+      sizes: [
+        "15号",
+        "13号",
+        "11号"
+      ],
+      "sizeUnit": "",
+      "countUnit": "米",
+      "unit": "米"
+    },
+    {
+      "type": "损耗类",
+      "name": "钢丝绳扣头",
+      sizes: [
+        "15号",
+        "13号",
+        "11号"
+      ],
+      "sizeUnit": "",
+      "countUnit": "只",
+      "unit": "只"
+    },
+    {
+      "type": "损耗类",
+      "name": "活兰",
+      sizes: [
+        "22号",
+        "18号",
+        "12号"
+      ],
+      "sizeUnit": "",
+      "countUnit": "个",
+      "unit": "个"
+    },
+    {
+      "type": "损耗类",
+      "name": "工字钢埋件",
+      sizes: [
+        "35CM圆钢U型扣",
+        "40CM圆钢U型扣",
+        "48CM圆钢U型扣",
+        "53CM圆钢U型扣",
+        "35CM钢板U型扣",
+        "40CM钢板U型扣",
+        "48CM钢板U型扣",
+        "53CM钢板U型扣",
+        "盖板",
+        "螺帽"
+      ],
+      "sizeUnit": "",
+      "countUnit": "支",
+      "unit": "支"
+    },
+    {
+      "type": "损耗类",
+      "name": "电焊条",
+      sizes: ["3.2", "4.0"],
+      "sizeUnit": "",
+      "countUnit": "箱",
+      "unit": "箱"
+    },
+    {
+      "type": "损耗类",
+      "name": "焊吧线",
+      sizes: ["35平方", "50平方"],
+      "sizeUnit": "",
+      "countUnit": "米",
+      "unit": "米"
+    },
+    {
+      "type": "损耗类",
+      "name": "电箱",
+      sizes: [],
+      "sizeUnit": "",
+      "countUnit": "个",
+      "unit": "个"
+    },
+    {
+      "type": "损耗类",
+      "name": "焊枪",
+      sizes: [],
+      "sizeUnit": "",
+      "countUnit": "把",
+      "unit": "把"
+    },
+    {
+      "type": "损耗类",
+      "name": "割机片",
+      sizes: [],
+      "sizeUnit": "",
+      "countUnit": "张",
+      "unit": "张"
+    },
+    {
+      "type": "损耗类",
+      "name": "钻头",
+      sizes: [],
+      "sizeUnit": "",
+      "countUnit": "支",
+      "unit": "支"
     },
   ]);
 }).then(() => {
