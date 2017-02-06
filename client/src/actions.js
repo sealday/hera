@@ -91,7 +91,7 @@ export const removeWorker =(id)=>(dispatch,getState)=>{
   if(!getState().requestWorkerlist.posting){
     dispatch({type:DELETE_WORKER});
     dispatch(newInfoNotify('提示','正在删除',2000))
-      ajax(`api/workercheckin/${id}/delete`,{
+      ajax(`/api/workercheckin/${id}/delete`,{
           method: 'POST',
           contentType: 'application/json'
       }).then(res=>{
@@ -113,7 +113,7 @@ export const requestWorkerlist =()=> (dispatch,getState)=>{
   if (!getState().requestWorkerlist.requesting){
     dispatch({type:REQUEST_WORKERS})
       dispatch(newInfoNotify("提示",'正在请求数据',2000))
-    ajax('api/workercheckin').then(res=>{
+    ajax('/api/workercheckin').then(res=>{
       const workers = res.data.workers
         dispatch({type:REQUEST_WORKERS_SUCCESS,data:workers})
         dispatch(newSuccessNotify('提示','请求数据成功',2000))
