@@ -2,10 +2,10 @@
  * Created by seal on 15/01/2017.
  */
 
-import React from 'react';
+import React from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
-import { calculateSize, toFixedWithoutTrailingZero } from '../utils'
+import { toFixedWithoutTrailingZero as fixed, total_ } from '../utils'
 import { Link } from 'react-router'
 
 class TransferOrder extends React.Component {
@@ -72,18 +72,17 @@ class TransferOrder extends React.Component {
 
     let entries = {}
     let total = {}
-    let key = 0; // 这里 key 不会影响性能，我们只显示，不会过滤任何一个字段，也不会重新排序等等
     record.entries.forEach(entry => {
-      let result = entry.count * calculateSize(entry.size);
+      let result = total_(entry)
 
       if (entry.name in entries) {
-        total[entry.name] += result;
-        entries[entry.name].push(entry);
+        total[entry.name] += result
+        entries[entry.name].push(entry)
       } else {
-        entries[entry.name] = [entry];
-        total[entry.name] = result;
+        entries[entry.name] = [entry]
+        total[entry.name] = result
       }
-    });
+    })
 
     let productTypeMap = {}
     articles.forEach(article => {
@@ -93,169 +92,143 @@ class TransferOrder extends React.Component {
     let printEntries = []
     for (let name in entries) {
       /*eslint guard-for-in: off*/
-      entries[name].forEach(entry => { /*eslint no-loop-func: off */
-        printEntries.push(
-          <tr className="text-right" key={key++}>
-            <td>{entry.name}</td>
-            <td>{entry.size ? entry.size.split(';').join(' ') + ' ' + productTypeMap[name].sizeUnit : ''}</td>
-            <td>{entry.count + ' ' + productTypeMap[name].countUnit}</td>
-          </tr>
-        )
-      })
+      printEntries = printEntries.concat(entries[name].map(entry => [
+        entry.name,
+        entry.size ? entry.size.split(';').join(' ') + ' ' + productTypeMap[name].sizeUnit : '',
+        entry.count + ' ' + productTypeMap[name].countUnit,
+        entry.comments,
+      ]))
       printEntries.push(
-        <tr className="row-sum text-right" key={key++}>
-          <td>{name}</td>
-          <td>小计</td>
-          <td>{toFixedWithoutTrailingZero(total[name])  + ' ' + productTypeMap[name].unit}</td>
-        </tr>
+        [
+          name,
+          '小计',
+          fixed(total[name])  + ' ' + productTypeMap[name].unit,
+          '',
+        ]
       )
     }
 
     // TODO 这里不应该会出现 fee，如果出现就是错误的了
-    if (!record.fee) {
-      console.warn('调拨单费用不应该是null')
+    if (record.type === '调拨') {
+      if (!record.fee) {
+        console.warn('调拨单费用不应该是null')
+      }
+      record.fee = record.fee || {}
+      printEntries.push(
+        [
+          '运费：',
+          `￥${record.fee.car || 0} `,
+          '整理费：',
+          `￥${record.fee.sort || 0}`,
+        ]
+      );
+      printEntries.push(
+        [
+          '其他费用1：',
+          `￥${record.fee.other1 || 0}`,
+          `其他费用2：`,
+          `￥${record.fee.other2 || 0}`,
+        ]
+      );
     }
-    record.fee = record.fee || {}
-    printEntries.push(
-      <tr key={key++} className="text-right">
-        <td />
-        <td>{`运费：￥${record.fee.car || 0} `}</td>
-        <td>{`整理费：￥${record.fee.sort || 0}`}</td>
-      </tr>
-    );
-
-    printEntries.push(
-      <tr key={key++} className="text-right">
-        <td/>
-        <td>{`其他费用1：￥${record.fee.other1 || 0}`}</td>
-        <td>{`其他费用2：￥${record.fee.other2 || 0}`}</td>
-      </tr>
-    );
 
     if (printEntries.length % 2 !== 0) {
-      printEntries.push(<tr key={key++}><td>{'\u00a0'}</td><td/><td/></tr>)
+      printEntries.push(['', '', '', ''])
     }
 
-    const leftPart = printEntries.slice(0, printEntries.length / 2)
-    const rightPart = printEntries.slice(printEntries.length / 2, printEntries.length)
+    let rows = []
+    const half = printEntries.length / 2
+    for (let i = 0; i < half; i++) {
+      rows.push(printEntries[i].concat(printEntries[i + half]))
+    }
 
     return (
-        <div className="container-fluid">
-          <div className="btn-group hidden-print">
-            <button className="btn btn-default" onClick={() => router.goBack()}>返回</button>
-            {record.type === '调拨' &&
-            <Link className="btn btn-primary" to={`/transfer/${direction}/${record._id}/edit`}>编辑</Link>
-            }
-            {record.type === '销售' &&
-            <Link className="btn btn-primary" to={`/purchase/out/${record._id}/edit`}>编辑</Link>
-            }
-            {record.type === '采购' &&
-            <Link className="btn btn-primary" to={`/purchase/in/${record._id}/edit`}>编辑</Link>
-            }
-            <button className="btn btn-default" onClick={this.handleTransport}>运输单</button>
-            <button className="btn btn-default" onClick={() => print()}>打印</button>
-            <a className="btn btn-default" href="check">审核确认</a>
-          </div>
-          <h4 className="text-center">上海创兴建筑设备租赁有限公司</h4>
-          <h4 className="text-center">{orderName}</h4>
-          <div className="row">
-            <div className="col-xs-6">
-              <table className="table table-clean">
-                <tbody>
-                <tr>
-                  <td className="text-left">{companyLabel}：{company}</td>
-                </tr>
-                <tr>
-                  <td className="text-left">{nameLabel}：{name}</td>
-                </tr>
-                </tbody>
-              </table>
-            </div>
-            <div className="col-xs-6">
-              <table className="table table-clean">
-                <tbody>
-                <tr>
-                  <td className="text-left">日期：{moment(record.outDate).format('YYYY-MM-DD')}</td>
-                  <td className="text-left">流水号：{record.number}</td>
-                </tr>
-                <tr>
-                  <td className="text-left">车号：{record.carNumber}</td>
-                  <td className="text-left">原始单号：{record.originalOrder}</td>
-                </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-xs-6">
-              <table className="table text-right">
-                <thead>
-                <tr>
-                  <th className="text-right">名称</th>
-                  <th className="text-right">规格</th>
-                  <th className="text-right">数量</th>
-                </tr>
-                </thead>
-                <tbody>
-                {leftPart}
-                <tr>
-                  <td colSpan="3" style={{height: '7em'}} className="text-left">
-                    <span>说明：如供需双方未签正式合同，本{orderName}经供需双方代表签字确认后，将作为合同</span>
-                    <span>及发生业务往来的有效凭证，如已签合同，则成为该合同的组成部分。{signer}须核对</span>
-                    <span>以上产品规格、数量确认后可签字认可。</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td/>
-                  <td/>
-                  <td/>
-                </tr>
-                </tbody>
-              </table>
-            </div>
-            <div className="col-xs-6">
-              <table className="table">
-                <thead>
-                <tr>
-                  <th className="text-right">名称</th>
-                  <th className="text-right">规格</th>
-                  <th className="text-right">数量</th>
-                </tr>
-                </thead>
-                <tbody>
-                {rightPart}
-                <tr>
-                  <td colSpan="3" style={{height: '7em'}}>备注 {record.comments }</td>
-                </tr>
-                <tr>
-                  <td/>
-                  <td/>
-                  <td/>
-                </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-xs-4">
-              <p>制单人：{record.username}</p>
-            </div>
-            <div className="col-xs-4">
-              <p>{outLabel}（签名）：</p>
-            </div>
-            <div className="col-xs-4">
-              <p>{inLabel}（签名）：</p>
-            </div>
-          </div>
+      <div>
+        <div className="btn-group hidden-print">
+          <button className="btn btn-default" onClick={() => router.goBack()}>返回</button>
+          {record.type === '调拨' &&
+          <Link className="btn btn-primary" to={`/transfer/${direction}/${record._id}/edit`}>编辑</Link>
+          }
+          {record.type === '销售' &&
+          <Link className="btn btn-primary" to={`/purchase/out/${record._id}/edit`}>编辑</Link>
+          }
+          {record.type === '采购' &&
+          <Link className="btn btn-primary" to={`/purchase/in/${record._id}/edit`}>编辑</Link>
+          }
+          <button className="btn btn-default" onClick={this.handleTransport}>运输单</button>
+          <button className="btn btn-default" onClick={() => print()}>打印</button>
+          <a className="btn btn-default" href="check">审核确认</a>
         </div>
+        <h4 className="text-center">上海创兴建筑设备租赁有限公司</h4>
+        <h4 className="text-center">{orderName}</h4>
+        <table style={{tableLayout: 'fixed', fontSize: '11px', width: '100%'}}>
+          <colgroup>
+            <col style={{width: '50%'}}/>
+          </colgroup>
+          <tbody>
+          <tr>
+            <td>{companyLabel}：{company}</td>
+            <td>日期：{moment(record.outDate).format('YYYY-MM-DD')}</td>
+            <td>流水号：{record.number}</td>
+          </tr>
+          <tr>
+            <td>{nameLabel}：{name}</td>
+            <td>车号：{record.carNumber}</td>
+            <td>原始单号：{record.originalOrder}</td>
+          </tr>
+          </tbody>
+        </table>
+        <table className="table table-bordered" style={{tableLayout: 'fixed', fontSize: '11px', marginBottom: '0'}}>
+          <thead>
+          <tr>
+            <th className="text-right">名称</th>
+            <th className="text-right">规格</th>
+            <th className="text-right">数量</th>
+            <th className="text-right">备注</th>
+            <th className="text-right">名称</th>
+            <th className="text-right">规格</th>
+            <th className="text-right">数量</th>
+            <th className="text-right">备注</th>
+          </tr>
+          </thead>
+          <tbody>
+          {rows.map((row, index) => (
+            <tr className="text-right" key={index}>
+              {row.map((col, index) => (
+                <td key={index}>{col}</td>
+              ))}
+            </tr>
+          ))}
+          <tr>
+            <td colSpan="4" >
+              <span>说明：如供需双方未签正式合同，本{orderName}经供需双方代表签字确认后，将作为合同</span>
+              <span>及发生业务往来的有效凭证，如已签合同，则成为该合同的组成部分。{signer}须核对</span>
+              <span>以上产品规格、数量确认后可签字认可。</span>
+            </td>
+            <td colSpan="4">
+              备注 {record.comments}
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <table style={{tableLayout: 'fixed', fontSize: '11px', width: '100%'}}>
+          <tbody>
+          <tr>
+            <td>制单人：{record.username}</td>
+            <td>{outLabel}（签名）：</td>
+            <td>{inLabel}（签名）：</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
     );
   }
 }
 
 const mapStateToProps = state => ({
-    projects: state.system.projects,
-    articles: state.system.articles.toArray(),
-    store: state.system.store
+  projects: state.system.projects,
+  articles: state.system.articles.toArray(),
+  store: state.system.store,
 })
 
 export default connect(mapStateToProps)(TransferOrder)
