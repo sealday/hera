@@ -123,17 +123,17 @@ class TransportOrder extends Component {
           </tr>
           <tr>
             <th>收货方</th>
-            <td colSpan="3">{transport['delivery-party']}</td>
-            <td>{transport['delivery-contact']}</td>
-            <td>{transport['delivery-phone']}</td>
-            <td>{transport['delivery-address']}</td>
-          </tr>
-          <tr>
-            <th>发货方</th>
             <td colSpan="3">{transport['receiving-party']}</td>
             <td>{transport['receiving-contact']}</td>
             <td>{transport['receiving-phone']}</td>
             <td>{transport['receiving-address']}</td>
+          </tr>
+          <tr>
+            <th>发货方</th>
+            <td colSpan="3">{transport['delivery-party']}</td>
+            <td>{transport['delivery-contact']}</td>
+            <td>{transport['delivery-phone']}</td>
+            <td>{transport['delivery-address']}</td>
           </tr>
           <tr>
             <th rowSpan="2">承运方</th>
