@@ -10,7 +10,6 @@ import { Provider } from 'react-redux'
 import * as reducers from './reducers'
 import { systemLoaded, updateOnlineUser, selectStore } from './actions'
 import { syncHistoryWithStore, routerReducer, routerMiddleware } from 'react-router-redux'
-import { logger } from './middlewares'
 
 import App from './App';
 import Home from './Home';
@@ -88,7 +87,7 @@ const store = createStore(combineReducers({
   form: formReducer,
   routing: routerReducer,
 }), composeEnhancers(
-  applyMiddleware(thunkMiddleware, routerMiddleware(hashHistory), logger)
+  applyMiddleware(thunkMiddleware, routerMiddleware(hashHistory))
 ))
 
 ajax('/api/load').then(res => {
