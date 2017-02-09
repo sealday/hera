@@ -10,6 +10,15 @@ import { Link } from 'react-router'
 
 class PurchaseOrder extends React.Component {
 
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      columnStyle: 'single', // 栏目样式，支持单栏和双栏
+    }
+
+  }
+
   handleTransport = () => {
     const { router, record } = this.props
     router.push(`/transport/${record._id}`)
@@ -128,9 +137,23 @@ class PurchaseOrder extends React.Component {
     }
 
     let rows = []
-    const half = printEntries.length / 2
-    for (let i = 0; i < half; i++) {
-      rows.push(printEntries[i].concat(printEntries[i + half]))
+    if (this.state.columnStyle === 'double') {
+      const half = printEntries.length / 2
+      for (let i = 0; i < half; i++) {
+        rows.push(printEntries[i].concat(printEntries[i + half]))
+      }
+    } else {
+      const length = printEntries.length
+      for (let i = 0; i < length; i++) {
+        rows.push(printEntries[i])
+      }
+    }
+
+
+    // 标题数量，单栏一倍，双栏两倍
+    let columnNames = ['名称', '规格', '数量', '小计', '单价', '金额', '备注']
+    if (this.state.columnStyle === 'double') {
+      columnNames = columnNames.concat(columnNames)
     }
 
     return (
@@ -149,6 +172,25 @@ class PurchaseOrder extends React.Component {
           <button className="btn btn-default" onClick={this.handleTransport}>运输单</button>
           <button className="btn btn-default" onClick={() => print()}>打印</button>
           <a className="btn btn-default" href="check">审核确认</a>
+
+        </div>
+        <div className="btn-group pull-right hidden-print">
+          <label className="btn btn-default">
+            <input
+              type="radio"
+              autoComplete="off"
+              value="single"
+              checked={this.state.columnStyle === 'single'}
+              onChange={e => this.setState({ columnStyle: e.target.value })}/>单栏
+          </label>
+          <label className="btn btn-default">
+            <input
+              type="radio"
+              autoComplete="off"
+              value="double"
+              checked={this.state.columnStyle === 'double'}
+              onChange={e => this.setState({ columnStyle: e.target.value })}/>双栏
+          </label>
         </div>
         <h4 className="text-center">上海创兴建筑设备租赁有限公司</h4>
         <h4 className="text-center">{orderName}</h4>
@@ -172,20 +214,9 @@ class PurchaseOrder extends React.Component {
         <table className="table table-bordered" style={{tableLayout: 'fixed', fontSize: '9px', marginBottom: '0'}}>
           <thead>
           <tr>
-            <th className="text-right">名称</th>
-            <th className="text-right">规格</th>
-            <th className="text-right">数量</th>
-            <th className="text-right">小计</th>
-            <th className="text-right">单价</th>
-            <th className="text-right">金额</th>
-            <th className="text-right">备注</th>
-            <th className="text-right">名称</th>
-            <th className="text-right">规格</th>
-            <th className="text-right">数量</th>
-            <th className="text-right">小计</th>
-            <th className="text-right">单价</th>
-            <th className="text-right">金额</th>
-            <th className="text-right">备注</th>
+            {columnNames.map((name, index) => (
+              <th key={index}>{name}</th>
+            ))}
           </tr>
           </thead>
           <tbody>
@@ -197,12 +228,12 @@ class PurchaseOrder extends React.Component {
             </tr>
           ))}
           <tr>
-            <td colSpan="7" >
+            <td colSpan={this.state.columnStyle === 'single' ? 4 : 7} >
               <span>说明：如供需双方未签正式合同，本{orderName}经供需双方代表签字确认后，将作为合同</span>
               <span>及发生业务往来的有效凭证，如已签合同，则成为该合同的组成部分。{signer}须核对</span>
               <span>以上产品规格、数量确认后可签字认可。</span>
             </td>
-            <td colSpan="7">
+            <td colSpan={this.state.columnStyle === 'single' ? 3 : 7}>
               备注 {record.comments}
             </td>
           </tr>
