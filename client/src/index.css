@@ -87,6 +87,15 @@ html {
   /*}*/
 }
 
+.table--tight>tbody>tr>td,
+.table--tight>tbody>tr>th,
+.table--tight>tfoot>tr>td,
+.table--tight>tfoot>tr>th,
+.table--tight>thead>tr>td,
+.table--tight>thead>tr>th {
+  padding: 1px;
+}
+
 .row-sum {
   font-weight: 900;
   text-decoration: underline;

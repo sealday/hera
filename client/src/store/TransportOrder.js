@@ -71,7 +71,7 @@ class TransportOrder extends Component {
         <button className="btn btn-primary hidden-print" onClick={this.handleEdit}>编辑</button>
         <button className="btn btn-default hidden-print" onClick={e => print()}>打印</button>
         <h2 className="text-center">货运运输协议 <small className="pull-right">单号：{record.number}</small></h2>
-        <table className="table table-bordered">
+        <table className="table table-bordered table--tight">
           <tbody>
           <tr>
             <th>日期</th>
