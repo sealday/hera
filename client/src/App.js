@@ -96,7 +96,7 @@ class App extends Component {
                       <li><Link to="project_create">新建项目</Link></li>
                       <li><Link to="project">项目列表</Link></li>
                       <li><Link to="">员工档案</Link></li>
-                      <li><Link to="">考勤表</Link></li>
+                      <li><Link to="/signin">考勤表</Link></li>
                       <li><Link to="">工资卡</Link></li>
                       <li><Link to="/worker_checkin">进场登记卡</Link></li>
                     </ul>}
