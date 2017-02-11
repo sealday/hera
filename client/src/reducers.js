@@ -108,26 +108,13 @@ export function requestWorkerlist(state= new WorkerRecord(),action) {
         case actionTypes.DELETE_WORKER_SUCCESS:
           const id = action.data;
           const workerlist = state.get('data');
-          const newworkers = workerlist.filter(obj =>obj._id != id);
+          const newworkers = workerlist.filter(obj =>obj._id !== id);
           return state.set('posting',false).set('data',newworkers)
         case actionTypes.DELETE_WORKER_FAILURE:
           return state.set('posting',false)
         default:
           return state;
     }
-}
-
-export function postTransfer(state = new PostRecord(), action) {
-  switch (action.type) {
-    case actionTypes.POST_TRANSFER:
-      return state.set('posting', true)
-    case actionTypes.POST_TRANSFER_SUCCESS:
-      return state.set('posting', false).set('data', action.data)
-    case actionTypes.POST_TRANSFER_FAILURE:
-      return state.set('posting', false)
-    default:
-      return state
-  }
 }
 
 export function postProject(state = new PostRecord(), action) {

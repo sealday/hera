@@ -4,7 +4,7 @@
 
 import React, {Component} from 'react';
 import {reduxForm, Field} from 'redux-form'
-import {Input, DatePicker, Select, FilterSelect} from '../components';
+import {Input, DatePicker, FilterSelect} from '../components';
 import moment from 'moment';
 import {validator} from '../utils'
 class WorkerCheckinForm extends Component {

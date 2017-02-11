@@ -80,10 +80,20 @@ html {
     margin-bottom: 0;
   }
 
-  .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
-    padding: 0;
-    /*line-height: 1.2;*/
-  }
+  /*.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {*/
+    /*padding-top: 4px;*/
+    /*padding-bottom: 4px;*/
+    /*!*line-height: 1.2;*!*/
+  /*}*/
+}
+
+.table--tight>tbody>tr>td,
+.table--tight>tbody>tr>th,
+.table--tight>tfoot>tr>td,
+.table--tight>tfoot>tr>th,
+.table--tight>thead>tr>td,
+.table--tight>thead>tr>th {
+  padding: 1px;
 }
 
 .row-sum {

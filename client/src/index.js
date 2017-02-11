@@ -10,7 +10,6 @@ import { Provider } from 'react-redux'
 import * as reducers from './reducers'
 import { systemLoaded, updateOnlineUser, selectStore } from './actions'
 import { syncHistoryWithStore, routerReducer, routerMiddleware } from 'react-router-redux'
-import { logger } from './middlewares'
 
 import App from './App';
 import Home from './Home';
@@ -81,15 +80,14 @@ import './index.css';
 import moment from 'moment';
 moment.locale('zh-CN');
 
-//noinspection JSUnresolvedVariable
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const composeEnhancers = window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] || compose;
 
 const store = createStore(combineReducers({
   ...reducers,
   form: formReducer,
   routing: routerReducer,
 }), composeEnhancers(
-  applyMiddleware(thunkMiddleware, routerMiddleware(hashHistory), logger)
+  applyMiddleware(thunkMiddleware, routerMiddleware(hashHistory))
 ))
 
 ajax('/api/load').then(res => {
@@ -112,7 +110,7 @@ ajax('/api/load').then(res => {
           <IndexRoute component={Home}/>
           <Route path="file_manager" component={FileManager}/>
             {/*劳务人员登记*/}
-          <Route path="worker_checkin" component={WorkerCheckin}/>
+          <Route path="worker/create" component={WorkerCheckin}/>
           <Route path="worker/:id/edit" component={WorkerCheckinEdit}/>
           {/*进场工人签到*/}
           <Route path="signin" component={Signin}/>
@@ -122,23 +120,21 @@ ajax('/api/load').then(res => {
           <Route path="operator/:id/edit" component={OperatorEdit}/>
 
           <Route path="project" component={Project}/>
-          <Route path="project_create" component={ProjectCreate}/>
+          <Route path="project/create" component={ProjectCreate}/>
           <Route path="project/:id/edit" component={ProjectEdit}/>
 
           <Route path="search" component={Search}/>
           <Route path="simple_search" component={SimpleSearch}/>
           <Route path="article" component={Article}/>
           <Route path="purchase" component={Purchase}/>
+
           {/* direction 表示调拨的方向 取值为 in 和 out  */}
           <Route path="transfer/:direction/create" component={TransferCreate}/>
+          <Route path="transfer/:direction/:id/edit" component={TransferEdit}/>
+          <Route path="purchase/:direction/create" component={PurchaseCreate}/>
+          <Route path="purchase/:direction/:id/edit" component={PurchaseEdit}/>
 
           <Route path="record/:id" component={Record}/>
-
-          <Route path="transfer/:direction/:id/edit" component={TransferEdit}/>
-
-          <Route path="purchase/:direction/create" component={PurchaseCreate}/>
-          <Route path="purchase/:recordId" component={PurchaseOrder}/>
-          <Route path="purchase/:direction/:id/edit" component={PurchaseEdit}/>
 
           <Route path="transport/:id" component={TransportOrder}/>
           <Route path="transport/:id/edit" component={TransportOrderEdit}/>
