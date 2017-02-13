@@ -428,6 +428,14 @@ mongoose
       "countUnit": "支",
       "unit": "支"
     },
+    {
+      "type": "损耗类",
+      "name": "钢丝绳",
+      sizes: [],
+      "sizeUnit": "",
+      "countUnit": "条",
+      "unit": "条"
+    },
   ]);
 }).then(() => {
   console.log('初始化物料数据成功')
