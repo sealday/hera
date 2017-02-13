@@ -60,3 +60,33 @@ exports.delete =(req,res,next)=>{
         next(err);
     })
 }
+
+exports.signin = (req,res,next)=>{
+    const id = req.params.id;
+    let signin = {
+        signintime:req.body.signintime,
+        signinaddition:req.body.signinaddition}
+    console.log(JSON.stringify(signin))
+    Worker.findByIdAndUpdate(id,{$push:{sign:signin}}).then(()=>{
+        res.json({
+            message:'签到成功'
+        })
+    }).catch(err=>{
+        next(err)
+    })
+}
+
+exports.signout = (req,res,next)=>{
+    const id = req.params.id;
+    let signout = {
+        signouttime:req.body.signouttime,
+        signoutaddition:req.body.signoutaddition}
+
+    Worker.findByIdAndUpdate(id,{$push:{sign:signout}}).then(()=>{
+        res.json({
+            message:'签退成功'
+        })
+    }).catch(err=>{
+        next(err)
+    })
+}

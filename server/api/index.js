@@ -38,7 +38,11 @@ router.post('/project/:id', project.update)
 router.post('/workercheckin',workercheckin.create)
 router.post('/workercheckin/:id/edit',workercheckin.update);
 router.get('/workercheckin',workercheckin.list);
-router.post('/workercheckin/:id/delete',workercheckin.delete)
+router.post('/workercheckin/:id/delete',workercheckin.delete);
+router.post('/workercheckin/:id/signin',workercheckin.signin)
+router.post('/workercheckin/:id/signout',workercheckin.signout)
+
+
 
 
 router.get('/record', record.list)

@@ -6,6 +6,9 @@
 import React, {Component} from 'react'
 import moment from 'moment';
 import  './signin.css'
+import {signinWorker} from  '../actions';
+import { connect } from 'react-redux'
+
 
 
 class Signin extends Component {
@@ -48,16 +51,25 @@ class Signin extends Component {
                         <input type="text" className="form-control" placeholder="请填写备注"/>
                     </div>
                     <div>
-                        <button className="btn btn-primary btn-block">提交</button>
+                        <button className="btn btn-primary btn-block" onClick={this.handleSubmit}>提交</button>
                     </div>
                 </div>
 
             </div>
         )
     }
+
+    handleSubmit=()=>{
+        this.props.dispatch(signinWorker(moment().format('YYYY-MM-DD,hh:mm:ss')));
+
+    }
+}
+
+const mapStateToProps = state =>{
+    return {}
 }
 
 
-export default Signin
+export default connect(mapStateToProps)(Signin)
 
 

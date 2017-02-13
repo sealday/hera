@@ -19,11 +19,12 @@ const WorkerSchema = new Schema({
     valid: Boolean,//身份是否有效
     jointime: Date,//进场时间
     project: Schema.Types.ObjectId,//所属项目id
-    signin: [{
-        time: {
-            signintime: Date,
-            signouttime: Date
-        }
+    sign: [{
+            signintime: Date,//签到时间
+            signouttime: Date,//签退时间
+            signinaddition:String,//备注
+            signoutaddition:String
+
     }
     ]//签到数组
 })

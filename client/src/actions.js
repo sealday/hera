@@ -83,6 +83,25 @@ export const toggleMenu = (name) => ({
   data: name
 })
 
+export const SIGNIN_WORKER = 'SIGNIN_WORKER'
+export const SIGNIN_WORKER_SUCCESS = 'SIGNIN_WORKER_SUCCESS'
+export const SIGNIN_WORKER_FAILURE = 'SIGNIN_WORKER_FAILURE'
+export const signinWorker = (time)=>(dispatch,getState)=>{
+  dispatch({type:SIGNIN_WORKER});
+  dispatch(newInfoNotify('提示','正在签到',2000))
+    ajax('api/workercheckin/58a1b55e54928b30e823e7cd/signin',{
+      data:JSON.stringify({signintime:time,signinaddition:'hello'}),
+      method:'POST',
+      contentType:'application/json'
+    }).then(res=>{
+      dispatch({type:SIGNIN_WORKER_SUCCESS})
+      dispatch(newSuccessNotify('提示','签到成功',2000))
+    }).catch(err=>{
+      dispatch({type:SIGNIN_WORKER_FAILURE})
+      dispatch(newErrorNotify('警告','签到失败',2000))
+    })
+}
+
 export const DELETE_WORKER = 'DELETE_WORKER'
 export const DELETE_WORKER_SUCCESS = 'DELETE_WORKER_SUCCESS'
 export const DELETE_WORKER_FAILURE = 'DELETE_WORKER_FAILURE'
@@ -141,7 +160,7 @@ export const alterWorker = (worker)=>(dispatch,getState)=>{
       const workerinfo = res.data.workerinfo;
       dispatch({type:ALTER_WORKER_SUCCESS,data:workerinfo})
       dispatch(newSuccessNotify('提示','修改工人信息成功',2000))
-      dispatch(push(`/worker_checkin`))
+      dispatch(push(`/worker/create`))
       }).catch(err=>{
       dispatch({type:ALTER_WORKER_FAILURE})
       dispatch(newErrorNotify('警告','修改工人信息失败',2000))
