@@ -13,18 +13,31 @@ import { Map } from 'immutable'
  * 提供排序功能的搜索结果表
  */
 class SimpleSearchTable extends React.Component {
-  render() {
-    const { search, projects } = this.props
 
-    const getProjectName = id => {
-      const project = projects.get(id)
-      return project ? project.company + project.name : '';
+  getDirection = entry => entry.type === '调拨'
+  ? entry.inStock === this.props.store._id ? '入库' : '出库'
+  : entry.type === '销售' ? '出库' : '入库'
+
+  getOtherSize = entry => {
+    switch (entry.type) {
+      case '调拨':
+        return this.getDirection(entry) === '出库' ? this.getProjectName(entry.inStock): this.getProjectName(entry.outStock)
+      case '销售': /* 和采购一样的情况 */
+      case '采购':
+        return entry.vendor
+      default:
+        return '未知'
     }
+  }
 
-    // FIXME 只考虑了 销售、调拨、采购 三种情况
-    const getDirection = entry => entry.type === '调拨'
-      ? entry.inStock === this.props.store._id ? '入库' : '出库'
-      : entry.type === '销售' ? '出库' : '入库'
+  getProjectName = id => {
+    const { projects } = this.props
+    const project = projects.get(id)
+    return project ? project.company + project.name : '';
+  }
+
+  render() {
+    const { search } = this.props
 
     const getTotal = (entries) => {
 
@@ -46,7 +59,7 @@ class SimpleSearchTable extends React.Component {
         getTotal(entry.entries).forEach((v, k) => {
           totals.push(k + '：' + toFixedWithoutTrailingZero(v)) //拼凑显示的字符串
 
-          if (getDirection(entry) === '入库') {
+          if (this.getDirection(entry) === '入库') {
             inStore = inStore.update(k, 0, total => total + v)
             store = store.update(k, 0, total => total + v)
           } else {
@@ -94,9 +107,9 @@ class SimpleSearchTable extends React.Component {
               <td>{entry.carNumber}</td>
               <td>{entry.number}</td>
               <td>{entry.originalOrder}</td>
-              <td>{getDirection(entry) === '出库' ? getProjectName(entry.inStock) : getProjectName(entry.outStock) || entry.vendor}</td>
+              <td>{this.getOtherSize(entry)}</td>
               {/* 当没有公司情况的时候，会有对方单位，当两个都没有的时候，属于上年结转的单据 */}
-              <td>{getDirection(entry)}</td>
+              <td>{this.getDirection(entry)}</td>
               <td>{entry.totalString}</td>
               <td>
                 <Link to={`/record/${entry._id}`}>查看详情</Link>
