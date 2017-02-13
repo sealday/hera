@@ -16,7 +16,6 @@ const User = require('./models/User');
 const compression = require('compression');
 const service = require('./service')
 
-const index = require('./controllers/index');
 const apiIndex = require('./api');
 
 // 使用 ES6 的 Promise
@@ -24,31 +23,6 @@ mongoose.Promise = global.Promise;
 // 连接 mongo 数据库
 mongoose
   .connect('mongodb://localhost/hera')
-  .then(() => {
-    // 读取初始数据
-    global.companyData = {};
-    return ProductType.find();
-  }).then(productTypes => {
-    global.companyData.productTypes = productTypes;
-    global.companyData.productTypeMap = {};
-    productTypes.forEach(type => {
-      global.companyData.productTypeMap[type.name] = type;
-    });
-    return Project.find();
-  }).then(projects => {
-    global.companyData.projects = {};
-    projects.forEach(p => {
-      global.companyData.projects[p.id] = p;
-    });
-    return User.find();
-  }).then(users => {
-    global.companyData.users = {};
-    users.forEach(u => {
-      global.companyData.users[u.id] = u;
-    });
-  }).catch(err => {
-    console.log(err);
-  });
 
 mongoose.connection.on('error', () => {
   console.log('%s MongoDB connection error. Please make sure MongoDB is running.', chalk.red('✗'));
@@ -59,10 +33,6 @@ const app = express();
 
 // compress all
 app.use(compression());
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
 
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -84,9 +54,7 @@ app.use(session({
   })
 }));
 
-// token bases api
 app.use('/api',  apiIndex);
-app.use('/', index);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
