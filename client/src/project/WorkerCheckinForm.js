@@ -59,7 +59,7 @@ class WorkerCheckinForm extends Component {
                         </div>
                         <label htmlFor="" className="col-md-1 control-label">出生年月</label>
                         <div className="col-md-3">
-                            <Field name="birthday" component={DatePicker} validate={validator.required}/>
+                            <Field name="birthday" component={DatePicker} showYearDropdown dateFormatCalendar="MMMM" scrollableYearDropdown  validate={validator.required}/>
                         </div>
                         <label htmlFor="" className="col-md-1 control-label">联系电话</label>
 
@@ -74,7 +74,7 @@ class WorkerCheckinForm extends Component {
                         </div>
                         <label htmlFor="" className="col-md-1 control-label">进场时间</label>
                         <div className="col-md-3">
-                            <Field component={DatePicker} name="jointime" validate={validator.required}/>
+                            <Field component={DatePicker} showYearDropdown dateFormatCalendar="MMMM" scrollableYearDropdown name="jointime" validate={validator.required}/>
                         </div>
                     </div>
                     <div className="form-group">
