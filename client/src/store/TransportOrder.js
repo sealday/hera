@@ -146,7 +146,7 @@ class TransportOrder extends Component {
             <td colSpan="3">{transport['carrier-party']}</td>
             <td>{transport['carrier-name']}</td>
             <td>{transport['carrier-phone']}</td>
-            <td>{transport['carrier-car']}</td>
+            <td>{record['carNumber']}</td>
           </tr>
           <tr>
             <th rowSpan="2">签字</th>

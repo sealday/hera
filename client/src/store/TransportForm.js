@@ -126,12 +126,6 @@ class TransportForm extends React.Component {
           </div>
         </div>
         <div className="form-group">
-          <label className="col-sm-2 control-label">车号</label>
-          <div className="col-sm-10">
-            <Field name="carrier-car" component={Input}/>
-          </div>
-        </div>
-        <div className="form-group">
           <button className="btn btn-primary btn-block">保存</button>
         </div>
       </form>
