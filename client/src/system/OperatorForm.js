@@ -46,6 +46,16 @@ class OperatorForm extends Component {
                 <Field type="radio" component="input" name="role" value="项目部管理员"/> 项目部管理员
               </label>
             </div>
+            <div className="radio">
+              <label>
+                <Field type="radio" component="input" name="role" value="成本估计管理员"/> 成本估计管理员
+              </label>
+            </div>
+            <div className="radio">
+              <label>
+                <Field type="radio" component="input" name="role" value="财务管理员"/> 财务管理员
+              </label>
+            </div>
           </fieldset>
           <div className="form-group">
             <button className="btn btn-primary btn-block">{this.props.btnName}</button>
