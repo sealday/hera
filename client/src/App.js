@@ -99,6 +99,7 @@ class App extends Component {
                       <li><Link to="/signin">考勤表</Link></li>
                       <li><Link to="/">工资卡</Link></li>
                       <li><Link to="/worker/create">进场登记卡</Link></li>
+                      <li><Link to="/signin/check">签到查询</Link></li>
                     </ul>}
                   </ReactCSSTransitionGroup>
                 </li>

@@ -128,18 +128,30 @@ export const REQUEST_WORKERS = 'REQUEST_WORKERS'
 export const REQUEST_WORKERS_SUCCESS='REQUEST_WORKERS_SUCCESS'
 export const REQUEST_WORKERS_FAILURE = 'REQUEST_WORKERS_FAILURE'
 
-export const requestWorkerlist =()=> (dispatch,getState)=>{
+export const requestWorkerlist =(flag)=> (dispatch,getState)=>{
   if (!getState().requestWorkerlist.requesting){
     dispatch({type:REQUEST_WORKERS})
-      dispatch(newInfoNotify("提示",'正在请求数据',2000))
+    if (flag === "displaysignin"){
+
+    }else {
+      dispatch(newInfoNotify("提示", '正在请求数据', 2000))
+    }
     ajax('/api/workercheckin').then(res=>{
       const workers = res.data.workers
         dispatch({type:REQUEST_WORKERS_SUCCESS,data:workers})
-        dispatch(newSuccessNotify('提示','请求数据成功',2000))
+        if (flag === "displaysignin"){
+
+        }else{
+          dispatch(newSuccessNotify('提示','请求数据成功',2000))
+        }
 
     }).catch(err=>{
       dispatch({type:REQUEST_WORKERS_FAILURE})
-        dispatch(newErrorNotify('警告','请求数据失败',2000))
+      if (flag === "displaysignin"){
+
+      }else {
+        dispatch(newErrorNotify('警告', '请求数据失败', 2000))
+      }
     })
   }
 }

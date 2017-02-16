@@ -15,7 +15,7 @@ class WorkerCheckin extends Component{
     }
 
     componentDidMount() {
-        this.props.dispatch(requestWorkerlist())
+        this.props.dispatch(requestWorkerlist("displayworklist"))
     }
 
     handleSubmit=(data)=>{

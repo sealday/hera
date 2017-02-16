@@ -55,7 +55,8 @@ import {
 import {
   WorkerCheckin,
   WorkerCheckinEdit,
-    Signin
+    Signin,
+    DisplaySignin,
 } from './project'
 
 import {
@@ -114,7 +115,8 @@ ajax('/api/load').then(res => {
           <Route path="worker/:id/edit" component={WorkerCheckinEdit}/>
           {/*进场工人签到*/}
           <Route path="signin" component={Signin}/>
-
+          {/*进场工人签到展示*/}
+          <Route path="signin/check" component={DisplaySignin}/>
           <Route path="operator" component={Operator}/>
           <Route path="operator/create" component={OperatorCreate}/>
           <Route path="operator/:id/edit" component={OperatorEdit}/>
