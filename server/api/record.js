@@ -28,13 +28,15 @@ exports.create = (req, res, next) => {
 
   switch (record.type) {
     case '采购':
-      record.status = historyRecord.status = '未支付'
-      break
     case '销售':
       record.status = historyRecord.status = '未支付'
       break
     case '调拨':
       record.status = historyRecord.status = '未确认'
+      break
+    case '盘点入库':
+    case '盘点出库':
+      // 没有状态信息
       break
     default:
       return res.status(400).json({
