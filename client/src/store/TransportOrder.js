@@ -65,23 +65,51 @@ class TransportOrder extends Component {
       return result
     }
 
+    const projects = this.props.projects
+    const inStock = projects.get(record.inStock)
+    const outStock = projects.get(record.outStock)
+
     return (
       <div>
         <button className="btn btn-default hidden-print" onClick={this.handleBack}>返回</button>
         <button className="btn btn-primary hidden-print" onClick={this.handleEdit}>编辑</button>
         <button className="btn btn-default hidden-print" onClick={e => print()}>打印</button>
-        <h2 className="text-center">货运运输协议 <small className="pull-right">单号：{record.number}</small></h2>
-        <table className="table table-bordered table--tight">
+        <h2 className="text-center">货运运输协议</h2>
+        <table className="table table-bordered table--tight table__transport">
           <tbody>
           <tr>
             <th>日期</th>
-            <th colSpan="2">承运日期</th>
-            <td colSpan="2">{moment(transport['off-date']).format('YYYY-MM-DD')}</td>
-            <th>要求到货日期</th>
+            <th>承运日期</th>
+            <td>{moment(transport['off-date']).format('YYYY-MM-DD')}</td>
+            <th>到货日期</th>
             <td>{moment(transport['arrival-date']).format('YYYY-MM-DD')}</td>
+            <th>单号</th>
+            <td>{record.number}</td>
           </tr>
           <tr>
-            <th>货物名称及数量</th>
+            <th>单价</th>
+            <td>{transport.price} 元</td>
+            <th>吨/趟</th>
+            <td>{transport.weight}</td>
+            <th/>
+            <th>金额</th>
+            <td>{fixed(transport.price * transport.weight)} 元</td>
+          </tr>
+          <tr>
+            <th rowSpan="2">付款方式及<br/>收款人信息</th>
+            <th>付款日期</th>
+            <th colSpan="2">付款方</th>
+            <th>收款人</th>
+            <th colSpan="2">收款人账号</th>
+          </tr>
+          <tr>
+            <td>{transport.payDate && moment(transport.payDate).format('YYYY-MM-DD')}</td>
+            <td colSpan="2">{transport.payer}</td>
+            <td>{transport.payee}</td>
+            <td colSpan="2">{transport.bank} {transport.account}</td>
+          </tr>
+          <tr>
+            <th>货物名称及<br/>数量</th>
             <td colSpan="6">
               <table style={{fontSize: '11px', width: '100%'}}>
                 <thead/>
@@ -90,74 +118,50 @@ class TransportOrder extends Component {
             </td>
           </tr>
           <tr>
-            <th>单价</th>
-            <td>{transport.price}</td>
-            <th>吨/趟</th>
-            <td>{transport.weight}</td>
-            <th>（元）</th>
-            <th>金额</th>
-            <td>{fixed(transport.price * transport.weight)}</td>
-          </tr>
-          <tr>
-            <th rowSpan="2">付款方式及收款人信息</th>
-            <th>付款日期</th>
-            <td colSpan="2">{transport.payDate && moment(transport.payDate).format('YYYY-MM-DD')}</td>
-            <th>付款方</th>
-            <td colSpan="2">{transport.payer}</td>
-          </tr>
-          <tr>
-            <th>收款人</th>
-            <td>{transport.payee}</td>
-            <td colSpan="4">{transport.bank} {transport.account}</td>
-          </tr>
-          <tr>
             <th>说明</th>
             <td colSpan="6">本协议一式三联，三方各执一份，单价及吨位按签字确认付款</td>
           </tr>
+          {/* 发货方 */}
           <tr>
-            <th>目录</th>
-            <th colSpan="3">发、收单位</th>
-            <th>联系人</th>
-            <th>电话号码</th>
-            <th>发、收方地址</th>
-          </tr>
-          <tr>
-            <th>收货方</th>
-            <td colSpan="3">{transport['receiving-party']}</td>
-            <td>{transport['receiving-contact']}</td>
-            <td>{transport['receiving-phone']}</td>
-            <td>{transport['receiving-address']}</td>
-          </tr>
-          <tr>
-            <th>发货方</th>
-            <td colSpan="3">{transport['delivery-party']}</td>
+            <th rowSpan="2">发货方单位<br/>发货方地址</th>
+            <td colSpan="3">{outStock ? outStock.company + outStock.name : record.vendor}</td>
             <td>{transport['delivery-contact']}</td>
             <td>{transport['delivery-phone']}</td>
-            <td>{transport['delivery-address']}</td>
-          </tr>
-          <tr>
-            <th rowSpan="2">承运方</th>
-            <th colSpan="3">承运单位</th>
-            <th>驾驶员</th>
-            <th>电话号码</th>
-            <th>车号</th>
-          </tr>
-          <tr>
-            <td colSpan="3">{transport['carrier-party']}</td>
-            <td>{transport['carrier-name']}</td>
-            <td>{transport['carrier-phone']}</td>
-            <td>{record['carNumber']}</td>
-          </tr>
-          <tr>
-            <th rowSpan="2">签字</th>
-            <th rowSpan="2">托运方</th>
-            <td colSpan="2" rowSpan="2"/>
-            <th rowSpan="2">承运方</th>
             <td rowSpan="2"/>
-            <th>身份证</th>
           </tr>
           <tr>
+            <td colSpan="3">{outStock ? outStock.address : transport['delivery-address']}</td>
+            <td/>
+            <td/>
+          </tr>
+          {/* 收货方 */}
+          <tr>
+            <th rowSpan="2">收货方单位<br/>收货方地址</th>
+            <td colSpan="3">{inStock ? inStock.company + inStock.name : record.vendor}</td>
+            <td>{transport['receiving-contact']}</td>
+            <td>{transport['receiving-phone']}</td>
+            <td rowSpan="2"/>
+          </tr>
+          <tr>
+            <td colSpan="3">{inStock ? inStock.address : transport['receiving-address']}</td>
+            <td/>
+            <td/>
+          </tr>
+          {/* 承运方 */}
+          <tr>
+            <th rowSpan="2">承运方单位<br/>驾驶员</th>
+            <td colSpan="3">{transport['carrier-party']}</td>
+            {/* 占位 */}
+            <td><br/></td>
+            <td/>
+            <td rowSpan="2"/>
+          </tr>
+          <tr>
+            <td>{transport['carrier-name']}</td>
+            <th>身份证</th>
             <td>{transport['carrier-id']}</td>
+            <td>{transport['carNumber']}</td>
+            <td>{transport['carrier-phone']}</td>
           </tr>
           </tbody>
         </table>
@@ -172,6 +176,7 @@ const mapStateToProps = (state, props) => {
   return {
     record,
     id,
+    projects: state.system.projects,
     ...transformArticle(state.system.articles.toArray()),
   }
 }

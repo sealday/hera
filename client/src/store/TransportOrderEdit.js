@@ -134,6 +134,7 @@ class TransportOrderEdit extends Component {
 
   render() {
     if (this.state['delivery-party']) {
+      const record = this.props.recordIdMap[this.props.params.id]
       return (
         <div>
           <button className="btn btn-default" onClick={this.handleCancel}>返回</button>
@@ -141,6 +142,7 @@ class TransportOrderEdit extends Component {
           <TransportForm
             onSubmit={this.handleSubmit}
             initialValues={this.state}
+            record={record}
             optionA={this.state['delivery-party']}
             optionB={this.state['receiving-party']}
           />

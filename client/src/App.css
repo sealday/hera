@@ -6,9 +6,13 @@
 .App-drawer {
   /*background-color: red;*/
 
+  padding-top: 50px;
   background-color: #222;
   color: white;
+  width: 240px;
   height: 100%;
+  position: absolute;
+  overflow: scroll;
 }
 
 .App-drawer a {
@@ -24,6 +28,19 @@
 }
 
 .App-content {
+  margin-left: 240px;
+  padding-right: 240px;
+  padding-top: 50px;
+  position: absolute;
+  max-height: 100%;
+  width: 100%;
+  overflow: scroll;
+}
+
+@media print {
+  .App-content {
+    margin-left: 0;
+  }
 }
 
 @media (max-width: 768px){
@@ -39,6 +56,12 @@
 
   .App-drawer.show{
     display: block;
+  }
+
+  .App-content {
+    margin-left: 0;
+    padding-right: 0;
+    padding-top: 0;
   }
 }
 

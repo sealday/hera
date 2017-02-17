@@ -223,7 +223,12 @@ class TransferForm extends Component {
               name="project"
               component={FilterSelect}
               validate={validator.required}
-              options={this.props.projects.map(project => ({ value: project._id, label: project.company + project.name }))}
+              options={this.props.projects.map(project => ({
+                value: project._id,
+                label: project.company + project.name,
+                pinyin: project.pinyin
+              }))}
+              filterOption={filterOption}
               placeholder="请选择项目" />
           </div>
           <label className="control-label col-md-1">对方单位</label>

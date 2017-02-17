@@ -5,7 +5,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import Select from 'react-select'
-import { selectStore } from './actions'
+import { selectStore } from '../actions'
 
 class CurrentStore extends React.Component {
   constructor(props) {
@@ -39,7 +39,7 @@ class CurrentStore extends React.Component {
   render() {
     const props = this.props
     return (
-      <div style={{maxWidth: '500px', margin: '0 auto'}}>
+      <div style={{maxWidth: '500px', margin: '0 auto', paddingTop: '50px'}}>
         <h2 className="page-header">仓库选择</h2>
         <div>
           <Select

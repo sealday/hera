@@ -2,21 +2,22 @@
   border-radius: 0 !important;
 }
 
+html {
+  height: 100%;
+}
+
+body {
+  font: 14px "微软雅黑", "Lucida Grande", Helvetica, Arial, sans-serif;
+  height: 100%;
+}
+
 .navbar {
   margin-bottom: 0;
   border: none;
 }
 
-body {
-  font: 14px "微软雅黑", "Lucida Grande", Helvetica, Arial, sans-serif;
-}
-
-body {
-  height: 100%;
-}
-
-html {
-  height: 100%;
+.navbar-fixed-top {
+  z-index: 900;
 }
 
 #root {
@@ -169,4 +170,13 @@ html {
   padding-left: 2px;
   padding-right: 2px;
   text-align: center;
+}
+
+/* 运输单 */
+.table__transport th {
+  min-width: 5.5em;
+}
+
+.table__transport td {
+  font-size: 11px;
 }

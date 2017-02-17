@@ -8,6 +8,7 @@ import { DatePicker, Input, Select } from '../components'
 
 class TransportForm extends React.Component {
   render() {
+    const { record } = this.props
     return (
       <form className="form-horizontal" onSubmit={this.props.handleSubmit}>
         <div className="form-group">
@@ -63,44 +64,48 @@ class TransportForm extends React.Component {
             <Field name="account" component={Input}/>
           </div>
         </div>
+        {record.type === '采购' &&
         <div className="form-group">
           <label className="col-sm-2 control-label">发货方单位</label>
           <div className="col-sm-4">
             <Field name="delivery-party" component={Input}/>
-          </div>
-          <label className="col-sm-2 control-label">发货方联系人</label>
-          <div className="col-sm-4">
-            <Field name="delivery-contact" component={Input}/>
-          </div>
-        </div>
-        <div className="form-group">
-          <label className="col-sm-2 control-label">发货方联系电话</label>
-          <div className="col-sm-4">
-            <Field name="delivery-phone" component={Input}/>
           </div>
           <label className="col-sm-2 control-label">发货人地址</label>
           <div className="col-sm-4">
             <Field name="delivery-address" component={Input}/>
           </div>
         </div>
+        }
+        <div className="form-group">
+          <label className="col-sm-2 control-label">发货方联系人</label>
+          <div className="col-sm-4">
+            <Field name="delivery-contact" component={Input}/>
+          </div>
+          <label className="col-sm-2 control-label">发货方联系电话</label>
+          <div className="col-sm-4">
+            <Field name="delivery-phone" component={Input}/>
+          </div>
+        </div>
+        {record.type === '销售' &&
         <div className="form-group">
           <label className="col-sm-2 control-label">收货方单位</label>
           <div className="col-sm-4">
             <Field name="receiving-party" component={Input}/>
           </div>
+          <label className="col-sm-2 control-label">收货方地址</label>
+          <div className="col-sm-4">
+            <Field name="receiving-address" component={Input}/>
+          </div>
+        </div>
+        }
+        <div className="form-group">
           <label className="col-sm-2 control-label">收货方联系人</label>
           <div className="col-sm-4">
             <Field name="receiving-contact" component={Input}/>
           </div>
-        </div>
-        <div className="form-group">
           <label className="col-sm-2 control-label">收货方联系电话</label>
           <div className="col-sm-4">
             <Field name="receiving-phone" component={Input}/>
-          </div>
-          <label className="col-sm-2 control-label">收货方地址</label>
-          <div className="col-sm-4">
-            <Field name="receiving-address" component={Input}/>
           </div>
         </div>
         <div className="form-group">
