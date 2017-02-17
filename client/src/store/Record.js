@@ -5,6 +5,7 @@
 import React from 'react'
 import TransferOrder from './TransferOrder'
 import PurchaseOrder from './PurchaseOrder'
+import StocktakingOrder from './StocktakingOrder'
 import { connect } from 'react-redux'
 import { requestRecord } from '../actions'
 
@@ -38,6 +39,10 @@ class Record extends React.Component {
       return <PurchaseOrder record={record} router={router}/>
     } else if (record.type === '采购') {
       return <PurchaseOrder record={record} router={router}/>
+    } else if (record.type === '盘点入库') {
+      return <StocktakingOrder record={record} router={router}/>
+    } else if (record.type === '盘点出库') {
+      return <StocktakingOrder record={record} router={router}/>
     } else {
       return <div>暂时不支持显示 {record.type} 类型的详情</div>
     }
