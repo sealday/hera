@@ -43,9 +43,9 @@ class TransferTable extends React.Component {
           <thead>
           <tr>
             <th className="text-center">单号</th>
-            <th className="text-center">原始单号</th>
+            {name &&<th className="text-center">原始单号</th>}
             <th className="text-center">时间</th>
-            <th className="text-center">{name}</th>
+            {name && <th className="text-center">{name}</th>}
             <th className="text-center" colSpan="3">内容</th>
             <th className="text-center">状态</th>
             <th className="text-center">制单人</th>
@@ -60,9 +60,9 @@ class TransferTable extends React.Component {
               return (
                 <tr key={index}>
                   <td rowSpan={rowSpan}>{record.number}</td>
-                  <td rowSpan={rowSpan}>{record.originalOrder}</td>
+                  {name && <td rowSpan={rowSpan}>{record.originalOrder}</td>}
                   <td rowSpan={rowSpan}>{moment(record.outDate).format('YYYY-MM-DD')}</td>
-                  <td rowSpan={rowSpan}>{this.getName(record)}</td>
+                  {name && <td rowSpan={rowSpan}>{this.getName(record)}</td>}
                   <th>名称</th>
                   <th>规格</th>
                   <th>数量</th>

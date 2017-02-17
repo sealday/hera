@@ -22,8 +22,8 @@ const Drawer = (props) => (
             <li><Link to="/purchase/out/create">销售出库</Link></li>
             <li><Link to="/transfer/out/create">调拨出库（发料）</Link></li>
             <li><Link to="/transfer/in/create">调拨入库（收料）</Link></li>
-            <li><Link to="/">盘点盈余入库</Link></li>
-            <li><Link to="/">盘点亏损出库</Link></li>
+            <li><Link to="/stocktaking/in/create">盘点盈余入库</Link></li>
+            <li><Link to="/stocktaking/out/create">盘点亏损出库</Link></li>
           </ul>}
         </ReactCSSTransitionGroup>
       </li>
@@ -42,8 +42,8 @@ const Drawer = (props) => (
             <li><Link to="/transfer_in_table">调拨入库明细表（收料）</Link></li>
             <li><Link to="/transfer_out_table">调拨出库明细表（发料）</Link></li>
             <li><Link to="/transport_table">运输单查询</Link></li>
-            <li><Link to="/">盘点盈余入库明细表</Link></li>
-            <li><Link to="/">盘点亏损出库明细表</Link></li>
+            <li><Link to="/stocktaking_in_table">盘点盈余入库明细表</Link></li>
+            <li><Link to="/stocktaking_out_table">盘点亏损出库明细表</Link></li>
           </ul>}
         </ReactCSSTransitionGroup>
       </li>

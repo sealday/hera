@@ -32,7 +32,6 @@ import {
 } from './file'
 
 import {
-  Purchase,
   Record,
   TransportOrder,
   TransportOrderEdit,
@@ -41,7 +40,9 @@ import {
 
   PurchaseCreate, // 采购创建
   PurchaseEdit, // 采购编辑
-  PurchaseOrder, // 采购查看
+
+  StocktakingCreate,
+  StocktakingEdit,
 } from './store'
 
 import {
@@ -53,6 +54,9 @@ import {
   Search,
   SimpleSearch,
   TransportSearch,
+
+  StocktakingOutTable,
+  StocktakingInTable,
 } from './report'
 
 import {
@@ -131,13 +135,14 @@ ajax('/api/load').then(res => {
           <Route path="search" component={Search}/>
           <Route path="simple_search" component={SimpleSearch}/>
           <Route path="article" component={Article}/>
-          <Route path="purchase" component={Purchase}/>
 
           {/* direction 表示调拨的方向 取值为 in 和 out  */}
           <Route path="transfer/:direction/create" component={TransferCreate}/>
           <Route path="transfer/:direction/:id/edit" component={TransferEdit}/>
           <Route path="purchase/:direction/create" component={PurchaseCreate}/>
           <Route path="purchase/:direction/:id/edit" component={PurchaseEdit}/>
+          <Route path="stocktaking/:direction/create" component={StocktakingCreate}/>
+          <Route path="stocktaking/:direction/:id/edit" component={StocktakingEdit}/>
 
           <Route path="record/:id" component={Record}/>
 
@@ -150,6 +155,8 @@ ajax('/api/load').then(res => {
           <Route path="sell_table" component={SellTable} />
           <Route path="store" component={Store} />
           <Route path="transport_table" component={TransportSearch}/>
+          <Route path="stocktaking_out_table" component={StocktakingOutTable}/>
+          <Route path="stocktaking_in_table" component={StocktakingInTable}/>
 
           {/*记账凭证输入*/}
           <Route path="accuntvoucher/input" component={AccountVoucherInput}/>
