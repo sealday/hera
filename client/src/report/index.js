@@ -11,3 +11,6 @@ export { default as SimpleSearch }  from './SimpleSearch'
 export { default as Store } from './Store'
 
 export { default as TransportSearch } from './TransportSearch'
+
+export { default as StocktakingOutTable } from './StocktakingOutTable'
+export { default as StocktakingInTable } from './StocktakingInTable'

@@ -51,6 +51,9 @@ import {
   Search,
   SimpleSearch,
   TransportSearch,
+
+  StocktakingOutTable,
+  StocktakingInTable,
 } from './report'
 
 import {
@@ -149,6 +152,8 @@ ajax('/api/load').then(res => {
           <Route path="sell_table" component={SellTable} />
           <Route path="store" component={Store} />
           <Route path="transport_table" component={TransportSearch}/>
+          <Route path="stocktaking_out_table" component={StocktakingOutTable}/>
+          <Route path="stocktaking_in_table" component={StocktakingInTable}/>
         </Route>
       </Router>
     </Provider>
