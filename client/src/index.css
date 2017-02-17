@@ -171,3 +171,12 @@ body {
   padding-right: 2px;
   text-align: center;
 }
+
+/* 运输单 */
+.table__transport th {
+  min-width: 6em;
+}
+
+.table__transport td {
+  font-size: 11px;
+}

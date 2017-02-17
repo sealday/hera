@@ -65,13 +65,17 @@ class TransportOrder extends Component {
       return result
     }
 
+    const projects = this.props.projects
+    const inStock = projects.get(record.inStock)
+    const outStock = projects.get(record.outStock)
+
     return (
       <div>
         <button className="btn btn-default hidden-print" onClick={this.handleBack}>返回</button>
         <button className="btn btn-primary hidden-print" onClick={this.handleEdit}>编辑</button>
         <button className="btn btn-default hidden-print" onClick={e => print()}>打印</button>
         <h2 className="text-center">货运运输协议</h2>
-        <table className="table table-bordered table--tight">
+        <table className="table table-bordered table--tight table__transport">
           <tbody>
           <tr>
             <th>日期</th>
@@ -120,26 +124,26 @@ class TransportOrder extends Component {
           {/* 发货方 */}
           <tr>
             <th rowSpan="2">发货方单位<br/>发货方地址</th>
-            <td colSpan="3">{transport['delivery-party']}</td>
+            <td colSpan="3">{outStock ? outStock.company + outStock.name : record.vendor}</td>
             <td>{transport['delivery-contact']}</td>
             <td>{transport['delivery-phone']}</td>
             <td rowSpan="2"/>
           </tr>
           <tr>
-            <td colSpan="3">{transport['delivery-address']}</td>
+            <td colSpan="3">{outStock ? outStock.address : transport['delivery-address']}</td>
             <td/>
             <td/>
           </tr>
           {/* 收货方 */}
           <tr>
             <th rowSpan="2">收货方单位<br/>收货方地址</th>
-            <td colSpan="3">{transport['receiving-party']}</td>
+            <td colSpan="3">{inStock ? inStock.company + inStock.name : record.vendor}</td>
             <td>{transport['receiving-contact']}</td>
             <td>{transport['receiving-phone']}</td>
             <td rowSpan="2"/>
           </tr>
           <tr>
-            <td colSpan="3">{transport['receiving-address']}</td>
+            <td colSpan="3">{inStock ? inStock.address : transport['receiving-address']}</td>
             <td/>
             <td/>
           </tr>
@@ -172,6 +176,7 @@ const mapStateToProps = (state, props) => {
   return {
     record,
     id,
+    projects: state.system.projects,
     ...transformArticle(state.system.articles.toArray()),
   }
 }
