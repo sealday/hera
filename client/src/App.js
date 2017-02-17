@@ -21,9 +21,8 @@ class App extends Component {
         <Notification/>
         <Navbar/>
         {this.isStoreSelected() && (
-        <div className="container-fluid" style={{height: '100%'}}>
-          <div className="row" style={{position: 'relative', height: '100%'}}>
-            <div className={cx({ 'col-sm-2': true, 'App-drawer': true, 'show': props.nav.drawer, 'hidden-print': true})}>
+        <div>
+            <div className={cx({'App-drawer': true, 'show': props.nav.drawer, 'hidden-print': true})}>
               {/* TODO 这里可以考虑改成数组的形式*/}
               <ul>
                 <li>
@@ -117,11 +116,14 @@ class App extends Component {
 
               </ul>
             </div>
+
             <button onClick={e => props.dispatch(toggleNav())} type="button" className="App-drawer-toggle"/>
-            <div className="col-sm-10 App-content">
-              {props.children}
+
+            <div className="App-content">
+              <div className="container-fluid">
+                {props.children}
+              </div>
             </div>
-          </div>
         </div>
         )}
         {!this.isStoreSelected() && (

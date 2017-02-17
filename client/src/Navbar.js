@@ -41,7 +41,7 @@ class Navbar extends Component {
   render() {
     const { store, num } = this.props
     return (
-      <nav className="navbar navbar-default navbar-inverse">
+      <nav className="navbar navbar-default navbar-fixed-top navbar-inverse">
         <div className="container-fluid">
           <div className="navbar-header">
             <button onClick={this.toggleCollapse} type="button" className="navbar-toggle collapsed">
@@ -54,7 +54,7 @@ class Navbar extends Component {
           </div>
           <div className={cx({collapse: true, 'navbar-collapse': true, in: this.state.collapse})}>
             <ul className="nav navbar-nav">
-              <li><p className="navbar-text">当前仓库：{store && store.company + store.name}</p></li>
+              <li><p className="navbar-text">{store && store.company + store.name}</p></li>
               <li><a href="#" onClick={ e => { e.preventDefault(); this.props.dispatch(selectStore(false))} }>管理其他仓库</a></li>
             </ul>
             <ul className="nav navbar-nav navbar-right">
