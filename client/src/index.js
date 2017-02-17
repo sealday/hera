@@ -38,7 +38,6 @@ import {
 
   PurchaseCreate, // 采购创建
   PurchaseEdit, // 采购编辑
-  PurchaseOrder, // 采购查看
 } from './store'
 
 import {
