@@ -39,7 +39,7 @@ const recordSchema = {
   }], // 订单项
 
   outDate: Date, // 出库时间
-  inDate: Date, // 入库时间
+  inDate: Date, // 入库时间  暂时用不到
 
   carNumber: String, // 车号
 

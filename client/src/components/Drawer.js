@@ -97,6 +97,7 @@ const Drawer = (props) => (
           {props.nav.finance && <ul>
             <li><Link to="">运费结算查询</Link></li>
             <li><Link to="/accuntvoucher/input">记账凭证输入</Link></li>
+            <li><Link to="/finance/paycheck"/>应付查询</li>
           </ul>}
         </ReactCSSTransitionGroup>
       </li>
