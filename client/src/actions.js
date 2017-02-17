@@ -83,13 +83,34 @@ export const toggleMenu = (name) => ({
   data: name
 })
 
+export const SEARCH_SIGNIN_WORKER = 'SEARCH_SIGNIN_WORKER'
+export const SEARCH_SIGNIN_WORKER_SUCCESS = 'SEARCH_SIGNIN_WORKER_SUCCESS'
+export const SEARCH_SIGNIN_WORKER_FAILURE = 'SEARCH_SIGNIN_WORKER_FAILURE'
+export const searchSignin = (data)=>(dispatch,getState)=>{
+  dispatch({type:SEARCH_SIGNIN_WORKER})
+  dispatch(newInfoNotify('提示','正在查询',2000))
+  ajax('/api/sign/search',{
+    data:JSON.stringify(data),
+    method:'POST',
+    contentType:'application/json'
+  }).then(res=>{
+    dispatch({type:SEARCH_SIGNIN_WORKER_SUCCESS})
+    dispatch(newSuccessNotify('提示','查询成功',2000))
+
+  }).catch(err=>{
+    dispatch({type:SIGNIN_WORKER_FAILURE})
+    dispatch(newErrorNotify('警告','查询失败',2000))
+  })
+}
+
+
 export const SIGNIN_WORKER = 'SIGNIN_WORKER'
 export const SIGNIN_WORKER_SUCCESS = 'SIGNIN_WORKER_SUCCESS'
 export const SIGNIN_WORKER_FAILURE = 'SIGNIN_WORKER_FAILURE'
 export const signinWorker = (time)=>(dispatch,getState)=>{
   dispatch({type:SIGNIN_WORKER});
   dispatch(newInfoNotify('提示','正在签到',2000))
-    ajax('api/workercheckin/58a1b55e54928b30e823e7cd/signin',{
+    ajax('/api/workercheckin/58a1b55e54928b30e823e7cd/signin',{
       data:JSON.stringify({signintime:time,signinaddition:'hello'}),
       method:'POST',
       contentType:'application/json'

@@ -91,3 +91,16 @@ exports.signout = (req,res,next)=>{
     })
 }
 
+
+exports.getsigninfolist = (req,res,next)=>{
+    const starttime=req.body.starttime;
+    const endtime = req.body.endtime;
+    const projectid = req.body.projectid;
+    const workerid = req.body.workerid;
+    Worker.findById(workerid,{project:projectid,sign:{signintime:{$not:{$lt:starttime}}},signouttime:{$lt:endtime}}).then((workerinfo)=>{
+        const signArray = workerinfo.sign;
+        const signindays = signArray.length;
+        console.log(signindays);
+    })
+
+}

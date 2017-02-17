@@ -14,9 +14,6 @@ class DisplaySignin extends Component {
         this.props.dispatch(requestWorkerlist("displaysignin"))
     }
 
-    handleDateChange = ()=> {
-
-    }
     handleSubmit = () =>{
 
     }
