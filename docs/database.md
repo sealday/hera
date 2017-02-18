@@ -59,3 +59,6 @@
     }
   ]);
 ```
+
+导出成csv 格式
+` mongoexport --db hera --collection records --type=csv --fields _id > hello.csv`
