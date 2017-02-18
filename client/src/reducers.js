@@ -10,7 +10,8 @@ import {
   NavRecord,
   PostRecord,
   PostRecords,
-  WorkerRecord
+  WorkerRecord,
+    PaycheckRecord
 } from './records'
 
 export function system(state = new SystemRecord(), action) {
@@ -74,6 +75,15 @@ export function nav(state = new NavRecord(), action) {
     default:
       return state
   }
+}
+
+export function payables(state = new PaycheckRecord(),action) {
+    switch (action.type){
+      case actionTypes.PAYCHECK_SUCCESS:
+        return state.set('requesting',false).set('data',action.data)
+      default:
+        return state;
+    }
 }
 
 export function requestWorkerlist(state= new WorkerRecord(),action) {

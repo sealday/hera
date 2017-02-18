@@ -14,7 +14,8 @@ import { syncHistoryWithStore, routerReducer, routerMiddleware } from 'react-rou
 import App from './App';
 import Home from './Home';
 import {
-  AccountVoucherInput
+  AccountVoucherInput,
+  PayCheck
 } from './finance'
 
 import {
@@ -160,6 +161,8 @@ ajax('/api/load').then(res => {
 
           {/*记账凭证输入*/}
           <Route path="accuntvoucher/input" component={AccountVoucherInput}/>
+          {/*应付查询*/}
+          <Route path="finance/paycheck" component={PayCheck}/>
         </Route>
       </Router>
     </Provider>

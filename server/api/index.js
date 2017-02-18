@@ -13,6 +13,7 @@ const user = require('./user');
 const project = require('./project');
 const  workercheckin = require('./worker')
 const record = require('./record')
+const payables = require('./payables')
 
 const router = express.Router();
 const File = require('../models/File');
@@ -43,6 +44,8 @@ router.post('/workercheckin/:id/signin',workercheckin.signin)
 router.post('/workercheckin/:id/signout',workercheckin.signout)
 
 
+
+router.get('/payable_search',payables.paychecksearch)
 
 
 router.get('/record', record.list)

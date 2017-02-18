@@ -83,6 +83,34 @@ export const toggleMenu = (name) => ({
   data: name
 })
 
+export const PAYCHECK='PAYCHECK';
+export const PAYCHECK_SUCCESS='PAYCHECK_SUCCESS'
+export const PAYCHECK_FAILURE='PAYCHECK_FAILURE'
+export const payables = (data)=>(dispatch,getState)=>{
+  if(!getState().payables.requesting){
+      dispatch({type:PAYCHECK})
+    dispatch(newInfoNotify('提示','正在查询',2000))
+    console.log(JSON.stringify(data))
+    ajax('/api/payable_search',{
+      data:{
+        condition: JSON.stringify(data)
+      }
+    }).then(res=>{
+      dispatch({type:PAYCHECK_SUCCESS})
+      dispatch(newSuccessNotify('提示','查询成功',2000))
+    }).catch(err=>{
+      dispatch({type:PAYCHECK_FAILURE})
+      dispatch(newErrorNotify('提示','查询失败',2000))
+    })
+  }
+}
+
+
+/**
+ * 查询签到情况，后台还没有写完
+ * @type {string}
+ * FIXME
+ */
 export const SEARCH_SIGNIN_WORKER = 'SEARCH_SIGNIN_WORKER'
 export const SEARCH_SIGNIN_WORKER_SUCCESS = 'SEARCH_SIGNIN_WORKER_SUCCESS'
 export const SEARCH_SIGNIN_WORKER_FAILURE = 'SEARCH_SIGNIN_WORKER_FAILURE'
