@@ -79,8 +79,8 @@ export function nav(state = new NavRecord(), action) {
 
 export function payables(state = new PaycheckRecord(),action) {
     switch (action.type){
-      case actionTypes.PAYCHECK_SUCCESS:
-        return state.set('requesting',false).set('data',action.data)
+      case actionTypes.PAYABLE:
+        return state.set('payables',action.data)
       default:
         return state;
     }

@@ -54,6 +54,5 @@ export const WorkerRecord = Record({
 })
 
 export const PaycheckRecord = Record({
-  posting:false,
-  requesting:false
+  payables:[]
 })

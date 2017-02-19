@@ -83,23 +83,23 @@ export const toggleMenu = (name) => ({
   data: name
 })
 
-export const PAYCHECK='PAYCHECK';
-export const PAYCHECK_SUCCESS='PAYCHECK_SUCCESS'
-export const PAYCHECK_FAILURE='PAYCHECK_FAILURE'
+export const PAYABLE='PAYABLE';
+
 export const payables = (data)=>(dispatch,getState)=>{
-  if(!getState().payables.requesting){
-      dispatch({type:PAYCHECK})
+  const payable = network(PAYABLE)
+  if (payable.shouldProceed(getState())) {
+      dispatch(payable.begin)
     dispatch(newInfoNotify('提示','正在查询',2000))
-    console.log(JSON.stringify(data))
     ajax('/api/payable_search',{
       data:{
         condition: JSON.stringify(data)
       }
     }).then(res=>{
-      dispatch({type:PAYCHECK_SUCCESS})
+      dispatch(payable.endSuccess)
+      dispatch({ type: PAYABLE, data: res.data.entries })
       dispatch(newSuccessNotify('提示','查询成功',2000))
     }).catch(err=>{
-      dispatch({type:PAYCHECK_FAILURE})
+      dispatch(payable.endFailure)
       dispatch(newErrorNotify('提示','查询失败',2000))
     })
   }
