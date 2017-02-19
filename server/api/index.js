@@ -11,9 +11,9 @@ const User = require('../models/User');
 const middleware = require('./middleware');
 const user = require('./user');
 const project = require('./project');
-const  workercheckin = require('./worker')
+const workercheckin = require('./worker')
 const record = require('./record')
-const payables = require('./payables')
+const payable = require('./payable')
 
 const router = express.Router();
 const File = require('../models/File');
@@ -45,7 +45,7 @@ router.post('/workercheckin/:id/signout',workercheckin.signout)
 
 
 
-router.get('/payable_search',payables.paychecksearch)
+router.get('/payable_search',payable.paycheckSearch)
 
 
 router.get('/record', record.list)

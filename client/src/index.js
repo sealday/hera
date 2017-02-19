@@ -162,7 +162,7 @@ ajax('/api/load').then(res => {
           {/*记账凭证输入*/}
           <Route path="accuntvoucher/input" component={AccountVoucherInput}/>
           {/*应付查询*/}
-          <Route path="finance/paycheck" component={PayCheck}/>
+          <Route path="finance/payable" component={PayCheck}/>
         </Route>
       </Router>
     </Provider>

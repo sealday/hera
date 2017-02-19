@@ -83,29 +83,6 @@ export const toggleMenu = (name) => ({
   data: name
 })
 
-export const PAYABLE='PAYABLE';
-
-export const payables = (data)=>(dispatch,getState)=>{
-  const payable = network(PAYABLE)
-  if (payable.shouldProceed(getState())) {
-      dispatch(payable.begin)
-    dispatch(newInfoNotify('提示','正在查询',2000))
-    ajax('/api/payable_search',{
-      data:{
-        condition: JSON.stringify(data)
-      }
-    }).then(res=>{
-      dispatch(payable.endSuccess)
-      dispatch({ type: PAYABLE, data: res.data.entries })
-      dispatch(newSuccessNotify('提示','查询成功',2000))
-    }).catch(err=>{
-      dispatch(payable.endFailure)
-      dispatch(newErrorNotify('提示','查询失败',2000))
-    })
-  }
-}
-
-
 /**
  * 查询签到情况，后台还没有写完
  * @type {string}
@@ -559,3 +536,27 @@ export const queryStore = (key, condition) => (dispatch, getState) => {
     })
   }
 }
+
+export const PAYABLE = 'PAYABLE';
+
+export const payables = data => (dispatch, getState) => {
+  const payable = network(PAYABLE)
+  if (payable.shouldProceed(getState())) {
+    dispatch(payable.begin)
+    dispatch(newInfoNotify('提示','正在查询',2000))
+    ajax('/api/payable_search',{
+      data:{
+        condition: JSON.stringify(data)
+      }
+    }).then(res => {
+      dispatch(payable.endSuccess)
+      dispatch({ type: PAYABLE, data: res.data.payables })
+      dispatch(newSuccessNotify('提示','查询成功',2000))
+    }).catch(err => {
+      dispatch(payable.endFailure)
+      dispatch(newErrorNotify('提示','查询失败',2000))
+    })
+  }
+}
+
+

@@ -1,7 +1,8 @@
 /**
  * Created by seal on 29/01/2017.
  */
-const Payables = require('../api/payables')
+const Payable = require('../models/Payable')
+
 exports.num = 0
 exports.io = null
 exports.sockets = []
@@ -25,27 +26,32 @@ exports.refreshStockCache = (stockId, inRecords, outRecords) => {
   }
 }
 
-exports.handleRecordCreate = (record)=>
-{
-  switch (record.type){
-    case '采购':
-      Payables.create(record)
-      break;
-    case '销售':
-      break
-    case '调拨':
-      break
-    case '盘点入库':
-      break
-    case '盘点出库':
-      break
+exports.recordCreated = record => {
+  if (record.type === '采购') {
+    let payable = new Payable()
+    payable.first = ''
+    payable.second = '材料费'
+    payable.vendor = record.vendor
+    payable.sourceId = record._id
+    payable.sourceType = '采购'
+    payable.sum = 1000
+    payable.save().catch(err => {
+      console.log(err)
+    })
   }
 }
 
-exports.handleTransportUpdated = (record)=>{
-  if(record.hasTransport){
-    if(record.transport.payer.includes('上海创兴建筑设备租赁有限公司')){
-      Payables.createTransport(record)
-    }
+exports.transportUpdated = record => {
+  if (record.transport.payer.indexOf('上海创兴建筑设备租赁有限公司') !== -1) {
+    let payable = new Payable()
+    payable.first = ''
+    payable.second = '运费'
+    payable.vendor = record.transport['carrier-name'] // 司机名称
+    payable.sourceId = record._id
+    payable.sourceType = '运输'
+    payable.sum = 2000
+    payable.save().catch(err => {
+      console.log(err)
+    })
   }
 }

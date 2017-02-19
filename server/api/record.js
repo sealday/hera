@@ -4,8 +4,6 @@
 
 const Record = require('../models/Record').Record
 const HistoryRecord = require('../models/Record').HistoryRecord
-const Payables = require('../api/payables')
-
 const service = require('../service/index')
 
 
@@ -54,7 +52,9 @@ exports.create = (req, res, next) => {
   record.username = historyRecord.username = req.session.user.username
 
   Promise.all([record.save(), historyRecord.save()]).then(([record]) => {
-    service.handleRecordCreate(record)
+
+    service.recordCreated(record) // 处理订单创建后置事件
+
     res.json({
       message: '创建' + record.type + '单成功！',
       data: {
@@ -113,7 +113,9 @@ exports.updateTransport = (req, res, next) => {
     record.hasTransport = true // 标记存在运输单
     return record.save()
   }).then(record => {
-    service.handleTransportUpdated(record)
+
+    service.transportUpdated(record) // 处理运输单更新后置事件
+
     res.json({
       message: '保存运输单成功',
       data: {
