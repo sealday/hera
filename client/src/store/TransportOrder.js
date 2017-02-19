@@ -160,7 +160,7 @@ class TransportOrder extends Component {
             <td>{transport['carrier-name']}</td>
             <th>身份证</th>
             <td>{transport['carrier-id']}</td>
-            <td>{transport['carNumber']}</td>
+            <td>{record['carNumber']}</td>
             <td>{transport['carrier-phone']}</td>
           </tr>
           </tbody>
