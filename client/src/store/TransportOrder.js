@@ -89,13 +89,21 @@ class TransportOrder extends Component {
                 style={{
                   width: '1em',
                   verticalAlign: 'middle',
-                  border: 'none',
                 }}>①发货方存根②收货方存根③承运方存根</td>
           </tr>
           <tr>
+            <th>货物名称及<br/>数量</th>
+            <td colSpan="6">
+              <table style={{fontSize: '11px', width: '100%'}}>
+                <thead/>
+                <tbody>{getTable()}</tbody>
+              </table>
+            </td>
+          </tr>
+          <tr>
             <th>运输费</th>
-            <th>吨/趟</th>
             <td>{transport.weight}</td>
+            <th>吨/趟</th>
             <th>单价</th>
             <td>{transport.price} 元</td>
             <th>金额</th>
@@ -113,15 +121,6 @@ class TransportOrder extends Component {
             <td colSpan="2">{transport.payer}</td>
             <td>{transport.payee}</td>
             <td colSpan="2">{transport.bank} {transport.account}</td>
-          </tr>
-          <tr>
-            <th>货物名称及<br/>数量</th>
-            <td colSpan="6">
-              <table style={{fontSize: '11px', width: '100%'}}>
-                <thead/>
-                <tbody>{getTable()}</tbody>
-              </table>
-            </td>
           </tr>
           <tr>
             <th>说明</th>
