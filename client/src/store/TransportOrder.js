@@ -85,13 +85,19 @@ class TransportOrder extends Component {
             <td>{moment(transport['arrival-date']).format('YYYY-MM-DD')}</td>
             <th>单号</th>
             <td>{record.number}</td>
+            <td rowSpan="12"
+                style={{
+                  width: '1em',
+                  verticalAlign: 'middle',
+                  border: 'none',
+                }}>①发货方存根②收货方存根③承运方存根</td>
           </tr>
           <tr>
-            <th>单价</th>
-            <td>{transport.price} 元</td>
+            <th>运输费</th>
             <th>吨/趟</th>
             <td>{transport.weight}</td>
-            <th/>
+            <th>单价</th>
+            <td>{transport.price} 元</td>
             <th>金额</th>
             <td>{fixed(transport.price * transport.weight)} 元</td>
           </tr>
