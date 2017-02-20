@@ -49,7 +49,11 @@ exports.transportUpdated = record => {
     payable.vendor = record.transport['carrier-name'] // 司机名称
     payable.sourceId = record._id
     payable.sourceType = '运输'
-    payable.sum = 2000
+    payable.sum = Number(record.transport.weight) * Number(record.transport.price)
+    if (isNaN(payable.sum)) {
+      // 不是数字则没必要存到应付款项中
+      return
+    }
     payable.save().catch(err => {
       console.log(err)
     })
