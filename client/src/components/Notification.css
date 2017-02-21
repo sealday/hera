@@ -1,10 +1,4 @@
 .notify-container {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  align-items: flex-start;
-  align-content: flex-start;
   position: fixed;
   top: 0;
   right: 0;
@@ -13,24 +7,22 @@
 
 .notify-item {
   width: 250px;
-  margin: 5px 10px;
+  margin: 10px;
+  padding: 5px;
   color: #FFF;
-  border-radius: 5px;
 }
 
 .notify-item:hover {
-  opacity: 0.8;
   box-shadow: 0 0 10px 0 rgb(15, 15, 15);
 }
 
 .notify-item > p {
   font: 14px "微软雅黑", "Lucida Grande", Helvetica, Arial, sans-serif;
   margin: 10px;
-  opacity: .8;
 }
 
 .notify-item.success {
-  background-color: rgba(81, 163, 81, 0.4);
+  background-color: rgba(81, 163, 81, 0.8);
 }
 
 .notify-item.error {
