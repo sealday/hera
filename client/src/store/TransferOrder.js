@@ -178,7 +178,7 @@ class TransferOrder extends React.Component {
           </tr>
           </tbody>
         </table>
-        <table className="table table-bordered" style={{tableLayout: 'fixed', fontSize: '11px', marginBottom: '0'}}>
+        <table className="table table-bordered table--tight" style={{tableLayout: 'fixed', fontSize: '11px', marginBottom: '0'}}>
           <thead>
           <tr>
             <th className="text-right">名称</th>
