@@ -40,6 +40,8 @@
 @media print {
   .App-content {
     margin-left: 0;
+    /* 打印时如果还是保留原本的绝对定位，会导致过长的内容打印不出来 */
+    position: static;
   }
 }
 
