@@ -103,7 +103,7 @@ export const searchSignin = (data)=>(dispatch,getState)=>{
     dispatch(newSuccessNotify('提示','查询成功',2000))
 
   }).catch(err=>{
-    dispatch({type:SIGNIN_WORKER_FAILURE})
+    dispatch({type:SEARCH_SIGNIN_WORKER_FAILURE})
     dispatch(newErrorNotify('警告','查询失败',2000))
   })
 }

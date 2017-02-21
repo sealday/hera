@@ -179,7 +179,6 @@ class PurchaseOrder extends React.Component {
           {record.type === '盘点出库' &&
           <Link className="btn btn-primary" to={`/stocktaking/out/${record._id}/edit`}>编辑</Link>
           }
-          <button className="btn btn-default" onClick={this.handleTransport}>运输单</button>
           <button className="btn btn-default" onClick={() => print()}>打印</button>
           <a className="btn btn-default" href="check">审核确认</a>
 

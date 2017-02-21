@@ -42,60 +42,62 @@ class TransportOrderEdit extends Component {
 
   componentDidMount() {
     // 假设本地没有这个缓存，那么属于直接访问这个页面的情况，这时候跳转到订单页面
-    if (!this.props.recordIdMap[this.props.params.id]) {
-      this.props.router.replace(`/transport/${this.props.params.id}`)
+    const record = this.props.records.get(this.props.params.id)
+    if (!record) {
+      return this.props.router.replace(`/transport/${this.props.params.id}`)
     }
 
-    const record = this.props.recordIdMap[this.props.params.id]
+    const projects = this.props.projects
+    const inStock = projects.get(record.inStock)
+    const outStock = projects.get(record.outStock)
+    let deliveryParty
+    let deliveryPhone
+    let deliveryContact
+    let deliveryAddress
+    let receivingParty
+    let receivingPhone
+    let receivingContact
+    let receivingAddress
+
+    switch (record.type) {
+      case '销售':
+        deliveryParty = outStock.company + outStock.name
+        deliveryContact = outStock.contacts[0].name
+        deliveryPhone = outStock.contacts[0].phone
+        deliveryAddress = outStock.address
+        receivingParty = record.vendor
+        break
+      case '采购':
+        deliveryParty = record.vendor
+        receivingParty = inStock.company + inStock.name
+        receivingContact = inStock.contacts[0].name
+        receivingPhone = inStock.contacts[0].phone
+        receivingAddress = inStock.address
+        break
+      case'调拨':
+        receivingParty = inStock.company + inStock.name
+        receivingContact = inStock.contacts[0].name
+        receivingPhone = inStock.contacts[0].phone
+        receivingAddress = inStock.address
+        deliveryParty = outStock.company + outStock.name
+        deliveryContact = outStock.contacts[0].name
+        deliveryPhone = outStock.contacts[0].phone
+        deliveryAddress = outStock.address
+        break
+      default:
+        throw new Error('不支持的订单类型')
+    }
+
     if (record.hasTransport) {
       this.setState({
         ...record.transport,
         'off-date': moment(record.transport['off-date']),
         'arrival-date': moment(record.transport['arrival-date']),
-        payDate: record.transport.payDate && moment(record.transport.payDate)
+        payDate: record.transport.payDate && moment(record.transport.payDate),
+        'delivery-party'   : deliveryParty, // 发货单位
+        'receiving-party'  : receivingParty, // 收货单位
       })
     } else {
-      const projects = this.props.projects
-      const inStock = projects[record.inStock]
-      const outStock = projects[record.outStock]
-      let deliveryParty
-      let deliveryPhone
-      let deliveryContact
-      let deliveryAddress
-      let receivingParty
-      let receivingPhone
-      let receivingContact
-      let receivingAddress
-
-      switch (record.type) {
-        case '销售':
-          deliveryParty = outStock.company + outStock.name
-          deliveryContact = outStock.contacts[0].name
-          deliveryPhone = outStock.contacts[0].phone
-          deliveryAddress = outStock.address
-          receivingParty = record.vendor
-          break
-        case '采购':
-          deliveryParty = record.vendor
-          receivingParty = inStock.company + inStock.name
-          receivingContact = inStock.contacts[0].name
-          receivingPhone = inStock.contacts[0].phone
-          receivingAddress = inStock.address
-          break
-        case'调拨':
-          receivingParty = inStock.company + inStock.name
-          receivingContact = inStock.contacts[0].name
-          receivingPhone = inStock.contacts[0].phone
-          receivingAddress = inStock.address
-          deliveryParty = outStock.company + outStock.name
-          deliveryContact = outStock.contacts[0].name
-          deliveryPhone = outStock.contacts[0].phone
-          deliveryAddress = outStock.address
-          break
-        default:
-          throw new Error('不支持的订单类型')
-      }
-
       this.setState({
         'off-date'         : moment(record.outDate).startOf('day'),
         'arrival-date'     : moment(record.outDate).startOf('day').add(1, 'day'), // 到达日期
@@ -134,7 +136,7 @@ class TransportOrderEdit extends Component {
 
   render() {
     if (this.state['delivery-party']) {
-      const record = this.props.recordIdMap[this.props.params.id]
+      const record = this.props.records.get(this.props.params.id)
       return (
         <div>
           <button className="btn btn-default" onClick={this.handleCancel}>返回</button>
@@ -156,8 +158,8 @@ class TransportOrderEdit extends Component {
 
 const mapStateToProps = state => {
   return {
-    recordIdMap: state.store.records.toObject(),
-    projects: state.system.projects.toObject(),
+    records: state.store.records,
+    projects: state.system.projects,
   }
 }
 

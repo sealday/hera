@@ -65,24 +65,6 @@ const EntryTable = connect(
     return isNaN(sum) ? false : sum
   }
 
-  const getFreight = (index) => {
-    const entry = fields.get(index)
-    const freight = entry.freightPrice * entry.freightCount
-    return isNaN(freight) ? false : freight
-  }
-
-  const getMixSum = (index) => {
-    const sum = getSum(index)
-    const freight = getFreight(index)
-    const mixSum = (sum ? sum : 0) + (freight ? freight: 0)
-    return mixSum ? mixSum : false
-  }
-
-  const getMixPrice = (index) => {
-    const total = getTotal(index)
-    return total ? getMixSum(index) / total : false
-  }
-
   const getReport = () => {
     let totalObj = {}
     for (let i = 0; i < fields.length; i++) {

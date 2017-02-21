@@ -3,7 +3,6 @@
  */
 import React, {Component} from 'react';
 import moment from 'moment';
-import DatePicker from 'react-datepicker';
 import {connect} from 'react-redux'
 import  {requestWorkerlist } from '../actions'
 import DisplaySigninForm from './DisplaySigninForm'
