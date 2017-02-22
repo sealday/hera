@@ -53,10 +53,10 @@ projectSchema.methods.initStore = function initStore() {
 };
 
 projectSchema.pre('save', function(next) {
-  this.pinyin = pinyin(this.company + this.name,
-    {style: pinyin.STYLE_NORMAL, heteronym: true}).map(array => array.join('')).join('')
+  this.pinyin = pinyin(this.company + this.name, {
+    style: pinyin.STYLE_NORMAL, heteronym: true
+  }).map(array => array.join('')).join('')
   next()
 })
 
-const Project = mongoose.model('Project', projectSchema);
-module.exports = Project;
+module.exports = mongoose.model('Project', projectSchema)

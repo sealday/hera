@@ -1,7 +1,7 @@
 /**
  * Created by seal on 05/01/2017.
  */
-const Project = require('../models/Project');
+const Project = require('../models').Project;
 const Record = require('../models').Record;
 const ObjectId = require('mongoose').Types.ObjectId;
 const service = require('../service')

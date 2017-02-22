@@ -5,7 +5,7 @@
 // 拆分全称变成简称
 
 const mongoose = require('mongoose');
-const Project = require('../models/Project');
+const Project = require('../models').Project;
 
 mongoose.Promise = global.Promise;
 mongoose

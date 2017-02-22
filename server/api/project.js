@@ -2,7 +2,7 @@
  * Created by seal on 13/01/2017.
  */
 
-const Project = require('../models/Project');
+const Project = require('../models').Project;
 
 /*
 列出所有的项目

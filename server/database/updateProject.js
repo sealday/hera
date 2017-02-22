@@ -6,7 +6,7 @@
 
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
-const Project = require('../models/Project');
+const Project = require('../models').Project;
 
 mongoose.Promise = global.Promise;
 mongoose

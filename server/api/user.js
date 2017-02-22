@@ -5,7 +5,7 @@
 const User = require('../models').User
 
 const Product = require('../models').Product
-const Project = require('../models/Project')
+const Project = require('../models').Project
 exports.login = (req, res, next) => {
   const username = req.body['username'] || '';
   const password = req.body['password'] || '';
