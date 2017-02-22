@@ -2,7 +2,6 @@
 
 const mongoose = require('mongoose');
 const User = require('../models').User;
-const ProductType = require('../models/ProductType');
 
 // 连接 mongo 数据库
 mongoose.Promise = global.Promise;

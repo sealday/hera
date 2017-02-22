@@ -4,7 +4,7 @@
 
 const User = require('../models').User
 
-const ProductType = require('../models/ProductType')
+const Product = require('../models').Product
 const Project = require('../models/Project')
 exports.login = (req, res, next) => {
   const username = req.body['username'] || '';
@@ -47,7 +47,7 @@ exports.isLogin = (req, res) => {
 // 包括项目信息、基地数据、用户数据以及
 exports.load = (req, res, next) => {
   Promise.all([
-    ProductType.find(),
+    Product.find(),
     Project.find(),
     User.find(),
   ]).then(([articles, projects, users]) => {

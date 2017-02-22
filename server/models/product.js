@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const pinyin = require('pinyin')
 
 const Schema = mongoose.Schema;
-const productTypeSchema = new Schema({
+const productSchema = new Schema({
   type: String,
   name: String,
   sizes: [String],
@@ -19,12 +19,11 @@ const productTypeSchema = new Schema({
 });
 
 
-productTypeSchema.pre('save', function(next) {
-  this.pinyin = pinyin(this.name,
-    {style: pinyin.STYLE_NORMAL, heteronym: true}).map(array => array.join('')).join('')
+productSchema.pre('save', function(next) {
+  this.pinyin = pinyin(this.name, {
+    style: pinyin.STYLE_NORMAL, heteronym: true
+  }).map(array => array.join('')).join('')
   next()
 })
 
-const ProductType = mongoose.model('ProductType', productTypeSchema);
-
-module.exports = ProductType;
+module.exports = mongoose.model('Product', productSchema)

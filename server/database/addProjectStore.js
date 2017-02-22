@@ -4,7 +4,7 @@
 
 const mongoose = require('mongoose');
 const Project = require('../models/Project');
-const ProductType = require('../models/ProductType');
+const Product = require('../models').Product;
 
 mongoose.Promise = global.Promise;
 mongoose
@@ -12,7 +12,7 @@ mongoose
   .then(() => {
     // 读取初始数据
     global.companyData = {};
-    return ProductType.find();
+    return Product.find();
   }).then(productTypes => {
     global.companyData.productTypes = productTypes;
   })

@@ -6,3 +6,4 @@ exports.Counter = require('./counter')
 exports.User = require('./user')
 exports.HistoryRecord = require('./record').HistoryRecord
 exports.Record = require('./record').Record
+exports.Product = require('./product')

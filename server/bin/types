@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const mongoose = require('mongoose');
-const ProductType = require('../models/ProductType');
+const Product = require('../models').Product;
 
 // 连接 mongo 数据库
 mongoose.Promise = global.Promise;
@@ -9,11 +9,11 @@ mongoose
   .connect('mongodb://localhost/hera')
   .then(() => {
     console.log('删除原有物料数据')
-    return ProductType.remove({})
+    return Product.remove({})
   }).then(() => {
   console.log('初始化物料数据！');
   // 10cm - 50 20cm - 30  30cm - 20
-  return ProductType.create([
+  return Product.create([
     {
       type: '租赁类',
       name: '钢管',

@@ -5,7 +5,7 @@
 
 const mongoose = require('mongoose');
 const Project = require('../models/Project');
-const ProductType = require('../models/ProductType')
+const Product = require('../models').Product
 
 mongoose.Promise = global.Promise;
 const connection = mongoose.connect('mongodb://localhost/hera');
@@ -28,7 +28,7 @@ connection.then(() => {
 
 }).then(results => {
 
-  return ProductType.find()
+  return Product.find()
 
 
 }).then(productTypes => {
