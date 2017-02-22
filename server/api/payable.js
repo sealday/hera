@@ -1,7 +1,7 @@
 /**
  * Created by xin on 2017/2/18.
  */
-const Payable = require('../models/Payable')
+const Payable = require('../models').Payable
 
 exports.paycheckSearch = (req,res,next) => {
   let condition = req.query['condition']

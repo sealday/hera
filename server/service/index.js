@@ -1,7 +1,7 @@
 /**
  * Created by seal on 29/01/2017.
  */
-const Payable = require('../models/Payable')
+const Payable = require('../models').Payable
 
 exports.num = 0
 exports.io = null

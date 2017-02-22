@@ -5,7 +5,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const PayableSchema = new Schema({
+const payableSchema = new Schema({
 
   number: Number, // 流水号
   vendor: String, // 对方单位
@@ -17,7 +17,5 @@ const PayableSchema = new Schema({
 
 }, { timestamps: true }); // 时间戳中有制单时间
 
-const Payable = mongoose.model('Payable', PayableSchema);
-
-module.exports = Payable;
+module.exports = mongoose.model('Payable', payableSchema)
 
