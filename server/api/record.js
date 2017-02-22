@@ -2,8 +2,8 @@
  * Created by seal on 15/01/2017.
  */
 
-const Record = require('../models/Record').Record
-const HistoryRecord = require('../models/Record').HistoryRecord
+const Record = require('../models').Record
+const HistoryRecord = require('../models').HistoryRecord
 const service = require('../service/index')
 
 

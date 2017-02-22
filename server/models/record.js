@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const service = require('../service')
-const Counter = require('./Counter')
+const Counter = require('../models').Counter
 
 /**
  * 仓库记录
@@ -104,8 +104,5 @@ RecordSchema.pre('save', function (next) {
   }
 })
 
-const Record = mongoose.model('Record', RecordSchema);
-const HistoryRecord = mongoose.model('HistoryRecord', HistoryRecordSchema);
-
-exports.Record = Record;
-exports.HistoryRecord = HistoryRecord;
+exports.Record = mongoose.model('Record', RecordSchema);
+exports.HistoryRecord = mongoose.model('HistoryRecord', HistoryRecordSchema);

@@ -3,8 +3,8 @@
  */
 
 const mongoose = require('mongoose');
-const Record = require('../models/Record').Record;
-const Counter = require('../models/Counter');
+const Record = require('../models').Record;
+const Counter = require('../models').Counter
 const ObjectId = mongoose.Types.ObjectId;
 
 mongoose.Promise = global.Promise;

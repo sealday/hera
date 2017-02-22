@@ -3,7 +3,7 @@
  */
 
 const mongoose = require('mongoose');
-const Counter = require('../models/Counter');
+const Counter = require('../models').Counter;
 
 mongoose.Promise = global.Promise;
 const connection = mongoose.connect('mongodb://localhost/hera');
