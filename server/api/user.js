@@ -2,7 +2,8 @@
  * Created by seal on 13/01/2017.
  */
 
-const User = require('../models/User');
+const User = require('../models').User
+
 const ProductType = require('../models/ProductType')
 const Project = require('../models/Project')
 exports.login = (req, res, next) => {

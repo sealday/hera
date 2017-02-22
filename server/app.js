@@ -10,9 +10,6 @@ const multer = require('multer');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 // const express-validator 可以考虑使用
-const ProductType = require('./models/ProductType');
-const Project = require('./models/Project');
-const User = require('./models/User');
 const compression = require('compression');
 const service = require('./service')
 

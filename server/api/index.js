@@ -7,7 +7,6 @@ const upload = multer({ dest: 'public/uploads/'});
 const article = require('./article');
 const file = require('./file');
 
-const User = require('../models/User');
 const middleware = require('./middleware');
 const user = require('./user');
 const project = require('./project');
