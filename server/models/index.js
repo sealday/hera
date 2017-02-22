@@ -9,3 +9,5 @@ exports.Record = require('./record').Record
 exports.Product = require('./product')
 exports.Project = require('./project')
 exports.Payable = require('./payable')
+exports.Worker = require('./worker')
+exports.File = require('./file')

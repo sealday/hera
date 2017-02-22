@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 
-const WorkerSchema = new Schema({
+const workerSchema = new Schema({
     name: String,//姓名
     age: Number,//年龄
     address: String,//家庭住址
@@ -29,5 +29,4 @@ const WorkerSchema = new Schema({
     ]//签到数组
 })
 
-const Worker = mongoose.model('Worker', WorkerSchema);
-module.exports = Worker;
+module.exports = mongoose.model('Worker', workerSchema)

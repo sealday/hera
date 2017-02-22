@@ -2,7 +2,7 @@
  * Created by wangjiabao on 2017/1/29.
  */
 
-const Worker = require('../models/Worker')
+const Worker = require('../models').Worker
 
 exports.list = (req,res,next)=>{
     Worker.find({valid:true}).then(workers=>{

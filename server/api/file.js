@@ -1,7 +1,7 @@
 /**
  * Created by seal on 11/01/2017.
  */
-const File = require('../models/File');
+const File = require('../models').File;
 const path = require('path')
 const service = require('../service')
 

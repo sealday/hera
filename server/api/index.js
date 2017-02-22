@@ -15,7 +15,6 @@ const record = require('./record')
 const payable = require('./payable')
 
 const router = express.Router();
-const File = require('../models/File');
 
 const store = require('./store')
 
