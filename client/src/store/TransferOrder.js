@@ -159,67 +159,76 @@ class TransferOrder extends React.Component {
           <button className="btn btn-default" onClick={() => print()}>打印</button>
           <a className="btn btn-default" href="check">审核确认</a>
         </div>
-        <h4 className="text-center">上海创兴建筑设备租赁有限公司</h4>
-        <h4 className="text-center">{orderName}</h4>
-        <table style={{tableLayout: 'fixed', fontSize: '11px', width: '100%'}}>
-          <colgroup>
-            <col style={{width: '50%'}}/>
-          </colgroup>
-          <tbody>
-          <tr>
-            <td>{companyLabel}：{company}</td>
-            <td>日期：{moment(record.outDate).format('YYYY-MM-DD')}</td>
-            <td>流水号：{record.number}</td>
-          </tr>
-          <tr>
-            <td>{nameLabel}：{name}</td>
-            <td>车号：{record.carNumber}</td>
-            <td>原始单号：{record.originalOrder}</td>
-          </tr>
-          </tbody>
-        </table>
-        <table className="table table-bordered table--tight" style={{tableLayout: 'fixed', fontSize: '11px', marginBottom: '0'}}>
-          <thead>
-          <tr>
-            <th className="text-right">名称</th>
-            <th className="text-right">规格</th>
-            <th className="text-right">数量</th>
-            <th className="text-right">备注</th>
-            <th className="text-right">名称</th>
-            <th className="text-right">规格</th>
-            <th className="text-right">数量</th>
-            <th className="text-right">备注</th>
-          </tr>
-          </thead>
-          <tbody>
-          {rows.map((row, index) => (
-            <tr className="text-right" key={index}>
-              {row.map((col, index) => (
-                <td key={index}>{col}</td>
-              ))}
+        <div style={{ position: 'relative', paddingRight: '1.2em', minHeight: '30em' }}> {/* 表格开始 */}
+          <div style={{
+            position: 'absolute',
+            top: '6.5em',
+            fontSize: '9px',
+            right: 0,
+            width: '1.2em'
+          }}>①发货方存根②收货方存根③承运方存根</div>
+          <h4 className="text-center">上海创兴建筑设备租赁有限公司</h4>
+          <h4 className="text-center">{orderName}</h4>
+          <table style={{tableLayout: 'fixed', fontSize: '11px', width: '100%'}}>
+            <colgroup>
+              <col style={{width: '50%'}}/>
+            </colgroup>
+            <tbody>
+            <tr>
+              <td>{companyLabel}：{company}</td>
+              <td>日期：{moment(record.outDate).format('YYYY-MM-DD')}</td>
+              <td>流水号：{record.number}</td>
             </tr>
-          ))}
-          <tr>
-            <td colSpan="4" >
-              <span>说明：如供需双方未签正式合同，本{orderName}经供需双方代表签字确认后，将作为合同</span>
-              <span>及发生业务往来的有效凭证，如已签合同，则成为该合同的组成部分。{signer}须核对</span>
-              <span>以上产品规格、数量确认后可签字认可。</span>
-            </td>
-            <td colSpan="4">
-              备注 {record.comments}
-            </td>
-          </tr>
-          </tbody>
-        </table>
-        <table style={{tableLayout: 'fixed', fontSize: '11px', width: '100%'}}>
-          <tbody>
-          <tr>
-            <td>制单人：{record.username}</td>
-            <td>{outLabel}（签名）：</td>
-            <td>{inLabel}（签名）：</td>
-          </tr>
-          </tbody>
-        </table>
+            <tr>
+              <td>{nameLabel}：{name}</td>
+              <td>车号：{record.carNumber}</td>
+              <td>原始单号：{record.originalOrder}</td>
+            </tr>
+            </tbody>
+          </table>
+          <table className="table table-bordered table--tight" style={{tableLayout: 'fixed', fontSize: '11px', marginBottom: '0'}}>
+            <thead>
+            <tr>
+              <th className="text-right">名称</th>
+              <th className="text-right">规格</th>
+              <th className="text-right">数量</th>
+              <th className="text-right">备注</th>
+              <th className="text-right">名称</th>
+              <th className="text-right">规格</th>
+              <th className="text-right">数量</th>
+              <th className="text-right">备注</th>
+            </tr>
+            </thead>
+            <tbody>
+            {rows.map((row, index) => (
+              <tr className="text-right" key={index}>
+                {row.map((col, index) => (
+                  <td key={index}>{col}</td>
+                ))}
+              </tr>
+            ))}
+            <tr>
+              <td colSpan="4" >
+                <span>说明：如供需双方未签正式合同，本{orderName}经供需双方代表签字确认后，将作为合同</span>
+                <span>及发生业务往来的有效凭证，如已签合同，则成为该合同的组成部分。{signer}须核对</span>
+                <span>以上产品规格、数量确认后可签字认可。</span>
+              </td>
+              <td colSpan="4">
+                备注 {record.comments}
+              </td>
+            </tr>
+            </tbody>
+          </table>
+          <table style={{tableLayout: 'fixed', fontSize: '11px', width: '100%'}}>
+            <tbody>
+            <tr>
+              <td>制单人：{record.username}</td>
+              <td>{outLabel}（签名）：</td>
+              <td>{inLabel}（签名）：</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     );
   }
