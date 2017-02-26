@@ -437,24 +437,24 @@ mongoose
     },
     {
       "type": "配件类",
-      "name": "轮扣横杆头",
-      sizes: [],
+      "name": "轮扣配件",
+      sizes: ["横杆头"],
       "sizeUnit": "",
       "countUnit": "个",
       "unit": "个"
     },
     {
       "type": "配件类",
-      "name": "轮扣立杆盘",
-      sizes: [],
+      "name": "轮扣配件",
+      sizes: ["立杆盘"],
       "sizeUnit": "",
       "countUnit": "个",
       "unit": "个"
     },
     {
       "type": "配件类",
-      "name": "轮扣五七头",
-      sizes: [],
+      "name": "轮扣配件",
+      sizes: ["五七头"],
       "sizeUnit": "",
       "countUnit": "个",
       "unit": "个"
