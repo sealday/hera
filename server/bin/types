@@ -435,6 +435,30 @@ mongoose
       "countUnit": "条",
       "unit": "条"
     },
+    {
+      "type": "配件类",
+      "name": "轮扣横杆头",
+      sizes: [],
+      "sizeUnit": "",
+      "countUnit": "个",
+      "unit": "个"
+    },
+    {
+      "type": "配件类",
+      "name": "轮扣立杆盘",
+      sizes: [],
+      "sizeUnit": "",
+      "countUnit": "个",
+      "unit": "个"
+    },
+    {
+      "type": "配件类",
+      "name": "轮扣五七头",
+      sizes: [],
+      "sizeUnit": "",
+      "countUnit": "个",
+      "unit": "个"
+    },
   ]);
 }).then(() => {
   console.log('初始化物料数据成功')
