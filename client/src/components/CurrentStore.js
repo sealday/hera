@@ -6,6 +6,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import Select from 'react-select'
 import { selectStore } from '../actions'
+import { filterOption } from '../utils'
 
 class CurrentStore extends React.Component {
   constructor(props) {
@@ -57,7 +58,9 @@ class CurrentStore extends React.Component {
             placeholder='选择项目'
             onChange={e => this.onProjectChange(e.value)}
             clearable={false}
-            options={props.system.projects.filter(project => project.type === '项目部仓库').toArray().map(project => ({ value: project._id, label: project.company + project.name}))}
+            filterOption={filterOption}
+            options={props.system.projects.filter(project => project.type === '项目部仓库').toArray().map(project =>
+              ({ value: project._id, label: project.company + project.name, pinyin: project.pinyin }))}
           />
           <button style={{marginTop: '1em'}} className="btn btn-primary btn-block" onClick={this.onProjectSelect}>项目部管理</button>
         </div>

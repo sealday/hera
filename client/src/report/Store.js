@@ -136,6 +136,7 @@ class Store extends Component {
   render() {
     let project = this.state.project
     let stocks = this.props.stocks
+    const { store } = this.props
 
     let recordsTable = []
     if (project && stocks.get(project)) {
@@ -196,11 +197,11 @@ class Store extends Component {
                 clearable={false}
                 placeholder="选择要查询的仓库"
                 value={this.state.project}
-                options={this.props.projects.map(project => ({
-                  value: project._id,
-                  label: project.company + project.name,
-                  pinyin: project.pinyin
-                }))}
+                options={[{
+                  value: store._id,
+                  label: store.company + store.name,
+                  pinyin: store.pinyin
+                }]}
                 filterOption={filterOption}
                 onChange={this.handleProjectChange}
               />
