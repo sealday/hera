@@ -62,7 +62,8 @@ exports.load = (req, res, next) => {
         articles,
         projects,
         users,
-        base
+        base,
+        user:req.session.user,
       }
     })
   }).catch(err => {

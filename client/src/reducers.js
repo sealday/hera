@@ -18,6 +18,7 @@ export function system(state = new SystemRecord(), action) {
   switch (action.type) {
     case actionTypes.SYSTEM_LOADED:
       const base = action.data.base
+      const user = action.data.user
       const projects = new Map(action.data.projects.map(project => [project._id, project]))
       const users = new Map(action.data.users.map(user => [user._id, user]))
       const articles = new OrderedMap(action.data.articles.map(article => [article._id, article]))
@@ -26,6 +27,7 @@ export function system(state = new SystemRecord(), action) {
         .set('projects', projects)
         .set('articles', articles)
         .set('users', users)
+        .set('user', user)
     case actionTypes.ONLINE_USER_CHANGE:
       return state.set('online', action.data)
     case actionTypes.UPDATE_ARTICLE_SIZES:

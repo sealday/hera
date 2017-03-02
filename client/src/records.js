@@ -10,6 +10,7 @@ export const SystemRecord = Record({
   articles: Map(),
   users: Map(),
   base: {},
+  user: {},
   notifications: Map(),
   store: false, // 选择的仓库
 })
