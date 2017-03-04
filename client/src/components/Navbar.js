@@ -39,7 +39,7 @@ class Navbar extends Component {
   };
 
   render() {
-    const { store, num } = this.props
+    const { store, num, user } = this.props
     return (
       <nav className="navbar navbar-default navbar-fixed-top navbar-inverse">
         <div className="container-fluid">
@@ -60,7 +60,7 @@ class Navbar extends Component {
             <ul className="nav navbar-nav navbar-right">
               <li><p className="navbar-text">当前在线人数{num}</p></li>
               <li><a href="#" onClick={this.logout}>登出</a></li>
-              <li className={cx({active: this.context.router.isActive("profile")})}><Link to="profile">超级管理员</Link></li>
+              <li className={cx({active: this.context.router.isActive("profile")})}><Link to="#">{user.username}</Link></li>
             </ul>
           </div>
         </div>
@@ -73,6 +73,7 @@ const mapStateToProps = state => {
   return {
     num: state.system.online,
     store: state.system.store,
+    user: state.system.user,
   }
 }
 
