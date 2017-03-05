@@ -43,6 +43,11 @@ class Operator extends Component {
                     this.props.dispatch(deleteOperator(user))
                   }
                 }} >删除</Link>
+                <br />
+                <Link to="#" onClick={e => {
+                  e.preventDefault()
+                  alert('还不支持禁用操作！')
+                }} >禁用</Link>
               </td>
             </tr>
           ))}
