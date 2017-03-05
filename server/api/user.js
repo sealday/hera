@@ -112,10 +112,33 @@ exports.create = (req, res, next) => {
 }
 
 exports.update = (req, res, next) => {
+  if (!req.body.username || !req.body.password || !req.body.profile || !req.body.role) {
+    return res.status(400).json({
+      message: '表单填写不完整'
+    })
+  }
   let id = req.params.id
-  User.findByIdAndUpdate(id, req.body, { new: true }).then(user => {
+  User.findById(id).then(user => {
+    delete req.body._id // 阻止客户端传来改变的 id
+    Object.assign(user, req.body)
+    return user.save()
+  }).then(user => {
     res.json({
       message: '更新用户成功',
+      data: {
+        user
+      }
+    })
+  }).catch(err => {
+    next(err)
+  })
+}
+
+exports.remove = (req, res, next) => {
+  let id = req.params.id
+  User.findByIdAndRemove(id).then(user => {
+    res.json({
+      message: '删除用户成功',
       data: {
         user
       }
