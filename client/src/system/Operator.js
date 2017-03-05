@@ -5,6 +5,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
+import { deleteOperator } from '../actions'
 
 class Operator extends Component {
   render() {
@@ -36,7 +37,12 @@ class Operator extends Component {
               <td>
                 <Link to={`/operator/${user._id}/edit`}>编辑</Link>
                 <br />
-                <Link to="">删除</Link>
+                <Link to="#" onClick={e => {
+                  e.preventDefault()
+                  if (confirm(`确定要删除用户 ${user.username}`)) {
+                    this.props.dispatch(deleteOperator(user))
+                  }
+                }} >删除</Link>
               </td>
             </tr>
           ))}

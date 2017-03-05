@@ -362,6 +362,7 @@ export const storeSearch = condition => (dispatch, getState) => {
 
 export const OPERATOR_CREATE = 'OPERATOR_CREATE' // 网络请求 action
 export const OPERATOR_UPDATE = 'OPERATOR_UPDATE' // 网络请求 action
+export const OPERATOR_DELETE = 'OPERATOR_DELETE' // 删除操作员
 export const NEW_OPERATOR = 'NEW_OPERATOR' // 接收到数据的 action
 
 export const createOperator = operator => (dispatch, getState) => {
@@ -403,6 +404,27 @@ export const updateOperator = operator => (dispatch, getState) => {
     }).catch(err => {
       dispatch(networking.endFailure)
       dispatch(newErrorNotify('错误', '更新操作员失败！', 2000))
+      throw err
+    })
+  }
+}
+
+export const deleteOperator = operator => (dispatch, getState) => {
+  const networking = network(OPERATOR_DELETE)
+  if (networking.shouldProceed(getState())) {
+    dispatch(networking.begin)
+    dispatch(newInfoNotify('提示', '正在删除操作员', 2000))
+    ajax(`/api/user/${operator._id}/delete`, {
+      data: JSON.stringify(operator),
+      method: 'POST',
+      contentType: 'application/json'
+    }).then(res => {
+      dispatch(networking.endSuccess)
+      dispatch({ type: OPERATOR_DELETE, data: res.data.user })
+      dispatch(newSuccessNotify('提示', '删除操员成功！', 2000))
+    }).catch(err => {
+      dispatch(networking.endFailure)
+      dispatch(newErrorNotify('错误', '删除操作员失败！', 2000))
       throw err
     })
   }

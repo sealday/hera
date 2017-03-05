@@ -45,6 +45,8 @@ export function system(state = new SystemRecord(), action) {
       return state.set('store', action.data)
     case actionTypes.NEW_OPERATOR:
       return state.setIn(['users', action.data._id], action.data)
+    case actionTypes.OPERATOR_DELETE:
+      return state.removeIn(['users', action.data._id]);
     default:
       return state
   }
