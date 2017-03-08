@@ -53,6 +53,11 @@ app.use(session({
 
 app.use('/api',  apiIndex);
 
+app.get('/system/', (req, res, next) => {
+  res.send('网站在维护中，请稍后访问！')
+});
+
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   let err = new Error('Not Found');
