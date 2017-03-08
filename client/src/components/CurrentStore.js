@@ -59,7 +59,7 @@ class CurrentStore extends React.Component {
             onChange={e => this.onProjectChange(e.value)}
             clearable={false}
             filterOption={filterOption}
-            options={props.system.projects.filter(project => project.type !== '项目部仓库').toArray().map(project =>
+            options={props.system.projects.filter(project => project.type !== '基地仓库').toArray().map(project =>
               ({ value: project._id, label: project.company + project.name, pinyin: project.pinyin }))}
           />
           <button style={{marginTop: '1em'}} className="btn btn-primary btn-block" onClick={this.onProjectSelect}>项目部管理</button>
