@@ -33,3 +33,7 @@ Thumbs.db
 
 server/public/system
 server/public/uploads
+
+# vim
+.*.un~
+*~
