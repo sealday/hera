@@ -14,6 +14,7 @@ class CurrentStore extends React.Component {
     this.state = {
       project: '',
       base: props.system.base._id,
+      other: '',
     }
   }
 
@@ -29,12 +30,22 @@ class CurrentStore extends React.Component {
     })
   }
 
+  onOtherChange = (value) => {
+    this.setState({
+      other: value,
+    })
+  }
+
   onBaseSelect = () => {
     this.props.dispatch(selectStore(this.props.system.projects.get(this.state.base)))
   }
 
   onProjectSelect = () => {
     this.props.dispatch(selectStore(this.props.system.projects.get(this.state.project)))
+  }
+
+  onOtherSelect = () => {
+    this.props.dispatch(selectStore(this.props.system.projects.get(this.state.other)))
   }
 
   render() {
@@ -48,7 +59,9 @@ class CurrentStore extends React.Component {
             placeholder='选择仓库'
             onChange={e => this.onBaseChange(e.value)}
             clearable={false}
-            options={props.system.projects.filter(project => project.type === '基地仓库').toArray().map(project => ({ value: project._id, label: project.company + project.name}))}
+            filterOption={filterOption}
+            options={props.system.projects.filter(project => project.type === '基地仓库').toArray().map(project =>
+              ({ value: project._id, label: project.company + project.name, pinyin: project.pinyin }))}
           />
           <button style={{marginTop: '1em'}} className="btn btn-primary btn-block" onClick={this.onBaseSelect}>基地管理</button>
         </div>
@@ -59,10 +72,22 @@ class CurrentStore extends React.Component {
             onChange={e => this.onProjectChange(e.value)}
             clearable={false}
             filterOption={filterOption}
-            options={props.system.projects.filter(project => project.type !== '基地仓库').toArray().map(project =>
+            options={props.system.projects.filter(project => project.type === '项目部仓库').toArray().map(project =>
               ({ value: project._id, label: project.company + project.name, pinyin: project.pinyin }))}
           />
           <button style={{marginTop: '1em'}} className="btn btn-primary btn-block" onClick={this.onProjectSelect}>项目部管理</button>
+        </div>
+        <div style={{marginTop: '2em'}}>
+          <Select
+            value={this.state.other}
+            placeholder='选择项目'
+            onChange={e => this.onOtherChange(e.value)}
+            clearable={false}
+            filterOption={filterOption}
+            options={props.system.projects.filter(project => project.type === '第三方仓库').toArray().map(project =>
+              ({ value: project._id, label: project.company + project.name, pinyin: project.pinyin }))}
+          />
+          <button style={{marginTop: '1em'}} className="btn btn-primary btn-block" onClick={this.onOtherSelect}>第三方管理</button>
         </div>
       </div>
     )
