@@ -61,15 +61,18 @@ class Store extends Component {
       article.sizes.forEach(size => {
         const key = makeKeyFromNameSize(article.name, size)
         let value = {}
+        value.delta = 0;
         let exists = false
         if (key in inRecordMap) {
           value.in = inRecordMap[key]
+          value.delta = value.in;
           value.inTotal = toFixedWithoutTrailingZero(inRecordMap[key] * calculateSize(size))
           inTotal += Number(value.inTotal)
           exists = true
         }
         if (key in outRecordMap) {
           value.out = outRecordMap[key]
+          value.delta -= value.out;
           value.outTotal = toFixedWithoutTrailingZero(outRecordMap[key] * calculateSize(size))
           outTotal += Number(value.outTotal)
           exists = true
@@ -91,15 +94,18 @@ class Store extends Component {
         const size = undefined
         const key = makeKeyFromNameSize(article.name, size)
         let value = {}
+        value.delta = 0;
         let exists = false
         if (key in inRecordMap) {
           value.in = inRecordMap[key]
+          value.delta += value.in
           value.inTotal = toFixedWithoutTrailingZero(inRecordMap[key] * calculateSize(size))
           inTotal += Number(value.inTotal)
           exists = true
         }
         if (key in outRecordMap) {
           value.out = outRecordMap[key]
+          value.delta -= value.out
           value.outTotal = toFixedWithoutTrailingZero(outRecordMap[key] * calculateSize(size))
           outTotal += Number(value.outTotal)
           exists = true
@@ -153,9 +159,8 @@ class Store extends Component {
             <th>{record.total.name}</th>
             <th>{record.total.size}</th>
             <th>{formatNumber(record.total.in)}</th>
-            <th>{formatNumber(record.total.inTotal)}</th>
             <th>{formatNumber(record.total.out)}</th>
-            <th>{formatNumber(record.total.outTotal)}</th>
+            <th/>
             <th>{formatNumber(record.total.total)}</th>
           </tr>
         )
@@ -176,9 +181,8 @@ class Store extends Component {
               {nameLine}
               <td>{record.size}</td>
               <td>{formatNumber(record.in)}</td>
-              <td>{formatNumber(record.inTotal)}</td>
               <td>{formatNumber(record.out)}</td>
-              <td>{formatNumber(record.outTotal)}</td>
+              <td>{formatNumber(record.delta)}</td>
               <td>{formatNumber(record.total)}</td>
             </tr>
           )
@@ -218,9 +222,8 @@ class Store extends Component {
             <th>名称</th>
             <th>规格</th>
             <th>入库数量</th>
-            <th>入库小计</th>
             <th>出库数量</th>
-            <th>出库小计</th>
+            <th>结存数量</th>
             <th>小计</th>
           </tr>
           </thead>
