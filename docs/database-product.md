@@ -38,10 +38,21 @@ const productSchema = new Schema({
     sizes: [{
         name: String,
         unit: String,
-        scale: Number, // 比例
+        scale: { type: Number, default: 1 }, // 比例
         pinyin: String,
     }],
     unit: String,
     pinyin: String,
 });
 
+
+productSchema.index({ type: 1, name: 1 }, { unique: true });
+productSchema.index({ type: 1, name: 1, "sizes.name": 1 }, { unique: true });
+
+如果需要支持排序的话，因为数量并不会太多，所以总是重新设置这个数据，而不是使用mongo中的方法。
+包括更新等操作
+
+在界面上应该给出以下的效果：
+1. 能够支持拖拽排序
+2. 能够支持预览在其他地方中某个修改会产生的效果
+3. 在界面上进行数据校验，让用户直接意识到某些问题
