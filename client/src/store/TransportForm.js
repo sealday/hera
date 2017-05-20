@@ -22,7 +22,7 @@ class TransportForm extends React.Component {
           </div>
         </div>
         <div className="form-group">
-          <label className="col-sm-2 control-label">顿/趟</label>
+          <label className="col-sm-2 control-label">吨/趟</label>
           <div className="col-sm-4">
             <Field name="weight" component={Input}/>
           </div>
