@@ -54,6 +54,7 @@ import {
   Store,
   Search,
   SimpleSearch,
+  SimpleSearchCompany,
   TransportSearch,
 
   StocktakingOutTable,
@@ -135,6 +136,7 @@ ajax('/api/load').then(res => {
 
           <Route path="search" component={Search}/>
           <Route path="simple_search" component={SimpleSearch}/>
+          <Route path="simple_search_company" component={SimpleSearchCompany}/>
           <Route path="article" component={Article}/>
 
           {/* direction 表示调拨的方向 取值为 in 和 out  */}

@@ -251,11 +251,21 @@ exports.simpleSearch = (req, res, next) => {
         { outStock: id, inStock: ObjectId(condition.self) },
         { inStock: id, outStock: ObjectId(condition.self) },
       ]
+      // 如果是公司角度搜索，不加限制条件
+      if (condition.company) {
+        match['$or'] = [
+          { outStock: id },
+          { inStock: id },
+        ]
+      }
     } else {
-      match['$or'] = [
-        { id, inStock: ObjectId(condition.self) },
-        { outStock: ObjectId(condition.self) },
-      ]
+      // 如果不是公司角度搜索，加限制条件
+      if (!condition.company) {
+        match['$or'] = [
+          { inStock: ObjectId(condition.self) },
+          { outStock: ObjectId(condition.self) },
+        ]
+      }
     }
 
     // 需要查询对方单位 采购销售
