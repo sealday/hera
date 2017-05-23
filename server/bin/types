@@ -40,7 +40,7 @@ mongoose
     },
     {
       type: '租赁类',
-      name: '顶丝',
+      name: '轮扣顶丝',
       sizes: ['上托', '下托'],
       sizeUnit: '',
       countUnit: '支',
