@@ -104,13 +104,23 @@ mongoose
     },
     {
       type: '租赁类',
-      name: '爬梯',
+      name: '钢踏板',
       sizes: [
         '0.9',
         '1.2',
         '1.5',
         '1.8',
         '2.1',
+      ],
+      sizeUnit: '米',
+      countUnit: '个',
+      unit: '米'
+    },
+    {
+      type: '租赁类',
+      name: '爬梯',
+      sizes: [
+        '2',
       ],
       sizeUnit: '米',
       countUnit: '个',
@@ -158,7 +168,17 @@ mongoose
     {
       type: '工具类',
       name: '架子',
-      sizes: ['钢管架', '扣件托盘', '轮扣立杆架', '轮扣横杆架'],
+      sizes: [
+        '钢管架',
+        '扣件托盘',
+
+        '轮扣立杆架',
+        '轮扣横杆架',
+
+        '盘扣立杆架',
+        '盘扣斜杆架',
+        '盘扣横杆架'
+      ],
       sizeUnit: '',
       countUnit: '个',
       unit: '个'
