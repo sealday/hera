@@ -415,7 +415,7 @@ mongoose
     {
       "type": "损耗类",
       "name": "铁线",
-      sizes: [],
+      sizes: ["8号", "10号", "12号", "14号", "16号", "18号", "20号"],
       "sizeUnit": "",
       "countUnit": "公斤",
       "unit": "公斤"
@@ -546,6 +546,30 @@ mongoose
       "sizeUnit": "",
       "countUnit": "条",
       "unit": "条"
+    },
+    {
+      "type": "损耗类",
+      "name": "焊丝",
+      "sizes": ["1.0"],
+      "sizeUnit": "",
+      "countUnit": "箱",
+      "unit": "箱"
+    },
+    {
+      "type": "损耗类",
+      "name": "膨胀螺丝",
+      "sizes": ["10*95"],
+      "sizeUnit": "",
+      "countUnit": "个",
+      "unit": "个"
+    },
+    {
+      "type": "损耗类",
+      "name": "钢筋",
+      "sizes": ["6.5mm", "8mm", "5.6mm"],
+      "sizeUnit": "",
+      "countUnit": "公斤",
+      "unit": "公斤"
     },
     {
       "type": "配件类",
