@@ -7,6 +7,16 @@ import { toggleMenu } from '../actions'
 import { Link } from 'react-router';
 import cx from 'classnames';
 
+const shouldShow = ({user, store}) => {
+  if (user.role === '项目部管理员') {
+    const perms = user.perms || [];
+    const projects = perms.filter((p) => p.insert).map((p) => p.projectId);
+    return projects.indexOf(store._id) !== -1;
+  } else {
+    return true;
+  }
+}
+
 const Drawer = (props) => (
   <div className={cx({'App-drawer': true, 'show': props.nav.drawer, 'hidden-print': true})}>
     {/* TODO 这里可以考虑改成数组的形式*/}
@@ -17,7 +27,7 @@ const Drawer = (props) => (
           transitionName="nav"
           transitionEnterTimeout={500}
           transitionLeaveTimeout={300}>
-          {props.nav.store && <ul>
+          {props.nav.store && shouldShow(props.system) && <ul>
             <li><Link to="/purchase/in/create">采购入库</Link></li>
             <li><Link to="/purchase/out/create">销售出库</Link></li>
             <li><Link to="/transfer/out/create">调拨出库（发料）</Link></li>

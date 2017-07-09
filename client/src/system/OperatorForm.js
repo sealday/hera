@@ -61,6 +61,7 @@ class OperatorForm extends Component {
           <fieldset>
             <legend>项目权限</legend>
             <p>权限暂时只对项目管理员有效果</p>
+            <p>修改权限暂时无效</p>
             <table className="table table-bordered">
               <thead>
               <tr>
@@ -71,7 +72,7 @@ class OperatorForm extends Component {
               </tr>
               </thead>
               <tbody>
-              {projects.map((project) => (
+              {projects.toArray().map((project) => (
                 <tr key={project._id}>
                   <td>{project.company} - {project.name}</td>
                   <td><Field type="checkbox" component="input" name={`perm.${project._id}.query`} /></td>

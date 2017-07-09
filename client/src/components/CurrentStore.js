@@ -53,7 +53,7 @@ class CurrentStore extends React.Component {
     let filteredProjects = projects;
     if (user.role === '项目部管理员') {
       const perms = user.perms || [];
-      const userProjects = perms.map((p) => p.projectId);
+      const userProjects = perms.filter((p) => p.query).map((p) => p.projectId);
       filteredProjects = projects.filter((project) => userProjects.indexOf(project._id) !== -1);
     }
     return (
