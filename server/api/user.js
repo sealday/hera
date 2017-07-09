@@ -112,7 +112,7 @@ exports.create = (req, res, next) => {
 }
 
 exports.update = (req, res, next) => {
-  if (!req.body.username || !req.body.password || !req.body.profile || !req.body.role) {
+  if (!req.body.username || !req.body.profile || !req.body.role) {
     return res.status(400).json({
       message: '表单填写不完整'
     })
