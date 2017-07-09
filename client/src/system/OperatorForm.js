@@ -60,6 +60,7 @@ class OperatorForm extends Component {
           </fieldset>
           <fieldset>
             <legend>项目权限</legend>
+            <p>权限暂时只对项目管理员有效果</p>
             <table className="table table-bordered">
               <thead>
               <tr>

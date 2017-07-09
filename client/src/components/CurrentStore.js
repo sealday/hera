@@ -49,7 +49,13 @@ class CurrentStore extends React.Component {
   }
 
   render() {
-    const props = this.props
+    const { projects, user } = this.props.system;
+    let filteredProjects = projects;
+    if (user.role === '项目部管理员') {
+      const perms = user.perms || [];
+      const userProjects = perms.map((p) => p.projectId);
+      filteredProjects = projects.filter((project) => userProjects.indexOf(project._id) !== -1);
+    }
     return (
       <div style={{maxWidth: '500px', margin: '0 auto', paddingTop: '50px'}}>
         <h2 className="page-header">仓库选择</h2>
@@ -60,7 +66,7 @@ class CurrentStore extends React.Component {
             onChange={e => this.onBaseChange(e.value)}
             clearable={false}
             filterOption={filterOption}
-            options={props.system.projects.filter(project => project.type === '基地仓库').toArray().map(project =>
+            options={filteredProjects.filter(project => project.type === '基地仓库').toArray().map(project =>
               ({ value: project._id, label: project.company + project.name, pinyin: project.pinyin }))}
           />
           <button style={{marginTop: '1em'}} className="btn btn-primary btn-block" onClick={this.onBaseSelect}>基地管理</button>
@@ -72,7 +78,7 @@ class CurrentStore extends React.Component {
             onChange={e => this.onProjectChange(e.value)}
             clearable={false}
             filterOption={filterOption}
-            options={props.system.projects.filter(project => project.type === '项目部仓库').toArray().map(project =>
+            options={filteredProjects.filter(project => project.type === '项目部仓库').toArray().map(project =>
               ({ value: project._id, label: project.company + project.name, pinyin: project.pinyin }))}
           />
           <button style={{marginTop: '1em'}} className="btn btn-primary btn-block" onClick={this.onProjectSelect}>项目部管理</button>
@@ -84,7 +90,7 @@ class CurrentStore extends React.Component {
             onChange={e => this.onOtherChange(e.value)}
             clearable={false}
             filterOption={filterOption}
-            options={props.system.projects.filter(project => project.type === '第三方仓库').toArray().map(project =>
+            options={filteredProjects.filter(project => project.type === '第三方仓库').toArray().map(project =>
               ({ value: project._id, label: project.company + project.name, pinyin: project.pinyin }))}
           />
           <button style={{marginTop: '1em'}} className="btn btn-primary btn-block" onClick={this.onOtherSelect}>第三方管理</button>
@@ -95,7 +101,8 @@ class CurrentStore extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  system: state.system
+  system: state.system,
+  user: state.system.user,
 })
 
 export default connect(mapStateToProps)(CurrentStore)
