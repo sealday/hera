@@ -14,11 +14,13 @@ class OperatorCreate extends Component {
   }
 
   render() {
+    const { projects } = this.props;
     return (
       <div>
         <button className="btn btn-default" onClick={e => this.props.router.goBack()}>取消</button>
         <h2 className="page-header">新增操作员</h2>
         <OperatorForm
+          projects={projects}
           onSubmit={this.handleSubmit}
           btnName="创建"
         />
@@ -27,4 +29,10 @@ class OperatorCreate extends Component {
   }
 }
 
-export default connect()(OperatorCreate);
+const mapStateToProps = state => {
+  return {
+    projects: state.system.projects,
+  }
+}
+
+export default connect(mapStateToProps)(OperatorCreate);

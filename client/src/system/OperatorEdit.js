@@ -21,6 +21,7 @@ class OperatorEdit extends Component {
   render() {
     const id = this.props.params.id
     const user = this.props.users.get(id)
+    const { projects } = this.props;
     const initialValues = {
       ...user,
       password: undefined
@@ -32,6 +33,7 @@ class OperatorEdit extends Component {
         <h2 className="page-header">操作员编辑</h2>
         <OperatorForm
           initialValues={initialValues}
+          projects={projects}
           onSubmit={this.handleSubmit}
           btnName="保存"
         />
@@ -43,7 +45,8 @@ class OperatorEdit extends Component {
 
 const mapStateToProps = state => {
   return {
-    users: state.system.users
+    users: state.system.users,
+    projects: state.system.projects,
   }
 }
 

@@ -1,12 +1,13 @@
 /**
  * Created by seal on 25/01/2017.
  */
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import { reduxForm, Field } from 'redux-form'
 import { Input } from '../components'
 
 class OperatorForm extends Component {
   render() {
+    const { projects } = this.props
     return (
       <div>
         <form onSubmit={this.props.handleSubmit}>
@@ -57,6 +58,29 @@ class OperatorForm extends Component {
               </label>
             </div>
           </fieldset>
+          <fieldset>
+            <legend>项目权限</legend>
+            <table className="table table-bordered">
+              <thead>
+              <tr>
+                <th>项目</th>
+                <th>查询</th>
+                <th>增加</th>
+                <th>修改</th>
+              </tr>
+              </thead>
+              <tbody>
+              {projects.map((project) => (
+                <tr key={project._id}>
+                  <td>{project.company} - {project.name}</td>
+                  <td><Field type="checkbox" component="input" name={`roles.${project._id}.query`} /></td>
+                  <td><Field type="checkbox" component="input" name={`roles.${project._id}.insert`} /></td>
+                  <td><Field type="checkbox" component="input" name={`roles.${project._id}.update`} /></td>
+                </tr>
+              ))}
+              </tbody>
+            </table>
+          </fieldset>
           <div className="form-group">
             <button className="btn btn-primary btn-block">{this.props.btnName}</button>
           </div>
@@ -70,4 +94,4 @@ OperatorForm = reduxForm({
   form: 'operator'
 })(OperatorForm)
 
-export default OperatorForm;
+export default OperatorForm
