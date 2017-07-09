@@ -73,9 +73,9 @@ class OperatorForm extends Component {
               {projects.map((project) => (
                 <tr key={project._id}>
                   <td>{project.company} - {project.name}</td>
-                  <td><Field type="checkbox" component="input" name={`roles.${project._id}.query`} /></td>
-                  <td><Field type="checkbox" component="input" name={`roles.${project._id}.insert`} /></td>
-                  <td><Field type="checkbox" component="input" name={`roles.${project._id}.update`} /></td>
+                  <td><Field type="checkbox" component="input" name={`perm.${project._id}.query`} /></td>
+                  <td><Field type="checkbox" component="input" name={`perm.${project._id}.insert`} /></td>
+                  <td><Field type="checkbox" component="input" name={`perm.${project._id}.update`} /></td>
                 </tr>
               ))}
               </tbody>

@@ -10,9 +10,21 @@ import { updateOperator } from '../actions'
 class OperatorEdit extends Component {
 
   handleSubmit = (operator) => {
+    const perm = operator.perm || {};
+    const perms = [];
+    for (let projectId in perm) {
+      perms.push({
+        projectId,
+        query: perm[projectId].query || false,
+        update: perm[projectId].update || false,
+        insert: perm[projectId].insert || false,
+      });
+    }
     this.props.dispatch(updateOperator(
       {
         ...operator,
+        perms,
+        perm: undefined,
         _id: this.props.params.id
       }
     ))
@@ -22,6 +34,12 @@ class OperatorEdit extends Component {
     const id = this.props.params.id
     const user = this.props.users.get(id)
     const { projects } = this.props;
+    const perms = user.perms || [];
+    const perm = {};
+    perms.forEach((p) => {
+      perm[p.projectId] = p;
+    });
+    user.perm = perm;
     const initialValues = {
       ...user,
       password: undefined
