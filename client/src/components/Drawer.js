@@ -35,6 +35,7 @@ const Drawer = (props) => (
             <li><Link to="/stocktaking/in/create">盘点盈余入库</Link></li>
             <li><Link to="/stocktaking/out/create">盘点亏损出库</Link></li>
           </ul>}
+          {props.nav.store && !shouldShow(props.system) && <ul><li>您没有权限操作</li></ul>}
         </ReactCSSTransitionGroup>
       </li>
       <li>
