@@ -13,12 +13,14 @@ class OperatorEdit extends Component {
     const perm = operator.perm || {};
     const perms = [];
     for (let projectId in perm) {
-      perms.push({
-        projectId,
-        query: perm[projectId].query || false,
-        update: perm[projectId].update || false,
-        insert: perm[projectId].insert || false,
-      });
+      if (perm.hasOwnProperty(projectId)) {
+        perms.push({
+          projectId,
+          query: perm[projectId].query || false,
+          update: perm[projectId].update || false,
+          insert: perm[projectId].insert || false,
+        });
+      }
     }
     this.props.dispatch(updateOperator(
       {

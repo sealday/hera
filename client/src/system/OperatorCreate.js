@@ -10,6 +10,19 @@ import { createOperator } from '../actions'
 class OperatorCreate extends Component {
 
   handleSubmit = (data) => {
+    const perm = data.perm || {};
+    const perms = [];
+    for (let projectId in perm) {
+      if (perm.hasOwnProperty(projectId)) {
+        perms.push({
+          projectId,
+          query: perm[projectId].query || false,
+          update: perm[projectId].update || false,
+          insert: perm[projectId].insert || false,
+        });
+      }
+    }
+    data.perms = perms;
     this.props.dispatch(createOperator(data))
   }
 
