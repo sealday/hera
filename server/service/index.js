@@ -7,6 +7,7 @@ exports.num = 0
 exports.io = null
 exports.sockets = []
 exports.stock = {} // { ObjectId: { valid, inRecords, outRecords} }
+exports.socketMap = new Map;
 
 exports.root = null // 项目根路径，由 app 文件设置
 

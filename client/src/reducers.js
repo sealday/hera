@@ -30,6 +30,8 @@ export function system(state = new SystemRecord(), action) {
         .set('user', user)
     case actionTypes.ONLINE_USER_CHANGE:
       return state.set('online', action.data)
+    case actionTypes.ONLINE_USERS_CHANGE:
+      return state.set('onlineUsers', action.data)
     case actionTypes.UPDATE_ARTICLE_SIZES:
       return state.updateIn(['articles', action.data.id], article => ({ ...article, sizes: action.data.sizes }) )
     case actionTypes.NEW_NOTIFY:

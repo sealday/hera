@@ -6,6 +6,7 @@ import { Map, Record } from 'immutable'
 
 export const SystemRecord = Record({
   online: 0,
+  onlineUsers: [],
   projects: Map(),
   articles: Map(),
   users: Map(),

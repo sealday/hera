@@ -8,7 +8,7 @@ import thunkMiddleware from 'redux-thunk'
 import { reducer as formReducer } from 'redux-form'
 import { Provider } from 'react-redux'
 import * as reducers from './reducers'
-import { systemLoaded, updateOnlineUser, selectStore } from './actions'
+import { systemLoaded, updateOnlineUser, updateOnlineUsers, selectStore } from './actions'
 import { syncHistoryWithStore, routerReducer, routerMiddleware } from 'react-router-redux'
 
 import App from './App';
@@ -107,6 +107,12 @@ ajax('/api/load').then(res => {
   socket.on('server:num', num => {
     store.dispatch(updateOnlineUser(num))
   });
+
+  socket.on('server:users', (users) => {
+    store.dispatch(updateOnlineUsers(users))
+  });
+
+  socket.emit('client:user', res.data.user);
 
   const store_ = JSON.parse(localStorage.getItem('store'))
   if (store_) {

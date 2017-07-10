@@ -8,13 +8,15 @@ import { Link } from 'react-router';
 import { ajax } from '../utils';
 import { connect } from 'react-redux'
 import { selectStore } from '../actions'
+import shortid from 'shortid'
 
 class Navbar extends Component {
   constructor(props) {
     super(props);
     this.state = {
       dropdown: false,
-      collapse: false
+      collapse: false,
+      showOnlineList: false,
     };
   }
 
@@ -39,7 +41,7 @@ class Navbar extends Component {
   };
 
   render() {
-    const { store, num, user } = this.props
+    const { store, num, user, onlineUsers } = this.props
     return (
       <nav className="navbar navbar-default navbar-fixed-top navbar-inverse">
         <div className="container-fluid">
@@ -58,7 +60,25 @@ class Navbar extends Component {
               <li><a href="#" onClick={ e => { e.preventDefault(); this.props.dispatch(selectStore(false))} }>管理其他仓库</a></li>
             </ul>
             <ul className="nav navbar-nav navbar-right">
-              <li><p className="navbar-text">当前在线人数{num}</p></li>
+              <li className={cx({ dropdown: true, open: this.state.showOnlineList })}
+                  onMouseEnter={() => {
+                    this.setState({
+                      showOnlineList: true
+                    })
+                  }}
+                  onMouseLeave={() => {
+                    this.setState({
+                      showOnlineList: false
+                    })
+                  }}
+              >
+                <p className="navbar-text">当前在线人数{num}</p>
+                <ul className="dropdown-menu">
+                  {(onlineUsers.map((user) => (
+                    <li key={shortid.generate()}><a>{user.profile.name}</a></li>
+                  )))}
+                </ul>
+              </li>
               <li><a href="#" onClick={this.logout}>登出</a></li>
               <li className={cx({active: this.context.router.isActive("profile")})}><Link to="#">{user.username}</Link></li>
             </ul>
@@ -72,6 +92,7 @@ class Navbar extends Component {
 const mapStateToProps = state => {
   return {
     num: state.system.online,
+    onlineUsers: state.system.onlineUsers,
     store: state.system.store,
     user: state.system.user,
   }

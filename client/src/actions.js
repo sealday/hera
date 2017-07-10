@@ -8,6 +8,7 @@ import { reset } from 'redux-form'
 
 export const SYSTEM_LOADED = 'SYSTEM_LOADED'
 export const ONLINE_USER_CHANGE = 'ONLINE_USER_CHANGE'
+export const ONLINE_USERS_CHANGE = 'ONLINE_USERS_CHANGE'
 export const UPDATE_ARTICLE_SIZES = 'UPDATE_ARTICLE_SIZES'
 export const REMOVE_PROJECT = 'REMOVE_PROJECT'
 
@@ -69,6 +70,11 @@ export const systemLoaded = (data) => ({
 export const updateOnlineUser = (num) => ({
   type: ONLINE_USER_CHANGE,
   data: num
+})
+
+export const updateOnlineUsers = (users) => ({
+  type: ONLINE_USERS_CHANGE,
+  data: users,
 })
 
 export const TOGGLE_NAV = 'TOGGLE_NAV'

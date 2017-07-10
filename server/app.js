@@ -75,13 +75,20 @@ app.use(function(err, req, res, next) {
   })
 });
 
+// TODO 增加认证的机制
 app.onSocketConnection = io => {
   return socket => {
     service.num++;
     io.emit('server:num', service.num);
     socket.on('disconnect', function(){
+      service.socketMap.delete(socket);
       service.num--;
       io.emit('server:num', service.num);
+      io.emit('server:users', [...service.socketMap.values()]);
+    });
+    socket.on('client:user', (user) => {
+      service.socketMap.set(socket, user);
+      io.emit('server:users', [...service.socketMap.values()]);
     });
   };
 };
