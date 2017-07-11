@@ -46,16 +46,18 @@ const Drawer = (props) => (
           transitionLeaveTimeout={300}>
           {props.nav.report && <ul>
             <li><Link to="/simple_search">仓库出入库查询</Link></li>
-            <li><Link to="/simple_search_company">仓库出入库查询（公司）</Link></li>
-            <li><Link to="/search">仓库明细检索</Link></li>
-            <li><Link to="/store">仓库库存查询</Link></li>
-            <li><Link to="/purchase_table">采购入库明细表</Link></li>
-            <li><Link to="/sell_table">销售出库明细表</Link></li>
-            <li><Link to="/transfer_in_table">调拨入库明细表（收料）</Link></li>
-            <li><Link to="/transfer_out_table">调拨出库明细表（发料）</Link></li>
-            <li><Link to="/transport_table">运输单查询</Link></li>
-            <li><Link to="/stocktaking_in_table">盘点盈余入库明细表</Link></li>
-            <li><Link to="/stocktaking_out_table">盘点亏损出库明细表</Link></li>
+            {props.system.store.type === '基地仓库' && <div>
+              <li><Link to="/simple_search_company">仓库出入库查询（公司）</Link></li>
+              <li><Link to="/search">仓库明细检索</Link></li>
+              <li><Link to="/store">仓库库存查询</Link></li>
+              <li><Link to="/purchase_table">采购入库明细表</Link></li>
+              <li><Link to="/sell_table">销售出库明细表</Link></li>
+              <li><Link to="/transfer_in_table">调拨入库明细表（收料）</Link></li>
+              <li><Link to="/transfer_out_table">调拨出库明细表（发料）</Link></li>
+              <li><Link to="/transport_table">运输单查询</Link></li>
+              <li><Link to="/stocktaking_in_table">盘点盈余入库明细表</Link></li>
+              <li><Link to="/stocktaking_out_table">盘点亏损出库明细表</Link></li>
+            </div>}
           </ul>}
         </ReactCSSTransitionGroup>
       </li>
