@@ -25,7 +25,7 @@ class PurchaseOrder extends React.Component {
   }
 
   render() {
-    const { record, store, projects, articles, router } = this.props
+    const { record, store, projects, articles, router, user } = this.props
 
     let orderName = ''
     let company = ''
@@ -164,21 +164,23 @@ class PurchaseOrder extends React.Component {
       <div>
         <div className="btn-group hidden-print">
           <button className="btn btn-default" onClick={() => router.goBack()}>返回</button>
-          {record.type === '调拨' &&
-          <Link className="btn btn-primary" to={`/transfer/${direction}/${record._id}/edit`}>编辑</Link>
-          }
-          {record.type === '销售' &&
-          <Link className="btn btn-primary" to={`/purchase/out/${record._id}/edit`}>编辑</Link>
-          }
-          {record.type === '采购' &&
-          <Link className="btn btn-primary" to={`/purchase/in/${record._id}/edit`}>编辑</Link>
-          }
-          {record.type === '盘点入库' &&
-          <Link className="btn btn-primary" to={`/stocktaking/in/${record._id}/edit`}>编辑</Link>
-          }
-          {record.type === '盘点出库' &&
-          <Link className="btn btn-primary" to={`/stocktaking/out/${record._id}/edit`}>编辑</Link>
-          }
+          {user.role === '系统管理员' && <div>
+            {record.type === '调拨' &&
+            <Link className="btn btn-primary" to={`/transfer/${direction}/${record._id}/edit`}>编辑</Link>
+            }
+            {record.type === '销售' &&
+            <Link className="btn btn-primary" to={`/purchase/out/${record._id}/edit`}>编辑</Link>
+            }
+            {record.type === '采购' &&
+            <Link className="btn btn-primary" to={`/purchase/in/${record._id}/edit`}>编辑</Link>
+            }
+            {record.type === '盘点入库' &&
+            <Link className="btn btn-primary" to={`/stocktaking/in/${record._id}/edit`}>编辑</Link>
+            }
+            {record.type === '盘点出库' &&
+            <Link className="btn btn-primary" to={`/stocktaking/out/${record._id}/edit`}>编辑</Link>
+            }
+          </div>}
           <button className="btn btn-default" onClick={() => print()}>打印</button>
           <a className="btn btn-default" href="check">审核确认</a>
 
@@ -254,6 +256,7 @@ const mapStateToProps = state => ({
   projects: state.system.projects,
   articles: state.system.articles.toArray(),
   store: state.system.store,
+  user: state.system.user,
 })
 
 export default connect(mapStateToProps)(PurchaseOrder)
