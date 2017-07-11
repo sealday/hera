@@ -10,6 +10,7 @@ import { Provider } from 'react-redux'
 import * as reducers from './reducers'
 import { systemLoaded, updateOnlineUser, updateOnlineUsers, selectStore } from './actions'
 import { syncHistoryWithStore, routerReducer, routerMiddleware } from 'react-router-redux'
+import { Profile } from './components'
 
 import App from './App';
 import Home from './Home';
@@ -173,6 +174,7 @@ ajax('/api/load').then(res => {
           <Route path="accuntvoucher/input" component={AccountVoucherInput}/>
           {/*应付查询*/}
           <Route path="finance/payable" component={PayCheck}/>
+          <Route path="profile" component={Profile}/>
         </Route>
       </Router>
     </Provider>

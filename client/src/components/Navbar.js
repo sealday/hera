@@ -80,7 +80,7 @@ class Navbar extends Component {
                 </ul>
               </li>
               <li><a href="#" onClick={this.logout}>登出</a></li>
-              <li className={cx({active: this.context.router.isActive("profile")})}><Link to="#">{user.username}</Link></li>
+              <li className={cx({active: this.context.router.isActive("profile")})}><Link to="profile">{user.username}</Link></li>
             </ul>
           </div>
         </div>
