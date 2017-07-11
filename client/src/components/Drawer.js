@@ -102,7 +102,7 @@ const Drawer = (props) => (
           </ul>}
         </ReactCSSTransitionGroup>
       </li>
-      <li>
+      {false && <li>
         <a href="#" onClick={e => { e.preventDefault(); props.dispatch(toggleMenu('finance'))}}>财务</a>
         <ReactCSSTransitionGroup
           transitionName="nav"
@@ -114,7 +114,7 @@ const Drawer = (props) => (
             <li><Link to="/finance/payable">应付账款</Link></li>
           </ul>}
         </ReactCSSTransitionGroup>
-      </li>
+      </li>}
     </ul>
   </div>
 )
