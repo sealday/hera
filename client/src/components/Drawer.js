@@ -21,13 +21,13 @@ const Drawer = (props) => (
   <div className={cx({'App-drawer': true, 'show': props.nav.drawer, 'hidden-print': true})}>
     {/* TODO 这里可以考虑改成数组的形式*/}
     <ul>
-      <li>
+      {shouldShow(props.system) && <li>
         <a href="#" onClick={e => { e.preventDefault(); props.dispatch(toggleMenu('store')) }}>仓库操作</a>
         <ReactCSSTransitionGroup
           transitionName="nav"
           transitionEnterTimeout={500}
           transitionLeaveTimeout={300}>
-          {props.nav.store && shouldShow(props.system) && <ul>
+          {props.nav.store && <ul>
             <li><Link to="/purchase/in/create">采购入库</Link></li>
             <li><Link to="/purchase/out/create">销售出库</Link></li>
             <li><Link to="/transfer/out/create">调拨出库（发料）</Link></li>
@@ -35,9 +35,8 @@ const Drawer = (props) => (
             <li><Link to="/stocktaking/in/create">盘点盈余入库</Link></li>
             <li><Link to="/stocktaking/out/create">盘点亏损出库</Link></li>
           </ul>}
-          {props.nav.store && !shouldShow(props.system) && <ul><li>您没有权限操作</li></ul>}
         </ReactCSSTransitionGroup>
-      </li>
+      </li>}
       <li>
         <a href="#" onClick={e => { e.preventDefault(); props.dispatch(toggleMenu('report'))}}>仓库查询</a>
         <ReactCSSTransitionGroup
@@ -72,7 +71,7 @@ const Drawer = (props) => (
           </ul>}
         </ReactCSSTransitionGroup>
       </li>
-      <li>
+      {props.system.user.role === '系统管理员' && <li>
         <a href="#" onClick={e => { e.preventDefault(); props.dispatch(toggleMenu('system'))}}>系统</a>
         <ReactCSSTransitionGroup
           transitionName="nav"
@@ -84,8 +83,8 @@ const Drawer = (props) => (
             <li><Link to="/operator">操作员列表</Link></li>
           </ul>}
         </ReactCSSTransitionGroup>
-      </li>
-      <li>
+      </li>}
+      {props.system.user.role === '系统管理员' && <li>
         <a href="#" onClick={e => { e.preventDefault(); props.dispatch(toggleMenu('project'))}}>项目信息</a>
         <ReactCSSTransitionGroup
           transitionName="nav"
@@ -101,7 +100,7 @@ const Drawer = (props) => (
             <li><Link to="/signin/check">签到查询</Link></li>
           </ul>}
         </ReactCSSTransitionGroup>
-      </li>
+      </li>}
       {false && <li>
         <a href="#" onClick={e => { e.preventDefault(); props.dispatch(toggleMenu('finance'))}}>财务</a>
         <ReactCSSTransitionGroup
