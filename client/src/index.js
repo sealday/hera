@@ -114,9 +114,11 @@ ajax('/api/load').then(res => {
 
   socket.emit('client:user', res.data.user);
 
-  const store_ = JSON.parse(localStorage.getItem('store'))
-  if (store_) {
+  try {
+    const store_ = JSON.parse(localStorage.getItem('store'))
     store.dispatch(selectStore(store_))
+  } catch (e) {
+    console.warn(e);
   }
 
   ReactDOM.render((
