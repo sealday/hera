@@ -6,6 +6,7 @@ import React, { Component } from 'react';
 import OperatorForm from './OperatorForm'
 import { connect } from 'react-redux'
 import { createOperator } from '../actions'
+import { getFormValues } from 'redux-form'
 
 class OperatorCreate extends Component {
 
@@ -27,7 +28,7 @@ class OperatorCreate extends Component {
   }
 
   render() {
-    const { projects } = this.props;
+    const { projects, operator } = this.props;
     return (
       <div>
         <button className="btn btn-default" onClick={e => this.props.router.goBack()}>取消</button>
@@ -36,6 +37,7 @@ class OperatorCreate extends Component {
           projects={projects}
           onSubmit={this.handleSubmit}
           btnName="创建"
+          operator={operator}
         />
       </div>
     )
@@ -45,6 +47,7 @@ class OperatorCreate extends Component {
 const mapStateToProps = state => {
   return {
     projects: state.system.projects,
+    operator: getFormValues('operator')(state),
   }
 }
 

@@ -8,7 +8,7 @@ import { Link } from 'react-router';
 import cx from 'classnames';
 
 const shouldShow = ({user, store}) => {
-  if (user.role === '项目部管理员') {
+  if (user.role === '项目部管理员' || user.role === '基地仓库管理员') {
     const perms = user.perms || [];
     const projects = perms.filter((p) => p.insert).map((p) => p.projectId);
     return projects.indexOf(store._id) !== -1;

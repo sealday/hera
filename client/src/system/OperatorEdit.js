@@ -5,6 +5,7 @@
 import React, { Component } from 'react';
 import OperatorForm from './OperatorForm'
 import { connect } from 'react-redux'
+import { getFormValues } from 'redux-form'
 import { updateOperator } from '../actions'
 
 class OperatorEdit extends Component {
@@ -35,7 +36,8 @@ class OperatorEdit extends Component {
   render() {
     const id = this.props.params.id
     const user = this.props.users.get(id)
-    const { projects } = this.props;
+    const { projects, operator } = this.props;
+    console.log(operator)
     const perms = user.perms || [];
     const perm = {};
     perms.forEach((p) => {
@@ -56,6 +58,7 @@ class OperatorEdit extends Component {
           projects={projects}
           onSubmit={this.handleSubmit}
           btnName="保存"
+          operator={operator}
         />
       </div>
     )
@@ -67,6 +70,7 @@ const mapStateToProps = state => {
   return {
     users: state.system.users,
     projects: state.system.projects,
+    operator: getFormValues('operator')(state)
   }
 }
 

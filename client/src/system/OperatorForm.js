@@ -2,12 +2,15 @@
  * Created by seal on 25/01/2017.
  */
 import React, { Component } from 'react'
-import { reduxForm, Field } from 'redux-form'
+import {
+  reduxForm,
+  Field,
+} from 'redux-form'
 import { Input } from '../components'
 
 class OperatorForm extends Component {
   render() {
-    const { projects } = this.props
+    const { projects, operator } = this.props
     return (
       <div>
         <form onSubmit={this.props.handleSubmit}>
@@ -58,9 +61,9 @@ class OperatorForm extends Component {
               </label>
             </div>
           </fieldset>
+          {operator && (operator.role === '基地仓库管理员' || operator.role === '项目部管理员') &&
           <fieldset>
             <legend>项目权限</legend>
-            <p>权限暂时只对项目管理员有效果</p>
             <p>修改权限暂时无效</p>
             <table className="table table-bordered">
               <thead>
@@ -83,6 +86,7 @@ class OperatorForm extends Component {
               </tbody>
             </table>
           </fieldset>
+          }
           <div className="form-group">
             <button className="btn btn-primary btn-block">{this.props.btnName}</button>
           </div>
