@@ -113,7 +113,9 @@ ajax('/api/load').then(res => {
     store.dispatch(updateOnlineUsers(users))
   });
 
-  socket.emit('client:user', res.data.user);
+  socket.on('connect', () => {
+    socket.emit('client:user', res.data.user)
+  })
 
   try {
     const store_ = JSON.parse(localStorage.getItem('store'))
