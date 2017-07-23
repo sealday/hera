@@ -146,7 +146,7 @@ class TransferOrder extends React.Component {
       <div>
         <div className="btn-group hidden-print">
           <button className="btn btn-default" onClick={() => router.goBack()}>返回</button>
-          {user.role === '系统管理员' && <div>
+          {user.role === '系统管理员' && <span>
             {record.type === '调拨' &&
             <Link className="btn btn-primary" to={`/transfer/${direction}/${record._id}/edit`}>编辑</Link>
             }
@@ -156,7 +156,7 @@ class TransferOrder extends React.Component {
             {record.type === '采购' &&
             <Link className="btn btn-primary" to={`/purchase/in/${record._id}/edit`}>编辑</Link>
             }
-          </div>}
+          </span>}
           <button className="btn btn-default" onClick={this.handleTransport}>运输单</button>
           <button className="btn btn-default" onClick={() => print()}>打印</button>
           <a className="btn btn-default" href="check">审核确认</a>
