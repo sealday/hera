@@ -827,5 +827,19 @@
         "sizeUnit": "",
         "countUnit": "个",
         "unit": "个"
+    },
+    {
+        "type": "损耗类",
+        "name": "气体",
+        "sizes": [
+            "氩气",
+            "氮气",
+            "氧气",
+            "乙炔",
+            "二氧化碳"
+        ],
+        "sizeUnit": "",
+        "countUnit": "瓶",
+        "unit": "瓶"
     }
 ]
