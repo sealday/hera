@@ -46,7 +46,6 @@ const Drawer = (props) => (
           {props.nav.report && <ul>
             <li><Link to="/simple_search">仓库出入库查询</Link></li>
             {props.system.store.type === '基地仓库' && <div>
-              <li><Link to="/simple_search_company">仓库出入库查询（公司）</Link></li>
               <li><Link to="/search">仓库明细检索</Link></li>
             </div>}
               <li><Link to="/store">仓库库存查询</Link></li>
@@ -113,6 +112,18 @@ const Drawer = (props) => (
             <li><Link to="">运费结算查询</Link></li>
             <li><Link to="/accuntvoucher/input">记账凭证输入</Link></li>
             <li><Link to="/finance/payable">应付账款</Link></li>
+          </ul>}
+        </ReactCSSTransitionGroup>
+      </li>}
+      {(props.system.user.role === '系统管理员' || props.system.user.role === '财务管理员') && <li>
+        <a href="#" onClick={e => { e.preventDefault(); props.dispatch(toggleMenu('company'))}}>公司</a>
+        <ReactCSSTransitionGroup
+          transitionName="nav"
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={300}>
+          {props.nav.company && <ul>
+            <li><Link to="/simple_search_company">仓库出入库查询</Link></li>
+            <li><Link to="/transport_table_company">运输单查询</Link></li>
           </ul>}
         </ReactCSSTransitionGroup>
       </li>}

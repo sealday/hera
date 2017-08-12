@@ -55,12 +55,13 @@ import {
   Store,
   Search,
   SimpleSearch,
-  SimpleSearchCompany,
   TransportSearch,
 
   StocktakingOutTable,
   StocktakingInTable,
 } from './report'
+
+import * as company from './company'
 
 import {
   WorkerCheckin,
@@ -147,7 +148,7 @@ ajax('/api/load').then(res => {
 
           <Route path="search" component={Search}/>
           <Route path="simple_search" component={SimpleSearch}/>
-          <Route path="simple_search_company" component={SimpleSearchCompany}/>
+          <Route path="simple_search_company" component={company.SimpleSearch}/>
           <Route path="article" component={Article}/>
 
           {/* direction 表示调拨的方向 取值为 in 和 out  */}
@@ -169,6 +170,7 @@ ajax('/api/load').then(res => {
           <Route path="sell_table" component={SellTable} />
           <Route path="store" component={Store} />
           <Route path="transport_table" component={TransportSearch}/>
+          <Route path="transport_table_company" component={company.TransportSearch}/>
           <Route path="stocktaking_out_table" component={StocktakingOutTable}/>
           <Route path="stocktaking_in_table" component={StocktakingInTable}/>
 
