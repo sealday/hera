@@ -26,10 +26,10 @@ class SimpleSearchTable extends React.Component {
       search.forEach((entry, index) => {
         entry.transport.fee = entry.transport.price * entry.transport.weight
         const payee = entry.transport.payee || '其他'
-        if (result[payee]) {
-          result[payee] += entry.transport.fee
+        if (payee in result) {
+          result[payee] += entry.transport.fee || 0
         } else {
-          result[payee] = entry.transport.fee
+          result[payee] = entry.transport.fee || 0
           resultRows.push({
             payee,
           })
@@ -51,6 +51,7 @@ class SimpleSearchTable extends React.Component {
             <th>原始单号</th>
             <th>出库</th>
             <th>入库 </th>
+            <th>收款人</th>
             <th>运费</th>
             <th/>
           </tr>
@@ -64,6 +65,7 @@ class SimpleSearchTable extends React.Component {
               <td>{entry.originalOrder}</td>
               <td>{getProjectName(entry.outStock) || entry.vendor}</td>
               <td>{getProjectName(entry.inStock) || entry.vendor}</td>
+              <td>{entry.transport.payee}</td>
               <td>{fixed_(entry.transport.fee)}</td>
               <td>
                 <Link to={`/transport/${entry._id}`}>查看运输单</Link>

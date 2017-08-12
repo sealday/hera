@@ -229,6 +229,11 @@ exports.simpleSearch = (req, res, next) => {
       match['carNumber'] = condition.carNumber
     }
 
+    // 查询收款人
+    if (condition.payee) {
+      match['transport.payee'] = condition.payee
+    }
+
     // 查询原始单号
     if (condition.originalOrder) {
       match['originalOrder'] = condition.originalOrder
