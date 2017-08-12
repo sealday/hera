@@ -121,6 +121,7 @@ class TransportOrderEdit extends Component {
   }
 
   handleSubmit = data => {
+    data.payee = (data.payee || '').trim()
     ajax(`/api/record/${this.props.params.id}/transport`, {
       data: JSON.stringify(data),
       method: 'POST',
