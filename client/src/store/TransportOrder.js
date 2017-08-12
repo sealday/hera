@@ -72,9 +72,9 @@ class TransportOrder extends Component {
     return (
       <div>
         <button className="btn btn-default hidden-print" onClick={this.handleBack}>返回</button>
-        {user.role === '系统管理员' && <div>
+        {user.role === '系统管理员' && <span>
           <button className="btn btn-primary hidden-print" onClick={this.handleEdit}>编辑</button>
-        </div>}
+        </span>}
         <button className="btn btn-default hidden-print" onClick={e => print()}>打印</button>
         <h2 className="text-center">货运运输协议</h2>
         <table className="table table-bordered table--tight table__transport">
