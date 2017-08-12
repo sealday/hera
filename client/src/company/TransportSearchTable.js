@@ -5,9 +5,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
-import { total_, toFixedWithoutTrailingZero } from '../utils'
+import { toFixedWithoutTrailingZero as fixed_  } from './../utils'
 import { Link } from 'react-router'
-import { Map } from 'immutable'
 
 /**
  * 提供排序功能的搜索结果表
@@ -21,53 +20,22 @@ class SimpleSearchTable extends React.Component {
       return project ? project.company + project.name : '';
     }
 
-    // FIXME 只考虑了 销售、调拨、采购 三种情况
-    const getDirection = entry => entry.type === '调拨'
-      ? entry.inStock === this.props.store._id ? '入库' : '出库'
-      : entry.type === '销售' ? '出库' : '入库'
-
-    const getTotal = (entries) => {
-
-      let names = new Map()
-      entries.forEach(entry => {
-        names = names.update(entry.name, 0, total => total + total_(entry))
-      })
-
-      return names
-    }
-
-    let inStore = new Map() // 入库
-    let outStore = new Map() // 出库
-    let store = new Map()
-
+    const result = {};
+    const resultRows = [];
     if (search) {
-      search.forEach(entry => {
-        let totals = []
-        getTotal(entry.entries).forEach((v, k) => {
-          totals.push(k + '：' + toFixedWithoutTrailingZero(v)) //拼凑显示的字符串
-
-          if (getDirection(entry) === '入库') {
-            inStore = inStore.update(k, 0, total => total + v)
-            store = store.update(k, 0, total => total + v)
-          } else {
-            outStore = outStore.update(k, 0, total => total + v)
-            store = store.update(k, 0, total => total - v)
-          }
-        })
-
-        entry.totalString = totals.join(' ')
+      search.forEach((entry, index) => {
+        entry.transport.fee = entry.transport.price * entry.transport.weight
+        const payee = entry.transport.payee || '其他'
+        if (result[payee]) {
+          result[payee] += entry.transport.fee
+        } else {
+          result[payee] = entry.transport.fee
+          resultRows.push({
+            payee,
+          })
+        }
       })
     }
-
-    let storeRows = []
-    store.forEach((v, k) => {
-      storeRows.push(<tr key={v}>
-        <td>{k}</td>
-        <td>{toFixedWithoutTrailingZero(outStore.get(k, 0))}</td>
-        <td>{toFixedWithoutTrailingZero(inStore.get(k, 0))}</td>
-        <td>{toFixedWithoutTrailingZero(v)}</td>
-      </tr>)
-    })
 
     return (
       <div className="panel panel-default">
@@ -81,9 +49,9 @@ class SimpleSearchTable extends React.Component {
             <th>车号</th>
             <th>单号</th>
             <th>原始单号</th>
-            <th>项目部</th>
-            <th>出入库 </th>
-            <th>订单内容</th>
+            <th>出库</th>
+            <th>入库 </th>
+            <th>运费</th>
             <th/>
           </tr>
           </thead>
@@ -94,10 +62,9 @@ class SimpleSearchTable extends React.Component {
               <td>{entry.carNumber}</td>
               <td>{entry.number}</td>
               <td>{entry.originalOrder}</td>
-              <td>{getDirection(entry) === '出库' ? getProjectName(entry.inStock) : getProjectName(entry.outStock) || entry.vendor}</td>
-              {/* 当没有公司情况的时候，会有对方单位，当两个都没有的时候，属于上年结转的单据 */}
-              <td>{getDirection(entry)}</td>
-              <td>{entry.totalString}</td>
+              <td>{getProjectName(entry.outStock) || entry.vendor}</td>
+              <td>{getProjectName(entry.inStock) || entry.vendor}</td>
+              <td>{fixed_(entry.transport.fee)}</td>
               <td>
                 <Link to={`/transport/${entry._id}`}>查看运输单</Link>
               </td>
@@ -105,6 +72,25 @@ class SimpleSearchTable extends React.Component {
           ))}
           </tbody>
         </table>
+        {resultRows.length > 0 && <div className="panel-heading">
+          <h3 className="panel-title">查询结果统计</h3>
+        </div>}
+        {resultRows.length > 0 && <table className="table table-bordered">
+          <thead>
+          <tr>
+            <th>收款人</th>
+            <th>小计</th>
+          </tr>
+          </thead>
+          <tbody>
+          {resultRows.map((row, i) => (
+            <tr key={i}>
+              <td>{row.payee}</td>
+              <td>{fixed_(result[row.payee])}</td>
+            </tr>
+          ))}
+          </tbody>
+        </table>}
       </div>
     )
   }
