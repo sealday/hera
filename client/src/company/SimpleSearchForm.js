@@ -130,7 +130,7 @@ class SimpleSearchForm extends React.Component {
 }
 
 SimpleSearchForm = reduxForm({
-  form: 'simpleSearchForm',
+  form: 'companySimpleSearchForm',
   initialValues: {
     startDate: moment().startOf('day'),
     endDate: moment().startOf('day')

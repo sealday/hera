@@ -28,28 +28,6 @@ class SimpleSearchForm extends React.Component {
     })))
   }
 
-  getNameOptions = () => {
-    const articles = this.props.articles
-    return [this.defaultOption].concat(articles.map(article => ({
-      value: article.name,
-      label: article.name,
-      pinyin: article.pinyin
-    })))
-  }
-
-  getSizeOptions() {
-    if (this.props.name === '' || !this.props.nameArticleMap[this.props.name]) {
-      return [this.defaultOption]
-    } else {
-      return [this.defaultOption].concat(this.props.nameArticleMap[this.props.name].sizes.map(size => (
-        {
-          value: size,
-          label: size,
-        }
-      )))
-    }
-  }
-
   render() {
     const { handleSubmit, projects, startDate, endDate, reset } = this.props
     return (
@@ -136,7 +114,7 @@ class SimpleSearchForm extends React.Component {
 }
 
 SimpleSearchForm = reduxForm({
-  form: 'simpleSearchForm',
+  form: 'companyTransportSearchForm',
   initialValues: {
     startDate: moment().startOf('day'),
     endDate: moment().startOf('day')
