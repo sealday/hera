@@ -7,7 +7,9 @@ import SearchForm from './TransportSearchForm'
 import SearchTable from './TransportSearchTable'
 import { connect } from 'react-redux'
 import { queryStore } from '../actions'
+import { saveAs } from 'file-saver'
 import moment from 'moment'
+import * as XLSX from 'xlsx'
 
 const key = '运输单查询公司'
 
@@ -27,8 +29,22 @@ class Search extends React.Component {
     return (
       <div>
         <h3 className="page-header">运输单查询</h3>
-        <SearchForm onSubmit={this.search}/>
-        <SearchTable search={records} />
+        <SearchForm
+          onSubmit={this.search}
+          onExcelExport={() => {
+            const wb = XLSX.utils.table_to_book(this.table)
+            const out = XLSX.write(wb, { bookType:'xlsx', bookSST:false, type:'binary', compression: true })
+            const s2ab = (s) => {
+              const buf = new ArrayBuffer(s.length)
+              const view = new Uint8Array(buf)
+              for (let i=0; i !== s.length; ++i) {
+                view[i] = s.charCodeAt(i) & 0xFF
+              }
+              return buf;
+            }
+            saveAs(new Blob([s2ab(out)],{type:"application/octet-stream"}), "运输单明细表.xlsx");
+          }}/>
+        <SearchTable search={records} onLoad={(table) => this.table = table} />
       </div>
     )
   }

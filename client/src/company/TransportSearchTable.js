@@ -14,7 +14,7 @@ import { newInfoNotify } from '../actions'
  */
 class SimpleSearchTable extends React.Component {
   render() {
-    const { search, projects } = this.props
+    const { search, projects, onLoad } = this.props
 
     const getProjectName = id => {
       const project = projects.get(id)
@@ -52,7 +52,7 @@ class SimpleSearchTable extends React.Component {
         <div className="panel-heading">
           <h3 className="panel-title">查询结果</h3>
         </div>
-        <table className="table table-bordered">
+        <table className="table table-bordered" ref={onLoad}>
           <thead>
           <tr>
             <th>时间</th>

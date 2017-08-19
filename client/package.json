@@ -9,6 +9,7 @@
     "animate.css": "^3.5.2",
     "bootstrap": "^3.3.7",
     "classnames": "^2.2.5",
+    "file-saver": "^1.3.3",
     "fuzzysearch": "^1.0.3",
     "immutable": "^3.8.1",
     "jquery": "^3.1.1",
@@ -29,7 +30,8 @@
     "redux-form": "^6.4.3",
     "redux-thunk": "^2.2.0",
     "shortid": "^2.2.6",
-    "socket.io-client": "^1.7.2"
+    "socket.io-client": "^1.7.2",
+    "xlsx": "^0.11.2"
   },
   "homepage": "http://sealday.github.io/system",
   "scripts": {
