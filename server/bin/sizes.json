@@ -841,5 +841,14 @@
         "sizeUnit": "",
         "countUnit": "瓶",
         "unit": "瓶"
+    },
+    {
+        "type": "损耗类",
+        "name": "柏油",
+        "sizes": [
+        ],
+        "sizeUnit": "",
+        "countUnit": "吨",
+        "unit": "吨"
     }
 ]
