@@ -24,13 +24,15 @@ class SimpleSearchTable extends React.Component {
     const result = {};
     const resultRows = [];
     const rows = search ? search.filter((entry) => entry.hasTransport) : []
+    let total = 0
     rows.forEach((entry, index) => {
       if (!entry.hasTransport) {
         // TODO 不是运费单，需要提醒用户
         return
       }
       entry.transport.fee = entry.transport.price * entry.transport.weight
-      const payee = entry.transport.payee || '其他'
+      total += entry.transport.fee || 0
+      const payee = entry.transport.payee || '未填写'
       if (payee in result) {
         result[payee] += entry.transport.fee || 0
       } else {
@@ -40,6 +42,10 @@ class SimpleSearchTable extends React.Component {
         })
       }
     })
+    resultRows.push({
+      payee: '合计',
+    })
+    result['合计'] = total
 
     return (
       <div className="panel panel-default">

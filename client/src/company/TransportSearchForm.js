@@ -8,6 +8,7 @@ import { FilterSelect, DatePicker, Input } from '../components'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import { filterOption, transformArticle } from '../utils'
+import { fetchAllPayer } from '../actions'
 
 /**
  * 搜索用的表单
@@ -28,8 +29,21 @@ class SimpleSearchForm extends React.Component {
     })))
   }
 
+  getPayerOptions = (payers) => {
+    return [this.defaultOption].concat(payers.map((payer) => ({
+      value: payer.name,
+      label: payer.name,
+      pinyin: payer.pinyin,
+    })))
+  }
+
+  componentDidMount() {
+    const { dispatch } = this.props
+    dispatch(fetchAllPayer())
+  }
+
   render() {
-    const { handleSubmit, projects, startDate, endDate, reset } = this.props
+    const { handleSubmit, projects, startDate, endDate, reset, payers, dispatch } = this.props
     return (
       <form onSubmit={handleSubmit} className="form-horizontal">
         <div className="form-group">
@@ -41,6 +55,27 @@ class SimpleSearchForm extends React.Component {
                    options={this.getStockOptions(projects)}
                    filterOption={filterOption}
             />
+          </div>
+        </div>
+        <div className="form-group">
+          <label className="control-label col-md-1">付款方</label>
+          <div className="col-md-5">
+            <Field name="payer"
+                   component={FilterSelect}
+                   placeholder="付款方"
+                   options={this.getPayerOptions(payers)}
+                   filterOption={filterOption}
+            />
+          </div>
+          <div className="col-md-6">
+            <a
+              href="#"
+              style={{paddingTop: '7px', display: 'inline-block'}}
+              onClick={(e) => {
+                e.preventDefault()
+                dispatch(fetchAllPayer())
+              }}
+            >刷新列表</a>
           </div>
         </div>
         <div className="form-group">
@@ -130,6 +165,7 @@ const mapStateToProps = state => {
     startDate: selector(state, 'startDate'),
     endDate: selector(state, 'endDate'),
     name: selector(state, 'name'),
+    payers: state.results.get('payers', []),
     articles,
     ...transformArticle(articles),
   }

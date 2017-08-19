@@ -234,6 +234,11 @@ exports.simpleSearch = (req, res, next) => {
       match['transport.payee'] = condition.payee
     }
 
+    // 查询付款方
+    if (condition.payer) {
+      match['transport.payer'] = condition.payer
+    }
+
     // 查询原始单号
     if (condition.originalOrder) {
       match['originalOrder'] = condition.originalOrder

@@ -48,6 +48,7 @@ router.get('/payable_search',payable.paycheckSearch)
 
 
 router.get('/record', record.list)
+router.get('/record/all_payer', record.findAllPayer)
 router.get('/record/:id', record.detail)
 router.post('/record/:id', record.update)
 router.post('/record/:id/transport', record.updateTransport)

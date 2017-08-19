@@ -587,4 +587,24 @@ export const payables = data => (dispatch, getState) => {
   }
 }
 
+const ALL_PAYER =  "ALL_PAYER"
 
+export const fetchAllPayer = () => (dispatch, getState) => {
+  const search = network(ALL_PAYER) // 让查询网络不会重复
+  if (search.shouldProceed(getState())) {
+    dispatch(search.begin)
+    dispatch(newInfoNotify('提示', '正在刷新付款方列表', 2000))
+    ajax('/api/record/all_payer').then(res => {
+      dispatch(search.endSuccess)
+      dispatch({ type: SAVE_RESULTS, data: {
+        key: 'payers',
+        result: res.data.payers
+      }})
+      dispatch(newSuccessNotify('提示', '刷新付款方列表成功', 1000))
+    }).catch(err => {
+      dispatch(search.endFailure)
+      dispatch(newErrorNotify('错误', '刷新付款方列表失败', 1000))
+      throw err
+    })
+  }
+}

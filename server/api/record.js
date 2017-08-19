@@ -5,6 +5,7 @@
 const Record = require('../models').Record
 const HistoryRecord = require('../models').HistoryRecord
 const service = require('../service/index')
+const pinyin = require('pinyin')
 
 
 exports.list = (req, res, next) => {
@@ -127,5 +128,24 @@ exports.updateTransport = (req, res, next) => {
   })
 }
 
+exports.findAllPayer = (req, res, next) => {
+  Record.distinct('transport.payer', { 'transport.payer': { $ne: '' } }).then((result) => {
+    const payers = result.map((payer) => ({
+      name: payer,
+      pinyin: pinyin(payer, {
+        style: pinyin.STYLE_NORMAL,
+        heteronym: true
+      }).map(array => array.join('')).join(''),
+    }))
+    res.json({
+      message: '获取所有付款人成功',
+      data: {
+        payers
+      }
+    })
+  }).catch((err) => {
+    next(err)
+  })
+}
 
 
