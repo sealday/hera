@@ -148,4 +148,21 @@ exports.findAllPayer = (req, res, next) => {
   })
 }
 
+exports.updateTransportPaidStatus = (req, res, next) => {
+  if (typeof req.body['paid'] === 'undefined') {
+    return res.status(400).send('参数不正确！')
+  }
+  const id = req.params.id
+  const paid = req.body['paid'] || false
+  Record.findOneAndUpdate({ _id: id }, { $set: { transportPaid: paid } }).then(() => {
+    res.json({
+      message: '修改运输付费状态成功',
+      data: {
+        transportPaid: paid
+      }
+    })
+  }).catch((err) => {
+    next(err)
+  })
+}
 

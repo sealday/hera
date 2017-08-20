@@ -7,14 +7,15 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 import { toFixedWithoutTrailingZero as fixed_  } from './../utils'
 import { Link } from 'react-router'
-import { newInfoNotify } from '../actions'
+import { updateTransportPaidStatus } from '../actions'
 
 /**
  * 提供排序功能的搜索结果表
  */
 class SimpleSearchTable extends React.Component {
+
   render() {
-    const { search, projects, onLoad } = this.props
+    const { search, projects, onLoad, dispatch } = this.props
 
     const getProjectName = id => {
       const project = projects.get(id)
@@ -31,6 +32,7 @@ class SimpleSearchTable extends React.Component {
         return
       }
       entry.transport.fee = entry.transport.price * entry.transport.weight
+      entry.transportPaid = entry.transportPaid || false
       total += entry.transport.fee || 0
       const payee = entry.transport.payee || '未填写'
       if (payee in result) {
@@ -55,6 +57,7 @@ class SimpleSearchTable extends React.Component {
         <table className="table table-bordered" ref={onLoad}>
           <thead>
           <tr>
+            <th>结清</th>
             <th>时间</th>
             <th>车号</th>
             <th>单号</th>
@@ -69,6 +72,11 @@ class SimpleSearchTable extends React.Component {
           <tbody>
           {rows.map((entry, index) => (
             <tr key={index}>
+              <td>
+                <input checked={entry.transportPaid}
+                       type="checkbox"
+                       onChange={(e) => { dispatch(updateTransportPaidStatus(entry._id, e.target.checked)) }}/>
+              </td>
               <td>{moment(entry.outDate).format('YYYY-MM-DD')}</td>
               <td>{entry.carNumber}</td>
               <td>{entry.number}</td>
