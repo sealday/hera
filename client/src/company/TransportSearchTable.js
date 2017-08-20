@@ -23,9 +23,11 @@ class SimpleSearchTable extends React.Component {
     }
 
     const result = {};
+    const resultUnpaid = {};
     const resultRows = [];
     const rows = search ? search.filter((entry) => entry.hasTransport) : []
     let total = 0
+    let totalUnpaid = 0
     rows.forEach((entry, index) => {
       if (!entry.hasTransport) {
         // TODO 不是运费单，需要提醒用户
@@ -39,15 +41,21 @@ class SimpleSearchTable extends React.Component {
         result[payee] += entry.transport.fee || 0
       } else {
         result[payee] = entry.transport.fee || 0
+        resultUnpaid[payee] = 0
         resultRows.push({
           payee,
         })
+      }
+      if (!entry.transportPaid) {
+        resultUnpaid[payee] += entry.transport.fee || 0
+        totalUnpaid += entry.transport.fee || 0
       }
     })
     resultRows.push({
       payee: '合计',
     })
     result['合计'] = total
+    resultUnpaid['合计'] = totalUnpaid
 
     return (
       <div className="panel panel-default">
@@ -100,6 +108,7 @@ class SimpleSearchTable extends React.Component {
           <tr>
             <th>收款人</th>
             <th>小计</th>
+            <th>未结清款</th>
           </tr>
           </thead>
           <tbody>
@@ -107,6 +116,7 @@ class SimpleSearchTable extends React.Component {
             <tr key={i}>
               <td>{row.payee}</td>
               <td>{fixed_(result[row.payee])}</td>
+              <td>{fixed_(resultUnpaid[row.payee])}</td>
             </tr>
           ))}
           </tbody>
