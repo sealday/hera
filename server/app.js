@@ -99,7 +99,6 @@ app.onSocketConnection = io => {
       io.emit('server:users', [...service.socketMap.values()])
     })
     socket.on('client:click', (click) => {
-      console.log(JSON.stringify(click, null, 4))
       const op = new Op(click)
       op.type = 'click'
       op.save().catch((err) => {

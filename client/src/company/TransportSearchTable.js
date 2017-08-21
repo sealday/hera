@@ -83,11 +83,13 @@ class SimpleSearchTable extends React.Component {
           {rows.map((entry, index) => (
             <tr key={index}>
               <td>
+                <span className="hidden">{entry.transportPaid ? '已结清' : '未结清'}</span>
                 <input checked={entry.transportPaid}
                        type="checkbox"
                        onChange={(e) => { dispatch(updateTransportPaidStatus(entry._id, e.target.checked)) }}/>
               </td>
               <td>
+                <span className="hidden">{entry.transportChecked ? '已核对' : '未核对'}</span>
                 <input checked={entry.transportChecked}
                        type="checkbox"
                        onChange={(e) => { dispatch(updateTransportCheckedStatus(entry._id, e.target.checked)) }}/>

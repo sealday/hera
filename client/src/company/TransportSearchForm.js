@@ -67,16 +67,6 @@ class SimpleSearchForm extends React.Component {
                    filterOption={filterOption}
             />
           </div>
-          <div className="col-md-6">
-            <a
-              href="#"
-              style={{paddingTop: '7px', display: 'inline-block'}}
-              onClick={(e) => {
-                e.preventDefault()
-                dispatch(fetchAllPayer())
-              }}
-            >刷新列表</a>
-          </div>
         </div>
         <div className="form-group">
           <label className="control-label col-md-1">收款人</label>
