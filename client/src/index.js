@@ -118,6 +118,8 @@ ajax('/api/load').then(res => {
     socket.emit('client:user', res.data.user)
   })
 
+  global.socket = socket
+
   try {
     const store_ = JSON.parse(localStorage.getItem('store'))
     store.dispatch(selectStore(store_))

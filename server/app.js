@@ -13,6 +13,7 @@ const MongoStore = require('connect-mongo')(session)
 // const express-validator 可以考虑使用
 const compression = require('compression')
 const service = require('./service')
+const Op = require('./models/op')
 
 const apiIndex = require('./api')
 
@@ -96,6 +97,14 @@ app.onSocketConnection = io => {
     socket.on('client:user', (user) => {
       service.socketMap.set(socket, user)
       io.emit('server:users', [...service.socketMap.values()])
+    })
+    socket.on('client:click', (click) => {
+      console.log(JSON.stringify(click, null, 4))
+      const op = new Op(click)
+      op.type = 'click'
+      op.save().catch((err) => {
+        console.error(JSON.stringify(err, null, 4))
+      })
     })
   }
 }

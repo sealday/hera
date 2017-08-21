@@ -13,7 +13,15 @@ class App extends Component {
     // TODO 考虑整理下目录，让目录由配置文件生成，而不是现在纯粹手写，纯粹手写需要在很多地方修改，容易出错，而且看起来不方便，并且重复工作太多
     const props = this.props
     return (
-      <div className="App">
+      <div className="App" onClick={(e) => {
+        console.dir(e.target)
+        global.socket.emit('client:click', {
+          base: e.target.baseURI,
+          text: e.target.textContent,
+          tag: e.target.tagName,
+          username: props.system.user.username,
+        })
+      }}>
         <Notification/>
         <Navbar/>
         {this.isStoreSelected() && (
