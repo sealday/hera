@@ -14,7 +14,6 @@ class App extends Component {
     const props = this.props
     return (
       <div className="App" onClick={(e) => {
-        console.dir(e.target)
         global.socket.emit('client:click', {
           base: e.target.baseURI,
           text: e.target.textContent,

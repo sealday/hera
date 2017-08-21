@@ -191,7 +191,7 @@ export function results(state = new Map(), action) {
   switch (action.type) {
     case actionTypes.SAVE_RESULTS:
       return state.set(action.data.key, action.data.result)
-    case actionTypes.PAYER_TRANSPORT_PAID_STATUS_CHANGED:
+    case actionTypes.PAYER_TRANSPORT_PAID_STATUS_CHANGED: {
       const records = state.get(action.data.key)
       const newRecords = []
       records.forEach((record) => {
@@ -201,6 +201,18 @@ export function results(state = new Map(), action) {
         newRecords.push(record)
       })
       return state.set(action.data.key, newRecords)
+    }
+    case actionTypes.PAYER_TRANSPORT_CHECKED_STATUS_CHANGED: {
+      const records = state.get(action.data.key)
+      const newRecords = []
+      records.forEach((record) => {
+        if (record._id === action.data.id) {
+          record.transportChecked = action.data.checked
+        }
+        newRecords.push(record)
+      })
+      return state.set(action.data.key, newRecords)
+    }
     default:
       return state
   }

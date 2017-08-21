@@ -53,6 +53,7 @@ router.get('/record/:id', record.detail)
 router.post('/record/:id', record.update)
 router.post('/record/:id/transport', record.updateTransport)
 router.post('/record/:id/transport_paid', record.updateTransportPaidStatus)
+router.post('/record/:id/transport_checked', record.updateTransportCheckedStatus)
 router.post('/record', record.create)
 
 router.get('/file', file.list);

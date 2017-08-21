@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 import { toFixedWithoutTrailingZero as fixed_  } from './../utils'
 import { Link } from 'react-router'
-import { updateTransportPaidStatus } from '../actions'
+import { updateTransportPaidStatus, updateTransportCheckedStatus } from '../actions'
 
 /**
  * 提供排序功能的搜索结果表
@@ -35,6 +35,7 @@ class SimpleSearchTable extends React.Component {
       }
       entry.transport.fee = entry.transport.price * entry.transport.weight
       entry.transportPaid = entry.transportPaid || false
+      entry.transportChecked = entry.transportChecked || false
       total += entry.transport.fee || 0
       const payee = entry.transport.payee || '未填写'
       if (payee in result) {
@@ -66,6 +67,7 @@ class SimpleSearchTable extends React.Component {
           <thead>
           <tr>
             <th>结清</th>
+            <th>核对</th>
             <th>时间</th>
             <th>车号</th>
             <th>单号</th>
@@ -84,6 +86,11 @@ class SimpleSearchTable extends React.Component {
                 <input checked={entry.transportPaid}
                        type="checkbox"
                        onChange={(e) => { dispatch(updateTransportPaidStatus(entry._id, e.target.checked)) }}/>
+              </td>
+              <td>
+                <input checked={entry.transportChecked}
+                       type="checkbox"
+                       onChange={(e) => { dispatch(updateTransportCheckedStatus(entry._id, e.target.checked)) }}/>
               </td>
               <td>{moment(entry.outDate).format('YYYY-MM-DD')}</td>
               <td>{entry.carNumber}</td>
@@ -109,6 +116,7 @@ class SimpleSearchTable extends React.Component {
             <th>收款人</th>
             <th>小计</th>
             <th>未结清款</th>
+            <th>已结清款</th>
           </tr>
           </thead>
           <tbody>
@@ -117,6 +125,7 @@ class SimpleSearchTable extends React.Component {
               <td>{row.payee}</td>
               <td>{fixed_(result[row.payee])}</td>
               <td>{fixed_(resultUnpaid[row.payee])}</td>
+              <td>{fixed_(result[row.payee] - resultUnpaid[row.payee])}</td>
             </tr>
           ))}
           </tbody>

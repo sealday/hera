@@ -166,3 +166,20 @@ exports.updateTransportPaidStatus = (req, res, next) => {
   })
 }
 
+exports.updateTransportCheckedStatus = (req, res, next) => {
+  if (typeof req.body['checked'] === 'undefined') {
+    return res.status(400).send('参数不正确！')
+  }
+  const id = req.params.id
+  const paid = req.body['checked'] || false
+  Record.findOneAndUpdate({ _id: id }, { $set: { transportChecked: paid } }).then(() => {
+    res.json({
+      message: '修改运输核对状态成功',
+      data: {
+        transportChecked: paid
+      }
+    })
+  }).catch((err) => {
+    next(err)
+  })
+}

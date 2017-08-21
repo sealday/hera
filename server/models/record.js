@@ -53,6 +53,7 @@ const recordSchema = {
 
   hasTransport: { type: Boolean, default: false }, // 是否有对应运输单
   transportPaid: { type: Boolean, default: false }, // 是否付过款
+  transportChecked: { type: Boolean, default: false }, // 是否核对过
   transport: { 'off-date': Date,
     'arrival-date': Date, // 到达日期
     weight: String, // 重量

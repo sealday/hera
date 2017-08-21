@@ -637,3 +637,31 @@ export const updateTransportPaidStatus = (id, status) => (dispatch, getState) =>
     })
   }
 }
+
+const UPDATE_TRANSPORT_CHECKED_STATUS = "UPDATE_TRANSPORT_CHECKED_STATUS"
+export const PAYER_TRANSPORT_CHECKED_STATUS_CHANGED = 'PAYER_TRANSPORT_CHECKED_STATUS_CHANGED'
+export const updateTransportCheckedStatus = (id, status) => (dispatch, getState) => {
+  const update = network(UPDATE_TRANSPORT_CHECKED_STATUS)
+  if (update.shouldProceed(getState())) {
+    dispatch(update.begin)
+    ajax(`/api/record/${ id }/transport_checked`, {
+      data: JSON.stringify({ checked: status }),
+      method: 'POST',
+      contentType: 'application/json'
+    }).then((res) => {
+      dispatch(update.endSuccess)
+      dispatch({
+        type: PAYER_TRANSPORT_CHECKED_STATUS_CHANGED,
+        data: {
+          key: '运输单查询公司',
+          id: id,
+          checked: status,
+        }
+      })
+      dispatch(newSuccessNotify('提示', '改变核对状态成功！', 1000))
+    }).catch((err) => {
+      dispatch(update.endFailure)
+      dispatch(newSuccessNotify('提示', '改变核对状态失败！', 1000))
+    })
+  }
+}
