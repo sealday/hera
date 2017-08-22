@@ -5,6 +5,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
+import cx from 'classnames'
 import { toFixedWithoutTrailingZero as fixed_  } from './../utils'
 import { Link } from 'react-router'
 import { updateTransportPaidStatus, updateTransportCheckedStatus } from '../actions'
@@ -93,16 +94,24 @@ class SimpleSearchTable extends React.Component {
           {rows.map((entry, index) => (
             <tr key={index}>
               <td>
-                <span className="hidden">{entry.transportPaid ? '已结清' : '未结清'}</span>
-                <input checked={entry.transportPaid}
+                <input className="h-checkbox"
+                       checked={entry.transportPaid}
                        type="checkbox"
+                       id={ `${ entry._id }-paid` }
                        onChange={(e) => { dispatch(updateTransportPaidStatus(entry._id, e.target.checked)) }}/>
+                <label htmlFor={ `${ entry._id }-paid` }>
+                  {entry.transportPaid ? '已结清' : '未结清'}
+                </label>
               </td>
               <td>
-                <span className="hidden">{entry.transportChecked ? '已核对' : '未核对'}</span>
-                <input checked={entry.transportChecked}
+                <input className="h-checkbox"
+                       checked={entry.transportChecked}
+                       id={ `${ entry._id }-checked` }
                        type="checkbox"
                        onChange={(e) => { dispatch(updateTransportCheckedStatus(entry._id, e.target.checked)) }}/>
+                <label htmlFor={ `${ entry._id }-checked` }>
+                  {entry.transportChecked ? '已核对' : '未核对'}
+                </label>
               </td>
               <td>{moment(entry.outDate).format('YYYY-MM-DD')}</td>
               <td>{entry.carNumber}</td>
