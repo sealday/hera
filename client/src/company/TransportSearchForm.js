@@ -133,7 +133,7 @@ class SimpleSearchForm extends React.Component {
             <button type="reset" className="btn btn-primary btn-block" onClick={e => reset()}>重置</button>
           </div>
           {this.props.onExcelExport && <div className="col-md-2">
-            <button className="btn btn-primary btn-block" onClick={e => this.props.onExcelExport() }>导出excel</button>
+            <button type="button" className="btn btn-primary btn-block" onClick={e => this.props.onExcelExport() }>导出excel</button>
           </div>}
         </div>
       </form>
