@@ -22,41 +22,51 @@ class SimpleSearchTable extends React.Component {
       return project ? project.company + project.name : '';
     }
 
-    const result = {};
-    const resultUnpaid = {};
-    const resultRows = [];
+    const payeeInfo = {};
+    const payees = [];
     const rows = search ? search.filter((entry) => entry.hasTransport) : []
-    let total = 0
-    let totalUnpaid = 0
-    rows.forEach((entry, index) => {
+    let total = {
+      fee: 0,
+      paid: 0,
+      checked: 0,
+    };
+    rows.forEach((entry) => {
       if (!entry.hasTransport) {
         // TODO 不是运费单，需要提醒用户
         return
       }
-      entry.transport.fee = entry.transport.price * entry.transport.weight
+      const fee = entry.transport.fee = entry.transport.price * entry.transport.weight || 0
       entry.transportPaid = entry.transportPaid || false
       entry.transportChecked = entry.transportChecked || false
-      total += entry.transport.fee || 0
       const payee = entry.transport.payee || '未填写'
-      if (payee in result) {
-        result[payee] += entry.transport.fee || 0
+      if (payee in payeeInfo) {
+        payeeInfo[payee].fee += fee
       } else {
-        result[payee] = entry.transport.fee || 0
-        resultUnpaid[payee] = 0
-        resultRows.push({
-          payee,
-        })
+        payeeInfo[payee] = {
+          fee: fee,
+          paid: 0,
+          checked: 0,
+        }
+        payees.push(payee)
       }
-      if (!entry.transportPaid) {
-        resultUnpaid[payee] += entry.transport.fee || 0
-        totalUnpaid += entry.transport.fee || 0
+      total.fee += fee
+      // 已支付
+      if (entry.transportPaid) {
+        payeeInfo[payee].paid += fee
+        total.paid += fee
+      }
+      // 已核对
+      if (entry.transportChecked) {
+        payeeInfo[payee].checked += fee
+        total.checked += fee
       }
     })
-    resultRows.push({
-      payee: '合计',
-    })
-    result['合计'] = total
-    resultUnpaid['合计'] = totalUnpaid
+    payees.push('合计')
+    payeeInfo['合计'] = {
+      fee: total.fee,
+      paid: total.paid,
+      checked: total.checked,
+    }
 
     return (
       <div className="panel panel-default">
@@ -109,29 +119,33 @@ class SimpleSearchTable extends React.Component {
           ))}
           </tbody>
         </table>
-        {resultRows.length > 0 && <div className="panel-heading">
+        <div className="panel-heading">
           <h3 className="panel-title">查询结果统计</h3>
-        </div>}
-        {resultRows.length > 0 && <table className="table table-bordered">
+        </div>
+        <table className="table table-bordered">
           <thead>
           <tr>
             <th>收款人</th>
             <th>小计</th>
-            <th>未结清款</th>
             <th>已结清款</th>
+            <th>未结清款</th>
+            <th>已核对款</th>
+            <th>未核对款</th>
           </tr>
           </thead>
           <tbody>
-          {resultRows.map((row, i) => (
+          {payees.map((payee, i) => (
             <tr key={i}>
-              <td>{row.payee}</td>
-              <td>{fixed_(result[row.payee])}</td>
-              <td>{fixed_(resultUnpaid[row.payee])}</td>
-              <td>{fixed_(result[row.payee] - resultUnpaid[row.payee])}</td>
+              <td>{payee}</td>
+              <td>{fixed_(payeeInfo[payee].fee)}</td>
+              <td>{fixed_(payeeInfo[payee].paid)}</td>
+              <td>{fixed_(payeeInfo[payee].fee - payeeInfo[payee].paid)}</td>
+              <td>{fixed_(payeeInfo[payee].checked)}</td>
+              <td>{fixed_(payeeInfo[payee].fee - payeeInfo[payee].checked)}</td>
             </tr>
           ))}
           </tbody>
-        </table>}
+        </table>
       </div>
     )
   }
