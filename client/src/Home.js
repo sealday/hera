@@ -8,12 +8,6 @@ class Home extends Component {
   render() {
     return (
       <div>
-        <div>
-          公告栏
-        </div>
-        <div>
-          人事变动通知
-        </div>
       </div>
     );
   }
