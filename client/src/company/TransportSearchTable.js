@@ -15,13 +15,16 @@ import { updateTransportPaidStatus, updateTransportCheckedStatus } from '../acti
  */
 class SimpleSearchTable extends React.Component {
 
+
+  getProjectName = id => {
+    const { projects } = this.props
+    const project = projects.get(id)
+    return project ? project.company + project.name : '';
+  }
+
   render() {
     const { search, projects, onLoad, dispatch } = this.props
 
-    const getProjectName = id => {
-      const project = projects.get(id)
-      return project ? project.company + project.name : '';
-    }
 
     const payeeInfo = {};
     const payees = [];
@@ -84,7 +87,7 @@ class SimpleSearchTable extends React.Component {
             <th>单号</th>
             <th>原始单号</th>
             <th>出库</th>
-            <th>入库 </th>
+            <th>入库</th>
             <th>收款人</th>
             <th>运费</th>
             <th/>
@@ -117,8 +120,8 @@ class SimpleSearchTable extends React.Component {
               <td>{entry.carNumber}</td>
               <td>{entry.number}</td>
               <td>{entry.originalOrder}</td>
-              <td>{getProjectName(entry.outStock) || entry.vendor}</td>
-              <td>{getProjectName(entry.inStock) || entry.vendor}</td>
+              <td>{this.getProjectName(entry.outStock) || entry.vendor}</td>
+              <td>{this.getProjectName(entry.inStock) || entry.vendor}</td>
               <td>{entry.transport.payee}</td>
               <td>{fixed_(entry.transport.fee)}</td>
               <td>

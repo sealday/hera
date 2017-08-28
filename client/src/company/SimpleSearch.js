@@ -24,7 +24,7 @@ class Search extends React.Component {
   render() {
     return (
       <div>
-        <h3 className="page-header">仓库出入库查询（公司）</h3>
+        <h3 className="page-header">仓库出入库查询</h3>
         <SearchForm onSubmit={this.search}/>
         <SearchTable search={this.props.records} />
       </div>

@@ -162,6 +162,7 @@ ajax('/api/load').then(res => {
           <Route path="stocktaking/:direction/:id/edit" component={StocktakingEdit}/>
 
           <Route path="record/:id" component={Record}/>
+          <Route path="company_record/:id" component={company.Record}/>
 
           <Route path="transport/:id" component={TransportOrder}/>
           <Route path="transport/:id/edit" component={TransportOrderEdit}/>

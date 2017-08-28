@@ -94,8 +94,8 @@ class SimpleSearchTable extends React.Component {
             <th>车号</th>
             <th>单号</th>
             <th>原始单号</th>
-            <th>项目部</th>
-            <th>出入库 </th>
+            <th>出库</th>
+            <th>入库</th>
             <th>订单内容</th>
             <th/>
           </tr>
@@ -107,12 +107,11 @@ class SimpleSearchTable extends React.Component {
               <td>{entry.carNumber}</td>
               <td>{entry.number}</td>
               <td>{entry.originalOrder}</td>
-              <td>{this.getOtherSize(entry)}</td>
-              {/* 当没有公司情况的时候，会有对方单位，当两个都没有的时候，属于上年结转的单据 */}
-              <td>{this.getDirection(entry)}</td>
+              <td>{this.getProjectName(entry.outStock) || entry.vendor}</td>
+              <td>{this.getProjectName(entry.inStock) || entry.vendor}</td>
               <td>{entry.totalString}</td>
               <td>
-                <Link to={`/record/${entry._id}`}>查看详情</Link>
+                <Link to={`/company_record/${entry._id}`}>查看详情</Link>
               </td>
             </tr>
           ))}
