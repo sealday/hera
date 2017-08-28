@@ -163,6 +163,7 @@ ajax('/api/load').then(res => {
 
           <Route path="record/:id" component={Record}/>
           <Route path="company_record/:id" component={company.Record}/>
+          <Route path="rent_calc" component={company.RentCalc}/>
 
           <Route path="transport/:id" component={TransportOrder}/>
           <Route path="transport/:id/edit" component={TransportOrderEdit}/>

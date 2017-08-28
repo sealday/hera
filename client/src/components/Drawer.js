@@ -122,6 +122,7 @@ const Drawer = (props) => (
           transitionEnterTimeout={500}
           transitionLeaveTimeout={300}>
           {props.nav.company && <ul>
+            <li><Link to="/rent_calc">租金计算</Link></li>
             <li><Link to="/simple_search_company">仓库出入库查询</Link></li>
             <li><Link to="/transport_table_company">运输单查询</Link></li>
           </ul>}
