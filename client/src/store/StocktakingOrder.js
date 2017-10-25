@@ -5,7 +5,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
-import { toFixedWithoutTrailingZero as fixed, total_ } from '../utils'
+import { toFixedWithoutTrailingZero as fixed, total_, isUpdatable } from '../utils'
 import { Link } from 'react-router'
 
 class PurchaseOrder extends React.Component {
@@ -164,7 +164,7 @@ class PurchaseOrder extends React.Component {
       <div>
         <div className="btn-group hidden-print">
           <button className="btn btn-default" onClick={() => router.goBack()}>返回</button>
-          {user.role === '系统管理员' && <span>
+          {isUpdatable(store, user) && <span>
             {record.type === '调拨' &&
             <Link className="btn btn-primary" to={`/transfer/${direction}/${record._id}/edit`}>编辑</Link>
             }

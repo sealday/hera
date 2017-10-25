@@ -5,7 +5,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { requestRecord } from '../actions'
-import { toFixedWithoutTrailingZero as fixed, transformArticle, total_ } from '../utils'
+import { toFixedWithoutTrailingZero as fixed, transformArticle, total_, isUpdatable } from '../utils'
 import moment from 'moment'
 
 class TransportOrder extends Component {
@@ -25,7 +25,7 @@ class TransportOrder extends Component {
   }
 
   render() {
-    const { record, nameArticleMap, user } = this.props
+    const { record, nameArticleMap, user, store } = this.props
     if (!record) {
       return <div>请求运输单！</div>
     }
@@ -72,7 +72,7 @@ class TransportOrder extends Component {
     return (
       <div>
         <button className="btn btn-default hidden-print" onClick={this.handleBack}>返回</button>
-        {user.role === '系统管理员' && <span>
+        {isUpdatable(store, user) && <span>
           <button className="btn btn-primary hidden-print" onClick={this.handleEdit}>编辑</button>
         </span>}
         <button className="btn btn-default hidden-print" onClick={e => print()}>打印</button>
@@ -186,6 +186,7 @@ const mapStateToProps = (state, props) => {
     projects: state.system.projects,
     ...transformArticle(state.system.articles.toArray()),
     user: state.system.user,
+    store: state.system.store,
   }
 }
 

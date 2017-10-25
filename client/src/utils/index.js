@@ -113,3 +113,16 @@ export const total_ = ({count, size}) => count * calculateSize(size)
 
 import * as validator from './validator'
 export { validator }
+
+export const isUpdatable = (store, user) => {
+  if (user.role === '系统管理员') {
+    return true;
+  }
+  for (let i = 0; i < user.perms.length; i++) {
+    const perm = user.perms[i]
+    if (perm.projectId === store._id) {
+      return perm.update;
+    }
+  }
+  return false;
+}
