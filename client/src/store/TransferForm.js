@@ -7,7 +7,7 @@ import React, { Component } from 'react';
 import { reduxForm, Field, FieldArray } from 'redux-form'
 import { Input, DatePicker, FilterSelect, Select, TextArea } from '../components'
 import { connect } from 'react-redux'
-import { filterOption, transformArticle, calculateSize, toFixedWithoutTrailingZero as fixed, validator } from '../utils'
+import { filterOption, transformArticle, calculateSize, toFixedWithoutTrailingZero as fixed, validator, calWeight } from '../utils'
 import moment from 'moment'
 
 const EntryTable = connect(
@@ -45,25 +45,38 @@ const EntryTable = connect(
   const getTotal = (index) => {
     try {
       const entry = fields.get(index)
-      return fixed(entry.count * calculateSize(entry.size))
+      return entry.count * calculateSize(entry.size)
     } catch (e) {
-      return '错误'
+      return 0
     }
+  }
+
+  const getWeight = (index) => {
+    try {
+      const entry = fields.get(index)
+      return calWeight(entry)
+    } catch (e) {
+      return 0
+    }
+
   }
 
   const getReport = () => {
     let totalObj = {}
+    let weightObj = {}
     for (let i = 0; i < fields.length; i++) {
       let entry = fields.get(i)
       let total = getTotal(i)
-      total = total === '错误' ? 0 : total
+      let weightTotal = getWeight(i)
 
       if (!entry.name) break // name 没填写的时候直接跳出
 
       if (totalObj[entry.name]) {
         totalObj[entry.name] += Number(total)
+        weightObj[entry.name] += weightTotal
       } else {
         totalObj[entry.name] = Number(total)
+        weightObj[entry.name] = weightTotal
       }
     }
 
@@ -73,6 +86,7 @@ const EntryTable = connect(
       total.push({
         name : i,
         total: totalObj[i],
+        weight: weightObj[i],
         unit: nameArticleMap[i].unit
       })
     }
@@ -89,6 +103,7 @@ const EntryTable = connect(
           <th>名称</th>
           <th>规格</th>
           <th>数量</th>
+          <th>重量</th>
           <th>小计</th>
           <th>备注</th>
           <th>
@@ -135,7 +150,8 @@ const EntryTable = connect(
               />
             </td>
             <td><Field name={`${entry}.count`} component={Input} validate={validator.required}/></td>
-            <td>{getTotal(index)}</td>
+            <td>{fixed(getWeight(index))}</td>
+            <td>{fixed(getTotal(index))}</td>
             <td><Field name={`${entry}.comments`} component={Input}/></td>
             <td>
               <button
@@ -155,7 +171,10 @@ const EntryTable = connect(
       </table>
       <ul className="list-group">
         {getReport().map((report, index) => (
-          <li key={index} className="list-group-item">{report.name} {report.total} {report.unit}</li>
+          <li key={index} className="list-group-item">
+            {report.name} {fixed(report.total)} {report.unit}
+            {report.weight === 0 ? ' *' : ' ' + fixed(report.weight / 1000, 3)} 吨
+          </li>
         ))}
       </ul>
     </div>
