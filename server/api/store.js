@@ -213,9 +213,6 @@ exports.simpleSearch = (req, res, next) => {
       outDate: {
         $gte: new Date(condition.startDate),
         $lt: new Date(condition.endDate)
-      },
-      'entries.count': {
-        $gte: 0
       }
     }
 
