@@ -4,6 +4,17 @@
 
 import $ from 'jquery';
 import fuzzysearch from 'fuzzysearch'
+import { products, SCALE_BASED, SIZE_BASED } from './products'
+
+const productsMap = {}
+// 预处理数据
+products.forEach(product => {
+  productsMap[JSON.stringify({
+    type: product.type,
+    name: product.name,
+    size: product.size
+  })] = product
+})
 
 /**
  * 计算规格的数值表达
@@ -21,12 +32,37 @@ export function calculateSize(sizeStr) {
 }
 
 /**
+ * 计算重量
+ * @param entry
+ */
+export function calWeight(entry) {
+  const key = JSON.stringify({
+    type: entry.type,
+    name: entry.name,
+    size: entry.size
+  })
+  if (productsMap[key]) {
+    if (productsMap[key].weight_method === SCALE_BASED) {
+      return productsMap[key].scale * entry.count * productsMap[key].weight
+    } else if (productsMap[key].weight_method === SIZE_BASED) {
+      return entry.count * productsMap[key].weight
+    } else {
+      return 0
+    }
+  } else {
+    return 0
+  }
+}
+
+/**
  * 最多保留两位，但是移除小数点后面的零
  * @param num
+ * @param last 保留几位
  * @returns {string}
  */
-export function toFixedWithoutTrailingZero(num) {
-  return Number(Number(num).toFixed(2)).toString();
+export function toFixedWithoutTrailingZero(num, last) {
+  const lead = last || 2
+  return Number(Number(num).toFixed(lead)).toString();
 }
 
 /**
