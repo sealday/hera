@@ -2,6 +2,7 @@
  * Created by seal on 29/01/2017.
  */
 const Payable = require('../models').Payable
+const Logger = require('./Logger')
 
 exports.num = 0
 exports.io = null
@@ -60,3 +61,5 @@ exports.transportUpdated = record => {
     })
   }
 }
+
+exports.logger = new Logger

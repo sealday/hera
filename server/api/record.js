@@ -4,8 +4,9 @@
 
 const Record = require('../models').Record
 const HistoryRecord = require('../models').HistoryRecord
-const service = require('../service/index')
+const service = require('../service')
 const pinyin = require('pinyin')
+const logger = service.logger
 
 
 exports.list = (req, res, next) => {
@@ -90,13 +91,16 @@ exports.update = (req, res, next) => {
   }
 
   Record.findById(req.params.id).then(record => {
+    const lhs = record.toObject();
     Object.assign(record, recordBody) // 对有提交的选项进行部分更新
     let historyRecord = new HistoryRecord(recordBody)
     historyRecord.order = record._id // 保存内部单号，对历史记录和当前记录进行关联
     historyRecord.status  = record.status // 更新最新的状态
     record.username = historyRecord.username = req.session.user.username // TODO 制单人为最新编辑的人
-    return Promise.all([record.save(), historyRecord.save()])
-  }).then(([record]) => {
+    return Promise.all([record.save(), historyRecord.save(), lhs])
+  }).then(([record, _, lhs]) => {
+    const rhs = record.toObject()
+    logger.logRecordDiff(lhs, rhs, req.session.user)
     res.json({
       message: '更新' + record.type +'成功！',
       data: {

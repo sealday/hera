@@ -356,6 +356,10 @@ decamelize@^1.0.0:
   version "1.2.0"
   resolved "http://registry.npm.taobao.org/decamelize/download/decamelize-1.2.0.tgz#f6534d15148269b20352e7bee26f501f9a191290"
 
+deep-diff@^0.3.8:
+  version "0.3.8"
+  resolved "http://registry.npm.taobao.org/deep-diff/download/deep-diff-0.3.8.tgz#c01de63efb0eec9798801d40c7e0dae25b582c84"
+
 deep-eql@^0.1.3:
   version "0.1.3"
   resolved "http://registry.npm.taobao.org/deep-eql/download/deep-eql-0.1.3.tgz#ef558acab8de25206cd713906d74e56930eb69f2"
