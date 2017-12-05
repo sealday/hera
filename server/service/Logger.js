@@ -38,6 +38,7 @@ class Logger {
     report.recordEdit = recordEdit
     report.user = user
     report.datetime = new Date
+    report.order = lhs.order 
     console.log(JSON.stringify(report, null, 4))
   }
 }
