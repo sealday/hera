@@ -1,3 +1,4 @@
+const Operation = require('../models').Operation
 const diff = require('deep-diff').diff
 
 class Logger {
@@ -37,9 +38,15 @@ class Logger {
     report.entryRemove = entryRemove
     report.recordEdit = recordEdit
     report.user = user
-    report.datetime = new Date
-    report.order = lhs.order 
-    console.log(JSON.stringify(report, null, 4))
+    report.order = lhs.order
+    const operation = new Operation({
+      level: 'DANGER',
+      timestamp: Date.now(),
+      report: report,
+    })
+    operation.save().catch((err) => {
+      console.error(err);
+    })
   }
 }
 
