@@ -13,11 +13,14 @@ const project = require('./project');
 const workercheckin = require('./worker')
 const record = require('./record')
 const payable = require('./payable')
+const operation = require('./operation')
 
 const router = express.Router();
 
 const store = require('./store')
 
+router.get('/operation/top_k', operation.topK)
+router.get('/operation/next_k', operation.nextK)
 router.use(middleware.user);
 router.post('/login', user.login);
 router.post('/logout', user.logout);
