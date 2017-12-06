@@ -22,7 +22,7 @@ const apiIndex = require('./api')
 mongoose.Promise = global.Promise
 // 连接 mongo 数据库
 mongoose
-  .connect('mongodb://localhost/hera')
+  .connect('mongodb://localhost/hera', { useMongoClient: true })
 
 mongoose.connection.on('error', () => {
   console.log('%s MongoDB connection error. Please make sure MongoDB is running.', chalk.red('✗'))
