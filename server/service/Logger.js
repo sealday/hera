@@ -1,4 +1,6 @@
+const Operation = require('../models').Operation
 const diff = require('deep-diff').diff
+const io = require('socket.io-emitter')({ host: '127.0.0.1', port: 6379 })
 
 class Logger {
   constructor () {
@@ -37,9 +39,16 @@ class Logger {
     report.entryRemove = entryRemove
     report.recordEdit = recordEdit
     report.user = user
-    report.datetime = new Date
-    report.order = lhs.order 
-    console.log(JSON.stringify(report, null, 4))
+    report.order = lhs.order
+    const operation = new Operation({
+      level: 'DANGER',
+      timestamp: Date.now(),
+      report: report,
+    })
+    io.emit('msg:danger', operation.toObject())
+    operation.save().catch((err) => {
+      console.error(err);
+    })
   }
 }
 
