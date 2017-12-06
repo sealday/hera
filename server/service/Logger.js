@@ -1,5 +1,6 @@
 const Operation = require('../models').Operation
 const diff = require('deep-diff').diff
+const io = require('socket.io-emitter')({ host: '127.0.0.1', port: 6379 })
 
 class Logger {
   constructor () {
@@ -44,6 +45,7 @@ class Logger {
       timestamp: Date.now(),
       report: report,
     })
+    io.emit('msg:danger', operation.toObject())
     operation.save().catch((err) => {
       console.error(err);
     })
