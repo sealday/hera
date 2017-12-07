@@ -7,6 +7,10 @@ class Logger {
   }
 
   logRecordDiff(lhs, rhs, user) {
+    lhs.inStock = lhs.inStock.toString()
+    lhs.outStock = lhs.outStock.toString()
+    rhs.inStock = rhs.inStock.toString()
+    rhs.outStock = rhs.outStock.toString()
     const differences = diff(lhs, rhs)
     const report = {}
     const entryEdit = []
