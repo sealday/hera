@@ -42,11 +42,12 @@ class Logger {
     report.entryAdd = entryAdd
     report.entryRemove = entryRemove
     report.recordEdit = recordEdit
-    report.user = user
     report.order = lhs.order
+    report.number = lhs.number
     const operation = new Operation({
       level: 'DANGER',
       timestamp: Date.now(),
+      user: user,
       report: report,
     })
     io.emit('msg:danger', operation.toObject())
