@@ -18,7 +18,7 @@ const ProfileForm = (props) => (
         </div>
         <div className="form-group">
           <label>密码</label>
-          <Field name="password" component={Input} type="password" />
+          <Field name="password" component={Input} type="password" autoComplete={false} />
         </div>
         <div className="form-group">
           <label>姓名</label>

@@ -134,6 +134,28 @@ exports.update = (req, res, next) => {
   })
 }
 
+exports.saveProfile = (req, res, next) => {
+  const password = req.body.password;
+  if (!password) {
+    return res.end();
+  }
+  let id = req.params.id
+  User.findById(id).then(user => {
+    delete req.body._id // 阻止客户端传来改变的 id
+    Object.assign(user, req.body)
+    return user.save()
+  }).then(user => {
+    res.json({
+      message: '更新用户成功',
+      data: {
+        user
+      }
+    })
+  }).catch(err => {
+    next(err)
+  })
+}
+
 exports.remove = (req, res, next) => {
   let id = req.params.id
   User.findByIdAndRemove(id).then(user => {

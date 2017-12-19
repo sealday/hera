@@ -30,6 +30,7 @@ router.get('/load', user.load);
 router.get('/user', user.list)
 router.post('/user', user.create)
 router.post('/user/:id', user.update)
+router.post('/user/:id/profile', user.saveProfile)
 router.post('/user/:id/delete', user.remove)
 
 router.get('/article', article.list);

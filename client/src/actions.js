@@ -609,6 +609,27 @@ export const fetchAllPayer = () => (dispatch, getState) => {
   }
 }
 
+const SAVE_PROFILE = 'SAVE_PROFILE'
+
+export const saveProfile = (user) => (dispatch, getState) => {
+  const search = network(SAVE_PROFILE)
+  if (search.shouldProceed(getState())) {
+    dispatch(search.begin)
+    dispatch(newInfoNotify('提示', '正在保存个人配置', 1000))
+    ajax(`/api/user/${ user._id }/profile`, {
+      data: JSON.stringify(user),
+      method: 'POST',
+      contentType: 'application/json'
+    }).then((res) => {
+      dispatch(search.endSuccess)
+      dispatch(newSuccessNotify('提示', '保存个人配置成功', 1000))
+    }).catch((err) => {
+      dispatch(search.endFailure)
+      dispatch(newErrorNotify('提示', '保存个人配置失败', 1000))
+    })
+  }
+}
+
 const UPDATE_TRANSPORT_PAID_STATUS = "UPDATE_TRANSPORT_PAID_STATUS"
 export const PAYER_TRANSPORT_PAID_STATUS_CHANGED = 'PAYER_TRANSPORT_PAID_STATUS_CHANGED'
 
@@ -633,7 +654,7 @@ export const updateTransportPaidStatus = (id, status) => (dispatch, getState) =>
       dispatch(newSuccessNotify('提示', '改变付款状态成功！', 1000))
     }).catch((err) => {
       dispatch(update.endFailure)
-      dispatch(newSuccessNotify('提示', '改变付款状态失败！', 1000))
+      dispatch(newErrorNotify('提示', '改变付款状态失败！', 1000))
     })
   }
 }
