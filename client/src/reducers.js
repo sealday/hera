@@ -213,6 +213,22 @@ export function results(state = new Map(), action) {
       })
       return state.set(action.data.key, newRecords)
     }
+    case actionTypes.OPERATION_TOP_K_RESULT: {
+      const newOps = action.data.operations
+      const operations = state.get(action.data.key) || newOps
+      for (let i = 0; i < newOps.length; i++) {
+        if (!operations[i] || operations[i]._id !== newOps[i]._id) {
+          operations.unshift(newOps[i])
+        } else {
+          break
+        }
+      }
+      return state.set(action.data.key, [...operations])
+    }
+    case actionTypes.OPERATION_NEXT_K_RESULT: {
+      const operations = state.get(action.data.key)
+      return state.set(action.data.key, operations.concat(action.data.operations))
+    }
     default:
       return state
   }

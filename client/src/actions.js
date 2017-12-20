@@ -682,7 +682,55 @@ export const updateTransportCheckedStatus = (id, status) => (dispatch, getState)
       dispatch(newSuccessNotify('提示', '改变核对状态成功！', 1000))
     }).catch((err) => {
       dispatch(update.endFailure)
-      dispatch(newSuccessNotify('提示', '改变核对状态失败！', 1000))
+      dispatch(newErrorNotify('提示', '改变核对状态失败！', 1000))
+    })
+  }
+}
+
+const OPERATION_FETCH = 'OPERATION_FETCH'
+export const OPERATION_TOP_K_RESULT = 'OPERATION_TOP_K_RESULT'
+
+export const queryLatestOperations = () => (dispatch, getState) => {
+  const update = network(OPERATION_FETCH)
+  if (update.shouldProceed(getState())) {
+    dispatch(update.begin)
+    ajax('/api/operation/top_k').then((res) => {
+      dispatch(update.endSuccess)
+      dispatch({
+        type: OPERATION_TOP_K_RESULT,
+        data: {
+          key: 'operations',
+          operations: res.data.operations,
+        }
+      })
+    }).catch((err) => {
+      dispatch(update.endFailure)
+      dispatch(newErrorNotify('警告', '查询最近操作记录失败！', 1000))
+    })
+  }
+}
+
+export const OPERATION_NEXT_K_RESULT = 'OPERATION_NEXT_K_RESULT'
+
+export const queryMoreOperations = (id) => (dispatch, getState) => {
+  const update = network(OPERATION_FETCH)
+  if (update.shouldProceed(getState())) {
+    dispatch(update.begin)
+    ajax(`/api/operation/next_k?id=${ id }`).then((res) => {
+      dispatch(update.endSuccess)
+      dispatch({
+        type: OPERATION_NEXT_K_RESULT,
+        data: {
+          key: 'operations',
+          operations: res.data.operations,
+        }
+      })
+      if (res.data.operations.length === 0) {
+        dispatch(newInfoNotify('提示', '没有更多的记录了！', 1000))
+      }
+    }).catch((err) => {
+      dispatch(update.endFailure)
+      dispatch(newErrorNotify('警告', '加载更多操作记录失败！', 1000))
     })
   }
 }
