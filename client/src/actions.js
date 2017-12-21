@@ -703,6 +703,7 @@ export const queryLatestOperations = () => (dispatch, getState) => {
           operations: res.data.operations,
         }
       })
+      dispatch(newSuccessNotify('提示', '查询最近操作记录成功！', 1000))
     }).catch((err) => {
       dispatch(update.endFailure)
       dispatch(newErrorNotify('警告', '查询最近操作记录失败！', 1000))

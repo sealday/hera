@@ -21,7 +21,7 @@ const Drawer = (props) => (
   <div className={cx({'App-drawer': true, 'show': props.nav.drawer, 'hidden-print': true})}>
     {/* TODO 这里可以考虑改成数组的形式*/}
     <ul>
-      <li><Link to="/">首页</Link></li>
+      {props.system.user.role === '系统管理员' && <li><Link to="/">首页</Link></li>}
       {shouldShow(props.system) && <li>
         <a href="#" onClick={e => { e.preventDefault(); props.dispatch(toggleMenu('store')) }}>仓库操作</a>
         <ReactCSSTransitionGroup

@@ -215,15 +215,7 @@ export function results(state = new Map(), action) {
     }
     case actionTypes.OPERATION_TOP_K_RESULT: {
       const newOps = action.data.operations
-      const operations = state.get(action.data.key) || newOps
-      for (let i = 0; i < newOps.length; i++) {
-        if (!operations[i] || operations[i]._id !== newOps[i]._id) {
-          operations.unshift(newOps[i])
-        } else {
-          break
-        }
-      }
-      return state.set(action.data.key, [...operations])
+      return state.set(action.data.key, newOps)
     }
     case actionTypes.OPERATION_NEXT_K_RESULT: {
       const operations = state.get(action.data.key)
