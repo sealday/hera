@@ -9,6 +9,7 @@ export const SystemRecord = Record({
   onlineUsers: [],
   projects: Map(),
   articles: Map(),
+  products: {},
   users: Map(),
   base: {},
   user: {},

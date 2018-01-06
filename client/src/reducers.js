@@ -4,6 +4,7 @@
 
 import * as actionTypes from './actions'
 import { Map, OrderedMap } from 'immutable'
+import { makeKeyFromNameSize } from'./utils'
 import {
   SystemRecord,
   StoreRecord,
@@ -21,11 +22,16 @@ export function system(state = new SystemRecord(), action) {
       const user = action.data.user
       const projects = new Map(action.data.projects.map(project => [project._id, project]))
       const users = new Map(action.data.users.map(user => [user._id, user]))
-      const articles = new OrderedMap(action.data.products.map((product) => [product.number, product]))
+      const products = {}
+      const articles = new OrderedMap(action.data.products.map((product) => {
+        products[makeKeyFromNameSize(product.name, product.size)] = product
+        return [product.number, product]
+      }))
 
       return state.set('base', base)
         .set('projects', projects)
         .set('articles', articles)
+        .set('products', products)
         .set('users', users)
         .set('user', user)
     case actionTypes.ONLINE_USER_CHANGE:

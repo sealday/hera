@@ -100,6 +100,12 @@ export function makeKeyFromNameSize(name, size) {
   return `${ name }|${ size }`
 }
 
+export const updateEntry = (record, products) => {
+  record.entries.forEach((entry) => {
+    entry.number = products[makeKeyFromNameSize(entry.name, entry.size)].number
+  })
+}
+
 /**
  * 产品类型从数组转换成 map 形式，方便查找
  * @param articles
