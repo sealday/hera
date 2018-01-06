@@ -4,32 +4,6 @@
 
 import $ from 'jquery';
 import fuzzysearch from 'fuzzysearch'
-import { products, SCALE_BASED, SIZE_BASED } from './products'
-
-const productsMap = {}
-// 预处理数据
-products.forEach(product => {
-  productsMap[JSON.stringify({
-    type: product.type,
-    name: product.name,
-    size: product.size
-  })] = product
-})
-
-/**
- * 计算规格的数值表达
- * @param sizeStr
- * @returns {number}
- */
-export function calculateSize(sizeStr) {
-  if (!sizeStr) return 1 // 未定义、空等情况返回1
-  let size = sizeStr.split(';').pop();
-  if (isNaN(size)) {
-    return 1;
-  } else {
-    return Number(size);
-  }
-}
 
 /**
  * 计算规格的数值表达
@@ -43,21 +17,12 @@ export const getScale = (product) => {
 /**
  * 计算重量
  * @param entry
+ * @param products
  */
-export function calWeight(entry) {
-  const key = JSON.stringify({
-    type: entry.type,
-    name: entry.name,
-    size: entry.size
-  })
-  if (productsMap[key]) {
-    if (productsMap[key].weight_method === SCALE_BASED) {
-      return productsMap[key].scale * entry.count * productsMap[key].weight
-    } else if (productsMap[key].weight_method === SIZE_BASED) {
-      return entry.count * productsMap[key].weight
-    } else {
-      return 0
-    }
+export function calWeight(entry, products) {
+  const product = products[makeKeyFromNameSize(entry.name, entry.size)]
+  if (product) {
+    return product.weight * entry.count
   } else {
     return 0
   }

@@ -7,14 +7,22 @@ import React, { Component } from 'react';
 import { reduxForm, Field, FieldArray } from 'redux-form'
 import { Input, DatePicker, FilterSelect, Select, TextArea } from '../components'
 import { connect } from 'react-redux'
-import { filterOption, transformArticle, calculateSize, toFixedWithoutTrailingZero as fixed, validator, calWeight } from '../utils'
+import {
+  filterOption,
+  transformArticle,
+  toFixedWithoutTrailingZero as fixed,
+  validator,
+  calWeight,
+  total_
+} from '../utils'
 import moment from 'moment'
 
 const EntryTable = connect(
   state => ({
     ...transformArticle(state.system.articles.toArray()),
+    products: state.system.products,
   })
-)(({ fields, typeNameMap, nameArticleMap }) => {
+)(({ fields, typeNameMap, nameArticleMap, products }) => {
   const add = () => {
     if (fields.length > 0) {
       let name = fields.get(fields.length - 1).name
@@ -45,7 +53,7 @@ const EntryTable = connect(
   const getTotal = (index) => {
     try {
       const entry = fields.get(index)
-      return entry.count * calculateSize(entry.size)
+      return total_(entry, products)
     } catch (e) {
       return 0
     }
@@ -54,7 +62,7 @@ const EntryTable = connect(
   const getWeight = (index) => {
     try {
       const entry = fields.get(index)
-      return calWeight(entry)
+      return calWeight(entry, products)
     } catch (e) {
       return 0
     }

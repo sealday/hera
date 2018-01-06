@@ -4,7 +4,6 @@
 import React, { Component } from 'react';
 import {
   toFixedWithoutTrailingZero,
-  calculateSize,
   makeKeyFromNameSize,
   filterOption,
   formatNumber,

@@ -1,7 +1,8 @@
 /**
  * Created by seal on 11/01/2017.
  */
-const Product = require('../models').Product;
+const Product = require('../models').Product
+const _ = require('lodash')
 
 exports.list = (req, res, next) => {
   Product.find().sort({ number: 1 }).then((products) => {
@@ -35,14 +36,18 @@ exports.delete = (req, res, next) => {
 
 exports.update = (req, res, next) => {
   const number = req.params.number
-  Product.findOneAndUpdate(number, req.body, { new: true }).then((product) => {
+  const newProduct = _.omit(req.body, ['_id'])
+  Product.findOne({ number: number }).then((product) => {
+    Object.assign(product, newProduct)
+    return product.save()
+  }).then((product) => {
     res.json({
       message: '更新成功',
       data: {
         product
       }
     })
-  }).catch(err => {
+  }).catch((err) => {
     next(err)
   })
 }
