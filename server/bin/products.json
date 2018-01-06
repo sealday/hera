@@ -5021,7 +5021,7 @@
   },
   {
     "number": 2700,
-    "type": "消耗类",
+    "type": "损耗类",
     "name": "方管钢钉",
     "countUnit": "箱",
     "weight": 0,
