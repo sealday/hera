@@ -73,7 +73,7 @@ const Drawer = (props) => (
           </ul>}
         </ReactCSSTransitionGroup>
       </li>
-      {props.system.user.role === '系统管理员' && <li>
+      {/系统管理员|基地仓库管理员/.test(props.system.user.role) && <li>
         <a href="#" onClick={e => { e.preventDefault(); props.dispatch(toggleMenu('system'))}}>系统</a>
         <ReactCSSTransitionGroup
           transitionName="nav"
@@ -81,8 +81,8 @@ const Drawer = (props) => (
           transitionLeaveTimeout={300}>
           {props.nav.system && <ul>
             <li><Link to="/product">产品信息维护</Link></li>
-            <li><Link to="/operator/create">新增操作员</Link></li>
-            <li><Link to="/operator">操作员列表</Link></li>
+            {props.system.user.role === '系统管理员' && <li><Link to="/operator/create">新增操作员</Link></li>}
+            {props.system.user.role === '系统管理员' && <li><Link to="/operator">操作员列表</Link></li>}
           </ul>}
         </ReactCSSTransitionGroup>
       </li>}
