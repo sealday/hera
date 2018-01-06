@@ -20,13 +20,13 @@ import {
 } from './finance'
 
 import {
-  Article,
   Operator,
   OperatorCreate,
   OperatorEdit,
   Project,
   ProjectCreate,
   ProjectEdit,
+  Product,
 } from './system'
 
 import {
@@ -151,7 +151,7 @@ ajax('/api/load').then(res => {
           <Route path="search" component={Search}/>
           <Route path="simple_search" component={SimpleSearch}/>
           <Route path="simple_search_company" component={company.SimpleSearch}/>
-          <Route path="article" component={Article}/>
+          <Route path="product" component={Product} />
 
           {/* direction 表示调拨的方向 取值为 in 和 out  */}
           <Route path="transfer/:direction/create" component={TransferCreate}/>
