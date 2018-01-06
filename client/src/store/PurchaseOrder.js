@@ -107,7 +107,7 @@ class PurchaseOrder extends React.Component {
       /*eslint guard-for-in: off*/
       printEntries = printEntries.concat(entries[name].map(entry => [
         entry.name,
-        entry.size ? entry.size.split(';').join(' ') + ' ' + productTypeMap[name].sizeUnit : '',
+        entry.size,
         entry.count + ' ' + productTypeMap[name].countUnit,
         fixed(total_(entry)) + productTypeMap[name].unit,
         entry.price ? '￥' + entry.price : '',

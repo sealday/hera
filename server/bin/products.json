@@ -5023,6 +5023,7 @@
     "number": 2700,
     "type": "损耗类",
     "name": "方管钢钉",
+    "size": "默认",
     "countUnit": "箱",
     "weight": 0,
     "isScaled": false
@@ -5112,6 +5113,7 @@
     "number": 3100,
     "type": "工具类",
     "name": "切割机",
+    "size": "默认",
     "countUnit": "台",
     "weight": 0,
     "isScaled": false
@@ -5120,6 +5122,7 @@
     "number": 3200,
     "type": "工具类",
     "name": "电焊机",
+    "size": "默认",
     "countUnit": "台",
     "weight": 0,
     "isScaled": false
@@ -5128,6 +5131,7 @@
     "number": 3300,
     "type": "工具类",
     "name": "扣件机",
+    "size": "默认",
     "countUnit": "台",
     "weight": 0,
     "isScaled": false
@@ -5136,6 +5140,7 @@
     "number": 3400,
     "type": "工具类",
     "name": "叉车",
+    "size": "默认",
     "countUnit": "辆",
     "weight": 0,
     "isScaled": false
@@ -5144,6 +5149,7 @@
     "number": 3500,
     "type": "工具类",
     "name": "电脑",
+    "size": "默认",
     "countUnit": "台",
     "weight": 0,
     "isScaled": false
@@ -5152,6 +5158,7 @@
     "number": 3600,
     "type": "工具类",
     "name": "打印机",
+    "size": "默认",
     "countUnit": "台",
     "weight": 0,
     "isScaled": false
@@ -5160,6 +5167,7 @@
     "number": 3700,
     "type": "工具类",
     "name": "斗车",
+    "size": "默认",
     "countUnit": "辆",
     "weight": 0,
     "isScaled": false
@@ -5168,6 +5176,7 @@
     "number": 3800,
     "type": "工具类",
     "name": "三轮电动车",
+    "size": "默认",
     "countUnit": "辆",
     "weight": 0,
     "isScaled": false
@@ -5176,6 +5185,7 @@
     "number": 3900,
     "type": "工具类",
     "name": "木工锯",
+    "size": "默认",
     "countUnit": "台",
     "weight": 0,
     "isScaled": false
@@ -5184,6 +5194,7 @@
     "number": 4000,
     "type": "工具类",
     "name": "电动扳手",
+    "size": "默认",
     "countUnit": "台",
     "weight": 0,
     "isScaled": false
@@ -5192,6 +5203,7 @@
     "number": 4100,
     "type": "工具类",
     "name": "冲击钻",
+    "size": "默认",
     "countUnit": "台",
     "weight": 0,
     "isScaled": false
@@ -5200,6 +5212,7 @@
     "number": 4200,
     "type": "工具类",
     "name": "电钻",
+    "size": "默认",
     "countUnit": "台",
     "weight": 0,
     "isScaled": false
@@ -5415,6 +5428,7 @@
     "number": 5000,
     "type": "损耗类",
     "name": "滚筒",
+    "size": "默认",
     "countUnit": "支",
     "weight": 0,
     "isScaled": false
@@ -5423,6 +5437,7 @@
     "number": 5100,
     "type": "损耗类",
     "name": "机油",
+    "size": "默认",
     "countUnit": "公斤",
     "weight": 0,
     "isScaled": false
@@ -5431,6 +5446,7 @@
     "number": 5200,
     "type": "损耗类",
     "name": "柴油",
+    "size": "默认",
     "countUnit": "公斤",
     "weight": 0,
     "isScaled": false
@@ -5439,6 +5455,7 @@
     "number": 5300,
     "type": "损耗类",
     "name": "废铁",
+    "size": "默认",
     "countUnit": "公斤",
     "weight": 0,
     "isScaled": false
@@ -5510,6 +5527,7 @@
     "number": 5500,
     "type": "损耗类",
     "name": "铁钉",
+    "size": "默认",
     "countUnit": "公斤",
     "weight": 0,
     "isScaled": false
@@ -5518,6 +5536,7 @@
     "number": 5600,
     "type": "损耗类",
     "name": "扣件螺丝",
+    "size": "默认",
     "countUnit": "套",
     "weight": 0,
     "isScaled": false
@@ -5733,6 +5752,7 @@
     "number": 6300,
     "type": "损耗类",
     "name": "电箱",
+    "size": "默认",
     "countUnit": "个",
     "weight": 0,
     "isScaled": false
@@ -5741,6 +5761,7 @@
     "number": 6400,
     "type": "损耗类",
     "name": "焊枪",
+    "size": "默认",
     "countUnit": "把",
     "weight": 0,
     "isScaled": false
@@ -5749,6 +5770,7 @@
     "number": 6500,
     "type": "损耗类",
     "name": "割机片",
+    "size": "默认",
     "countUnit": "张",
     "weight": 0,
     "isScaled": false
@@ -5757,6 +5779,7 @@
     "number": 6600,
     "type": "损耗类",
     "name": "钻头",
+    "size": "默认",
     "countUnit": "支",
     "weight": 0,
     "isScaled": false
@@ -5765,6 +5788,7 @@
     "number": 6700,
     "type": "损耗类",
     "name": "钢丝绳",
+    "size": "默认",
     "countUnit": "条",
     "weight": 0,
     "isScaled": false
@@ -5890,6 +5914,7 @@
     "number": 7300,
     "type": "损耗类",
     "name": "柏油",
+    "size": "默认",
     "countUnit": "吨",
     "weight": 0,
     "isScaled": false

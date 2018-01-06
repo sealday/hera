@@ -25,7 +25,7 @@ export default class ProductForm extends React.Component {
         </div>
         <div className="form-group">
           <label>规格</label>
-          <Field name="size" component={Input} />
+          <Field name="size" component={Input} validate={[validator.required]} />
         </div>
         <div className="form-group">
           <label>理论重量（千克）</label>

@@ -18,9 +18,10 @@ const EntryTable = connect(
   const add = () => {
     if (fields.length > 0) {
       let name = fields.get(fields.length - 1).name
-      fields.push({ type: '租赁类', name })
+      let type = fields.get(fields.length - 1).type
+      fields.push({ type, name })
     } else {
-      fields.push({ type: '租赁类' })
+      fields.push({ type: Object.keys(typeNameMap)[0] })
     }
   }
 

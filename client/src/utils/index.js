@@ -105,23 +105,30 @@ export function makeKeyFromNameSize(name, size) {
 /**
  * 产品类型从数组转换成 map 形式，方便查找
  * @param articles
- * @returns {{typeNameMap: {租赁类: Array, 消耗类: Array, 工具类: Array}, nameArticleMap: {}}}
+ * @returns
  */
 export function transformArticle(articles) {
-  let typeNameMap = {};
-  let nameArticleMap = {};
+  const typeNameMap = {}
+  const nameArticleMap = {}
+  const names = {}
   articles.forEach(article => {
     if (!typeNameMap[article.type]) {
       typeNameMap[article.type] = []
     }
-    typeNameMap[article.type].push(article.name);
-    nameArticleMap[article.name] = article;
-  });
+    if (names[article.name]) {
+      names[article.name].sizes.push(article.size)
+    } else {
+      names[article.name] = article
+      typeNameMap[article.type].push(article.name)
+      nameArticleMap[article.name] = article
+      article.sizes = [article.size]
+    }
+  })
 
   return {
     typeNameMap,
     nameArticleMap
-  };
+  }
 }
 
 export const filterOption = (option, filter) => {

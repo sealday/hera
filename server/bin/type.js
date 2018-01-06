@@ -34,6 +34,7 @@ _.forEach(products, (product, i) => {
       number: i * 100,
       type: product.type,
       name: product.name,
+      size: '默认',
       countUnit: product.countUnit,
       weight: 0,
       isScaled: false,
