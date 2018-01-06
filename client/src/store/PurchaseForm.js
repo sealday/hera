@@ -13,8 +13,9 @@ import moment from 'moment'
 const EntryTable = connect(
   state => ({
     ...transformArticle(state.system.articles.toArray()),
+    products: state.system.products,
   })
-)(({ fields, typeNameMap, nameArticleMap }) => {
+)(({ fields, typeNameMap, nameArticleMap, products }) => {
   const add = () => {
     if (fields.length > 0) {
       let name = fields.get(fields.length - 1).name
@@ -45,7 +46,7 @@ const EntryTable = connect(
   const getTotal = (index) => {
     try {
       const entry = fields.get(index)
-      const total = total_(entry)
+      const total = total_(entry, products)
       return isNaN(total) ? false : total
     } catch (e) {
       return false

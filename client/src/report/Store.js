@@ -2,7 +2,15 @@
  * Created by seal on 16/01/2017.
  */
 import React, { Component } from 'react';
-import { toFixedWithoutTrailingZero, calculateSize, makeKeyFromNameSize, filterOption, formatNumber, oldProductStructure } from '../utils'
+import {
+  toFixedWithoutTrailingZero,
+  calculateSize,
+  makeKeyFromNameSize,
+  filterOption,
+  formatNumber,
+  oldProductStructure,
+  getScale,
+} from '../utils'
 import { connect } from 'react-redux'
 import Select from 'react-select'
 import { requestStore } from '../actions'
@@ -66,14 +74,15 @@ class Store extends Component {
         if (key in inRecordMap) {
           value.in = inRecordMap[key]
           value.delta = value.in;
-          value.inTotal = toFixedWithoutTrailingZero(inRecordMap[key] * calculateSize(size))
+           // this.props.products[key].scale
+          value.inTotal = toFixedWithoutTrailingZero(inRecordMap[key] * getScale(this.props.products[key]))
           inTotal += Number(value.inTotal)
           exists = true
         }
         if (key in outRecordMap) {
           value.out = outRecordMap[key]
           value.delta -= value.out;
-          value.outTotal = toFixedWithoutTrailingZero(outRecordMap[key] * calculateSize(size))
+          value.outTotal = toFixedWithoutTrailingZero(outRecordMap[key] * getScale(this.props.products[key]))
           outTotal += Number(value.outTotal)
           exists = true
         }
@@ -99,14 +108,14 @@ class Store extends Component {
         if (key in inRecordMap) {
           value.in = inRecordMap[key]
           value.delta += value.in
-          value.inTotal = toFixedWithoutTrailingZero(inRecordMap[key] * calculateSize(size))
+          value.inTotal = toFixedWithoutTrailingZero(inRecordMap[key] * getScale(this.props.products[key]))
           inTotal += Number(value.inTotal)
           exists = true
         }
         if (key in outRecordMap) {
           value.out = outRecordMap[key]
           value.delta -= value.out
-          value.outTotal = toFixedWithoutTrailingZero(outRecordMap[key] * calculateSize(size))
+          value.outTotal = toFixedWithoutTrailingZero(outRecordMap[key] * getScale(this.props.products[key]))
           outTotal += Number(value.outTotal)
           exists = true
         }
@@ -239,6 +248,7 @@ class Store extends Component {
 const mapStateToProps = state => ({
   projects: state.system.projects.toArray(),
   articles: oldProductStructure(state.system.articles.toArray()),
+  products: state.system.products,
   stocks: state.store.stocks,
   store: state.system.store,
 })

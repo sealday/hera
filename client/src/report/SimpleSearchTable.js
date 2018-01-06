@@ -43,7 +43,7 @@ class SimpleSearchTable extends React.Component {
 
       let names = new Map()
       entries.forEach(entry => {
-        names = names.update(entry.name, 0, total => total + total_(entry))
+        names = names.update(entry.name, 0, total => total + total_(entry, this.props.products))
       })
 
       return names
@@ -147,6 +147,7 @@ class SimpleSearchTable extends React.Component {
 const mapStateToProps = state => ({
   search: state.store.simpleSearch,
   projects: state.system.projects,
+  products: state.system.products,
   articles: state.system.articles.toArray(),
   store: state.system.store,
 })

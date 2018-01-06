@@ -73,7 +73,7 @@ class TransferOrder extends React.Component {
     let entries = {}
     let total = {}
     record.entries.forEach(entry => {
-      let result = total_(entry)
+      let result = total_(entry, this.props.products)
 
       if (entry.name in entries) {
         total[entry.name] += result
@@ -239,6 +239,7 @@ class TransferOrder extends React.Component {
 const mapStateToProps = state => ({
   projects: state.system.projects,
   articles: state.system.articles.toArray(),
+  products: state.system.products,
   store: state.system.store,
   user: state.system.user,
 })

@@ -84,7 +84,7 @@ class PurchaseOrder extends React.Component {
     let sum = {} // 金额
     let amount = 0 // 总金额
     record.entries.forEach(entry => {
-      let result = total_(entry)
+      let result = total_(entry, this.props.products)
 
       if (entry.name in entries) {
         entries[entry.name].push(entry)
@@ -109,9 +109,9 @@ class PurchaseOrder extends React.Component {
         entry.name,
         entry.size,
         entry.count + ' ' + productTypeMap[name].countUnit,
-        fixed(total_(entry)) + getUnit(productTypeMap[name]),
+        fixed(total_(entry, this.props.products)) + getUnit(productTypeMap[name]),
         entry.price ? '￥' + entry.price : '',
-        entry.price ? '￥' + fixed(total_(entry) * entry.price) : '',
+        entry.price ? '￥' + fixed(total_(entry, this.props.products) * entry.price) : '',
         entry.comments,
       ]))
 
@@ -267,6 +267,7 @@ class PurchaseOrder extends React.Component {
 const mapStateToProps = state => ({
   projects: state.system.projects,
   articles: state.system.articles.toArray(),
+  products: state.system.products,
   store: state.system.store,
   user: state.system.user,
 })

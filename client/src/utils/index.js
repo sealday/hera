@@ -32,6 +32,15 @@ export function calculateSize(sizeStr) {
 }
 
 /**
+ * 计算规格的数值表达
+ * @param product
+ * @returns {number}
+ */
+export const getScale = (product) => {
+  return product.isScaled ? product.scale : 1
+}
+
+/**
  * 计算重量
  * @param entry
  */
@@ -174,12 +183,12 @@ if (Intl) {
 
 export const formatNumber = formatNumber_
 
-export const total = (count, size) => toFixedWithoutTrailingZero(count * calculateSize(size))
+export const total = (count, product) => toFixedWithoutTrailingZero(count * getScale(product))
 
 /**
  * 返回为数字的total，且传入的参数形式是对象，这个方法理应更经常使用
  */
-export const total_ = ({count, size}) => count * calculateSize(size)
+export const total_ = ({count, size, name}, products) => count * getScale(products[makeKeyFromNameSize(name, size)])
 
 import * as validator from './validator'
 export { validator }

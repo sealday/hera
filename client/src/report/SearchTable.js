@@ -5,7 +5,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
-import { total } from '../utils'
+import { total, makeKeyFromNameSize } from '../utils'
 import { Link } from 'react-router'
 
 /**
@@ -44,7 +44,7 @@ class SearchTable extends React.Component {
             <td>{entry.name}</td>
             <td>{entry.size}</td>
             <td>{entry.count}</td>
-            <td>{total(entry.count, entry.size)}</td>
+            <td>{total(entry.count, this.props.products[makeKeyFromNameSize(entry.name, entry.size)])}</td>
             <td>
               <Link to={`/record/${entry._id}`}>查看详情</Link>
             </td>
@@ -58,7 +58,8 @@ class SearchTable extends React.Component {
 
 const mapStateToProps = state => ({
   search: state.store.search,
-  projects: state.system.projects
+  projects: state.system.projects,
+  products: state.system.products,
 })
 
 export default connect(mapStateToProps)(SearchTable)

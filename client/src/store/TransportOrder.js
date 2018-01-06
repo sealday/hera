@@ -47,7 +47,7 @@ class TransportOrder extends Component {
       let result = []
       record.entries.forEach(entry => {
         const {unit, sizeUnit, countUnit} = nameArticleMap[entry.name]
-        result.push(`${entry.name}${entry.size}${sizeUnit} × ${entry.count}${countUnit} = ${fixed(total_(entry))}${unit}`)
+        result.push(`${entry.name}${entry.size}${sizeUnit} × ${entry.count}${countUnit} = ${fixed(total_(entry, this.props.products))}${unit}`)
       })
       return result
     }
@@ -184,6 +184,7 @@ const mapStateToProps = (state, props) => {
     record,
     id,
     projects: state.system.projects,
+    products: state.system.products,
     ...transformArticle(state.system.articles.toArray()),
     user: state.system.user,
     store: state.system.store,
