@@ -143,6 +143,7 @@ const EntryTable = connect(
                 name={`${entry}.size`}
                 component={FilterSelect}
                 options={getSizeOptions(fields.get(index).name)}
+                validate={validator.required}
                 placeholder="规格"
               />
             </td>

@@ -131,6 +131,15 @@ export function transformArticle(articles) {
   }
 }
 
+/**
+ * 获取产品的单位
+ * @param product
+ * @returns {string}
+ */
+export const getUnit = (product) => {
+  return product.isScaled ? product.unit : product.countUnit
+}
+
 export const filterOption = (option, filter) => {
   return fuzzysearch(filter, option.pinyin) || fuzzysearch(filter, option.label)
 }

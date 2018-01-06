@@ -5,7 +5,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
-import { toFixedWithoutTrailingZero as fixed, total_, isUpdatable } from '../utils'
+import { toFixedWithoutTrailingZero as fixed, total_, isUpdatable, getUnit } from '../utils'
 import { Link } from 'react-router'
 
 class PurchaseOrder extends React.Component {
@@ -113,7 +113,7 @@ class PurchaseOrder extends React.Component {
         entry.name,
         entry.size,
         entry.count + ' ' + productTypeMap[name].countUnit,
-        fixed(total_(entry)) + productTypeMap[name].unit,
+        fixed(total_(entry)) + getUnit(productTypeMap[name]),
         entry.price ? '￥' + entry.price : '',
         entry.price ? '￥' + fixed(total_(entry) * entry.price) : '',
         entry.comments,
@@ -126,7 +126,7 @@ class PurchaseOrder extends React.Component {
           name,
           '',
           '',
-          fixed(total[name])  + ' ' + productTypeMap[name].unit,
+          fixed(total[name])  + ' ' + getUnit(productTypeMap[name]),
           '',
           '￥' + fixed(sum[name]),
           '',

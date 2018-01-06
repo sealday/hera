@@ -5,7 +5,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
-import { toFixedWithoutTrailingZero as fixed, total_, isUpdatable } from '../utils'
+import { toFixedWithoutTrailingZero as fixed, total_, isUpdatable, getUnit } from '../utils'
 import { Link } from 'react-router'
 
 class TransferOrder extends React.Component {
@@ -102,7 +102,7 @@ class TransferOrder extends React.Component {
         [
           name,
           '小计',
-          fixed(total[name])  + ' ' + productTypeMap[name].unit,
+          fixed(total[name])  + ' ' + getUnit(productTypeMap[name]),
           '',
         ]
       )
