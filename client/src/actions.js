@@ -290,11 +290,16 @@ export const REQUEST_STORE_SUCCESS = 'REQUEST_STORE_SUCCESS'
 export const REQUEST_STORE_FAILURE = 'REQUEST_STORE_FAILURE'
 export const UPDATE_STORE = 'UPDATE_STORE'
 
-export const requestStore = (stockId) => (dispatch, getState) => {
+export const requestStore = (condition) => (dispatch, getState) => {
+  const stockId = condition.project
   if (!getState().requestStore.posting.get(stockId)) {
     dispatch({ type: REQUEST_STORE, data: stockId })
     dispatch(newInfoNotify('提示', '正在请求库存信息', 2000))
-    ajax(`/api/store/${stockId}`).then(res => {
+    ajax(`/api/store/${stockId}`, {
+      data: {
+        condition: JSON.stringify(condition)
+      }
+    }).then(res => {
       dispatch({ type: REQUEST_STORE_SUCCESS, data: stockId })
       dispatch({ type: UPDATE_STORE, data: {
         id: stockId,

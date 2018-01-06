@@ -14,10 +14,16 @@ const moment = require('moment')
  * @param projectId
  */
 
-function queryAll(projectId) {
+function queryAll(projectId, params) {
   return Record.aggregate([
     {
-      $match: {outStock: ObjectId(projectId)},
+      $match: {
+        outStock: ObjectId(projectId),
+        outDate: {
+          $gte: new Date(params.startDate),
+          $lt: new Date(params.endDate)
+        }
+      },
     },
     {
       $unwind: '$entries'
@@ -37,7 +43,13 @@ function queryAll(projectId) {
     console.log(outRecords)
     return Promise.all([Record.aggregate([
       {
-        $match: {inStock: ObjectId(projectId)},
+        $match: {
+          inStock: ObjectId(projectId),
+          outDate: {
+            $gte: new Date(params.startDate),
+            $lt: new Date(params.endDate)
+          }
+        },
       },
       {
         $unwind: '$entries'
@@ -58,33 +70,26 @@ function queryAll(projectId) {
 }
 
 exports.queryAll = (req, res, next) => {
+  let condition = req.query['condition']
+  if (!condition) {
+    return res.status(400).json({
+      message: '错误的请求格式'
+    })
+  }
   if (req.params.id) {
-
-    if (service.isValidStockCache(req.params.id)) {
-      console.log('缓存命中')
-      let inRecords = service.stock[req.params.id].inRecords
-      let outRecords = service.stock[req.params.id].outRecords
+    const params = JSON.parse(condition)
+    queryAll(req.params.id, params).then(([inRecords, outRecords]) => {
+      service.refreshStockCache(req.params.id, inRecords, outRecords)
       res.json({
         message: '查询成功',
-        data: {
+        data   : {
           inRecords,
           outRecords
         }
       })
-    } else {
-      queryAll(req.params.id).then(([inRecords, outRecords]) => {
-        service.refreshStockCache(req.params.id, inRecords, outRecords)
-        res.json({
-          message: '查询成功',
-          data   : {
-            inRecords,
-            outRecords
-          }
-        })
-      }).catch(err => {
-        next(err)
-      })
-    }
+    }).catch(err => {
+      next(err)
+    })
   } else {
     res.status(400).json({
       message: '错误的请求格式'

@@ -2,6 +2,7 @@
  * Created by seal on 16/01/2017.
  */
 import React, { Component } from 'react';
+import DatePicker from 'react-datepicker'
 import {
   toFixedWithoutTrailingZero,
   makeKeyFromNameSize,
@@ -11,6 +12,7 @@ import {
   getScale,
 } from '../utils'
 import { connect } from 'react-redux'
+import moment from 'moment'
 import Select from 'react-select'
 import { requestStore } from '../actions'
 import { Map } from 'immutable'
@@ -21,6 +23,8 @@ class Store extends Component {
     this.state = {
       records: [],
       project: props.store._id,
+      startDate: moment().startOf('year'),
+      endDate: moment().endOf('year'),
       showing: new Map()
     }
   }
@@ -32,7 +36,11 @@ class Store extends Component {
   query = (e) => {
     e.preventDefault()
     if (this.state.project) {
-      this.props.dispatch(requestStore(this.state.project))
+      this.props.dispatch(requestStore({
+        project: this.state.project,
+        startDate: this.state.startDate,
+        endDate: moment(this.state.endDate).add(1, 'day'),
+      }))
       this.setState({
         showing: new Map() // 重置状态显示
       })
@@ -202,6 +210,62 @@ class Store extends Component {
       <div>
         <h2 className="page-header">仓库实时查询</h2>
         <form className="form-horizontal" onSubmit={this.query}>
+          <div className="form-group">
+            <label className="control-label col-md-1">开始日期</label>
+            <div className="col-md-2">
+              <DatePicker
+                selected={this.state.startDate}
+                className="form-control"
+                name="startDate"
+                selectsStart
+                startDate={this.state.startDate}
+                endDate={this.state.endDate}
+                onChange={(date) => this.setState({ startDate: date })}
+              />
+            </div>
+            <label className="control-label col-md-1">结束日期</label>
+            <div className="col-md-2">
+              <DatePicker
+                onChange={(date) => this.setState({ endDate: date })}
+                selected={this.state.endDate}
+                name="endDate"
+                className="form-control"
+                selectsEnd
+                startDate={this.state.startDate}
+                endDate={this.state.endDate}
+              />
+            </div>
+            <div className="col-md-6">
+              <a href="#" onClick={e => {
+                e.preventDefault()
+                this.setState({
+                  startDate: moment().startOf('year').subtract(1, 'year'),
+                  endDate: moment().endOf('year').subtract(1, 'year'),
+                })
+              }} style={{paddingTop: '7px', display: 'inline-block'}}>上一年</a>
+              <a href="#" onClick={e => {
+                e.preventDefault()
+                this.setState({
+                  startDate: moment().startOf('year'),
+                  endDate: moment().endOf('year'),
+                })
+              }} style={{paddingTop: '7px', display: 'inline-block', marginLeft: '1em'}}>今年</a>
+              <a href="#" onClick={e => {
+                e.preventDefault()
+                this.setState({
+                  startDate:  moment().startOf('day').subtract(1, 'month'),
+                  endDate: moment().startOf('day'),
+                })
+              }} style={{paddingTop: '7px', display: 'inline-block', marginLeft: '1em'}}>最近一个月</a>
+              <a href="#" onClick={e => {
+                e.preventDefault()
+                this.setState({
+                  startDate:  moment().startOf('day').subtract(2, 'month'),
+                  endDate: moment().startOf('day'),
+                })
+              }} style={{paddingTop: '7px', display: 'inline-block', marginLeft: '1em'}}>两个月</a>
+            </div>
+          </div>
           <div className="form-group">
             <div className="col-md-10">
               <Select
