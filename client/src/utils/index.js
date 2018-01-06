@@ -129,6 +129,20 @@ export function transformArticle(articles) {
   }
 }
 
+export const oldProductStructure = (products) => {
+  const names = {}
+  const results = []
+  products.forEach((product) => {
+    if (!names[product.name]) {
+      names[product.name] = product
+      results.push(product)
+      product.sizes = []
+    }
+    names[product.name].sizes.push(product.size)
+  })
+  return results
+}
+
 /**
  * 获取产品的单位
  * @param product

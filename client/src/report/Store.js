@@ -2,7 +2,7 @@
  * Created by seal on 16/01/2017.
  */
 import React, { Component } from 'react';
-import { toFixedWithoutTrailingZero, calculateSize, makeKeyFromNameSize, filterOption, formatNumber } from '../utils'
+import { toFixedWithoutTrailingZero, calculateSize, makeKeyFromNameSize, filterOption, formatNumber, oldProductStructure } from '../utils'
 import { connect } from 'react-redux'
 import Select from 'react-select'
 import { requestStore } from '../actions'
@@ -238,7 +238,7 @@ class Store extends Component {
 
 const mapStateToProps = state => ({
   projects: state.system.projects.toArray(),
-  articles: state.system.articles.toArray(),
+  articles: oldProductStructure(state.system.articles.toArray()),
   stocks: state.store.stocks,
   store: state.system.store,
 })
