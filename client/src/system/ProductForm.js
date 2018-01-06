@@ -13,7 +13,7 @@ export default class ProductForm extends React.Component {
         </div>
         <div className="form-group">
           <label>类型</label>
-          <Field name="type" component={Input}  />
+          <Field name="type" component={Input}  validate={[validator.required]} />
         </div>
         <div className="form-group">
           <label>型号</label>

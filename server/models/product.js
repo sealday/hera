@@ -28,6 +28,6 @@ productSchema.pre('save', function(next) {
   next()
 })
 
-productSchema.index({ number: 1 })
+productSchema.index({ number: 1 }, { unique: true })
 
 module.exports = mongoose.model('Product', productSchema)

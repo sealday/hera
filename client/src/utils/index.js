@@ -91,15 +91,13 @@ export function ajax(url, settings) {
 }
 
 /**
- * 这个地方是为了处理 6.0 和 6 这样子两个没有区别的数字
- * 实际中似乎没有解决问题，但是后来没有重现问题
- * TODO 以 name + size 的形式作为键值对，有更好的方式么
+ * name|size 的形式作为键值对
  * @param name
  * @param size
  * @returns {*}
  */
 export function makeKeyFromNameSize(name, size) {
-  return isNaN(size) ? name + (size ? size : '') : name + Number(size) // 增加处理undefined的情况
+  return `${ name }|${ size }`
 }
 
 /**
