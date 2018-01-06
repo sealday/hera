@@ -12,6 +12,10 @@ export default class ProductForm extends React.Component {
           <Field disabled={this.props.action === 'edit'} name="number" component={Input} validate={[validator.required]} />
         </div>
         <div className="form-group">
+          <label>类型</label>
+          <Field name="type" component={Input}  />
+        </div>
+        <div className="form-group">
           <label>型号</label>
           <Field name="model" component={Input}  />
         </div>

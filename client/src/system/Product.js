@@ -117,6 +117,7 @@ class Product extends React.Component {
           <thead>
           <tr>
             <th>编号</th>
+            <th>类型</th>
             <th>型号</th>
             <th>名称</th>
             <th>规格</th>
@@ -132,6 +133,7 @@ class Product extends React.Component {
           {this.state.products.map((product) => (
             <tr key={shortId.generate()}>
               <td>{product.number}</td>
+              <td>{product.type}</td>
               <td>{product.model}</td>
               <td>{product.name}</td>
               <td>{product.size}</td>
