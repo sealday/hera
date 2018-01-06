@@ -4,7 +4,7 @@
 const express = require('express');
 const multer = require('multer');
 const upload = multer({ dest: 'public/uploads/'});
-const article = require('./article');
+const product = require('./product');
 const file = require('./file');
 
 const middleware = require('./middleware');
@@ -33,7 +33,11 @@ router.post('/user/:id', user.update)
 router.post('/user/:id/profile', user.saveProfile)
 router.post('/user/:id/delete', user.remove)
 
-router.get('/article', article.list);
+router.get('/product', product.list)
+router.post('/product', product.create)
+router.post('/product/:number', product.update)
+router.post('/product/:number/delete', product.delete)
+
 router.get('/project', project.list);
 router.post('/project', project.create)
 router.get('/project/:id', project.detail)

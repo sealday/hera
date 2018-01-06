@@ -21,7 +21,7 @@ export function system(state = new SystemRecord(), action) {
       const user = action.data.user
       const projects = new Map(action.data.projects.map(project => [project._id, project]))
       const users = new Map(action.data.users.map(user => [user._id, user]))
-      const articles = new OrderedMap(action.data.articles.map(article => [article._id, article]))
+      const articles = new OrderedMap(action.data.products.map((product) => [product.number, product]))
 
       return state.set('base', base)
         .set('projects', projects)

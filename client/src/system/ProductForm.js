@@ -9,7 +9,7 @@ export default class ProductForm extends React.Component {
       <form className="form-inline" onSubmit={this.props.handleSubmit}>
         <div className="form-group">
           <label>编号</label>
-          <Field name="number" component={Input} validate={[validator.required]} />
+          <Field disabled={this.props.action === 'edit'} name="number" component={Input} validate={[validator.required]} />
         </div>
         <div className="form-group">
           <label>型号</label>
@@ -44,7 +44,7 @@ export default class ProductForm extends React.Component {
           <Field name="isScaled" component={Input} type="checkbox" />
         </div>
         <div className="form-group">
-          <button type="submit" className="btn btn-primary">{this.props.action}</button>
+          <button type="submit" className="btn btn-primary">{this.props.action === 'create' ? '新增' : '保存'}</button>
         </div>
       </form>
     )

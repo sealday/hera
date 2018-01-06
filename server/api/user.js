@@ -50,7 +50,7 @@ exports.load = (req, res, next) => {
     Product.find(),
     Project.find(),
     User.find(),
-  ]).then(([articles, projects, users]) => {
+  ]).then(([products, projects, users]) => {
 
     // TODO 这里暂定为第一个找到第一个找到的为基地
     const bases = projects.filter(project => project.type === '基地仓库')
@@ -59,7 +59,7 @@ exports.load = (req, res, next) => {
     res.json({
       message: '加载成功！',
       data: {
-        articles,
+        products,
         projects,
         users,
         base,

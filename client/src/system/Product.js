@@ -3,11 +3,14 @@ import { reduxForm } from 'redux-form'
 import ProductForm from './ProductForm'
 import shortId from 'shortid'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
+import Dialog from 'material-ui/Dialog'
+import FlatButton from 'material-ui/FlatButton'
+import { ajax } from '../utils'
+import { connect } from 'react-redux'
+import { newErrorNotify } from '../actions'
 
-const ProductCreateForm = reduxForm({ form: 'PRODUCT_CREATE', action: '新增' })(ProductForm)
-const ProductEditForm = reduxForm({ form: 'PRODUCT_EDIT', action: '保存' })(ProductForm)
+const ProductCreateForm = reduxForm({ form: 'PRODUCT_CREATE', action: 'create' })(ProductForm)
+const ProductEditForm = reduxForm({ form: 'PRODUCT_EDIT', action: 'edit' })(ProductForm)
 
 class Product extends React.Component {
   constructor(props) {
@@ -26,6 +29,15 @@ class Product extends React.Component {
       deleteConfirm: false,
     }
   }
+  componentDidMount() {
+    ajax('/api/product').then((res) => {
+      this.setState({
+        products: res.data.products
+      })
+    }).catch((err) => {
+      this.props.dispatch(newErrorNotify('警告', '加载出错', 1000))
+    })
+  }
   handleOpen = () => {
     this.setState({open: true})
   }
@@ -39,22 +51,45 @@ class Product extends React.Component {
     this.setState({deleteConfirm: false})
   }
   onCreate = (product) => {
-    this.setState((prev) => ({ products: prev.products.concat(product) }))
+    ajax('/api/product', {
+      data: JSON.stringify(product),
+      method: 'POST',
+      contentType: 'application/json'
+    }).then((res) => {
+      this.setState((prev) => ({ products: prev.products.concat(product) }))
+    }).catch((err) => {
+      this.props.dispatch(newErrorNotify('警告', '创建出错', 1000))
+    })
   }
   onEdit = (product) => {
-    this.setState((prev) => {
-      const products = prev.products
-      return {
-        products: products.map((old) => old.number === product.number ? product : old),
-        open: false,
-      }
+    ajax(`/api/product/${ product.number }`, {
+      data: JSON.stringify(product),
+      method: 'POST',
+      contentType: 'application/json'
+    }).then((res) => {
+      this.setState((prev) => {
+        const products = prev.products
+        return {
+          products: products.map((old) => old.number === product.number ? product : old),
+          open: false,
+        }
+      })
+    }).catch((err) => {
+      this.props.dispatch(newErrorNotify('警告', '编辑出错', 1000))
     })
   }
   onDelete = () => {
-    this.setState((prev) => ({
-      products: prev.products.filter((old) => old.number !== prev.current.number),
-      deleteConfirm: false,
-    }))
+    ajax(`/api/product/${ this.state.current.number }/delete`, {
+      method: 'POST',
+      contentType: 'application/json'
+    }).then((res) => {
+      this.setState((prev) => ({
+        products: prev.products.filter((old) => old.number !== prev.current.number),
+        deleteConfirm: false,
+      }))
+    }).catch((err) => {
+      this.props.dispatch(newErrorNotify('警告', '删除出错', 1000))
+    })
   }
   render() {
     const actions = [
@@ -143,4 +178,4 @@ class Product extends React.Component {
   }
 }
 
-export default Product
+export default connect()(Product)

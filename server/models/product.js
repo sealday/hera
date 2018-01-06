@@ -6,14 +6,16 @@ const pinyin = require('pinyin')
 
 const Schema = mongoose.Schema;
 const productSchema = new Schema({
-  type: String,
-  name: String,
-  sizes: [String],
-  unit: String,
-  sizeUnit: String,
-  countUnit: String,
-  convert: Number, // 折合数量级
-  convertUnit: String, // 折合单位
+  type: String, // 类型
+  number: String, // 内部编号
+  model: String, // 型号
+  name: String, // 名称
+  size: String, // 规格
+  countUnit: String, // 计量单位
+  weight: Number, // 理论重量
+  unit: String, // 换算单位
+  scale: Number, // 换算比例
+  isScaled: Boolean, // 是否需要换算
 
   pinyin: String, // 产品名称的拼音
 });
@@ -25,5 +27,7 @@ productSchema.pre('save', function(next) {
   }).map(array => array.join('')).join('')
   next()
 })
+
+productSchema.index({ number: 1 })
 
 module.exports = mongoose.model('Product', productSchema)
