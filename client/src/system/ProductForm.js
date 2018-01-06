@@ -44,7 +44,7 @@ export default class ProductForm extends React.Component {
           <Field name="isScaled" component={Input} type="checkbox" />
         </div>
         <div className="form-group">
-          <button type="submit" className="btn btn-primary">新增</button>
+          <button type="submit" className="btn btn-primary">{this.props.action}</button>
         </div>
       </form>
     )

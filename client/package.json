@@ -13,6 +13,7 @@
     "fuzzysearch": "^1.0.3",
     "immutable": "^3.8.1",
     "jquery": "^3.1.1",
+    "material-ui": "^0.20.0",
     "moment": "^2.17.1",
     "react": "^15.4.2",
     "react-addons-css-transition-group": "^15.4.2",
