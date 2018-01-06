@@ -22,7 +22,7 @@ const recordSchema = {
     type: { // 类型
       type: String
     },
-    number: String, // 编号
+    number: Number, // 编号
     name: String, // 名称
     size: String, // 规格
     count: Number, // 数量
