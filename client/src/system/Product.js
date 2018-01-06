@@ -1,5 +1,6 @@
 import React from 'react'
-import { reduxForm } from 'redux-form'
+import { Field, reduxForm, getFormValues } from 'redux-form'
+import { Input } from '../components'
 import ProductForm from './ProductForm'
 import shortId from 'shortid'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
@@ -7,29 +8,27 @@ import Dialog from 'material-ui/Dialog'
 import FlatButton from 'material-ui/FlatButton'
 import { ajax } from '../utils'
 import { connect } from 'react-redux'
-import { newErrorNotify } from '../actions'
+import { newErrorNotify, newInfoNotify } from '../actions'
 
 const ProductCreateForm = reduxForm({ form: 'PRODUCT_CREATE', action: 'create' })(ProductForm)
 const ProductEditForm = reduxForm({ form: 'PRODUCT_EDIT', action: 'edit' })(ProductForm)
+const ProductFilterForm = reduxForm({ form: 'PRODUCT_FILTER', initialValues: { keyword: '' } })(
+  (props) => <form className="navbar-form" role="search">
+    <Field name="keyword" component={Input} placeholder="过滤出指定名称产品"/>
+  </form>
+)
 
 class Product extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      products: [{
-        number: 1,
-        name: '钢管',
-        size: '0.4',
-        weight: 3,
-        countUnit: '根',
-        unit: '米',
-        scale: 0.4,
-      }],
+      products: [],
       open: false,
       deleteConfirm: false,
     }
   }
   componentDidMount() {
+    this.props.dispatch(newInfoNotify('提示', '正在加载产品列表', 1000))
     ajax('/api/product').then((res) => {
       this.setState({
         products: res.data.products
@@ -113,6 +112,11 @@ class Product extends React.Component {
       <div>
         <h2 className="page-header">产品信息维护</h2>
         <ProductCreateForm onSubmit={(d) => this.onCreate(d)}/>
+        <nav className="navbar navbar-default">
+          <div className="container-fluid">
+            <ProductFilterForm/>
+          </div>
+        </nav>
         <table className="table">
           <thead>
           <tr>
@@ -130,7 +134,7 @@ class Product extends React.Component {
           </tr>
           </thead>
           <tbody>
-          {this.state.products.map((product) => (
+          {this.state.products.filter((product) => new RegExp(this.props.productFilter.keyword).test(product.name)).map((product) => (
             <tr key={shortId.generate()}>
               <td>{product.number}</td>
               <td>{product.type}</td>
@@ -180,4 +184,4 @@ class Product extends React.Component {
   }
 }
 
-export default connect()(Product)
+export default connect(state => ({ productFilter: getFormValues('PRODUCT_FILTER')(state) }))(Product)
