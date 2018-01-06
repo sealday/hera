@@ -4,7 +4,7 @@
 const Product = require('../models').Product;
 
 exports.list = (req, res, next) => {
-  Product.find().then((products) => {
+  Product.find().sort({ number: 1 }).then((products) => {
     res.json({
       data: {
         products

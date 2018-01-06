@@ -9,7 +9,7 @@ export default class ProductForm extends React.Component {
       <form className="form-inline" onSubmit={this.props.handleSubmit}>
         <div className="form-group">
           <label>编号</label>
-          <Field disabled={this.props.action === 'edit'} name="number" component={Input} validate={[validator.required]} />
+          <Field disabled={this.props.action === 'edit'} name="number" component={Input} validate={[validator.required, validator.num]} />
         </div>
         <div className="form-group">
           <label>类型</label>

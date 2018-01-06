@@ -7,7 +7,7 @@ const pinyin = require('pinyin')
 const Schema = mongoose.Schema;
 const productSchema = new Schema({
   type: String, // 类型
-  number: String, // 内部编号
+  number: Number, // 内部编号
   model: String, // 型号
   name: String, // 名称
   size: String, // 规格
