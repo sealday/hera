@@ -2,7 +2,6 @@ import React from 'react'
 import { Field, reduxForm, getFormValues } from 'redux-form'
 import { Input } from '../components'
 import ProductForm from './ProductForm'
-import shortId from 'shortid'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import Dialog from 'material-ui/Dialog'
 import FlatButton from 'material-ui/FlatButton'
@@ -135,7 +134,7 @@ class Product extends React.Component {
           </thead>
           <tbody>
           {this.state.products.filter((product) => new RegExp(this.props.productFilter.keyword).test(product.name)).map((product) => (
-            <tr key={shortId.generate()}>
+            <tr key={product.number}>
               <td>{product.number}</td>
               <td>{product.type}</td>
               <td>{product.model}</td>
