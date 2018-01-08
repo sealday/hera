@@ -1,6 +1,7 @@
 import React from 'react'
 import shortId from 'shortid'
 import moment from 'moment'
+import { Link } from 'react-router'
 
 class Price extends React.Component {
   state = {
@@ -15,6 +16,13 @@ class Price extends React.Component {
     return (
       <div>
         <h2 className="page-header">定价方案</h2>
+        <nav className="navbar navbar-default">
+          <div className="container-fluid">
+            <ul className="nav navbar-nav navbar-right ">
+              <li><Link to="/price/create">创建</Link></li>
+            </ul>
+          </div>
+        </nav>
         <table className="table">
           <thead>
           <tr>
@@ -33,8 +41,7 @@ class Price extends React.Component {
               <td>{moment(plan.date).format('YYYY-MM-DD')}</td>
               <td>{plan.comments}</td>
               <td>
-                <button className="btn btn-default">编辑</button>
-                <button className="btn btn-default">从这个创建</button>
+                <Link className="btn btn-default" to={`/price/${plan._id}`}>编辑</Link>
               </td>
             </tr>
           ))}
