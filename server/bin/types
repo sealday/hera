@@ -7,9 +7,7 @@ const fs = require('fs');
 // 连接 mongo 数据库
 mongoose.Promise = global.Promise;
 mongoose
-  .connect('mongodb://localhost/hera', {
-    useMongoClient: true
-  })
+  .connect('mongodb://localhost/hera')
   .then(() => {
     console.log('删除原有物料数据')
     return Product.remove({})
