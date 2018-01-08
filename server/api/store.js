@@ -5,6 +5,8 @@ const Project = require('../models').Project;
 const Record = require('../models').Record;
 const ObjectId = require('mongoose').Types.ObjectId;
 const service = require('../service')
+const mongoose = require('mongoose')
+const moment = require('moment')
 
 /**
  * 查询指定 project 的库存
@@ -307,4 +309,121 @@ exports.simpleSearch = (req, res, next) => {
       message: '错误的请求格式'
     })
   }
+}
+
+const doRent = () => {
+  const endDate = moment('2018-01-31').toDate()
+  const timezone = 'Asia/Shanghai'
+  const project = ObjectId('587af5e644e35f50b980d2ea')
+  Record.aggregate([
+    {
+      $match: {
+        $or: [
+          {
+            inStock: project
+          },
+          {
+            outStock: project
+          }
+        ]
+      }
+    },
+    {
+      $unwind: '$entries'
+    },
+    {
+      $lookup: {
+        from: 'products',
+        localField: 'entries.number',
+        foreignField: 'number',
+        as: 'products',
+      }
+    },
+    {
+      $unwind: '$products'
+    },
+    {
+      $addFields: {
+        days: {
+          $let: {
+            vars: {
+              outDays: {
+                $dayOfYear: {
+                  date: '$outDate',
+                  timezone: timezone,
+                }
+              },
+              endDays: {
+                $dayOfYear: {
+                  date: endDate,
+                  timezone: timezone,
+                }
+              }
+            },
+            in: {
+              $subtract: [ '$$endDays', '$$outDays' ]
+            }
+          }
+        },
+        count: {
+          $cond: {
+            if: '$products.isScaled',
+            then: {
+              $multiply: ['$entries.count', '$products.scale']
+            },
+            else: ['$entries.count']
+          }
+        },
+        weight: {
+          $multiply: ['$entries.count', '$products.weight']
+        },
+        inOut: {
+          $cond: {
+            if: {
+              $eq: ['$inStock', project]
+            },
+            then: 1,
+            else: -1
+          }
+        }
+      }
+    },
+    {
+      $facet: {
+        list: [
+          {
+            $match: {}
+          }
+        ],
+        group: [
+          {
+            $addFields: {
+              total: {
+                $multiply: ['$inOut', '$count', 3.1415926]
+              }
+            }
+          },
+          {
+            $group: {
+              _id: null,
+              sum: {
+                $sum: '$total'
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]).then((result) => {
+    console.log(JSON.stringify(result[0].list, null, 4))
+    console.log(JSON.stringify(result[0].group, null, 4))
+  }).catch((err) => {
+    console.log(err)
+  })
+}
+
+const test = () => {
+  mongoose
+    .connect('mongodb://localhost/hera')
+  doRent()
 }
