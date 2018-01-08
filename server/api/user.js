@@ -47,7 +47,7 @@ exports.isLogin = (req, res) => {
 // 包括项目信息、基地数据、用户数据以及
 exports.load = (req, res, next) => {
   Promise.all([
-    Product.find(),
+    Product.find().sort({ number: 1 }),
     Project.find(),
     User.find(),
   ]).then(([products, projects, users]) => {
