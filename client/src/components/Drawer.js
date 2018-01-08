@@ -80,7 +80,8 @@ const Drawer = (props) => (
           transitionEnterTimeout={500}
           transitionLeaveTimeout={300}>
           {props.nav.system && <ul>
-            <li><Link to="/product">产品信息维护</Link></li>
+            <li><Link to="/product">产品信息</Link></li>
+            <li><Link to="/price">定价方案</Link></li>
             {props.system.user.role === '系统管理员' && <li><Link to="/operator/create">新增操作员</Link></li>}
             {props.system.user.role === '系统管理员' && <li><Link to="/operator">操作员列表</Link></li>}
           </ul>}

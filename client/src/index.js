@@ -27,6 +27,7 @@ import {
   ProjectCreate,
   ProjectEdit,
   Product,
+  Price,
 } from './system'
 
 import {
@@ -152,6 +153,7 @@ ajax('/api/load').then(res => {
           <Route path="simple_search" component={SimpleSearch}/>
           <Route path="simple_search_company" component={company.SimpleSearch}/>
           <Route path="product" component={Product} />
+          <Route path="price" component={Price} />
 
           {/* direction 表示调拨的方向 取值为 in 和 out  */}
           <Route path="transfer/:direction/create" component={TransferCreate}/>
