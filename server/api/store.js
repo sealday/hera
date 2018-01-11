@@ -4,6 +4,7 @@
 const Project = require('../models').Project;
 const Record = require('../models').Record;
 const ObjectId = require('mongoose').Types.ObjectId;
+const Price = require('../models').Price
 const service = require('../service')
 const mongoose = require('mongoose')
 const moment = require('moment')
@@ -389,26 +390,88 @@ const doRent = () => {
       }
     },
     {
+      $lookup: {
+        from: 'prices',
+        let: { number: '$products.number' },
+        pipeline: [
+          {
+            $match: { _id: ObjectId('5a56c5ead7042175dcb593d7') }
+          },
+          {
+            $unwind: '$entries'
+          },
+          {
+            $match: {
+              $expr: {
+                $eq: ['$entries.number', '$$number']
+              }
+            }
+          }
+        ],
+        as: 'prices'
+      }
+    },
+    {
+      $unwind: '$prices'
+    },
+    {
+      $addFields: {
+        price: {
+          $multiply: ['$entries.count', '$products.scale', '$prices.entries.unitPrice', '$days', '$inOut']
+        },
+        freight: {
+          $cond: {
+            if: {
+              $or: [
+                {
+                  $and: [
+                    { $in: ['$prices.entries.freightType', ['出库', '双向']] },
+                    { $eq: ['$inOut', 1] },
+                  ],
+                },
+                {
+                  $and: [
+                    { $in: ['$prices.entries.freightType', ['入库', '双向']] },
+                    { $eq: ['$inOut', -1] },
+                  ],
+                }
+              ]
+            },
+            then: { $multiply: ['$entries.count', '$products.weight', '$prices.entries.freight', 0.001] },
+            else: 0,
+          },
+        }
+      }
+    },
+    {
       $facet: {
         list: [
           {
-            $match: {}
+            $project: {
+              outDate: '$outDate',
+              number: '$number',
+              name: '$products.name',
+              size: '$products.size',
+              count: '$entries.count',
+              days: '$days',
+              inOut: { $cond: { if: { $eq: ['$inOut', 1] }, then: '出库', else: '入库' } },
+              unitPrice: '$prices.entries.unitPrice',
+              unitFreight: '$prices.entries.freight',
+              price: '$price',
+              freight: '$freight',
+            }
           }
         ],
         group: [
           {
-            $addFields: {
-              total: {
-                $multiply: ['$inOut', '$count', 3.1415926]
-              }
-            }
-          },
-          {
             $group: {
               _id: null,
-              sum: {
-                $sum: '$total'
-              }
+              price: {
+                $sum: '$price'
+              },
+              freight: {
+                $sum: '$freight'
+              },
             }
           }
         ]
@@ -426,4 +489,48 @@ const test = () => {
   mongoose
     .connect('mongodb://localhost/hera')
   doRent()
+  // const pricePlan = new Price({
+  //   name: '示例方案',
+  //   date: new Date(),
+  //   comments: '用于体现当前功能的方案',
+  //   entries: [
+  //     {
+  //       number: 56, // 规格编号
+  //       unitPrice: 0.04, // 单价
+  //       type: '换算数量',
+  //       freight: 120, // 运费
+  //       freightType: '出库',
+  //     },
+  //     {
+  //       number: 36, // 规格编号
+  //       unitPrice: 0.04, // 单价
+  //       type: '换算数量',
+  //       freight: 120, // 运费
+  //       freightType: '出库',
+  //     },
+  //     {
+  //       number: 36, // 规格编号
+  //       unitPrice: 0.04, // 单价
+  //       type: '换算数量',
+  //       freight: 120, // 运费
+  //       freightType: '出库',
+  //     },
+  //     {
+  //       number: 16, // 规格编号
+  //       unitPrice: 0.04, // 单价
+  //       type: '换算数量',
+  //       freight: 120, // 运费
+  //       freightType: '出库',
+  //     },
+  //     {
+  //       number: 34, // 规格编号
+  //       unitPrice: 0.04, // 单价
+  //       type: '换算数量',
+  //       freightType: '出库',
+  //     },
+  //   ]
+  // })
+  // pricePlan.save();
 }
+
+test()

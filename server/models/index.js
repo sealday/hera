@@ -14,3 +14,7 @@ exports.File = require('./file')
 exports.Vendor = require('./vendor')
 exports.Op = require('./op')
 exports.Operation = require('./operation')
+/**
+ * @type Model
+ */
+exports.Price = require('./price')
