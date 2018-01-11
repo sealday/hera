@@ -316,7 +316,7 @@ const doRent = () => {
   const endDate = moment('2018-01-31').toDate()
   const timezone = 'Asia/Shanghai'
   const project = ObjectId('587af5e644e35f50b980d2ea')
-  const pricePlanId = ObjectId('5a56d974843b737fffb66282')
+  const pricePlanId = ObjectId('5a56ff25af16eb8d5163df9c')
   Record.aggregate([
     {
       $match: {
@@ -413,12 +413,31 @@ const doRent = () => {
       }
     },
     {
-      $unwind: '$prices'
+      $unwind: {
+        path: '$prices',
+        preserveNullAndEmptyArrays: true,
+      }
     },
     {
       $addFields: {
         price: {
-          $multiply: ['$entries.count', '$products.scale', '$prices.entries.unitPrice', '$days', '$inOut']
+          $switch: {
+            branches: [
+              {
+                case: { $eq: ['$prices.entries.type', '换算数量'] },
+                then: { $multiply: ['$entries.count', '$products.scale', '$prices.entries.unitPrice', '$days', '$inOut'] },
+              },
+              {
+                case: { $eq: ['$prices.entries.type', '数量'] },
+                then: { $multiply: ['$entries.count', '$prices.entries.unitPrice', '$days', '$inOut'] },
+              },
+              {
+                case: { $eq: ['$prices.entries.type', '重量'] },
+                then: { $multiply: ['$entries.count', '$entries.weight', '$prices.entries.unitPrice', '$days', '$inOut'] },
+              },
+            ],
+            default: 0
+          }
         },
         freight: {
           $cond: {
@@ -490,41 +509,4 @@ const test = () => {
   mongoose
     .connect('mongodb://localhost/hera')
   doRent()
-  // const pricePlan = new Price({
-  //   name: '示例方案',
-  //   date: new Date(),
-  //   comments: '用于体现当前功能的方案',
-  //   freight: 120,
-  //   freightType: '出库',
-  //   entries: [
-  //     {
-  //       number: 56, // 规格编号
-  //       unitPrice: 0.04, // 单价
-  //       type: '换算数量',
-  //     },
-  //     {
-  //       number: 36, // 规格编号
-  //       unitPrice: 0.04, // 单价
-  //       type: '换算数量',
-  //     },
-  //     {
-  //       number: 36, // 规格编号
-  //       unitPrice: 0.04, // 单价
-  //       type: '换算数量',
-  //     },
-  //     {
-  //       number: 16, // 规格编号
-  //       unitPrice: 0.04, // 单价
-  //       type: '换算数量',
-  //     },
-  //     {
-  //       number: 34, // 规格编号
-  //       unitPrice: 0.04, // 单价
-  //       type: '换算数量',
-  //     },
-  //   ]
-  // })
-  // pricePlan.save();
 }
-
-// test()
