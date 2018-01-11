@@ -316,6 +316,7 @@ const doRent = () => {
   const endDate = moment('2018-01-31').toDate()
   const timezone = 'Asia/Shanghai'
   const project = ObjectId('587af5e644e35f50b980d2ea')
+  const pricePlanId = ObjectId('5a56d974843b737fffb66282')
   Record.aggregate([
     {
       $match: {
@@ -395,7 +396,7 @@ const doRent = () => {
         let: { number: '$products.number' },
         pipeline: [
           {
-            $match: { _id: ObjectId('5a56c5ead7042175dcb593d7') }
+            $match: { _id: pricePlanId }
           },
           {
             $unwind: '$entries'
@@ -425,19 +426,19 @@ const doRent = () => {
               $or: [
                 {
                   $and: [
-                    { $in: ['$prices.entries.freightType', ['出库', '双向']] },
+                    { $in: ['$prices.freightType', ['出库', '双向']] },
                     { $eq: ['$inOut', 1] },
                   ],
                 },
                 {
                   $and: [
-                    { $in: ['$prices.entries.freightType', ['入库', '双向']] },
+                    { $in: ['$prices.freightType', ['入库', '双向']] },
                     { $eq: ['$inOut', -1] },
                   ],
                 }
               ]
             },
-            then: { $multiply: ['$entries.count', '$products.weight', '$prices.entries.freight', 0.001] },
+            then: { $multiply: ['$entries.count', '$products.weight', '$prices.freight', 0.001] },
             else: 0,
           },
         }
@@ -455,8 +456,8 @@ const doRent = () => {
               count: '$entries.count',
               days: '$days',
               inOut: { $cond: { if: { $eq: ['$inOut', 1] }, then: '出库', else: '入库' } },
-              unitPrice: '$prices.entries.unitPrice',
-              unitFreight: '$prices.entries.freight',
+              unitPrice: '$prices.unitPrice',
+              unitFreight: '$prices.freight',
               price: '$price',
               freight: '$freight',
             }
@@ -493,44 +494,37 @@ const test = () => {
   //   name: '示例方案',
   //   date: new Date(),
   //   comments: '用于体现当前功能的方案',
+  //   freight: 120,
+  //   freightType: '出库',
   //   entries: [
   //     {
   //       number: 56, // 规格编号
   //       unitPrice: 0.04, // 单价
   //       type: '换算数量',
-  //       freight: 120, // 运费
-  //       freightType: '出库',
   //     },
   //     {
   //       number: 36, // 规格编号
   //       unitPrice: 0.04, // 单价
   //       type: '换算数量',
-  //       freight: 120, // 运费
-  //       freightType: '出库',
   //     },
   //     {
   //       number: 36, // 规格编号
   //       unitPrice: 0.04, // 单价
   //       type: '换算数量',
-  //       freight: 120, // 运费
-  //       freightType: '出库',
   //     },
   //     {
   //       number: 16, // 规格编号
   //       unitPrice: 0.04, // 单价
   //       type: '换算数量',
-  //       freight: 120, // 运费
-  //       freightType: '出库',
   //     },
   //     {
   //       number: 34, // 规格编号
   //       unitPrice: 0.04, // 单价
   //       type: '换算数量',
-  //       freightType: '出库',
   //     },
   //   ]
   // })
   // pricePlan.save();
 }
 
-test()
+// test()
