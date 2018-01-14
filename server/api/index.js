@@ -10,6 +10,7 @@ const file = require('./file');
 const middleware = require('./middleware');
 const user = require('./user');
 const project = require('./project');
+const price = require('./price')
 const workercheckin = require('./worker')
 const record = require('./record')
 const payable = require('./payable')
@@ -37,6 +38,11 @@ router.get('/product', product.list)
 router.post('/product', product.create)
 router.post('/product/:number', product.update)
 router.post('/product/:number/delete', product.delete)
+
+router.get('/price', price.list)
+router.post('/price', price.create)
+router.post('/price/:id', price.update)
+router.post('/price/:id/delete', price.delete)
 
 router.get('/project', project.list);
 router.post('/project', project.create)

@@ -43,32 +43,90 @@ const newPlan = {
  * @param plan
  * @param callback
  */
-const generate = (plan, callback) => {
-  async.map(plan.userPlans, async (plan) => {
-    const filter = { name: plan.name }
-    if (plan.level === '规格') {
-      filter.size = plan.size
-    }
-    const products = await Product.find(filter)
-    return _.map(products, (product) => ({
-      number: product.number,
-      unitPrice: plan.unitPrice,
-      type: plan.type,
-    }))
-  }, (err, results) => {
-    if (err) {
-      return callback(err)
-    }
-    plan.entries = _.concat(...results)
-    callback(null, plan)
+const generate = async (plan) => {
+  return new Promise((resolve, reject) => {
+    async.map(plan.userPlans, async (plan) => {
+      const filter = { name: plan.name }
+      if (plan.level === '规格') {
+        filter.size = plan.size
+      }
+      const products = await Product.find(filter)
+      return _.map(products, (product) => ({
+        number: product.number,
+        unitPrice: plan.unitPrice,
+        type: plan.type,
+      }))
+    }, (err, results) => {
+      if (err) {
+        return reject(err)
+      }
+      plan.entries = _.concat(...results)
+      resolve(plan)
+    })
   })
 }
 
 const test = () => {
   mongoose
     .connect('mongodb://localhost/hera')
-  generate(newPlan, (err, plan) => {
+  generate(newPlan).then((plan) => {
     const price = new Price(plan)
     price.save()
   })
 }
+
+exports.list = (req, res, next) => {
+  Price.find().then((prices) => {
+    res.json({
+      data: {
+        prices
+      }
+    });
+  }).catch(err => {
+    next(err);
+  });
+};
+
+exports.create = (req, res, next) => {
+  const newPlan = req.body
+  generate(newPlan).then((plan) => {
+    const price = new Price(plan)
+    return price.save()
+  }).then(() => {
+    res.end()
+  }).catch((err) => {
+    next(err)
+  })
+}
+
+exports.delete = (req, res, next) => {
+  const id = req.params.id
+  Price.remove({ _id: ObjectId(id) }).then(() => {
+    res.end()
+  }).catch((err) => {
+    next(err)
+  })
+}
+
+const update = async (req, res, next) => {
+  const id = req.params.id
+  const newPlan = _.omit(req.body, ['_id'])
+
+  const plan = await generate(newPlan)
+  const oldPlan = await Price.findOne({ _id: ObjectId(id) })
+  oldPlan.entries = []
+  Object.assign(oldPlan, plan)
+  await oldPlan.save()
+  res.json({
+    message: '更新成功'
+  })
+}
+
+const helper =  (asyncFn) => (req, res, next) => {
+  asyncFn(req, res, next).catch((err) => {
+    next(err)
+  })
+}
+
+exports.update = helper(update)
+

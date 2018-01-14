@@ -33,7 +33,7 @@ class Product extends React.Component {
         products: res.data.products
       })
     }).catch((err) => {
-      this.props.dispatch(newErrorNotify('警告', '加载出错', 1000))
+      this.props.dispatch(newErrorNotify('警告', '加载产品列表出错', 1000))
     })
   }
   handleOpen = () => {
