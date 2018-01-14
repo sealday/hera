@@ -27,7 +27,8 @@ const priceSchema = new Schema({
     type: {
       type: String,
       enum: ['数量', '换算数量', '重量'],
-    }
+    },
+    comments: String, // 备注
   }],
   entries: [{
     number: Number, // 规格编号

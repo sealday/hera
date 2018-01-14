@@ -46,7 +46,7 @@ export const DatePicker = ({ input, ...custom }) => (
 
 export const FilterSelect = ({ input, options, style, ...custom, meta: { touched, error, warning } }) => {
   const {onChange, value, onFocus } = input
-  const { placeholder, filterOption } = custom
+  const { placeholder, filterOption, disabled } = custom
 
   if (touched && error) {
     style = {
@@ -59,6 +59,7 @@ export const FilterSelect = ({ input, options, style, ...custom, meta: { touched
     style={style}
     onFocus={onFocus}
     value={value}
+    disabled={disabled}
     placeholder={placeholder}
     onChange={e => onChange(e.value)}
     clearable={false}
