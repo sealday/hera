@@ -312,13 +312,8 @@ exports.simpleSearch = (req, res, next) => {
   }
 }
 
-const doRent = () => {
-  const startDate = moment('2018-02-01').toDate()
-  const endDate = moment('2018-02-28').add(1, 'day').toDate()
-  const timezone = 'Asia/Shanghai'
-  const project = ObjectId('587af5e644e35f50b980d2ea')
-  const pricePlanId = ObjectId('5a56ff25af16eb8d5163df9c')
-  Record.aggregate([
+const doRent = async ({startDate, endDate, timezone, project, pricePlanId}) => {
+  return Record.aggregate([
     {
       $match: {
         $or: [
@@ -520,7 +515,19 @@ const doRent = () => {
         ]
       }
     }
-  ]).then((result) => {
+  ])
+}
+
+const test = () => {
+  mongoose
+    .connect('mongodb://localhost/hera')
+  doRent({
+    startDate: moment('2018-02-01').toDate(),
+    endDate: moment('2018-02-28').add(1, 'day').toDate(),
+    timezone: 'Asia/Shanghai',
+    project: ObjectId('587af5e644e35f50b980d2ea'),
+    pricePlanId: ObjectId('5a56ff25af16eb8d5163df9c'),
+  }).then((result) => {
     console.log(JSON.stringify(result[0].list, null, 4))
     console.log(JSON.stringify(result[0].group, null, 4))
   }).catch((err) => {
@@ -528,8 +535,52 @@ const doRent = () => {
   })
 }
 
-const test = () => {
-  mongoose
-    .connect('mongodb://localhost/hera')
-  doRent()
+/**
+ *
+ * 计算租金
+ *
+ * query.condition 是一个 JSON 字符串
+ *
+ * 包含字段
+ * project: 目标项目
+ * startDate: 开始时间
+ * endDate: 结束时间
+ *
+ */
+exports.rent = (req, res, next) => {
+  let condition = req.query['condition']
+
+  if (condition) {
+    condition = JSON.parse(condition)
+
+    const startDate = new Date(condition.startDate)
+    const endDate = new Date(condition.endDate)
+    const timezone = 'Asia/Shanghai'
+    const project = ObjectId(condition.project)
+    const pricePlanId = ObjectId(condition.planId)
+
+    doRent({
+      startDate,
+      endDate,
+      timezone,
+      project,
+      pricePlanId,
+    }).then((result) => {
+      res.json({
+        message: '查询成功！',
+        data: {
+          rent: {
+            list: result[0].list,
+            group: result[0].group,
+          }
+        }
+      })
+    }).catch((err) => {
+      next(err)
+    })
+  } else {
+    res.status(400).json({
+      message: '错误的请求格式'
+    })
+  }
 }

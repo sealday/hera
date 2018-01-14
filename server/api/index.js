@@ -77,5 +77,6 @@ router.get('/file/:filename', file.download)
 router.get('/store/search', store.search)
 router.get('/store/simple_search', store.simpleSearch)
 router.get('/store/:id', store.queryAll)
+router.get('/store/rent', store.rent)
 
 module.exports = router;
