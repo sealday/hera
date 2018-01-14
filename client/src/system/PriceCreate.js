@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { reduxForm } from 'redux-form'
 import { ajax } from '../utils'
 import { newInfoNotify, newErrorNotify, newSuccessNotify } from '../actions'
+import { push } from 'react-router-redux'
 import moment from 'moment'
 
 const PriceForm = reduxForm({ form: 'PRICE_CREATE', action: 'create' })(Form)
@@ -18,6 +19,7 @@ class PriceCreate extends React.Component {
       contentType: 'application/json'
     }).then((res) => {
       this.props.dispatch(newSuccessNotify('提示', '创建成功', 1000))
+      this.props.dispatch(push(`/price`))
     }).catch((err) => {
       this.props.dispatch(newErrorNotify('警告', '创建失败', 1000))
     })

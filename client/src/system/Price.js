@@ -4,7 +4,7 @@ import moment from 'moment'
 import { Link } from 'react-router'
 import { ajax } from '../utils'
 import { connect } from 'react-redux'
-import { newErrorNotify, newInfoNotify } from '../actions'
+import { newErrorNotify, newInfoNotify, newSuccessNotify } from '../actions'
 
 class Price extends React.Component {
   state = {
@@ -17,12 +17,29 @@ class Price extends React.Component {
   }
   componentDidMount() {
     this.props.dispatch(newInfoNotify('提示', '正在加载定价方案', 1000))
+    this.load()
+  }
+
+  load = () => {
     ajax('/api/price').then((res) => {
       this.setState({
         plans: res.data.prices
       })
     }).catch((err) => {
       this.props.dispatch(newErrorNotify('警告', '加载定价方案出错', 1000))
+    })
+  }
+
+  handleDelete = (id) => {
+    this.props.dispatch(newInfoNotify('提示', '正在删除', 1000))
+    ajax(`/api/price/${ id }/delete`, {
+      method: 'POST',
+      contentType: 'application/json'
+    }).then((res) => {
+      this.props.dispatch(newSuccessNotify('提示', '删除成功', 1000))
+      this.load()
+    }).catch((err) => {
+      this.props.dispatch(newErrorNotify('警告', '删除失败', 1000))
     })
   }
   render() {
@@ -53,8 +70,8 @@ class Price extends React.Component {
               <td>{plan.comments}</td>
               <td>
                 <Link className="btn btn-default" to={`/price/${plan._id}`}>编辑</Link>
-                <button className="btn btn-danger h-left-margin-1-em">删除</button>
-                <button className="btn btn-primary h-left-margin-1-em">创建</button>
+                <button className="btn btn-danger h-left-margin-1-em" onClick={() => this.handleDelete(plan._id)}>删除</button>
+                <Link className="btn btn-primary h-left-margin-1-em" to="/price/create">创建</Link>
               </td>
             </tr>
           ))}
