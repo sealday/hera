@@ -313,7 +313,8 @@ exports.simpleSearch = (req, res, next) => {
 }
 
 const doRent = () => {
-  const endDate = moment('2018-01-31').toDate()
+  const startDate = moment('2018-02-01').toDate()
+  const endDate = moment('2018-02-28').add(1, 'day').toDate()
   const timezone = 'Asia/Shanghai'
   const project = ObjectId('587af5e644e35f50b980d2ea')
   const pricePlanId = ObjectId('5a56ff25af16eb8d5163df9c')
@@ -327,7 +328,28 @@ const doRent = () => {
           {
             outStock: project
           }
-        ]
+        ],
+        outDate: {
+          $lt: endDate,
+        }
+      }
+    },
+    {
+      $addFields: {
+        history: {
+          $lt: ['$outDate', startDate]
+        },
+      }
+    },
+    {
+      $addFields: {
+        outDate: {
+          $cond: {
+            if: '$history',
+            then: startDate,
+            else: '$outDate',
+          },
+        }
       }
     },
     {
@@ -479,6 +501,7 @@ const doRent = () => {
               unitFreight: '$prices.freight',
               price: '$price',
               freight: '$freight',
+              history: '$history',
             }
           }
         ],
