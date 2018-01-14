@@ -11,7 +11,6 @@ const PriceForm = reduxForm({ form: 'PRICE_CREATE', action: 'create' })(Form)
 
 class PriceCreate extends React.Component {
   handleSubmit = (data) => {
-    console.log(data);
     this.props.dispatch(newInfoNotify('提示', '正在创建', 1000))
     ajax('/api/price', {
       data: JSON.stringify(data),

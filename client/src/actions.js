@@ -737,3 +737,26 @@ export const queryMoreOperations = (id) => (dispatch, getState) => {
     })
   }
 }
+
+export const PRICE_PLAN = 'PRICE_PLAN'
+
+export const queryPricePlan = () => (dispatch, getState) => {
+  const search = network(PRICE_PLAN) // 让查询网络不会重复
+  const key = PRICE_PLAN
+  if (search.shouldProceed(getState())) {
+    dispatch(search.begin)
+    dispatch(newInfoNotify('提示', '正在加载定价方案', 2000))
+    ajax('/api/price').then(res => {
+      dispatch(search.endSuccess)
+      dispatch({ type: SAVE_RESULTS, data: {
+          key,
+          result: res.data.prices
+        }})
+      dispatch(newSuccessNotify('提示', '加载定价方案成功', 2000))
+    }).catch(err => {
+      dispatch(search.endFailure)
+      dispatch(newErrorNotify('错误', '加载定价方案失败', 2000))
+      throw err
+    })
+  }
+}

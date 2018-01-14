@@ -4,30 +4,15 @@ import moment from 'moment'
 import { Link } from 'react-router'
 import { ajax } from '../utils'
 import { connect } from 'react-redux'
-import { newErrorNotify, newInfoNotify, newSuccessNotify } from '../actions'
+import { newErrorNotify, newInfoNotify, newSuccessNotify, queryPricePlan, PRICE_PLAN } from '../actions'
 
 class Price extends React.Component {
-  state = {
-    plans: [{
-      _id: shortId.generate(),
-      name: '基本方案',
-      date: moment('2018-01-01'),
-      comments: '这是一个基础方案'
-    }]
-  }
   componentDidMount() {
-    this.props.dispatch(newInfoNotify('提示', '正在加载定价方案', 1000))
     this.load()
   }
 
   load = () => {
-    ajax('/api/price').then((res) => {
-      this.setState({
-        plans: res.data.prices
-      })
-    }).catch((err) => {
-      this.props.dispatch(newErrorNotify('警告', '加载定价方案出错', 1000))
-    })
+    this.props.dispatch(queryPricePlan())
   }
 
   handleDelete = (id) => {
@@ -63,7 +48,7 @@ class Price extends React.Component {
           </tr>
           </thead>
           <tbody>
-          {this.state.plans.map((plan) => (
+          {this.props.plans.map((plan) => (
             <tr key={plan._id}>
               <td>{plan.name}</td>
               <td>{moment(plan.date).format('YYYY-MM-DD')}</td>
@@ -82,4 +67,11 @@ class Price extends React.Component {
   }
 }
 
-export default connect()(Price)
+const mapStateToProps = (state) => {
+  const plans = state.results.get(PRICE_PLAN, [])
+
+  return {
+    plans: plans,
+  }
+}
+export default connect(mapStateToProps)(Price)
