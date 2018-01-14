@@ -30,7 +30,7 @@ class Price extends React.Component {
   render() {
     return (
       <div>
-        <h2 className="page-header">定价方案</h2>
+        <h2 className="page-header">价格方案</h2>
         <nav className="navbar navbar-default">
           <div className="container-fluid">
             <ul className="nav navbar-nav navbar-right ">
@@ -56,7 +56,7 @@ class Price extends React.Component {
               <td>
                 <Link className="btn btn-default" to={`/price/${plan._id}`}>编辑</Link>
                 <button className="btn btn-danger h-left-margin-1-em" onClick={() => this.handleDelete(plan._id)}>删除</button>
-                <Link className="btn btn-primary h-left-margin-1-em" to="/price/create">创建</Link>
+                <Link className="btn btn-primary h-left-margin-1-em" to={`/price/create/${plan._id}`}>创建</Link>
               </td>
             </tr>
           ))}

@@ -158,6 +158,7 @@ ajax('/api/load').then(res => {
           <Route path="price" component={Price} />
           <Route path="price/create" component={PriceCreate} />
           <Route path="price/:id" component={PriceEdit} />
+          <Route path="price/create/:id" component={PriceCreate} />
 
           {/* direction 表示调拨的方向 取值为 in 和 out  */}
           <Route path="transfer/:direction/create" component={TransferCreate}/>
