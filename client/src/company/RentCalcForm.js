@@ -4,10 +4,11 @@
 
 import React from 'react'
 import { reduxForm, Field, formValueSelector } from 'redux-form'
-import { FilterSelect, DatePicker, Input } from '../components'
+import { FilterSelect, DatePicker } from '../components'
 import { connect } from 'react-redux'
 import moment from 'moment'
-import { filterOption } from '../utils'
+import { filterOption, validator } from '../utils'
+import { PRICE_PLAN, queryPricePlan } from '../actions'
 
 /**
  * 搜索用的表单
@@ -22,6 +23,18 @@ class SimpleSearchForm extends React.Component {
     })))
   }
 
+  getPlanOptions = (plans) => {
+    return [].concat(plans.map((plan) => ({
+      value: plan._id,
+      label: plan.name,
+      pinyin: ''
+    })))
+  }
+
+  componentDidMount() {
+    this.props.dispatch(queryPricePlan())
+  }
+
   render() {
     const { handleSubmit, projects, startDate, endDate, reset } = this.props
     return (
@@ -33,6 +46,7 @@ class SimpleSearchForm extends React.Component {
                    component={FilterSelect}
                    placeholder="请选择要计算的项目部"
                    options={this.getStockOptions(projects)}
+                   validate={[validator.required]}
                    filterOption={filterOption}
             />
           </div>
@@ -75,6 +89,18 @@ class SimpleSearchForm extends React.Component {
           </div>
         </div>
         <div className="form-group">
+          <label className="control-label col-md-1">价格方案</label>
+          <div className="col-md-5">
+            <Field name="planId"
+                   component={FilterSelect}
+                   placeholder="请选择要使用的价格方案"
+                   validate={[validator.required]}
+                   options={this.getPlanOptions(this.props.plans)}
+                   filterOption={filterOption}
+            />
+          </div>
+        </div>
+        <div className="form-group">
           <div className="col-md-offset-6 col-md-2">
             <button type="submit" className="btn btn-primary btn-block">查询</button>
           </div>
@@ -98,10 +124,13 @@ SimpleSearchForm = reduxForm({
 
 const selector = formValueSelector('rentCalcForm')
 const mapStateToProps = state => {
+  const plans = state.results.get(PRICE_PLAN, [])
+
   return {
     projects: state.system.projects.toArray(),
     startDate: selector(state, 'startDate'),
     endDate: selector(state, 'endDate'),
+    plans: plans,
   }
 }
 

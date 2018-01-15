@@ -760,3 +760,31 @@ export const queryPricePlan = () => (dispatch, getState) => {
     })
   }
 }
+
+
+export const RENT = 'RENT'
+
+export const queryRent = (condition) => (dispatch, getState) => {
+  const search = network(RENT) // 让查询网络不会重复
+  const key = RENT
+  if (search.shouldProceed(getState())) {
+    dispatch(search.begin)
+    dispatch(newInfoNotify('提示', '正在计算租金', 2000))
+    ajax('/api/store/rent', {
+      data: {
+        condition: JSON.stringify(condition)
+      }
+    }).then(res => {
+      dispatch(search.endSuccess)
+      dispatch({ type: SAVE_RESULTS, data: {
+          key,
+          result: res.data.rent
+        }})
+      dispatch(newSuccessNotify('提示', '计算租金成功', 2000))
+    }).catch(err => {
+      dispatch(search.endFailure)
+      dispatch(newErrorNotify('错误', '计算租金失败', 2000))
+      throw err
+    })
+  }
+}
