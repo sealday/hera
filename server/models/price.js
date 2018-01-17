@@ -17,6 +17,7 @@ const priceSchema = new Schema({
   date: Date,
   comments: String,
   userPlans: [{
+    productType: String, // 产品类型
     name: String, // 名称
     level: {
       type: String,
