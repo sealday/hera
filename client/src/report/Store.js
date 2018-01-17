@@ -24,7 +24,7 @@ class Store extends Component {
       records: [],
       project: props.store._id,
       startDate: moment().startOf('year'),
-      endDate: moment().endOf('year'),
+      endDate: moment().endOf('year').startOf('day'),
       showing: new Map()
     }
   }
@@ -240,14 +240,14 @@ class Store extends Component {
                 e.preventDefault()
                 this.setState({
                   startDate: moment().startOf('year').subtract(1, 'year'),
-                  endDate: moment().endOf('year').subtract(1, 'year'),
+                  endDate: moment().endOf('year').subtract(1, 'year').startOf('day'),
                 })
               }} style={{paddingTop: '7px', display: 'inline-block'}}>上一年</a>
               <a href="#" onClick={e => {
                 e.preventDefault()
                 this.setState({
                   startDate: moment().startOf('year'),
-                  endDate: moment().endOf('year'),
+                  endDate: moment().endOf('year').startOf('day'),
                 })
               }} style={{paddingTop: '7px', display: 'inline-block', marginLeft: '1em'}}>今年</a>
               <a href="#" onClick={e => {
