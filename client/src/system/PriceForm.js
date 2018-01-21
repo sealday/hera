@@ -19,7 +19,7 @@ class PriceForm extends React.Component {
           </div>
 
           <div className="form-group">
-            <label>运费</label>
+            <label>运费（元/每吨）</label>
             <Field name="freight" component={Input} validate={[validator.required, validator.num]}  />
           </div>
           <div className="form-group">

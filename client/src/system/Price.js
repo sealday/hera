@@ -34,7 +34,7 @@ class Price extends React.Component {
         <nav className="navbar navbar-default">
           <div className="container-fluid">
             <ul className="nav navbar-nav navbar-right ">
-              <li><Link to="/price/create">点击这里创建一个空白的定价方案</Link></li>
+              <li><Link to="/price/create">点击这里创建一个空白的价格方案</Link></li>
             </ul>
           </div>
         </nav>
