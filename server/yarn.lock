@@ -754,9 +754,9 @@ jstransformer@1.0.0:
     is-promise "^2.0.0"
     promise "^7.0.1"
 
-kareem@2.0.0-rc5:
-  version "2.0.0-rc5"
-  resolved "http://registry.npm.taobao.org/kareem/download/kareem-2.0.0-rc5.tgz#9899c745f65f97559c26288cf269a9f30823af86"
+kareem@2.0.1:
+  version "2.0.1"
+  resolved "http://registry.npm.taobao.org/kareem/download/kareem-2.0.1.tgz#f17f77e9032f64aa402b334f91fb4407fe4c042c"
 
 keypress@0.1.x:
   version "0.1.0"
@@ -929,13 +929,13 @@ mongoose-legacy-pluralize@1.0.1:
   version "1.0.1"
   resolved "http://registry.npm.taobao.org/mongoose-legacy-pluralize/download/mongoose-legacy-pluralize-1.0.1.tgz#31ae25db45c30f1448c0f93f52769e903367c701"
 
-mongoose@^5.0.0-rc2:
-  version "5.0.0-rc2"
-  resolved "http://registry.npm.taobao.org/mongoose/download/mongoose-5.0.0-rc2.tgz#4072845ff576af086c1ddfed9039c7887df55ef3"
+mongoose@^5.0.0:
+  version "5.0.0"
+  resolved "http://registry.npm.taobao.org/mongoose/download/mongoose-5.0.0.tgz#85e92fd72d718b21b3d55a62b09434da37354b5a"
   dependencies:
     async "2.1.4"
     bson "~1.0.4"
-    kareem "2.0.0-rc5"
+    kareem "2.0.1"
     lodash.get "4.4.2"
     mongodb "3.0.1"
     mongoose-legacy-pluralize "1.0.1"
