@@ -450,7 +450,7 @@ const doRent = async ({startDate, endDate, timezone, project, pricePlanId}) => {
               },
               {
                 case: { $eq: ['$prices.entries.type', '重量'] },
-                then: { $multiply: ['$entries.count', '$entries.weight', '$prices.entries.unitPrice', '$days', '$inOut'] },
+                then: { $multiply: ['$entries.count', '$products.weight', '$prices.entries.unitPrice', '$days', '$inOut'] },
               },
             ],
             default: 0
