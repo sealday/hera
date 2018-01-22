@@ -34,7 +34,7 @@ class SimpleSearchTable extends React.Component {
           <tbody>
           {rent.list.map((item) => (
             <tr key={shortId.generate()}>
-              <td>{item.history ? '历史结算' :  moment(item.outDate).format('YYYY-MM-DD')}</td>
+              <td>{item.history ? '上期结存' :  moment(item.outDate).format('YYYY-MM-DD')}</td>
               <td>{item.inOut}</td>
               <td>{item.name}</td>
               <td>{item.size}</td>
