@@ -5,7 +5,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { requestRecord } from '../actions'
-import { toFixedWithoutTrailingZero as fixed, transformArticle, total_, isUpdatable } from '../utils'
+import { toFixedWithoutTrailingZero as fixed, transformArticle, total_, isUpdatable, getUnit } from '../utils'
 import moment from 'moment'
 
 class TransportOrder extends Component {
@@ -46,8 +46,9 @@ class TransportOrder extends Component {
     const getContent = () => {
       let result = []
       record.entries.forEach(entry => {
-        const {unit, sizeUnit, countUnit} = nameArticleMap[entry.name]
-        result.push(`${entry.name}${entry.size}${sizeUnit} × ${entry.count}${countUnit} = ${fixed(total_(entry, this.props.products))}${unit}`)
+        const {countUnit} = nameArticleMap[entry.name]
+        result.push(`${entry.name}${entry.size} × ${entry.count}${countUnit} = 
+        ${fixed(total_(entry, this.props.products))}${getUnit(nameArticleMap[entry.name])}`)
       })
       return result
     }
