@@ -131,7 +131,7 @@ class Store extends Component {
       }
 
       // 计算合计
-      if (inTotal > 0 || outTotal > 0) {
+      if (inTotal !== 0 || outTotal !== 0) {
         total = toFixedWithoutTrailingZero(inTotal - outTotal)
         record.total = {
           type: article.type,
