@@ -11,6 +11,7 @@ import * as reducers from './reducers'
 import { systemLoaded, updateOnlineUser, updateOnlineUsers, selectStore } from './actions'
 import { syncHistoryWithStore, routerReducer, routerMiddleware } from 'react-router-redux'
 import { Profile } from './components'
+import config from '../../config'
 
 import App from './App';
 import Home from './Home';
@@ -124,7 +125,8 @@ ajax('/api/load').then(res => {
   global.socket = socket
 
   try {
-    const store_ = JSON.parse(localStorage.getItem('store'))
+    const store_ = JSON.parse(localStorage.getItem(`store-${ config.db }`))
+    console.log(`store-${ config.db }`)
     store.dispatch(selectStore(store_))
   } catch (e) {
     console.warn(e);

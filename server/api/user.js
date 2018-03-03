@@ -21,7 +21,10 @@ exports.login = (req, res, next) => {
 
   User.findOne({ username: username }).then(user => {
     if (!user) {
-      return res.status(400).send('这个操作员不存在');
+      throw {
+        status: 400,
+        message: '这个操作员不存在'
+      }
     }
     return Promise.all([user.comparePassword(password), user]);
   }).then(([matched, user]) => {
@@ -29,11 +32,17 @@ exports.login = (req, res, next) => {
       req.session.user = user;
       return res.send('登录成功！');
     } else {
-      return res.status(400).send('密码错！');
+      throw {
+        status: 400,
+        message: '密码错误！'
+      }
     }
   }).catch((err) => {
-    console.log(err);
-    return res.status(500).send('服务器端出错！');
+    if (err.status) {
+      res.status(err.status).end(err.message);
+    } else {
+      next(err);
+    }
   });
 };
 

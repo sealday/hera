@@ -15,6 +15,9 @@ const compression = require('compression')
 const service = require('./service')
 const Op = require('./models/op')
 const pug = require('pug')
+const Project = require('./models').Project;
+const User = require('./models').User;
+const config = require('../config');
 
 const apiIndex = require('./api')
 
@@ -22,7 +25,25 @@ const apiIndex = require('./api')
 mongoose.Promise = global.Promise
 // 连接 mongo 数据库
 mongoose
-  .connect('mongodb://localhost/hera')
+  .connect(`mongodb://localhost/${ config.db }`)
+  .then(() => {
+    return Promise.all([Project.find(), User.find()]);
+  })
+  .then(([projects, users]) => {
+    if (projects.length === 0) {
+      new Project(config.base).save()
+    }
+    if (users.length === 0) {
+      new User({
+        username: 'hera',
+        password: '123456',
+        type: 258,
+        profile: {
+          name: '超级管理员'
+        }
+      }).save()
+    }
+  });
 
 mongoose.connection.on('error', () => {
   console.log('%s MongoDB connection error. Please make sure MongoDB is running.', chalk.red('✗'))
