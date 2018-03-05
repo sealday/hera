@@ -40,7 +40,8 @@ mongoose
         type: 258,
         profile: {
           name: '超级管理员'
-        }
+        },
+        role: '系统管理员'
       }).save()
     }
   });
