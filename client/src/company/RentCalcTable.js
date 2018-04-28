@@ -5,6 +5,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { RENT } from '../actions'
+import { currencyFormat, numberFormat } from '../utils'
 import shortId from 'shortid'
 import moment from 'moment'
 
@@ -40,15 +41,15 @@ class SimpleSearchTable extends React.Component {
               <td>{item.size}</td>
               <td>{item.count}</td>
               <td>{item.days}</td>
-              <td>{item.price}</td>
+              <td style={{ textAlign: 'right' }}>{currencyFormat(item.price)}</td>
               <td>{item.freight}</td>
             </tr>
           ))}
           </tbody>
         </table>
         {rent.list.length > 0 && <ul className="list-group">
-          <li className="list-group-item">金额：{rent.group[0].price} 元</li>
-          <li className="list-group-item">运费：{rent.group[0].freight} 元</li>
+          <li className="list-group-item">金额：{numberFormat(rent.group[0].price)} 元</li>
+          <li className="list-group-item">运费：{numberFormat(rent.group[0].freight)} 元</li>
         </ul>}
       </div>
     )

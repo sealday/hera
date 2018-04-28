@@ -137,16 +137,29 @@ export const filterOption = (option, filter) => {
 }
 
 let formatNumber_
+let currencyFormat_
+let numberFormat_
 
-if (Intl) {
+if (window.Intl) {
   formatNumber_ = (number) => {
     return isNaN(number) ? '' : new Intl.NumberFormat().format(number)
   }
+  const options = { style: 'currency', currency: 'CNY' }
+  const numberFormat = new Intl.NumberFormat('zh-CN', options)
+  currencyFormat_ = (number) => numberFormat.format(number)
+  const numberFormater = new Intl.NumberFormat('zh-CN', { maximumFractionDigits: 2 })
+  numberFormat_ = (number) => numberFormater.format(number)
 } else {
   formatNumber_ = number => number
+  currencyFormat_ = (number) => {
+    return isNaN(number) ? '' : number
+  }
+  numberFormat_ = number => number
 }
 
 export const formatNumber = formatNumber_
+export const currencyFormat = currencyFormat_
+export const numberFormat = numberFormat_
 
 export const total = (count, product) => toFixedWithoutTrailingZero(count * getScale(product))
 
