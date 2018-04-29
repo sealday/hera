@@ -11,3 +11,9 @@ exports.calculateSize = size => {
     return Number(sizes[sizes.length - 1]);
   }
 };
+
+exports.helper =  (asyncFn) => (req, res, next) => {
+  asyncFn(req, res, next).catch((err) => {
+    next(err)
+  })
+}

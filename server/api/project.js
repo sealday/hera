@@ -3,6 +3,10 @@
  */
 
 const Project = require('../models').Project;
+const helper = require('../utils/my').helper
+const rentService = require('../service/Rent')
+const moment = require('moment')
+const ObjectId = require('mongoose').Types.ObjectId;
 
 /*
 列出所有的项目
@@ -67,3 +71,64 @@ exports.detail = (req, res, next) => {
     next(err)
   })
 }
+
+const addItem = async (req, res, next) => {
+  let condition = req.body
+
+  if (condition) {
+    const projectId = ObjectId(req.params.id)
+    const startDate = new Date(condition.startDate)
+    const endDate = new Date(condition.endDate)
+    const timezone = 'Asia/Shanghai'
+    const pricePlanId = ObjectId(condition.planId)
+    const project = await Project.findById(projectId)
+
+    // 检查是否有区间重合
+    const items = project.items.filter(item => item.name === '对账单')
+    items.forEach(item => {
+      if (!(moment(item.startDate).startOf('day') > moment(endDate).startOf('day')
+      || moment(item.endDate).startOf('day') < moment(startDate).startOf('day'))) {
+        throw {
+          status: 400,
+          message: '对账单区间重合！',
+        }
+      }
+    })
+
+    const result = await rentService.calculate({
+      startDate,
+      endDate,
+      timezone,
+      projectId,
+      pricePlanId,
+    })
+    console.log(JSON.stringify(result[0], null, 4))
+    const item = {
+      name: '对账单', // 名称
+      startDate: startDate, // 开始时间
+      endDate: endDate, // 结束时间
+      createdAt: new Date(), // 创建时间
+      updatedAt: new Date(), // 更新时间
+      username: req.session.user.username, // 操作员
+      content: {
+        history: result[0].history,
+        list: result[0].list,
+        group: result[0].group,
+      }
+    }
+    project.items.push(item)
+    const newProject = await project.save()
+    res.json({
+      message: '生成成功！',
+      data: {
+        project: newProject,
+      }
+    })
+  } else {
+    res.status(400).json({
+      message: '错误的请求格式'
+    })
+  }
+}
+
+exports.addItem = helper(addItem)

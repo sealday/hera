@@ -3,7 +3,7 @@ import RentCalcForm from './RentCalcForm'
 import RentCalcTable from './RentCalcTable'
 import { connect } from 'react-redux'
 import moment from 'moment'
-import { queryRent } from '../actions'
+import { queryRent, projectAddItem } from '../actions'
 import * as XLSX from 'xlsx'
 import { saveAs } from 'file-saver'
 
@@ -16,12 +16,20 @@ class RentCalc extends React.Component {
     }))
   }
 
+  handleAddItem = (condition) => {
+    this.props.dispatch(projectAddItem({
+      ...condition,
+      endDate: moment(condition.endDate).add(1, 'day')
+    }))
+  }
+
   render() {
     return (
       <div>
         <h3 className="page-header">租金计算</h3>
         <RentCalcForm
           onSubmit={this.handleSubmit}
+          onAddItem={this.handleAddItem}
           onExcelExport={() => {
             const wb = XLSX.utils.table_to_book(this.table)
             const out = XLSX.write(wb, { bookType:'xlsx', bookSST:false, type:'binary', compression: true })

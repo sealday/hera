@@ -5,6 +5,7 @@ const ObjectId = mongoose.Types.ObjectId
 const Product = require('../models').Product
 const _ = require('lodash')
 const async = require('async')
+const helper = require('../utils/my').helper
 
 const newPlan = {
   _id: ObjectId('5a56ff25af16eb8d5163df9c'),
@@ -119,12 +120,6 @@ const update = async (req, res, next) => {
   await oldPlan.save()
   res.json({
     message: '更新成功'
-  })
-}
-
-const helper =  (asyncFn) => (req, res, next) => {
-  asyncFn(req, res, next).catch((err) => {
-    next(err)
   })
 }
 

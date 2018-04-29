@@ -106,10 +106,14 @@ app.use(function(err, req, res, next) {
     console.log(err)
   }
   res.status(err.status || 500)
-  res.json({
-    message: '出错了！',
-    originalError: err
-  })
+  if (err.status) {
+    res.json(err)
+  } else {
+    res.json({
+      message: '出错了！',
+      originalError: err
+    })
+  }
 })
 
 // TODO 增加认证的机制

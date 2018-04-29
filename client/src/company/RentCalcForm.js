@@ -36,7 +36,7 @@ class SimpleSearchForm extends React.Component {
   }
 
   render() {
-    const { handleSubmit, projects, startDate, endDate, reset } = this.props
+    const { handleSubmit, projects, startDate, endDate, reset, onAddItem } = this.props
     return (
       <form onSubmit={handleSubmit} className="form-horizontal">
         <div className="form-group">
@@ -101,7 +101,7 @@ class SimpleSearchForm extends React.Component {
           </div>
         </div>
         <div className="form-group">
-          <div className="col-md-offset-6 col-md-2">
+          <div className="col-md-offset-4 col-md-2">
             <button type="submit" className="btn btn-primary btn-block">查询</button>
           </div>
           <div className="col-md-2">
@@ -109,6 +109,9 @@ class SimpleSearchForm extends React.Component {
           </div>
           {this.props.onExcelExport && <div className="col-md-2">
             <button type="button" className="btn btn-primary btn-block" onClick={e => this.props.onExcelExport() }>导出excel</button>
+          </div>}
+          {<div className="col-md-2">
+            <button type="button" className="btn btn-primary btn-block" onClick={handleSubmit(onAddItem)}>生成对账单</button>
           </div>}
         </div>
       </form>

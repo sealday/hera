@@ -20,26 +20,6 @@ class ContractContent extends React.Component {
   render() {
     let { projects, params } = this.props
     const project = projects.get(params.id)
-    const contents = [
-      {
-        _id: 0,
-        name: '对账单',
-        startDate: moment('2018-01-21'),
-        endDate: moment('2018-02-20'),
-        createdAt: moment('2018-02-25'),
-        updatedAt: moment('2018-02-25'),
-        username: '管理员',
-      },
-      {
-        _id: 1,
-        name: '对账单',
-        startDate: moment('2018-02-21'),
-        endDate: moment('2018-03-20'),
-        createdAt: moment('2018-03-25'),
-        updatedAt: moment('2018-03-25'),
-        username: '管理员',
-      },
-    ]
     return (
       <div>
         <h2 className="page-header">合同详情</h2>
@@ -69,13 +49,13 @@ class ContractContent extends React.Component {
           </tr>
           </thead>
           <tbody>
-          {contents.map(content => (
-            <tr key={content._id} id={content._id}>
-              <td>{content.name}</td>
-              <td>{dateFormat(content.startDate)} - {dateFormat(content.endDate)}</td>
-              <td>{dateFormat(content.createdAt)}</td>
-              <td>{dateFormat(content.updatedAt)}</td>
-              <td>{content.username}</td>
+          {project.items.map(item => (
+            <tr key={item._id} id={item._id}>
+              <td>{item.name}</td>
+              <td>{dateFormat(item.startDate)} ~ {dateFormat(item.endDate)}</td>
+              <td>{dateFormat(item.createdAt)}</td>
+              <td>{dateFormat(item.updatedAt)}</td>
+              <td>{item.username}</td>
             </tr>
           ))}
           </tbody>

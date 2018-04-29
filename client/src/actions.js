@@ -794,3 +794,28 @@ export const queryRent = (condition) => (dispatch, getState) => {
     })
   }
 }
+
+export const PROJECT_ADD_ITEM = 'PROJECT_ADD_ITEM'
+
+export const projectAddItem = (condition) => (dispatch, getState) => {
+  const search = network(PROJECT_ADD_ITEM) // 让查询网络不会重复
+  if (search.shouldProceed(getState())) {
+    dispatch(search.begin)
+    dispatch(newInfoNotify('提示', '正在生成对账单', 2000))
+    ajax(`/api/project/${ condition.project }/add_item`, {
+      data: JSON.stringify(condition),
+      method: 'POST',
+      contentType: 'application/json'
+    }).then(res => {
+      dispatch(search.endSuccess)
+      dispatch({ type: UPDATE_PROJECT, data: res.data.project })
+      dispatch(newSuccessNotify('提示', '生成对账单成功', 2000))
+      dispatch(push(`/contract/${ condition.project }`))
+    }).catch(err => {
+      console.dir(err)
+      const res = err.responseJSON
+      dispatch(search.endFailure)
+      dispatch(newErrorNotify('错误', `生成对账单失败：${ res.message }`, 2000))
+    })
+  }
+}

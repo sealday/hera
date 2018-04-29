@@ -22,6 +22,15 @@ const projectSchema = new Schema({
   comments: String, // 备注
   store: [{name: String, size: String, count: Number}], // 库存信息（实时）
   type: String, // 仓库类型
+  items: [{
+    name: String, // 名称
+    startDate: Date, // 开始时间
+    endDate: Date, // 结束时间
+    createdAt: Date, // 创建时间
+    updatedAt: Date, // 更新时间
+    username: String, // 操作员
+    content: Schema.Types.Mixed, // 内容
+  }],
 
   base: String, // 关联的基地仓库，用来制作三方的库存记录
 }, { timestamps: true });
