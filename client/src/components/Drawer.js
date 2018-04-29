@@ -112,7 +112,7 @@ const Drawer = (props) => (
           </ul>}
         </ReactCSSTransitionGroup>
       </li>}
-      {(props.system.user.role === '系统管理员' || props.system.user.role === '财务管理员') && <li>
+      {(props.system.user.role === '系统管理员' || props.system.user.role === '财务管理员' || props.system.user.role === '基地仓库管理员') && <li>
         <a href="#" onClick={e => { e.preventDefault(); props.dispatch(toggleMenu('company'))}}>公司</a>
         <ReactCSSTransitionGroup
           transitionName="nav"
@@ -122,6 +122,7 @@ const Drawer = (props) => (
             <li><Link to="/rent_calc">租金计算</Link></li>
             <li><Link to="/simple_search_company">仓库出入库查询</Link></li>
             <li><Link to="/transport_table_company">运输单查询</Link></li>
+            <li><Link to="/contract">合同</Link></li>
           </ul>}
         </ReactCSSTransitionGroup>
       </li>}
