@@ -1,15 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import { Link } from 'react-router'
-import { removeProject } from '../actions'
+import { formValueSelector } from 'redux-form'
+import ContractForm from './ContractForm'
 
 class Contract extends React.Component {
 
   render() {
-    let { projects } = this.props
+    let { projects, router, project } = this.props
+    const projectId = project
     return (
       <div>
         <h2 className="page-header">合同</h2>
+        <ContractForm/>
         <table className="table table-bordered">
           <thead>
           <tr>
@@ -19,8 +21,8 @@ class Contract extends React.Component {
           </tr>
           </thead>
           <tbody>
-          {projects.valueSeq().filter(project => project.type !== '基地仓库').map(project => (
-            <tr key={project._id} id={project._id}>
+          {projects.valueSeq().filter(project => project.type !== '基地仓库' && (projectId ? project._id === projectId : true) ).map(project => (
+            <tr key={project._id} id={project._id} onClick={() => router.push(`/contract/${ project._id }`)}>
               <td>{project.company} {project.name}</td>
               <td>{project._id}</td>
               <td/>
@@ -33,9 +35,11 @@ class Contract extends React.Component {
   }
 }
 
+const selector = formValueSelector('contractForm')
 const mapStateToProps = state => {
   return {
-    projects: state.system.projects
+    projects: state.system.projects,
+    project: selector(state, 'project'),
   }
 }
 
