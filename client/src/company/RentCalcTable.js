@@ -15,11 +15,11 @@ import moment from 'moment'
 class SimpleSearchTable extends React.Component {
 
   render() {
-    const { rent } = this.props
+    const { rent, onLoad } = this.props
 
     return (
       <div className="panel panel-default">
-        <table className="table">
+        <table className="table" ref={onLoad}>
           <thead>
           <tr>
             <th>日期</th>
@@ -38,15 +38,15 @@ class SimpleSearchTable extends React.Component {
           {rent.history.map((item) => (
             <tr key={shortId.generate()}>
               <td>上期结存</td>
-              <td>&nbsp;</td>
+              <td/>
               <td>{item.name}</td>
-              <td>&nbsp;</td>
+              <td/>
               <td>{item.unit}</td>
               <td className="text-right">{numberFormat(item.count)}</td>
               <td className="text-right">{currencyFormat(item.unitPrice, 3)}</td>
               <td>{item.days}</td>
               <td className="text-right">{currencyFormat(item.price)}</td>
-              <td>&nbsp;</td>
+              <td/>
             </tr>
           ))}
           {rent.list.map((item) => (
