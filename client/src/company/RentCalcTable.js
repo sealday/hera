@@ -5,7 +5,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { RENT } from '../actions'
-import { currencyFormat, numberFormat } from '../utils'
+import { currencyFormat, numberFormat, dateFormat } from '../utils'
 import shortId from 'shortid'
 import moment from 'moment'
 
@@ -26,22 +26,40 @@ class SimpleSearchTable extends React.Component {
             <th>出入库</th>
             <th>名称</th>
             <th>规格</th>
-            <th>数量</th>
+            <th>单位</th>
+            <th className="text-right">数量</th>
+            <th className="text-right">单价</th>
             <th>天数</th>
-            <th>金额</th>
+            <th className="text-right">金额</th>
             <th>运费</th>
           </tr>
           </thead>
           <tbody>
+          {rent.history.map((item) => (
+            <tr key={shortId.generate()}>
+              <td>上期结存</td>
+              <td>&nbsp;</td>
+              <td>{item.name}</td>
+              <td>&nbsp;</td>
+              <td>{item.unit}</td>
+              <td className="text-right">{numberFormat(item.count)}</td>
+              <td className="text-right">{currencyFormat(item.unitPrice, 3)}</td>
+              <td>{item.days}</td>
+              <td className="text-right">{currencyFormat(item.price)}</td>
+              <td>&nbsp;</td>
+            </tr>
+          ))}
           {rent.list.map((item) => (
             <tr key={shortId.generate()}>
-              <td>{item.history ? '上期结存' :  moment(item.outDate).format('YYYY-MM-DD')}</td>
+              <td>{dateFormat(item.outDate)}</td>
               <td>{item.inOut}</td>
               <td>{item.name}</td>
               <td>{item.size}</td>
-              <td>{item.count}</td>
+              <td>{item.unit}</td>
+              <td className="text-right">{numberFormat(item.count)}</td>
+              <td className="text-right">{currencyFormat(item.unitPrice, 3)}</td>
               <td>{item.days}</td>
-              <td style={{ textAlign: 'right' }}>{currencyFormat(item.price)}</td>
+              <td className="text-right">{currencyFormat(item.price)}</td>
               <td>{item.freight}</td>
             </tr>
           ))}
@@ -57,7 +75,7 @@ class SimpleSearchTable extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  rent: state.results.get(RENT, { list: [], group: [ { price: 0, freight: 0 } ] })
+  rent: state.results.get(RENT, { history: [], list: [], group: [ { price: 0, freight: 0 } ] })
 })
 
 export default connect(mapStateToProps)(SimpleSearchTable)

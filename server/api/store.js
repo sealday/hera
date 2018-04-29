@@ -349,6 +349,15 @@ const doRent = async ({startDate, endDate, timezone, project, pricePlanId}) => {
             then: startDate,
             else: '$outDate',
           },
+        },
+        inOut: {
+          $cond: {
+            if: {
+              $eq: ['$inStock', project]
+            },
+            then: 1,
+            else: -1
+          }
         }
       }
     },
@@ -390,26 +399,60 @@ const doRent = async ({startDate, endDate, timezone, project, pricePlanId}) => {
           }
         },
         count: {
-          $cond: {
-            if: '$products.isScaled',
-            then: {
-              $multiply: ['$entries.count', '$products.scale']
-            },
-            else: ['$entries.count']
+          $switch: {
+            branches: [
+              {
+                case: { $eq: ['$prices.entries.type', '换算数量'] },
+                then: { $multiply: ['$entries.count', '$products.scale', '$inOut'] },
+              },
+              {
+                case: { $eq: ['$prices.entries.type', '数量'] },
+                then: { $multiply: ['$entries.count', '$inOut'] },
+              },
+              {
+                case: { $eq: ['$prices.entries.type', '重量'] },
+                then: { $multiply: ['$entries.count', '$products.weight', '$inOut'] },
+              },
+            ],
+            default:  {
+              $cond: {
+                if: '$products.isScaled',
+                then: {
+                  $multiply: ['$entries.count', '$products.scale', '$inOut']
+                },
+                else: { $multiply: ['$entries.count', '$inOut'] }
+              }
+            }
+          }
+        },
+        unit: {
+          $switch: {
+            branches: [
+              {
+                case: { $eq: ['$prices.entries.type', '换算数量'] },
+                then: '$products.unit',
+              },
+              {
+                case: { $eq: ['$prices.entries.type', '数量'] },
+                then: '$products.countUnit',
+              },
+              {
+                case: { $eq: ['$prices.entries.type', '重量'] },
+                then: '吨',
+              },
+            ],
+            default:  {
+              $cond: {
+                if: '$products.isScaled',
+                then: '$products.unit',
+                else: '$products.countUnit',
+              }
+            }
           }
         },
         weight: {
           $multiply: ['$entries.count', '$products.weight']
         },
-        inOut: {
-          $cond: {
-            if: {
-              $eq: ['$inStock', project]
-            },
-            then: 1,
-            else: -1
-          }
-        }
       }
     },
     {
@@ -487,21 +530,102 @@ const doRent = async ({startDate, endDate, timezone, project, pricePlanId}) => {
     },
     {
       $facet: {
+        history: [
+          {
+            $match: {
+              history: true
+            },
+          },
+          {
+            // TODO 考虑不合并的情况
+            $group: {
+              _id: '$products.name',
+              name: {
+                $first: '$products.name',
+              },
+              count: {
+                $sum: '$count',
+              },
+              days: {
+                $first: '$days',
+              },
+              price: {
+                $sum: {
+                  $multiply: [ '$prices.entries.unitPrice', '$days', '$count' ],
+                }
+              },
+              unit: {
+                $first: '$unit'
+              },
+            }
+          },
+          {
+            $addFields: {
+              unitPrice: {
+                $divide: [
+                  {
+                    $divide: [
+                      '$price', '$count',
+                    ],
+                  },
+                  '$days',
+                ],
+              }
+            }
+          }
+        ],
         list: [
+          {
+            $match: {
+              history: false
+            }
+          },
           {
             $project: {
               outDate: '$outDate',
-              number: '$number',
+              number: '$entries.number',
               name: '$products.name',
               size: '$products.size',
-              count: '$entries.count',
+              count: '$count',
               days: '$days',
               inOut: { $cond: { if: { $eq: ['$inOut', 1] }, then: '出库', else: '入库' } },
-              unitPrice: '$prices.unitPrice',
+              unitPrice: '$prices.entries.unitPrice',
               unitFreight: '$prices.freight',
               price: '$price',
               freight: '$freight',
               history: '$history',
+              unit: '$unit',
+            }
+          },
+          {
+            $group: {
+              // TODO 考虑不合并的情况
+              _id: {
+                year: { $year: { date: '$outDate', timezone: 'Asia/Shanghai' } },
+                month: { $month: { date: '$outDate', timezone: 'Asia/Shanghai' } },
+                day: { $dayOfMonth: { date: '$outDate', timezone: 'Asia/Shanghai' } },
+                name: '$name',
+                inOut: { $cond: { if: { $eq: ['$inOut', 1] }, then: '出库', else: '入库' } }
+              },
+              outDate: { $first: '$outDate' },
+              number: { $first:  '$number' },
+              name: { $first: '$name' },
+              count: { $sum: '$count' },
+              days: { $first: '$days' },
+              inOut: { $first: { $cond: { if: { $eq: ['$inOut', 1] }, then: '出库', else: '入库' } } },
+              unitPrice: { $first: '$unitPrice' },
+              unitFreight: { $first: '$freight' },
+              price: { $sum: '$price' },
+              freight: { $sum: '$freight' },
+              unit: { $first: '$unit' },
+            }
+          },
+          {
+            $sort: {
+              '_id.year': 1,
+              '_id.month': 1,
+              '_id.day': 1,
+              number: 1,
             }
           }
         ],
@@ -571,10 +695,12 @@ exports.rent = (req, res, next) => {
       project,
       pricePlanId,
     }).then((result) => {
+      console.log(JSON.stringify(result[0], null, 4))
       res.json({
         message: '查询成功！',
         data: {
           rent: {
+            history: result[0].history,
             list: result[0].list,
             group: result[0].group,
           }

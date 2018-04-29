@@ -4,6 +4,7 @@
 
 import $ from 'jquery';
 import fuzzysearch from 'fuzzysearch'
+import moment from 'moment'
 
 /**
  * 计算规格的数值表达
@@ -144,11 +145,15 @@ if (window.Intl) {
   formatNumber_ = (number) => {
     return isNaN(number) ? '' : new Intl.NumberFormat().format(number)
   }
-  const options = { style: 'currency', currency: 'CNY' }
-  const numberFormat = new Intl.NumberFormat('zh-CN', options)
-  currencyFormat_ = (number) => numberFormat.format(number)
-  const numberFormater = new Intl.NumberFormat('zh-CN', { maximumFractionDigits: 2 })
-  numberFormat_ = (number) => numberFormater.format(number)
+  currencyFormat_ = (number, fractionDigits = 2) => {
+    const options = { style: 'currency', currency: 'CNY', minimumFractionDigits: fractionDigits, maximumFractionDigits: fractionDigits }
+    const numberFormat = new Intl.NumberFormat('zh-CN', options)
+    return number ? numberFormat.format(number) : numberFormat.format(0)
+  }
+  numberFormat_ = (number, fractionDigits = 2) => {
+    const numberFormat = new Intl.NumberFormat('zh-CN', { minimumFractionDigits: fractionDigits, maximumFractionDigits: fractionDigits })
+    return numberFormat.format(number)
+  }
 } else {
   formatNumber_ = number => number
   currencyFormat_ = (number) => {
@@ -160,6 +165,7 @@ if (window.Intl) {
 export const formatNumber = formatNumber_
 export const currencyFormat = currencyFormat_
 export const numberFormat = numberFormat_
+export const dateFormat = date => moment(date).format('YYYY-MM-DD')
 
 export const total = (count, product) => toFixedWithoutTrailingZero(count * getScale(product))
 
