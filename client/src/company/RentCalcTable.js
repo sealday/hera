@@ -31,7 +31,7 @@ class SimpleSearchTable extends React.Component {
             <th className="text-right">单价</th>
             <th>天数</th>
             <th className="text-right">金额</th>
-            <th>运费</th>
+            <th className="text-right">运费</th>
           </tr>
           </thead>
           <tbody>
@@ -43,7 +43,7 @@ class SimpleSearchTable extends React.Component {
               <td/>
               <td>{item.unit}</td>
               <td className="text-right">{numberFormat(item.count)}</td>
-              <td className="text-right">{currencyFormat(item.unitPrice, 3)}</td>
+              <td className="text-right">{currencyFormat(item.unitPrice, 4)}</td>
               <td>{item.days}</td>
               <td className="text-right">{currencyFormat(item.price)}</td>
               <td/>
@@ -57,10 +57,10 @@ class SimpleSearchTable extends React.Component {
               <td>{item.size}</td>
               <td>{item.unit}</td>
               <td className="text-right">{numberFormat(item.count)}</td>
-              <td className="text-right">{currencyFormat(item.unitPrice, 3)}</td>
+              <td className="text-right">{currencyFormat(item.unitPrice, 4)}</td>
               <td>{item.days}</td>
               <td className="text-right">{currencyFormat(item.price)}</td>
-              <td>{item.freight}</td>
+              <td className="text-right">{currencyFormat(item.freight)}</td>
             </tr>
           ))}
           </tbody>
