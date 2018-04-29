@@ -1,14 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import { Link } from 'react-router'
-import { removeProject } from '../actions'
-import moment from 'moment'
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
-import { currencyFormat, dateFormat } from '../utils'
-import FlatButton from 'material-ui/FlatButton';
+import Card, { CardContent } from 'material-ui/Card'
+import { currencyFormat, dateFormat, theme } from '../utils'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import Typography from 'material-ui/Typography'
 import short_id from 'shortid'
+import { withStyles } from 'material-ui/styles';
 
+const styles = {
+  title: {
+    fontSize: 42,
+  },
+};
 
 class ContractContent extends React.Component {
 
@@ -18,24 +21,27 @@ class ContractContent extends React.Component {
   }
 
   render() {
-    let { projects, params } = this.props
+    let { projects, params, classes } = this.props
+
     const project = projects.get(params.id)
     return (
       <div>
         <h2 className="page-header">合同详情</h2>
-        <MuiThemeProvider>
+        <MuiThemeProvider theme={theme}>
             <Card>
-              <CardTitle
-                title={`${ project.company } ${ project.name }`}
-                subtitle={<p>编号：{ project._id }  <br/>外部：{ short_id.generate() }</p>}  />
-              <CardText>
+              <CardContent>
+                <Typography
+                  className={classes.title}
+                  variant="headline"
+                  component="h2"
+                >{ project.company } { project.name }</Typography>
+                <Typography variant="subheading" color="textSecondary">
+                  <p>编号：{ project._id }  <br/>外部：{ short_id.generate() }</p>
+                </Typography>
                 <p>费用：<span style={{ fontSize: 'xx-large' }}>{ currencyFormat(761946.14) }</span> </p>
                 <p>收款：<span style={{ fontSize: 'xx-large' }}>{ currencyFormat(150000.00) }</span> </p>
                 <p>税收：<span style={{ fontSize: 'xx-large' }}>{ currencyFormat(232.23) }</span> </p>
-              </CardText>
-              <CardActions>
-                <FlatButton label="添加新的对账单" onClick={() => {} } />
-              </CardActions>
+              </CardContent>
             </Card>
         </MuiThemeProvider>
         <table className="table table-bordered" style={{ marginTop: '2em' }}>
@@ -64,6 +70,12 @@ class ContractContent extends React.Component {
     );
   }
 }
+
+ContractContent.propTypes = {
+  classes: React.PropTypes.object.isRequired,
+};
+
+ContractContent = withStyles(styles)(ContractContent)
 
 const mapStateToProps = state => {
   return {

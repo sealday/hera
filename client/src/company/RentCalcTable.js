@@ -7,7 +7,6 @@ import { connect } from 'react-redux'
 import { RENT } from '../actions'
 import { currencyFormat, numberFormat, dateFormat } from '../utils'
 import shortId from 'shortid'
-import moment from 'moment'
 
 /**
  * 提供排序功能的搜索结果表

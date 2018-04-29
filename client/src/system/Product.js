@@ -3,14 +3,17 @@ import { Field, reduxForm, getFormValues } from 'redux-form'
 import { Input } from '../components'
 import ProductForm from './ProductForm'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import Dialog from 'material-ui/Dialog'
-import FlatButton from 'material-ui/FlatButton'
-import { ajax } from '../utils'
+import Dialog, {
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from 'material-ui/Dialog'
+import { ajax, theme } from '../utils'
 import { connect } from 'react-redux'
 import { newErrorNotify, newInfoNotify } from '../actions'
 
-const ProductCreateForm = reduxForm({ form: 'PRODUCT_CREATE', action: 'create' })(ProductForm)
-const ProductEditForm = reduxForm({ form: 'PRODUCT_EDIT', action: 'edit' })(ProductForm)
+const ProductCreateForm = reduxForm({ form: 'PRODUCT_CREATE' })(ProductForm)
+const ProductEditForm = reduxForm({ form: 'PRODUCT_EDIT' })(ProductForm)
 const ProductFilterForm = reduxForm({ form: 'PRODUCT_FILTER', initialValues: { keyword: '' } })(
   (props) => <form className="navbar-form" role="search">
     <Field name="keyword" component={Input} placeholder="过滤出指定名称产品"/>
@@ -26,6 +29,10 @@ class Product extends React.Component {
       deleteConfirm: false,
     }
   }
+
+  createForm =  null
+  editForm = null
+
   componentDidMount() {
     this.props.dispatch(newInfoNotify('提示', '正在加载产品列表', 1000))
     ajax('/api/product').then((res) => {
@@ -35,9 +42,6 @@ class Product extends React.Component {
     }).catch((err) => {
       this.props.dispatch(newErrorNotify('警告', '加载产品列表出错', 1000))
     })
-  }
-  handleOpen = () => {
-    this.setState({open: true})
   }
   handleClose = () => {
     this.setState({open: false})
@@ -90,27 +94,13 @@ class Product extends React.Component {
     })
   }
   render() {
-    const actions = [
-      <FlatButton
-        label="取消"
-        primary={true}
-        onClick={this.handleClose}
-      />,
-    ]
-    const deleteActions = [
-      <button
-        className="btn btn-default"
-        onClick={this.handleDeleteConfirmClose}
-      >取消</button>,
-      <button
-        className="btn btn-danger h-left-margin-1-em"
-        onClick={this.onDelete}
-      >确定删除</button>,
-    ]
     return (
       <div>
         <h2 className="page-header">产品信息维护</h2>
-        <ProductCreateForm onSubmit={(d) => this.onCreate(d)}/>
+        <ProductCreateForm onSubmit={(d) => this.onCreate(d)} ref={createForm => this.createForm = createForm}/>
+        <div className="form-group">
+          <button type="submit" className="btn btn-primary" onClick={() => this.createForm.submit()}>新增</button>
+        </div>
         <nav className="navbar navbar-default">
           <div className="container-fluid">
             <ProductFilterForm/>
@@ -158,24 +148,44 @@ class Product extends React.Component {
           ))}
           </tbody>
         </table>
-        <MuiThemeProvider>
-        <Dialog
-          title="编辑"
-          actions={actions}
-          modal={true}
-          open={this.state.open}
-        >
-          <ProductEditForm initialValues={this.state.current} onSubmit={(d) => this.onEdit(d)}/>
+        <MuiThemeProvider theme={theme}>
+        <Dialog open={this.state.open}>
+          <DialogTitle>编辑</DialogTitle>
+          <DialogContent>
+            <ProductEditForm
+              initialValues={this.state.current}
+              onSubmit={(d) => this.onEdit(d)}
+              ref={editForm => this.editForm = editForm}
+            />
+          </DialogContent>
+          <DialogActions>
+            <button
+              className="btn btn-default"
+              onClick={this.handleClose}
+            >取消</button>
+            <button
+              className="btn btn-danger h-left-margin-1-em"
+              onClick={() => this.editForm.submit()}
+            >保存</button>
+          </DialogActions>
         </Dialog>
         </MuiThemeProvider>
-        <MuiThemeProvider>
-          <Dialog
-            title="确认删除"
-            actions={deleteActions}
-            modal={true}
-            open={this.state.deleteConfirm}
-          >
-            删除后可能造成不必要的麻烦，如果需要恢复，请新增一个编号相同的产品！
+        <MuiThemeProvider theme={theme}>
+          <Dialog open={this.state.deleteConfirm}>
+            <DialogTitle>确认删除</DialogTitle>
+            <DialogContent>
+              删除后可能造成不必要的麻烦，如果需要恢复，请新增一个编号相同的产品！
+            </DialogContent>
+            <DialogActions>
+              <button
+                className="btn btn-default"
+                onClick={this.handleDeleteConfirmClose}
+              >取消</button>
+              <button
+                className="btn btn-danger h-left-margin-1-em"
+                onClick={this.onDelete}
+              >确定删除</button>
+            </DialogActions>
           </Dialog>
         </MuiThemeProvider>
       </div>

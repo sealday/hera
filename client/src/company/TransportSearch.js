@@ -9,7 +9,7 @@ import { connect } from 'react-redux'
 import { queryStore } from '../actions'
 import { saveAs } from 'file-saver'
 import moment from 'moment'
-import * as XLSX from 'xlsx'
+import XLSX from 'xlsx'
 
 const key = '运输单查询公司'
 

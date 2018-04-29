@@ -3,7 +3,7 @@
  */
 
 import React from 'react'
-import { reduxForm, Field, formValueSelector } from 'redux-form'
+import { reduxForm, Field } from 'redux-form'
 import { FilterSelect } from '../components'
 import { connect } from 'react-redux'
 import { filterOption, validator } from '../utils'

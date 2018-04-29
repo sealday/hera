@@ -1,5 +1,4 @@
 import React from 'react'
-import shortId from 'shortid'
 import moment from 'moment'
 import { Link } from 'react-router'
 import { ajax } from '../utils'

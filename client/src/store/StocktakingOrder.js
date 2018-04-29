@@ -25,54 +25,26 @@ class PurchaseOrder extends React.Component {
   }
 
   render() {
-    const { record, store, projects, articles, router, user } = this.props
+    const { record, store, articles, router, user } = this.props
 
     let orderName = ''
-    let company = ''
-    let companyLabel = '承租单位'
-    let name = ''
-    let nameLabel = '工程项目'
     let direction = ''
-
-    let outLabel = '出租单位'
-    let inLabel = '租借单位'
-
-    let signer = '租用方'
-
     // 判断是收料单还是发料单
     if (record.inStock === store._id) {
       // 入库是当前操作仓库时，是入库单
       orderName = '收料单'
       direction = 'in'
       if (record.type === '调拨') {
-        company = projects.get(record.outStock).company
-        name = projects.get(record.outStock).name
       } else if (record.type === '采购') {
         orderName = '采购入库单'
-        outLabel = '出售单位'
-        inLabel = '采购项目'
-        companyLabel = '出售单位'
-        company = record.vendor
-        nameLabel = '采购项目'
-        signer = '出售方'
-        name = projects.get(record.inStock).company + projects.get(record.inStock).name
       }
     } else if (record.outStock === store._id) {
       // 出库是当前操作仓库时，是出库单
       orderName = '出库单'
       direction = 'out'
       if (record.type === '调拨') {
-        company = projects.get(record.inStock).company
-        name = projects.get(record.inStock).name
       } else if (record.type === '销售') {
         orderName = '销售出库单'
-        outLabel = '出售项目'
-        inLabel = '采购单位'
-        companyLabel = '采购单位'
-        company = record.vendor
-        nameLabel = '出售项目'
-        signer = '采购方'
-        name = projects.get(record.outStock).company + projects.get(record.outStock).name
       } else if (record.type === '盘点入库') {
         orderName = '盘点入库单'
       } else if (record.type === '盘点出库') {

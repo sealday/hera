@@ -1,5 +1,5 @@
 import React from 'react'
-import { Input, Checkbox } from '../components'
+import { Input } from '../components'
 import { Field } from 'redux-form'
 import { validator } from '../utils'
 
@@ -46,9 +46,6 @@ export default class ProductForm extends React.Component {
         <div className="form-group">
           <label>是否需要换算</label>
           <Field name="isScaled" component={Input} type="checkbox" />
-        </div>
-        <div className="form-group">
-          <button type="submit" className="btn btn-primary">{this.props.action === 'create' ? '新增' : '保存'}</button>
         </div>
       </form>
     )

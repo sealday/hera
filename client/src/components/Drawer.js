@@ -62,17 +62,6 @@ const Drawer = (props) => (
           </ul>}
         </ReactCSSTransitionGroup>
       </li>
-      <li>
-        <a href="#" onClick={e => { e.preventDefault(); props.dispatch(toggleMenu('file'))}}>文件</a>
-        <ReactCSSTransitionGroup
-          transitionName="nav"
-          transitionEnterTimeout={500}
-          transitionLeaveTimeout={300}>
-          {props.nav.file && <ul>
-            <li><Link to="/file_manager">文件管理</Link></li>
-          </ul>}
-        </ReactCSSTransitionGroup>
-      </li>
       {/系统管理员|基地仓库管理员/.test(props.system.user.role) && <li>
         <a href="#" onClick={e => { e.preventDefault(); props.dispatch(toggleMenu('system'))}}>系统</a>
         <ReactCSSTransitionGroup

@@ -4,7 +4,7 @@ import RentCalcTable from './RentCalcTable'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import { queryRent, projectAddItem } from '../actions'
-import * as XLSX from 'xlsx'
+import XLSX from 'xlsx'
 import { saveAs } from 'file-saver'
 
 

@@ -5,7 +5,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
-import cx from 'classnames'
 import { toFixedWithoutTrailingZero as fixed_  } from './../utils'
 import { Link } from 'react-router'
 import { updateTransportPaidStatus, updateTransportCheckedStatus } from '../actions'
@@ -23,7 +22,7 @@ class SimpleSearchTable extends React.Component {
   }
 
   render() {
-    const { search, projects, onLoad, dispatch } = this.props
+    const { search, onLoad, dispatch } = this.props
 
 
     const payeeInfo = {};
