@@ -82,6 +82,40 @@ class Rent {
               }
             }
           },
+          weight: {
+            $multiply: ['$entries.count', '$products.weight']
+          },
+        }
+      },
+      {
+        $lookup: {
+          from: 'prices',
+          let: { number: '$products.number' },
+          pipeline: [
+            {
+              $match: { _id: pricePlanId }
+            },
+            {
+              $unwind: '$entries'
+            },
+            {
+              $match: {
+                $expr: {
+                  $eq: ['$entries.number', '$$number']
+                }
+              }
+            }
+          ],
+          as: 'prices'
+        }
+      },
+      {
+        $unwind: {
+          path: '$prices',
+        }
+      },
+      {
+        $addFields: {
           count: {
             $switch: {
               branches: [
@@ -122,7 +156,7 @@ class Rent {
                 },
                 {
                   case: { $eq: ['$prices.entries.type', '重量'] },
-                  then: '吨',
+                  then: '千克',
                 },
               ],
               default:  {
@@ -134,37 +168,6 @@ class Rent {
               }
             }
           },
-          weight: {
-            $multiply: ['$entries.count', '$products.weight']
-          },
-        }
-      },
-      {
-        $lookup: {
-          from: 'prices',
-          let: { number: '$products.number' },
-          pipeline: [
-            {
-              $match: { _id: pricePlanId }
-            },
-            {
-              $unwind: '$entries'
-            },
-            {
-              $match: {
-                $expr: {
-                  $eq: ['$entries.number', '$$number']
-                }
-              }
-            }
-          ],
-          as: 'prices'
-        }
-      },
-      {
-        $unwind: {
-          path: '$prices',
-          preserveNullAndEmptyArrays: true,
         }
       },
       {
@@ -244,6 +247,13 @@ class Rent {
               }
             },
             {
+              $match: {
+                count: {
+                  $ne: 0
+                }
+              }
+            },
+            {
               $addFields: {
                 unitPrice: {
                   $divide: [
@@ -285,9 +295,9 @@ class Rent {
               $group: {
                 // TODO 考虑不合并的情况
                 _id: {
-                  year: { $year: { date: '$outDate', timezone: timezone } },
-                  month: { $month: { date: '$outDate', timezone: timezone } },
-                  day: { $dayOfMonth: { date: '$outDate', timezone: timezone } },
+                  year: { $year: { date: '$outDate', timezone: 'Asia/Shanghai' } },
+                  month: { $month: { date: '$outDate', timezone: 'Asia/Shanghai' } },
+                  day: { $dayOfMonth: { date: '$outDate', timezone: 'Asia/Shanghai' } },
                   name: '$name',
                   inOut: { $cond: { if: { $eq: ['$inOut', 1] }, then: '出库', else: '入库' } }
                 },
