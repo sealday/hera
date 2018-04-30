@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { reduxForm, Field, FieldArray } from 'redux-form'
 import { Input, DatePicker, FilterSelect, TextArea } from '../components'
 import Tabs, { Tab } from 'material-ui/Tabs';
+import AppBar from 'material-ui/AppBar';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import { connect } from 'react-redux'
 import moment from 'moment'
@@ -82,17 +83,21 @@ class TransferForm extends Component {
         <div className="form-group">
           <div className="col-md-12">
             <MuiThemeProvider theme={theme}>
-              <Tabs value={tab} onChange={this.handleTabChange}>
-                <Tab label="租赁" />
-                <Tab label="销售" />
-                <Tab label="赔偿" />
-                <Tab label="维修" />
-              </Tabs>
+              <div>
+                <AppBar position="static" color="default">
+                  <Tabs value={tab} onChange={this.handleTabChange}>
+                    <Tab label="租赁" />
+                    <Tab label="销售" />
+                    <Tab label="赔偿" />
+                    <Tab label="维修" />
+                  </Tabs>
+                </AppBar>
+                { tab === 0 && <FieldArray name="entries" component={EntryTable} mode="L"/>}
+                { tab === 1 && <FieldArray name="entries" component={EntryTable} mode="S"/>}
+                { tab === 2 && <FieldArray name="entries" component={EntryTable} mode="C"/>}
+                { tab === 3 && <FieldArray name="entries" component={EntryTable} mode="R"/>}
+              </div>
             </MuiThemeProvider>
-            { tab === 0 && <FieldArray name="entries1" component={EntryTable}/>}
-            { tab === 1 && <FieldArray name="entries2" component={EntryTable}/>}
-            { tab === 2 && <FieldArray name="entries3" component={EntryTable}/>}
-            { tab === 3 && <FieldArray name="entries4" component={EntryTable}/>}
           </div>
         </div>
         <div className="form-group">

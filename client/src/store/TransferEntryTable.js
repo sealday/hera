@@ -16,14 +16,14 @@ const TransferEntryTable = connect(
     ...transformArticle(state.system.articles.toArray()),
     products: state.system.products,
   })
-)(({ fields, typeNameMap, nameArticleMap, products }) => {
+)(({ fields, typeNameMap, nameArticleMap, products, mode }) => {
   const add = () => {
     if (fields.length > 0) {
       let name = fields.get(fields.length - 1).name
       let type = fields.get(fields.length - 1).type
-      fields.push({ type, name })
+      fields.push({ type, name, mode })
     } else {
-      fields.push({ type: Object.keys(typeNameMap)[0] })
+      fields.push({ type: Object.keys(typeNameMap)[0], mode })
     }
   }
 
@@ -97,8 +97,8 @@ const TransferEntryTable = connect(
   }
 
   return (
-    <div className="panel panel-default">
-      <table className="table table-bordered">
+    <div>
+      <table className="table">
         <thead>
         <tr>
           <th>类型</th>
@@ -119,7 +119,7 @@ const TransferEntryTable = connect(
         </thead>
         <tbody>
         {fields.map((entry, index) =>
-          <tr key={index}>
+          fields.get(index).mode === mode && <tr key={index}>
             <td>
               <Field
                 name={`${entry}.type`}

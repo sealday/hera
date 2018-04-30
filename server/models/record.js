@@ -37,6 +37,18 @@ const recordSchema = {
     mixPrice: Number, // 综合单价
     mixSum: Number, // 综合金额
     comments: String, // 备注
+    /**
+     *
+     * L lease 租赁，库存同方向，计算和时间有关
+     * C compensation  赔偿，库存反方向，计算和时间无关
+     * S sales 销售，库存同方向， 计算和时间无关
+     * R repair 维修，不涉及库存，计算和时间无关
+     */
+    mode: {
+      type: String,
+      enum: ['L', 'C', 'S', 'R'],
+      default: 'L'
+    }, // 模式，
   }], // 订单项
 
   outDate: Date, // 出库时间
