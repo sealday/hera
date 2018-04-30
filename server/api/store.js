@@ -560,6 +560,13 @@ const doRent = async ({startDate, endDate, timezone, project, pricePlanId}) => {
             }
           },
           {
+            $match: {
+              count: {
+                $ne: 0
+              }
+            }
+          },
+          {
             $addFields: {
               unitPrice: {
                 $divide: [
