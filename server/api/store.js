@@ -398,6 +398,41 @@ const doRent = async ({startDate, endDate, timezone, project, pricePlanId}) => {
             }
           }
         },
+        weight: {
+          $multiply: ['$entries.count', '$products.weight']
+        },
+      }
+    },
+    {
+      $lookup: {
+        from: 'prices',
+        let: { number: '$products.number' },
+        pipeline: [
+          {
+            $match: { _id: pricePlanId }
+          },
+          {
+            $unwind: '$entries'
+          },
+          {
+            $match: {
+              $expr: {
+                $eq: ['$entries.number', '$$number']
+              }
+            }
+          }
+        ],
+        as: 'prices'
+      }
+    },
+    {
+      $unwind: {
+        path: '$prices',
+        preserveNullAndEmptyArrays: true,
+      }
+    },
+    {
+      $addFields: {
         count: {
           $switch: {
             branches: [
@@ -438,7 +473,7 @@ const doRent = async ({startDate, endDate, timezone, project, pricePlanId}) => {
               },
               {
                 case: { $eq: ['$prices.entries.type', '重量'] },
-                then: '吨',
+                then: '千克',
               },
             ],
             default:  {
@@ -450,37 +485,6 @@ const doRent = async ({startDate, endDate, timezone, project, pricePlanId}) => {
             }
           }
         },
-        weight: {
-          $multiply: ['$entries.count', '$products.weight']
-        },
-      }
-    },
-    {
-      $lookup: {
-        from: 'prices',
-        let: { number: '$products.number' },
-        pipeline: [
-          {
-            $match: { _id: pricePlanId }
-          },
-          {
-            $unwind: '$entries'
-          },
-          {
-            $match: {
-              $expr: {
-                $eq: ['$entries.number', '$$number']
-              }
-            }
-          }
-        ],
-        as: 'prices'
-      }
-    },
-    {
-      $unwind: {
-        path: '$prices',
-        preserveNullAndEmptyArrays: true,
       }
     },
     {
