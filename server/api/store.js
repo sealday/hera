@@ -428,7 +428,6 @@ const doRent = async ({startDate, endDate, timezone, project, pricePlanId}) => {
     {
       $unwind: {
         path: '$prices',
-        preserveNullAndEmptyArrays: true,
       }
     },
     {
