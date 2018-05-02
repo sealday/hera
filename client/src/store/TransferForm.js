@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { reduxForm, Field, FieldArray } from 'redux-form'
+import SwipeableViews from 'react-swipeable-views'
 import { Input, DatePicker, FilterSelect, TextArea } from '../components'
 import Tabs, { Tab } from 'material-ui/Tabs';
 import AppBar from 'material-ui/AppBar';
@@ -19,6 +20,10 @@ class TransferForm extends Component {
   }
 
   handleTabChange = (event, tab) => {
+    this.setState({ tab });
+  };
+
+  handleSwipeTabChange = (tab) => {
     this.setState({ tab });
   };
 
@@ -92,10 +97,15 @@ class TransferForm extends Component {
                     <Tab label="维修" />
                   </Tabs>
                 </AppBar>
-                { tab === 0 && <FieldArray name="entries" component={EntryTable} mode="L"/>}
-                { tab === 1 && <FieldArray name="entries" component={EntryTable} mode="S"/>}
-                { tab === 2 && <FieldArray name="entries" component={EntryTable} mode="C"/>}
-                { tab === 3 && <FieldArray name="entries" component={EntryTable} mode="R"/>}
+                <SwipeableViews
+                  index={this.state.tab}
+                  onChangeIndex={this.handleSwipeTabChange}
+                >
+                  <FieldArray name="entries" component={EntryTable} mode="L"/>
+                  <FieldArray name="entries" component={EntryTable} mode="S"/>
+                  <FieldArray name="entries" component={EntryTable} mode="C"/>
+                  <FieldArray name="entries" component={EntryTable} mode="R"/>
+                </SwipeableViews>
               </div>
             </MuiThemeProvider>
           </div>
