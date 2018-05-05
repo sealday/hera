@@ -14,6 +14,7 @@ const allMenu = [
   },
   {
     name: '仓库操作',
+    roles: ['项目部管理员', '系统管理员', '基地仓库管理员'],
     children: [
       {
         name: '采购入库',

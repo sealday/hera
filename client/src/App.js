@@ -9,7 +9,7 @@ import Toolbar from 'material-ui/Toolbar';
 import List from 'material-ui/List';
 import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button'
-import Menu, { MenuItem } from 'material-ui/Menu'
+import { MenuItem } from 'material-ui/Menu'
 import Popover from 'material-ui/Popover';
 import short_id from 'shortid'
 import { push, goBack } from 'react-router-redux'
@@ -83,6 +83,24 @@ class App extends Component {
     }).then(() => {
       location.href = "login.html";
     });
+  }
+
+  isCurrentStorePermit () {
+    const { store, user } = this.props
+    if (user.role === '项目部管理员' || user.role === '基地仓库管理员') {
+      const perms = user.perms || [];
+      const projects = perms.filter((p) => p.insert).map((p) => p.projectId);
+      return projects.indexOf(store._id) !== -1;
+    } else {
+      return true;
+    }
+  }
+
+  componentDidMount() {
+    const { dispatch } = this.props
+    if (!this.isCurrentStorePermit()) {
+      dispatch(selectStore(false))
+    }
   }
 
   static propTypes = {
