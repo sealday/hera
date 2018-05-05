@@ -5,6 +5,7 @@ import { MenuItem } from 'material-ui/Menu'
 import Collapse from 'material-ui/transitions/Collapse'
 import ExpandLess from '@material-ui/icons/ExpandLess'
 import ExpandMore from '@material-ui/icons/ExpandMore'
+import { isInsertable } from '../utils'
 
 
 const allMenu = [
@@ -15,14 +16,18 @@ const allMenu = [
   {
     name: '仓库操作',
     roles: ['项目部管理员', '系统管理员', '基地仓库管理员'],
+    // TODO 解决这个权限特殊处理
+    isInsertable: isInsertable,
     children: [
       {
         name: '采购入库',
         path: '/purchase/in/create',
+        roles: ['系统管理员', '基地仓库管理员'],
       },
       {
         name: '销售出库',
-        path: '/purchase/out/create'
+        path: '/purchase/out/create',
+        roles: ['系统管理员', '基地仓库管理员'],
       },
       {
         name: '调拨出库（发料）',
@@ -35,16 +40,22 @@ const allMenu = [
       {
         name: '盘点盈余入库',
         path: '/stocktaking/in/create',
+        roles: ['系统管理员', '基地仓库管理员'],
       },
       {
         name: '盘点亏损出库',
         path: '/stocktaking/out/create',
+        roles: ['系统管理员', '基地仓库管理员'],
       },
     ]
   },
   {
     name: '仓库查询',
     children: [
+      {
+        name: '库存查询',
+        path: '/store',
+      },
       {
         name: '出入库查询',
         path: '/simple_search',
@@ -60,10 +71,12 @@ const allMenu = [
       {
         name: '采购入库明细表',
         path: '/purchase_table',
+        roles: ['系统管理员', '基地仓库管理员'],
       },
       {
         name: '销售出库明细表',
         path: '/sell_table',
+        roles: ['系统管理员', '基地仓库管理员'],
       },
       {
         name: '调拨入库明细表',
@@ -76,10 +89,12 @@ const allMenu = [
       {
         name: '盘点盈余入库明细表',
         path: '/stocktaking_in_table',
+        roles: ['系统管理员', '基地仓库管理员'],
       },
       {
         name: '盘点亏损出库明细表',
         path: '/stocktaking_out_table',
+        roles: ['系统管理员', '基地仓库管理员'],
       },
     ]
   },
@@ -187,11 +202,14 @@ class MenuList extends React.Component {
   }
 
   getFilteredMenu = (menu) => {
-    const { user } = this.props
+    const { user, store } = this.props
     return menu.filter(menuItem => {
       if (menuItem.roles && menuItem.roles.indexOf(user.role) === -1) {
         return false
       } else {
+        if (menuItem.isInsertable && !menuItem.isInsertable(store, user)) {
+          return false;
+        }
         if (menuItem.children) {
           menuItem.children = menuItem.children.filter(subMenuItem => !(subMenuItem.roles && subMenuItem.roles.indexOf(user.role) === -1))
         }

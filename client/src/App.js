@@ -12,8 +12,8 @@ import Button from 'material-ui/Button'
 import { MenuItem } from 'material-ui/Menu'
 import Popover from 'material-ui/Popover';
 import short_id from 'shortid'
-import { push, goBack } from 'react-router-redux'
-import { ajax, theme } from './utils'
+import { push } from 'react-router-redux'
+import { ajax } from './utils'
 import { selectStore } from './actions'
 
 
@@ -89,7 +89,7 @@ class App extends Component {
     const { store, user } = this.props
     if (user.role === '项目部管理员' || user.role === '基地仓库管理员') {
       const perms = user.perms || [];
-      const projects = perms.filter((p) => p.insert).map((p) => p.projectId);
+      const projects = perms.filter((p) => p.query).map((p) => p.projectId);
       return projects.indexOf(store._id) !== -1;
     } else {
       return true;
@@ -171,7 +171,7 @@ class App extends Component {
             }}
           >
             <div className={classes.toolbar} />
-            <MenuList user={user}/>
+            <MenuList user={user} store={store}/>
           </Drawer>}
           <main className={classes.content}>
             <div className={classes.toolbar} />
