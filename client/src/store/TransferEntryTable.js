@@ -68,6 +68,9 @@ const TransferEntryTable = connect(
     let weightObj = {}
     for (let i = 0; i < fields.length; i++) {
       let entry = fields.get(i)
+      if (entry.mode !== mode) {
+        continue
+      }
       let total = getTotal(i)
       let weightTotal = getWeight(i)
 
