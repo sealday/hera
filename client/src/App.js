@@ -174,8 +174,8 @@ class App extends Component {
             <div className={classes.toolbar} />
             <MenuList user={user} store={store}/>
           </Drawer>}
-          <main className={classes.content}>
-            <div className={classes.toolbar} />
+          <main className={classes.content + " reset-to-print"}>
+            <div className={classes.toolbar + " hidden-print"} />
             {this.isStoreSelected() && children}
             {!this.isStoreSelected() && <CurrentStore/>}
           </main>

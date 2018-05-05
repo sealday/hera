@@ -125,8 +125,8 @@ class TransferOrder extends React.Component {
       <div>
         <div className="hidden-print" style={{ display: 'flex' }}>
           <span style={{ flex: 1 }} />
-          <Button color="primary" onClick={() => router.goBack()}>返回</Button>
-          <Button onClick={() => print()}>打印</Button>
+          <Button onClick={() => router.goBack()}>返回</Button>
+          <Button color="primary" onClick={() => print()}>打印</Button>
         </div>
         <div ref={(l) => window.temp2 = l} style={{ position: 'relative', paddingRight: '1.2em', minHeight: '30em' }}> {/* 表格开始 */}
           <div style={{
@@ -135,7 +135,7 @@ class TransferOrder extends React.Component {
             fontSize: '9px',
             right: 0,
             width: '1.2em'
-          }}>①发货方存根②收货方存根③承运方存根</div>
+          }}>①白单存根联②黄单客户联③黄单客户联</div>
           <h4 className="text-center">上海创兴建筑设备租赁有限公司</h4>
           <h4 className="text-center">{orderName}</h4>
           <table style={{tableLayout: 'fixed', fontSize: '11px', width: '100%'}}>

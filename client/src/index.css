@@ -80,6 +80,11 @@ body {
     padding-top: 0;
     margin-bottom: 0;
   }
+
+  .reset-to-print {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
 }
 
 .table--tight>tbody>tr>td,
