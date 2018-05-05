@@ -1,34 +1,23 @@
 import React, { Component } from 'react';
 import { reduxForm, Field, FieldArray } from 'redux-form'
-import SwipeableViews from 'react-swipeable-views'
-import { Input, DatePicker, FilterSelect, TextArea } from '../components'
-import Tabs, { Tab } from 'material-ui/Tabs';
-import AppBar from 'material-ui/AppBar';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import { connect } from 'react-redux'
 import moment from 'moment'
+import ExpansionPanel, {
+  ExpansionPanelSummary,
+  ExpansionPanelDetails,
+} from 'material-ui/ExpansionPanel'
+import Typography from 'material-ui/Typography'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+
 import EntryTable from './TransferEntryTable'
 import {
   filterOption,
   validator,
-  theme,
 } from '../utils'
+import { Input, DatePicker, FilterSelect, TextArea } from '../components'
 
 class TransferForm extends Component {
-  state = {
-    tab: 0,
-  }
-
-  handleTabChange = (event, tab) => {
-    this.setState({ tab });
-  };
-
-  handleSwipeTabChange = (tab) => {
-    this.setState({ tab });
-  };
-
   render() {
-    const { tab } = this.state;
     return (
       <form className="form-horizontal" onSubmit={this.props.handleSubmit}>
         <div className="form-group">
@@ -60,24 +49,6 @@ class TransferForm extends Component {
           <div className="col-md-3">
             <Field name="carNumber" component={Input}/>
           </div>
-          <label className="control-label col-md-1">运费</label>
-          <div className="col-md-3">
-            <Field name="fee.car" component={Input}/>
-          </div>
-          <label className="control-label col-md-1">整理费用</label>
-          <div className="col-md-3">
-            <Field name="fee.sort" component={Input}/>
-          </div>
-        </div>
-        <div className="form-group">
-          <label className="control-label col-md-1">其他费用1</label>
-          <div className="col-md-3">
-            <Field name="fee.other1" component={Input}/>
-          </div>
-          <label className="control-label col-md-1">其他费用2</label>
-          <div className="col-md-3">
-            <Field name="fee.other2" component={Input}/>
-          </div>
         </div>
         <div className="form-group">
           <label className="control-label col-md-1">备注</label>
@@ -87,27 +58,38 @@ class TransferForm extends Component {
         </div>
         <div className="form-group">
           <div className="col-md-12">
-            <MuiThemeProvider theme={theme}>
-              <div>
-                <AppBar position="static" color="default">
-                  <Tabs value={tab} onChange={this.handleTabChange}>
-                    <Tab label="租赁" />
-                    <Tab label="销售" />
-                    <Tab label="赔偿" />
-                    <Tab label="维修" />
-                  </Tabs>
-                </AppBar>
-                <SwipeableViews
-                  index={this.state.tab}
-                  onChangeIndex={this.handleSwipeTabChange}
-                >
-                  <FieldArray name="entries" component={EntryTable} mode="L"/>
-                  <FieldArray name="entries" component={EntryTable} mode="S"/>
-                  <FieldArray name="entries" component={EntryTable} mode="C"/>
-                  <FieldArray name="entries" component={EntryTable} mode="R"/>
-                </SwipeableViews>
-              </div>
-            </MuiThemeProvider>
+            <ExpansionPanel defaultExpanded={true}>
+              <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
+                <Typography >租赁（入库）</Typography>
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails>
+                <FieldArray name="entries" component={EntryTable} mode="L"/>
+              </ExpansionPanelDetails>
+            </ExpansionPanel>
+            <ExpansionPanel>
+              <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
+                <Typography>销售（入库）</Typography>
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails>
+                <FieldArray name="entries" component={EntryTable} mode="S"/>
+              </ExpansionPanelDetails>
+            </ExpansionPanel>
+            <ExpansionPanel>
+              <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
+                <Typography>赔偿（出库）</Typography>
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails>
+                <FieldArray name="entries" component={EntryTable} mode="C"/>
+              </ExpansionPanelDetails>
+            </ExpansionPanel>
+            <ExpansionPanel>
+              <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
+                <Typography>维修（不影响库存）</Typography>
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails>
+                <FieldArray name="entries" component={EntryTable} mode="R"/>
+              </ExpansionPanelDetails>
+            </ExpansionPanel>
           </div>
         </div>
         <div className="form-group">
