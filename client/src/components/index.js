@@ -70,6 +70,5 @@ export const FilterSelect = ({ input, options, style, ...custom, meta: { touched
 
 export { default as Notification } from './Notification'
 export { default as CurrentStore } from './CurrentStore'
-export { default as Drawer } from './Drawer'
 export { default as Profile } from './Profile'
 export { default as MenuList } from './MenuList'

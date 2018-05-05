@@ -99,6 +99,28 @@ const allMenu = [
     ]
   },
   {
+    name: '公司',
+    roles: ['系统管理员', '财务管理员', '基地仓库管理员'],
+    children: [
+      {
+        name: '租金计算',
+        path: '/rent_calc',
+      },
+      {
+        name: '出入库查询',
+        path: '/simple_search_company',
+      },
+      {
+        name: '运输单查询',
+        path: '/transport_table_company',
+      },
+      {
+        name: '合同',
+        path: '/contract',
+      },
+    ]
+  },
+  {
     name: '系统信息',
     roles: ['系统管理员'],
     children: [
@@ -128,28 +150,6 @@ const allMenu = [
       },
     ]
   },
-  {
-    name: '公司',
-    roles: ['系统管理员', '财务管理员', '基地仓库管理员'],
-    children: [
-      {
-        name: '租金计算',
-        path: '/rent_calc',
-      },
-      {
-        name: '出入库查询',
-        path: '/simple_search_company',
-      },
-      {
-        name: '运输单查询',
-        path: '/transport_table_company',
-      },
-      {
-        name: '合同',
-        path: '/contract',
-      },
-    ]
-  }
 ];
 
 const styles = theme => ({
