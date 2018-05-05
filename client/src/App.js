@@ -120,7 +120,7 @@ class App extends Component {
       }}>
         <Notification/>
         <div className={classes.root}>
-          <AppBar position="absolute" className={classes.appBar}>
+          <AppBar position="absolute" className={classes.appBar + " hidden-print"}>
             <Toolbar>
               <Typography variant="display3" color="inherit" noWrap className={classes.marginRight}>
                 赫拉管理系统
@@ -166,6 +166,7 @@ class App extends Component {
           </AppBar>
           {this.isStoreSelected() && <Drawer
             variant="permanent"
+            className="hidden-print"
             classes={{
               paper: classes.drawerPaper,
             }}
