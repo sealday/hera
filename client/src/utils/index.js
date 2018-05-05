@@ -5,8 +5,6 @@
 import $ from 'jquery';
 import fuzzysearch from 'fuzzysearch'
 import moment from 'moment'
-import { createMuiTheme } from 'material-ui/styles'
-import blue from 'material-ui/colors/blue';
 
 /**
  * 计算规格的数值表达
@@ -192,8 +190,4 @@ export const isUpdatable = (store, user) => {
   return false;
 }
 
-export const theme = createMuiTheme({
-  palette: {
-    primary: blue,
-  },
-});
+export { default as theme } from './theme'

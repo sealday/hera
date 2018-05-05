@@ -85,8 +85,9 @@ import {
 import {
   Router,
   Route,
-  IndexRoute,
-  hashHistory
+  hashHistory,
+  IndexRedirect,
+  Redirect,
 } from 'react-router';
 
 import { ajax } from './utils';
@@ -162,7 +163,8 @@ ajax('/api/load').then(res => {
       <PersistGate loading={null} persistor={persistor}>
         <Router history={syncHistoryWithStore(hashHistory, store)}>
           <Route path="/" component={App}>
-            <IndexRoute component={Home}/>
+            <IndexRedirect to="/dashboard"/>
+            <Route path="dashboard" component={Home}/>
             <Route path="file_manager" component={FileManager}/>
             {/*劳务人员登记*/}
             <Route path="worker/create" component={WorkerCheckin}/>
@@ -220,6 +222,7 @@ ajax('/api/load').then(res => {
             {/*应付查询*/}
             <Route path="finance/payable" component={PayCheck}/>
             <Route path="profile" component={Profile}/>
+            <Redirect path="*" to="/dashboard"/>
           </Route>
         </Router>
       </PersistGate>

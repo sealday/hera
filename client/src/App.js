@@ -1,37 +1,153 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { toggleNav } from './actions'
 import './App.css';
-import { Notification, Navbar, Drawer, CurrentStore } from './components'
+import { Notification, CurrentStore, MenuList } from './components'
+import { withStyles } from 'material-ui/styles';
+import Drawer from 'material-ui/Drawer';
+import AppBar from 'material-ui/AppBar';
+import Toolbar from 'material-ui/Toolbar';
+import List from 'material-ui/List';
+import Typography from 'material-ui/Typography';
+import Button from 'material-ui/Button'
+import Menu, { MenuItem } from 'material-ui/Menu'
+import Popover from 'material-ui/Popover';
+import short_id from 'shortid'
+import { push, goBack } from 'react-router-redux'
+import { ajax, theme } from './utils'
 
+
+
+const drawerWidth = 240;
+
+const styles = theme => ({
+  root: {
+    flexGrow: 1,
+    zIndex: 1,
+    overflow: 'hidden',
+    position: 'relative',
+    display: 'flex',
+  },
+  appBar: {
+    zIndex: theme.zIndex.drawer + 1,
+  },
+  drawerPaper: {
+    position: 'relative',
+    width: drawerWidth,
+  },
+  content: {
+    flexGrow: 1,
+    backgroundColor: theme.palette.background.default,
+    padding: theme.spacing.unit * 3,
+    minWidth: 0, // So the Typography noWrap works
+  },
+  flex: {
+    flex: 1,
+  },
+  toolbar: theme.mixins.toolbar,
+});
 
 class App extends Component {
+  state = {
+    menuOpen: false,
+    menuAnchorEl: null,
+  }
+
+  handleMenu = e => {
+    const target = e.currentTarget
+    this.setState(prev => ({
+      menuOpen: !prev.menuOpen,
+      menuAnchorEl: target,
+    }))
+  }
+
+  handleMenuClose = () => {
+    this.setState(() => ({
+      menuOpen: false,
+    }))
+  }
+
   isStoreSelected() {
     return this.props.system.store
   }
+
+  logout = () => {
+    // TODO 这里出错？？？ 总是重定向到首页
+    ajax('/api/logout', {
+      method: 'POST'
+    }).then(res => {
+    }).catch(err => {
+    }).then(() => {
+      location.href = "login.html";
+    });
+  }
+
+  static propTypes = {
+    classes: React.PropTypes.object.isRequired,
+  }
+
   render() {
-    // TODO 考虑整理下目录，让目录由配置文件生成，而不是现在纯粹手写，纯粹手写需要在很多地方修改，容易出错，而且看起来不方便，并且重复工作太多
-    const props = this.props
+    const { classes, store, num, user, onlineUsers, children, system, dispatch } = this.props
     return (
       <div className="App" onClick={(e) => {
         global.socket.emit('client:click', {
           base: e.target.baseURI,
           text: e.target.textContent,
           tag: e.target.tagName,
-          username: props.system.user.username,
+          username: system.user.username,
         })
       }}>
         <Notification/>
-        <Navbar/>
         {this.isStoreSelected() && (
-          <div>
-            <Drawer {...props}/>
-            <button onClick={e => props.dispatch(toggleNav())} type="button" className="App-drawer-toggle"/>
-            <div className="App-content">
-              <div className="container-fluid">
-                {props.children}
-              </div>
-            </div>
+          <div className={classes.root}>
+            <AppBar position="absolute" className={classes.appBar}>
+              <Toolbar>
+                <Typography variant="display3" color="inherit" noWrap>
+                  赫拉管理系统
+                </Typography>
+                <Typography variant="headline" color="inherit" noWrap className={classes.flex}>
+                  {store && store.company + store.name}
+                </Typography>
+                <Button
+                  color="inherit"
+                  onClick={this.handleMenu}
+                >当前在线人数{num}</Button>
+                <Popover
+                  open={this.state.menuOpen}
+                  anchorEl={this.state.menuAnchorEl}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'center',
+                  }}
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'center',
+                  }}
+                  onClose={this.handleMenuClose}
+                >
+                  <List>
+                    {onlineUsers.map(user => <MenuItem
+                      key={short_id.generate()}
+                      onClick={this.handleMenuClose}
+                    >{user.profile.name}</MenuItem>)}
+                  </List>
+                </Popover>
+                <Button color="inherit" onClick={this.logout}>登出</Button>
+                <Button color="inherit" onClick={() => dispatch(push('/profile'))}>{user.username}</Button>
+              </Toolbar>
+            </AppBar>
+            <Drawer
+              variant="permanent"
+              classes={{
+                paper: classes.drawerPaper,
+              }}
+            >
+              <div className={classes.toolbar} />
+              <MenuList/>
+            </Drawer>
+            <main className={classes.content}>
+              <div className={classes.toolbar} />
+              {children}
+            </main>
           </div>
         )}
         {!this.isStoreSelected() && (
@@ -46,7 +162,11 @@ const mapStateToProps = state => {
   return {
     nav: state.nav,
     system: state.system,
+    num: state.system.online,
+    onlineUsers: state.system.onlineUsers,
+    store: state.system.store,
+    user: state.system.user,
   }
 }
 
-export default connect(mapStateToProps)(App);
+export default connect(mapStateToProps)(withStyles(styles)(App));
