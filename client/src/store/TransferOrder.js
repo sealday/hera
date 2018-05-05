@@ -5,15 +5,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
-import { toFixedWithoutTrailingZero as fixed, total_, isUpdatable, getUnit } from '../utils'
+import { total_, isUpdatable } from '../utils'
 import { Link } from 'react-router'
 import Card, { CardHeader, CardContent } from 'material-ui/Card'
 import Typography from 'material-ui/Typography'
 import { withStyles } from 'material-ui/styles'
 import Divider from 'material-ui/Divider'
 import Button from 'material-ui/Button'
-import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
-import Paper from 'material-ui/Paper';
+import Table, { TableBody, TableCell, TableHead, TableRow, TablePagination } from 'material-ui/Table';
 
 const styles = theme => ({
   flex: {
@@ -33,6 +32,21 @@ class TransferOrder extends React.Component {
   handleTransport = () => {
     const { router, record } = this.props
     router.push(`/transport/${record._id}`)
+  }
+
+  state = {
+    rowsPerPage: {
+      l: 5,
+      s: 5,
+      c: 5,
+      r: 5,
+    },
+    page: {
+      l: 0,
+      s: 0,
+      c: 0,
+      r: 0,
+    },
   }
 
   render() {
@@ -64,62 +78,16 @@ class TransferOrder extends React.Component {
       productTypeMap[article.name] = article
     })
 
-    let printEntries = []
-    for (let name in entries) {
-      /*eslint guard-for-in: off*/
-      printEntries = printEntries.concat(entries[name].map(entry => [
-        entry.name,
-        entry.size,
-        entry.count + ' ' + productTypeMap[name].countUnit,
-        entry.comments,
-      ]))
-      printEntries.push(
-        [
-          name,
-          '小计',
-          fixed(total[name])  + ' ' + getUnit(productTypeMap[name]),
-          '',
-        ]
-      )
-    }
-
-    // TODO 这里不应该会出现 fee，如果出现就是错误的了
-    if (record.type === '调拨') {
-      if (!record.fee) {
-        console.warn('调拨单费用不应该是null')
-      }
-      record.fee = record.fee || {}
-      printEntries.push(
-        [
-          '运费：',
-          `￥${record.fee.car || 0} `,
-          '整理费：',
-          `￥${record.fee.sort || 0}`,
-        ]
-      );
-      printEntries.push(
-        [
-          '其他费用1：',
-          `￥${record.fee.other1 || 0}`,
-          `其他费用2：`,
-          `￥${record.fee.other2 || 0}`,
-        ]
-      );
-    }
-
-    if (printEntries.length % 2 !== 0) {
-      printEntries.push(['', '', '', ''])
-    }
-
-    let rows = []
-    const half = printEntries.length / 2
-    for (let i = 0; i < half; i++) {
-      rows.push(printEntries[i].concat(printEntries[i + half]))
-    }
-
     const inProject = projects.get(record.inStock)
     const outProject = projects.get(record.outStock)
     const { classes } = this.props
+
+    const records = {
+      l: record.entries.filter(entry => entry.mode === 'L'),
+      s: record.entries.filter(entry => entry.mode === 'S'),
+      c: record.entries.filter(entry => entry.mode === 'C'),
+      r: record.entries.filter(entry => entry.mode === 'R'),
+    }
 
     return (
       <div>
@@ -138,41 +106,123 @@ class TransferOrder extends React.Component {
           />
           <CardContent>
             <Typography variant="display3">调拨单</Typography>
-            <Typography variant="subheadline">单号：{record.number} 日期：{moment(record.outDate).format('YYYY-MM-DD')}</Typography>
+            <Typography variant="subheading">单号：{record.number} 日期：{moment(record.outDate).format('YYYY-MM-DD')}</Typography>
             <Divider className={classes.marginTop}/>
-            <Typography variant="paragraph" className={classes.marginTop}>出库：{outProject.company}{outProject.name}</Typography>
-            <Typography variant="paragraph">入库：{inProject.company}{inProject.name}</Typography>
-            <Typography variant="paragraph">制单人：{record.username}</Typography>
+            <Typography variant="body1" className={classes.marginTop}>出库：{outProject.company}{outProject.name}</Typography>
+            <Typography variant="body1">入库：{inProject.company}{inProject.name}</Typography>
+            <Typography variant="body1">制单人：{record.username}</Typography>
           </CardContent>
         </Card>
 
         <Card className={classes.marginTop}>
           <CardContent>
             <Typography variant="display3">租赁</Typography>
-            {record.entries.map(entry => (<p>
-              {entry.name} {entry.size} {entry.count}
-            </p>))}
+            <Table className={classes.table}>
+              <TableHead>
+                <TableRow>
+                  <TableCell>产品</TableCell>
+                  <TableCell>类型</TableCell>
+                  <TableCell numeric>数量</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {records.l.slice(this.state.rowsPerPage.l * this.state.page.l, this.state.rowsPerPage.l * (this.state.page.l + 1)).map(entry => {
+                  return (
+                    <TableRow key={entry._id}>
+                      <TableCell>{entry.name}</TableCell>
+                      <TableCell>{entry.size}</TableCell>
+                      <TableCell numeric>{entry.count}</TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+            <TablePagination
+              component="div"
+              count={records.l.length}
+              rowsPerPage={this.state.rowsPerPage.l}
+              page={this.state.page.l}
+              onChangePage={(e, page) => this.setState(prev => ({ page: { ...prev.page, l: page } }))}
+              onChangeRowsPerPage={e => this.setState(prev => ({ rowsPerPage: { ...prev.rowsPerPage, l: e.target.value } }))}
+            />
           </CardContent>
         </Card>
 
         <Card className={classes.marginTop}>
           <CardContent>
             <Typography variant="display3">销售</Typography>
-
+            <Table className={classes.table}>
+              <TableHead>
+                <TableRow>
+                  <TableCell>产品</TableCell>
+                  <TableCell>类型</TableCell>
+                  <TableCell numeric>数量</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {record.entries.filter(entry => entry.mode === 'S').map(entry => {
+                  return (
+                    <TableRow key={entry._id}>
+                      <TableCell>{entry.name}</TableCell>
+                      <TableCell>{entry.size}</TableCell>
+                      <TableCell numeric>{entry.count}</TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
           </CardContent>
         </Card>
 
         <Card className={classes.marginTop}>
           <CardContent>
             <Typography variant="display3">赔偿</Typography>
-
+            <Table className={classes.table}>
+              <TableHead>
+                <TableRow>
+                  <TableCell>产品</TableCell>
+                  <TableCell>类型</TableCell>
+                  <TableCell numeric>数量</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {record.entries.filter(entry => entry.mode === 'C').map(entry => {
+                  return (
+                    <TableRow key={entry._id}>
+                      <TableCell>{entry.name}</TableCell>
+                      <TableCell>{entry.size}</TableCell>
+                      <TableCell numeric>{entry.count}</TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
           </CardContent>
         </Card>
 
         <Card className={classes.marginTop}>
           <CardContent>
             <Typography variant="display3">维修</Typography>
-
+            <Table className={classes.table}>
+              <TableHead>
+                <TableRow>
+                  <TableCell>产品</TableCell>
+                  <TableCell>类型</TableCell>
+                  <TableCell numeric>数量</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {record.entries.filter(entry => entry.mode === 'R').map(entry => {
+                  return (
+                    <TableRow key={entry._id}>
+                      <TableCell>{entry.name}</TableCell>
+                      <TableCell>{entry.size}</TableCell>
+                      <TableCell numeric>{entry.count}</TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
           </CardContent>
         </Card>
       </div>
