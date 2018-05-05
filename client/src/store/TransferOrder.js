@@ -89,6 +89,13 @@ class TransferOrder extends React.Component {
       r: record.entries.filter(entry => entry.mode === 'R'),
     }
 
+    const names = {
+      l: '租赁',
+      s: '销售',
+      c: '赔偿',
+      r: '维修',
+    }
+
     return (
       <div>
         <Card>
@@ -114,117 +121,41 @@ class TransferOrder extends React.Component {
           </CardContent>
         </Card>
 
-        <Card className={classes.marginTop}>
-          <CardContent>
-            <Typography variant="display3">租赁</Typography>
-            <Table className={classes.table}>
-              <TableHead>
-                <TableRow>
-                  <TableCell>产品</TableCell>
-                  <TableCell>类型</TableCell>
-                  <TableCell numeric>数量</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {records.l.slice(this.state.rowsPerPage.l * this.state.page.l, this.state.rowsPerPage.l * (this.state.page.l + 1)).map(entry => {
-                  return (
-                    <TableRow key={entry._id}>
-                      <TableCell>{entry.name}</TableCell>
-                      <TableCell>{entry.size}</TableCell>
-                      <TableCell numeric>{entry.count}</TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-            <TablePagination
-              component="div"
-              count={records.l.length}
-              rowsPerPage={this.state.rowsPerPage.l}
-              page={this.state.page.l}
-              onChangePage={(e, page) => this.setState(prev => ({ page: { ...prev.page, l: page } }))}
-              onChangeRowsPerPage={e => this.setState(prev => ({ rowsPerPage: { ...prev.rowsPerPage, l: e.target.value } }))}
-            />
-          </CardContent>
-        </Card>
-
-        <Card className={classes.marginTop}>
-          <CardContent>
-            <Typography variant="display3">销售</Typography>
-            <Table className={classes.table}>
-              <TableHead>
-                <TableRow>
-                  <TableCell>产品</TableCell>
-                  <TableCell>类型</TableCell>
-                  <TableCell numeric>数量</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {record.entries.filter(entry => entry.mode === 'S').map(entry => {
-                  return (
-                    <TableRow key={entry._id}>
-                      <TableCell>{entry.name}</TableCell>
-                      <TableCell>{entry.size}</TableCell>
-                      <TableCell numeric>{entry.count}</TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
-
-        <Card className={classes.marginTop}>
-          <CardContent>
-            <Typography variant="display3">赔偿</Typography>
-            <Table className={classes.table}>
-              <TableHead>
-                <TableRow>
-                  <TableCell>产品</TableCell>
-                  <TableCell>类型</TableCell>
-                  <TableCell numeric>数量</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {record.entries.filter(entry => entry.mode === 'C').map(entry => {
-                  return (
-                    <TableRow key={entry._id}>
-                      <TableCell>{entry.name}</TableCell>
-                      <TableCell>{entry.size}</TableCell>
-                      <TableCell numeric>{entry.count}</TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
-
-        <Card className={classes.marginTop}>
-          <CardContent>
-            <Typography variant="display3">维修</Typography>
-            <Table className={classes.table}>
-              <TableHead>
-                <TableRow>
-                  <TableCell>产品</TableCell>
-                  <TableCell>类型</TableCell>
-                  <TableCell numeric>数量</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {record.entries.filter(entry => entry.mode === 'R').map(entry => {
-                  return (
-                    <TableRow key={entry._id}>
-                      <TableCell>{entry.name}</TableCell>
-                      <TableCell>{entry.size}</TableCell>
-                      <TableCell numeric>{entry.count}</TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
+        {['l', 's', 'c', 'r'].map(t => (
+          <Card className={classes.marginTop} key={t}>
+            <CardContent>
+              <Typography variant="display3">{names[t]}</Typography>
+              <Table className={classes.table}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>产品</TableCell>
+                    <TableCell>类型</TableCell>
+                    <TableCell numeric>数量</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {records[t]
+                    .slice(this.state.rowsPerPage[t] * this.state.page[t], this.state.rowsPerPage[t] * (this.state.page[t] + 1))
+                    .map(entry => (
+                      <TableRow key={entry._id}>
+                        <TableCell>{entry.name}</TableCell>
+                        <TableCell>{entry.size}</TableCell>
+                        <TableCell numeric>{entry.count}</TableCell>
+                      </TableRow>
+                    ))}
+                </TableBody>
+              </Table>
+              <TablePagination
+                component="div"
+                count={records[t].length}
+                rowsPerPage={this.state.rowsPerPage[t]}
+                page={this.state.page[t]}
+                onChangePage={(e, page) => this.setState(prev => ({ page: { ...prev.page, [t]: page } }))}
+                onChangeRowsPerPage={e => this.setState(prev => ({ rowsPerPage: { ...prev.rowsPerPage, [t]: e.target.value } }))}
+              />
+            </CardContent>
+          </Card>
+        ))}
       </div>
     );
   }
