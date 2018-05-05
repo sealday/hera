@@ -11,8 +11,9 @@ import { createStore, combineReducers, compose, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk'
 import { reducer as formReducer } from 'redux-form'
 import { Provider } from 'react-redux'
-import { persistStore, persistReducer } from 'redux-persist'
+import { persistStore, persistReducer, createTransform } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
+import msgpack5 from 'msgpack5'
 import { PersistGate } from 'redux-persist/integration/react'
 import * as reducers from './reducers'
 import { systemLoaded, updateOnlineUser, updateOnlineUsers, selectStore } from './actions'
@@ -105,8 +106,18 @@ moment.locale('zh-CN');
 
 const composeEnhancers = window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] || compose;
 
+// 处理 moment 类型的转换
+const msgpack = msgpack5()
+const { encode, decode } = msgpack
+msgpack.register(0x42, moment, (m) => encode(m.toDate()), (buf) => moment(decode(buf)))
+const myTransform = createTransform(
+  inboundState => encode(inboundState),
+  outboundState => decode(outboundState),
+);
+
 const persistConfig = {
-  key: 'form',
+  key: 'form-6',
+  transforms: [myTransform],
   storage,
 }
 
