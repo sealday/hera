@@ -7,7 +7,7 @@ import ExpandLess from '@material-ui/icons/ExpandLess'
 import ExpandMore from '@material-ui/icons/ExpandMore'
 
 
-const menu = [
+const allMenu = [
   {
     name: '仪表盘',
     path: '/dashboard',
@@ -84,6 +84,7 @@ const menu = [
   },
   {
     name: '系统信息',
+    roles: ['系统管理员'],
     children: [
       {
         name: '产品信息',
@@ -113,6 +114,7 @@ const menu = [
   },
   {
     name: '公司',
+    roles: ['系统管理员', '财务管理员', '基地仓库管理员'],
     children: [
       {
         name: '租金计算',
@@ -168,7 +170,7 @@ class MenuList extends React.Component {
 
   componentDidMount() {
     const { router } = this.context
-    menu.forEach(menuItem => {
+    allMenu.forEach(menuItem => {
       if (menuItem.children) {
         menuItem.children.forEach(subMenuItem => {
           if (router.isActive(subMenuItem.path)) {
@@ -183,9 +185,24 @@ class MenuList extends React.Component {
     })
   }
 
+  getFilteredMenu = (menu) => {
+    const { user } = this.props
+    return menu.filter(menuItem => {
+      if (menuItem.roles && menuItem.roles.indexOf(user.role) === -1) {
+        return false
+      } else {
+        if (menuItem.children) {
+          menuItem.children = menuItem.children.filter(subMenuItem => !(subMenuItem.roles && subMenuItem.roles.indexOf(user.role) === -1))
+        }
+        return true
+      }
+    })
+  }
+
   render() {
     const { classes } = this.props
     const { router } = this.context
+    const menu = this.getFilteredMenu(allMenu)
 
     return (
       <div className={classes.root}>

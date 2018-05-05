@@ -14,6 +14,7 @@ import Popover from 'material-ui/Popover';
 import short_id from 'shortid'
 import { push, goBack } from 'react-router-redux'
 import { ajax, theme } from './utils'
+import { selectStore } from './actions'
 
 
 
@@ -42,6 +43,9 @@ const styles = theme => ({
   },
   flex: {
     flex: 1,
+  },
+  marginRight: {
+    marginRight: '1em',
   },
   toolbar: theme.mixins.toolbar,
 });
@@ -101,12 +105,20 @@ class App extends Component {
           <div className={classes.root}>
             <AppBar position="absolute" className={classes.appBar}>
               <Toolbar>
-                <Typography variant="display3" color="inherit" noWrap>
+                <Typography variant="display3" color="inherit" noWrap className={classes.marginRight}>
                   赫拉管理系统
                 </Typography>
-                <Typography variant="headline" color="inherit" noWrap className={classes.flex}>
+                <Typography variant="headline" color="inherit" noWrap className={classes.marginRight}>
                   {store && store.company + store.name}
                 </Typography>
+                <Button
+                  color="inherit"
+                  onClick={e => {
+                    e.preventDefault()
+                    dispatch(selectStore(false))
+                  }}
+                >其他仓库</Button>
+                <span className={classes.flex} />
                 <Button
                   color="inherit"
                   onClick={this.handleMenu}
@@ -142,7 +154,7 @@ class App extends Component {
               }}
             >
               <div className={classes.toolbar} />
-              <MenuList/>
+              <MenuList user={user}/>
             </Drawer>
             <main className={classes.content}>
               <div className={classes.toolbar} />
