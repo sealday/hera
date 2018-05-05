@@ -166,11 +166,15 @@ const styles = theme => ({
 class MenuList extends React.Component {
   state = {
     open: { },
-  };
+  }
 
   static contextTypes = {
-    router: React.PropTypes.object.isRequired
-  };
+    router: React.PropTypes.object.isRequired,
+  }
+
+  static propTypes = {
+    classes: React.PropTypes.object.isRequired,
+  }
 
   handleClick = (item) => {
     const { router } = this.context
@@ -258,8 +262,4 @@ class MenuList extends React.Component {
   }
 }
 
-MenuList.propTypes = {
-  classes: React.PropTypes.object.isRequired,
-};
-
-export default  withStyles(styles)(MenuList);
+export default  withStyles(styles)(MenuList)
