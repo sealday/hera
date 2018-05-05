@@ -18,6 +18,7 @@ import { Input, DatePicker, FilterSelect, TextArea } from '../components'
 
 class TransferForm extends Component {
   render() {
+    const { direction } = this.props
     return (
       <form className="form-horizontal" onSubmit={this.props.handleSubmit}>
         <div className="form-group">
@@ -60,7 +61,7 @@ class TransferForm extends Component {
           <div className="col-md-12">
             <ExpansionPanel defaultExpanded={true}>
               <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
-                <Typography >租赁（入库）</Typography>
+                <Typography>{direction === 'in' ? '租赁（入库）' : '租赁（出库）'}</Typography>
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
                 <FieldArray name="entries" component={EntryTable} mode="L"/>
@@ -68,7 +69,7 @@ class TransferForm extends Component {
             </ExpansionPanel>
             <ExpansionPanel>
               <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
-                <Typography>销售（入库）</Typography>
+                <Typography>{direction === 'in' ? '销售（入库）' : '销售（出库）'}</Typography>
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
                 <FieldArray name="entries" component={EntryTable} mode="S"/>
@@ -76,7 +77,7 @@ class TransferForm extends Component {
             </ExpansionPanel>
             <ExpansionPanel>
               <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
-                <Typography>赔偿（出库）</Typography>
+                <Typography>{direction === 'in' ? '赔偿（出库）' : '赔偿（入库）'}</Typography>
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
                 <FieldArray name="entries" component={EntryTable} mode="C"/>
@@ -84,7 +85,7 @@ class TransferForm extends Component {
             </ExpansionPanel>
             <ExpansionPanel>
               <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
-                <Typography>维修（不影响库存）</Typography>
+                <Typography>服务类（维修或者运费等不影响库存）</Typography>
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
                 <FieldArray name="entries" component={EntryTable} mode="R"/>

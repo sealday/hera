@@ -47,6 +47,7 @@ import {
 
 import {
   Record,
+  RecordPreview,
   TransportOrder,
   TransportOrderEdit,
   TransferCreate,
@@ -199,6 +200,7 @@ ajax('/api/load').then(res => {
             <Route path="stocktaking/:direction/:id/edit" component={StocktakingEdit}/>
 
             <Route path="record/:id" component={Record}/>
+            <Route path="record/:id/preview" component={RecordPreview}/>
             <Route path="company_record/:id" component={company.Record}/>
             <Route path="rent_calc" component={company.RentCalc}/>
             <Route path="contract" component={company.Contract}/>

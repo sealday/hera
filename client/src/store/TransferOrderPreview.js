@@ -146,20 +146,7 @@ class TransferOrder extends React.Component {
       <div>
         <div className="btn-group hidden-print">
           <button className="btn btn-default" onClick={() => router.goBack()}>返回</button>
-          {isUpdatable(store, user) && <span>
-            {record.type === '调拨' &&
-            <Link className="btn btn-primary" to={`/transfer/${direction}/${record._id}/edit`}>编辑</Link>
-            }
-            {record.type === '销售' &&
-            <Link className="btn btn-primary" to={`/purchase/out/${record._id}/edit`}>编辑</Link>
-            }
-            {record.type === '采购' &&
-            <Link className="btn btn-primary" to={`/purchase/in/${record._id}/edit`}>编辑</Link>
-            }
-          </span>}
-          <button className="btn btn-default" onClick={this.handleTransport}>运输单</button>
           <button className="btn btn-default" onClick={() => print()}>打印</button>
-          <a className="btn btn-default" href="check">审核确认</a>
         </div>
         <div style={{ position: 'relative', paddingRight: '1.2em', minHeight: '30em' }}> {/* 表格开始 */}
           <div style={{

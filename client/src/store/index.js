@@ -19,3 +19,4 @@ export { default as StocktakingEdit } from './StocktakingEdit'
 export { default as StocktakingOrder } from './StocktakingOrder'
 
 export { default as Record } from './Record'
+export { default as RecordPreview } from './RecordPreview'
