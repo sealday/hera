@@ -119,70 +119,66 @@ class App extends Component {
         })
       }}>
         <Notification/>
-        {this.isStoreSelected() && (
-          <div className={classes.root}>
-            <AppBar position="absolute" className={classes.appBar}>
-              <Toolbar>
-                <Typography variant="display3" color="inherit" noWrap className={classes.marginRight}>
-                  赫拉管理系统
-                </Typography>
-                <Typography variant="headline" color="inherit" noWrap className={classes.marginRight}>
-                  {store && store.company + store.name}
-                </Typography>
-                <Button
-                  color="inherit"
-                  onClick={e => {
-                    e.preventDefault()
-                    dispatch(selectStore(false))
-                  }}
-                >其他仓库</Button>
-                <span className={classes.flex} />
-                <Button
-                  color="inherit"
-                  onClick={this.handleMenu}
-                >当前在线人数{num}</Button>
-                <Popover
-                  open={this.state.menuOpen}
-                  anchorEl={this.state.menuAnchorEl}
-                  anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'center',
-                  }}
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'center',
-                  }}
-                  onClose={this.handleMenuClose}
-                >
-                  <List>
-                    {onlineUsers.map(user => <MenuItem
-                      key={short_id.generate()}
-                      onClick={this.handleMenuClose}
-                    >{user.profile.name}</MenuItem>)}
-                  </List>
-                </Popover>
-                <Button color="inherit" onClick={this.logout}>登出</Button>
-                <Button color="inherit" onClick={() => dispatch(push('/profile'))}>{user.username}</Button>
-              </Toolbar>
-            </AppBar>
-            <Drawer
-              variant="permanent"
-              classes={{
-                paper: classes.drawerPaper,
-              }}
-            >
-              <div className={classes.toolbar} />
-              <MenuList user={user}/>
-            </Drawer>
-            <main className={classes.content}>
-              <div className={classes.toolbar} />
-              {children}
-            </main>
-          </div>
-        )}
-        {!this.isStoreSelected() && (
-          <CurrentStore/>
-        )}
+        <div className={classes.root}>
+          <AppBar position="absolute" className={classes.appBar}>
+            <Toolbar>
+              <Typography variant="display3" color="inherit" noWrap className={classes.marginRight}>
+                赫拉管理系统
+              </Typography>
+              <Typography variant="headline" color="inherit" noWrap className={classes.marginRight}>
+                {store && store.company + store.name}
+              </Typography>
+              <Button
+                color="inherit"
+                onClick={e => {
+                  e.preventDefault()
+                  dispatch(selectStore(false))
+                }}
+              >其他仓库</Button>
+              <span className={classes.flex} />
+              <Button
+                color="inherit"
+                onClick={this.handleMenu}
+              >当前在线人数{num}</Button>
+              <Popover
+                open={this.state.menuOpen}
+                anchorEl={this.state.menuAnchorEl}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'center',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'center',
+                }}
+                onClose={this.handleMenuClose}
+              >
+                <List>
+                  {onlineUsers.map(user => <MenuItem
+                    key={short_id.generate()}
+                    onClick={this.handleMenuClose}
+                  >{user.profile.name}</MenuItem>)}
+                </List>
+              </Popover>
+              <Button color="inherit" onClick={this.logout}>退出</Button>
+              <Button color="inherit" onClick={() => dispatch(push('/profile'))}>{user.username}</Button>
+            </Toolbar>
+          </AppBar>
+          {this.isStoreSelected() && <Drawer
+            variant="permanent"
+            classes={{
+              paper: classes.drawerPaper,
+            }}
+          >
+            <div className={classes.toolbar} />
+            <MenuList user={user}/>
+          </Drawer>}
+          <main className={classes.content}>
+            <div className={classes.toolbar} />
+            {this.isStoreSelected() && children}
+            {!this.isStoreSelected() && <CurrentStore/>}
+          </main>
+        </div>
       </div>
     );
   }
