@@ -53,9 +53,6 @@ mongoose.connection.on('error', () => {
 
 const app = express()
 
-app.set('views', path.resolve('./views'))
-app.set('view engine', 'pug')
-
 // compress all
 app.use(compression())
 
