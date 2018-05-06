@@ -139,7 +139,7 @@ class App extends Component {
               <Button
                 color="inherit"
                 onClick={this.handleMenu}
-              >当前在线人数{num}</Button>
+              >当前在线 {num} 人</Button>
               <Popover
                 open={this.state.menuOpen}
                 anchorEl={this.state.menuAnchorEl}
