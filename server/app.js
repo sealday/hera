@@ -83,9 +83,6 @@ app.use(session({
   })
 }))
 
-app.get('/f/change_report', (req, res) => {
-  res.render('edit_report')
-})
 app.use('/api',  apiIndex)
 
 app.get('/system/', (req, res, next) => {
