@@ -4,7 +4,8 @@
 
 import React from 'react'
 import { reduxForm, Field } from 'redux-form'
-import { DatePicker, Input, Select } from '../components'
+
+import { DatePicker, Input, Select, MaskedInput } from '../components'
 
 class TransportForm extends React.Component {
   render() {
@@ -61,7 +62,18 @@ class TransportForm extends React.Component {
           </div>
           <label className="col-sm-2 control-label">收款人账号</label>
           <div className="col-sm-4">
-            <Field name="account" component={Input}/>
+            <Field
+              name="account"
+              component={MaskedInput}
+              guide={false}
+              mask={[
+                /\d/, /\d/, /\d/, /\d/, ' ',
+                /\d/, /\d/, /\d/, /\d/, ' ',
+                /\d/, /\d/, /\d/, /\d/, ' ',
+                /\d/, /\d/, /\d/, /\d/, ' ',
+                /\d/, /\d/, /\d/,
+              ]}
+            />
           </div>
         </div>
         {record.type === '采购' &&

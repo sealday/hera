@@ -4649,7 +4649,7 @@ promise@7.1.1, promise@^7.1.1:
   dependencies:
     asap "~2.0.3"
 
-prop-types@^15.5.4, prop-types@^15.5.8, prop-types@^15.6.1:
+prop-types@^15.5.4, prop-types@^15.5.6, prop-types@^15.5.8, prop-types@^15.6.1:
   version "15.6.1"
   resolved "http://registry.npm.taobao.org/prop-types/download/prop-types-15.6.1.tgz#36644453564255ddda391191fb3a125cbdf654ca"
   dependencies:
@@ -4974,6 +4974,12 @@ react-swipeable-views@^0.12.13:
 react-tagsinput@^3.14.0:
   version "3.14.0"
   resolved "http://registry.npm.taobao.org/react-tagsinput/download/react-tagsinput-3.14.0.tgz#6729f8d5b313ed8fbb35496205ec2a97654af6bc"
+
+react-text-mask@^5.4.0:
+  version "5.4.0"
+  resolved "http://registry.npm.taobao.org/react-text-mask/download/react-text-mask-5.4.0.tgz#4472eb2f0b9d8916017a2532c864707d51b98cf1"
+  dependencies:
+    prop-types "^15.5.6"
 
 react-toastr@^2.8.2:
   version "2.8.2"

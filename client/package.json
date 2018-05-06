@@ -30,6 +30,7 @@
     "react-select": "^1.0.0-rc.2",
     "react-swipeable-views": "^0.12.13",
     "react-tagsinput": "^3.14.0",
+    "react-text-mask": "^5.4.0",
     "react-toastr": "^2.8.2",
     "redux": "^3.6.0",
     "redux-form": "^6.4.3",

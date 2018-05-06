@@ -4,6 +4,7 @@
 import React from 'react'
 import ReactDatePicker from 'react-datepicker'
 import ReactSelect from 'react-select'
+import ReactMaskedInput from 'react-text-mask'
 
 const errorStyle = {
   borderColor: '#a94442',
@@ -22,6 +23,19 @@ export const Input = ({ input, meta: { touched, error, warning }, style, ...cust
     style={style}
   />
 )}
+
+export const MaskedInput = ({ input, meta: { touched, error, warning }, style, ...custom }) => {
+  if (touched && error) {
+    style = {
+      ...style,
+      ...errorStyle,
+    }
+  }
+  return (
+    <ReactMaskedInput {...input} className="form-control" {...custom}
+           style={style}
+    />
+  )}
 
 export const TextArea = ({ input, meta: { touched, error, warning }, style, ...custom }) => {
   if (touched && error) {
