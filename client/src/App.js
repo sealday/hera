@@ -122,10 +122,10 @@ class App extends Component {
         <div className={classes.root}>
           <AppBar position="absolute" className={classes.appBar + " hidden-print"}>
             <Toolbar>
-              <Typography variant="display3" color="inherit" noWrap className={classes.marginRight}>
+              <Typography variant="headline" color="inherit" noWrap className={classes.marginRight}>
                 {config.name}
               </Typography>
-              <Typography variant="headline" color="inherit" noWrap className={classes.marginRight}>
+              <Typography variant="subheading" color="inherit" noWrap className={classes.marginRight}>
                 {store && store.company + store.name}
               </Typography>
               <Button

@@ -8,7 +8,7 @@ import Dialog, {
   DialogContent,
   DialogTitle,
 } from 'material-ui/Dialog'
-import { ajax, theme } from '../utils'
+import { ajax } from '../utils'
 import { connect } from 'react-redux'
 import { newErrorNotify, newInfoNotify } from '../actions'
 
@@ -141,14 +141,13 @@ class Product extends React.Component {
                   open: true,
                 })
               }} >编辑</button>
-              <button style={{marginLeft: '1em'}} className="btn btn-danger" onClick={() => {
-                this.handleDeleteConfirmOpen(product)
-              }} >删除</button></td>
+                <button style={{marginLeft: '1em'}} className="btn btn-danger" onClick={() => {
+                  this.handleDeleteConfirmOpen(product)
+                }} >删除</button></td>
             </tr>
           ))}
           </tbody>
         </table>
-        <MuiThemeProvider theme={theme}>
         <Dialog open={this.state.open}>
           <DialogTitle>编辑</DialogTitle>
           <DialogContent>
@@ -169,25 +168,22 @@ class Product extends React.Component {
             >保存</button>
           </DialogActions>
         </Dialog>
-        </MuiThemeProvider>
-        <MuiThemeProvider theme={theme}>
-          <Dialog open={this.state.deleteConfirm}>
-            <DialogTitle>确认删除</DialogTitle>
-            <DialogContent>
-              删除后可能造成不必要的麻烦，如果需要恢复，请新增一个编号相同的产品！
-            </DialogContent>
-            <DialogActions>
-              <button
-                className="btn btn-default"
-                onClick={this.handleDeleteConfirmClose}
-              >取消</button>
-              <button
-                className="btn btn-danger h-left-margin-1-em"
-                onClick={this.onDelete}
-              >确定删除</button>
-            </DialogActions>
-          </Dialog>
-        </MuiThemeProvider>
+        <Dialog open={this.state.deleteConfirm}>
+          <DialogTitle>确认删除</DialogTitle>
+          <DialogContent>
+            删除后可能造成不必要的麻烦，如果需要恢复，请新增一个编号相同的产品！
+          </DialogContent>
+          <DialogActions>
+            <button
+              className="btn btn-default"
+              onClick={this.handleDeleteConfirmClose}
+            >取消</button>
+            <button
+              className="btn btn-danger h-left-margin-1-em"
+              onClick={this.onDelete}
+            >确定删除</button>
+          </DialogActions>
+        </Dialog>
       </div>
     )
   }
