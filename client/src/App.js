@@ -15,7 +15,7 @@ import short_id from 'shortid'
 import { push } from 'react-router-redux'
 import { ajax } from './utils'
 import { selectStore } from './actions'
-
+import config from '../../config'
 
 
 const drawerWidth = 240;
@@ -123,7 +123,7 @@ class App extends Component {
           <AppBar position="absolute" className={classes.appBar + " hidden-print"}>
             <Toolbar>
               <Typography variant="display3" color="inherit" noWrap className={classes.marginRight}>
-                赫拉管理系统
+                {config.name}
               </Typography>
               <Typography variant="headline" color="inherit" noWrap className={classes.marginRight}>
                 {store && store.company + store.name}
