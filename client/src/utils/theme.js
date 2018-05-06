@@ -6,6 +6,6 @@ export default createMuiTheme({
     primary: blue,
   }, 
   typography: {
-    htmlFontSize: 8,
+    htmlFontSize: 10,
   },
 });
