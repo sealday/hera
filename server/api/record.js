@@ -1,35 +1,29 @@
 /**
  * Created by seal on 15/01/2017.
  */
-
 const Record = require('../models').Record
 const HistoryRecord = require('../models').HistoryRecord
 const service = require('../service')
 const pinyin = require('pinyin')
 const logger = service.logger
+const helper = require('../utils/my').helper
 
 
-exports.list = (req, res, next) => {
-
-  Record.find(req.query).then(records => {
-    res.json({
-      data: {
-        records
-      }
-    })
-  }).catch(err => {
-    next(err)
+const list = async (req, res) => {
+  const records = await Record.find(req.query)
+  res.json({
+    data: {
+      records
+    }
   })
 }
 
 /*
 客户端传来 inStock 和 outStock，这里不判断是调入还是调出
  */
-exports.create = (req, res, next) => {
-
+const create = async (req, res) => {
   let record = new Record(req.body)
   let historyRecord = new HistoryRecord(req.body)
-
   switch (record.type) {
     case '采购':
     case '销售':
@@ -47,143 +41,121 @@ exports.create = (req, res, next) => {
         message: '请求参数有误！'
       })
   }
-
   // 内部单号
   record.order = historyRecord.order = record._id
   // 制单人
   record.username = historyRecord.username = req.session.user.username
-
-  Promise.all([record.save(), historyRecord.save()]).then(([record]) => {
-
-    service.recordCreated(record) // 处理订单创建后置事件
-
-    res.json({
-      message: '创建' + record.type + '单成功！',
-      data: {
-        record
-      }
-    })
-  }).catch(err => {
-    next(err)
+  const [savedRecord] = await Promise.all([record.save(), historyRecord.save()])
+  service.recordCreated(savedRecord) // 处理订单创建后置事件
+  res.json({
+    message: '创建' + savedRecord.type + '单成功！',
+    data: {
+      record: savedRecord,
+    }
   })
 }
 
-exports.detail = (req, res, next) => {
-  Record.findById(req.params.id).then(record => {
-    res.json({
-      data: {
-        record
-      }
-    })
-  }).catch(err => {
-    next(err)
+const detail = async (req, res) => {
+  const record = await Record.findById(req.params.id)
+  res.json({
+    data: {
+      record
+    }
   })
 }
 
-exports.update = (req, res, next) => {
+const update = async (req, res) => {
   let recordBody = req.body
   delete recordBody._id // 删除 _id 否则正在创建历史记录时会出问题（允许客户端提交 _id 但是进行忽略)
-
   if (!req.params.id) {
     return res.status(400).json({
       message: '请求参数有误！'
     })
   }
-
-  Record.findById(req.params.id).then(record => {
-    const lhs = record.toObject();
-    Object.assign(record, recordBody) // 对有提交的选项进行部分更新
-    let historyRecord = new HistoryRecord(recordBody)
-    historyRecord.order = record._id // 保存内部单号，对历史记录和当前记录进行关联
-    historyRecord.status  = record.status // 更新最新的状态
-    record.username = historyRecord.username = req.session.user.username // TODO 制单人为最新编辑的人
-    return Promise.all([record.save(), historyRecord.save(), lhs])
-  }).then(([record, _, lhs]) => {
-    const rhs = record.toObject()
-    logger.logRecordDiff(lhs, rhs, req.session.user)
-    res.json({
-      message: '更新' + record.type +'成功！',
-      data: {
-        record
-      }
-    })
-  }).catch(err => {
-    next(err)
+  const record = await Record.findById(req.params.id)
+  const lhs = record.toObject();
+  Object.assign(record, recordBody) // 对有提交的选项进行部分更新
+  let historyRecord = new HistoryRecord(recordBody)
+  historyRecord.order = record._id // 保存内部单号，对历史记录和当前记录进行关联
+  historyRecord.status  = record.status // 更新最新的状态
+  record.username = historyRecord.username = req.session.user.username // TODO 制单人为最新编辑的人
+  const [updatedRecord] = await Promise.all([record.save(), historyRecord.save()])
+  const rhs = record.toObject()
+  logger.logRecordDiff(lhs, rhs, req.session.user)
+  res.json({
+    message: '更新' + updatedRecord.type +'成功！',
+    data: {
+      record: updatedRecord,
+    }
   })
 }
 
-exports.updateTransport = (req, res, next) => {
-  Record.findById(req.params.id).then(record => {
-    Object.assign(record.transport, req.body)
-    record.hasTransport = true // 标记存在运输单
-    return record.save()
-  }).then(record => {
-
-    service.transportUpdated(record) // 处理运输单更新后置事件
-
-    res.json({
-      message: '保存运输单成功',
-      data: {
-        record
-      }
-    })
-  }).catch(err => {
-    next(err)
+const updateTransport = async (req, res) => {
+  const record = await Record.findById(req.params.id)
+  Object.assign(record.transport, req.body)
+  record.hasTransport = true // 标记存在运输单
+  const updatedRecord = await record.save()
+  service.transportUpdated(updatedRecord) // 处理运输单更新后置事件
+  res.json({
+    message: '保存运输单成功',
+    data: {
+      record: updatedRecord,
+    }
   })
 }
 
-exports.findAllPayer = (req, res, next) => {
-  Record.distinct('transport.payer', { 'transport.payer': { $ne: '' } }).then((result) => {
-    const payers = result.map((payer) => ({
-      name: payer,
-      pinyin: pinyin(payer, {
-        style: pinyin.STYLE_NORMAL,
-        heteronym: true
-      }).map(array => array.join('')).join(''),
-    }))
-    res.json({
-      message: '获取所有付款人成功',
-      data: {
-        payers
-      }
-    })
-  }).catch((err) => {
-    next(err)
+const findAllPayer = async (req, res) => {
+  const result = await Record.distinct('transport.payer', { 'transport.payer': { $ne: '' } })
+  const payers = result.map((payer) => ({
+    name: payer,
+    pinyin: pinyin(payer, {
+      style: pinyin.STYLE_NORMAL,
+      heteronym: true
+    }).map(array => array.join('')).join(''),
+  }))
+  res.json({
+    message: '获取所有付款人成功',
+    data: {
+      payers
+    }
   })
 }
 
-exports.updateTransportPaidStatus = (req, res, next) => {
+const updateTransportPaidStatus = async (req, res) => {
   if (typeof req.body['paid'] === 'undefined') {
     return res.status(400).send('参数不正确！')
   }
   const id = req.params.id
   const paid = req.body['paid'] || false
-  Record.findOneAndUpdate({ _id: id }, { $set: { transportPaid: paid } }).then(() => {
-    res.json({
-      message: '修改运输付费状态成功',
-      data: {
-        transportPaid: paid
-      }
-    })
-  }).catch((err) => {
-    next(err)
+  await Record.findOneAndUpdate({ _id: id }, { $set: { transportPaid: paid } })
+  res.json({
+    message: '修改运输付费状态成功',
+    data: {
+      transportPaid: paid
+    }
   })
 }
 
-exports.updateTransportCheckedStatus = (req, res, next) => {
+const updateTransportCheckedStatus = async (req, res) => {
   if (typeof req.body['checked'] === 'undefined') {
     return res.status(400).send('参数不正确！')
   }
   const id = req.params.id
   const paid = req.body['checked'] || false
-  Record.findOneAndUpdate({ _id: id }, { $set: { transportChecked: paid } }).then(() => {
-    res.json({
-      message: '修改运输核对状态成功',
-      data: {
-        transportChecked: paid
-      }
-    })
-  }).catch((err) => {
-    next(err)
+  await Record.findOneAndUpdate({ _id: id }, { $set: { transportChecked: paid } })
+  res.json({
+    message: '修改运输核对状态成功',
+    data: {
+      transportChecked: paid
+    }
   })
 }
+
+exports.list = helper(list)
+exports.create = helper(create)
+exports.detail = helper(detail)
+exports.update = helper(update)
+exports.updateTransport = helper(updateTransport)
+exports.findAllPayer = helper(findAllPayer)
+exports.updateTransportPaidStatus = helper(updateTransportPaidStatus)
+exports.updateTransportCheckedStatus = helper(updateTransportCheckedStatus)
