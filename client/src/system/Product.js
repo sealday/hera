@@ -1,16 +1,16 @@
 import React from 'react'
 import { Field, reduxForm, getFormValues } from 'redux-form'
-import { Input } from '../components'
-import ProductForm from './ProductForm'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import Dialog, {
   DialogActions,
   DialogContent,
   DialogTitle,
 } from 'material-ui/Dialog'
+
 import { ajax } from '../utils'
 import { connect } from 'react-redux'
 import { newErrorNotify, newInfoNotify } from '../actions'
+import { Input } from '../components'
+import ProductForm from './ProductForm'
 
 const ProductCreateForm = reduxForm({ form: 'PRODUCT_CREATE' })(ProductForm)
 const ProductEditForm = reduxForm({ form: 'PRODUCT_EDIT' })(ProductForm)
