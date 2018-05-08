@@ -103,7 +103,7 @@ const allMenu = [
     roles: ['系统管理员', '财务管理员', '基地仓库管理员'],
     children: [
       {
-        name: '租金计算',
+        name: '租金计算',
         path: '/rent_calc',
       },
       {
