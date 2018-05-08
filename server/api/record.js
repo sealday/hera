@@ -1,10 +1,12 @@
 /**
  * Created by seal on 15/01/2017.
  */
+const pinyin = require('pinyin')
+const _ = require('lodash')
+
 const Record = require('../models').Record
 const HistoryRecord = require('../models').HistoryRecord
 const service = require('../service')
-const pinyin = require('pinyin')
 const logger = service.logger
 const helper = require('../utils/my').helper
 
@@ -22,8 +24,9 @@ const list = async (req, res) => {
 客户端传来 inStock 和 outStock，这里不判断是调入还是调出
  */
 const create = async (req, res) => {
-  let record = new Record(req.body)
-  let historyRecord = new HistoryRecord(req.body)
+  const body = _.omit(req.body, ['_id'])
+  let record = new Record(body)
+  let historyRecord = new HistoryRecord(body)
   switch (record.type) {
     case '采购':
     case '销售':
@@ -65,8 +68,8 @@ const detail = async (req, res) => {
 }
 
 const update = async (req, res) => {
-  let recordBody = req.body
-  delete recordBody._id // 删除 _id 否则正在创建历史记录时会出问题（允许客户端提交 _id 但是进行忽略)
+  // 忽略 _id 否则正在创建历史记录时会出问题（允许客户端提交 _id 但是进行忽略)
+  let recordBody = _.omit(req.body, ['_id'])
   if (!req.params.id) {
     return res.status(400).json({
       message: '请求参数有误！'
