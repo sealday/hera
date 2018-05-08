@@ -2,11 +2,13 @@
  * Created by seal on 25/01/2017.
  */
 
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import TransferForm from './TransferForm'
 import { connect } from 'react-redux'
-import { updateTransfer, requestRecord } from '../actions'
 import moment from 'moment'
+import Button from 'material-ui/Button'
+
+import { updateTransfer, requestRecord } from '../actions'
 
 class TransferCreate extends Component {
   handleSubmit = (transfer) => {
@@ -36,7 +38,7 @@ class TransferCreate extends Component {
   }
 
   render() {
-    const { records, params: { direction, id } } = this.props
+    const { records, params: { direction, id }, router } = this.props
     let pageTitle
     let stock
     if (direction === 'out') {
@@ -66,8 +68,10 @@ class TransferCreate extends Component {
 
     return (
       <div>
-        <button className="btn btn-default hidden-print" onClick={e => this.props.router.goBack()}>返回</button>
-        <h2 className="page-header">{pageTitle}</h2>
+        <div className="hidden-print" style={{ display: 'flex' }}>
+          <h2 className="page-header" style={{ flex: 1 }}>{pageTitle}</h2>
+          <span><Button onClick={() => router.goBack()}>返回</Button></span>
+        </div>
         <TransferForm
           onSubmit={this.handleSubmit}
           initialValues={record}

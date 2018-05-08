@@ -6,14 +6,12 @@ import React from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import Button from 'material-ui/Button'
+
 import { toFixedWithoutTrailingZero as fixed, total_, getUnit } from '../utils'
+import config from '../../../config'
+
 
 class TransferOrder extends React.Component {
-
-  handleTransport = () => {
-    const { router, record } = this.props
-    router.push(`/transport/${record._id}`)
-  }
 
   render() {
     const { record, store, projects, articles, router } = this.props
@@ -135,7 +133,7 @@ class TransferOrder extends React.Component {
             fontSize: '9px',
             right: 0,
             width: '1.2em'
-          }}>①白单存根联②黄单客户联③黄单客户联</div>
+          }}>{config.print.side}</div>
           <h4 className="text-center">上海创兴建筑设备租赁有限公司</h4>
           <h4 className="text-center">{orderName}</h4>
           <table style={{tableLayout: 'fixed', fontSize: '11px', width: '100%'}}>

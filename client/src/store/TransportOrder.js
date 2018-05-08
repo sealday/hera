@@ -2,11 +2,17 @@
  * Created by seal on 20/01/2017.
  */
 
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import moment from 'moment'
+import Button from 'material-ui/Button'
+import Card, { CardHeader, CardContent } from 'material-ui/Card'
+import Typography from 'material-ui/Typography'
+
 import { requestRecord } from '../actions'
 import { toFixedWithoutTrailingZero as fixed, transformArticle, total_, isUpdatable, getUnit } from '../utils'
-import moment from 'moment'
+import config from '../../../config'
+
 
 class TransportOrder extends Component {
   handleEdit = () => {
@@ -32,11 +38,19 @@ class TransportOrder extends Component {
 
     if (!record.hasTransport) {
       return  (
-        <div>
-          <h2>还未填写运输单！</h2>
-          <button className="btn btn-default hidden-print" onClick={this.handleBack}>返回</button>
-          <button className="btn btn-primary hidden-print" onClick={this.handleEdit}>填写运输单</button>
-        </div>
+        <Card>
+          <CardHeader
+            action={
+              <div>
+                <Button onClick={this.handleBack}>返回</Button>
+                <Button onClick={this.handleEdit} color="primary">填写运输单</Button>
+              </div>
+            }
+          />
+          <CardContent>
+            <Typography variant="headline">还未填写运输单！</Typography>
+          </CardContent>
+        </Card>
       )
     }
 
@@ -72,11 +86,12 @@ class TransportOrder extends Component {
 
     return (
       <div>
-        <button className="btn btn-default hidden-print" onClick={this.handleBack}>返回</button>
-        {isUpdatable(store, user) && <span>
-          <button className="btn btn-primary hidden-print" onClick={this.handleEdit}>编辑</button>
-        </span>}
-        <button className="btn btn-default hidden-print" onClick={e => print()}>打印</button>
+        <div className="hidden-print" style={{ display: 'flex' }}>
+          <span style={{ flex: 1 }} />
+          <Button onClick={this.handleBack}>返回</Button>
+          {isUpdatable(store, user) && <Button onClick={this.handleEdit}>编辑</Button>}
+          <Button color="primary" onClick={e => print()}>打印</Button>
+        </div>
         <h2 className="text-center">货运运输协议</h2>
         <table className="table table-bordered table--tight table__transport">
           <tbody>
@@ -92,7 +107,7 @@ class TransportOrder extends Component {
                 style={{
                   width: '1em',
                   verticalAlign: 'middle',
-                }}>①发货方存根②收货方存根③承运方存根</td>
+                }}>{config.print.side}</td>
           </tr>
           <tr>
             <th>货物名称及<br/>数量</th>

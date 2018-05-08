@@ -5,6 +5,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
+import Button from 'material-ui/Button'
+
 import TransportForm from './TransportForm'
 import { ajax } from '../utils'
 import { updateRecord } from '../actions'
@@ -140,8 +142,10 @@ class TransportOrderEdit extends Component {
       const record = this.props.records.get(this.props.params.id)
       return (
         <div>
-          <button className="btn btn-default" onClick={this.handleCancel}>返回</button>
-          <h2 className="page-header">运输单编辑</h2>
+          <div style={{ display: 'flex' }}>
+            <h2 className="page-header" style={{ flex: 1 }}>运输单编辑</h2>
+            <span><Button onClick={this.handleCancel}>返回</Button></span>
+          </div>
           <TransportForm
             onSubmit={this.handleSubmit}
             initialValues={this.state}
