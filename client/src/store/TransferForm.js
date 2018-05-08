@@ -85,7 +85,7 @@ class TransferForm extends Component {
             </ExpansionPanel>
             <ExpansionPanel>
               <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
-                <Typography>服务类（维修或者运费等不影响库存）</Typography>
+                <Typography>服务（维修或者运费等不影响库存）</Typography>
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
                 <FieldArray name="entries" component={EntryTable} mode="R"/>
