@@ -41,11 +41,8 @@ import {
   Price,
   PriceEdit,
   PriceCreate,
+  Supplier,
 } from './system'
-
-import {
-  FileManager
-} from './file'
 
 import {
   Record,
@@ -169,7 +166,6 @@ ajax('/api/load').then(res => {
           <Route path="/" component={App}>
             <IndexRedirect to="/dashboard"/>
             <Route path="dashboard" component={Home}/>
-            <Route path="file_manager" component={FileManager}/>
             {/*劳务人员登记*/}
             <Route path="worker/create" component={WorkerCheckin}/>
             <Route path="worker/:id/edit" component={WorkerCheckinEdit}/>
@@ -184,6 +180,8 @@ ajax('/api/load').then(res => {
             <Route path="project" component={Project}/>
             <Route path="project/create" component={ProjectCreate}/>
             <Route path="project/:id/edit" component={ProjectEdit}/>
+
+            <Route path="supplier" component={Supplier} />
 
             <Route path="search" component={Search}/>
             <Route path="simple_search" component={SimpleSearch}/>

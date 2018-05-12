@@ -1,10 +1,16 @@
 import React from 'react'
 import { withStyles } from 'material-ui/styles'
-import List, { ListItemText } from 'material-ui/List'
+import List, { ListItemText, ListItemIcon } from 'material-ui/List'
 import { MenuItem } from 'material-ui/Menu'
 import Collapse from 'material-ui/transitions/Collapse'
 import ExpandLess from '@material-ui/icons/ExpandLess'
 import ExpandMore from '@material-ui/icons/ExpandMore'
+import Dashboard from '@material-ui/icons/Dashboard'
+import Work from '@material-ui/icons/Work'
+import Storage from '@material-ui/icons/Storage'
+import GroupWork from '@material-ui/icons/GroupWork'
+import AccountBox from '@material-ui/icons/AccountBox'
+
 import { isInsertable } from '../utils'
 
 
@@ -12,9 +18,11 @@ const allMenu = [
   {
     name: '仪表盘',
     path: '/dashboard',
+    icon: Dashboard,
   },
   {
     name: '仓库操作',
+    icon: Work,
     roles: ['项目部管理员', '系统管理员', '基地仓库管理员'],
     // TODO 解决这个权限特殊处理
     isInsertable: isInsertable,
@@ -51,6 +59,7 @@ const allMenu = [
   },
   {
     name: '仓库查询',
+    icon: Storage,
     children: [
       {
         name: '库存查询',
@@ -100,6 +109,7 @@ const allMenu = [
   },
   {
     name: '公司',
+    icon: GroupWork,
     roles: ['系统管理员', '财务管理员', '基地仓库管理员'],
     children: [
       {
@@ -122,6 +132,7 @@ const allMenu = [
   },
   {
     name: '系统信息',
+    icon: AccountBox,
     roles: ['系统管理员'],
     children: [
       {
@@ -147,6 +158,10 @@ const allMenu = [
       {
         name: '项目列表',
         path: '/project',
+      },
+      {
+        name: '供应商管理',
+        path: '/supplier',
       },
     ]
   },
@@ -237,6 +252,9 @@ class MenuList extends React.Component {
                 onClick={() => this.handleClick(menuItem)}
                 selected={!menuItem.children && router.isActive(menuItem.path)}
               >
+                <ListItemIcon>
+                  <menuItem.icon />
+                </ListItemIcon>
                 <ListItemText inset primary={menuItem.name}/>
                 {menuItem.children && (this.state.open[menuItem.name] ? <ExpandLess /> : <ExpandMore />)}
               </MenuItem>
