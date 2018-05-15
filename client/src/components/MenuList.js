@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react'
 import { withStyles } from 'material-ui/styles'
 import List, { ListItemText, ListItemIcon } from 'material-ui/List'
@@ -184,11 +185,11 @@ class MenuList extends React.Component {
   }
 
   static contextTypes = {
-    router: React.PropTypes.object.isRequired,
+    router: PropTypes.object.isRequired,
   }
 
   static propTypes = {
-    classes: React.PropTypes.object.isRequired,
+    classes: PropTypes.object.isRequired,
   }
 
   handleClick = (item) => {

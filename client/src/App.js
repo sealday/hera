@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import './App.css';
@@ -15,7 +16,7 @@ import short_id from 'shortid'
 import { push } from 'react-router-redux'
 import { ajax } from './utils'
 import { selectStore } from './actions'
-import config from '../../config'
+import config from './config'
 
 
 const drawerWidth = 240;
@@ -81,7 +82,7 @@ class App extends Component {
     }).then(res => {
     }).catch(err => {
     }).then(() => {
-      location.href = "login.html";
+      window.location.href = "login.html";
     });
   }
 
@@ -104,7 +105,7 @@ class App extends Component {
   }
 
   static propTypes = {
-    classes: React.PropTypes.object.isRequired,
+    classes: PropTypes.object.isRequired,
   }
 
   render() {
@@ -139,7 +140,7 @@ class App extends Component {
               <Button
                 color="inherit"
                 onClick={this.handleMenu}
-              >当前在线人数{num}</Button>
+              >当前在线 {num} 人</Button>
               <Popover
                 open={this.state.menuOpen}
                 anchorEl={this.state.menuAnchorEl}

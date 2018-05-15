@@ -39,7 +39,7 @@ class Operator extends Component {
                 <br />
                 <Link to="#" onClick={e => {
                   e.preventDefault()
-                  if (confirm(`确定要删除用户 ${user.username}`)) {
+                  if (window.confirm(`确定要删除用户 ${user.username}`)) {
                     this.props.dispatch(deleteOperator(user))
                   }
                 }} >删除</Link>

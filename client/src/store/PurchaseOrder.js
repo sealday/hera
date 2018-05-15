@@ -172,7 +172,7 @@ class PurchaseOrder extends React.Component {
             }
           </span>}
           <button className="btn btn-default" onClick={this.handleTransport}>运输单</button>
-          <button className="btn btn-default" onClick={() => print()}>打印</button>
+          <button className="btn btn-default" onClick={() => window.print()}>打印</button>
           <a className="btn btn-default" href="check">审核确认</a>
 
         </div>

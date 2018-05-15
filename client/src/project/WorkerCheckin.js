@@ -25,7 +25,7 @@ class WorkerCheckin extends Component{
 
     onDeleteClick=(e,worker)=>{
         e.preventDefault()
-        if (confirm(`确定要删除工人 ${worker.name}`)) {
+        if (window.confirm(`确定要删除工人 ${worker.name}`)) {
             this.props.dispatch(removeWorker(worker._id));
         }
     }

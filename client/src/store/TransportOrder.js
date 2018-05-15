@@ -11,7 +11,7 @@ import Typography from 'material-ui/Typography'
 
 import { requestRecord } from '../actions'
 import { toFixedWithoutTrailingZero as fixed, transformArticle, total_, isUpdatable, getUnit } from '../utils'
-import config from '../../../config'
+import config from './../config'
 
 
 class TransportOrder extends Component {
@@ -90,7 +90,7 @@ class TransportOrder extends Component {
           <span style={{ flex: 1 }} />
           <Button onClick={this.handleBack}>返回</Button>
           {isUpdatable(store, user) && <Button onClick={this.handleEdit}>编辑</Button>}
-          <Button color="primary" onClick={e => print()}>打印</Button>
+          <Button color="primary" onClick={e => window.print()}>打印</Button>
         </div>
         <h2 className="text-center">货运运输协议</h2>
         <table className="table table-bordered table--tight table__transport">

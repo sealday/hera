@@ -2,7 +2,9 @@
  * Created by seal on 15/01/2017.
  */
 
-import React from 'react'
+import PropTypes from 'prop-types';
+
+import React from 'react';
 import { connect } from 'react-redux'
 import moment from 'moment'
 import { total_, isUpdatable } from '../utils'
@@ -26,7 +28,7 @@ const styles = theme => ({
 class TransferOrder extends React.Component {
 
   static propTypes = {
-    classes: React.PropTypes.object.isRequired,
+    classes: PropTypes.object.isRequired,
   }
 
   handleTransport = () => {

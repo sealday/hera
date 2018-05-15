@@ -153,7 +153,7 @@ class PurchaseOrder extends React.Component {
             <Link className="btn btn-primary" to={`/stocktaking/out/${record._id}/edit`}>编辑</Link>
             }
           </span>}
-          <button className="btn btn-default" onClick={() => print()}>打印</button>
+          <button className="btn btn-default" onClick={() => window.print()}>打印</button>
           <a className="btn btn-default" href="check">审核确认</a>
 
         </div>
