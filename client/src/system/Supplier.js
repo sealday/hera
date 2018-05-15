@@ -1,8 +1,4 @@
 import React from 'react'
-import Card, {
-  CardContent
-} from 'material-ui/Card'
-import Typography from 'material-ui/Typography'
 import Table, {
   TableHead,
   TableRow,
@@ -12,6 +8,7 @@ import Table, {
 import Button from 'material-ui/Button'
 import Paper from 'material-ui/Paper'
 import { withStyles } from 'material-ui/styles'
+import PropTypes from 'prop-types'
 
 
 const styles = theme => ({
@@ -25,7 +22,7 @@ const styles = theme => ({
 class Supplier extends React.Component {
 
   static propTypes = {
-    classes: React.PropTypes.object.isRequired,
+    classes: PropTypes.object.isRequired,
   }
 
   projects = [

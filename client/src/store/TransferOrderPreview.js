@@ -8,7 +8,7 @@ import moment from 'moment'
 import Button from 'material-ui/Button'
 
 import { toFixedWithoutTrailingZero as fixed, total_, getUnit } from '../utils'
-import config from '../../../config'
+import config from './../config'
 
 
 class TransferOrder extends React.Component {
