@@ -45,7 +45,7 @@ class TransportOrder extends Component {
             action={
               <div>
                 <Button onClick={this.handleBack}>返回</Button>
-                <Button onClick={this.handleEdit} color="primary">填写运输单</Button>
+                <Button variant="raised" onClick={this.handleEdit} color="primary">填写运输单</Button>
               </div>
             }
           />
@@ -92,7 +92,7 @@ class TransportOrder extends Component {
           <span style={{ flex: 1 }} />
           <Button onClick={this.handleBack}>返回</Button>
           {isUpdatable(store, user) && <Button onClick={this.handleEdit}>编辑</Button>}
-          <Button color="primary" onClick={e => window.print()}>打印</Button>
+          <Button variant="raised" color="primary" onClick={e => window.print()}>打印</Button>
         </div>
         <h2 className="text-center">货运运输协议</h2>
         <table className="table table-bordered table--tight table__transport">

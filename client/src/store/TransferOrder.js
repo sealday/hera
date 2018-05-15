@@ -16,6 +16,9 @@ import TableCell from '@material-ui/core/TableCell'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import TablePagination from '@material-ui/core/TablePagination'
+import Stepper from '@material-ui/core/Stepper'
+import Step from '@material-ui/core/Step'
+import StepLabel from '@material-ui/core/StepLabel'
 
 import { total_, isUpdatable } from '../utils'
 
@@ -126,10 +129,27 @@ class TransferOrder extends React.Component {
           </CardContent>
         </Card>
 
+        <Card className={classes.marginTop}>
+          <CardContent>
+            <Typography variant="headline">流程进度</Typography>
+            <Stepper>
+              <Step>
+                <StepLabel>aaa</StepLabel>
+              </Step>
+              <Step>
+                <StepLabel>bbb</StepLabel>
+              </Step>
+              <Step>
+                <StepLabel>ccc</StepLabel>
+              </Step>
+            </Stepper>
+          </CardContent>
+        </Card>
+
         {['l', 's', 'c', 'r'].map(t => (
            records[t].length > 0 && <Card className={classes.marginTop} key={t}>
             <CardContent>
-              <Typography variant="display1">{names[t]}</Typography>
+              <Typography variant="headline">{names[t]}</Typography>
               <Table className={classes.table}>
                 <TableHead>
                   <TableRow>
