@@ -53,9 +53,6 @@ mongoose.connection.on('error', () => {
 
 const app = express()
 
-app.set('views', path.resolve('./views'))
-app.set('view engine', 'pug')
-
 // compress all
 app.use(compression())
 
@@ -83,9 +80,6 @@ app.use(session({
   })
 }))
 
-app.get('/f/change_report', (req, res) => {
-  res.render('edit_report')
-})
 app.use('/api',  apiIndex)
 
 app.get('/system/', (req, res, next) => {

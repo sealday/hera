@@ -20,6 +20,8 @@ import { systemLoaded, updateOnlineUser, updateOnlineUsers, selectStore } from '
 import { syncHistoryWithStore, routerReducer, routerMiddleware } from 'react-router-redux'
 import { Profile } from './components'
 import config from '../../config'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import { theme } from './utils'
 
 import App from './App';
 import Home from './Home';
@@ -162,6 +164,7 @@ ajax('/api/load').then(res => {
   ReactDOM.render((
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
+        <MuiThemeProvider theme={theme}>
         <Router history={syncHistoryWithStore(hashHistory, store)}>
           <Route path="/" component={App}>
             <IndexRedirect to="/dashboard"/>
@@ -227,6 +230,7 @@ ajax('/api/load').then(res => {
             <Redirect path="*" to="/dashboard"/>
           </Route>
         </Router>
+        </MuiThemeProvider>
       </PersistGate>
     </Provider>
     ), document.getElementById('root')

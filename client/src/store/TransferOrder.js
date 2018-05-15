@@ -124,7 +124,7 @@ class TransferOrder extends React.Component {
         {['l', 's', 'c', 'r'].map(t => (
           <Card className={classes.marginTop} key={t}>
             <CardContent>
-              <Typography variant="display3">{names[t]}</Typography>
+              <Typography variant="display1">{names[t]}</Typography>
               <Table className={classes.table}>
                 <TableHead>
                   <TableRow>
@@ -147,6 +147,7 @@ class TransferOrder extends React.Component {
               </Table>
               <TablePagination
                 component="div"
+				labelRowsPerPage="每页"
                 count={records[t].length}
                 rowsPerPage={this.state.rowsPerPage[t]}
                 page={this.state.page[t]}

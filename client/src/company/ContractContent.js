@@ -1,8 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import Card, { CardContent } from 'material-ui/Card'
-import { currencyFormat, dateFormat, theme } from '../utils'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import { currencyFormat, dateFormat } from '../utils'
 import Typography from 'material-ui/Typography'
 import short_id from 'shortid'
 import { withStyles } from 'material-ui/styles';
@@ -27,23 +26,21 @@ class ContractContent extends React.Component {
     return (
       <div>
         <h2 className="page-header">合同详情</h2>
-        <MuiThemeProvider theme={theme}>
-            <Card>
-              <CardContent>
-                <Typography
-                  className={classes.title}
-                  variant="headline"
-                  component="h2"
-                >{ project.company } { project.name }</Typography>
-                <Typography variant="subheading" color="textSecondary">
-                  <p>编号：{ project._id }  <br/>外部：{ short_id.generate() }</p>
-                </Typography>
-                <p>费用：<span style={{ fontSize: 'xx-large' }}>{ currencyFormat(761946.14) }</span> </p>
-                <p>收款：<span style={{ fontSize: 'xx-large' }}>{ currencyFormat(150000.00) }</span> </p>
-                <p>税收：<span style={{ fontSize: 'xx-large' }}>{ currencyFormat(232.23) }</span> </p>
-              </CardContent>
-            </Card>
-        </MuiThemeProvider>
+        <Card>
+          <CardContent>
+            <Typography
+              className={classes.title}
+              variant="headline"
+              component="h2"
+            >{ project.company } { project.name }</Typography>
+            <Typography variant="subheading" color="textSecondary">
+              <p>编号：{ project._id }  <br/>外部：{ short_id.generate() }</p>
+            </Typography>
+            <p>费用：<span style={{ fontSize: 'xx-large' }}>{ currencyFormat(761946.14) }</span> </p>
+            <p>收款：<span style={{ fontSize: 'xx-large' }}>{ currencyFormat(150000.00) }</span> </p>
+            <p>税收：<span style={{ fontSize: 'xx-large' }}>{ currencyFormat(232.23) }</span> </p>
+          </CardContent>
+        </Card>
         <table className="table table-bordered" style={{ marginTop: '2em' }}>
           <thead>
           <tr>

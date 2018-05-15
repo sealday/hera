@@ -1,6 +1,5 @@
 const Operation = require('../models').Operation
 const diff = require('deep-diff').diff
-const io = require('socket.io-emitter')({ host: '127.0.0.1', port: 6379 })
 const _ = require('lodash')
 
 class Logger {
@@ -85,7 +84,6 @@ class Logger {
       user: _.pick(user, ['username', 'profile.name']),
       report: report,
     })
-    io.emit('msg:danger', operation.toObject())
     operation.save().catch((err) => {
       console.error(err);
     })

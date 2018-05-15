@@ -4,5 +4,8 @@ import blue from 'material-ui/colors/blue';
 export default createMuiTheme({
   palette: {
     primary: blue,
+  }, 
+  typography: {
+    htmlFontSize: 10,
   },
 });
