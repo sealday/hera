@@ -1,22 +1,23 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import './App.css';
-import { Notification, CurrentStore, MenuList } from './components'
-import { withStyles } from 'material-ui/styles';
-import Drawer from 'material-ui/Drawer';
-import AppBar from 'material-ui/AppBar';
-import Toolbar from 'material-ui/Toolbar';
-import List from 'material-ui/List';
-import Typography from 'material-ui/Typography';
-import Button from 'material-ui/Button'
-import { MenuItem } from 'material-ui/Menu'
-import Popover from 'material-ui/Popover';
+import { withStyles } from '@material-ui/core/styles'
+import Drawer from '@material-ui/core/Drawer'
+import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar'
+import List from '@material-ui/core/List'
+import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
+import MenuItem from '@material-ui/core/MenuItem'
+import Popover from '@material-ui/core/Popover'
 import short_id from 'shortid'
 import { push } from 'react-router-redux'
+
+import { Notification, CurrentStore, MenuList } from './components'
 import { ajax } from './utils'
 import { selectStore } from './actions'
 import config from './config'
+import './App.css'
 
 
 const drawerWidth = 240;

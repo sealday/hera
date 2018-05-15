@@ -5,7 +5,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
-import Button from 'material-ui/Button'
+import Button from '@material-ui/core/Button'
 
 import { toFixedWithoutTrailingZero as fixed, total_, getUnit } from '../utils'
 import config from './../config'

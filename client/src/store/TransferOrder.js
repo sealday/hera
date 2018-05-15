@@ -1,20 +1,23 @@
-/**
- * Created by seal on 15/01/2017.
- */
-
-import PropTypes from 'prop-types';
-
 import React from 'react';
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import moment from 'moment'
-import { total_, isUpdatable } from '../utils'
 import { Link } from 'react-router'
-import Card, { CardHeader, CardContent } from 'material-ui/Card'
-import Typography from 'material-ui/Typography'
-import { withStyles } from 'material-ui/styles'
-import Divider from 'material-ui/Divider'
-import Button from 'material-ui/Button'
-import Table, { TableBody, TableCell, TableHead, TableRow, TablePagination } from 'material-ui/Table';
+import Card from '@material-ui/core/Card'
+import CardHeader from '@material-ui/core/CardHeader'
+import CardContent from '@material-ui/core/CardContent'
+import Typography from '@material-ui/core/Typography'
+import { withStyles } from '@material-ui/core/styles'
+import Divider from '@material-ui/core/Divider'
+import Button from '@material-ui/core/Button'
+import Table from '@material-ui/core/Table'
+import TableBody from '@material-ui/core/TableBody'
+import TableCell from '@material-ui/core/TableCell'
+import TableHead from '@material-ui/core/TableHead'
+import TableRow from '@material-ui/core/TableRow'
+import TablePagination from '@material-ui/core/TablePagination'
+
+import { total_, isUpdatable } from '../utils'
 
 const styles = theme => ({
   flex: {

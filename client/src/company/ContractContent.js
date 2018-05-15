@@ -1,11 +1,12 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux'
-import Card, { CardContent } from 'material-ui/Card'
+import Card from '@material-ui/core/Card'
+import CardContent from '@material-ui/core/CardContent'
 import { currencyFormat, dateFormat } from '../utils'
-import Typography from 'material-ui/Typography'
+import Typography from '@material-ui/core/Typography'
 import short_id from 'shortid'
-import { withStyles } from 'material-ui/styles';
+import { withStyles } from '@material-ui/core/styles'
 
 const styles = {
   title: {

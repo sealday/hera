@@ -17,7 +17,7 @@ import { systemLoaded, updateOnlineUser, updateOnlineUsers, selectStore } from '
 import { syncHistoryWithStore, routerReducer, routerMiddleware } from 'react-router-redux'
 import { Profile } from './components'
 import config from './config'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
 import { theme } from './utils'
 
 import App from './App';
