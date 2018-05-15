@@ -98,7 +98,8 @@ import 'animate.css'
 import './index.css';
 
 // 初始化 moment 时间属性
-import moment from 'moment';
+import moment from 'moment'
+import 'moment/locale/zh-cn'
 moment.locale('zh-CN');
 
 const composeEnhancers = window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] || compose;
@@ -107,13 +108,18 @@ const composeEnhancers = window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] || compo
 const msgpack = msgpack5()
 const { encode, decode } = msgpack
 msgpack.register(0x42, moment, (m) => encode(m.toDate()), (buf) => moment(decode(buf)))
+const noErrorEncode = prev => {
+  try {
+    return encode(prev)
+  } catch (e) {}
+}
 const myTransform = createTransform(
-  inboundState => encode(inboundState),
+  inboundState => noErrorEncode(inboundState),
   outboundState => decode(outboundState),
 );
 
 const persistConfig = {
-  key: 'form-6',
+  key: 'form-7',
   transforms: [myTransform],
   storage,
 }

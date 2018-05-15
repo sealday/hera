@@ -99,8 +99,7 @@ const TransferEntryTable = connect(
     return total
   }
 
-  return (
-    <div>
+  return [
       <table className="table">
         <thead>
         <tr>
@@ -174,7 +173,7 @@ const TransferEntryTable = connect(
           </tr>
         )}
         </tbody>
-      </table>
+      </table>,
       <ul className="list-group">
         {getReport().map((report, index) => (
           <li key={index} className="list-group-item">
@@ -183,8 +182,7 @@ const TransferEntryTable = connect(
           </li>
         ))}
       </ul>
-    </div>
-  )
+  ]
 })
 
 export default TransferEntryTable

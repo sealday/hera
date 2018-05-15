@@ -70,7 +70,7 @@ class TransferCreate extends Component {
       <div>
         <div className="hidden-print" style={{ display: 'flex' }}>
           <h2 className="page-header" style={{ flex: 1 }}>{pageTitle}</h2>
-          <span><Button onClick={() => router.goBack()}>返回</Button></span>
+          <span><Button variant="raised" onClick={() => router.goBack()}>返回</Button></span>
         </div>
         <TransferForm
           onSubmit={this.handleSubmit}

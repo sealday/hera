@@ -111,7 +111,7 @@ class TransferOrder extends React.Component {
                 <Button onClick={this.handleTransport}>运输单</Button>
                 {direction && <Button component={Link} to={`/record/${record._id}/preview`}>打印预览</Button>}
                 {isUpdatable(store, user) && direction &&
-                <Button component={Link} to={`/transfer/${direction}/${record._id}/edit`} color="primary">编辑</Button>
+                <Button variant="raised" component={Link} to={`/transfer/${direction}/${record._id}/edit`} color="primary">编辑</Button>
                 }
               </div>
             }

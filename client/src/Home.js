@@ -69,7 +69,7 @@ class Home extends Component {
     }
     return (
       <div>
-        <h2 className="page-header">近期操作记录【目前只显示调拨销售编辑】</h2>
+        <h2 className="page-header">近期操作记录</h2>
         <div className="panel panel-default">
           <div className="panel-body">
             <button className="btn btn-primary" onClick={() => {
