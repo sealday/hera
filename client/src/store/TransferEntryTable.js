@@ -1,7 +1,8 @@
 import React from 'react';
 import { Field } from 'redux-form'
-import { Input, FilterSelect, Select } from '../components'
 import { connect } from 'react-redux'
+import Button from '@material-ui/core/Button'
+
 import {
   filterOption,
   transformArticle,
@@ -10,6 +11,7 @@ import {
   calWeight,
   total_
 } from '../utils'
+import { Input, FilterSelect, Select } from '../components'
 
 const TransferEntryTable = connect(
   state => ({
@@ -111,10 +113,12 @@ const TransferEntryTable = connect(
           <th>小计</th>
           <th>备注</th>
           <th>
-            <button
+            <Button
+              variant="raised"
+              color="primary"
               type="button"
               onClick={add}
-              className="btn btn-default">增加</button>
+            >增加</Button>
           </th>
           <th/>
         </tr>
@@ -159,16 +163,19 @@ const TransferEntryTable = connect(
             <td>{fixed(getTotal(index))}</td>
             <td><Field name={`${entry}.comments`} component={Input}/></td>
             <td>
-              <button
+              <Button
+                variant="raised"
+                color="primary"
                 type="button"
                 onClick={add}
-                className="btn btn-default">增加</button>
+              >增加</Button>
             </td>
             <td>
-              <button
+              <Button
+                color="secondary"
                 type="button"
-                className="btn btn-danger"
-                onClick={() => fields.remove(index)}>删除</button>
+                onClick={() => fields.remove(index)}
+              >删除</Button>
             </td>
           </tr>
         )}
