@@ -2,7 +2,6 @@ import React from 'react'
 import { Field, reduxForm, getFormValues } from 'redux-form'
 import { Input } from '../components'
 import ProductForm from './ProductForm'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import Dialog, {
   DialogActions,
   DialogContent,

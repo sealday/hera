@@ -1,9 +1,6 @@
-import Raven from 'raven-js';
-if (process.env.NODE_ENV !== 'development') {
-  Raven.config('http://0b212a63e44a4ec4a070b0a3babc4576@sentry.shchuangxing.com/2').install();
-}
 // 使用 bluebird 的 promise 实现
 // TODO 需要测试下实际中浏览器的兼容性
+import './before'
 import 'bluebird';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -19,7 +16,7 @@ import * as reducers from './reducers'
 import { systemLoaded, updateOnlineUser, updateOnlineUsers, selectStore } from './actions'
 import { syncHistoryWithStore, routerReducer, routerMiddleware } from 'react-router-redux'
 import { Profile } from './components'
-import config from '../../config'
+import config from './config'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import { theme } from './utils'
 
@@ -42,10 +39,6 @@ import {
   PriceEdit,
   PriceCreate,
 } from './system'
-
-import {
-  FileManager
-} from './file'
 
 import {
   Record,
@@ -99,7 +92,6 @@ import io from 'socket.io-client';
 // css 除非是模块自己的，否则直接在这里进行全局 import
 import 'bootstrap/dist/css/bootstrap.css';
 import 'react-select/dist/react-select.css';
-import 'react-tagsinput/react-tagsinput.css';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'animate.css'
 import './index.css';
@@ -169,7 +161,6 @@ ajax('/api/load').then(res => {
           <Route path="/" component={App}>
             <IndexRedirect to="/dashboard"/>
             <Route path="dashboard" component={Home}/>
-            <Route path="file_manager" component={FileManager}/>
             {/*劳务人员登记*/}
             <Route path="worker/create" component={WorkerCheckin}/>
             <Route path="worker/:id/edit" component={WorkerCheckinEdit}/>

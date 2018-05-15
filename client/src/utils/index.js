@@ -6,6 +6,8 @@ import $ from 'jquery';
 import fuzzysearch from 'fuzzysearch'
 import moment from 'moment'
 
+import * as validator from './validator'
+
 /**
  * 计算规格的数值表达
  * @param product
@@ -58,7 +60,7 @@ export function getShortOrder(id) {
 export function ajax(url, settings) {
   return $.ajax(url, settings).catch(res => {
     if (res.status === 401) {
-      location.href = 'login.html';
+      window.location.href = 'login.html';
     }
     // 无论如何总是抛出，以便于后面的 catch 可以捕捉
     throw res;
@@ -174,7 +176,6 @@ export const total = (count, product) => toFixedWithoutTrailingZero(count * getS
  */
 export const total_ = ({count, size, name}, products) => count * getScale(products[makeKeyFromNameSize(name, size)])
 
-import * as validator from './validator'
 export { validator }
 
 export const isUpdatable = (store, user) => {

@@ -86,7 +86,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
     onDeleteClick(e, project) {
       e.preventDefault()
-      if (confirm(`确定要删除项目 ${project.company} ${project.name}`)) {
+      if (window.confirm(`确定要删除项目 ${project.company} ${project.name}`)) {
         alert('暂时不支持删除项目！')
         dispatch(removeProject(project._id))
       }

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux'
 import Card, { CardContent } from 'material-ui/Card'
@@ -69,7 +70,7 @@ class ContractContent extends React.Component {
 }
 
 ContractContent.propTypes = {
-  classes: React.PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired,
 };
 
 ContractContent = withStyles(styles)(ContractContent)

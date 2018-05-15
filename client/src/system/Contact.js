@@ -1,19 +1,21 @@
 /**
  * Created by seal on 19/01/2017.
  */
-import React, { Component } from 'react'
+import PropTypes from 'prop-types';
+
+import React, { Component } from 'react';
 
 class Contact extends Component {
   static propTypes = {
-    onAdd: React.PropTypes.func,
-    onRemove: React.PropTypes.func,
-    onChange: React.PropTypes.func,
-    id: React.PropTypes.oneOfType([
-      React.PropTypes.number,
-      React.PropTypes.string
+    onAdd: PropTypes.func,
+    onRemove: PropTypes.func,
+    onChange: PropTypes.func,
+    id: PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.string
     ]),
-    name: React.PropTypes.string,
-    phone: React.PropTypes.string,
+    name: PropTypes.string,
+    phone: PropTypes.string,
   };
 
   constructor(props) {

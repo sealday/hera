@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import './App.css';
@@ -15,7 +16,7 @@ import short_id from 'shortid'
 import { push } from 'react-router-redux'
 import { ajax } from './utils'
 import { selectStore } from './actions'
-import config from '../../config'
+import config from './config'
 
 
 const drawerWidth = 240;
@@ -81,7 +82,7 @@ class App extends Component {
     }).then(res => {
     }).catch(err => {
     }).then(() => {
-      location.href = "login.html";
+      window.location.href = "login.html";
     });
   }
 
@@ -104,7 +105,7 @@ class App extends Component {
   }
 
   static propTypes = {
-    classes: React.PropTypes.object.isRequired,
+    classes: PropTypes.object.isRequired,
   }
 
   render() {

@@ -76,7 +76,7 @@ class TransportOrder extends Component {
         {isUpdatable(store, user) && <span>
           <button className="btn btn-primary hidden-print" onClick={this.handleEdit}>编辑</button>
         </span>}
-        <button className="btn btn-default hidden-print" onClick={e => print()}>打印</button>
+        <button className="btn btn-default hidden-print" onClick={e => window.print()}>打印</button>
         <h2 className="text-center">货运运输协议</h2>
         <table className="table table-bordered table--tight table__transport">
           <tbody>
