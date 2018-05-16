@@ -73,7 +73,7 @@ class TransferForm extends Component {
           <div className="col-md-12">
             <ExpansionPanel defaultExpanded={true}>
               <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
-                <Typography variant="headline">{direction === 'in' ? '租赁（入库）' : '租赁（出库）'}</Typography>
+                <Typography variant="title">{direction === 'in' ? '租赁（入库）' : '租赁（出库）'}</Typography>
               </ExpansionPanelSummary>
               <ExpansionPanelDetails className={classes.panel}>
                 <FieldArray name="entries" component={EntryTable} mode="L"/>
@@ -81,7 +81,7 @@ class TransferForm extends Component {
             </ExpansionPanel>
             <ExpansionPanel>
               <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
-                <Typography variant="headline">{direction === 'in' ? '销售（入库）' : '销售（出库）'}</Typography>
+                <Typography variant="title">{direction === 'in' ? '销售（入库）' : '销售（出库）'}</Typography>
               </ExpansionPanelSummary>
               <ExpansionPanelDetails className={classes.panel}>
                 <FieldArray name="entries" component={EntryTable} mode="S"/>
@@ -89,7 +89,7 @@ class TransferForm extends Component {
             </ExpansionPanel>
             <ExpansionPanel>
               <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
-                <Typography variant="headline">{direction === 'in' ? '赔偿（出库）' : '赔偿（入库）'}</Typography>
+                <Typography variant="title">{direction === 'in' ? '赔偿（出库）' : '赔偿（入库）'}</Typography>
               </ExpansionPanelSummary>
               <ExpansionPanelDetails className={classes.panel}>
                 <FieldArray name="entries" component={EntryTable} mode="C"/>
@@ -97,7 +97,7 @@ class TransferForm extends Component {
             </ExpansionPanel>
             <ExpansionPanel>
               <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
-                <Typography variant="headline">服务（维修或者运费等不影响库存）</Typography>
+                <Typography variant="title">服务（维修或者运费等不影响库存）</Typography>
               </ExpansionPanelSummary>
               <ExpansionPanelDetails className={classes.panel}>
                 <FieldArray name="entries" component={EntryTable} mode="R"/>
