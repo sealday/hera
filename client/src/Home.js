@@ -35,14 +35,15 @@ class Home extends Component {
       other2Fee: '其他费用2',
       comments: '备注',
     }
-    report.recordEdit.forEach((diff) => {
+    let entries = report.recordEdit || []
+    entries.forEach((diff) => {
       items.push(<p key={diff.field}>
         <span>{nameMap[diff.field]}：</span>
         { diff.old && <span style={styles.diffRemove}>{JSON.stringify(diff.old)}</span> }
         { diff.new && <span style={styles.diffAdd}>{JSON.stringify(diff.new)}</span> }
       </p>)
     })
-    let entries = report.entryAdd || []
+    entries = report.entryAdd || []
     entries.forEach((entry) => {
       items.push(<p key={entry.field}
       ><span style={styles.diffAdd}>{entry.new.name} | {entry.new.size} | {entry.new.count}</span></p>)
@@ -90,7 +91,7 @@ class Home extends Component {
           {this.props.operations.map((op) => (
             <tr key={op._id}>
               <td>{moment(op.timestamp).format('MMMM Do YYYY, h:mm:ss a')}</td>
-              <td>修改</td>
+              <td>{op.type || '修改'}</td>
               <td>{op.user.username}</td>
               <td>
                 <p key="number">单号：{op.report.number}</p>

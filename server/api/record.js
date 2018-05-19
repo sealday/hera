@@ -50,6 +50,7 @@ const create = async (req, res) => {
   record.username = historyRecord.username = req.session.user.username
   const [savedRecord] = await Promise.all([record.save(), historyRecord.save()])
   service.recordCreated(savedRecord) // 处理订单创建后置事件
+  logger.logNewRecord(savedRecord, req.session.user)
   res.json({
     message: '创建' + savedRecord.type + '单成功！',
     data: {

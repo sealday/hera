@@ -6,6 +6,21 @@ class Logger {
   constructor () {
   }
 
+  logNewRecord(record, user) {
+    const report = {}
+    report.number = record.number
+    const operation = new Operation({
+      level: 'DANGER',
+      type: '新增',
+      timestamp: Date.now(),
+      user: _.pick(user, ['username', 'profile.name']),
+      report: report,
+    })
+    operation.save().catch((err) => {
+      console.error(err);
+    })
+  }
+
   logRecordDiff(lhs, rhs, user) {
     lhs.inStock = lhs.inStock && lhs.inStock.toString()
     lhs.outStock = lhs.outStock && lhs.outStock.toString()
@@ -80,6 +95,7 @@ class Logger {
     report.type = lhs.type
     const operation = new Operation({
       level: 'DANGER',
+      type: '修改',
       timestamp: Date.now(),
       user: _.pick(user, ['username', 'profile.name']),
       report: report,
