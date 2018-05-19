@@ -36,7 +36,7 @@ class Home extends Component {
       comments: '备注',
     }
     report.recordEdit.forEach((diff) => {
-      items.push(<p key={diff.field} className="list-group-item">
+      items.push(<p key={diff.field}>
         <span>{nameMap[diff.field]}：</span>
         { diff.old && <span style={styles.diffRemove}>{JSON.stringify(diff.old)}</span> }
         { diff.new && <span style={styles.diffAdd}>{JSON.stringify(diff.new)}</span> }
@@ -45,16 +45,16 @@ class Home extends Component {
     let entries = report.entryAdd || []
     entries.forEach((entry) => {
       items.push(<p key={entry.field}
-                    className="list-group-item"><span style={styles.diffAdd}>{entry.new.name} | {entry.new.size} | {entry.new.count}</span></p>)
+      ><span style={styles.diffAdd}>{entry.new.name} | {entry.new.size} | {entry.new.count}</span></p>)
     })
     entries = report.entryRemove || []
     entries.forEach((entry) => {
       items.push(<p key={entry.field}
-                    className="list-group-item"><span style={styles.diffRemove}>{entry.old.name} | {entry.old.size} | {entry.old.count}</span></p>)
+      ><span style={styles.diffRemove}>{entry.old.name} | {entry.old.size} | {entry.old.count}</span></p>)
     })
     entries = report.entryEdit || []
     entries.forEach((entry) => {
-      items.push(<p key={entry.field} className="list-group-item">
+      items.push(<p key={entry.field}>
         <span style={styles.diffRemove}>{entry.old.name} | {entry.old.size} | {entry.old.count}</span>
         <i className="glyphicon glyphicon-triangle-right" />
         <span style={styles.diffAdd}>{entry.new.name} | {entry.new.size} | {entry.new.count}</span>
@@ -93,10 +93,8 @@ class Home extends Component {
               <td>修改</td>
               <td>{op.user.username}</td>
               <td>
-                <div className="panel panel-default">
-                  <p key="number">单号：{op.report.number}</p>
-                  {this.renderReport(op.report)}
-                </div>
+                <p key="number">单号：{op.report.number}</p>
+                {this.renderReport(op.report)}
               </td>
             </tr>
           ))}
