@@ -131,16 +131,16 @@ class TransferOrder extends React.Component {
 
         <Card className={classes.marginTop}>
           <CardContent>
-            <Typography variant="headline">流程进度</Typography>
+            <Typography variant="headline">进度</Typography>
             <Stepper>
               <Step>
-                <StepLabel>aaa</StepLabel>
+                <StepLabel>填单</StepLabel>
               </Step>
               <Step>
-                <StepLabel>bbb</StepLabel>
+                <StepLabel>审核</StepLabel>
               </Step>
               <Step>
-                <StepLabel>ccc</StepLabel>
+                <StepLabel>完成</StepLabel>
               </Step>
             </Stepper>
           </CardContent>
