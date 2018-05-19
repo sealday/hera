@@ -9,6 +9,8 @@ import Typography from '@material-ui/core/Typography'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { withStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
+import Paper from '@material-ui/core/Paper'
+import Button from '@material-ui/core/Button'
 
 import EntryTable from './TransferEntryTable'
 import {
@@ -18,8 +20,15 @@ import {
 import { Input, DatePicker, FilterSelect, TextArea } from '../components'
 
 const styles = (theme) => ({
+  header: {
+    padding: 16,
+  },
   panel: {
     flexDirection: 'column'
+  },
+  submitButton: {
+    width: '100%',
+    marginTop: 16,
   }
 })
 
@@ -33,6 +42,7 @@ class TransferForm extends Component {
     const { direction, classes } = this.props
     return (
       <form className="form-horizontal" onSubmit={this.props.handleSubmit}>
+        <Paper className={classes.header}>
         <div className="form-group">
           <label className="control-label col-md-1">项目部</label>
           <div className="col-md-3">
@@ -69,8 +79,7 @@ class TransferForm extends Component {
             <Field name="comments" component={TextArea}/>
           </div>
         </div>
-        <div className="form-group">
-          <div className="col-md-12">
+        </Paper>
             <ExpansionPanel defaultExpanded={true}>
               <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
                 <Typography variant="title">{direction === 'in' ? '租赁（入库）' : '租赁（出库）'}</Typography>
@@ -103,13 +112,7 @@ class TransferForm extends Component {
                 <FieldArray name="entries" component={EntryTable} mode="R"/>
               </ExpansionPanelDetails>
             </ExpansionPanel>
-          </div>
-        </div>
-        <div className="form-group">
-          <div className="col-md-12">
-            <button type="submit" className="btn btn-primary btn-block">保存</button>
-          </div>
-        </div>
+        <Button variant="raised" color="primary" type="submit" className={classes.submitButton}>保存</Button>
       </form>
     );
   }

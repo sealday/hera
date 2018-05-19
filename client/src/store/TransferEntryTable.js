@@ -109,6 +109,7 @@ const TransferEntryTable = connect(
           <th>名称</th>
           <th>规格</th>
           <th>数量</th>
+          {mode === 'S' && <th>单价</th>}
           <th>重量</th>
           <th>小计</th>
           <th>备注</th>
@@ -159,6 +160,7 @@ const TransferEntryTable = connect(
               />
             </td>
             <td><Field name={`${entry}.count`} component={Input} validate={validator.required}/></td>
+            {mode === 'S' && <td><Field name={`${entry}.price`} component={Input} validate={validator.required}/></td>}
             <td>{fixed(getWeight(index))}</td>
             <td>{fixed(getTotal(index))}</td>
             <td><Field name={`${entry}.comments`} component={Input}/></td>
