@@ -5,10 +5,24 @@
 //noinspection JSUnresolvedVariable
 import React, { Component } from 'react';
 import { reduxForm, Field, FieldArray } from 'redux-form'
-import { Input, DatePicker, FilterSelect, Select, TextArea } from '../components'
 import { connect } from 'react-redux'
-import { transformArticle,total_, toFixedWithoutTrailingZero as fixed, validator, filterOption } from '../utils'
 import moment from 'moment'
+import Paper from '@material-ui/core/Paper'
+import { withStyles } from '@material-ui/core/styles'
+import PropTypes from 'prop-types'
+import Button from '@material-ui/core/Button'
+
+import { Input, DatePicker, FilterSelect, Select, TextArea } from '../components'
+import { transformArticle,total_, toFixedWithoutTrailingZero as fixed, validator, filterOption } from '../utils'
+
+const styles = theme => ({
+  root: {
+    padding: 16,
+  },
+  submitButton: {
+    width: '100%',
+  },
+})
 
 const EntryTable = connect(
   state => ({
@@ -115,8 +129,8 @@ const EntryTable = connect(
   }
 
   return (
-    <div className="panel panel-default">
-      <table className="table table-bordered" id="purchase-table">
+    <div>
+      <table className="table" id="purchase-table">
         <thead>
         <tr>
           <th>类型</th>
@@ -135,10 +149,11 @@ const EntryTable = connect(
           <th>综合金额</th>
           <th>备注</th>
           <th>
-            <button
-              type="button"
+            <Button
+              variant="raised"
+              color="primary"
               onClick={add}
-              className="btn btn-default">增加</button>
+            >增加</Button>
           </th>
           <th/>
         </tr>
@@ -190,16 +205,17 @@ const EntryTable = connect(
             <td>{fixed(getMixSum(index))}</td>
             <td><Field name={`${entry}.comments`} component={Input}/></td>
             <td>
-              <button
-                type="button"
+              <Button
+                variant="raised"
+                color="primary"
                 onClick={add}
-                className="btn btn-default">增加</button>
+              >增加</Button>
             </td>
             <td>
-              <button
-                type="button"
-                className="btn btn-danger"
-                onClick={() => fields.remove(index)}>删除</button>
+              <Button
+                color="secondary"
+                onClick={() => fields.remove(index)}
+              >删除</Button>
             </td>
           </tr>
         )}
@@ -207,7 +223,7 @@ const EntryTable = connect(
       </table>
       <ul className="list-group">
         {getReport().map((report, index) => (
-          <li key={index} className="list-group-item">{report.name} {report.total} {report.unit}</li>
+          <li key={index} className="list-group-item">{report.name} {fixed(report.total)} {report.unit}</li>
         ))}
       </ul>
     </div>
@@ -217,60 +233,59 @@ const EntryTable = connect(
 
 class TransferForm extends Component {
   render() {
+    const { classes } = this.props
     return (
-      <form className="form-horizontal" onSubmit={this.props.handleSubmit}>
-        <div className="form-group">
-          <label className="control-label col-md-1">项目部</label>
-          <div className="col-md-3">
-            <Field
-              name="project"
-              component={FilterSelect}
-              validate={validator.required}
-              options={this.props.projects.map(project => ({
-                value: project._id,
-                label: project.company + project.name,
-                pinyin: project.pinyin
-              }))}
-              filterOption={filterOption}
-              placeholder="请选择项目" />
+      <Paper className={classes.root}>
+        <form className="form-horizontal" onSubmit={this.props.handleSubmit}>
+          <div className="form-group">
+            <label className="control-label col-md-1">项目部</label>
+            <div className="col-md-3">
+              <Field
+                name="project"
+                component={FilterSelect}
+                validate={validator.required}
+                options={this.props.projects.map(project => ({
+                  value: project._id,
+                  label: project.company + project.name,
+                  pinyin: project.pinyin
+                }))}
+                filterOption={filterOption}
+                placeholder="请选择项目" />
+            </div>
+            <label className="control-label col-md-1">对方单位</label>
+            <div className="col-md-3">
+              <Field name="vendor" component={Input} validate={validator.required}/>
+            </div>
+            <label className="control-label col-md-1">日期</label>
+            <div className="col-md-3">
+              <Field name="outDate" component={DatePicker}/>
+            </div>
           </div>
-          <label className="control-label col-md-1">对方单位</label>
-          <div className="col-md-3">
-            <Field name="vendor" component={Input} validate={validator.required}/>
+          <div className="form-group">
+            <label className="control-label col-md-1">原始单号</label>
+            <div className="col-md-3">
+              <Field name="originalOrder" component={Input}/>
+            </div>
+            <label className="control-label col-md-1">车号</label>
+            <div className="col-md-3">
+              <Field name="carNumber" component={Input}/>
+            </div>
           </div>
-          <label className="control-label col-md-1">日期</label>
-          <div className="col-md-3">
-            <Field name="outDate" component={DatePicker}/>
+          <div className="form-group">
+            <label className="control-label col-md-1">备注</label>
+            <div className="col-md-11">
+              <Field name="comments" component={TextArea}/>
+            </div>
           </div>
-        </div>
-        <div className="form-group">
-          <label className="control-label col-md-1">原始单号</label>
-          <div className="col-md-3">
-            <Field name="originalOrder" component={Input}/>
+          <div className="form-group">
+            <div className="col-md-12">
+              <FieldArray name="entries" component={EntryTable}/>
+            </div>
           </div>
-          <label className="control-label col-md-1">车号</label>
-          <div className="col-md-3">
-            <Field name="carNumber" component={Input}/>
-          </div>
-        </div>
-        <div className="form-group">
-          <label className="control-label col-md-1">备注</label>
-          <div className="col-md-11">
-            <Field name="comments" component={TextArea}/>
-          </div>
-        </div>
-        <div className="form-group">
-          <div className="col-md-12">
-            <FieldArray name="entries" component={EntryTable}/>
-          </div>
-        </div>
-        <div className="form-group">
-          <div className="col-md-12">
-            <button type="submit" className="btn btn-primary btn-block">保存</button>
-          </div>
-        </div>
-      </form>
-    );
+          <Button type="submit" color="primary" variant="raised" className={classes.submitButton}>保存</Button>
+        </form>
+      </Paper>
+    )
   }
 }
 
@@ -281,10 +296,14 @@ TransferForm = reduxForm({
   }
 })(TransferForm)
 
+TransferForm.propTypes = {
+  classes: PropTypes.object.isRequired,
+}
+
 const mapStateToProps = state => ({
   projects: state.system.projects.toArray(),
   stocks: state.store.stocks,
 })
 
 
-export default connect(mapStateToProps)(TransferForm);
+export default connect(mapStateToProps)(withStyles(styles)(TransferForm));
