@@ -80,38 +80,38 @@ class TransferForm extends Component {
           </div>
         </div>
         </Paper>
-            <ExpansionPanel defaultExpanded={true}>
-              <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
-                <Typography variant="title">{direction === 'in' ? '租赁（入库）' : '租赁（出库）'}</Typography>
-              </ExpansionPanelSummary>
-              <ExpansionPanelDetails className={classes.panel}>
-                <FieldArray name="entries" component={EntryTable} mode="L"/>
-              </ExpansionPanelDetails>
-            </ExpansionPanel>
-            <ExpansionPanel>
-              <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
-                <Typography variant="title">{direction === 'in' ? '销售（入库）' : '销售（出库）'}</Typography>
-              </ExpansionPanelSummary>
-              <ExpansionPanelDetails className={classes.panel}>
-                <FieldArray name="entries" component={EntryTable} mode="S"/>
-              </ExpansionPanelDetails>
-            </ExpansionPanel>
-            <ExpansionPanel>
-              <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
-                <Typography variant="title">{direction === 'in' ? '赔偿（出库）' : '赔偿（入库）'}</Typography>
-              </ExpansionPanelSummary>
-              <ExpansionPanelDetails className={classes.panel}>
-                <FieldArray name="entries" component={EntryTable} mode="C"/>
-              </ExpansionPanelDetails>
-            </ExpansionPanel>
-            <ExpansionPanel>
-              <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
-                <Typography variant="title">服务（维修或者运费等不影响库存）</Typography>
-              </ExpansionPanelSummary>
-              <ExpansionPanelDetails className={classes.panel}>
-                <FieldArray name="entries" component={EntryTable} mode="R"/>
-              </ExpansionPanelDetails>
-            </ExpansionPanel>
+        <ExpansionPanel defaultExpanded={true}>
+          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
+            <Typography variant="title">{direction === 'in' ? '租赁（入库）' : '租赁（出库）'}</Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails className={classes.panel}>
+            <FieldArray name="entries" component={EntryTable} mode="L"/>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
+        <ExpansionPanel>
+          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
+            <Typography variant="title">{direction === 'in' ? '销售（入库）' : '销售（出库）'}</Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails className={classes.panel}>
+            <FieldArray name="entries" component={EntryTable} mode="S"/>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
+        <ExpansionPanel>
+          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
+            <Typography variant="title">{direction === 'in' ? '赔偿（出库）' : '赔偿（入库）'}</Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails className={classes.panel}>
+            <FieldArray name="entries" component={EntryTable} mode="C"/>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
+        <ExpansionPanel>
+          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
+            <Typography variant="title">服务（维修或者运费等不影响库存）</Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails className={classes.panel}>
+            <FieldArray name="entries" component={EntryTable} mode="R"/>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
         <Button variant="raised" color="primary" type="submit" className={classes.submitButton}>保存</Button>
       </form>
     );
