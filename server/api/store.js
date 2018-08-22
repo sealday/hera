@@ -378,26 +378,12 @@ const doRent = async ({startDate, endDate, timezone, project, pricePlanId}) => {
     {
       $addFields: {
         days: {
-          $let: {
-            vars: {
-              outDays: {
-                $dayOfYear: {
-                  date: '$outDate',
-                  timezone: timezone,
-                }
-              },
-              endDays: {
-                $dayOfYear: {
-                  date: endDate,
-                  timezone: timezone,
-                }
-              }
-            },
-            in: {
-              $subtract: [ '$$endDays', '$$outDays' ]
-            }
+          $ceil: {
+            $divide: [{
+              $subtract: [endDate, '$outDate']
+            }, 24*60*60*1000 ]
           }
-        },
+      },
         weight: {
           $multiply: ['$entries.count', '$products.weight']
         },
