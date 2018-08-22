@@ -65,7 +65,8 @@ class SimpleSearchTable extends React.Component {
           ))}
           </tbody>
         </table>
-        {rent.list.length > 0 && <ul className="list-group">
+        {/* 避免在没有列表信息的时候显示 */}
+        {(rent.list.length > 0 || rent.history.length > 0) && <ul className="list-group">
           <li className="list-group-item">金额：{numberFormat(rent.group[0].price)} 元</li>
           <li className="list-group-item">运费：{numberFormat(rent.group[0].freight)} 元</li>
         </ul>}
