@@ -72,7 +72,7 @@ export function ajax(url, settings) {
  * @returns {*}
  */
 export function makeKeyFromNameSize(name, size) {
-  return `${ name }|${ size }`
+  return `${ name }|${ typeof size === 'undefined' ? '' : size }`
 }
 
 export const updateEntry = (record, products) => {
