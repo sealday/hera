@@ -55,6 +55,8 @@ export function system(state = new SystemRecord(), action) {
       return state.setIn(['users', action.data._id], action.data)
     case actionTypes.OPERATOR_DELETE:
       return state.removeIn(['users', action.data._id]);
+    case actionTypes.PRINT_COMPANY_UPDATE:
+      return state.set('printCompany', action.data)
     default:
       return state
   }

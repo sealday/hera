@@ -16,7 +16,7 @@ class TransferOrder extends React.Component {
   }
 
   render() {
-    const { record, store, projects, articles, router, user } = this.props
+    const { record, store, projects, articles, router, user, printCompany } = this.props
 
     let orderName = ''
     let company = ''
@@ -169,7 +169,7 @@ class TransferOrder extends React.Component {
             right: 0,
             width: '1.2em'
           }}>①发货方存根②收货方存根③承运方存根</div>
-          <h4 className="text-center">上海创兴建筑设备租赁有限公司</h4>
+          <h4 className="text-center">{printCompany}</h4>
           <h4 className="text-center">{orderName}</h4>
           <table style={{tableLayout: 'fixed', fontSize: '11px', width: '100%'}}>
             <colgroup>
@@ -242,6 +242,7 @@ const mapStateToProps = state => ({
   products: state.system.products,
   store: state.system.store,
   user: state.system.user,
+  printCompany: state.system.printCompany,
 })
 
 export default connect(mapStateToProps)(TransferOrder)

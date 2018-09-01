@@ -7,7 +7,7 @@ import cx from 'classnames';
 import { Link } from 'react-router';
 import { ajax } from '../utils';
 import { connect } from 'react-redux'
-import { selectStore } from '../actions'
+import { selectStore, selectPrintCompany } from '../actions'
 import shortid from 'shortid'
 
 class Navbar extends Component {
@@ -17,6 +17,7 @@ class Navbar extends Component {
       dropdown: false,
       collapse: false,
       showOnlineList: false,
+      showSwitchList: false,
     };
   }
 
@@ -60,6 +61,30 @@ class Navbar extends Component {
               <li><a href="#" onClick={ e => { e.preventDefault(); this.props.dispatch(selectStore(false))} }>管理其他仓库</a></li>
             </ul>
             <ul className="nav navbar-nav navbar-right">
+              <li className={cx({ dropdown: true, open: this.state.showSwitchList })}
+                  onMouseEnter={() => {
+                    this.setState({
+                      showSwitchList: true
+                    })
+                  }}
+                  onMouseLeave={() => {
+                    this.setState({
+                      showSwitchList: false
+                    })
+                  }}
+              >
+                <p className="navbar-text">切换公司（打印）</p>
+                <ul className="dropdown-menu">
+                  {(['上海创兴建筑设备租赁有限公司', '上海标济建材有限公司'].map((name) => (
+                    <li key={shortid.generate()}><a onClick={() => {
+                      this.setState({
+                        showSwitchList: false
+                      })
+                      this.props.dispatch(selectPrintCompany(name))
+                    }}>{name}</a></li>
+                  )))}
+                </ul>
+              </li>
               <li className={cx({ dropdown: true, open: this.state.showOnlineList })}
                   onMouseEnter={() => {
                     this.setState({

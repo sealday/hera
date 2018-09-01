@@ -377,6 +377,15 @@ export const OPERATOR_UPDATE = 'OPERATOR_UPDATE' // 网络请求 action
 export const OPERATOR_DELETE = 'OPERATOR_DELETE' // 删除操作员
 export const NEW_OPERATOR = 'NEW_OPERATOR' // 接收到数据的 action
 
+export const PRINT_COMPANY_UPDATE = 'PRINT_COMPANY_UPDATE'
+
+export const selectPrintCompany = (name) => {
+  return {
+    type: PRINT_COMPANY_UPDATE,
+    data: name
+  }
+}
+
 export const createOperator = operator => (dispatch, getState) => {
   const networking = network(OPERATOR_CREATE)
   if (networking.shouldProceed(getState())) {
