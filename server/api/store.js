@@ -14,6 +14,7 @@ const helper = require('../utils/my').helper
 /**
  * 查询指定 project 的库存
  * @param projectId
+ * @param params
  */
 
 function queryAll(projectId, params) {

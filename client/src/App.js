@@ -15,7 +15,7 @@ import { push } from 'react-router-redux'
 
 import { Notification, CurrentStore, MenuList } from './components'
 import { ajax } from './utils'
-import { selectStore } from './actions'
+import { selectStore, selectPrintCompany } from './actions'
 import config from './config'
 import './App.css'
 
@@ -54,21 +54,27 @@ const styles = theme => ({
 
 class App extends Component {
   state = {
-    menuOpen: false,
-    menuAnchorEl: null,
+    menuOpen: {
+      printCompany: false,
+      onlineCount: false,
+    },
+    menuAnchorEl: {
+      printCompany: null,
+      onlineCount: null,
+    },
   }
 
-  handleMenu = e => {
+  handleMenu = type => e => {
     const target = e.currentTarget
     this.setState(prev => ({
-      menuOpen: !prev.menuOpen,
-      menuAnchorEl: target,
+      menuOpen: { ...prev.menuOpen, [type]: !prev.menuOpen[type]},
+      menuAnchorEl: { ...prev.menuAnchorEl, [type]: target},
     }))
   }
 
-  handleMenuClose = () => {
-    this.setState(() => ({
-      menuOpen: false,
+  handleMenuClose = type => () => {
+    this.setState(prev => ({
+      menuOpen: { ...prev.menuOpen, [type]: false },
     }))
   }
 
@@ -140,11 +146,11 @@ class App extends Component {
               <span className={classes.flex} />
               <Button
                 color="inherit"
-                onClick={this.handleMenu}
-              >当前在线 {num} 人</Button>
+                onClick={this.handleMenu('printCompany')}
+              >切换公司（打印）</Button>
               <Popover
-                open={this.state.menuOpen}
-                anchorEl={this.state.menuAnchorEl}
+                open={this.state.menuOpen['printCompany']}
+                anchorEl={this.state.menuAnchorEl['printCompany']}
                 anchorOrigin={{
                   vertical: 'bottom',
                   horizontal: 'center',
@@ -153,12 +159,42 @@ class App extends Component {
                   vertical: 'top',
                   horizontal: 'center',
                 }}
-                onClose={this.handleMenuClose}
+                onClose={this.handleMenuClose('printCompany')}
+              >
+                <List>
+                  {['上海创兴建筑设备租赁有限公司', '上海标济建材有限公司'].map(name => <MenuItem
+                    key={short_id.generate()}
+                    onClick={(e) => {
+                      this.setState({
+                        showSwitchList: false
+                      })
+                      this.props.dispatch(selectPrintCompany(name))
+                      this.handleMenuClose('printCompany')(e)
+                    }}
+                  >{name}</MenuItem>)}
+                </List>
+              </Popover>
+              <Button
+                color="inherit"
+                onClick={this.handleMenu('onlineCount')}
+              >当前在线 {num} 人</Button>
+              <Popover
+                open={this.state.menuOpen['onlineCount']}
+                anchorEl={this.state.menuAnchorEl['onlineCount']}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'center',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'center',
+                }}
+                onClose={this.handleMenuClose('onlineCount')}
               >
                 <List>
                   {onlineUsers.map(user => <MenuItem
                     key={short_id.generate()}
-                    onClick={this.handleMenuClose}
+                    onClick={this.handleMenuClose('onlineCount')}
                   >{user.profile.name}</MenuItem>)}
                 </List>
               </Popover>

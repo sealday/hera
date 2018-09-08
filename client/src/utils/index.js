@@ -74,7 +74,7 @@ export function ajax(url, settings) {
  * @returns {*}
  */
 export function makeKeyFromNameSize(name, size) {
-  return `${ name }|${ size }`
+  return `${ name }|${ typeof size === 'undefined' ? '' : size }`
 }
 
 export const updateEntry = (record, products) => {
@@ -174,7 +174,14 @@ export const total = (count, product) => toFixedWithoutTrailingZero(count * getS
 /**
  * 返回为数字的total，且传入的参数形式是对象，这个方法理应更经常使用
  */
-export const total_ = ({count, size, name}, products) => count * getScale(products[makeKeyFromNameSize(name, size)])
+export const total_ = ({count, size, name}, products) => {
+  const product = products[makeKeyFromNameSize(name, size)]
+  if (product) {
+    return count * getScale(products[makeKeyFromNameSize(name, size)])
+  } else {
+    return count;
+  }
+}
 
 export { validator }
 
