@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 import Button from '@material-ui/core/Button'
 
-import { toFixedWithoutTrailingZero as fixed, total_, getUnit } from '../utils'
+import { toFixedWithoutTrailingZero as fixed, total_, getUnit, parseMode } from '../utils'
 import config from './../config'
 
 
@@ -69,11 +69,12 @@ class TransferOrder extends React.Component {
     let printEntries = []
     for (let name in entries) {
       /*eslint guard-for-in: off*/
+      console.dir(entries)
       printEntries = printEntries.concat(entries[name].map(entry => [
         entry.name,
         entry.size,
         entry.count + ' ' + productTypeMap[name].countUnit,
-        entry.comments,
+        parseMode(entry.mode) + ' ' + (entry.comments ? entry.comments : ''),
       ]))
       printEntries.push(
         [

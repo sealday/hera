@@ -135,6 +135,16 @@ export const getUnit = (product) => {
   return product.isScaled ? product.unit : product.countUnit
 }
 
+export const parseMode = mode => {
+  const names = {
+    L: '租赁',
+    S: '销售',
+    C: '赔偿',
+    R: '服务',
+  }
+  return !mode || mode === 'L' ? '' : names[mode]
+}
+
 export const filterOption = (option, filter) => {
   return fuzzysearch(filter, option.pinyin) || fuzzysearch(filter, option.label)
 }
