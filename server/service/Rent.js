@@ -49,6 +49,14 @@ class Rent {
         $unwind: '$entries'
       },
       {
+        $match: {
+          $or: [
+            { 'entries.mode': 'L' },
+            { 'entries.mode': { $exists: false } }
+          ]
+        }
+      },
+      {
         $lookup: {
           from: 'products',
           localField: 'entries.number',
