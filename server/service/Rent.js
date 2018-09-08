@@ -285,14 +285,14 @@ class Rent {
                   month: { $month: { date: '$outDate', timezone: 'Asia/Shanghai' } },
                   day: { $dayOfMonth: { date: '$outDate', timezone: 'Asia/Shanghai' } },
                   name: '$name',
-                  inOut: { $cond: { if: { $eq: ['$inOut', 1] }, then: '出库', else: '入库' } }
+                  inOut: '$inOut',
                 },
                 outDate: { $first: '$outDate' },
                 number: { $first:  '$number' },
                 name: { $first: '$name' },
                 count: { $sum: '$count' },
                 days: { $first: '$days' },
-                inOut: { $first: { $cond: { if: { $eq: ['$inOut', 1] }, then: '出库', else: '入库' } } },
+                inOut: { $first: '$inOut' },
                 unitPrice: { $first: '$unitPrice' },
                 unitFreight: { $first: '$freight' },
                 price: { $sum: '$price' },
@@ -321,7 +321,7 @@ class Rent {
                 },
               }
             }
-          ]
+          ],
         }
       }
     ])
