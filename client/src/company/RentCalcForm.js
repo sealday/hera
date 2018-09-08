@@ -3,10 +3,12 @@
  */
 
 import React from 'react'
+import Button from '@material-ui/core/Button'
 import { reduxForm, Field, formValueSelector } from 'redux-form'
+import { Link } from 'react-router'
+import moment from 'moment'
 import { FilterSelect, DatePicker } from '../components'
 import { connect } from 'react-redux'
-import moment from 'moment'
 import { filterOption, validator } from '../utils'
 import { PRICE_PLAN, queryPricePlan } from '../actions'
 
@@ -110,9 +112,10 @@ class SimpleSearchForm extends React.Component {
           {this.props.onExcelExport && <div className="col-md-2">
             <button type="button" className="btn btn-primary btn-block" onClick={e => this.props.onExcelExport() }>导出excel</button>
           </div>}
-          {<div className="col-md-2">
-            <button type="button" className="btn btn-primary btn-block" onClick={handleSubmit(onAddItem)}>生成对账单</button>
-          </div>}
+          <Button component={Link} to={`/rent_calc_preview`}>打印预览</Button>
+          {/*{<div className="col-md-2">*/}
+            {/*<button type="button" className="btn btn-primary btn-block" onClick={handleSubmit(onAddItem)}>生成对账单</button>*/}
+          {/*</div>}*/}
         </div>
       </form>
     )
