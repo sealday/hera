@@ -32,6 +32,13 @@ function queryAll(projectId, params) {
       $unwind: '$entries'
     },
     {
+      $match: {
+        'entries.mode': {
+          $ne: 'R'
+        }
+      }
+    },
+    {
       $group: {
         _id: {
           name: '$entries.name',
@@ -56,6 +63,13 @@ function queryAll(projectId, params) {
       },
       {
         $unwind: '$entries'
+      },
+      {
+        $match: {
+          'entries.mode': {
+            $ne: 'R'
+          }
+        }
       },
       {
         $group: {
