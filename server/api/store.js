@@ -376,6 +376,7 @@ const rent = async (req, res) => {
           history: result[0].history,
           list: result[0].list,
           group: result[0].group,
+          nameGroup: result[0].nameGroup,
         }
       }
     })

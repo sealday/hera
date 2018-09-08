@@ -309,6 +309,25 @@ class Rent {
               }
             }
           ],
+          nameGroup: [
+            {
+              $project: {
+                name: '$products.name',
+                count: '$count',
+                unit: '$unit',
+              },
+            },
+            {
+              $group: {
+                _id: {
+                  name: '$name',
+                },
+                name: { $first: '$name' },
+                count: { $sum: '$count' },
+                unit: { $first: '$unit' },
+              }
+            },
+          ],
           group: [
             {
               $group: {
