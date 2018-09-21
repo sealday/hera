@@ -44,23 +44,6 @@ projectSchema.pre('save', function save(next) {
   next();
 });
 
-/**
- * 使用规格表的数据来进行初始化
- */
-projectSchema.methods.initStore = function initStore() {
-  const project = this;
-  const productTypes = global.companyData.productTypes;
-  productTypes.forEach(productType => {
-    productType.sizes.forEach(size => {
-      project.store.push({
-        name: productType.name,
-        size,
-        count: 0
-      });
-    });
-  });
-};
-
 projectSchema.pre('save', function(next) {
   this.pinyin = pinyin(this.company + this.name, {
     style: pinyin.STYLE_NORMAL, heteronym: true
