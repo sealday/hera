@@ -32,7 +32,7 @@ class ContractForm extends React.Component {
     return (
       <form onSubmit={handleSubmit} className="form-horizontal">
         <div className="form-group">
-          <label className="control-label col-md-1">合同名称</label>
+          <label className="control-label col-md-1">过滤</label>
           <div className="col-md-5">
             <Field name="project"
                    component={FilterSelect}

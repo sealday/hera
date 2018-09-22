@@ -15,6 +15,12 @@ import TableCell from '@material-ui/core/TableCell'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogContentText from '@material-ui/core/DialogContentText'
+import DialogTitle from '@material-ui/core/DialogTitle'
+import Fade from '@material-ui/core/Fade'
 
 const styles = {
   title: {
@@ -28,6 +34,18 @@ const styles = {
 
 class ContractContent extends React.Component {
 
+  state = {
+    open: false,
+  }
+
+  handleClickOpen = () => {
+    this.setState({ open: true });
+  };
+
+  handleClose = () => {
+    this.setState({ open: false });
+  };
+
   componentDidMount() {
     let { projects, params } = this.props
     console.log(projects.get(params.id))
@@ -38,10 +56,40 @@ class ContractContent extends React.Component {
 
     const project = projects.get(params.id)
     return [
+      <Dialog
+        open={this.state.open}
+        TransitionComponent={Fade}
+        keepMounted
+        onClose={this.handleClose}
+        aria-labelledby="alert-dialog-slide-title"
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle id="alert-dialog-slide-title">
+          {"Use Google's location service?"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            Let Google help apps determine location. This means sending anonymous location data to
+            Google, even when no apps are running.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.handleClose} color="primary">
+            Disagree
+          </Button>
+          <Button onClick={this.handleClose} color="primary">
+            Agree
+          </Button>
+        </DialogActions>
+      </Dialog>,
         <Card>
           <CardHeader
             action={
-                <Button onClick={() => router.goBack()}>返回</Button>
+              [
+                <Button onClick={() => router.goBack()}>返回</Button>,
+                <Button onClick={this.handleClickOpen} color="primary">编辑</Button>,
+                <Button onClick={() => router.push('rent_calc')} color="primary">创建对账单</Button>,
+              ]
             }
             title={`${project.company} ${project.name}`}
             subheader={`内部编号：${project._id} 外部编号：${short_id.generate()}`}

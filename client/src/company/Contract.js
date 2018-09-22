@@ -2,6 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux'
 import { formValueSelector } from 'redux-form'
 import ContractForm from './ContractForm'
+import Table from '@material-ui/core/Table'
+import TableBody from '@material-ui/core/TableBody'
+import TableCell from '@material-ui/core/TableCell'
+import TableHead from '@material-ui/core/TableHead'
+import TableRow from '@material-ui/core/TableRow'
+import Card from '@material-ui/core/Card'
+import CardHeader from '@material-ui/core/CardHeader'
 
 class Contract extends React.Component {
 
@@ -9,28 +16,33 @@ class Contract extends React.Component {
     let { projects, router, project } = this.props
     const projectId = project
     return (
-      <div>
-        <h2 className="page-header">合同</h2>
+      <Card>
+        {/* TODO 综合访问频率、上次访问排序 */}
+        <CardHeader title="合同列表"/>
         <ContractForm/>
-        <table className="table table-bordered">
-          <thead>
-          <tr>
-            <th>合同名称</th>
-            <th>合同编号</th>
-            <th>外部编号</th>
-          </tr>
-          </thead>
-          <tbody>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>合同名称</TableCell>
+              <TableCell>合同编号</TableCell>
+              <TableCell>外部编号</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
           {projects.valueSeq().filter(project => project.type !== '基地仓库' && (projectId ? project._id === projectId : true) ).map(project => (
-            <tr key={project._id} id={project._id} onClick={() => router.push(`/contract/${ project._id }`)}>
-              <td>{project.company} {project.name}</td>
-              <td>{project._id}</td>
-              <td/>
-            </tr>
+            <TableRow key={project._id}
+                      id={project._id}
+                      onClick={() => router.push(`/conTableRowact/${ project._id }`)}
+                      hover={true}
+            >
+              <TableCell>{project.company} {project.name}</TableCell>
+              <TableCell>{project._id}</TableCell>
+              <TableCell/>
+            </TableRow>
           ))}
-          </tbody>
-        </table>
-      </div>
+          </TableBody>
+        </Table>
+      </Card>
     );
   }
 }
