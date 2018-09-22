@@ -32,7 +32,7 @@ class Contract extends React.Component {
           {projects.valueSeq().filter(project => project.type !== '基地仓库' && (projectId ? project._id === projectId : true) ).map(project => (
             <TableRow key={project._id}
                       id={project._id}
-                      onClick={() => router.push(`/conTableRowact/${ project._id }`)}
+                      onClick={() => router.push(`/contract/${ project._id }`)}
                       hover={true}
             >
               <TableCell>{project.company} {project.name}</TableCell>
