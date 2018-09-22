@@ -8,4 +8,12 @@ export default createMuiTheme({
   typography: {
     htmlFontSize: 10,
   },
+  overrides: {
+    MuiCollapse: {
+      entered: {
+        height: "auto",
+        overflow: "visible"
+      }
+    }
+  }
 });
