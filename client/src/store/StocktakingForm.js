@@ -1,14 +1,28 @@
-/**
- * Created by seal on 25/01/2017.
- */
-
-//noinspection JSUnresolvedVariable
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import { reduxForm, Field, FieldArray } from 'redux-form'
-import { Input, DatePicker, FilterSelect, Select, TextArea } from '../components'
 import { connect } from 'react-redux'
-import { transformArticle,total_, toFixedWithoutTrailingZero as fixed, validator, filterOption } from '../utils'
 import moment from 'moment'
+import Card from '@material-ui/core/Card'
+import CardHeader from '@material-ui/core/CardHeader'
+import CardContent from '@material-ui/core/CardContent'
+import Button from '@material-ui/core/Button'
+import Table from '@material-ui/core/Table'
+import TableHead from '@material-ui/core/TableHead'
+import TableBody from '@material-ui/core/TableBody'
+import TableCell from '@material-ui/core/TableCell'
+import TableRow from '@material-ui/core/TableRow'
+import { withStyles } from '@material-ui/core/styles'
+
+import { transformArticle,total_, toFixedWithoutTrailingZero as fixed, validator, filterOption} from '../utils'
+import { Input, DatePicker, FilterSelect, Select, TextArea, ReportFooter } from '../components'
+
+const styles = theme => ({
+  root: {
+  },
+  submitButton: {
+    width: '100%',
+  },
+})
 
 const EntryTable = connect(
   state => ({
@@ -97,122 +111,122 @@ const EntryTable = connect(
   }
 
   return (
-    <div className="panel panel-default">
-      <table className="table table-bordered" id="purchase-table">
-        <thead>
-        <tr>
-          <th>类型</th>
-          <th>名称</th>
-          <th>规格</th>
-          <th>数量</th>
-          <th>小计</th>
-          <th>单位</th>
-          <th>单价</th>
-          <th>金额</th>
-          <th>备注</th>
-          <th>
-            <button
-              type="button"
-              onClick={add}
-              className="btn btn-default">增加</button>
-          </th>
-          <th/>
-        </tr>
-        </thead>
-        <tbody>
-        {fields.map((entry, index) =>
-          <tr key={index}>
-            <td style={{minWidth: '6em'}}>
-              <Field name={`${entry}.type`} component={Select}>
-                {Object.keys(typeNameMap).map((type, index) => (
-                  <option key={index}>{type}</option>
-                ))}
-              </Field>
-            </td>
-            <td style={{minWidth: '7em'}}>
-              <Field
-                name={`${entry}.name`}
-                component={FilterSelect}
-                options={getNameOptions(fields.get(index).type)}
-                validate={validator.required}
-                placeholder="名称"
-                filterOption={filterOption}
-              />
-            </td>
-            <td style={{minWidth: '11em'}}>
-              <Field
-                name={`${entry}.size`}
-                component={FilterSelect}
-                options={getSizeOptions(fields.get(index).name)}
-                validate={validator.required}
-                placeholder="规格"
-              />
-            </td>
-            <td><Field name={`${entry}.count`} component={Input} validate={validator.required}/></td>
-            <td>{fixed(getTotal(index))}</td>
-            <td>{getUnit(index)}</td>
-            <td><Field name={`${entry}.price`} component={Input}/></td>
-            <td>{fixed(getSum(index))}</td>
-            <td><Field name={`${entry}.comments`} component={Input}/></td>
-            <td>
-              <button
-                type="button"
+    [
+      <Table id="purchase-table">
+        <TableHead>
+          <TableRow>
+            <TableCell>类型</TableCell>
+            <TableCell>名称</TableCell>
+            <TableCell>规格</TableCell>
+            <TableCell>数量</TableCell>
+            <TableCell>小计</TableCell>
+            <TableCell>单位</TableCell>
+            <TableCell>单价</TableCell>
+            <TableCell>金额</TableCell>
+            <TableCell>备注</TableCell>
+            <TableCell>
+              <Button
+                variant="raised"
+                color="primary"
                 onClick={add}
-                className="btn btn-default">增加</button>
-            </td>
-            <td>
-              <button
-                type="button"
-                className="btn btn-danger"
-                onClick={() => fields.remove(index)}>删除</button>
-            </td>
-          </tr>
-        )}
-        </tbody>
-      </table>
-      <ul className="list-group">
-        {getReport().map((report, index) => (
-          <li key={index} className="list-group-item">{report.name} {report.total} {report.unit}</li>
-        ))}
-      </ul>
-    </div>
+              >增加</Button>
+            </TableCell>
+            <TableCell/>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {fields.map((entry, index) =>
+            <TableRow key={index}>
+              <TableCell style={{minWidth: '6em'}}>
+                <Field name={`${entry}.type`} component={Select}>
+                  {Object.keys(typeNameMap).map((type, index) => (
+                    <option key={index}>{type}</option>
+                  ))}
+                </Field>
+              </TableCell>
+              <TableCell style={{minWidth: '7em'}}>
+                <Field
+                  name={`${entry}.name`}
+                  component={FilterSelect}
+                  options={getNameOptions(fields.get(index).type)}
+                  validate={validator.required}
+                  placeholder="名称"
+                  filterOption={filterOption}
+                />
+              </TableCell>
+              <TableCell style={{minWidth: '11em'}}>
+                <Field
+                  name={`${entry}.size`}
+                  component={FilterSelect}
+                  options={getSizeOptions(fields.get(index).name)}
+                  validate={validator.required}
+                  placeholder="规格"
+                />
+              </TableCell>
+              <TableCell><Field name={`${entry}.count`} component={Input} validate={validator.required}/></TableCell>
+              <TableCell>{fixed(getTotal(index))}</TableCell>
+              <TableCell>{getUnit(index)}</TableCell>
+              <TableCell><Field name={`${entry}.price`} component={Input}/></TableCell>
+              <TableCell>{fixed(getSum(index))}</TableCell>
+              <TableCell><Field name={`${entry}.comments`} component={Input}/></TableCell>
+              <TableCell>
+                <Button
+                  variant="raised"
+                  color="primary"
+                  onClick={add}
+                >增加</Button>
+              </TableCell>
+              <TableCell>
+                <Button
+                  color="secondary"
+                  onClick={() => fields.remove(index)}
+                >删除</Button>
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>,
+      <ReportFooter report={getReport()} noWeight={true}/>,
+    ]
   )
 })
 
 
 class TransferForm extends Component {
   render() {
+    const { title, action, classes } = this.props
     return (
       <form className="form-horizontal" onSubmit={this.props.handleSubmit}>
-        <div className="form-group">
-          <label className="control-label col-md-1">日期</label>
-          <div className="col-md-3">
-            <Field name="outDate" component={DatePicker}/>
-          </div>
-        </div>
-        <div className="form-group">
-          <label className="control-label col-md-1">备注</label>
-          <div className="col-md-11">
-            <Field name="comments" component={TextArea}/>
-          </div>
-        </div>
-        <div className="form-group">
-          <div className="col-md-12">
-            <FieldArray name="entries" component={EntryTable}/>
-          </div>
-        </div>
-        <div className="form-group">
-          <div className="col-md-12">
-            <button type="submit" className="btn btn-primary btn-block">保存</button>
-          </div>
-        </div>
+        <Card>
+          <CardHeader title={title} action={action}/>
+          <CardContent>
+            <div className="form-group">
+              <label className="control-label col-md-1">日期</label>
+              <div className="col-md-3">
+                <Field name="outDate" component={DatePicker}/>
+              </div>
+            </div>
+            <div className="form-group">
+              <label className="control-label col-md-1">备注</label>
+              <div className="col-md-11">
+                <Field name="comments" component={TextArea}/>
+              </div>
+            </div>
+            <div className="form-group">
+              <div className="col-md-12">
+                <FieldArray name="entries" component={EntryTable}/>
+              </div>
+            </div>
+            <Button type="submit" color="primary" variant="raised" className={classes.submitButton}>保存</Button>
+          </CardContent>
+        </Card>
       </form>
-    );
+    )
   }
 }
 
 TransferForm = reduxForm({
-  form: 'purchase',
+  form: 'stocktaking',
   initialValues: {
     outDate: moment()
   }
@@ -224,4 +238,4 @@ const mapStateToProps = state => ({
 })
 
 
-export default connect(mapStateToProps)(TransferForm);
+export default connect(mapStateToProps)(withStyles(styles)(TransferForm))

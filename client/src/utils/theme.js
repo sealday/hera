@@ -14,6 +14,11 @@ export default createMuiTheme({
         height: "auto",
         overflow: "visible"
       }
+    },
+    MuiCard: {
+      root: {
+        overflow: "visible"
+      }
     }
   }
 });

@@ -1,12 +1,10 @@
-/**
- * Created by seal on 25/01/2017.
- */
-
 import React from 'react'
-import PurchaseForm from './StocktakingForm'
 import { connect } from 'react-redux'
-import { updateTransfer, requestRecord } from '../actions'
 import moment from 'moment'
+import Button from '@material-ui/core/Button'
+
+import { updateTransfer, requestRecord } from '../actions'
+import PurchaseForm from './StocktakingForm'
 
 class PurchaseEdit extends React.Component {
 
@@ -62,15 +60,13 @@ class PurchaseEdit extends React.Component {
     }
 
     return (
-      <div>
-        <button className="btn btn-default hidden-print" onClick={e => this.props.router.goBack()}>返回</button>
-        <h2 className="page-header">{pageTitle}</h2>
-        <PurchaseForm
-          initialValues={record}
-          onSubmit={this.handleSubmit}
-        />
-      </div>
-    );
+      <PurchaseForm
+        title={pageTitle}
+        action={<Button onClick={e => this.props.router.goBack()}>返回</Button>}
+        initialValues={record}
+        onSubmit={this.handleSubmit}
+      />
+    )
   }
 }
 
@@ -79,4 +75,4 @@ const mapStateToProps = state => ({
   records: state.store.records, // Immutable Map
 })
 
-export default connect(mapStateToProps)(PurchaseEdit);
+export default connect(mapStateToProps)(PurchaseEdit)

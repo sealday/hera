@@ -1,12 +1,9 @@
-/**
- * Created by seal on 25/01/2017.
- */
-
-import React, { Component } from 'react';
-import PurchaseForm from './StocktakingForm'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { postTransfer } from '../actions'
 import moment from 'moment'
+
+import PurchaseForm from './StocktakingForm'
+import { postTransfer } from '../actions'
 
 class PurchaseCreate extends Component {
   handleSubmit = (record) => {
@@ -40,17 +37,15 @@ class PurchaseCreate extends Component {
     }
 
     return (
-      <div>
-        <h2 className="page-header">{pageTitle}</h2>
-        <PurchaseForm
-          initialValues={{
-            project: store._id,
-            outDate: moment(),
-          }}
-          onSubmit={this.handleSubmit}
-        />
-      </div>
-    );
+      <PurchaseForm
+        title={pageTitle}
+        initialValues={{
+          project: store._id,
+          outDate: moment(),
+        }}
+        onSubmit={this.handleSubmit}
+      />
+    )
   }
 }
 
@@ -58,4 +53,4 @@ const mapStateToProps = state => ({
   store: state.system.store
 })
 
-export default connect(mapStateToProps)(PurchaseCreate);
+export default connect(mapStateToProps)(PurchaseCreate)

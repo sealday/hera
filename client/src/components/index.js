@@ -1,10 +1,12 @@
-/**
- * Created by seal on 25/01/2017.
- */
 import React from 'react'
 import ReactDatePicker from 'react-datepicker'
 import ReactSelect from 'react-select'
 import ReactMaskedInput from 'react-text-mask'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemText from '@material-ui/core/ListItemText'
+
+import { toFixedWithoutTrailingZero as fixed } from '../utils'
 
 const errorStyle = {
   borderColor: '#a94442',
@@ -81,6 +83,23 @@ export const FilterSelect = ({ input, options, style, ...custom, meta: { touched
     filterOption={filterOption}
   />
 }
+
+export const ReportFooter = ({ report, noWeight }) => (
+  <List>
+    {report.map((report, index) => (
+      <ListItem divider={true} dense={true} key={index}>
+        {noWeight ?
+          <ListItemText primary={`${report.name} ${report.total} ${report.unit}`}/>
+          :
+          <ListItemText primary={`
+        ${report.name} ${report.total} ${report.unit}
+        ${report.weight === 0 ? ' *' : ' ' + fixed(report.weight / 1000, 3)} 吨
+        `}/>
+        }
+      </ListItem>
+    ))}
+  </List>
+)
 
 export { default as Notification } from './Notification'
 export { default as CurrentStore } from './CurrentStore'

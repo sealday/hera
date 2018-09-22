@@ -8,8 +8,13 @@ import Button from '@material-ui/core/Button'
 import Card from '@material-ui/core/Card'
 import CardHeader from '@material-ui/core/CardHeader'
 import CardContent from '@material-ui/core/CardContent'
+import Table from '@material-ui/core/Table'
+import TableHead from '@material-ui/core/TableHead'
+import TableBody from '@material-ui/core/TableBody'
+import TableCell from '@material-ui/core/TableCell'
+import TableRow from '@material-ui/core/TableRow'
 
-import { Input, DatePicker, FilterSelect, Select, TextArea } from '../components'
+import { Input, DatePicker, FilterSelect, Select, TextArea, ReportFooter } from '../components'
 import { transformArticle,total_, toFixedWithoutTrailingZero as fixed, validator, filterOption } from '../utils'
 
 const styles = theme => ({
@@ -125,104 +130,100 @@ const EntryTable = connect(
   }
 
   return (
-    <div>
-      <table className="table" id="purchase-table">
-        <thead>
-        <tr>
-          <th>类型</th>
-          <th>名称</th>
-          <th>规格</th>
-          <th>数量</th>
-          <th>小计</th>
-          <th>单位</th>
-          <th>单价</th>
-          <th>金额</th>
-          <th>吨/趟</th>
-          <th>运费单位</th>
-          <th>运费单价</th>
-          <th>运费</th>
-          <th>综合单价</th>
-          <th>综合金额</th>
-          <th>备注</th>
-          <th>
-            <Button
-              variant="raised"
-              color="primary"
-              onClick={add}
-            >增加</Button>
-          </th>
-          <th/>
-        </tr>
-        </thead>
-        <tbody>
-        {fields.map((entry, index) =>
-          <tr key={index}>
-            <td style={{minWidth: '6em'}}>
-              <Field name={`${entry}.type`} component={Select}>
-                {Object.keys(typeNameMap).map((type, index) => (
-                  <option key={index}>{type}</option>
-                ))}
-              </Field>
-            </td>
-            <td style={{minWidth: '7em'}}>
-              <Field
-                name={`${entry}.name`}
-                component={FilterSelect}
-                options={getNameOptions(fields.get(index).type)}
-                validate={validator.required}
-                placeholder="名称"
-                filterOption={filterOption}
-              />
-            </td>
-            <td style={{minWidth: '11em'}}>
-              <Field
-                name={`${entry}.size`}
-                component={FilterSelect}
-                options={getSizeOptions(fields.get(index).name)}
-                validate={validator.required}
-                placeholder="规格"
-              />
-            </td>
-            <td><Field name={`${entry}.count`} component={Input} validate={validator.required}/></td>
-            <td>{fixed(getTotal(index))}</td>
-            <td>{getUnit(index)}</td>
-            <td><Field name={`${entry}.price`} component={Input}/></td>
-            <td>{fixed(getSum(index))}</td>
-            <td><Field name={`${entry}.freightCount`} component={Input}/></td>
-            <td style={{minWidth: '5em'}}>
-              <Field name={`${entry}.freightUnit`} component={Select}>
-                <option>吨</option>
-                <option>趟</option>
-              </Field>
-            </td>
-            <td><Field name={`${entry}.freightPrice`} component={Input}/></td>
-            <td>{fixed(getFreight(index))}</td>
-            <td>{fixed(getMixPrice(index))}</td>
-            <td>{fixed(getMixSum(index))}</td>
-            <td><Field name={`${entry}.comments`} component={Input}/></td>
-            <td>
+    [
+      <Table className="table" id="purchase-table">
+        <TableHead>
+          <TableRow>
+            <TableCell>类型</TableCell>
+            <TableCell>名称</TableCell>
+            <TableCell>规格</TableCell>
+            <TableCell>数量</TableCell>
+            <TableCell>小计</TableCell>
+            <TableCell>单位</TableCell>
+            <TableCell>单价</TableCell>
+            <TableCell>金额</TableCell>
+            <TableCell>吨/趟</TableCell>
+            <TableCell>运费单位</TableCell>
+            <TableCell>运费单价</TableCell>
+            <TableCell>运费</TableCell>
+            <TableCell>综合单价</TableCell>
+            <TableCell>综合金额</TableCell>
+            <TableCell>备注</TableCell>
+            <TableCell>
               <Button
                 variant="raised"
                 color="primary"
                 onClick={add}
               >增加</Button>
-            </td>
-            <td>
-              <Button
-                color="secondary"
-                onClick={() => fields.remove(index)}
-              >删除</Button>
-            </td>
-          </tr>
-        )}
-        </tbody>
-      </table>
-      <ul className="list-group">
-        {getReport().map((report, index) => (
-          <li key={index} className="list-group-item">{report.name} {fixed(report.total)} {report.unit}</li>
-        ))}
-      </ul>
-    </div>
+            </TableCell>
+            <TableCell/>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {fields.map((entry, index) =>
+            <TableRow key={index}>
+              <TableCell style={{minWidth: '6em'}}>
+                <Field name={`${entry}.type`} component={Select}>
+                  {Object.keys(typeNameMap).map((type, index) => (
+                    <option key={index}>{type}</option>
+                  ))}
+                </Field>
+              </TableCell>
+              <TableCell style={{minWidth: '7em'}}>
+                <Field
+                  name={`${entry}.name`}
+                  component={FilterSelect}
+                  options={getNameOptions(fields.get(index).type)}
+                  validate={validator.required}
+                  placeholder="名称"
+                  filterOption={filterOption}
+                />
+              </TableCell>
+              <TableCell style={{minWidth: '11em'}}>
+                <Field
+                  name={`${entry}.size`}
+                  component={FilterSelect}
+                  options={getSizeOptions(fields.get(index).name)}
+                  validate={validator.required}
+                  placeholder="规格"
+                />
+              </TableCell>
+              <TableCell><Field name={`${entry}.count`} component={Input} validate={validator.required}/></TableCell>
+              <TableCell>{fixed(getTotal(index))}</TableCell>
+              <TableCell>{getUnit(index)}</TableCell>
+              <TableCell><Field name={`${entry}.price`} component={Input}/></TableCell>
+              <TableCell>{fixed(getSum(index))}</TableCell>
+              <TableCell><Field name={`${entry}.freightCount`} component={Input}/></TableCell>
+              <TableCell style={{minWidth: '5em'}}>
+                <Field name={`${entry}.freightUnit`} component={Select}>
+                  <option>吨</option>
+                  <option>趟</option>
+                </Field>
+              </TableCell>
+              <TableCell><Field name={`${entry}.freightPrice`} component={Input}/></TableCell>
+              <TableCell>{fixed(getFreight(index))}</TableCell>
+              <TableCell>{fixed(getMixPrice(index))}</TableCell>
+              <TableCell>{fixed(getMixSum(index))}</TableCell>
+              <TableCell><Field name={`${entry}.comments`} component={Input}/></TableCell>
+              <TableCell>
+                <Button
+                  variant="raised"
+                  color="primary"
+                  onClick={add}
+                >增加</Button>
+              </TableCell>
+              <TableCell>
+                <Button
+                  color="secondary"
+                  onClick={() => fields.remove(index)}
+                >删除</Button>
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>,
+      <ReportFooter report={getReport()} noWeight={true}/>,
+    ]
   )
 })
 
