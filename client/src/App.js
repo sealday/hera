@@ -29,6 +29,7 @@ const styles = theme => ({
     overflow: 'hidden',
     position: 'relative',
     display: 'flex',
+    minHeight: '100%',
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
