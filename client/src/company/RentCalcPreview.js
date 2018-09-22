@@ -75,7 +75,7 @@ class RentCalcPreview extends React.Component {
         </table>
         </div>
       </div>
-    );
+    )
   }
 }
 

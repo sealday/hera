@@ -1,16 +1,28 @@
-/**
- * Created by seal on 31/01/2017.
- */
-
 import React from 'react'
 import Button from '@material-ui/core/Button'
 import { reduxForm, Field, formValueSelector } from 'redux-form'
 import { Link } from 'react-router'
 import moment from 'moment'
-import { FilterSelect, DatePicker } from '../components'
 import { connect } from 'react-redux'
+import CardHeader from '@material-ui/core/CardHeader'
+import CardContent from '@material-ui/core/CardContent'
+import { withStyles } from '@material-ui/core/styles'
+
+import { FilterSelect, DatePicker } from '../components'
 import { filterOption, validator } from '../utils'
 import { PRICE_PLAN, queryPricePlan } from '../actions'
+
+const styles = {
+  rangeFirst: {
+    paddingTop: '7px',
+    display: 'inline-block',
+  },
+  range: {
+    paddingTop: '7px',
+    display: 'inline-block',
+    marginLeft: '1em'
+  },
+}
 
 /**
  * 搜索用的表单
@@ -33,90 +45,92 @@ class SimpleSearchForm extends React.Component {
     })))
   }
 
+  changeRange = (start, end) => e => {
+    e.preventDefault()
+    this.props.change('startDate', start)
+    this.props.change('endDate', end)
+  }
+
   componentDidMount() {
     this.props.dispatch(queryPricePlan())
   }
 
   render() {
-    const { handleSubmit, projects, startDate, endDate, reset, onAddItem } = this.props
+    const { handleSubmit, projects, startDate, endDate, reset, onAddItem, title, onExcelExport, classes } = this.props
     return (
-      <form onSubmit={handleSubmit} className="form-horizontal">
-        <div className="form-group">
-          <label className="control-label col-md-1">项目部</label>
-          <div className="col-md-5">
-            <Field name="project"
-                   component={FilterSelect}
-                   placeholder="请选择要计算的项目部"
-                   options={this.getStockOptions(projects)}
-                   validate={[validator.required]}
-                   filterOption={filterOption}
-            />
+      <form onSubmit={handleSubmit}>
+        <CardHeader
+          title={title}
+          action={
+            [
+              <Button key={0} type="submit">查询</Button>,
+              <Button key={1} type="reset" onClick={() => reset()}>重置</Button>,
+              onExcelExport &&
+              <Button key={2} type="button" onClick={onExcelExport}>导出excel</Button>,
+              <Button key={3} component={Link} to={`/rent_calc_preview`}>打印预览</Button>,
+              <Button key={4} type="button" onClick={handleSubmit(onAddItem)}>生成对账单</Button>,
+            ]
+          }
+        />
+        <CardContent>
+          <div className="form-horizontal">
+            <div className="form-group">
+              <label className="control-label col-md-1">项目部</label>
+              <div className="col-md-5">
+                <Field name="project"
+                       component={FilterSelect}
+                       placeholder="请选择要计算的项目部"
+                       options={this.getStockOptions(projects)}
+                       validate={[validator.required]}
+                       filterOption={filterOption}
+                />
+              </div>
+            </div>
+            <div className="form-group">
+              <label className="control-label col-md-1">开始日期</label>
+              <div className="col-md-2">
+                <Field name="startDate"
+                       component={DatePicker}
+                       selectsStart
+                       startDate={startDate}
+                       endDate={endDate}
+                />
+              </div>
+              <label className="control-label col-md-1">结束日期</label>
+              <div className="col-md-2">
+                <Field name="endDate"
+                       component={DatePicker}
+                       selectsEnd
+                       startDate={startDate}
+                       endDate={endDate}
+                />
+              </div>
+              <div className="col-md-6">
+                <a href="#"
+                   onClick={this.changeRange(moment().startOf('year'), moment().startOf('day'))}
+                   className={classes.rangeFirst}>今年</a>
+                <a href="#"
+                   onClick={this.changeRange(moment().startOf('day').subtract(1, 'month'), moment().startOf('day'))}
+                   className={classes.range}>最近一个月</a>
+                <a href="#"
+                   onClick={this.changeRange(moment().startOf('day').subtract(2, 'month'), moment().startOf('day'))}
+                   className={classes.range}>两个月</a>
+              </div>
+            </div>
+            <div className="form-group">
+              <label className="control-label col-md-1">价格方案</label>
+              <div className="col-md-5">
+                <Field name="planId"
+                       component={FilterSelect}
+                       placeholder="请选择要使用的价格方案"
+                       validate={[validator.required]}
+                       options={this.getPlanOptions(this.props.plans)}
+                       filterOption={filterOption}
+                />
+              </div>
+            </div>
           </div>
-        </div>
-        <div className="form-group">
-          <label className="control-label col-md-1">开始日期</label>
-          <div className="col-md-2">
-            <Field name="startDate"
-                   component={DatePicker}
-                   selectsStart
-                   startDate={startDate}
-                   endDate={endDate}
-            />
-          </div>
-          <label className="control-label col-md-1">结束日期</label>
-          <div className="col-md-2">
-            <Field name="endDate"
-                   component={DatePicker}
-                   selectsEnd
-                   startDate={startDate}
-                   endDate={endDate}
-            />
-          </div>
-          <div className="col-md-6">
-            <a href="#" onClick={e => {
-              e.preventDefault()
-              this.props.change('startDate', moment().startOf('year'))
-              this.props.change('endDate', moment().startOf('day'))
-            }} style={{paddingTop: '7px', display: 'inline-block'}}>今年</a>
-            <a href="#" onClick={e => {
-              e.preventDefault()
-              this.props.change('startDate', moment().startOf('day').subtract(1, 'month'))
-              this.props.change('endDate', moment().startOf('day'))
-            }} style={{paddingTop: '7px', display: 'inline-block', marginLeft: '1em'}}>最近一个月</a>
-            <a href="#" onClick={e => {
-              e.preventDefault()
-              this.props.change('startDate', moment().startOf('day').subtract(2, 'month'))
-              this.props.change('endDate', moment().startOf('day'))
-            }} style={{paddingTop: '7px', display: 'inline-block', marginLeft: '1em'}}>两个月</a>
-          </div>
-        </div>
-        <div className="form-group">
-          <label className="control-label col-md-1">价格方案</label>
-          <div className="col-md-5">
-            <Field name="planId"
-                   component={FilterSelect}
-                   placeholder="请选择要使用的价格方案"
-                   validate={[validator.required]}
-                   options={this.getPlanOptions(this.props.plans)}
-                   filterOption={filterOption}
-            />
-          </div>
-        </div>
-        <div className="form-group">
-          <div className="col-md-offset-4 col-md-2">
-            <button type="submit" className="btn btn-primary btn-block">查询</button>
-          </div>
-          <div className="col-md-2">
-            <button type="reset" className="btn btn-primary btn-block" onClick={() => reset()}>重置</button>
-          </div>
-          {this.props.onExcelExport && <div className="col-md-2">
-            <button type="button" className="btn btn-primary btn-block" onClick={e => this.props.onExcelExport() }>导出excel</button>
-          </div>}
-          <Button component={Link} to={`/rent_calc_preview`}>打印预览</Button>
-          {/*{<div className="col-md-2">*/}
-            {/*<button type="button" className="btn btn-primary btn-block" onClick={handleSubmit(onAddItem)}>生成对账单</button>*/}
-          {/*</div>}*/}
-        </div>
+        </CardContent>
       </form>
     )
   }
@@ -143,6 +157,4 @@ const mapStateToProps = state => {
   }
 }
 
-SimpleSearchForm = connect(mapStateToProps)(SimpleSearchForm)
-
-export default SimpleSearchForm
+export default connect(mapStateToProps)(withStyles(styles)(SimpleSearchForm))

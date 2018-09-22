@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import { connect } from 'react-redux'
 import { formValueSelector } from 'redux-form'
 import ContractForm from './ContractForm'
@@ -43,7 +43,7 @@ class Contract extends React.Component {
           </TableBody>
         </Table>
       </Card>
-    );
+    )
   }
 }
 
@@ -55,4 +55,4 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps)(Contract);
+export default connect(mapStateToProps)(Contract)

@@ -3,11 +3,12 @@ import RentCalcForm from './RentCalcForm'
 import RentCalcTable from './RentCalcTable'
 import { connect } from 'react-redux'
 import moment from 'moment'
-import { queryRent, projectAddItem } from '../actions'
 import XLSX from 'xlsx'
 import { saveAs } from 'file-saver'
-import { RENT } from '../actions'
+import Card from '@material-ui/core/Card'
+
 import { dateFormat } from '../utils'
+import { queryRent, projectAddItem, RENT } from '../actions'
 
 
 class RentCalc extends React.Component {
@@ -28,13 +29,13 @@ class RentCalc extends React.Component {
   render() {
     const { rent } = this.props
     return (
-      <div>
-        <h3 className="page-header">租金计算</h3>
+      <Card>
         <RentCalcForm
+          title='租金计算'
           onSubmit={this.handleSubmit}
           onAddItem={this.handleAddItem}
           onExcelExport={() => {
-            const wb = XLSX.utils.book_new();
+            const wb = XLSX.utils.book_new()
 
             const json = [[
               '日期', '出入库', '名称', '规格', '单位', '数量', '单价', '天数', '金额', '运费'
@@ -77,9 +78,9 @@ class RentCalc extends React.Component {
                   continue
               }
               for(let R = range.s.r; R <= range.e.r; ++R) {
-                if (R === 0) continue;
-                const cell_address = {c:C, r:R};
-                const cell_ref = XLSX.utils.encode_cell(cell_address);
+                if (R === 0) continue
+                const cell_address = {c:C, r:R}
+                const cell_ref = XLSX.utils.encode_cell(cell_address)
                 if (sheet[cell_ref]) {
                   sheet[cell_ref] = XLSX.utils.cell_set_number_format(sheet[cell_ref], format)
                 }
@@ -93,13 +94,13 @@ class RentCalc extends React.Component {
               for (let i=0; i !== s.length; ++i) {
                 view[i] = s.charCodeAt(i) & 0xFF
               }
-              return buf;
+              return buf
             }
-            saveAs(new Blob([s2ab(out)],{type:"application/octet-stream"}), "租金计算表.xlsx");
+            saveAs(new Blob([s2ab(out)],{type:"application/octet-stream"}), "租金计算表.xlsx")
           }}
         />
         <RentCalcTable onLoad={(table) => this.table = table} />
-      </div>
+      </Card>
     )
   }
 }
