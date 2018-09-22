@@ -1,13 +1,9 @@
-/**
- * Created by seal on 25/01/2017.
- */
-
 import React, { Component } from 'react'
-import TransferForm from './TransferForm'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import Button from '@material-ui/core/Button'
 
+import TransferForm from './TransferForm'
 import { updateTransfer, requestRecord } from '../actions'
 
 class TransferCreate extends Component {
@@ -67,17 +63,13 @@ class TransferCreate extends Component {
     }
 
     return (
-      <div>
-        <div className="hidden-print" style={{ display: 'flex' }}>
-          <h2 className="page-header" style={{ flex: 1 }}>{pageTitle}</h2>
-          <span><Button variant="raised" onClick={() => router.goBack()}>返回</Button></span>
-        </div>
-        <TransferForm
-          onSubmit={this.handleSubmit}
-          initialValues={record}
-        />
-      </div>
-    );
+      <TransferForm
+        title={pageTitle}
+        action={<Button onClick={() => router.goBack()}>返回</Button>}
+        onSubmit={this.handleSubmit}
+        initialValues={record}
+      />
+    )
   }
 }
 
@@ -86,4 +78,4 @@ const mapStateToProps = state => ({
   records: state.store.records, // Immutable Map
 })
 
-export default connect(mapStateToProps)(TransferCreate);
+export default connect(mapStateToProps)(TransferCreate)

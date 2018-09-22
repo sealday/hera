@@ -1,23 +1,19 @@
-/**
- * Created by seal on 25/01/2017.
- */
-
-//noinspection JSUnresolvedVariable
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import { reduxForm, Field, FieldArray } from 'redux-form'
 import { connect } from 'react-redux'
 import moment from 'moment'
-import Paper from '@material-ui/core/Paper'
 import { withStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import Button from '@material-ui/core/Button'
+import Card from '@material-ui/core/Card'
+import CardHeader from '@material-ui/core/CardHeader'
+import CardContent from '@material-ui/core/CardContent'
 
 import { Input, DatePicker, FilterSelect, Select, TextArea } from '../components'
 import { transformArticle,total_, toFixedWithoutTrailingZero as fixed, validator, filterOption } from '../utils'
 
 const styles = theme => ({
   root: {
-    padding: 16,
   },
   submitButton: {
     width: '100%',
@@ -233,58 +229,61 @@ const EntryTable = connect(
 
 class TransferForm extends Component {
   render() {
-    const { classes } = this.props
+    const { classes, title, action } = this.props
     return (
-      <Paper className={classes.root}>
-        <form className="form-horizontal" onSubmit={this.props.handleSubmit}>
-          <div className="form-group">
-            <label className="control-label col-md-1">项目部</label>
-            <div className="col-md-3">
-              <Field
-                name="project"
-                component={FilterSelect}
-                validate={validator.required}
-                options={this.props.projects.map(project => ({
-                  value: project._id,
-                  label: project.company + project.name,
-                  pinyin: project.pinyin
-                }))}
-                filterOption={filterOption}
-                placeholder="请选择项目" />
+      <Card className={classes.root}>
+        <CardHeader title={title} action={action}/>
+        <CardContent>
+          <form className="form-horizontal" onSubmit={this.props.handleSubmit}>
+            <div className="form-group">
+              <label className="control-label col-md-1">项目部</label>
+              <div className="col-md-3">
+                <Field
+                  name="project"
+                  component={FilterSelect}
+                  validate={validator.required}
+                  options={this.props.projects.map(project => ({
+                    value: project._id,
+                    label: project.company + project.name,
+                    pinyin: project.pinyin
+                  }))}
+                  filterOption={filterOption}
+                  placeholder="请选择项目" />
+              </div>
+              <label className="control-label col-md-1">对方单位</label>
+              <div className="col-md-3">
+                <Field name="vendor" component={Input} validate={validator.required}/>
+              </div>
+              <label className="control-label col-md-1">日期</label>
+              <div className="col-md-3">
+                <Field name="outDate" component={DatePicker}/>
+              </div>
             </div>
-            <label className="control-label col-md-1">对方单位</label>
-            <div className="col-md-3">
-              <Field name="vendor" component={Input} validate={validator.required}/>
+            <div className="form-group">
+              <label className="control-label col-md-1">原始单号</label>
+              <div className="col-md-3">
+                <Field name="originalOrder" component={Input}/>
+              </div>
+              <label className="control-label col-md-1">车号</label>
+              <div className="col-md-3">
+                <Field name="carNumber" component={Input}/>
+              </div>
             </div>
-            <label className="control-label col-md-1">日期</label>
-            <div className="col-md-3">
-              <Field name="outDate" component={DatePicker}/>
+            <div className="form-group">
+              <label className="control-label col-md-1">备注</label>
+              <div className="col-md-11">
+                <Field name="comments" component={TextArea}/>
+              </div>
             </div>
-          </div>
-          <div className="form-group">
-            <label className="control-label col-md-1">原始单号</label>
-            <div className="col-md-3">
-              <Field name="originalOrder" component={Input}/>
+            <div className="form-group">
+              <div className="col-md-12">
+                <FieldArray name="entries" component={EntryTable}/>
+              </div>
             </div>
-            <label className="control-label col-md-1">车号</label>
-            <div className="col-md-3">
-              <Field name="carNumber" component={Input}/>
-            </div>
-          </div>
-          <div className="form-group">
-            <label className="control-label col-md-1">备注</label>
-            <div className="col-md-11">
-              <Field name="comments" component={TextArea}/>
-            </div>
-          </div>
-          <div className="form-group">
-            <div className="col-md-12">
-              <FieldArray name="entries" component={EntryTable}/>
-            </div>
-          </div>
-          <Button type="submit" color="primary" variant="raised" className={classes.submitButton}>保存</Button>
-        </form>
-      </Paper>
+            <Button type="submit" color="primary" variant="raised" className={classes.submitButton}>保存</Button>
+          </form>
+        </CardContent>
+      </Card>
     )
   }
 }
@@ -306,4 +305,4 @@ const mapStateToProps = state => ({
 })
 
 
-export default connect(mapStateToProps)(withStyles(styles)(TransferForm));
+export default connect(mapStateToProps)(withStyles(styles)(TransferForm))

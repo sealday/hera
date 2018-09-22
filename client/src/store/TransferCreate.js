@@ -1,10 +1,7 @@
-/**
- * Created by seal on 25/01/2017.
- */
-
-import React, { Component } from 'react';
-import TransferForm from './TransferForm'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
+
+import TransferForm from './TransferForm'
 import { postTransfer } from '../actions'
 
 class TransferCreate extends Component {
@@ -41,11 +38,12 @@ class TransferCreate extends Component {
     }
 
     return (
-      <div>
-        <h2 className="page-header">{pageTitle}</h2>
-        <TransferForm onSubmit={this.handleSubmit} direction={direction}/>
-      </div>
-    );
+      <TransferForm
+        title={pageTitle}
+        onSubmit={this.handleSubmit}
+        direction={direction}
+      />
+    )
   }
 }
 
@@ -53,4 +51,4 @@ const mapStateToProps = state => ({
   store: state.system.store
 })
 
-export default connect(mapStateToProps)(TransferCreate);
+export default connect(mapStateToProps)(TransferCreate)

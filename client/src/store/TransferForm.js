@@ -9,8 +9,10 @@ import Typography from '@material-ui/core/Typography'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { withStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
-import Paper from '@material-ui/core/Paper'
 import Button from '@material-ui/core/Button'
+import Card from '@material-ui/core/Card'
+import CardHeader from '@material-ui/core/CardHeader'
+import CardContent from '@material-ui/core/CardContent'
 
 import EntryTable from './TransferEntryTable'
 import {
@@ -39,47 +41,51 @@ class TransferForm extends Component {
   }
 
   render() {
-    const { direction, classes } = this.props
+    const { direction, classes, title, action } = this.props
     return (
       <form className="form-horizontal" onSubmit={this.props.handleSubmit}>
-        <Paper className={classes.header}>
-        <div className="form-group">
-          <label className="control-label col-md-1">项目部</label>
-          <div className="col-md-3">
-            <Field
-              name="project"
-              component={FilterSelect}
-              validate={validator.required}
-              options={this.props.projects.map(project => ({
-                value: project._id,
-                label: project.company + project.name,
-                pinyin: project.pinyin
-              }))}
-              filterOption={filterOption}
-              placeholder="请选择项目" />
-          </div>
-          <label className="control-label col-md-1">日期</label>
-          <div className="col-md-3">
-            <Field name="outDate" component={DatePicker}/>
-          </div>
-          <label className="control-label col-md-1">原始单号</label>
-          <div className="col-md-3">
-            <Field name="originalOrder" component={Input}/>
-          </div>
-        </div>
-        <div className="form-group">
-          <label className="control-label col-md-1">车号</label>
-          <div className="col-md-3">
-            <Field name="carNumber" component={Input}/>
-          </div>
-        </div>
-        <div className="form-group">
-          <label className="control-label col-md-1">备注</label>
-          <div className="col-md-11">
-            <Field name="comments" component={TextArea}/>
-          </div>
-        </div>
-        </Paper>
+        <Card>
+          <CardHeader title={title} action={action}/>
+          <CardContent>
+            <div className="form-group">
+              <label className="control-label col-md-1">项目部</label>
+              <div className="col-md-3">
+                <Field
+                  name="project"
+                  component={FilterSelect}
+                  validate={validator.required}
+                  options={this.props.projects.map(project => ({
+                    value: project._id,
+                    label: project.company + project.name,
+                    pinyin: project.pinyin
+                  }))}
+                  filterOption={filterOption}
+                  placeholder="请选择项目"
+                />
+              </div>
+              <label className="control-label col-md-1">日期</label>
+              <div className="col-md-3">
+                <Field name="outDate" component={DatePicker}/>
+              </div>
+              <label className="control-label col-md-1">原始单号</label>
+              <div className="col-md-3">
+                <Field name="originalOrder" component={Input}/>
+              </div>
+            </div>
+            <div className="form-group">
+              <label className="control-label col-md-1">车号</label>
+              <div className="col-md-3">
+                <Field name="carNumber" component={Input}/>
+              </div>
+            </div>
+            <div className="form-group">
+              <label className="control-label col-md-1">备注</label>
+              <div className="col-md-11">
+                <Field name="comments" component={TextArea}/>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
         <ExpansionPanel defaultExpanded={true}>
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
             <Typography variant="title">{direction === 'in' ? '租赁（入库）' : '租赁（出库）'}</Typography>
@@ -114,7 +120,7 @@ class TransferForm extends Component {
         </ExpansionPanel>
         <Button variant="raised" color="primary" type="submit" className={classes.submitButton}>保存</Button>
       </form>
-    );
+    )
   }
 }
 
@@ -130,4 +136,4 @@ const mapStateToProps = state => ({
   stocks: state.store.stocks,
 })
 
-export default connect(mapStateToProps)(withStyles(styles)(TransferForm));
+export default connect(mapStateToProps)(withStyles(styles)(TransferForm))
