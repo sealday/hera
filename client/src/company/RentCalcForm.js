@@ -47,8 +47,8 @@ class SimpleSearchForm extends React.Component {
 
   changeRange = (start, end) => e => {
     e.preventDefault()
-    this.props.change('startDate', start)
-    this.props.change('endDate', end)
+    this.props.change('startDate', start.startOf('day'))
+    this.props.change('endDate', end.startOf('day'))
   }
 
   componentDidMount() {
@@ -107,13 +107,27 @@ class SimpleSearchForm extends React.Component {
               </div>
               <div className="col-md-6">
                 <a href="#"
-                   onClick={this.changeRange(moment().startOf('year'), moment().startOf('day'))}
+                   onClick={this.changeRange(moment().startOf('year'), moment())}
                    className={classes.rangeFirst}>今年</a>
                 <a href="#"
-                   onClick={this.changeRange(moment().startOf('day').subtract(1, 'month'), moment().startOf('day'))}
+                   onClick={
+                     this.changeRange(
+                       moment(startDate).subtract(1, 'year').startOf('year'),
+                       moment(startDate).subtract(1, 'year').endOf('year'))
+                   }
+                   className={classes.range}>上一年</a>
+                <a href="#"
+                   onClick={
+                     this.changeRange(
+                       moment(startDate).add(1, 'year').startOf('year'),
+                       moment(startDate).add(1, 'year').endOf('year'))
+                   }
+                   className={classes.range}>下一年</a>
+                <a href="#"
+                   onClick={this.changeRange(moment().subtract(1, 'month'), moment())}
                    className={classes.range}>最近一个月</a>
                 <a href="#"
-                   onClick={this.changeRange(moment().startOf('day').subtract(2, 'month'), moment().startOf('day'))}
+                   onClick={this.changeRange(moment().subtract(2, 'month'), moment())}
                    className={classes.range}>两个月</a>
               </div>
             </div>
