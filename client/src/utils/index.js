@@ -152,6 +152,7 @@ export const filterOption = (option, filter) => {
 let formatNumber_
 let currencyFormat_
 let numberFormat_
+let percentFormat_
 
 if (window.Intl) {
   formatNumber_ = (number) => {
@@ -159,6 +160,11 @@ if (window.Intl) {
   }
   currencyFormat_ = (number, fractionDigits = 2) => {
     const options = { style: 'currency', currency: 'CNY', minimumFractionDigits: fractionDigits, maximumFractionDigits: fractionDigits }
+    const numberFormat = new Intl.NumberFormat('zh-CN', options)
+    return number ? numberFormat.format(number) : numberFormat.format(0)
+  }
+  percentFormat_ = (number, fractionDigits = 2) => {
+    const options = { style: 'percent', minimumFractionDigits: fractionDigits, maximumFractionDigits: fractionDigits }
     const numberFormat = new Intl.NumberFormat('zh-CN', options)
     return number ? numberFormat.format(number) : numberFormat.format(0)
   }
@@ -172,11 +178,13 @@ if (window.Intl) {
     return isNaN(number) ? '' : number
   }
   numberFormat_ = number => number
+  percentFormat_ = number => number
 }
 
 export const formatNumber = formatNumber_
 export const currencyFormat = currencyFormat_
 export const numberFormat = numberFormat_
+export const percentFormat = percentFormat_
 export const dateFormat = date => moment(date).format('YYYY-MM-DD')
 
 export const total = (count, product) => toFixedWithoutTrailingZero(count * getScale(product))

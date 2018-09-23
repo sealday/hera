@@ -209,6 +209,8 @@ ajax('/api/load').then(res => {
             <Route path="rent_calc_preview" component={company.RentCalcPreview}/>
             <Route path="contract" component={company.Contract}/>
             <Route path="contract/:id" component={company.ContractContent}/>
+            <Route path="contract/:id/item/:itemId" component={company.ContractItem}/>
+            <Route path="contract/:id/item/:itemId/preview" component={company.RentCalcPreview}/>
 
             <Route path="transport/:id" component={TransportOrder}/>
             <Route path="transport/:id/edit" component={TransportOrderEdit}/>

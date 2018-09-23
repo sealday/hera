@@ -11,7 +11,6 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 
 import { currencyFormat, numberFormat, dateFormat } from '../utils'
-import { RENT } from '../actions'
 
 /**
  * 提供排序功能的搜索结果表
@@ -82,7 +81,6 @@ class SimpleSearchTable extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  rent: state.results.get(RENT, { history: [], list: [], group: [ { price: 0, freight: 0 } ] })
 })
 
 export default connect(mapStateToProps)(SimpleSearchTable)

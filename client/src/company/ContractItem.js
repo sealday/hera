@@ -13,15 +13,18 @@ import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
+import Paper from '@material-ui/core/Paper'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Fade from '@material-ui/core/Fade'
+import { Link } from 'react-router'
 
-import { currencyFormat, dateFormat } from '../utils'
+import { currencyFormat, dateFormat, percentFormat } from '../utils'
 import { projectDeleteItem } from '../actions'
+import RentCalcTable from './RentCalcTable'
 
 const styles = {
   title: {
@@ -33,7 +36,7 @@ const styles = {
   }
 }
 
-class ContractContent extends React.Component {
+class ContractItem extends React.Component {
 
   state = {
     open: false,
@@ -56,6 +59,8 @@ class ContractContent extends React.Component {
     let { projects, params, classes, router, dispatch } = this.props
 
     const project = projects.get(params.id)
+    // TODO 处理空异常
+    const item = project.items.filter(item => item._id === params.itemId)[0]
     return [
       <Dialog
         key={0}
@@ -90,61 +95,33 @@ class ContractContent extends React.Component {
             [
               <Button key={0} onClick={() => router.goBack()}>返回</Button>,
               <Button key={1} onClick={this.handleClickOpen} color="primary">编辑</Button>,
-              <Button key={2} onClick={() => router.push('rent_calc')} color="primary">创建对账单</Button>,
+              <Button key={3} component={Link} to={`contract/${params.id}/item/${params.itemId}/preview`}>打印预览</Button>,
             ]
           }
-          title={`${project.company} ${project.name}`}
-          subheader={`内部编号：${project._id} 外部编号：${short_id.generate()}`}
+          title={`${project.company} ${project.name} 对账单`}
+          subheader={`${dateFormat(item.startDate)} ~ ${dateFormat(item.endDate)}`}
         />
         <CardContent>
           <Typography variant="subheading" color="textSecondary">
           </Typography>
-          <p>费用：<span style={{ fontSize: 'xx-large' }}>{ currencyFormat(761946.14) }</span> </p>
-          <p>收款：<span style={{ fontSize: 'xx-large' }}>{ currencyFormat(150000.00) }</span> </p>
-          <p>税收：<span style={{ fontSize: 'xx-large' }}>{ currencyFormat(232.23) }</span> </p>
+          <p>租金：<span style={{ fontSize: 'xx-large' }}>{ currencyFormat(761946.14) }</span> </p>
+          <p>税率：<span style={{ fontSize: 'xx-large' }}>{ percentFormat(0.03) }</span> </p>
+          <p>维修费：<span style={{ fontSize: 'xx-large' }}>{ currencyFormat(150000.00) }</span> </p>
+          <p>赔偿费：<span style={{ fontSize: 'xx-large' }}>{ currencyFormat(232.23) }</span> </p>
+          <p>运杂费：<span style={{ fontSize: 'xx-large' }}>{ currencyFormat(232.23) }</span> </p>
         </CardContent>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>名称</TableCell>
-              <TableCell>日期区间</TableCell>
-              <TableCell>创建时间</TableCell>
-              <TableCell>更新时间</TableCell>
-              <TableCell>操作员</TableCell>
-              <TableCell/>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {project.items.map(item => (
-              <TableRow key={item._id} id={item._id}>
-                <TableCell>{item.name}</TableCell>
-                <TableCell>{dateFormat(item.startDate)} ~ {dateFormat(item.endDate)}</TableCell>
-                <TableCell>{dateFormat(item.createdAt)}</TableCell>
-                <TableCell>{dateFormat(item.updatedAt)}</TableCell>
-                <TableCell>{item.username}</TableCell>
-                <TableCell>
-                  <Button
-                    onClick={() => {
-                      router.push(`contract/${project._id}/item/${item._id}`)
-                    }}>查看</Button>
-                  <Button
-                    color="secondary"
-                    onClick={() => dispatch(projectDeleteItem({ project: project._id, item: item._id }))}>删除</Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+        <RentCalcTable
+          rent={item.content}
+        />
       </Card>,
     ]
   }
 }
 
-ContractContent.propTypes = {
+ContractItem.propTypes = {
   classes: PropTypes.object.isRequired,
 }
 
-ContractContent = withStyles(styles)(ContractContent)
 
 const mapStateToProps = state => {
   return {
@@ -152,4 +129,4 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps)(ContractContent)
+export default connect(mapStateToProps)(withStyles(styles)(ContractItem))

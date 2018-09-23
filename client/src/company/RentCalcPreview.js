@@ -13,7 +13,7 @@ class RentCalcPreview extends React.Component {
         <div className="hidden-print" style={{ display: 'flex' }}>
           <span style={{ flex: 1 }} />
           <Button onClick={() => router.goBack()}>返回</Button>
-          <Button variant="raised" color="primary" onClick={() => window.print()}>打印</Button>
+          <Button color="primary" onClick={() => window.print()}>打印</Button>
         </div>
         <div style={{ position: 'relative', paddingRight: '1.2em', minHeight: '30em' }}> {/* 表格开始 */}
         <table style={{ width: '100%' }}>

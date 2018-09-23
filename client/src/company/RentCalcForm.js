@@ -1,7 +1,6 @@
 import React from 'react'
 import Button from '@material-ui/core/Button'
 import { reduxForm, Field, formValueSelector } from 'redux-form'
-import { Link } from 'react-router'
 import moment from 'moment'
 import { connect } from 'react-redux'
 import CardHeader from '@material-ui/core/CardHeader'
@@ -67,7 +66,6 @@ class SimpleSearchForm extends React.Component {
               <Button key={1} type="reset" onClick={() => reset()}>重置</Button>,
               onExcelExport &&
               <Button key={2} type="button" onClick={onExcelExport}>导出excel</Button>,
-              <Button key={3} component={Link} to={`/rent_calc_preview`}>打印预览</Button>,
               <Button key={4} type="button" onClick={handleSubmit(onAddItem)}>生成对账单</Button>,
             ]
           }

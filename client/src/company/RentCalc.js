@@ -99,14 +99,14 @@ class RentCalc extends React.Component {
             saveAs(new Blob([s2ab(out)],{type:"application/octet-stream"}), "租金计算表.xlsx")
           }}
         />
-        <RentCalcTable onLoad={(table) => this.table = table} />
+        <RentCalcTable onLoad={(table) => this.table = table} rent={rent} />
       </Card>
     )
   }
 }
 
 const mapStateToProps = state => ({
-  rent: state.results.get(RENT, { history: [], list: [], group: [ { price: 0, freight: 0 } ] })
+  rent: state.results.get(RENT, { history: [], list: [], group: [ { price: 0, freight: 0 } ], nameGroup: [] })
 })
 
 export default connect(mapStateToProps)(RentCalc)
