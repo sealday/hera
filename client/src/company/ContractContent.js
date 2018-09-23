@@ -52,7 +52,7 @@ class ContractContent extends React.Component {
   }
 
   total(project) {
-    return project.items.map(item => item.content.group[0].price).reduce((a, b) => a + b)
+    return project.items.map(item => item.content.group[0].price).reduce((a, b) => a + b, 0)
   }
 
   render() {
