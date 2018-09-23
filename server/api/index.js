@@ -49,6 +49,8 @@ router.post('/project', project.create)
 router.get('/project/:id', project.detail)
 router.post('/project/:id', project.update)
 router.post('/project/:id/add_item', project.addItem)
+router.get('/project/:id/item/:itemId', project.itemDetail)
+router.post('/project/:id/item/:itemId/delete', project.deleteItem)
 
 router.post('/workercheckin',workercheckin.create)
 router.post('/workercheckin/:id/edit',workercheckin.update);

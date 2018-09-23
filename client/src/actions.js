@@ -805,6 +805,7 @@ export const queryRent = (condition) => (dispatch, getState) => {
 }
 
 export const PROJECT_ADD_ITEM = 'PROJECT_ADD_ITEM'
+export const PROJECT_DELETE_ITEM = 'PROJECT_DELETE_ITEM'
 
 export const projectAddItem = (condition) => (dispatch, getState) => {
   const search = network(PROJECT_ADD_ITEM) // 让查询网络不会重复
@@ -821,10 +822,29 @@ export const projectAddItem = (condition) => (dispatch, getState) => {
       dispatch(newSuccessNotify('提示', '生成对账单成功', 2000))
       dispatch(push(`/contract/${ condition.project }`))
     }).catch(err => {
-      console.dir(err)
       const res = err.responseJSON
       dispatch(search.endFailure)
       dispatch(newErrorNotify('错误', `生成对账单失败：${ res.message }`, 2000))
+    })
+  }
+}
+
+export const projectDeleteItem = (condition) => (dispatch, getState) => {
+  const search = network(PROJECT_DELETE_ITEM)
+  if (search.shouldProceed(getState())) {
+    dispatch(search.begin)
+    ajax(`/api/project/${ condition.project }/item/${ condition.item }/delete`, {
+      method: 'POST',
+      contentType: 'application/json'
+    }).then(res => {
+      dispatch(search.endSuccess)
+      dispatch({ type: UPDATE_PROJECT, data: res.data.project })
+      dispatch(newSuccessNotify('提示', '删除对账单成功', 2000))
+      dispatch(push(`/contract/${ condition.project }`))
+    }).catch(err => {
+      const res = err.responseJSON
+      dispatch(search.endFailure)
+      dispatch(newErrorNotify('错误', `删除对账单失败：${ err }`, 2000))
     })
   }
 }

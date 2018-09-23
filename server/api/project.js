@@ -83,18 +83,6 @@ const addItem = async (req, res, next) => {
     const pricePlanId = ObjectId(condition.planId)
     const project = await Project.findById(projectId)
 
-    // 检查是否有区间重合
-    const items = project.items.filter(item => item.name === '对账单')
-    items.forEach(item => {
-      if (!(moment(item.startDate).startOf('day') > moment(endDate).startOf('day')
-      || moment(item.endDate).startOf('day') < moment(startDate).startOf('day'))) {
-        throw {
-          status: 400,
-          message: '对账单区间重合！',
-        }
-      }
-    })
-
     const result = await rentService.calculate({
       startDate,
       endDate,
@@ -102,18 +90,19 @@ const addItem = async (req, res, next) => {
       projectId,
       pricePlanId,
     })
-    console.log(JSON.stringify(result[0], null, 4))
     const item = {
       name: '对账单', // 名称
       startDate: startDate, // 开始时间
       endDate: endDate, // 结束时间
       createdAt: new Date(), // 创建时间
       updatedAt: new Date(), // 更新时间
+      planId: pricePlanId,  // 价格计划
       username: req.session.user.username, // 操作员
       content: {
         history: result[0].history,
         list: result[0].list,
         group: result[0].group,
+        nameGroup: result[0].nameGroup,
       }
     }
     project.items.push(item)
@@ -131,4 +120,42 @@ const addItem = async (req, res, next) => {
   }
 }
 
+const itemDetail = async (req, res) => {
+  const project = await Project.findById(req.params.id)
+  const items = project.items.filter(i => i._id.toString() === req.params.itemId)
+  if (items.length < 1) {
+    res.status(404).json({
+      message: '不存在该账单'
+    })
+  } else {
+    res.json({
+      message: '获取成功！',
+      data: {
+        item: items[0],
+      }
+    })
+  }
+}
+
+const deleteItem = async (req, res) => {
+  const project = await Project.findById(req.params.id)
+  const items = project.items.filter(i => i._id.toString() === req.params.itemId)
+  if (items.length < 1) {
+    res.status(404).json({
+      message: '不存在该账单'
+    })
+  } else {
+    project.items = project.items.filter(i => i._id.toString() !== req.params.itemId)
+    const newProject = await project.save()
+    res.json({
+      message: '删除成功！',
+      data: {
+        project: newProject,
+      }
+    })
+  }
+}
+
 exports.addItem = helper(addItem)
+exports.itemDetail = helper(itemDetail)
+exports.deleteItem = helper(deleteItem)

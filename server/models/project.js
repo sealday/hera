@@ -5,7 +5,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const pinyin = require('pinyin')
-
 const projectSchema = new Schema({
   name: String, // 项目名称
   company: String, // 公司名称
@@ -29,6 +28,7 @@ const projectSchema = new Schema({
     createdAt: Date, // 创建时间
     updatedAt: Date, // 更新时间
     username: String, // 操作员
+    planId: Schema.Types.ObjectId, // 价格方案
     content: Schema.Types.Mixed, // 内容
   }],
 
