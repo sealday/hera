@@ -2,7 +2,7 @@ const Record = require('../models').Record
 
 class Rent {
   async calculate({startDate, endDate, timezone, project, pricePlanId})  {
-    return Record.aggregate([
+    const result = await Record.aggregate([
       {
         $match: {
           $or: [
@@ -352,6 +352,12 @@ class Rent {
         }
       }
     ])
+    return {
+      history: result[0].history,
+      list: result[0].list,
+      group: result[0].group,
+      nameGroup: result[0].nameGroup,
+    }
   }
 }
 

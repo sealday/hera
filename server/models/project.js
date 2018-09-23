@@ -29,6 +29,7 @@ const projectSchema = new Schema({
     updatedAt: Date, // 更新时间
     username: String, // 操作员
     planId: Schema.Types.ObjectId, // 价格方案
+    taxRate: { type: String, default: "0.03" }, // 税率
     content: Schema.Types.Mixed, // 内容
   }],
 

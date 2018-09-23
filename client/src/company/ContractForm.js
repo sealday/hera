@@ -1,11 +1,8 @@
-/**
- * Created by seal on 31/01/2017.
- */
-
 import React from 'react'
 import { reduxForm, Field } from 'redux-form'
-import { FilterSelect } from '../components'
 import { connect } from 'react-redux'
+
+import { FilterSelect } from '../components'
 import { filterOption, validator } from '../utils'
 
 /**

@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types'
 import React from 'react'
 import { connect } from 'react-redux'
 import Card from '@material-ui/core/Card'
@@ -52,6 +51,10 @@ class ContractContent extends React.Component {
     console.log(projects.get(params.id))
   }
 
+  total(project) {
+    return project.items.map(item => item.content.group[0].price).reduce((a, b) => a + b)
+  }
+
   render() {
     let { projects, params, classes, router, dispatch } = this.props
 
@@ -89,7 +92,6 @@ class ContractContent extends React.Component {
           action={
             [
               <Button key={0} onClick={() => router.goBack()}>返回</Button>,
-              <Button key={1} onClick={this.handleClickOpen} color="primary">编辑</Button>,
               <Button key={2} onClick={() => router.push('rent_calc')} color="primary">创建对账单</Button>,
             ]
           }
@@ -99,9 +101,9 @@ class ContractContent extends React.Component {
         <CardContent>
           <Typography variant="subheading" color="textSecondary">
           </Typography>
-          <p>费用：<span style={{ fontSize: 'xx-large' }}>{ currencyFormat(761946.14) }</span> </p>
-          <p>收款：<span style={{ fontSize: 'xx-large' }}>{ currencyFormat(150000.00) }</span> </p>
-          <p>税收：<span style={{ fontSize: 'xx-large' }}>{ currencyFormat(232.23) }</span> </p>
+          <p>费用：<span style={{ fontSize: 'xx-large' }}>{ currencyFormat(this.total(project)) }</span> </p>
+          <p>收款：<span style={{ fontSize: 'xx-large' }}>{ currencyFormat(0) }</span> </p>
+          <p>税款：<span style={{ fontSize: 'xx-large' }}>{ currencyFormat(0) }</span> </p>
         </CardContent>
         <Table>
           <TableHead>
@@ -140,16 +142,10 @@ class ContractContent extends React.Component {
   }
 }
 
-ContractContent.propTypes = {
-  classes: PropTypes.object.isRequired,
-}
-
-ContractContent = withStyles(styles)(ContractContent)
-
 const mapStateToProps = state => {
   return {
     projects: state.system.projects,
   }
 }
 
-export default connect(mapStateToProps)(ContractContent)
+export default connect(mapStateToProps)(withStyles(styles)(ContractContent))

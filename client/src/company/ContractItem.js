@@ -21,10 +21,13 @@ import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Fade from '@material-ui/core/Fade'
 import { Link } from 'react-router'
+import TextField from '@material-ui/core/TextField'
+import { reduxForm, Field } from 'redux-form'
 
 import { currencyFormat, dateFormat, percentFormat } from '../utils'
 import { projectDeleteItem } from '../actions'
 import RentCalcTable from './RentCalcTable'
+import ContractFormDialog from './ContractFormDialog'
 
 const styles = {
   title: {
@@ -50,6 +53,14 @@ class ContractItem extends React.Component {
     this.setState({ open: false })
   }
 
+  handleEditSave = (values) => {
+    let { projects, params } = this.props
+    const project = projects.get(params.id)
+    const item = project.items.filter(item => item._id === params.itemId)[0]
+    item.taxRate = values.taxRate
+    this.handleClose()
+  }
+
   componentDidMount() {
     let { projects, params } = this.props
     console.log(projects.get(params.id))
@@ -62,33 +73,14 @@ class ContractItem extends React.Component {
     // TODO 处理空异常
     const item = project.items.filter(item => item._id === params.itemId)[0]
     return [
-      <Dialog
+      <ContractFormDialog
         key={0}
+        initialValues={{
+          taxRate: item.taxRate,
+        }}
         open={this.state.open}
-        TransitionComponent={Fade}
-        keepMounted
-        onClose={this.handleClose}
-        aria-labelledby="alert-dialog-slide-title"
-        aria-describedby="alert-dialog-slide-description"
-      >
-        <DialogTitle id="alert-dialog-slide-title">
-          {"Use Google's location service?"}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description">
-            Let Google help apps determine location. This means sending anonymous location data to
-            Google, even when no apps are running.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={this.handleClose} color="primary">
-            Disagree
-          </Button>
-          <Button onClick={this.handleClose} color="primary">
-            Agree
-          </Button>
-        </DialogActions>
-      </Dialog>,
+        onSubmit={this.handleEditSave}
+        onClose={this.handleClose}/>,
       <Card key={1}>
         <CardHeader
           action={
@@ -104,11 +96,11 @@ class ContractItem extends React.Component {
         <CardContent>
           <Typography variant="subheading" color="textSecondary">
           </Typography>
-          <p>租金：<span style={{ fontSize: 'xx-large' }}>{ currencyFormat(761946.14) }</span> </p>
-          <p>税率：<span style={{ fontSize: 'xx-large' }}>{ percentFormat(0.03) }</span> </p>
-          <p>维修费：<span style={{ fontSize: 'xx-large' }}>{ currencyFormat(150000.00) }</span> </p>
-          <p>赔偿费：<span style={{ fontSize: 'xx-large' }}>{ currencyFormat(232.23) }</span> </p>
-          <p>运杂费：<span style={{ fontSize: 'xx-large' }}>{ currencyFormat(232.23) }</span> </p>
+          <p>租金：<span style={{ fontSize: 'xx-large' }}>{ currencyFormat(item.content.group[0].price) }</span> </p>
+          <p>税率：<span style={{ fontSize: 'xx-large' }}>{ percentFormat(item.taxRate) }</span> </p>
+          <p>维修费：<span style={{ fontSize: 'xx-large' }}>{ currencyFormat(0) }</span> </p>
+          <p>赔偿费：<span style={{ fontSize: 'xx-large' }}>{ currencyFormat(0) }</span> </p>
+          <p>运杂费：<span style={{ fontSize: 'xx-large' }}>{ currencyFormat(item.content.group[0].freight) }</span> </p>
         </CardContent>
         <RentCalcTable
           rent={item.content}
