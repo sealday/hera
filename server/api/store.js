@@ -382,16 +382,10 @@ const rent = async (req, res) => {
       project,
       pricePlanId,
     })
-    console.log(JSON.stringify(result[0], null, 4))
     res.json({
       message: '查询成功！',
       data: {
-        rent: {
-          history: result[0].history,
-          list: result[0].list,
-          group: result[0].group,
-          nameGroup: result[0].nameGroup,
-        }
+        rent: result,
       }
     })
   } else {

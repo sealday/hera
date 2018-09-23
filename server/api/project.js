@@ -87,7 +87,7 @@ const addItem = async (req, res, next) => {
       startDate,
       endDate,
       timezone,
-      projectId,
+      project: projectId,
       pricePlanId,
     })
     const item = {
@@ -98,12 +98,7 @@ const addItem = async (req, res, next) => {
       updatedAt: new Date(), // 更新时间
       planId: pricePlanId,  // 价格计划
       username: req.session.user.username, // 操作员
-      content: {
-        history: result[0].history,
-        list: result[0].list,
-        group: result[0].group,
-        nameGroup: result[0].nameGroup,
-      }
+      content: result,
     }
     project.items.push(item)
     const newProject = await project.save()
