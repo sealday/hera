@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react'
+import React from 'react'
 import { Field } from 'redux-form'
 import { connect } from 'react-redux'
 import Button from '@material-ui/core/Button'
@@ -7,6 +7,7 @@ import TableHead from '@material-ui/core/TableHead'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
 import TableRow from '@material-ui/core/TableRow'
+import _ from 'lodash'
 
 import {
   filterOption,
@@ -92,23 +93,17 @@ const TransferEntryTable = connect(
       }
     }
 
-    let total = []
-    /* eslint guard-for-in: off */
-    for (let i in totalObj) {
-      total.push({
-        name : i,
-        total: totalObj[i],
-        weight: weightObj[i],
-        unit: nameArticleMap[i].unit
-      })
-    }
-
-    return total
+    return _.map(totalObj, (v, k) => ({
+      name : k,
+      total: v,
+      weight: weightObj[k],
+      unit: nameArticleMap[k].unit
+    }))
   }
 
   return (
     [
-      <Table className="table">
+      <Table className="table" key={0}>
         <TableHead>
         <TableRow>
           <TableCell>类型</TableCell>
@@ -130,7 +125,7 @@ const TransferEntryTable = connect(
           <TableCell/>
         </TableRow>
         </TableHead>
-        <tbody>
+        <TableBody>
         {fields.map((entry, index) =>
           fields.get(index).mode === mode && <TableRow key={index}>
             <TableCell>
@@ -187,9 +182,9 @@ const TransferEntryTable = connect(
             </TableCell>
           </TableRow>
         )}
-        </tbody>
+        </TableBody>
       </Table>,
-      <ReportFooter report={getReport()} />,
+      <ReportFooter report={getReport()} key={1} />,
     ]
   )
 })

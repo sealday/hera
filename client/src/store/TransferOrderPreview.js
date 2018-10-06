@@ -1,11 +1,8 @@
-/**
- * Created by seal on 15/01/2017.
- */
-
 import React from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import Button from '@material-ui/core/Button'
+import _ from 'lodash'
 
 import { toFixedWithoutTrailingZero as fixed, total_, getUnit, parseMode } from '../utils'
 import config from './../config'
@@ -67,9 +64,8 @@ class TransferOrder extends React.Component {
     })
 
     let printEntries = []
-    for (let name in entries) {
-      /*eslint guard-for-in: off*/
-      console.dir(entries)
+
+    _.forEach(entries, (entry, name) => {
       printEntries = printEntries.concat(entries[name].map(entry => [
         entry.name,
         entry.size,
@@ -84,13 +80,9 @@ class TransferOrder extends React.Component {
           '',
         ]
       )
-    }
+    })
 
-    // TODO 这里不应该会出现 fee，如果出现就是错误的了
     if (record.type === '调拨') {
-      if (!record.fee) {
-        console.warn('调拨单费用不应该是null')
-      }
       record.fee = record.fee || {}
       printEntries.push(
         [
