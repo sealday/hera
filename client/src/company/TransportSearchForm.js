@@ -101,12 +101,12 @@ class SimpleSearchForm extends React.Component {
             }} style={{paddingTop: '7px', display: 'inline-block'}}>今年</a>
             <a href="#" onClick={e => {
               e.preventDefault()
-              this.props.change('startDate', moment().startOf('day').add('month', -1))
+              this.props.change('startDate', moment().startOf('day').add(-1, 'month'))
               this.props.change('endDate', moment().startOf('day'))
             }} style={{paddingTop: '7px', display: 'inline-block', marginLeft: '1em'}}>最近一个月</a>
             <a href="#" onClick={e => {
               e.preventDefault()
-              this.props.change('startDate', moment().startOf('day').add('month', -2))
+              this.props.change('startDate', moment().startOf('day').add(-2, 'month'))
               this.props.change('endDate', moment().startOf('day'))
             }} style={{paddingTop: '7px', display: 'inline-block', marginLeft: '1em'}}>两个月</a>
           </div>
