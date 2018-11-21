@@ -8,10 +8,6 @@ import { createStore, combineReducers, compose, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk'
 import { reducer as formReducer } from 'redux-form'
 import { Provider } from 'react-redux'
-import { persistStore, persistReducer, createTransform } from 'redux-persist'
-import storage from 'redux-persist/lib/storage'
-import msgpack5 from 'msgpack5'
-import { PersistGate } from 'redux-persist/integration/react'
 import * as reducers from './reducers'
 import { systemLoaded, updateOnlineUser, updateOnlineUsers, selectStore } from './actions'
 import { syncHistoryWithStore, routerReducer, routerMiddleware } from 'react-router-redux'
@@ -104,35 +100,13 @@ moment.locale('zh-CN');
 
 const composeEnhancers = window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] || compose;
 
-// 处理 moment 类型的转换
-const msgpack = msgpack5()
-const { encode, decode } = msgpack
-msgpack.register(0x42, moment, (m) => encode(m.toDate()), (buf) => moment(decode(buf)))
-const noErrorEncode = prev => {
-  try {
-    return encode(prev)
-  } catch (e) {}
-}
-const myTransform = createTransform(
-  inboundState => noErrorEncode(inboundState),
-  outboundState => decode(outboundState),
-);
-
-const persistConfig = {
-  key: 'form-7',
-  transforms: [myTransform],
-  storage,
-}
-
 const store = createStore(combineReducers({
   ...reducers,
-  form: persistReducer(persistConfig, formReducer),
+  form: formReducer,
   routing: routerReducer,
 }), composeEnhancers(
   applyMiddleware(thunkMiddleware, routerMiddleware(hashHistory))
 ))
-
-const persistor = persistStore(store)
 
 ajax('/api/load').then(res => {
   store.dispatch(systemLoaded(res.data))
@@ -162,7 +136,6 @@ ajax('/api/load').then(res => {
 
   ReactDOM.render((
     <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
         <MuiThemeProvider theme={theme}>
         <Router history={syncHistoryWithStore(hashHistory, store)}>
           <Route path="/" component={App}>
@@ -234,7 +207,6 @@ ajax('/api/load').then(res => {
           </Route>
         </Router>
         </MuiThemeProvider>
-      </PersistGate>
     </Provider>
     ), document.getElementById('root')
   );
