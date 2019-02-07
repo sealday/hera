@@ -1,3 +1,5 @@
+const _ = require('lodash')
+
 const Record = require('../models').Record
 
 class Rent {
@@ -343,20 +345,38 @@ class Rent {
                 price: {
                   $sum: '$price'
                 },
+              }
+            }
+          ],
+          freightGroup: [
+            {
+              $match: {
+                history: false,
+              },
+            },
+            {
+              $group: {
+                _id: null,
                 freight: {
                   $sum: '$freight'
                 },
               }
-            }
-          ],
+            },
+          ]
         }
       }
     ])
+    const price = _.get(result, '0.group.0.price', 0)
+    const freight = _.get(result, '0.freightGroup.0.freight', 0)
     return {
       history: result[0].history,
       list: result[0].list,
-      group: result[0].group,
+      group: {
+        price,
+        freight,
+      },
       nameGroup: result[0].nameGroup,
+      freightGroup: result[0].freightGroup,
     }
   }
 }

@@ -72,8 +72,8 @@ class SimpleSearchTable extends React.Component {
           {rent.nameGroup.map(item => (
             <ListItem key={shortId.generate()}>{item.name}： {numberFormat(item.count)} {item.unit}</ListItem>
           ))}
-          <ListItem key="price">金额：{numberFormat(rent.group[0].price)} 元</ListItem>
-          <ListItem key="freight">运费：{numberFormat(rent.group[0].freight)} 元</ListItem>
+          <ListItem key="price">金额：{numberFormat(rent.group.price)} 元</ListItem>
+          <ListItem key="freight">运费：{numberFormat(rent.group.freight)} 元</ListItem>
         </List>,
       ]
     )
