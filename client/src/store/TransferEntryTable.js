@@ -1,12 +1,14 @@
 import React from 'react'
 import { Field } from 'redux-form'
 import { connect } from 'react-redux'
-import Button from '@material-ui/core/Button'
-import Table from '@material-ui/core/Table'
-import TableHead from '@material-ui/core/TableHead'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import TableRow from '@material-ui/core/TableRow'
+import {
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+} from '@material-ui/core'
 import _ from 'lodash'
 
 import {
@@ -20,7 +22,7 @@ import {
 import { Input, FilterSelect, Select, ReportFooter } from '../components'
 
 class EntryRow extends React.Component {
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps, nextState, nextContext) {
     const props = [
       'type',
       'name',
@@ -59,58 +61,58 @@ class EntryRow extends React.Component {
       onDelete,
     } = this.props
     return (
-<TableRow>
-            <TableCell>
-              <Field
-                name={name}
-                component={Select}
-                style={{minWidth: '6em'}}
-              >
-                {typeOptions}
-              </Field>
-            </TableCell>
-            <TableCell>
-              <Field
-                name={name}
-                component={FilterSelect}
-                options={nameOptions}
-                validate={validator.required}
-                filterOption={filterOption}
-                placeholder="名称"
-                style={{minWidth: '7em'}}
-              />
-            </TableCell>
-            <TableCell>
-              <Field
-                name={size}
-                component={FilterSelect}
-                options={sizeOptions}
-                validate={validator.required}
-                placeholder="规格"
-                style={{minWidth: '11em'}}
-              />
-            </TableCell>
-            <TableCell><Field name={count} component={Input} validate={validator.required}/></TableCell>
-            {mode === 'S' && <TableCell><Field name={price} component={Input} validate={validator.required}/></TableCell>}
-            <TableCell>{weight}</TableCell>
-            <TableCell>{total}</TableCell>
-            <TableCell><Field name={comments} component={Input}/></TableCell>
-            <TableCell>
-              <Button
-                variant="raised"
-                color="primary"
-                type="button"
-                onClick={onAdd}
-              >增加</Button>
-            </TableCell>
-            <TableCell>
-              <Button
-                color="secondary"
-                type="button"
-                onClick={onDelete}
-              >删除</Button>
-            </TableCell>
-          </TableRow>
+      <TableRow>
+        <TableCell>
+          <Field
+            name={type}
+            component={Select}
+            style={{minWidth: '6em'}}
+          >
+            {typeOptions}
+          </Field>
+        </TableCell>
+        <TableCell>
+          <Field
+            name={name}
+            component={FilterSelect}
+            options={nameOptions}
+            validate={validator.required}
+            filterOption={filterOption}
+            placeholder="名称"
+            style={{minWidth: '7em'}}
+          />
+        </TableCell>
+        <TableCell>
+          <Field
+            name={size}
+            component={FilterSelect}
+            options={sizeOptions}
+            validate={validator.required}
+            placeholder="规格"
+            style={{minWidth: '11em'}}
+          />
+        </TableCell>
+        <TableCell><Field name={count} component={Input} validate={validator.required}/></TableCell>
+        {mode === 'S' && <TableCell><Field name={price} component={Input} validate={validator.required}/></TableCell>}
+        <TableCell>{weight}</TableCell>
+        <TableCell>{total}</TableCell>
+        <TableCell><Field name={comments} component={Input}/></TableCell>
+        <TableCell>
+          <Button
+            variant="raised"
+            color="primary"
+            type="button"
+            onClick={onAdd}
+          >增加</Button>
+        </TableCell>
+        <TableCell>
+          <Button
+            color="secondary"
+            type="button"
+            onClick={onDelete}
+          >删除</Button>
+        </TableCell>
+      </TableRow>
 
     )
   }
@@ -202,48 +204,51 @@ const TransferEntryTable = connect(
     [
       <Table className="table" key={0}>
         <TableHead>
-        <TableRow>
-          <TableCell>类型</TableCell>
-          <TableCell>名称</TableCell>
-          <TableCell>规格</TableCell>
-          <TableCell>数量</TableCell>
-          {mode === 'S' && <TableCell>单价</TableCell>}
-          <TableCell>重量</TableCell>
-          <TableCell>小计</TableCell>
-          <TableCell>备注</TableCell>
-          <TableCell>
-            <Button
-              variant="raised"
-              color="primary"
-              type="button"
-              onClick={add}
-            >增加</Button>
-          </TableCell>
-          <TableCell/>
-        </TableRow>
+          <TableRow>
+            <TableCell>类型</TableCell>
+            <TableCell>名称</TableCell>
+            <TableCell>规格</TableCell>
+            <TableCell>数量</TableCell>
+            {mode === 'S' && <TableCell>单价</TableCell>}
+            <TableCell>重量</TableCell>
+            <TableCell>小计</TableCell>
+            <TableCell>备注</TableCell>
+            <TableCell>
+              <Button
+                variant="raised"
+                color="primary"
+                type="button"
+                onClick={add}
+              >增加</Button>
+            </TableCell>
+            <TableCell/>
+          </TableRow>
         </TableHead>
         <TableBody>
-        {fields.map((entry, index) =>
-          fields.get(index).mode === mode && <EntryRow key={index}
-            type={`${entry}.type`}
-            typeOptions={Object.keys(typeNameMap).map((type, index) => (
-                  <option key={index}>{type}</option>
-                ))}
-            selectedType={fields.get(index).type}
-            selectedName={fields.get(index).name}
-            name={`${entry}.name`}
-            nameOptions={getNameOptions(fields.get(index).type)}
-            size={`${entry}.size`}
-            sizeOptions={getSizeOptions(fields.get(index).name)}
-            count={`${entry}.count`}
-            mode={mode}
-            price={`${entry}.price`}
-            weight={fixed(getWeight(index))}
-            total={fixed(getTotal(index))}
-            comments={`${entry}.comments`}
-            onAdd={add}
-            onDelete={() => fields.remove(index)}
-          />)}
+          {fields.map((entry, index) =>
+            fields.get(index).mode === mode &&
+            <EntryRow
+              key={index}
+              type={`${entry}.type`}
+              typeOptions={Object.keys(typeNameMap).map((type, index) => (
+                <option key={index}>{type}</option>
+              ))}
+              selectedType={fields.get(index).type}
+              selectedName={fields.get(index).name}
+              name={`${entry}.name`}
+              nameOptions={getNameOptions(fields.get(index).type)}
+              size={`${entry}.size`}
+              sizeOptions={getSizeOptions(fields.get(index).name)}
+              count={`${entry}.count`}
+              mode={mode}
+              price={`${entry}.price`}
+              weight={fixed(getWeight(index))}
+              total={fixed(getTotal(index))}
+              comments={`${entry}.comments`}
+              onAdd={add}
+              onDelete={() => fields.remove(index)}
+            />
+          )}
         </TableBody>
       </Table>,
       <ReportFooter report={getReport()} key={1} />,

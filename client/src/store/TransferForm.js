@@ -2,17 +2,21 @@ import React, { Component } from 'react'
 import { reduxForm, Field, FieldArray } from 'redux-form'
 import { connect } from 'react-redux'
 import moment from 'moment'
-import ExpansionPanel from '@material-ui/core/ExpansionPanel'
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
-import Typography from '@material-ui/core/Typography'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import { withStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
-import Button from '@material-ui/core/Button'
-import Card from '@material-ui/core/Card'
-import CardHeader from '@material-ui/core/CardHeader'
-import CardContent from '@material-ui/core/CardContent'
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  ExpansionPanel,
+  ExpansionPanelDetails,
+  ExpansionPanelSummary,
+  Typography,
+  withStyles,
+} from '@material-ui/core'
+import {
+  ExpandMore as ExpandMoreIcon,
+} from '@material-ui/icons'
 
 import EntryTable from './TransferEntryTable'
 import {
@@ -21,7 +25,7 @@ import {
 } from '../utils'
 import { Input, DatePicker, FilterSelect, TextArea } from '../components'
 
-const styles = (theme) => ({
+const styles = () => ({
   header: {
     padding: 16,
   },
@@ -41,7 +45,7 @@ class TransferForm extends Component {
   }
 
   render() {
-    const { direction, classes, title, action } = this.props
+    const { direction, classes, title, action, projects } = this.props
     return (
       <form className="form-horizontal" onSubmit={this.props.handleSubmit}>
         <Card>
@@ -54,7 +58,7 @@ class TransferForm extends Component {
                   name="project"
                   component={FilterSelect}
                   validate={validator.required}
-                  options={this.props.projects.map(project => ({
+                  options={projects.map(project => ({
                     value: project._id,
                     label: project.company + project.name,
                     pinyin: project.pinyin
@@ -127,7 +131,7 @@ class TransferForm extends Component {
 TransferForm = reduxForm({
   form: 'transfer',
   initialValues: {
-    outDate: moment()
+    outDate: moment(),
   }
 })(TransferForm)
 
