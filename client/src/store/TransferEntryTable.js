@@ -120,10 +120,11 @@ class EntryRow extends React.Component {
 
 const TransferEntryTable = connect(
   state => ({
-    ...transformArticle(state.system.articles.toArray()),
+    articles: state.system.articles,
     products: state.system.products,
   })
-)(({ fields, typeNameMap, nameArticleMap, products, mode }) => {
+)(({ fields, articles, products, mode }) => {
+  const { typeNameMap, nameArticleMap } = transformArticle(articles.toArray())
   const add = () => {
     if (fields.length > 0) {
       let name = fields.get(fields.length - 1).name

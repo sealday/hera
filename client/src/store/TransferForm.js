@@ -45,7 +45,8 @@ class TransferForm extends Component {
   }
 
   render() {
-    const { direction, classes, title, action, projects } = this.props
+    const { direction, classes, title, action } = this.props
+    const projects = this.props.projects.toArray()
     return (
       <form className="form-horizontal" onSubmit={this.props.handleSubmit}>
         <Card>
@@ -136,7 +137,7 @@ TransferForm = reduxForm({
 })(TransferForm)
 
 const mapStateToProps = state => ({
-  projects: state.system.projects.toArray(),
+  projects: state.system.projects,
   stocks: state.store.stocks,
 })
 
