@@ -33,6 +33,12 @@ class TransportForm extends React.Component {
           </div>
         </div>
         <div className="form-group">
+          <label className="col-sm-2 control-label">附加价格</label>
+          <div className="col-sm-4">
+            <Field name="extraPrice" component={Input}/>
+          </div>
+        </div>
+        <div className="form-group">
           <label className="col-sm-2 control-label">付款方</label>
           <div className="col-sm-4">
             <Field name="payer" component={Select}>

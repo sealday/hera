@@ -5,6 +5,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
+import _ from 'lodash'
 import { toFixedWithoutTrailingZero as fixed_  } from './../utils'
 import { Link } from 'react-router'
 import { updateTransportPaidStatus, updateTransportCheckedStatus } from '../actions'
@@ -38,7 +39,7 @@ class SimpleSearchTable extends React.Component {
         // TODO 不是运费单，需要提醒用户
         return
       }
-      const fee = entry.transport.fee = entry.transport.price * entry.transport.weight || 0
+      const fee = entry.transport.fee = (entry.transport.price * entry.transport.weight || 0) + _.toNumber(entry.transport.extraPrice ? entry.transport.extraPrice : 0)
       entry.transportPaid = entry.transportPaid || false
       entry.transportChecked = entry.transportChecked || false
       const payee = entry.transport.payee || '未填写'

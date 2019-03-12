@@ -20,6 +20,7 @@ class TransportOrderEdit extends Component {
       'arrival-date'     : moment().startOf('day').add(1, 'day'), // 到达日期
       weight             : '', // 重量
       price              : '', // 价格
+      extraPrice         : '', // 附加价格
       payer              : '', // 付款方
       payDate            : null, // 付款日期
       'pay-info'         : '', // 付款信息

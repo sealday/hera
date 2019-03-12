@@ -10,6 +10,7 @@ import Card from '@material-ui/core/Card'
 import CardHeader from '@material-ui/core/CardHeader'
 import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
+import _ from 'lodash'
 
 import { requestRecord } from '../actions'
 import { toFixedWithoutTrailingZero as fixed, transformArticle, total_, isUpdatable, getUnit } from '../utils'
@@ -124,10 +125,10 @@ class TransportOrder extends Component {
             <th>运输费</th>
             <td>{transport.weight}</td>
             <th>吨/趟</th>
-            <th>单价</th>
-            <td>{transport.price} 元</td>
+            <th>单价 {transport.price} 元</th>
+            <th>附加价格 {_.toNumber(transport.extraPrice ? transport.extraPrice : 0)} 元</th>
             <th>金额</th>
-            <td>{fixed(transport.price * transport.weight)} 元</td>
+            <td>{fixed(transport.price * transport.weight + _.toNumber(transport.extraPrice ? transport.extraPrice : 0))} 元</td>
           </tr>
           <tr>
             <th rowSpan="2">付款方式及<br/>收款人信息</th>

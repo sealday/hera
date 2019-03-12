@@ -71,6 +71,7 @@ const recordSchema = {
     'arrival-date': Date, // 到达日期
     weight: String, // 重量
     price: String, // 价格
+    extraPrice: String, // 附加价格
     payer: String, // 付款方
     payDate: Date, // 付款日期
     'pay-info': String, // 付款信息
