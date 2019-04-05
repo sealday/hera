@@ -62,34 +62,14 @@ class TransportOrderEdit extends Component {
     let receivingContact
     let receivingAddress
 
-    switch (record.type) {
-      case '销售':
-        deliveryParty = outStock.company + outStock.name
-        deliveryContact = outStock.contacts[0].name
-        deliveryPhone = outStock.contacts[0].phone
-        deliveryAddress = outStock.address
-        receivingParty = record.vendor
-        break
-      case '采购':
-        deliveryParty = record.vendor
-        receivingParty = inStock.company + inStock.name
-        receivingContact = inStock.contacts[0].name
-        receivingPhone = inStock.contacts[0].phone
-        receivingAddress = inStock.address
-        break
-      case'调拨':
-        receivingParty = inStock.company + inStock.name
-        receivingContact = inStock.contacts[0].name
-        receivingPhone = inStock.contacts[0].phone
-        receivingAddress = inStock.address
-        deliveryParty = outStock.company + outStock.name
-        deliveryContact = outStock.contacts[0].name
-        deliveryPhone = outStock.contacts[0].phone
-        deliveryAddress = outStock.address
-        break
-      default:
-        throw new Error('不支持的订单类型')
-    }
+    receivingParty = inStock.company + inStock.name
+    receivingContact = inStock.contacts[0].name
+    receivingPhone = inStock.contacts[0].phone
+    receivingAddress = inStock.address
+    deliveryParty = outStock.company + outStock.name
+    deliveryContact = outStock.contacts[0].name
+    deliveryPhone = outStock.contacts[0].phone
+    deliveryAddress = outStock.address
 
     if (record.hasTransport) {
       this.setState({

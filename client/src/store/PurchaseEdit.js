@@ -14,11 +14,13 @@ class PurchaseEdit extends React.Component {
       this.props.dispatch(updateTransfer({
         ...record,
         inStock: record.project,
+        outStock: record.vendor,
       }))
     } else if (direction === 'out') { // 销售单
       this.props.dispatch(updateTransfer({
         ...record,
         outStock: record.project,
+        inStock: record.vendor,
       }))
     }
   }

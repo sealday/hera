@@ -1,9 +1,6 @@
-/**
- * Created by seal on 19/01/2017.
- */
-import PropTypes from 'prop-types';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
-import React, { Component } from 'react';
 
 class Contact extends Component {
   static propTypes = {

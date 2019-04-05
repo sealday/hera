@@ -1,9 +1,7 @@
-/**
- * Created by seal on 22/01/2017.
- */
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import { reduxForm, Field } from 'redux-form'
 import ContactList from './ContactList'
+import BankList from './BankList'
 import { Input, Select } from '../components'
 
 class ProjectForm extends Component {
@@ -37,6 +35,7 @@ class ProjectForm extends Component {
           </div>
         </div>
         <Field name="contacts" component={ContactList}/>
+        <Field name="banks" component={BankList}/>
         <div className="form-group">
           <label className="control-label col-sm-2">仓库类型</label>
           <div className="col-sm-3">
@@ -44,6 +43,8 @@ class ProjectForm extends Component {
               <option>项目部仓库</option>
               <option>基地仓库</option>
               <option>第三方仓库</option>
+              <option>供应商</option>
+              <option>承运商</option>
             </Field>
           </div>
         </div>

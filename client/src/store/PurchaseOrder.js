@@ -49,7 +49,7 @@ class PurchaseOrder extends React.Component {
         outLabel = '出售单位'
         inLabel = '采购项目'
         companyLabel = '出售单位'
-        company = record.vendor
+        company = projects.get(record.outStock).company + projects.get(record.outStock).name
         nameLabel = '采购项目'
         signer = '出售方'
         name = projects.get(record.inStock).company + projects.get(record.inStock).name
@@ -66,7 +66,7 @@ class PurchaseOrder extends React.Component {
         outLabel = '出售项目'
         inLabel = '采购单位'
         companyLabel = '采购单位'
-        company = record.vendor
+        company = projects.get(record.inStock).company + projects.get(record.inStock).name
         nameLabel = '出售项目'
         signer = '采购方'
         name = projects.get(record.outStock).company + projects.get(record.outStock).name

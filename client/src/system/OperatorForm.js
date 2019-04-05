@@ -1,6 +1,3 @@
-/**
- * Created by seal on 25/01/2017.
- */
 import React, { Component } from 'react'
 import {
   reduxForm,

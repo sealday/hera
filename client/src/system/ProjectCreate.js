@@ -1,8 +1,4 @@
-/**
- * Created by seal on 13/01/2017.
- */
-
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import ProjectForm from './ProjectForm'
 import { postProject } from '../actions'
@@ -19,6 +15,12 @@ class ProjectCreate extends Component {
         name: '',
         phone: '',
       }],
+      banks: [{
+        key: Date.now(),
+        name: '',
+        account: '',
+        bank: '',
+      }],
       type: '项目部仓库'}
     return (
       <div>
@@ -32,4 +34,4 @@ class ProjectCreate extends Component {
   }
 }
 
-export default connect()(ProjectCreate);
+export default connect()(ProjectCreate)

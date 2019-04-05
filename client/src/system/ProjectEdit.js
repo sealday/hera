@@ -1,7 +1,3 @@
-/**
- * Created by seal on 13/01/2017.
- */
-
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import shortid from 'shortid'
@@ -29,7 +25,7 @@ class ProjectEdit extends Component {
           initialValues={project}
         />
       </div>
-    );
+    )
   }
 }
 
@@ -37,4 +33,4 @@ const mapStateToProps = (state, props) => ({
   project: state.system.projects.get(props.params.id)
 })
 
-export default connect(mapStateToProps)(ProjectEdit);
+export default connect(mapStateToProps)(ProjectEdit)

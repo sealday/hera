@@ -15,7 +15,15 @@ import TableCell from '@material-ui/core/TableCell'
 import TableRow from '@material-ui/core/TableRow'
 
 import { Input, DatePicker, FilterSelect, Select, TextArea, ReportFooter } from '../components'
-import { transformArticle,total_, toFixedWithoutTrailingZero as fixed, validator, filterOption } from '../utils'
+import {
+  transformArticle,
+  total_,
+  toFixedWithoutTrailingZero as fixed,
+  validator,
+  filterOption,
+  getProjects,
+  getVendors
+} from '../utils'
 
 const styles = theme => ({
   root: {
@@ -231,6 +239,7 @@ const EntryTable = connect(
 class TransferForm extends Component {
   render() {
     const { classes, title, action } = this.props
+    const projects = this.props.projects.toArray()
     return (
       <Card className={classes.root}>
         <CardHeader title={title} action={action}/>
@@ -243,7 +252,7 @@ class TransferForm extends Component {
                   name="project"
                   component={FilterSelect}
                   validate={validator.required}
-                  options={this.props.projects.map(project => ({
+                  options={getProjects(projects).map(project => ({
                     value: project._id,
                     label: project.company + project.name,
                     pinyin: project.pinyin
@@ -253,7 +262,17 @@ class TransferForm extends Component {
               </div>
               <label className="control-label col-md-1">对方单位</label>
               <div className="col-md-3">
-                <Field name="vendor" component={Input} validate={validator.required}/>
+                <Field
+                  name="vendor"
+                  component={FilterSelect}
+                  validate={validator.required}
+                  options={getVendors(projects).map(project => ({
+                    value: project._id,
+                    label: project.company + project.name,
+                    pinyin: project.pinyin
+                  }))}
+                  filterOption={filterOption}
+                  placeholder="请选择供应商" />
               </div>
               <label className="control-label col-md-1">日期</label>
               <div className="col-md-3">
@@ -301,7 +320,7 @@ TransferForm.propTypes = {
 }
 
 const mapStateToProps = state => ({
-  projects: state.system.projects.toArray(),
+  projects: state.system.projects,
   stocks: state.store.stocks,
 })
 

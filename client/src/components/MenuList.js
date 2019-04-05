@@ -162,10 +162,6 @@ const allMenu = [
         name: '项目列表',
         path: '/project',
       },
-      {
-        name: '供应商管理',
-        path: '/supplier',
-      },
     ]
   },
 ];

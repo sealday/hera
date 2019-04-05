@@ -1,8 +1,4 @@
-/**
- * Created by seal on 13/01/2017.
- */
-
-import React from 'react';
+import React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import { removeProject } from '../actions'
@@ -73,7 +69,7 @@ class Project extends React.Component {
           </tbody>
         </table>
       </div>
-    );
+    )
   }
 }
 
@@ -93,4 +89,4 @@ const mapDispatchToProps = dispatch => ({
     }
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Project);
+export default connect(mapStateToProps, mapDispatchToProps)(Project)

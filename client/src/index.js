@@ -34,7 +34,6 @@ import {
   Price,
   PriceEdit,
   PriceCreate,
-  Supplier,
 } from './system'
 
 import {
@@ -124,8 +123,6 @@ ajax('/api/load').then(res => {
     socket.emit('client:user', res.data.user)
   })
 
-  global.socket = socket
-
   try {
     const store_ = JSON.parse(localStorage.getItem(`store-${ config.db }`))
     console.log(`store-${ config.db }`)
@@ -155,8 +152,6 @@ ajax('/api/load').then(res => {
             <Route path="project" component={Project}/>
             <Route path="project/create" component={ProjectCreate}/>
             <Route path="project/:id/edit" component={ProjectEdit}/>
-
-            <Route path="supplier" component={Supplier} />
 
             <Route path="search" component={Search}/>
             <Route path="simple_search" component={SimpleSearch}/>

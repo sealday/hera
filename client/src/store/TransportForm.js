@@ -1,7 +1,3 @@
-/**
- * Created by seal on 25/01/2017.
- */
-
 import React from 'react'
 import { reduxForm, Field } from 'redux-form'
 
@@ -82,18 +78,6 @@ class TransportForm extends React.Component {
             />
           </div>
         </div>
-        {record.type === '采购' &&
-        <div className="form-group">
-          <label className="col-sm-2 control-label">发货方单位</label>
-          <div className="col-sm-4">
-            <Field name="delivery-party" component={Input}/>
-          </div>
-          <label className="col-sm-2 control-label">发货人地址</label>
-          <div className="col-sm-4">
-            <Field name="delivery-address" component={Input}/>
-          </div>
-        </div>
-        }
         <div className="form-group">
           <label className="col-sm-2 control-label">发货方联系人</label>
           <div className="col-sm-4">
@@ -104,18 +88,6 @@ class TransportForm extends React.Component {
             <Field name="delivery-phone" component={Input}/>
           </div>
         </div>
-        {record.type === '销售' &&
-        <div className="form-group">
-          <label className="col-sm-2 control-label">收货方单位</label>
-          <div className="col-sm-4">
-            <Field name="receiving-party" component={Input}/>
-          </div>
-          <label className="col-sm-2 control-label">收货方地址</label>
-          <div className="col-sm-4">
-            <Field name="receiving-address" component={Input}/>
-          </div>
-        </div>
-        }
         <div className="form-group">
           <label className="col-sm-2 control-label">收货方联系人</label>
           <div className="col-sm-4">

@@ -230,3 +230,24 @@ export const isInsertable = (store, user) => {
 }
 
 export { default as theme } from './theme'
+
+const PROJECT_TYPE_SET = new Set(['基地仓库', '第三方仓库', '项目部仓库'])
+/**
+ * 筛选仓库列表
+ * @param projects
+ * @returns {*}
+ */
+export const getProjects = projects => {
+  return projects.filter(project => PROJECT_TYPE_SET.has(project.type))
+}
+
+/**
+ * 筛选供应商列表
+ * @param projects
+ * @returns {*}
+ */
+export const getVendors = projects => {
+  return projects.filter(project => project.type === '供应商')
+}
+
+

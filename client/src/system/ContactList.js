@@ -1,7 +1,3 @@
-/**
- * Created by seal on 22/01/2017.
- */
-
 import React, { Component } from 'react'
 import Contact from './Contact'
 
