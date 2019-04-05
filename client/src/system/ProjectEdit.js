@@ -19,6 +19,9 @@ class ProjectEdit extends Component {
     project.contacts.forEach(contact => {
       contact.key = shortid.generate()
     })
+    project.banks.forEach(bank => {
+      bank.key = shortid.generate()
+    })
     return (
       <ProjectForm
         onSubmit={this.handleSubmit}
