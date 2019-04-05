@@ -16,6 +16,7 @@ const app = async () => {
     type: '供应商',
     address: '供应商地址',
   }).save()))
+  await Project.updateMany({}, { $set: { banks: [{name: '', bank: '', account: ''}] }})
   await mongoose.disconnect()
 }
 
