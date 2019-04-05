@@ -119,14 +119,7 @@ class App extends Component {
   render() {
     const { classes, store, num, user, onlineUsers, children, system, dispatch } = this.props
     return (
-      <div className="App" onClick={(e) => {
-        global.socket.emit('client:click', {
-          base: e.target.baseURI,
-          text: e.target.textContent,
-          tag: e.target.tagName,
-          username: system.user.username,
-        })
-      }}>
+      <div className="App">
         <Notification/>
         <div className={classes.root}>
           <AppBar position="absolute" className={classes.appBar + " hidden-print"}>
