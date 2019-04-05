@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import ReactMaskedInput from 'react-text-mask'
 import PropTypes from 'prop-types'
-import {Field} from 'redux-form'
 
 
 class Bank extends Component {

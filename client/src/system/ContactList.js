@@ -17,7 +17,7 @@ class ContactList extends Component {
 
   handleContactAdd = () => {
     this.props.input.onChange([
-      ...this.props.input.value, { key: Date.now(), name: '', phone: '' }
+      ...this.props.input.value, { key: Date.now(), name: '', phone: '', number: '', }
     ])
   }
 
@@ -43,6 +43,7 @@ class ContactList extends Component {
             id={contact.key}
             name={contact.name}
             phone={contact.phone}
+            number={contact.number}
             onChange={this.handleContactChange}
             onAdd={this.handleContactAdd}
             onRemove={this.handleContactRemove} />

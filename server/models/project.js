@@ -9,7 +9,8 @@ const projectSchema = new Schema({
   pinyin: String, // 公司名称加项目简称的拼音
   contacts: [{
     name: String, // 联系人姓名
-    phone: String // 联系人电话
+    phone: String, // 联系人电话
+    number: String, // 身份证号
   }],
   banks: [{
     name: String, // 账户名称

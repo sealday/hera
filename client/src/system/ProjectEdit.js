@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import shortid from 'shortid'
+import {
+  Button,
+} from '@material-ui/core'
+
 import { alterProject } from '../actions'
 import ProjectForm from './ProjectForm'
 
@@ -16,15 +20,12 @@ class ProjectEdit extends Component {
       contact.key = shortid.generate()
     })
     return (
-      <div>
-        <h2>
-          <button className="btn btn-default" onClick={e => this.props.router.goBack()}>返回</button>项目信息修改
-        </h2>
-        <ProjectForm
-          onSubmit={this.handleSubmit}
-          initialValues={project}
-        />
-      </div>
+      <ProjectForm
+        onSubmit={this.handleSubmit}
+        initialValues={project}
+        action={<Button onClick={() => this.props.router.goBack()}>返回</Button>}
+        title={"项目信息修改"}
+      />
     )
   }
 }

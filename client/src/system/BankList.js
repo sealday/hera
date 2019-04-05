@@ -43,7 +43,7 @@ class BankList extends Component {
             key={bank.key}
             id={bank.key}
             name={bank.name}
-            bank={bank.phone}
+            bank={bank.bank}
             account={bank.account}
             onChange={this.handleBankChange}
             onAdd={this.handleBankAdd}
