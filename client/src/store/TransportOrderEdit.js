@@ -1,11 +1,9 @@
-/**
- * Created by seal on 20/01/2017.
- */
-
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
-import Button from '@material-ui/core/Button'
+import {
+  Button,
+} from '@material-ui/core'
 
 import TransportForm from './TransportForm'
 import { ajax } from '../utils'
@@ -122,19 +120,15 @@ class TransportOrderEdit extends Component {
     if (this.state['delivery-party']) {
       const record = this.props.records.get(this.props.params.id)
       return (
-        <div>
-          <div style={{ display: 'flex' }}>
-            <h2 className="page-header" style={{ flex: 1 }}>运输单编辑</h2>
-            <span><Button onClick={this.handleCancel}>返回</Button></span>
-          </div>
-          <TransportForm
-            onSubmit={this.handleSubmit}
-            initialValues={this.state}
-            record={record}
-            optionA={this.state['delivery-party']}
-            optionB={this.state['receiving-party']}
-          />
-        </div>
+        <TransportForm
+          title="运输单编辑"
+          action={<Button onClick={this.handleCancel}>返回</Button>}
+          onSubmit={this.handleSubmit}
+          initialValues={this.state}
+          record={record}
+          optionA={this.state['delivery-party']}
+          optionB={this.state['receiving-party']}
+        />
       )
     } else {
       return null

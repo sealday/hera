@@ -60,7 +60,7 @@ export const DatePicker = ({ input, ...custom }) => (
   <ReactDatePicker selected={input.value} className="form-control" onChange={date => input.onChange(date)} autoComplete="off" {...custom} />
 )
 
-export const FilterSelect = ({ input, options, style, ...custom, meta: { touched, error, warning } }) => {
+export const FilterSelect = ({ input, options, style, meta: { touched, error, warning }, ...custom }) => {
   const {onChange, value, onFocus } = input
   const { placeholder, filterOption, disabled } = custom
 
