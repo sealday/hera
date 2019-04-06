@@ -15,18 +15,22 @@ class ProjectEdit extends Component {
   }
 
   render() {
-    let project = this.props.project
+    const { project, router } = this.props
     project.contacts.forEach(contact => {
-      contact.key = shortid.generate()
+      if (!contact.key) {
+        contact.key = shortid.generate()
+      }
     })
     project.banks.forEach(bank => {
-      bank.key = shortid.generate()
+      if (!bank.key) {
+        bank.key = shortid.generate()
+      }
     })
     return (
       <ProjectForm
         onSubmit={this.handleSubmit}
         initialValues={project}
-        action={<Button onClick={() => this.props.router.goBack()}>返回</Button>}
+        action={<Button onClick={() => router.goBack()}>返回</Button>}
         title={"项目信息修改"}
       />
     )

@@ -15,14 +15,9 @@ class Bank extends Component {
     bank: PropTypes.string,
     name: PropTypes.string,
     account: PropTypes.string,
-  };
-
-  constructor(props) {
-    super(props);
-    this.handleChange = this.handleChange.bind(this);
   }
 
-  handleChange(e) {
+  handleChange = e => {
     this.props.onChange(
       this.props.id,
       e.target.name,
@@ -31,18 +26,19 @@ class Bank extends Component {
   }
 
   render() {
+    const { bank, name, account, onAdd, onRemove, id } = this.props
     return (
-      [
-        <div className="form-group" key={0}>
+      <>
+        <div className="form-group" >
           <label className="control-label col-sm-2">开户行</label>
           <div className="col-sm-3">
-            <input className="form-control" name="bank" type="text" value={this.props.bank} onChange={this.handleChange} />
+            <input className="form-control" name="bank" type="text" value={bank} onChange={this.handleChange} />
           </div>
-        </div>,
-        <div className="form-group" key={1}>
+        </div>
+        <div className="form-group">
           <label className="control-label col-sm-2">账户名</label>
           <div className="col-sm-3">
-            <input className="form-control" name="name" type="text" value={this.props.name} onChange={this.handleChange} />
+            <input className="form-control" name="name" type="text" value={name} onChange={this.handleChange} />
           </div>
           <label className="control-label col-sm-2">卡号</label>
           <div className="col-sm-5">
@@ -59,23 +55,23 @@ class Bank extends Component {
                 className="form-control"
                 name="account"
                 type="text"
-                value={this.props.account}
+                value={account}
                 onChange={this.handleChange}
               />
               <span className="input-group-btn">
-              <a className="btn btn-default" onClick={this.props.onAdd}>
+              <a className="btn btn-default" onClick={onAdd}>
                 <span className="glyphicon glyphicon-plus"/>
               </a>
             </span>
               <span className="input-group-btn">
-              <a className="btn btn-default" onClick={e => this.props.onRemove(this.props.id)}>
+              <a className="btn btn-default" onClick={e => onRemove(id)}>
                 <span className="glyphicon glyphicon-minus"/>
               </a>
             </span>
             </div>
           </div>
         </div>
-      ]
+      </>
     )
   }
 }

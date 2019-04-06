@@ -74,7 +74,7 @@ class ProjectForm extends Component {
 }
 
 ProjectForm = reduxForm({
-  form: 'project'
+  form: 'ProjectEditForm',
 })(ProjectForm)
 
 

@@ -11,9 +11,6 @@ import {
   RadioGroup,
   FormControlLabel,
 } from '@material-ui/core'
-import {
-  unstable_useMediaQuery as useMediaQuery,
-} from '@material-ui/core/useMediaQuery'
 
 import { toFixedWithoutTrailingZero as fixed, total_, isUpdatable, getUnit } from '../utils'
 
@@ -21,6 +18,7 @@ class PurchaseOrder extends React.Component {
 
   state = {
     columnStyle: 'single', // 栏目样式，支持单栏和双栏
+    isPrint: false,
   }
 
   handleTransport = () => {
@@ -28,8 +26,18 @@ class PurchaseOrder extends React.Component {
     router.push(`/transport/${record._id}`)
   }
 
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (this.state.isPrint) {
+      window.print()
+      this.setState({
+        isPrint: false,
+      })
+    }
+  }
+
   render() {
-    const { record, store, projects, articles, router, user, printCompany } = this.props
+    const { record, store, projects, articles: imArticles, router, user, printCompany } = this.props
+    const articles = imArticles.toArray()
 
     let orderName = ''
     let company = ''
@@ -227,55 +235,47 @@ class PurchaseOrder extends React.Component {
       </table>
     </div>
 
-
-    const PrintSwitchContent = () => {
-      const isPrint = useMediaQuery('print')
-
-      return isPrint ? <PrintContent/> : <Card>
-        <CardHeader
-          title={
-            <RadioGroup
-              style={{ flexDirection: 'row' }}
-              value={this.state.columnStyle}
-              onChange={e => this.setState({ columnStyle: e.target.value })}>
-              <FormControlLabel control={<Radio />} value="single" label="单栏" />
-              <FormControlLabel control={<Radio />} value="double" label="双栏" />
-            </RadioGroup>
-          }
-          action={<>
-            <Button className="btn btn-default" onClick={() => router.goBack()}>返回</Button>
-            {isUpdatable(store, user) && <>
-              {record.type === '调拨' &&
-              <Button color="primary" component={Link} to={`/transfer/${direction}/${record._id}/edit`}>编辑</Button>
-              }
-              {record.type === '销售' &&
-              <Button color="primary" component={Link} to={`/purchase/out/${record._id}/edit`}>编辑</Button>
-              }
-              {record.type === '采购' &&
-              <Button color="primary" component={Link} to={`/purchase/in/${record._id}/edit`}>编辑</Button>
-              }
-            </>}
-            <Button onClick={this.handleTransport}>运输单</Button>
-            <Button onClick={() => window.print()}>打印</Button>
-            <Button >审核确认</Button>
+    return this.state.isPrint ? <PrintContent/> : <Card>
+      <CardHeader
+        title={
+          <RadioGroup
+            style={{ flexDirection: 'row' }}
+            value={this.state.columnStyle}
+            onChange={e => this.setState({ columnStyle: e.target.value })}>
+            <FormControlLabel control={<Radio />} value="single" label="单栏" />
+            <FormControlLabel control={<Radio />} value="double" label="双栏" />
+          </RadioGroup>
+        }
+        action={<>
+          <Button className="btn btn-default" onClick={() => router.goBack()}>返回</Button>
+          {isUpdatable(store, user) && <>
+            {record.type === '调拨' &&
+            <Button color="primary" component={Link} to={`/transfer/${direction}/${record._id}/edit`}>编辑</Button>
+            }
+            {record.type === '销售' &&
+            <Button color="primary" component={Link} to={`/purchase/out/${record._id}/edit`}>编辑</Button>
+            }
+            {record.type === '采购' &&
+            <Button color="primary" component={Link} to={`/purchase/in/${record._id}/edit`}>编辑</Button>
+            }
           </>}
-        />
-        <CardContent>
-          <PrintContent/>
-        </CardContent>
-      </Card>
-
-    }
-
-    return (
-      <PrintSwitchContent/>
-    )
+          <Button onClick={this.handleTransport}>运输单</Button>
+          <Button onClick={() => {
+            this.setState({ isPrint: true })
+          }}>打印</Button>
+          <Button >审核确认</Button>
+        </>}
+      />
+      <CardContent>
+        <PrintContent/>
+      </CardContent>
+    </Card>
   }
 }
 
 const mapStateToProps = state => ({
   projects: state.system.projects,
-  articles: state.system.articles.toArray(),
+  articles: state.system.articles,
   products: state.system.products,
   store: state.system.store,
   user: state.system.user,

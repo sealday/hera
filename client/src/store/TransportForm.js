@@ -1,5 +1,7 @@
 import React from 'react'
 import { reduxForm, Field } from 'redux-form'
+import { connect } from 'react-redux'
+import { flatMap } from 'lodash'
 import {
   Button,
   Card,
@@ -11,7 +13,11 @@ import { DatePicker, Input, Select, MaskedInput } from '../components'
 
 class TransportForm extends React.Component {
   render() {
-    const { record, title, action, handleSubmit } = this.props
+    const { record, title, action, handleSubmit, projects: imProjects } = this.props
+    const inProject = imProjects.get(record.inStock)
+    const outProject = imProjects.get(record.outStock)
+    const projects = imProjects.toArray()
+
     return (
       <Card>
         <CardHeader title={title} action={action} />
@@ -129,6 +135,49 @@ class TransportForm extends React.Component {
                 <Field name="carrier-id" component={Input}/>
               </div>
             </div>
+            <div className="form-group">
+              <label className="col-sm-2 control-label">收款人信息</label>
+              <div className="col-sm-10">
+                <Field name="a" component={Select}>
+                  {flatMap(projects, project => project.banks)
+                    .filter(bank => bank.bank).map(payee => <option>
+                      {`${payee.bank} ${payee.name} ${payee.account}`}
+                    </option>)}
+                </Field>
+              </div>
+            </div>
+            <div className="form-group">
+              <label className="col-sm-2 control-label">发货方联系人</label>
+              <div className="col-sm-10">
+                <Field name="b" component={Select}>
+                  {outProject.contacts.map(contact => <option>
+                    {`${contact.name} ${contact.phone}`}
+                  </option>)}
+                </Field>
+              </div>
+            </div>
+            <div className="form-group">
+              <label className="col-sm-2 control-label">收货方联系人</label>
+              <div className="col-sm-10">
+                <Field name="c" component={Select}>
+                  {inProject.contacts.map(contact => <option>
+                    {`${contact.name} ${contact.phone}`}
+                  </option>)}
+                </Field>
+              </div>
+            </div>
+            <div className="form-group">
+              <label className="col-sm-2 control-label">承运方</label>
+              <div className="col-sm-10">
+                <Field name="d" component={Select}>
+                  {flatMap(projects.filter(project => project.type === '承运商'),
+                    project => project.contacts)
+                    .map(contact => <option>
+                      {`${contact.name} ${contact.phone} ${contact.number}`}
+                    </option>)}
+                </Field>
+              </div>
+            </div>
             <Button variant="contained" color="primary" fullWidth type="submit">保存</Button>
           </form>
         </CardContent>
@@ -142,4 +191,8 @@ TransportForm = reduxForm({
   form: 'transport'
 })(TransportForm)
 
-export default TransportForm
+const mapStateToProps = state => ({
+  projects: state.system.projects,
+})
+
+export default connect(mapStateToProps)(TransportForm)
