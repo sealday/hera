@@ -145,8 +145,8 @@ export const parseMode = mode => {
   return !mode || mode === 'L' ? '' : names[mode]
 }
 
-export const filterOption = (option, filter) => {
-  return fuzzysearch(filter, option.pinyin) || fuzzysearch(filter, option.label)
+export const filterOption = (filter, option) => {
+  return fuzzysearch(filter, option.props.pinyin) || fuzzysearch(filter, option.props.label)
 }
 
 let formatNumber_

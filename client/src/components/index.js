@@ -7,6 +7,7 @@ import {
   ListItem,
   ListItemText,
 } from '@material-ui/core'
+import fuzzysearch from 'fuzzysearch'
 
 import {
   Input as AntInput,
@@ -84,6 +85,10 @@ export const DatePicker = ({ input, ...custom }) => (
     {...custom} />
 )
 
+const defaultFilterOption = (filter, option) => {
+  return fuzzysearch(filter, option.props.label)
+}
+
 export const FilterSelect = ({ input, options, style, meta: { touched, error, warning }, ...custom }) => {
   const {onChange, value, onFocus } = input
   const { placeholder, filterOption, disabled } = custom
@@ -100,6 +105,7 @@ export const FilterSelect = ({ input, options, style, meta: { touched, error, wa
       ...style,
     }
   }
+  console.log(style)
 
   // return <ReactSelect
   //   style={style}
@@ -112,8 +118,16 @@ export const FilterSelect = ({ input, options, style, meta: { touched, error, wa
   //   options={options}
   //   filterOption={filterOption}
   // />
-  return <AntSelect style={style} {...input}>
-    {options.map(option => <AntSelect.Option key={option.value} value={option.value}>
+  return <AntSelect
+    showSearch
+    filterOption={filterOption ? filterOption : defaultFilterOption}
+    style={style} {...input}>
+    {options.map(option => <AntSelect.Option
+      pinyin={option.pinyin}
+      label={option.label}
+      key={option.value}
+      value={option.value}
+    >
       {option.label}
     </AntSelect.Option>)}
   </AntSelect>
