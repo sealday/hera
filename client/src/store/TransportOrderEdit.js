@@ -92,6 +92,7 @@ class TransportOrderEdit extends Component {
         'receiving-address': receivingAddress, // 收货地址
         'carrier-car': record.carNumber,
         'payer': deliveryParty,
+        'payDate': moment().startOf('day'),
       })
     }
   }

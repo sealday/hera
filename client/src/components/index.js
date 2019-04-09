@@ -1,6 +1,4 @@
 import React from 'react'
-import ReactDatePicker from 'react-datepicker'
-import ReactSelect from 'react-select'
 import ReactMaskedInput from 'react-text-mask'
 import {
   List,
@@ -47,8 +45,11 @@ export const MaskedInput = ({ input, meta: { touched, error, warning }, style, .
     }
   }
   return (
-    <ReactMaskedInput {...input} className="form-control" {...custom}
-           style={style}
+    <ReactMaskedInput
+      {...input}
+      {...custom}
+      style={style}
+      className="ant-input"
     />
   )}
 
@@ -65,9 +66,21 @@ export const TextArea = ({ input, meta: { touched, error, warning }, style, ...c
     />
   )}
 
-export const Select = ({ input, children }) => {
+export const Select = ({ input, style, meta: { touched, error }, ...custom }) => {
+  if (touched && error) {
+    style = {
+      width: '100%',
+      ...style,
+      ...errorStyle,
+    }
+  } else {
+    style = {
+      width: '100%',
+      ...style,
+    }
+  }
   return (
-    <AntSelect {...input}>{children.map(child =>
+    <AntSelect style={style} {...input} {...custom}>{custom.children.map(child =>
       <AntSelect.Option
         key={child.props.value ? child.props.value : child.props.children}
         value={child.props.value ? child.props.value : child.props.children}>
@@ -77,13 +90,29 @@ export const Select = ({ input, children }) => {
   )
 }
 
-export const DatePicker = ({ input, ...custom }) => (
-  <AntDatePicker
-    {...input}
-    value={moment(input.value)}
-    onChange={date => input.onChange(date)}
-    {...custom} />
-)
+export const DatePicker = ({ input, style, meta: { touched, error }, ...custom }) => {
+  if (touched && error) {
+    style = {
+      width: '100%',
+      ...style,
+      ...errorStyle,
+    }
+  } else {
+    style = {
+      width: '100%',
+      ...style,
+    }
+  }
+
+  return (
+    <AntDatePicker
+      style={style}
+      {...input}
+      value={moment(input.value)}
+      onChange={date => input.onChange(date)}
+      {...custom} />
+  )
+}
 
 const defaultFilterOption = (filter, option) => {
   return fuzzysearch(filter, option.props.label)
@@ -105,7 +134,6 @@ export const FilterSelect = ({ input, options, style, meta: { touched, error, wa
       ...style,
     }
   }
-  console.log(style)
 
   // return <ReactSelect
   //   style={style}

@@ -57,7 +57,6 @@ class EntryRow extends React.Component {
       weight,
       total,
       comments,
-      onAdd,
       onDelete,
     } = this.props
     return (
@@ -99,14 +98,7 @@ class EntryRow extends React.Component {
         <TableCell><Field name={comments} component={Input}/></TableCell>
         <TableCell>
           <Button
-            variant="raised"
-            color="primary"
-            type="button"
-            onClick={onAdd}
-          >增加</Button>
-        </TableCell>
-        <TableCell>
-          <Button
+            size="small"
             color="secondary"
             type="button"
             onClick={onDelete}
@@ -202,8 +194,8 @@ const TransferEntryTable = connect(
   }
 
   return (
-    [
-      <Table className="table" key={0}>
+    <>
+      <Table className="table" >
         <TableHead>
           <TableRow>
             <TableCell>类型</TableCell>
@@ -214,14 +206,6 @@ const TransferEntryTable = connect(
             <TableCell>重量</TableCell>
             <TableCell>小计</TableCell>
             <TableCell>备注</TableCell>
-            <TableCell>
-              <Button
-                variant="raised"
-                color="primary"
-                type="button"
-                onClick={add}
-              >增加</Button>
-            </TableCell>
             <TableCell/>
           </TableRow>
         </TableHead>
@@ -246,14 +230,14 @@ const TransferEntryTable = connect(
               weight={fixed(getWeight(index))}
               total={fixed(getTotal(index))}
               comments={`${entry}.comments`}
-              onAdd={add}
               onDelete={() => fields.remove(index)}
             />
           )}
         </TableBody>
-      </Table>,
-      <ReportFooter report={getReport()} key={1} />,
-    ]
+      </Table>
+      <Button onClick={add} color="primary" variant="text" fullWidth>增加</Button>
+      <ReportFooter report={getReport()} />
+    </>
   )
 })
 
