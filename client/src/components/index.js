@@ -2,9 +2,21 @@ import React from 'react'
 import ReactDatePicker from 'react-datepicker'
 import ReactSelect from 'react-select'
 import ReactMaskedInput from 'react-text-mask'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemText from '@material-ui/core/ListItemText'
+import {
+  List,
+  ListItem,
+  ListItemText,
+} from '@material-ui/core'
+
+import {
+  Input as AntInput,
+  Select as AntSelect,
+  DatePicker as AntDatePicker,
+} from 'antd'
+import * as moment  from 'moment'
+import 'antd/lib/input/style/css'
+import 'antd/lib/select/style/css'
+import 'antd/lib/date-picker/style/css'
 
 import { toFixedWithoutTrailingZero as fixed } from '../utils'
 
@@ -21,7 +33,7 @@ export const Input = ({ input, meta: { touched, error, warning }, style, ...cust
     }
   }
   return (
-  <input {...input} className="form-control" {...custom}
+  <AntInput {...input} {...custom}
     style={style}
   />
 )}
@@ -47,17 +59,29 @@ export const TextArea = ({ input, meta: { touched, error, warning }, style, ...c
     }
   }
   return (
-    <textarea {...input} className="form-control" {...custom}
+    <AntInput.TextArea {...input} {...custom}
            style={style}
     />
   )}
 
-export const Select = ({ input, children }) => (
-  <select {...input} className="form-control" >{children}</select>
-)
+export const Select = ({ input, children }) => {
+  return (
+    <AntSelect {...input}>{children.map(child =>
+      <AntSelect.Option
+        key={child.props.value ? child.props.value : child.props.children}
+        value={child.props.value ? child.props.value : child.props.children}>
+          {child.props.children}
+      </AntSelect.Option>)}
+    </AntSelect>
+  )
+}
 
 export const DatePicker = ({ input, ...custom }) => (
-  <ReactDatePicker selected={input.value} className="form-control" onChange={date => input.onChange(date)} autoComplete="off" {...custom} />
+  <AntDatePicker
+    {...input}
+    value={moment(input.value)}
+    onChange={date => input.onChange(date)}
+    {...custom} />
 )
 
 export const FilterSelect = ({ input, options, style, meta: { touched, error, warning }, ...custom }) => {
@@ -66,22 +90,33 @@ export const FilterSelect = ({ input, options, style, meta: { touched, error, wa
 
   if (touched && error) {
     style = {
+      width: '100%',
       ...style,
       ...errorStyle,
     }
+  } else {
+    style = {
+      width: '100%',
+      ...style,
+    }
   }
 
-  return <ReactSelect
-    style={style}
-    onFocus={onFocus}
-    value={value}
-    disabled={disabled}
-    placeholder={placeholder}
-    onChange={e => onChange(e.value)}
-    clearable={false}
-    options={options}
-    filterOption={filterOption}
-  />
+  // return <ReactSelect
+  //   style={style}
+  //   onFocus={onFocus}
+  //   value={value}
+  //   disabled={disabled}
+  //   placeholder={placeholder}
+  //   onChange={e => onChange(e.value)}
+  //   clearable={false}
+  //   options={options}
+  //   filterOption={filterOption}
+  // />
+  return <AntSelect style={style} {...input}>
+    {options.map(option => <AntSelect.Option key={option.value} value={option.value}>
+      {option.label}
+    </AntSelect.Option>)}
+  </AntSelect>
 }
 
 export const ReportFooter = ({ report, noWeight }) => (

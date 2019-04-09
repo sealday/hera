@@ -21,7 +21,7 @@ import { removeProject } from '../actions'
 const ProjectFilterForm = reduxForm({
   form: 'ProjectFilterForm',
   initialValues: {
-    type: '全部',
+    type: '项目部仓库',
   },
 })(() =>  <Field
   component={TextField}

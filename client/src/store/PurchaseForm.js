@@ -4,15 +4,17 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 import { withStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
-import Button from '@material-ui/core/Button'
-import Card from '@material-ui/core/Card'
-import CardHeader from '@material-ui/core/CardHeader'
-import CardContent from '@material-ui/core/CardContent'
-import Table from '@material-ui/core/Table'
-import TableHead from '@material-ui/core/TableHead'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import TableRow from '@material-ui/core/TableRow'
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+} from '@material-ui/core'
 
 import { Input, DatePicker, FilterSelect, Select, TextArea, ReportFooter } from '../components'
 import {
@@ -35,10 +37,11 @@ const styles = theme => ({
 
 const EntryTable = connect(
   state => ({
-    ...transformArticle(state.system.articles.toArray()),
+    articles: state.system.articles,
     products: state.system.products,
   })
-)(({ fields, typeNameMap, nameArticleMap, products }) => {
+)(({ fields, articles, products }) => {
+  const { typeNameMap, nameArticleMap } = transformArticle(articles.toArray())
   const add = () => {
     if (fields.length > 0) {
       let name = fields.get(fields.length - 1).name
@@ -138,7 +141,7 @@ const EntryTable = connect(
   }
 
   return (
-    [
+    <>
       <Table className="table" id="purchase-table">
         <TableHead>
           <TableRow>
@@ -157,13 +160,6 @@ const EntryTable = connect(
             <TableCell>综合单价</TableCell>
             <TableCell>综合金额</TableCell>
             <TableCell>备注</TableCell>
-            <TableCell>
-              <Button
-                variant="raised"
-                color="primary"
-                onClick={add}
-              >增加</Button>
-            </TableCell>
             <TableCell/>
           </TableRow>
         </TableHead>
@@ -215,13 +211,6 @@ const EntryTable = connect(
               <TableCell><Field name={`${entry}.comments`} component={Input}/></TableCell>
               <TableCell>
                 <Button
-                  variant="raised"
-                  color="primary"
-                  onClick={add}
-                >增加</Button>
-              </TableCell>
-              <TableCell>
-                <Button
                   color="secondary"
                   onClick={() => fields.remove(index)}
                 >删除</Button>
@@ -229,9 +218,10 @@ const EntryTable = connect(
             </TableRow>
           )}
         </TableBody>
-      </Table>,
-      <ReportFooter report={getReport()} noWeight={true}/>,
-    ]
+      </Table>
+      <Button onClick={add} color="primary" variant="text" fullWidth>增加</Button>
+      <ReportFooter report={getReport()} noWeight={true}/>
+    </>
   )
 })
 
@@ -300,7 +290,7 @@ class TransferForm extends Component {
                 <FieldArray name="entries" component={EntryTable}/>
               </div>
             </div>
-            <Button type="submit" color="primary" variant="raised" className={classes.submitButton}>保存</Button>
+            <Button type="submit" color="primary" variant="contained" fullWidth>保存</Button>
           </form>
         </CardContent>
       </Card>
