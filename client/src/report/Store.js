@@ -1,8 +1,18 @@
-/**
- * Created by seal on 16/01/2017.
- */
-import React, { Component } from 'react';
-import DatePicker from 'react-datepicker'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import moment from 'moment'
+import { Map } from 'immutable'
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+} from '@material-ui/core'
+
 import {
   toFixedWithoutTrailingZero,
   makeKeyFromNameSize,
@@ -11,11 +21,8 @@ import {
   oldProductStructure,
   getScale,
 } from '../utils'
-import { connect } from 'react-redux'
-import moment from 'moment'
-import Select from 'react-select'
 import { requestStore } from '../actions'
-import { Map } from 'immutable'
+import StoreForm from './StoreForm'
 
 class Store extends Component {
   constructor(props) {
@@ -33,13 +40,12 @@ class Store extends Component {
     this.setState({ project: project.value })
   }
 
-  query = (e) => {
-    e.preventDefault()
-    if (this.state.project) {
+  query = data => {
+    if (data.project) {
       this.props.dispatch(requestStore({
-        project: this.state.project,
-        startDate: this.state.startDate,
-        endDate: moment(this.state.endDate).add(1, 'day'),
+        project: data.project,
+        startDate: data.startDate,
+        endDate: moment(data.endDate).add(1, 'day'),
       }))
       this.setState({
         showing: new Map() // 重置状态显示
@@ -60,7 +66,7 @@ class Store extends Component {
     })
 
     let records = [] // [{ total, entries }]
-    const articles = this.props.articles
+    const articles = oldProductStructure(this.props.articles.toArray())
     articles.forEach(article => {
       // 算每一项
       let inTotal = 0
@@ -81,7 +87,6 @@ class Store extends Component {
         if (key in inRecordMap) {
           value.in = inRecordMap[key]
           value.delta = value.in;
-           // this.props.products[key].scale
           value.inTotal = toFixedWithoutTrailingZero(inRecordMap[key] * getScale(this.props.products[key]))
           inTotal += Number(value.inTotal)
           exists = true
@@ -166,19 +171,19 @@ class Store extends Component {
 
       records.forEach((record, index) => {
         recordsTable.push(
-          <tr key={index} onClick={e => {
+          <TableRow key={index} onClick={e => {
             this.setState(state => ({
               showing: state.showing.update(record.total.name, showing => !showing)
             }))
           }}>
-            <th>{record.total.type}</th>
-            <th>{record.total.name}</th>
-            <th>{record.total.size}</th>
-            <th>{formatNumber(record.total.in)}</th>
-            <th>{formatNumber(record.total.out)}</th>
-            <th/>
-            <th>{formatNumber(record.total.total)}</th>
-          </tr>
+            <TableCell>{record.total.type}</TableCell>
+            <TableCell>{record.total.name}</TableCell>
+            <TableCell>{record.total.size}</TableCell>
+            <TableCell>{formatNumber(record.total.in)}</TableCell>
+            <TableCell>{formatNumber(record.total.out)}</TableCell>
+            <TableCell/>
+            <TableCell>{formatNumber(record.total.total)}</TableCell>
+          </TableRow>
         )
 
         const rowSpan = record.entries.length
@@ -186,131 +191,55 @@ class Store extends Component {
           let typeLine
           let nameLine
           if (recordIndex === 0) {
-            typeLine = <td rowSpan={rowSpan}/>
-            nameLine = <td rowSpan={rowSpan}/>
+            typeLine = <TableCell rowSpan={rowSpan}/>
+            nameLine = <TableCell rowSpan={rowSpan}/>
           }
 
           recordsTable.push(
             // 设计不显示时样式为 none
-            <tr key={index + ',' + recordIndex} style={{display: this.state.showing.get(record.name) ? 'table-row' : 'none'}}>
+            <TableRow key={index + ',' + recordIndex} style={{display: this.state.showing.get(record.name) ? 'table-row' : 'none'}}>
               {typeLine}
               {nameLine}
-              <td>{record.size}</td>
-              <td>{formatNumber(record.in)}</td>
-              <td>{formatNumber(record.out)}</td>
-              <td>{formatNumber(record.delta)}</td>
-              <td>{formatNumber(record.total)}</td>
-            </tr>
+              <TableCell>{record.size}</TableCell>
+              <TableCell>{formatNumber(record.in)}</TableCell>
+              <TableCell>{formatNumber(record.out)}</TableCell>
+              <TableCell>{formatNumber(record.delta)}</TableCell>
+              <TableCell>{formatNumber(record.total)}</TableCell>
+            </TableRow>
           )
         })
       })
     }
 
     return (
-      <div>
-        <h2 className="page-header">仓库实时查询</h2>
-        <form className="form-horizontal" onSubmit={this.query}>
-          <div className="form-group">
-            <label className="control-label col-md-1">开始日期</label>
-            <div className="col-md-2">
-              <DatePicker
-                selected={this.state.startDate}
-                className="form-control"
-                name="startDate"
-                selectsStart
-                startDate={this.state.startDate}
-                endDate={this.state.endDate}
-                onChange={(date) => this.setState({ startDate: date })}
-              />
-            </div>
-            <label className="control-label col-md-1">结束日期</label>
-            <div className="col-md-2">
-              <DatePicker
-                onChange={(date) => this.setState({ endDate: date })}
-                selected={this.state.endDate}
-                name="endDate"
-                className="form-control"
-                selectsEnd
-                startDate={this.state.startDate}
-                endDate={this.state.endDate}
-              />
-            </div>
-            <div className="col-md-6">
-              <a href="#" onClick={e => {
-                e.preventDefault()
-                this.setState({
-                  startDate: moment().startOf('year').subtract(1, 'year'),
-                  endDate: moment().endOf('year').subtract(1, 'year').startOf('day'),
-                })
-              }} style={{paddingTop: '7px', display: 'inline-block'}}>上一年</a>
-              <a href="#" onClick={e => {
-                e.preventDefault()
-                this.setState({
-                  startDate: moment().startOf('year'),
-                  endDate: moment().endOf('year').startOf('day'),
-                })
-              }} style={{paddingTop: '7px', display: 'inline-block', marginLeft: '1em'}}>今年</a>
-              <a href="#" onClick={e => {
-                e.preventDefault()
-                this.setState({
-                  startDate:  moment().startOf('day').subtract(1, 'month'),
-                  endDate: moment().startOf('day'),
-                })
-              }} style={{paddingTop: '7px', display: 'inline-block', marginLeft: '1em'}}>最近一个月</a>
-              <a href="#" onClick={e => {
-                e.preventDefault()
-                this.setState({
-                  startDate:  moment().startOf('day').subtract(2, 'month'),
-                  endDate: moment().startOf('day'),
-                })
-              }} style={{paddingTop: '7px', display: 'inline-block', marginLeft: '1em'}}>两个月</a>
-            </div>
-          </div>
-          <div className="form-group">
-            <div className="col-md-10">
-              <Select
-                name="project"
-                clearable={false}
-                placeholder="选择要查询的仓库"
-                value={this.state.project}
-                options={[{
-                  value: store._id,
-                  label: store.company + store.name,
-                  pinyin: store.pinyin
-                }]}
-                filterOption={filterOption}
-                onChange={this.handleProjectChange}
-              />
-            </div>
-            <div className="col-md-2">
-              <button className="btn btn-primary btn-block">查询</button>
-            </div>
-          </div>
-        </form>
-        <table className="table table-bordered table-hover">
-          <thead>
-          <tr>
-            <th>类型</th>
-            <th>名称</th>
-            <th>规格</th>
-            <th>入库数量</th>
-            <th>出库数量</th>
-            <th>结存数量</th>
-            <th>小计</th>
-          </tr>
-          </thead>
-          <tbody>
-          {recordsTable}
-          </tbody>
-        </table>
-      </div>
-    );
+      <Card>
+        <CardHeader title="仓库实时查询"/>
+        <CardContent>
+          <StoreForm onSubmit={this.query}/>
+          <Table padding="dense">
+            <TableHead>
+            <TableRow>
+              <TableCell>类型</TableCell>
+              <TableCell>名称</TableCell>
+              <TableCell>规格</TableCell>
+              <TableCell>入库数量</TableCell>
+              <TableCell>出库数量</TableCell>
+              <TableCell>结存数量</TableCell>
+              <TableCell>小计</TableCell>
+            </TableRow>
+            </TableHead>
+            <TableBody>
+            {recordsTable}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+    )
   }
 }
 
 const mapStateToProps = state => ({
-  projects: state.system.projects.toArray(),
-  articles: oldProductStructure(state.system.articles.toArray()),
+  articles: state.system.articles,
   products: state.system.products,
   stocks: state.store.stocks,
   store: state.system.store,

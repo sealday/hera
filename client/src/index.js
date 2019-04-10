@@ -86,10 +86,6 @@ import { ajax } from './utils';
 import io from 'socket.io-client';
 
 // css 除非是模块自己的，否则直接在这里进行全局 import
-import 'bootstrap/dist/css/bootstrap.css';
-import 'react-select/dist/react-select.css';
-import 'react-datepicker/dist/react-datepicker.css';
-import 'animate.css'
 import './index.css';
 
 // 初始化 moment 时间属性
@@ -132,77 +128,77 @@ ajax('/api/load').then(res => {
   }
 
   ReactDOM.render((
-    <Provider store={store}>
+      <Provider store={store}>
         <MuiThemeProvider theme={theme}>
-        <Router history={syncHistoryWithStore(hashHistory, store)}>
-          <Route path="/" component={App}>
-            <IndexRedirect to="/dashboard"/>
-            <Route path="dashboard" component={Home}/>
-            {/*劳务人员登记*/}
-            <Route path="worker/create" component={WorkerCheckin}/>
-            <Route path="worker/:id/edit" component={WorkerCheckinEdit}/>
-            {/*进场工人签到*/}
-            <Route path="signin" component={Signin}/>
-            {/*进场工人签到展示*/}
-            <Route path="signin/check" component={DisplaySignin}/>
-            <Route path="operator" component={Operator}/>
-            <Route path="operator/create" component={OperatorCreate}/>
-            <Route path="operator/:id/edit" component={OperatorEdit}/>
+          <Router history={syncHistoryWithStore(hashHistory, store)}>
+            <Route path="/" component={App}>
+              <IndexRedirect to="/dashboard"/>
+              <Route path="dashboard" component={Home}/>
+              {/*劳务人员登记*/}
+              <Route path="worker/create" component={WorkerCheckin}/>
+              <Route path="worker/:id/edit" component={WorkerCheckinEdit}/>
+              {/*进场工人签到*/}
+              <Route path="signin" component={Signin}/>
+              {/*进场工人签到展示*/}
+              <Route path="signin/check" component={DisplaySignin}/>
+              <Route path="operator" component={Operator}/>
+              <Route path="operator/create" component={OperatorCreate}/>
+              <Route path="operator/:id/edit" component={OperatorEdit}/>
 
-            <Route path="project" component={Project}/>
-            <Route path="project/create" component={ProjectCreate}/>
-            <Route path="project/:id/edit" component={ProjectEdit}/>
+              <Route path="project" component={Project}/>
+              <Route path="project/create" component={ProjectCreate}/>
+              <Route path="project/:id/edit" component={ProjectEdit}/>
 
-            <Route path="search" component={Search}/>
-            <Route path="simple_search" component={SimpleSearch}/>
-            <Route path="simple_search_company" component={company.SimpleSearch}/>
-            <Route path="product" component={Product} />
-            <Route path="price" component={Price} />
-            <Route path="price/create" component={PriceCreate} />
-            <Route path="price/:id" component={PriceEdit} />
-            <Route path="price/create/:id" component={PriceCreate} />
+              <Route path="search" component={Search}/>
+              <Route path="simple_search" component={SimpleSearch}/>
+              <Route path="simple_search_company" component={company.SimpleSearch}/>
+              <Route path="product" component={Product} />
+              <Route path="price" component={Price} />
+              <Route path="price/create" component={PriceCreate} />
+              <Route path="price/:id" component={PriceEdit} />
+              <Route path="price/create/:id" component={PriceCreate} />
 
-            {/* direction 表示调拨的方向 取值为 in 和 out  */}
-            <Route path="transfer/:direction/create" component={TransferCreate}/>
-            <Route path="transfer/:direction/:id/edit" component={TransferEdit}/>
-            <Route path="purchase/:direction/create" component={PurchaseCreate}/>
-            <Route path="purchase/:direction/:id/edit" component={PurchaseEdit}/>
-            <Route path="stocktaking/:direction/create" component={StocktakingCreate}/>
-            <Route path="stocktaking/:direction/:id/edit" component={StocktakingEdit}/>
+              {/* direction 表示调拨的方向 取值为 in 和 out  */}
+              <Route path="transfer/:direction/create" component={TransferCreate}/>
+              <Route path="transfer/:direction/:id/edit" component={TransferEdit}/>
+              <Route path="purchase/:direction/create" component={PurchaseCreate}/>
+              <Route path="purchase/:direction/:id/edit" component={PurchaseEdit}/>
+              <Route path="stocktaking/:direction/create" component={StocktakingCreate}/>
+              <Route path="stocktaking/:direction/:id/edit" component={StocktakingEdit}/>
 
-            <Route path="record/:id" component={Record}/>
-            <Route path="record/:id/preview" component={RecordPreview}/>
-            <Route path="company_record/:id" component={company.Record}/>
-            <Route path="rent_calc" component={company.RentCalc}/>
-            <Route path="rent_calc_preview" component={company.RentCalcPreview}/>
-            <Route path="contract" component={company.Contract}/>
-            <Route path="contract/:id" component={company.ContractContent}/>
-            <Route path="contract/:id/item/:itemId" component={company.ContractItem}/>
-            <Route path="contract/:id/item/:itemId/preview" component={company.RentCalcPreview}/>
+              <Route path="record/:id" component={Record}/>
+              <Route path="record/:id/preview" component={RecordPreview}/>
+              <Route path="company_record/:id" component={company.Record}/>
+              <Route path="rent_calc" component={company.RentCalc}/>
+              <Route path="rent_calc_preview" component={company.RentCalcPreview}/>
+              <Route path="contract" component={company.Contract}/>
+              <Route path="contract/:id" component={company.ContractContent}/>
+              <Route path="contract/:id/item/:itemId" component={company.ContractItem}/>
+              <Route path="contract/:id/item/:itemId/preview" component={company.RentCalcPreview}/>
 
-            <Route path="transport/:id" component={TransportOrder}/>
-            <Route path="transport/:id/edit" component={TransportOrderEdit}/>
+              <Route path="transport/:id" component={TransportOrder}/>
+              <Route path="transport/:id/edit" component={TransportOrderEdit}/>
 
-            <Route path="transfer_in_table" component={TransferInTable} />
-            <Route path="transfer_out_table" component={TransferOutTable} />
-            <Route path="purchase_table" component={PurchaseTable} />
-            <Route path="sell_table" component={SellTable} />
-            <Route path="store" component={Store} />
-            <Route path="transport_table" component={TransportSearch}/>
-            <Route path="transport_table_company" component={company.TransportSearch}/>
-            <Route path="stocktaking_out_table" component={StocktakingOutTable}/>
-            <Route path="stocktaking_in_table" component={StocktakingInTable}/>
+              <Route path="transfer_in_table" component={TransferInTable} />
+              <Route path="transfer_out_table" component={TransferOutTable} />
+              <Route path="purchase_table" component={PurchaseTable} />
+              <Route path="sell_table" component={SellTable} />
+              <Route path="store" component={Store} />
+              <Route path="transport_table" component={TransportSearch}/>
+              <Route path="transport_table_company" component={company.TransportSearch}/>
+              <Route path="stocktaking_out_table" component={StocktakingOutTable}/>
+              <Route path="stocktaking_in_table" component={StocktakingInTable}/>
 
-            {/*记账凭证输入*/}
-            <Route path="accuntvoucher/input" component={AccountVoucherInput}/>
-            {/*应付查询*/}
-            <Route path="finance/payable" component={PayCheck}/>
-            <Route path="profile" component={Profile}/>
-            <Redirect path="*" to="/dashboard"/>
-          </Route>
-        </Router>
+              {/*记账凭证输入*/}
+              <Route path="accuntvoucher/input" component={AccountVoucherInput}/>
+              {/*应付查询*/}
+              <Route path="finance/payable" component={PayCheck}/>
+              <Route path="profile" component={Profile}/>
+              <Redirect path="*" to="/dashboard"/>
+            </Route>
+          </Router>
         </MuiThemeProvider>
-    </Provider>
+      </Provider>
     ), document.getElementById('root')
   );
 });

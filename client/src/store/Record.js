@@ -1,12 +1,9 @@
-/**
- * Created by seal on 04/02/2017.
- */
-
 import React from 'react'
+import { connect } from 'react-redux'
+
 import TransferOrder from './TransferOrder'
 import PurchaseOrder from './PurchaseOrder'
 import StocktakingOrder from './StocktakingOrder'
-import { connect } from 'react-redux'
 import { requestRecord } from '../actions'
 
 class Record extends React.Component {

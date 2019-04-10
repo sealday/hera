@@ -1,19 +1,19 @@
-/**
- * Created by seal on 10/01/2017.
- */
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { queryLatestOperations, queryMoreOperations } from './actions'
 import moment from 'moment'
-import Table from '@material-ui/core/Table'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
-import Card from '@material-ui/core/Card'
-import CardHeader from '@material-ui/core/CardHeader'
-import CardContent from '@material-ui/core/CardContent'
-import Button from '@material-ui/core/Button'
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+} from '@material-ui/core'
+
+import { queryLatestOperations, queryMoreOperations } from './actions'
 
 const styles = {
   diffAdd: {
@@ -109,17 +109,17 @@ class Home extends Component {
               </TableRow>
             ))}
           </TableBody>
-          <CardContent>
-            <Button
-              onClick={() => {
-                const ops = this.props.operations
-                if (ops.length > 0) {
-                  this.props.dispatch(queryMoreOperations(ops[ops.length - 1]._id))
-                }
-              }}
-            >加载更多</Button>
-          </CardContent>
         </Table>
+        <CardContent>
+          <Button
+            onClick={() => {
+              const ops = this.props.operations
+              if (ops.length > 0) {
+                this.props.dispatch(queryMoreOperations(ops[ops.length - 1]._id))
+              }
+            }}
+          >加载更多</Button>
+        </CardContent>
       </Card>
     );
   }

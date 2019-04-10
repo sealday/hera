@@ -1,8 +1,4 @@
-/**
- * Created by seal on 20/01/2017.
- */
-
-import $ from 'jquery';
+import $ from 'jquery'
 import fuzzysearch from 'fuzzysearch'
 import moment from 'moment'
 

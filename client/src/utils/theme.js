@@ -5,9 +5,6 @@ export default createMuiTheme({
   palette: {
     primary: blue,
   }, 
-  typography: {
-    htmlFontSize: 10,
-  },
   overrides: {
     MuiCollapse: {
       entered: {

@@ -1,10 +1,5 @@
 import React from 'react'
 import ReactMaskedInput from 'react-text-mask'
-import {
-  List,
-  ListItem,
-  ListItemText,
-} from '@material-ui/core'
 import fuzzysearch from 'fuzzysearch'
 
 import {
@@ -17,7 +12,6 @@ import 'antd/lib/input/style/css'
 import 'antd/lib/select/style/css'
 import 'antd/lib/date-picker/style/css'
 
-import { toFixedWithoutTrailingZero as fixed } from '../utils'
 
 const errorStyle = {
   borderColor: '#a94442',
@@ -114,6 +108,30 @@ export const DatePicker = ({ input, style, meta: { touched, error }, ...custom }
   )
 }
 
+export const RangePicker = ({ input, style, meta: { touched, error }, ...custom }) => {
+  if (touched && error) {
+    style = {
+      width: '100%',
+      ...style,
+      ...errorStyle,
+    }
+  } else {
+    style = {
+      width: '100%',
+      ...style,
+    }
+  }
+
+  return (
+    <AntDatePicker.RangePicker
+      style={style}
+      {...input}
+      value={moment(input.value)}
+      onChange={date => input.onChange(date)}
+      {...custom} />
+  )
+}
+
 const defaultFilterOption = (filter, option) => {
   return fuzzysearch(filter, option.props.label)
 }
@@ -161,24 +179,9 @@ export const FilterSelect = ({ input, options, style, meta: { touched, error, wa
   </AntSelect>
 }
 
-export const ReportFooter = ({ report, noWeight }) => (
-  <List>
-    {report.map((report, index) => (
-      <ListItem divider={true} dense={true} key={index}>
-        {noWeight ?
-          <ListItemText primary={`${report.name} ${report.total} ${report.unit}`}/>
-          :
-          <ListItemText primary={`
-        ${report.name} ${report.total} ${report.unit}
-        ${report.weight === 0 ? ' *' : ' ' + fixed(report.weight / 1000, 3)} 吨
-        `}/>
-        }
-      </ListItem>
-    ))}
-  </List>
-)
 
 export { default as Notification } from './Notification'
 export { default as CurrentStore } from './CurrentStore'
 export { default as Profile } from './Profile'
 export { default as MenuList } from './MenuList'
+export { default as ReportFooter } from './ReportFooter'
