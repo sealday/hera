@@ -242,6 +242,13 @@ body {
   flex-basis: 25%;
 }
 
+.col-md-4 {
+  padding: 8px;
+  flex-grow: 0;
+  max-width: 33.3%;
+  flex-basis: 33.3%;
+}
+
 .col-md-6 {
   padding: 8px;
   flex-grow: 0;
