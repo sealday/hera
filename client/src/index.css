@@ -249,6 +249,13 @@ body {
   flex-basis: 33.3%;
 }
 
+.col-md-5 {
+  padding: 8px;
+  flex-grow: 0;
+  max-width: 41.7%;
+  flex-basis: 41.7%;
+}
+
 .col-md-6 {
   padding: 8px;
   flex-grow: 0;
@@ -280,4 +287,10 @@ body {
   line-height: 30px;
   text-align: right;
   font-weight: 600;
+}
+
+@media print {
+  .hidden-print {
+    display: none !important;
+  }
 }

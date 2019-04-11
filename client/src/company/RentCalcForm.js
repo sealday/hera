@@ -15,13 +15,10 @@ import { PRICE_PLAN, queryPricePlan } from '../actions'
 
 const styles = {
   rangeFirst: {
-    paddingTop: '7px',
-    display: 'inline-block',
+    // display: 'inline-block',
   },
   range: {
-    paddingTop: '7px',
-    display: 'inline-block',
-    marginLeft: '1em'
+    // marginLeft: '1em'
   },
 }
 
@@ -107,28 +104,33 @@ class SimpleSearchForm extends React.Component {
               </div>
               <div className="col-md-6">
                 <Button
-                   onClick={this.changeRange(moment().startOf('year'), moment())}
-                   className={classes.rangeFirst}>今年</Button>
+                  size="small"
+                  onClick={this.changeRange(moment().startOf('year'), moment())}
+                  className={classes.rangeFirst}>今年</Button>
                 <Button
-                   onClick={
-                     this.changeRange(
-                       moment(startDate).subtract(1, 'year').startOf('year'),
-                       moment(startDate).subtract(1, 'year').endOf('year'))
-                   }
-                   className={classes.range}>上一年</Button>
+                  size="small"
+                  onClick={
+                    this.changeRange(
+                      moment(startDate).subtract(1, 'year').startOf('year'),
+                      moment(startDate).subtract(1, 'year').endOf('year'))
+                  }
+                  className={classes.range}>上一年</Button>
                 <Button
-                   onClick={
-                     this.changeRange(
-                       moment(startDate).add(1, 'year').startOf('year'),
-                       moment(startDate).add(1, 'year').endOf('year'))
-                   }
-                   className={classes.range}>下一年</Button>
+                  size="small"
+                  onClick={
+                    this.changeRange(
+                      moment(startDate).add(1, 'year').startOf('year'),
+                      moment(startDate).add(1, 'year').endOf('year'))
+                  }
+                  className={classes.range}>下一年</Button>
                 <Button
-                   onClick={this.changeRange(moment().subtract(1, 'month'), moment())}
-                   className={classes.range}>最近一个月</Button>
+                  size="small"
+                  onClick={this.changeRange(moment().subtract(1, 'month'), moment())}
+                  className={classes.range}>最近一个月</Button>
                 <Button
-                   onClick={this.changeRange(moment().subtract(2, 'month'), moment())}
-                   className={classes.range}>两个月</Button>
+                  size="small"
+                  onClick={this.changeRange(moment().subtract(2, 'month'), moment())}
+                  className={classes.range}>两个月</Button>
               </div>
             </div>
             <div className="form-group">

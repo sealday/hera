@@ -143,6 +143,4 @@ const mapStateToProps = state => {
   }
 }
 
-SimpleSearchForm = connect(mapStateToProps)(SimpleSearchForm)
-
-export default SimpleSearchForm
+export default connect(mapStateToProps)(SimpleSearchForm)
