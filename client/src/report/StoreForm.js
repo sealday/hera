@@ -12,10 +12,11 @@ import {
   DateRangeModifier,
 } from '../components'
 import {
-  filterOption
+  filterOption,
+  wrapper,
 } from '../utils'
 
-const StoreForm = ({ store, handleSubmit }) => (
+const StoreForm = ({ store, handleSubmit, change }) => (
   <form className="form-horizontal" onSubmit={handleSubmit}>
     <div className="form-group">
       <label className="control-label col-md-1">开始日期</label>
@@ -34,7 +35,7 @@ const StoreForm = ({ store, handleSubmit }) => (
       </div>
       <div className="col-md-6">
         <DateRangeModifier
-          change={this.props.change}
+          change={change}
           key_start="startDate"
           key_end="endDate"
         />
@@ -68,15 +69,13 @@ const mapStateToProps = state => ({
   store: state.system.store,
 })
 
-export default reduxForm({
-  form: 'StoreForm',
-  initialValues: {
-    startDate: moment().startOf('day'),
-    endDate: moment().startOf('day')
-  }
-})(
-  connect(mapStateToProps)(
-    StoreForm
-  )
-)
-
+export default wrapper([
+  connect(mapStateToProps),
+  reduxForm({
+    form: 'StoreForm',
+    initialValues: { startDate: moment().startOf('day'),
+      endDate: moment().startOf('day')
+    }
+  }),
+  StoreForm,
+])

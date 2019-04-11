@@ -240,6 +240,7 @@ const mapStateToProps = state => ({
   articles: state.system.articles,
   products: state.system.products,
   stocks: state.store.stocks,
+  store: state.system.store,
 })
 
 export default connect(mapStateToProps)(Store);
