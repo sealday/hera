@@ -9,6 +9,7 @@ import {
 import {
   DatePicker,
   FilterSelect,
+  DateRangeModifier,
 } from '../components'
 import {
   filterOption
@@ -32,34 +33,11 @@ const StoreForm = ({ store, handleSubmit }) => (
         />
       </div>
       <div className="col-md-6">
-        <a href="#" onClick={e => {
-          e.preventDefault()
-          this.setState({
-            startDate: moment().startOf('year').subtract(1, 'year'),
-            endDate: moment().endOf('year').subtract(1, 'year').startOf('day'),
-          })
-        }} style={{paddingTop: '7px', display: 'inline-block'}}>上一年</a>
-        <a href="#" onClick={e => {
-          e.preventDefault()
-          this.setState({
-            startDate: moment().startOf('year'),
-            endDate: moment().endOf('year').startOf('day'),
-          })
-        }} style={{paddingTop: '7px', display: 'inline-block', marginLeft: '1em'}}>今年</a>
-        <a href="#" onClick={e => {
-          e.preventDefault()
-          this.setState({
-            startDate:  moment().startOf('day').subtract(1, 'month'),
-            endDate: moment().startOf('day'),
-          })
-        }} style={{paddingTop: '7px', display: 'inline-block', marginLeft: '1em'}}>最近一个月</a>
-        <a href="#" onClick={e => {
-          e.preventDefault()
-          this.setState({
-            startDate:  moment().startOf('day').subtract(2, 'month'),
-            endDate: moment().startOf('day'),
-          })
-        }} style={{paddingTop: '7px', display: 'inline-block', marginLeft: '1em'}}>两个月</a>
+        <DateRangeModifier
+          change={this.props.change}
+          key_start="startDate"
+          key_end="endDate"
+        />
       </div>
     </div>
     <div className="form-group">

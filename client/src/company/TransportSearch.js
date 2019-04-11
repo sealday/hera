@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 import { queryStore } from '../actions'
 import { saveAs } from 'file-saver'
 import moment from 'moment'
-import XLSX from 'xlsx'
 
 const key = '运输单查询公司'
 
@@ -20,7 +19,18 @@ class Search extends React.Component {
     }))
   }
 
+  state = {
+    XLSX: null,
+  }
+
+  async componentDidMount() {
+    const XLSX = await import('xlsx')
+    this.setState({ XLSX })
+  }
+
   render() {
+    if (!this.state.XLSX) return null
+    const XLSX = this.state.XLSX
     const { records } = this.props
     return (
       <div>

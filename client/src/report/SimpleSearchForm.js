@@ -1,12 +1,14 @@
-/**
- * Created by seal on 31/01/2017.
- */
-
 import React from 'react'
 import { reduxForm, Field, formValueSelector } from 'redux-form'
-import { FilterSelect, DatePicker, Input } from '../components'
-import { connect } from 'react-redux'
 import moment from 'moment'
+import { connect } from 'react-redux'
+
+import {
+  FilterSelect,
+  DatePicker,
+  Input,
+  DateRangeModifier,
+} from '../components'
 import { filterOption, transformArticle } from '../utils'
 
 /**
@@ -85,21 +87,11 @@ class SimpleSearchForm extends React.Component {
             />
           </div>
           <div className="col-md-6">
-            <a href="#" onClick={e => {
-              e.preventDefault()
-              this.props.change('startDate', moment().startOf('year'))
-              this.props.change('endDate', moment().startOf('day'))
-            }} style={{paddingTop: '7px', display: 'inline-block'}}>今年</a>
-            <a href="#" onClick={e => {
-              e.preventDefault()
-              this.props.change('startDate', moment().startOf('day').add(-1, 'month'))
-              this.props.change('endDate', moment().startOf('day'))
-            }} style={{paddingTop: '7px', display: 'inline-block', marginLeft: '1em'}}>最近一个月</a>
-            <a href="#" onClick={e => {
-              e.preventDefault()
-              this.props.change('startDate', moment().startOf('day').add(-2, 'month'))
-              this.props.change('endDate', moment().startOf('day'))
-            }} style={{paddingTop: '7px', display: 'inline-block', marginLeft: '1em'}}>两个月</a>
+            <DateRangeModifier
+              change={this.props.change}
+              key_start="startDate"
+              key_end="endDate"
+            />
           </div>
         </div>
         <div className="form-group">

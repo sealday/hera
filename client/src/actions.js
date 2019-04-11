@@ -1,10 +1,7 @@
-/**
- * Created by seal on 21/01/2017.
- */
-
-import { ajax, updateEntry } from './utils'
 import { push, goBack } from 'react-router-redux'
 import { reset } from 'redux-form'
+
+import { ajax, updateEntry } from './utils'
 import config from './config'
 
 export const SYSTEM_LOADED = 'SYSTEM_LOADED'
@@ -844,7 +841,7 @@ export const projectDeleteItem = (condition) => (dispatch, getState) => {
     }).catch(err => {
       const res = err.responseJSON
       dispatch(search.endFailure)
-      dispatch(newErrorNotify('错误', `删除对账单失败：${ err }`, 2000))
+      dispatch(newErrorNotify('错误', `删除对账单失败：${ res.message }`, 2000))
     })
   }
 }

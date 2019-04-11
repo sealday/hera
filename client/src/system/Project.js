@@ -14,7 +14,6 @@ import {
   TableRow,
 } from '@material-ui/core'
 import { reduxForm, Field, formValueSelector } from 'redux-form'
-import { TextField } from 'redux-form-material-ui'
 
 import { removeProject } from '../actions'
 
@@ -24,7 +23,7 @@ const ProjectFilterForm = reduxForm({
     type: '项目部仓库',
   },
 })(() =>  <Field
-  component={TextField}
+  component="input"
   name="type"
   label="项目类型"
   select

@@ -16,7 +16,6 @@ import {
 import {
   toFixedWithoutTrailingZero,
   makeKeyFromNameSize,
-  filterOption,
   formatNumber,
   oldProductStructure,
   getScale,
@@ -163,7 +162,6 @@ class Store extends Component {
   render() {
     let project = this.state.project
     let stocks = this.props.stocks
-    const { store } = this.props
 
     let recordsTable = []
     if (project && stocks.get(project)) {
@@ -242,7 +240,6 @@ const mapStateToProps = state => ({
   articles: state.system.articles,
   products: state.system.products,
   stocks: state.store.stocks,
-  store: state.system.store,
 })
 
 export default connect(mapStateToProps)(Store);

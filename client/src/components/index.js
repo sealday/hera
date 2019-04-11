@@ -137,8 +137,7 @@ const defaultFilterOption = (filter, option) => {
 }
 
 export const FilterSelect = ({ input, options, style, meta: { touched, error, warning }, ...custom }) => {
-  const {onChange, value, onFocus } = input
-  const { placeholder, filterOption, disabled } = custom
+  const { filterOption } = custom
 
   if (touched && error) {
     style = {
@@ -153,21 +152,12 @@ export const FilterSelect = ({ input, options, style, meta: { touched, error, wa
     }
   }
 
-  // return <ReactSelect
-  //   style={style}
-  //   onFocus={onFocus}
-  //   value={value}
-  //   disabled={disabled}
-  //   placeholder={placeholder}
-  //   onChange={e => onChange(e.value)}
-  //   clearable={false}
-  //   options={options}
-  //   filterOption={filterOption}
-  // />
   return <AntSelect
+    {...input}
+    {...custom}
     showSearch
     filterOption={filterOption ? filterOption : defaultFilterOption}
-    style={style} {...input}>
+    style={style}>
     {options.map(option => <AntSelect.Option
       pinyin={option.pinyin}
       label={option.label}
@@ -185,3 +175,4 @@ export { default as CurrentStore } from './CurrentStore'
 export { default as Profile } from './Profile'
 export { default as MenuList } from './MenuList'
 export { default as ReportFooter } from './ReportFooter'
+export { default as DateRangeModifier } from './DateRangeModifier'

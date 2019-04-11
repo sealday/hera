@@ -1,36 +1,27 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Card from '@material-ui/core/Card'
-import CardContent from '@material-ui/core/CardContent'
-import CardHeader from '@material-ui/core/CardHeader'
-import Typography from '@material-ui/core/Typography'
-import Button from '@material-ui/core/Button'
 import short_id from 'shortid'
-import { withStyles } from '@material-ui/core/styles'
-import Table from '@material-ui/core/Table'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
-import Dialog from '@material-ui/core/Dialog'
-import DialogActions from '@material-ui/core/DialogActions'
-import DialogContent from '@material-ui/core/DialogContent'
-import DialogContentText from '@material-ui/core/DialogContentText'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import Fade from '@material-ui/core/Fade'
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Fade,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Typography,
+} from '@material-ui/core'
 
 import { currencyFormat, dateFormat } from '../utils'
 import { projectDeleteItem } from '../actions'
-
-const styles = {
-  title: {
-    fontSize: 42,
-  },
-  content: {
-    marginTop: '2em',
-    padding: '1em',
-  }
-}
 
 class ContractContent extends React.Component {
 
@@ -56,7 +47,7 @@ class ContractContent extends React.Component {
   }
 
   render() {
-    let { projects, params, classes, router, dispatch } = this.props
+    let { projects, params, router, dispatch } = this.props
 
     const project = projects.get(params.id)
     return [
@@ -142,10 +133,8 @@ class ContractContent extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    projects: state.system.projects,
-  }
-}
+const mapStateToProps = state => ({
+  projects: state.system.projects,
+})
 
-export default connect(mapStateToProps)(withStyles(styles)(ContractContent))
+export default connect(mapStateToProps)(ContractContent)

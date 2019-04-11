@@ -1,6 +1,7 @@
 import $ from 'jquery'
 import fuzzysearch from 'fuzzysearch'
 import moment from 'moment'
+import { flow, last, dropRight } from 'lodash'
 
 import * as validator from './validator'
 
@@ -233,17 +234,25 @@ const PROJECT_TYPE_SET = new Set(['基地仓库', '第三方仓库', '项目部�
  * @param projects
  * @returns {*}
  */
-export const getProjects = projects => {
-  return projects.filter(project => PROJECT_TYPE_SET.has(project.type))
-}
+export const getProjects = projects => projects.filter(project => PROJECT_TYPE_SET.has(project.type))
 
 /**
  * 筛选供应商列表
  * @param projects
  * @returns {*}
  */
-export const getVendors = projects => {
-  return projects.filter(project => project.type === '供应商')
-}
+export const getVendors = projects => projects.filter(project => project.type === '供应商')
 
+
+/**
+ * 包装 HOC
+ * @param fns
+ * @returns {*}
+ */
+export const wrapper = (fns) => {
+  if (fns.length < 2) {
+    throw new Error('函数列表个数不得少于 2 个')
+  }
+  return flow(dropRight(fns))(last(fns))
+}
 

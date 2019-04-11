@@ -2,19 +2,21 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withStyles } from '@material-ui/core/styles'
-import Drawer from '@material-ui/core/Drawer'
-import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
-import List from '@material-ui/core/List'
-import Typography from '@material-ui/core/Typography'
-import Button from '@material-ui/core/Button'
-import MenuItem from '@material-ui/core/MenuItem'
-import Popover from '@material-ui/core/Popover'
+import {
+  AppBar,
+  Button,
+  Drawer,
+  List,
+  MenuItem,
+  Popover,
+  Toolbar,
+  Typography,
+} from '@material-ui/core'
 import short_id from 'shortid'
 import { push } from 'react-router-redux'
 
 import { Notification, CurrentStore, MenuList } from './components'
-import { ajax } from './utils'
+import { ajax, wrapper } from './utils'
 import { selectStore, selectPrintCompany } from './actions'
 import config from './config'
 import './App.css'
@@ -117,7 +119,7 @@ class App extends Component {
   }
 
   render() {
-    const { classes, store, num, user, onlineUsers, children, system, dispatch } = this.props
+    const { classes, store, num, user, onlineUsers, children, dispatch } = this.props
     return (
       <div className="App">
         <Notification/>
@@ -213,19 +215,22 @@ class App extends Component {
           </main>
         </div>
       </div>
-    );
+    )
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    nav: state.nav,
-    system: state.system,
-    num: state.system.online,
-    onlineUsers: state.system.onlineUsers,
-    store: state.system.store,
-    user: state.system.user,
-  }
-}
+const mapStateToProps = state => ({
+  nav: state.nav,
+  system: state.system,
+  num: state.system.online,
+  onlineUsers: state.system.onlineUsers,
+  store: state.system.store,
+  user: state.system.user,
+})
 
-export default connect(mapStateToProps)(withStyles(styles)(App));
+export default wrapper([
+  connect(mapStateToProps),
+  withStyles(styles),
+  App,
+])
+

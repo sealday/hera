@@ -1,28 +1,30 @@
-// 使用 bluebird 的 promise 实现
-// TODO 需要测试下实际中浏览器的兼容性
 import './before'
-import 'bluebird';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { createStore, combineReducers, compose, applyMiddleware } from 'redux';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { createStore, combineReducers, compose, applyMiddleware } from 'redux'
 import thunkMiddleware from 'redux-thunk'
 import { reducer as formReducer } from 'redux-form'
 import { Provider } from 'react-redux'
+import { syncHistoryWithStore, routerReducer, routerMiddleware } from 'react-router-redux'
+import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
+import moment from 'moment'
+import 'moment/locale/zh-cn'
+import {
+  Router,
+  Route,
+  hashHistory,
+  IndexRedirect,
+  Redirect,
+} from 'react-router'
+import io from 'socket.io-client'
+
+import config from './config'
 import * as reducers from './reducers'
 import { systemLoaded, updateOnlineUser, updateOnlineUsers, selectStore } from './actions'
-import { syncHistoryWithStore, routerReducer, routerMiddleware } from 'react-router-redux'
 import { Profile } from './components'
-import config from './config'
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
 import { theme } from './utils'
-
-import App from './App';
-import Home from './Home';
-import {
-  AccountVoucherInput,
-  PayCheck
-} from './finance'
-
+import App from './App'
+import Home from './Home'
 import {
   Operator,
   OperatorCreate,
@@ -35,7 +37,6 @@ import {
   PriceEdit,
   PriceCreate,
 } from './system'
-
 import {
   Record,
   RecordPreview,
@@ -43,14 +44,11 @@ import {
   TransportOrderEdit,
   TransferCreate,
   TransferEdit,
-
-  PurchaseCreate, // 采购创建
-  PurchaseEdit, // 采购编辑
-
+  PurchaseCreate,
+  PurchaseEdit,
   StocktakingCreate,
   StocktakingEdit,
 } from './store'
-
 import {
   TransferInTable,
   TransferOutTable,
@@ -60,40 +58,20 @@ import {
   Search,
   SimpleSearch,
   TransportSearch,
-
   StocktakingOutTable,
   StocktakingInTable,
 } from './report'
-
 import * as company from './company'
-
-import {
-  WorkerCheckin,
-  WorkerCheckinEdit,
-    Signin,
-    DisplaySignin,
-} from './project'
-
-import {
-  Router,
-  Route,
-  hashHistory,
-  IndexRedirect,
-  Redirect,
-} from 'react-router';
-
-import { ajax } from './utils';
-import io from 'socket.io-client';
+import { ajax } from './utils'
 
 // css 除非是模块自己的，否则直接在这里进行全局 import
-import './index.css';
+import './index.css'
 
 // 初始化 moment 时间属性
-import moment from 'moment'
-import 'moment/locale/zh-cn'
-moment.locale('zh-CN');
+moment.locale('zh-CN')
 
-const composeEnhancers = window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] || compose;
+// 启用 REDUX DEVTOOLS，可以在谷歌等浏览器上安装相应插件
+const composeEnhancers = window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] || compose
 
 const store = createStore(combineReducers({
   ...reducers,
@@ -105,15 +83,15 @@ const store = createStore(combineReducers({
 
 ajax('/api/load').then(res => {
   store.dispatch(systemLoaded(res.data))
-  const socket = io();
+  const socket = io()
 
   socket.on('server:num', num => {
     store.dispatch(updateOnlineUser(num))
-  });
+  })
 
   socket.on('server:users', (users) => {
     store.dispatch(updateOnlineUsers(users))
-  });
+  })
 
   socket.on('connect', () => {
     socket.emit('client:user', res.data.user)
@@ -124,7 +102,7 @@ ajax('/api/load').then(res => {
     console.log(`store-${ config.db }`)
     store.dispatch(selectStore(store_))
   } catch (e) {
-    console.warn(e);
+    console.warn(e)
   }
 
   ReactDOM.render((
@@ -134,21 +112,12 @@ ajax('/api/load').then(res => {
             <Route path="/" component={App}>
               <IndexRedirect to="/dashboard"/>
               <Route path="dashboard" component={Home}/>
-              {/*劳务人员登记*/}
-              <Route path="worker/create" component={WorkerCheckin}/>
-              <Route path="worker/:id/edit" component={WorkerCheckinEdit}/>
-              {/*进场工人签到*/}
-              <Route path="signin" component={Signin}/>
-              {/*进场工人签到展示*/}
-              <Route path="signin/check" component={DisplaySignin}/>
               <Route path="operator" component={Operator}/>
               <Route path="operator/create" component={OperatorCreate}/>
               <Route path="operator/:id/edit" component={OperatorEdit}/>
-
               <Route path="project" component={Project}/>
               <Route path="project/create" component={ProjectCreate}/>
               <Route path="project/:id/edit" component={ProjectEdit}/>
-
               <Route path="search" component={Search}/>
               <Route path="simple_search" component={SimpleSearch}/>
               <Route path="simple_search_company" component={company.SimpleSearch}/>
@@ -157,7 +126,6 @@ ajax('/api/load').then(res => {
               <Route path="price/create" component={PriceCreate} />
               <Route path="price/:id" component={PriceEdit} />
               <Route path="price/create/:id" component={PriceCreate} />
-
               {/* direction 表示调拨的方向 取值为 in 和 out  */}
               <Route path="transfer/:direction/create" component={TransferCreate}/>
               <Route path="transfer/:direction/:id/edit" component={TransferEdit}/>
@@ -165,7 +133,6 @@ ajax('/api/load').then(res => {
               <Route path="purchase/:direction/:id/edit" component={PurchaseEdit}/>
               <Route path="stocktaking/:direction/create" component={StocktakingCreate}/>
               <Route path="stocktaking/:direction/:id/edit" component={StocktakingEdit}/>
-
               <Route path="record/:id" component={Record}/>
               <Route path="record/:id/preview" component={RecordPreview}/>
               <Route path="company_record/:id" component={company.Record}/>
@@ -175,10 +142,8 @@ ajax('/api/load').then(res => {
               <Route path="contract/:id" component={company.ContractContent}/>
               <Route path="contract/:id/item/:itemId" component={company.ContractItem}/>
               <Route path="contract/:id/item/:itemId/preview" component={company.RentCalcPreview}/>
-
               <Route path="transport/:id" component={TransportOrder}/>
               <Route path="transport/:id/edit" component={TransportOrderEdit}/>
-
               <Route path="transfer_in_table" component={TransferInTable} />
               <Route path="transfer_out_table" component={TransferOutTable} />
               <Route path="purchase_table" component={PurchaseTable} />
@@ -188,11 +153,6 @@ ajax('/api/load').then(res => {
               <Route path="transport_table_company" component={company.TransportSearch}/>
               <Route path="stocktaking_out_table" component={StocktakingOutTable}/>
               <Route path="stocktaking_in_table" component={StocktakingInTable}/>
-
-              {/*记账凭证输入*/}
-              <Route path="accuntvoucher/input" component={AccountVoucherInput}/>
-              {/*应付查询*/}
-              <Route path="finance/payable" component={PayCheck}/>
               <Route path="profile" component={Profile}/>
               <Redirect path="*" to="/dashboard"/>
             </Route>
@@ -200,5 +160,5 @@ ajax('/api/load').then(res => {
         </MuiThemeProvider>
       </Provider>
     ), document.getElementById('root')
-  );
-});
+  )
+})
