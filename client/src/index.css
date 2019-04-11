@@ -159,9 +159,9 @@ body {
   animation: 0.6s fadeOut ease;
 }
 
-/* 采购、销售页面的样式设置 */
-#purchase-table th,
-#purchase-table td {
+/* 作为表单的表格样式 */
+.form-table th,
+.form-table td {
   padding-left: 2px;
   padding-right: 2px;
   text-align: center;

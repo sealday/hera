@@ -15,6 +15,7 @@ import {
 } from '@material-ui/core'
 import { reduxForm, Field, formValueSelector } from 'redux-form'
 
+import { Select } from '../components'
 import { removeProject } from '../actions'
 
 const ProjectFilterForm = reduxForm({
@@ -23,18 +24,16 @@ const ProjectFilterForm = reduxForm({
     type: '项目部仓库',
   },
 })(() =>  <Field
-  component="input"
+  component={Select}
   name="type"
   label="项目类型"
-  select
-  fullWidth
 >
-  <MenuItem value="全部">全部</MenuItem>
-  <MenuItem value="基地仓库">基地仓库</MenuItem>
-  <MenuItem value="第三方仓库">第三方仓库</MenuItem>
-  <MenuItem value="项目部仓库">项目部仓库</MenuItem>
-  <MenuItem value="供应商">供应商</MenuItem>
-  <MenuItem value="承运商">承运商</MenuItem>
+  <option value="全部">全部</option>
+  <option value="基地仓库">基地仓库</option>
+  <option value="第三方仓库">第三方仓库</option>
+  <option value="项目部仓库">项目部仓库</option>
+  <option value="供应商">供应商</option>
+  <option value="承运商">承运商</option>
 </Field>)
 
 class Project extends React.Component {

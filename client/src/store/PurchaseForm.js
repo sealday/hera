@@ -133,7 +133,7 @@ const EntryTable = connect(
 
   return (
     <>
-      <Table className="table" id="purchase-table">
+      <Table className="form-table">
         <TableHead>
           <TableRow>
             <TableCell>类型</TableCell>
@@ -222,10 +222,10 @@ class TransferForm extends Component {
     const { title, action } = this.props
     const projects = this.props.projects.toArray()
     return (
-      <Card>
-        <CardHeader title={title} action={action}/>
-        <CardContent>
-          <form className="form-horizontal" onSubmit={this.props.handleSubmit}>
+      <form onSubmit={this.props.handleSubmit}>
+        <Card>
+          <CardHeader title={title} action={action}/>
+          <CardContent>
             <div className="form-group">
               <label className="control-label col-md-1">项目部</label>
               <div className="col-md-3">
@@ -281,10 +281,10 @@ class TransferForm extends Component {
                 <FieldArray name="entries" component={EntryTable}/>
               </div>
             </div>
-            <Button type="submit" color="primary" variant="contained" fullWidth>保存</Button>
-          </form>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+        <Button style={{ marginTop: '16px' }} type="submit" color="primary" variant="contained" fullWidth>保存</Button>
+      </form>
     )
   }
 }

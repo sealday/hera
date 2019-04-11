@@ -195,7 +195,7 @@ const TransferEntryTable = connect(
 
   return (
     <>
-      <Table className="table" >
+      <Table className="form-table">
         <TableHead>
           <TableRow>
             <TableCell>类型</TableCell>
@@ -235,7 +235,7 @@ const TransferEntryTable = connect(
           )}
         </TableBody>
       </Table>
-      <Button onClick={add} color="primary" variant="text" fullWidth>增加</Button>
+      <Button style={{ marginTop: '8px' }} onClick={add} color="primary" variant="outlined" fullWidth>增加</Button>
       <ReportFooter report={getReport()} />
     </>
   )

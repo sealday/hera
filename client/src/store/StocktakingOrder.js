@@ -1,12 +1,9 @@
-/**
- * Created by seal on 15/01/2017.
- */
-
 import React from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
-import { toFixedWithoutTrailingZero as fixed, total_, isUpdatable, getUnit } from '../utils'
 import { Link } from 'react-router'
+
+import { toFixedWithoutTrailingZero as fixed, total_, isUpdatable, getUnit } from '../utils'
 
 class PurchaseOrder extends React.Component {
 
@@ -220,7 +217,7 @@ class PurchaseOrder extends React.Component {
           </tbody>
         </table>
       </div>
-    );
+    )
   }
 }
 
