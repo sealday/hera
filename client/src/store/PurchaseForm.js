@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 import { reduxForm, Field, FieldArray } from 'redux-form'
 import { connect } from 'react-redux'
 import moment from 'moment'
-import { withStyles } from '@material-ui/core/styles'
-import PropTypes from 'prop-types'
 import {
   Button,
   Card,
@@ -24,16 +22,9 @@ import {
   validator,
   filterOption,
   getProjects,
-  getVendors
+  getVendors,
+  wrapper,
 } from '../utils'
-
-const styles = theme => ({
-  root: {
-  },
-  submitButton: {
-    width: '100%',
-  },
-})
 
 const EntryTable = connect(
   state => ({
@@ -219,7 +210,7 @@ const EntryTable = connect(
           )}
         </TableBody>
       </Table>
-      <Button onClick={add} color="primary" variant="text" fullWidth>增加</Button>
+      <Button style={{ marginTop: '8px' }} onClick={add} color="primary" variant="outlined" fullWidth>增加</Button>
       <ReportFooter report={getReport()} noWeight={true}/>
     </>
   )
@@ -228,10 +219,10 @@ const EntryTable = connect(
 
 class TransferForm extends Component {
   render() {
-    const { classes, title, action } = this.props
+    const { title, action } = this.props
     const projects = this.props.projects.toArray()
     return (
-      <Card className={classes.root}>
+      <Card>
         <CardHeader title={title} action={action}/>
         <CardContent>
           <form className="form-horizontal" onSubmit={this.props.handleSubmit}>
@@ -298,21 +289,18 @@ class TransferForm extends Component {
   }
 }
 
-TransferForm = reduxForm({
-  form: 'purchase',
-  initialValues: {
-    outDate: moment()
-  }
-})(TransferForm)
-
-TransferForm.propTypes = {
-  classes: PropTypes.object.isRequired,
-}
-
 const mapStateToProps = state => ({
   projects: state.system.projects,
   stocks: state.store.stocks,
 })
 
-
-export default connect(mapStateToProps)(withStyles(styles)(TransferForm))
+export default wrapper([
+  connect(mapStateToProps),
+  reduxForm({
+    form: 'purchase',
+    initialValues: {
+      outDate: moment()
+    }
+  }),
+  TransferForm,
+])

@@ -9,13 +9,21 @@ export default createMuiTheme({
     MuiCollapse: {
       entered: {
         height: "auto",
-        overflow: "visible"
-      }
+        overflow: "visible",
+      },
+    },
+    MuiButton: {
+      outlinedPrimary: {
+        borderStyle: 'dashed',
+        '&:hover': {
+          borderStyle: 'dashed',
+        },
+      },
     },
     MuiCard: {
       root: {
-        overflow: "visible"
-      }
-    }
+        overflow: "visible",
+      },
+    },
   }
 });
