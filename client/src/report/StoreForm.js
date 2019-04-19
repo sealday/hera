@@ -70,12 +70,12 @@ const mapStateToProps = state => ({
 })
 
 export default wrapper([
-  connect(mapStateToProps),
   reduxForm({
     form: 'StoreForm',
     initialValues: { startDate: moment().startOf('day'),
       endDate: moment().startOf('day')
     }
   }),
+  connect(mapStateToProps),
   StoreForm,
 ])

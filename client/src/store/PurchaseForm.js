@@ -295,12 +295,12 @@ const mapStateToProps = state => ({
 })
 
 export default wrapper([
-  connect(mapStateToProps),
   reduxForm({
     form: 'purchase',
     initialValues: {
       outDate: moment()
     }
   }),
+  connect(mapStateToProps),
   TransferForm,
 ])

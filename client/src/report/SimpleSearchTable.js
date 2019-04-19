@@ -16,15 +16,7 @@ class SimpleSearchTable extends React.Component {
   : entry.type === '销售' ? '出库' : '入库'
 
   getOtherSize = entry => {
-    switch (entry.type) {
-      case '调拨':
-        return this.getDirection(entry) === '出库' ? this.getProjectName(entry.inStock): this.getProjectName(entry.outStock)
-      case '销售': /* 和采购一样的情况 */
-      case '采购':
-        return entry.vendor
-      default:
-        return '未知'
-    }
+    return this.getDirection(entry) === '出库' ? this.getProjectName(entry.inStock): this.getProjectName(entry.outStock)
   }
 
   getProjectName = id => {
@@ -80,11 +72,8 @@ class SimpleSearchTable extends React.Component {
     })
 
     return (
-      <div className="panel panel-default">
-        <div className="panel-heading">
-          <h3 className="panel-title">查询结果</h3>
-        </div>
-        <table className="table table-bordered">
+      <div>
+        <table className="table table-bordered" style={{ width: '100%' }}>
           <thead>
           <tr>
             <th>时间</th>

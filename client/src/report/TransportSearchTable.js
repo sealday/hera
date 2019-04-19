@@ -1,13 +1,10 @@
-/**
- * Created by seal on 31/01/2017.
- */
-
 import React from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
-import { total_, toFixedWithoutTrailingZero } from '../utils'
 import { Link } from 'react-router'
 import { Map } from 'immutable'
+
+import { total_, toFixedWithoutTrailingZero } from '../utils'
 
 /**
  * 提供排序功能的搜索结果表
@@ -70,11 +67,8 @@ class SimpleSearchTable extends React.Component {
     })
 
     return (
-      <div className="panel panel-default">
-        <div className="panel-heading">
-          <h3 className="panel-title">查询结果</h3>
-        </div>
-        <table className="table table-bordered">
+      <div>
+        <table className="table table-bordered" style={{ width: '100%' }}>
           <thead>
           <tr>
             <th>时间</th>

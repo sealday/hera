@@ -229,8 +229,8 @@ const mapStateToProps = state => ({
 })
 
 export default wrapper([
-  connect(mapStateToProps),
   withStyles(styles),
+  connect(mapStateToProps),
   App,
 ])
 

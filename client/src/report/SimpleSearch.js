@@ -1,9 +1,15 @@
 import React from 'react'
-import SearchForm from './SimpleSearchForm'
-import SearchTable from './SimpleSearchTable'
 import { connect } from 'react-redux'
 import moment from 'moment'
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+} from '@material-ui/core'
 
+import SearchForm from './SimpleSearchForm'
+import SearchTable from './SimpleSearchTable'
 import { simpleSearch } from '../actions'
 
 class Search extends React.Component {
@@ -17,17 +23,28 @@ class Search extends React.Component {
 
   render() {
     return (
-      <div>
-        <h3 className="page-header">仓库出入库查询</h3>
-        <SearchForm onSubmit={this.search}/>
-        <SearchTable/>
-      </div>
+      <Card>
+        <CardHeader
+          title="出入库查询"
+          action={<>
+            <Button onClick={() => this.form.reset()}>重置</Button>
+            <Button color="primary" onClick={() => this.form.submit()}>查询</Button>
+          </>}
+        />
+        <CardContent>
+          <SearchForm
+            ref={form => this.form = form}
+            onSubmit={this.search}
+          />
+          <SearchTable/>
+        </CardContent>
+      </Card>
     )
   }
 }
 
 const mapStateToProps = state => ({
-  store: state.system.store
+  store: state.system.store,
 })
 
 export default connect(mapStateToProps)(Search)

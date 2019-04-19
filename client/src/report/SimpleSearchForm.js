@@ -9,7 +9,7 @@ import {
   Input,
   DateRangeModifier,
 } from '../components'
-import { filterOption, transformArticle } from '../utils'
+import { filterOption, transformArticle, wrapper } from '../utils'
 
 /**
  * 搜索用的表单
@@ -55,7 +55,7 @@ class SimpleSearchForm extends React.Component {
   render() {
     const { handleSubmit, projects, startDate, endDate, reset } = this.props
     return (
-      <form onSubmit={handleSubmit} className="form-horizontal">
+      <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label className="control-label col-md-1">项目部</label>
           <div className="col-md-5">
@@ -108,29 +108,13 @@ class SimpleSearchForm extends React.Component {
             <Field name="originalOrder" className="form-control" component={Input} />
           </div>
         </div>
-        <div className="form-group">
-          <div className="col-md-offset-6 col-md-2">
-            <button type="submit" className="btn btn-primary btn-block">查询</button>
-          </div>
-          <div className="col-md-2">
-            <button type="reset" className="btn btn-primary btn-block" onClick={e => reset()}>重置</button>
-          </div>
-        </div>
       </form>
     )
   }
 }
 
-SimpleSearchForm = reduxForm({
-  form: 'simpleSearchForm',
-  initialValues: {
-    startDate: moment().startOf('day'),
-    endDate: moment().startOf('day')
-  }
-})(SimpleSearchForm)
 
-
-const selector = formValueSelector('simpleSearchForm')
+const selector = formValueSelector('SimpleSearchForm')
 const mapStateToProps = state => {
   const articles = state.system.articles.toArray()
   return {
@@ -143,6 +127,14 @@ const mapStateToProps = state => {
   }
 }
 
-SimpleSearchForm = connect(mapStateToProps)(SimpleSearchForm)
-
-export default SimpleSearchForm
+export default wrapper([
+  reduxForm({
+    form: 'SimpleSearchForm',
+    initialValues: {
+      startDate: moment().startOf('day'),
+      endDate: moment().startOf('day')
+    }
+  }),
+  connect(mapStateToProps),
+  SimpleSearchForm,
+])

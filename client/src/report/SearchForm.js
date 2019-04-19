@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 
 import { FilterSelect, DatePicker, Input, Select } from '../components'
-import { filterOption, transformArticle } from '../utils'
+import { filterOption, transformArticle, wrapper } from '../utils'
 
 /**
  * 搜索用的表单
@@ -125,29 +125,12 @@ class TransferSearchForm extends React.Component {
             <Field name="endCount" className="form-control" component={Input} />
           </div>
         </div>
-        <div className="form-group">
-          <div className="col-md-offset-6 col-md-2">
-            <button type="submit" className="btn btn-primary btn-block">查询</button>
-          </div>
-          <div className="col-md-2">
-            <button type="reset" className="btn btn-primary btn-block" onClick={e => reset()}>重置</button>
-          </div>
-        </div>
       </form>
     )
   }
 }
 
-TransferSearchForm = reduxForm({
-  form: 'transferSearch',
-  initialValues: {
-    startDate: moment().startOf('day'),
-    endDate: moment().startOf('day')
-  }
-})(TransferSearchForm)
-
-
-const selector = formValueSelector('transferSearch')
+const selector = formValueSelector('TransferSearchForm')
 const mapStateToProps = state => {
   const articles = state.system.articles.toArray()
   return {
@@ -160,6 +143,15 @@ const mapStateToProps = state => {
   }
 }
 
-TransferSearchForm = connect(mapStateToProps)(TransferSearchForm)
+export default wrapper([
+  reduxForm({
+    form: 'TransferSearchForm',
+    initialValues: {
+      startDate: moment().startOf('day'),
+      endDate: moment().startOf('day')
+    }
+  }),
+  connect(mapStateToProps),
+  TransferSearchForm,
+])
 
-export default TransferSearchForm

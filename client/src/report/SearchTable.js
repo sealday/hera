@@ -15,7 +15,7 @@ class SearchTable extends React.Component {
       return project ? project.company + project.name : '';
     }
     return (
-      <table className="table table-bordered">
+      <table className="table table-bordered" style={{ width: '100%' }}>
         <thead>
         <tr>
           <th>时间</th>

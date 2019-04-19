@@ -1,7 +1,7 @@
 import $ from 'jquery'
 import fuzzysearch from 'fuzzysearch'
 import moment from 'moment'
-import { flow, last, dropRight } from 'lodash'
+import { flowRight, last, dropRight } from 'lodash'
 
 import * as validator from './validator'
 
@@ -253,6 +253,6 @@ export const wrapper = (fns) => {
   if (fns.length < 2) {
     throw new Error('函数列表个数不得少于 2 个')
   }
-  return flow(dropRight(fns))(last(fns))
+  return flowRight(dropRight(fns))(last(fns))
 }
 
