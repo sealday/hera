@@ -102,7 +102,7 @@ class TransportOrder extends Component {
 
     const PrintContent = () => <>
       <h2 className="text-center">货运运输协议</h2>
-      <table className="table table-bordered table--tight table__transport">
+      <table className="table table-bordered table--tight table__transport" style={{ width: '100%' }}>
         <tbody>
         <tr>
           <th>日期</th>
