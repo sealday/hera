@@ -1,8 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
-import Button from '@material-ui/core/Button'
 import _ from 'lodash'
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+} from '@material-ui/core'
 
 import { toFixedWithoutTrailingZero as fixed, total_, getUnit, parseMode } from '../utils'
 import config from './../config'
@@ -10,8 +15,22 @@ import config from './../config'
 
 class TransferOrder extends React.Component {
 
+  state = {
+    isPrint: false,
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (this.state.isPrint) {
+      window.print()
+      this.setState({
+        isPrint: false,
+      })
+    }
+  }
+
   render() {
-    const { record, store, projects, articles, router, printCompany } = this.props
+    const { record, store, projects, router, printCompany } = this.props
+    const articles = this.props.articles
 
     let orderName = ''
     let company = ''
@@ -112,96 +131,104 @@ class TransferOrder extends React.Component {
       rows.push(printEntries[i].concat(printEntries[i + half]))
     }
 
-    return (
-      <div>
-        <div className="hidden-print" style={{ display: 'flex' }}>
-          <span style={{ flex: 1 }} />
-          <Button onClick={() => router.goBack()}>返回</Button>
-          <Button variant="contained" color="primary" onClick={() => window.print()}>打印</Button>
-        </div>
-        <div ref={(l) => window.temp2 = l} style={{ position: 'relative', paddingRight: '1.2em', minHeight: '30em' }}> {/* 表格开始 */}
-          <div style={{
-            position: 'absolute',
-            top: '6.5em',
-            fontSize: '9px',
-            right: 0,
-            width: '1.2em'
-          }}>{config.print.side}</div>
-          <h4 className="text-center">{printCompany}</h4>
-          <h4 className="text-center">{orderName}</h4>
-          <table style={{tableLayout: 'fixed', fontSize: '11px', width: '100%'}}>
-            <colgroup>
-              <col style={{width: '50%'}}/>
-            </colgroup>
-            <tbody>
-            <tr>
-              <td>{companyLabel}：{company}</td>
-              <td>日期：{moment(record.outDate).format('YYYY-MM-DD')}</td>
-              <td>流水号：{record.number}</td>
+    const PrintContent = () => (
+      <div style={{ position: 'relative', paddingRight: '1.2em', minHeight: '30em' }}> {/* 表格开始 */}
+        <div style={{
+          position: 'absolute',
+          top: '6.5em',
+          fontSize: '9px',
+          right: 0,
+          width: '1.2em'
+        }}>{config.print.side}</div>
+        <h4 className="text-center">{printCompany}</h4>
+        <h4 className="text-center">{orderName}</h4>
+        <table style={{tableLayout: 'fixed', fontSize: '11px', width: '100%'}}>
+          <colgroup>
+            <col style={{width: '50%'}}/>
+          </colgroup>
+          <tbody>
+          <tr>
+            <td>{companyLabel}：{company}</td>
+            <td>日期：{moment(record.outDate).format('YYYY-MM-DD')}</td>
+            <td>流水号：{record.number}</td>
+          </tr>
+          <tr>
+            <td>{nameLabel}：{name}</td>
+            <td>车号：{record.carNumber}</td>
+            <td>原始单号：{record.originalOrder}</td>
+          </tr>
+          </tbody>
+        </table>
+        <table className="table table-bordered table--tight" style={{
+          tableLayout: 'fixed',
+          fontSize: '11px',
+          marginBottom: '0',
+          width: '100%',
+        }}>
+          <thead>
+          <tr>
+            <th className="text-right">名称</th>
+            <th className="text-right">规格</th>
+            <th className="text-right">数量</th>
+            <th className="text-right">备注</th>
+            <th className="text-right">名称</th>
+            <th className="text-right">规格</th>
+            <th className="text-right">数量</th>
+            <th className="text-right">备注</th>
+          </tr>
+          </thead>
+          <tbody>
+          {rows.map((row, index) => (
+            <tr className="text-right" key={index}>
+              {row.map((col, index) => (
+                <td key={index}>{col}</td>
+              ))}
             </tr>
-            <tr>
-              <td>{nameLabel}：{name}</td>
-              <td>车号：{record.carNumber}</td>
-              <td>原始单号：{record.originalOrder}</td>
-            </tr>
-            </tbody>
-          </table>
-          <table className="table table-bordered table--tight" style={{
-            tableLayout: 'fixed',
-            fontSize: '11px',
-            marginBottom: '0',
-            width: '100%',
-          }}>
-            <thead>
-            <tr>
-              <th className="text-right">名称</th>
-              <th className="text-right">规格</th>
-              <th className="text-right">数量</th>
-              <th className="text-right">备注</th>
-              <th className="text-right">名称</th>
-              <th className="text-right">规格</th>
-              <th className="text-right">数量</th>
-              <th className="text-right">备注</th>
-            </tr>
-            </thead>
-            <tbody>
-            {rows.map((row, index) => (
-              <tr className="text-right" key={index}>
-                {row.map((col, index) => (
-                  <td key={index}>{col}</td>
-                ))}
-              </tr>
-            ))}
-            <tr>
-              <td colSpan="4" >
-                <span>说明：如供需双方未签正式合同，本{orderName}经供需双方代表签字确认后，将作为合同</span>
-                <span>及发生业务往来的有效凭证，如已签合同，则成为该合同的组成部分。{signer}须核对</span>
-                <span>以上产品规格、数量确认后可签字认可。</span>
-              </td>
-              <td colSpan="4">
-                备注 {record.comments}
-              </td>
-            </tr>
-            </tbody>
-          </table>
-          <table style={{tableLayout: 'fixed', fontSize: '11px', width: '100%'}}>
-            <tbody>
-            <tr>
-              <td>制单人：{record.username}</td>
-              <td>{outLabel}（签名）：</td>
-              <td>{inLabel}（签名）：</td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
+          ))}
+          <tr>
+            <td colSpan="4" >
+              <span>说明：如供需双方未签正式合同，本{orderName}经供需双方代表签字确认后，将作为合同</span>
+              <span>及发生业务往来的有效凭证，如已签合同，则成为该合同的组成部分。{signer}须核对</span>
+              <span>以上产品规格、数量确认后可签字认可。</span>
+            </td>
+            <td colSpan="4">
+              备注： {record.comments}
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <table style={{tableLayout: 'fixed', fontSize: '11px', width: '100%'}}>
+          <tbody>
+          <tr>
+            <td>制单人：{record.username}</td>
+            <td>{outLabel}（签名）：</td>
+            <td>{inLabel}（签名）：</td>
+          </tr>
+          </tbody>
+        </table>
       </div>
-    );
+    )
+
+    return (
+      this.state.isPrint ? <PrintContent/> :
+        <Card>
+          <CardHeader
+            action={<>
+              <Button onClick={() => router.goBack()}>返回</Button>
+              <Button color="primary" onClick={() => this.setState({ isPrint: true })}>打印</Button>
+            </>}
+          />
+          <CardContent>
+            <PrintContent/>
+          </CardContent>
+        </Card>
+    )
   }
 }
 
 const mapStateToProps = state => ({
   projects: state.system.projects,
-  articles: state.system.articles.toArray(),
+  articles: state.system.articles,
   products: state.system.products,
   store: state.system.store,
   user: state.system.user,

@@ -139,64 +139,92 @@ class TransportForm extends React.Component {
             <div className="form-group">
               <label className="col-md-2 control-label">收款人信息</label>
               <div className="col-md-10">
-                <Field name="a" component={Select} onChange={e => {
-                  const [bank, name, account] = e.target.value.split(',')
+                <Field name="a" component={Select} onChange={(_, newValue) => {
+                  const [bank, name, account] = newValue.split(',')
                   change('bank', bank)
                   change('payee', name)
                   change('account', account)
                 }}>
                   {flatMap(projects, project => project.banks)
                     .filter(bank => bank.bank)
-                    .map(payee => <option value={[payee.bank, payee.name, payee.account]}>
-                      {`${payee.bank} ${payee.name} ${payee.account}`}
-                    </option>)}
+                    .map(payee =>
+                      <option
+                        key={[payee.bank, payee.name, payee.account].join(',')}
+                        value={[payee.bank, payee.name, payee.account].join(',')}>
+                        {`${payee.bank} ${payee.name} ${payee.account}`}
+                      </option>
+                    )}
                 </Field>
               </div>
             </div>
             <div className="form-group">
               <label className="col-md-2 control-label">发货方联系人</label>
               <div className="col-md-10">
-                <Field name="b" component={Select} onChange={e => {
-                  const [name, phone] = e.target.value.split(',')
-                  change('delivery-contact', name)
-                  change('delivery-phone', phone)
-                }}>
-                  {outProject.contacts.map(contact => <option value={[contact.name, contact.phone]}>
-                    {`${contact.name} ${contact.phone}`}
-                  </option>)}
+                <Field
+                  name="b"
+                  component={Select}
+                  onChange={(_, newValue) => {
+                    const [name, phone] = newValue.split(',')
+                    change('delivery-contact', name)
+                    change('delivery-phone', phone)
+                  }}
+                >
+                  {outProject.contacts.map(contact =>
+                    <option
+                      key={[contact.name, contact.phone].join(',')}
+                      value={[contact.name, contact.phone].join(',')}>
+                      {`${contact.name} ${contact.phone}`}
+                    </option>
+                  )}
                 </Field>
               </div>
             </div>
             <div className="form-group">
               <label className="col-md-2 control-label">收货方联系人</label>
               <div className="col-md-10">
-                <Field name="c" component={Select} onChange={e => {
-                  const [name, phone] = e.target.value.split(',')
-                  change('receiving-contact', name)
-                  change('receiving-phone', phone)
-                }}>
-                  {inProject.contacts.map(contact => <option value={[contact.name, contact.phone]}>
-                    {`${contact.name} ${contact.phone}`}
-                  </option>)}
+                <Field
+                  name="c"
+                  component={Select}
+                  onChange={(_, newValue) => {
+                    const [name, phone] = newValue.split(',')
+                    change('receiving-contact', name)
+                    change('receiving-phone', phone)
+                  }}
+                >
+                  {inProject.contacts.map(contact =>
+                    <option
+                      key={[contact.name, contact.phone].join(',')}
+                      value={[contact.name, contact.phone].join(',')}>
+                      {`${contact.name} ${contact.phone}`}
+                    </option>
+                  )}
                 </Field>
               </div>
             </div>
             <div className="form-group">
               <label className="col-md-2 control-label">承运方</label>
               <div className="col-md-10">
-                <Field name="d" component={Select} onChange={e => {
-                  const [projectId, idx] = e.target.value.split(',')
-                  change('carrier-party', projectMap[projectId].company + projectMap[projectId].name)
-                  change('carrier-name', projectMap[projectId].contacts[idx].name)
-                  change('carrier-phone', projectMap[projectId].contacts[idx].phone)
-                  change('carrier-id', projectMap[projectId].contacts[idx].number)
-                }}>
+                <Field
+                  name="d"
+                  component={Select}
+                  onChange={(_, newValue) => {
+                    const [company, name, phone, number] = newValue.split(',')
+                    change('carrier-party', company)
+                    change('carrier-name', name)
+                    change('carrier-phone', phone)
+                    change('carrier-id', number)
+                  }}
+                >
                   {flatMap(projects.filter(project => project.type === '承运商'),
                     project => project.contacts
-                      .map(contact => ({...contact, company: project.company + project.name, projectId: project._id})))
-                    .map((contact, idx) => <option value={[contact.projectId, idx]}>
-                      {`${contact.company} ${contact.name} ${contact.phone} ${contact.number}`}
-                    </option>)}
+                      .map(contact => ({...contact, company: project.company + project.name})))
+                    .map(contact =>
+                      <option
+                        key={[contact.company, contact.name, contact.phone, contact.number].join(',')}
+                        value={[contact.company, contact.name, contact.phone, contact.number].join(',')}>
+                        {`${contact.company} ${contact.name} ${contact.phone} ${contact.number}`}
+                      </option>
+                    )}
                 </Field>
               </div>
             </div>

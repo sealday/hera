@@ -7,6 +7,7 @@ import {
   Card,
   CardHeader,
   CardContent,
+  Typography,
 } from '@material-ui/core'
 
 import { requestRecord } from '../actions'
@@ -55,7 +56,6 @@ class TransportOrder extends Component {
       return  (
         <Card>
           <CardHeader
-            title="还未填写运输单！"
             action={
               <div>
                 <Button onClick={this.handleBack}>返回</Button>
@@ -63,6 +63,9 @@ class TransportOrder extends Component {
               </div>
             }
           />
+          <CardContent>
+            <Typography variant="h2">还未填写运输单！</Typography>
+          </CardContent>
         </Card>
       )
     }
