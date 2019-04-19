@@ -2,9 +2,6 @@ import React from 'react'
 import { reduxForm, Field } from 'redux-form'
 import { connect } from 'react-redux'
 import moment from 'moment'
-import {
-  Button,
-} from '@material-ui/core'
 
 import {
   DatePicker,

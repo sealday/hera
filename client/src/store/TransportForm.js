@@ -17,7 +17,6 @@ class TransportForm extends React.Component {
     const inProject = imProjects.get(record.inStock)
     const outProject = imProjects.get(record.outStock)
     const projects = imProjects.toArray()
-    const projectMap = imProjects.toObject()
 
     return (
       <Card>

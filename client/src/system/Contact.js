@@ -47,8 +47,8 @@ class Contact extends Component {
                  name="phone" type="text" value={this.props.phone} required onChange={this.handleChange}
                  addonAfter={
                    <>
-                     <a onClick={this.props.onAdd}><span className="glyphicon glyphicon-plus"/></a>
-                     <a onClick={e => this.props.onRemove(this.props.id)}><span className="glyphicon glyphicon-minus"/></a>
+                     <span onClick={this.props.onAdd}><span className="glyphicon glyphicon-plus"/></span>
+                     <span onClick={e => this.props.onRemove(this.props.id)}><span className="glyphicon glyphicon-minus"/></span>
                    </>
                  }
               />

@@ -90,7 +90,7 @@ class ContractContent extends React.Component {
           subheader={`内部编号：${project._id} 外部编号：${short_id.generate()}`}
         />
         <CardContent>
-          <Typography variant="subheading" color="textSecondary">
+          <Typography variant="subtitle1" color="textSecondary">
           </Typography>
           <p>费用：<span style={{ fontSize: 'xx-large' }}>{ currencyFormat(this.total(project)) }</span> </p>
           <p>收款：<span style={{ fontSize: 'xx-large' }}>{ currencyFormat(0) }</span> </p>

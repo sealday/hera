@@ -79,7 +79,7 @@ class ContractItem extends React.Component {
           subheader={`${dateFormat(item.startDate)} ~ ${dateFormat(item.endDate)}`}
         />
         <CardContent>
-          <Typography variant="subheading" color="textSecondary">
+          <Typography variant="subtitle1" color="textSecondary">
           </Typography>
           <p>租金：<span style={{ fontSize: 'xx-large' }}>{ currencyFormat(item.content.group[0].price) }</span> </p>
           <p>税率：<span style={{ fontSize: 'xx-large' }}>{ percentFormat(item.taxRate) }</span> </p>

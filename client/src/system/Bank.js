@@ -59,14 +59,14 @@ class Bank extends Component {
                 onChange={this.handleChange}
               />
               <span className="input-group-btn">
-              <a className="btn btn-default" onClick={onAdd}>
+              <span className="btn btn-default" onClick={onAdd}>
                 <span className="glyphicon glyphicon-plus"/>
-              </a>
+              </span>
             </span>
               <span className="input-group-btn">
-              <a className="btn btn-default" onClick={e => onRemove(id)}>
+              <span className="btn btn-default" onClick={e => onRemove(id)}>
                 <span className="glyphicon glyphicon-minus"/>
-              </a>
+              </span>
             </span>
             </div>
           </div>

@@ -123,18 +123,18 @@ class TransferOrder extends React.Component {
             }
           />
           <CardContent>
-            <Typography variant="display3">调拨单</Typography>
-            <Typography variant="subheading">单号：{record.number} 日期：{moment(record.outDate).format('YYYY-MM-DD')}</Typography>
+            <Typography variant="h2">调拨单</Typography>
+            <Typography variant="subtitle1">单号：{record.number} 日期：{moment(record.outDate).format('YYYY-MM-DD')}</Typography>
             <Divider className={classes.marginTop}/>
-            <Typography variant="body1" className={classes.marginTop}>出库：{outProject.company}{outProject.name}</Typography>
-            <Typography variant="body1">入库：{inProject.company}{inProject.name}</Typography>
-            <Typography variant="body1">制单人：{record.username}</Typography>
+            <Typography variant="body2" className={classes.marginTop}>出库：{outProject.company}{outProject.name}</Typography>
+            <Typography variant="body2">入库：{inProject.company}{inProject.name}</Typography>
+            <Typography variant="body2">制单人：{record.username}</Typography>
           </CardContent>
         </Card>
 
         <Card className={classes.marginTop}>
           <CardContent>
-            <Typography variant="headline">进度</Typography>
+            <Typography variant="h5">进度</Typography>
             <Stepper>
               <Step>
                 <StepLabel>填单</StepLabel>
@@ -152,7 +152,7 @@ class TransferOrder extends React.Component {
         {['l', 's', 'c', 'r'].map(t => (
            records[t].length > 0 && <Card className={classes.marginTop} key={t}>
             <CardContent>
-              <Typography variant="headline">{names[t]}</Typography>
+              <Typography variant="h5">{names[t]}</Typography>
               <Table className={classes.table}>
                 <TableHead>
                   <TableRow>

@@ -53,7 +53,7 @@ class SimpleSearchForm extends React.Component {
   }
 
   render() {
-    const { handleSubmit, projects, startDate, endDate, reset } = this.props
+    const { handleSubmit, projects, startDate, endDate } = this.props
     return (
       <form onSubmit={handleSubmit} className="form-horizontal">
         <div className="form-group">

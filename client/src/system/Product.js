@@ -176,7 +176,7 @@ class Product extends React.Component {
           <Dialog open={this.state.createOpen}>
             <DialogTitle>新增</DialogTitle>
             <DialogContent>
-              <ProductEditForm
+              <ProductCreateForm
                 onSubmit={(d) => this.onCreate(d)}
                 ref={createForm => this.createForm = createForm}
               />
