@@ -93,7 +93,7 @@ class Home extends Component {
           <Card>
             <CardContent>
               <Typography>当日订单量</Typography>
-              <Typography>9</Typography>
+              <Typography>0</Typography>
             </CardContent>
           </Card>
         </Grid>
@@ -101,7 +101,7 @@ class Home extends Component {
           <Card>
             <CardContent>
               <Typography>今日运输单量</Typography>
-              <Typography>9</Typography>
+              <Typography>0</Typography>
             </CardContent>
           </Card>
         </Grid>
@@ -109,7 +109,7 @@ class Home extends Component {
           <Card>
             <CardContent>
               <Typography>今日修改量</Typography>
-              <Typography>9</Typography>
+              <Typography>0</Typography>
             </CardContent>
           </Card>
         </Grid>
