@@ -103,6 +103,7 @@ class SimpleSearchTable extends React.Component {
                            type="checkbox"
                            id={ `${ entry._id }-paid` }
                            onChange={(e) => { dispatch(updateTransportPaidStatus(entry._id, e.target.checked)) }}/>
+                    <label className="hidden" htmlFor={ `${ entry._id }-paid` }>{entry.transportPaid ? '已结清' : '未结清'}</label>
                   </td>
                   <td>
                     <input className="h-checkbox"
@@ -110,6 +111,7 @@ class SimpleSearchTable extends React.Component {
                            id={ `${ entry._id }-checked` }
                            type="checkbox"
                            onChange={(e) => { dispatch(updateTransportCheckedStatus(entry._id, e.target.checked)) }}/>
+                    <label className="hidden" htmlFor={ `${ entry._id }-checked` }>{entry.transportChecked ? '已核对' : '未核对'}</label>
                   </td>
                   <td>{moment(entry.outDate).format('YYYY-MM-DD')}</td>
                   <td>{entry.carNumber}</td>
