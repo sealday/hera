@@ -119,16 +119,8 @@ const allMenu = [
         path: '/price',
       },
       {
-        name: '新增操作员',
-        path: '/operator/create',
-      },
-      {
-        name: '操作员列表',
+        name: '用户管理',
         path: '/operator',
-      },
-      {
-        name: '新增项目',
-        path: '/project/create',
       },
       {
         name: '项目列表',

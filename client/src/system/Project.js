@@ -41,7 +41,12 @@ class Project extends React.Component {
     let { projects, onDeleteClick, projectType } = this.props
     return (
       <Card>
-        <CardHeader title="项目列表" />
+        <CardHeader
+          title="项目列表"
+          action={<>
+            <Button component={Link} to="/project/create">新增</Button>
+          </>}
+        />
         <CardContent>
           <ProjectFilterForm/>
         </CardContent>

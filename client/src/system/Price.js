@@ -1,8 +1,15 @@
 import React from 'react'
 import moment from 'moment'
 import { Link } from 'react-router'
-import { ajax } from '../utils'
 import { connect } from 'react-redux'
+import {
+  Button,
+  Card,
+  CardHeader,
+  CardContent,
+} from '@material-ui/core'
+
+import { ajax } from '../utils'
 import { newErrorNotify, newInfoNotify, newSuccessNotify, queryPricePlan, PRICE_PLAN } from '../actions'
 
 class Price extends React.Component {
@@ -26,49 +33,49 @@ class Price extends React.Component {
       this.props.dispatch(newErrorNotify('警告', '删除失败', 1000))
     })
   }
+
   render() {
     return (
-      <div>
-        <h2 className="page-header">价格方案</h2>
-        <nav className="navbar navbar-default">
-          <div className="container-fluid">
-            <ul className="nav navbar-nav navbar-right ">
-              <li><Link to="/price/create">点击这里创建一个空白的价格方案</Link></li>
-            </ul>
-          </div>
-        </nav>
-        <table className="table">
-          <thead>
-          <tr>
-            <th>名称</th>
-            <th>日期</th>
-            <th>备注</th>
-            <th/>
-          </tr>
-          </thead>
-          <tbody>
-          {this.props.plans.map((plan) => (
-            <tr key={plan._id}>
-              <td>{plan.name}</td>
-              <td>{moment(plan.date).format('YYYY-MM-DD')}</td>
-              <td>{plan.comments}</td>
-              <td>
-                <Link className="btn btn-default" to={`/price/${plan._id}`}>编辑</Link>
-                <button className="btn btn-danger h-left-margin-1-em" onClick={() => this.handleDelete(plan._id)}>删除</button>
-                <Link className="btn btn-primary h-left-margin-1-em" to={`/price/create/${plan._id}`}>创建</Link>
-              </td>
+      <Card>
+        <CardHeader
+          title="价格方案"
+          action={<>
+            <Button color="primary" component={Link} to="/price/create">新增</Button>
+          </>}
+        />
+        <CardContent>
+          <table className="table table-bordered" style={{ width: '100%', tableLayout: 'fixed' }}>
+            <thead>
+            <tr>
+              <th>名称</th>
+              <th>日期</th>
+              <th>备注</th>
+              <th/>
             </tr>
-          ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+            {this.props.plans.map((plan) => (
+              <tr key={plan._id}>
+                <td>{plan.name}</td>
+                <td>{moment(plan.date).format('YYYY-MM-DD')}</td>
+                <td>{plan.comments}</td>
+                <td>
+                  <button><Link component="button" to={`/price/${plan._id}`}>编辑</Link></button>
+                  <button onClick={() => this.handleDelete(plan._id)}>删除</button>
+                  <button><Link to={`/price/create/${plan._id}`}>克隆</Link></button>
+                </td>
+              </tr>
+            ))}
+            </tbody>
+          </table>
+        </CardContent>
+      </Card>
     )
   }
 }
 
 const mapStateToProps = (state) => {
   const plans = state.results.get(PRICE_PLAN, [])
-
   return {
     plans: plans,
   }

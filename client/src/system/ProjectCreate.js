@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import {
+  Button,
+} from '@material-ui/core'
 
 import ProjectForm from './ProjectForm'
 import { postProject } from '../actions'
@@ -10,6 +13,7 @@ class ProjectCreate extends Component {
   }
 
   render() {
+    const { router } = this.props
     const initialValues = {
       contacts: [{
         key: Date.now(),
@@ -28,6 +32,7 @@ class ProjectCreate extends Component {
       <ProjectForm
         initialValues={initialValues}
         onSubmit={this.handleSubmit}
+        action={<Button onClick={() => router.goBack()}>返回</Button>}
         title="录入项目信息"
       />
     )
