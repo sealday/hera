@@ -26,19 +26,21 @@ class Search extends React.Component {
 
   render() {
     return (
-      <Card>
-        <CardHeader
-          title="仓库出入库查询"
-          action={<>
-            <Button>查询</Button>
-            <Button>重置</Button>
-          </>}
-        />
-        <CardContent>
-          <SearchForm onSubmit={this.search}/>
-          <SearchTable search={this.props.records} />
-        </CardContent>
-      </Card>
+      <>
+        <Card>
+          <CardHeader
+            title="仓库出入库查询"
+            action={<>
+              <Button onClick={() => this.form.reset()}>重置</Button>
+              <Button color="primary" onClick={() => this.form.submit()}>查询</Button>
+            </>}
+          />
+          <CardContent>
+            <SearchForm onSubmit={this.search} ref={form => this.form = form}/>
+          </CardContent>
+        </Card>
+        <SearchTable search={this.props.records} />
+      </>
     )
   }
 }

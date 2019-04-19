@@ -9,7 +9,7 @@ import {
   Input,
   DateRangeModifier,
 } from '../components'
-import { filterOption, transformArticle } from '../utils'
+import { filterOption, transformArticle, wrapper } from '../utils'
 import { fetchAllPayer } from '../actions'
 
 class SimpleSearchForm extends React.Component {
@@ -114,32 +114,12 @@ class SimpleSearchForm extends React.Component {
             <Field name="originalOrder" className="form-control" component={Input} />
           </div>
         </div>
-        <div className="form-group">
-          <div className="col-md-offset-6 col-md-2">
-            <button type="submit" className="btn btn-primary btn-block">查询</button>
-          </div>
-          <div className="col-md-2">
-            <button type="reset" className="btn btn-primary btn-block" onClick={e => reset()}>重置</button>
-          </div>
-          {this.props.onExcelExport && <div className="col-md-2">
-            <button type="button" className="btn btn-primary btn-block" onClick={e => this.props.onExcelExport() }>导出excel</button>
-          </div>}
-        </div>
       </form>
     )
   }
 }
 
-SimpleSearchForm = reduxForm({
-  form: 'companyTransportSearchForm',
-  initialValues: {
-    startDate: moment().startOf('day'),
-    endDate: moment().startOf('day')
-  }
-})(SimpleSearchForm)
-
-
-const selector = formValueSelector('simpleSearchForm')
+const selector = formValueSelector('CompanyTransportSearchForm')
 const mapStateToProps = state => {
   const articles = state.system.articles.toArray()
   return {
@@ -153,6 +133,15 @@ const mapStateToProps = state => {
   }
 }
 
-SimpleSearchForm = connect(mapStateToProps)(SimpleSearchForm)
+export default wrapper([
+  reduxForm({
+    form: 'CompanyTransportSearchForm',
+    initialValues: {
+      startDate: moment().startOf('day'),
+      endDate: moment().startOf('day')
+    }
+  }),
+  connect(mapStateToProps),
+  SimpleSearchForm,
+])
 
-export default SimpleSearchForm

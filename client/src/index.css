@@ -105,43 +105,6 @@ body {
   font-size: 11px;
 }
 
-.h-checkbox {
-  display: none;
-}
-
-.h-checkbox + label {
-  position: relative;
-  padding-right: 22px;
-}
-
-.h-checkbox + label:after {
-  content: ' ';
-  border-radius: 10px;
-  width: 20px;
-  height: 20px;
-  position: absolute;
-  top: 0;
-  right: 0;
-  box-shadow: inset 0 16px 40px rgba(0, 0, 0, 0.4);
-}
-
-.h-checkbox + label:before {
-  content: ' ';
-  border-radius: 6px;
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  top: 4px;
-  right: 4px;
-  z-index: 999;
-  display: none;
-  box-shadow: inset 0 16px 40px #FFF;
-}
-
-.h-checkbox:checked + label:before {
-  display: block;
-}
-
 .h-left-margin-1-em {
     margin-left: 1em;
 }
