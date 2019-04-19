@@ -1,6 +1,7 @@
 import React from 'react'
-import { Input } from '../components'
 import { Field } from 'redux-form'
+
+import { Input } from '../components'
 import { validator } from '../utils'
 
 export default class ProductForm extends React.Component {

@@ -1,24 +1,26 @@
-import React from 'react';
+import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import { Link } from 'react-router'
-import Card from '@material-ui/core/Card'
-import CardHeader from '@material-ui/core/CardHeader'
-import CardContent from '@material-ui/core/CardContent'
-import Typography from '@material-ui/core/Typography'
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  Divider,
+  Step,
+  StepLabel,
+  Stepper,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TablePagination,
+  TableRow,
+  Typography,
+} from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
-import Divider from '@material-ui/core/Divider'
-import Button from '@material-ui/core/Button'
-import Table from '@material-ui/core/Table'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
-import TablePagination from '@material-ui/core/TablePagination'
-import Stepper from '@material-ui/core/Stepper'
-import Step from '@material-ui/core/Step'
-import StepLabel from '@material-ui/core/StepLabel'
 
 import { total_, isUpdatable } from '../utils'
 
@@ -58,7 +60,8 @@ class TransferOrder extends React.Component {
   }
 
   render() {
-    const { record, store, projects, articles, router, user } = this.props
+    const { record, store, projects, router, user } = this.props
+    const articles = this.props.articles.toArray()
     let direction = null
 
     if (record.inStock === store._id) {
@@ -114,7 +117,7 @@ class TransferOrder extends React.Component {
                 <Button onClick={this.handleTransport}>运输单</Button>
                 {direction && <Button component={Link} to={`/record/${record._id}/preview`}>打印预览</Button>}
                 {isUpdatable(store, user) && direction &&
-                <Button variant="raised" component={Link} to={`/transfer/${direction}/${record._id}/edit`} color="primary">编辑</Button>
+                <Button component={Link} to={`/transfer/${direction}/${record._id}/edit`} color="primary">编辑</Button>
                 }
               </div>
             }
@@ -155,7 +158,7 @@ class TransferOrder extends React.Component {
                   <TableRow>
                     <TableCell>产品</TableCell>
                     <TableCell>类型</TableCell>
-                    <TableCell numeric>数量</TableCell>
+                    <TableCell>数量</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -165,7 +168,7 @@ class TransferOrder extends React.Component {
                       <TableRow key={entry._id}>
                         <TableCell>{entry.name}</TableCell>
                         <TableCell>{entry.size}</TableCell>
-                        <TableCell numeric>{entry.count}</TableCell>
+                        <TableCell>{entry.count}</TableCell>
                       </TableRow>
                     ))}
                 </TableBody>
@@ -189,7 +192,7 @@ class TransferOrder extends React.Component {
 
 const mapStateToProps = state => ({
   projects: state.system.projects,
-  articles: state.system.articles.toArray(),
+  articles: state.system.articles,
   products: state.system.products,
   store: state.system.store,
   user: state.system.user,

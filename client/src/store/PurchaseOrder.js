@@ -144,12 +144,11 @@ class PurchaseOrder extends React.Component {
 
     printEntries.push(['', '', '', '', '总金额', '￥' + fixed(amount), ''])
 
-    if (printEntries.length % 2 !== 0) {
-      printEntries.push(['', '', '', '', '', '', ''])
-    }
-
     let rows = []
     if (this.state.columnStyle === 'double') {
+      if (printEntries.length % 2 !== 0) {
+        printEntries.push(['', '', '', '', '', '', ''])
+      }
       const half = printEntries.length / 2
       for (let i = 0; i < half; i++) {
         rows.push(printEntries[i].concat(printEntries[i + half]))
@@ -196,7 +195,12 @@ class PurchaseOrder extends React.Component {
         </tr>
         </tbody>
       </table>
-      <table className="table table-bordered table--tight" style={{tableLayout: 'fixed', fontSize: '9px', marginBottom: '0'}}>
+      <table className="table table-bordered table--tight" style={{
+        tableLayout: 'fixed',
+        fontSize: '9px',
+        marginBottom: '0',
+        width: '100%',
+      }}>
         <thead>
         <tr>
           {columnNames.map((name, index) => (
@@ -247,7 +251,7 @@ class PurchaseOrder extends React.Component {
           </RadioGroup>
         }
         action={<>
-          <Button className="btn btn-default" onClick={() => router.goBack()}>返回</Button>
+          <Button onClick={() => router.goBack()}>返回</Button>
           {isUpdatable(store, user) && <>
             {record.type === '调拨' &&
             <Button color="primary" component={Link} to={`/transfer/${direction}/${record._id}/edit`}>编辑</Button>

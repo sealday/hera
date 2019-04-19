@@ -123,7 +123,7 @@ class TransferForm extends Component {
             <FieldArray name="entries" component={EntryTable} mode="R"/>
           </ExpansionPanelDetails>
         </ExpansionPanel>
-        <Button variant="raised" color="primary" type="submit" className={classes.submitButton}>保存</Button>
+        <Button variant="contained" color="primary" type="submit" className={classes.submitButton}>保存</Button>
       </form>
     )
   }
