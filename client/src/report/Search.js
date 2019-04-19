@@ -1,13 +1,10 @@
-/**
- * Created by seal on 31/01/2017.
- */
-
 import React from 'react'
+import { connect } from 'react-redux'
+import moment from 'moment'
+
 import SearchForm from './SearchForm'
 import SearchTable from './SearchTable'
-import { connect } from 'react-redux'
 import { storeSearch } from '../actions'
-import moment from 'moment'
 
 class Search extends React.Component {
   search = condition => {

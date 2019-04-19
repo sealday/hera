@@ -1,13 +1,10 @@
-/**
- * Created by seal on 31/01/2017.
- */
-
 import React from 'react'
 import SearchForm from './SimpleSearchForm'
 import SearchTable from './SimpleSearchTable'
 import { connect } from 'react-redux'
-import { simpleSearch } from '../actions'
 import moment from 'moment'
+
+import { simpleSearch } from '../actions'
 
 class Search extends React.Component {
   search = condition => {

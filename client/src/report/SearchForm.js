@@ -1,12 +1,9 @@
-/**
- * Created by seal on 31/01/2017.
- */
-
 import React from 'react'
 import { reduxForm, Field, formValueSelector } from 'redux-form'
-import { FilterSelect, DatePicker, Input, Select } from '../components'
 import { connect } from 'react-redux'
 import moment from 'moment'
+
+import { FilterSelect, DatePicker, Input, Select } from '../components'
 import { filterOption, transformArticle } from '../utils'
 
 /**

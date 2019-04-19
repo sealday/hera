@@ -1,13 +1,10 @@
-/**
- * Created by seal on 31/01/2017.
- */
-
 import React from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
-import { total_, toFixedWithoutTrailingZero } from '../utils'
 import { Link } from 'react-router'
 import { Map } from 'immutable'
+
+import { total_, toFixedWithoutTrailingZero } from '../utils'
 
 /**
  * 提供排序功能的搜索结果表

@@ -50,16 +50,10 @@ import {
   StocktakingEdit,
 } from './store'
 import {
-  TransferInTable,
-  TransferOutTable,
-  PurchaseTable,
-  SellTable,
   Store,
   Search,
   SimpleSearch,
   TransportSearch,
-  StocktakingOutTable,
-  StocktakingInTable,
 } from './report'
 import * as company from './company'
 import { ajax } from './utils'
@@ -144,15 +138,9 @@ ajax('/api/load').then(res => {
               <Route path="contract/:id/item/:itemId/preview" component={company.RentCalcPreview}/>
               <Route path="transport/:id" component={TransportOrder}/>
               <Route path="transport/:id/edit" component={TransportOrderEdit}/>
-              <Route path="transfer_in_table" component={TransferInTable} />
-              <Route path="transfer_out_table" component={TransferOutTable} />
-              <Route path="purchase_table" component={PurchaseTable} />
-              <Route path="sell_table" component={SellTable} />
               <Route path="store" component={Store} />
               <Route path="transport_table" component={TransportSearch}/>
               <Route path="transport_table_company" component={company.TransportSearch}/>
-              <Route path="stocktaking_out_table" component={StocktakingOutTable}/>
-              <Route path="stocktaking_in_table" component={StocktakingInTable}/>
               <Route path="profile" component={Profile}/>
               <Redirect path="*" to="/dashboard"/>
             </Route>

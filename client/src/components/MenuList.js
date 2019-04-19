@@ -80,34 +80,6 @@ const allMenu = [
         name: '运输单查询',
         path: '/transport_table',
       },
-      {
-        name: '采购入库明细表',
-        path: '/purchase_table',
-        roles: ['系统管理员', '基地仓库管理员', '财务管理员'],
-      },
-      {
-        name: '销售出库明细表',
-        path: '/sell_table',
-        roles: ['系统管理员', '基地仓库管理员', '财务管理员'],
-      },
-      {
-        name: '调拨入库明细表',
-        path: '/transfer_in_table',
-      },
-      {
-        name: '调拨出库明细表',
-        path: '/transfer_out_table',
-      },
-      {
-        name: '盘点盈余入库明细表',
-        path: '/stocktaking_in_table',
-        roles: ['系统管理员', '基地仓库管理员'],
-      },
-      {
-        name: '盘点亏损出库明细表',
-        path: '/stocktaking_out_table',
-        roles: ['系统管理员', '基地仓库管理员'],
-      },
     ]
   },
   {

@@ -1,7 +1,3 @@
-/**
- * Created by seal on 31/01/2017.
- */
-
 import React from 'react'
 import SearchForm from './TransportSearchForm'
 import SearchTable from './TransportSearchTable'

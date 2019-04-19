@@ -1,7 +1,3 @@
-/**
- * Created by seal on 31/01/2017.
- */
-
 import React from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
