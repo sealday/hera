@@ -50,7 +50,7 @@ class Product extends React.Component {
     })
   }
   handleClose = () => {
-    this.setState({open: false})
+    this.setState({open: false, createOpen: false})
   }
   handleDeleteConfirmOpen = (product) => {
     this.setState({deleteConfirm: true, current: product})

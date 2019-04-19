@@ -1,12 +1,18 @@
 import React from 'react'
-import Form from './PriceForm'
 import { connect } from 'react-redux'
 import { reduxForm } from 'redux-form'
-import { ajax } from '../utils'
-import { newInfoNotify, newErrorNotify, newSuccessNotify, PRICE_PLAN, queryPricePlan } from '../actions'
 import { push } from 'react-router-redux'
 import moment from 'moment'
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+} from '@material-ui/core'
 
+import Form from './PriceForm'
+import { ajax } from '../utils'
+import { newInfoNotify, newErrorNotify, newSuccessNotify, PRICE_PLAN, queryPricePlan } from '../actions'
 const PriceForm = reduxForm({ form: 'PRICE_CREATE', action: 'create' })(Form)
 
 class PriceCreate extends React.Component {
@@ -39,29 +45,38 @@ class PriceCreate extends React.Component {
       </div>)
     }
     return (
-      <div>
-        <h2 className="page-header">价格方案创建</h2>
-        {id ?
-          <PriceForm
-            onSubmit={this.handleSubmit}
-            initialValues={{
-              ...this.props.plan,
-              date: moment(this.props.date),
-              name: this.props.plan.name + '（克隆）',
-              _id: undefined,
-            }}
-          />
+      <Card>
+        <CardHeader
+          title="价格方案创建"
+          action={<>
+            <Button color="primary" onClick={() => this.form.submit()}>保存</Button>
+          </>}
+        />
+        <CardContent>
+          {id ?
+            <PriceForm
+              ref={form => this.form = form}
+              onSubmit={this.handleSubmit}
+              initialValues={{
+                ...this.props.plan,
+                date: moment(this.props.date),
+                name: this.props.plan.name + '（克隆）',
+                _id: undefined,
+              }}
+            />
 
-          :
-          <PriceForm
-            onSubmit={this.handleSubmit}
-            initialValues={{
-              date: moment(),
-              freightType: '入库',
-            }}
-          />
-        }
-      </div>
+            :
+            <PriceForm
+              ref={form => this.form = form}
+              onSubmit={this.handleSubmit}
+              initialValues={{
+                date: moment(),
+                freightType: '入库',
+              }}
+            />
+          }
+        </CardContent>
+      </Card>
     )
   }
 }

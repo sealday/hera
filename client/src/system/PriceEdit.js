@@ -1,9 +1,16 @@
 import React from 'react'
-import Form from './PriceForm'
 import { reduxForm } from 'redux-form'
 import moment from 'moment'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+} from '@material-ui/core'
+
+import Form from './PriceForm'
 import { ajax } from '../utils'
 import { PRICE_PLAN, queryPricePlan, newSuccessNotify, newInfoNotify, newErrorNotify  } from '../actions'
 
@@ -39,16 +46,24 @@ class PriceEdit extends React.Component {
     }
 
     return (
-      <div>
-        <h2 className="page-header">价格方案编辑</h2>
-        <PriceForm
-          onSubmit={this.handleSubmit}
-          initialValues={{
-            ...this.props.plan,
-            date: moment(this.props.date),
-          }}
+      <Card>
+        <CardHeader
+          title="价格方案编辑"
+          action={<>
+            <Button color="primary" onClick={() => this.form.submit()}>保存</Button>
+          </>}
         />
-      </div>
+        <CardContent>
+          <PriceForm
+            ref={form => this.form = form}
+            onSubmit={this.handleSubmit}
+            initialValues={{
+              ...this.props.plan,
+              date: moment(this.props.date),
+            }}
+          />
+        </CardContent>
+      </Card>
     )
   }
 }

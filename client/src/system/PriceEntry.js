@@ -1,14 +1,19 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Field } from 'redux-form'
+import {
+  Button,
+} from '@material-ui/core'
+
 import { FilterSelect, Input, Select } from '../components'
 import { validator, filterOption, transformArticle } from '../utils'
 
 const PriceEntry = connect(
   state => ({
-    ...transformArticle(state.system.articles.toArray()),
+    articles: state.system.articles,
   })
-)(({ fields, typeNameMap, nameArticleMap}) => {
+)(({ fields, articles }) => {
+  const { typeNameMap, nameArticleMap } = transformArticle(articles.toArray())
   const add = () => {
     if (fields.length > 0) {
       const name = fields.get(fields.length - 1).name
@@ -49,8 +54,8 @@ const PriceEntry = connect(
   }
 
   return (
-    <div className="panel panel-default">
-      <table className="table">
+    <>
+      <table className="table" style={{ width: '100%', marginTop: '16px' }}>
         <thead>
         <tr>
           <th>类型</th>
@@ -60,12 +65,6 @@ const PriceEntry = connect(
           <th>单价</th>
           <th>计算类型</th>
           <th>备注</th>
-          <th>
-            <button
-              type="button"
-              onClick={add}
-              className="btn btn-default">增加</button>
-          </th>
           <th/>
         </tr>
         </thead>
@@ -125,22 +124,18 @@ const PriceEntry = connect(
             </td>
             <td><Field name={`${entry}.comments`} component={Input}/></td>
             <td>
-              <button
+              <Button
                 type="button"
-                onClick={add}
-                className="btn btn-default">增加</button>
-            </td>
-            <td>
-              <button
-                type="button"
-                className="btn btn-danger"
-                onClick={() => fields.remove(index)}>删除</button>
+                color="secondary"
+                size="small"
+                onClick={() => fields.remove(index)}>删除</Button>
             </td>
           </tr>
         )}
         </tbody>
       </table>
-    </div>
+      <Button style={{ marginTop: '8px' }} onClick={add} color="primary" variant="outlined" fullWidth>增加</Button>
+    </>
   )
 })
 
