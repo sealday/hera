@@ -3,6 +3,10 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 import { Link } from 'react-router'
 import { Map } from 'immutable'
+import {
+  Card,
+  CardContent,
+} from '@material-ui/core'
 
 import { total_, toFixedWithoutTrailingZero } from '../utils'
 
@@ -67,39 +71,41 @@ class SimpleSearchTable extends React.Component {
     })
 
     return (
-      <div>
-        <table className="table table-bordered" style={{ width: '100%' }}>
-          <thead>
-          <tr>
-            <th>时间</th>
-            <th>车号</th>
-            <th>单号</th>
-            <th>原始单号</th>
-            <th>项目部</th>
-            <th>出入库 </th>
-            <th>订单内容</th>
-            <th/>
-          </tr>
-          </thead>
-          <tbody>
-          {search && search.map((entry, index) => (
-            <tr key={index}>
-              <td>{moment(entry.outDate).format('YYYY-MM-DD')}</td>
-              <td>{entry.carNumber}</td>
-              <td>{entry.number}</td>
-              <td>{entry.originalOrder}</td>
-              <td>{getDirection(entry) === '出库' ? getProjectName(entry.inStock) : getProjectName(entry.outStock) || entry.vendor}</td>
-              {/* 当没有公司情况的时候，会有对方单位，当两个都没有的时候，属于上年结转的单据 */}
-              <td>{getDirection(entry)}</td>
-              <td>{entry.totalString}</td>
-              <td>
-                <Link to={`/transport/${entry._id}`}>查看运输单</Link>
-              </td>
+      <Card style={{ marginTop: '16px' }}>
+        <CardContent>
+          <table className="table table-bordered" style={{ width: '100%' }}>
+            <thead>
+            <tr>
+              <th>时间</th>
+              <th>车号</th>
+              <th>单号</th>
+              <th>原始单号</th>
+              <th>项目部</th>
+              <th>出入库 </th>
+              <th>订单内容</th>
+              <th/>
             </tr>
-          ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+            {search && search.map((entry, index) => (
+              <tr key={index}>
+                <td>{moment(entry.outDate).format('YYYY-MM-DD')}</td>
+                <td>{entry.carNumber}</td>
+                <td>{entry.number}</td>
+                <td>{entry.originalOrder}</td>
+                <td>{getDirection(entry) === '出库' ? getProjectName(entry.inStock) : getProjectName(entry.outStock) || entry.vendor}</td>
+                {/* 当没有公司情况的时候，会有对方单位，当两个都没有的时候，属于上年结转的单据 */}
+                <td>{getDirection(entry)}</td>
+                <td>{entry.totalString}</td>
+                <td>
+                  <Link to={`/transport/${entry._id}`}>查看运输单</Link>
+                </td>
+              </tr>
+            ))}
+            </tbody>
+          </table>
+        </CardContent>
+      </Card>
     )
   }
 }

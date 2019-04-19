@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 import { Map } from 'immutable'
 import {
+  Button,
   Card,
   CardContent,
   CardHeader,
@@ -210,28 +211,40 @@ class Store extends Component {
     }
 
     return (
-      <Card>
-        <CardHeader title="仓库实时查询"/>
-        <CardContent>
-          <StoreForm onSubmit={this.query}/>
-          <Table padding="dense">
-            <TableHead>
-            <TableRow>
-              <TableCell>类型</TableCell>
-              <TableCell>名称</TableCell>
-              <TableCell>规格</TableCell>
-              <TableCell>入库数量</TableCell>
-              <TableCell>出库数量</TableCell>
-              <TableCell>结存数量</TableCell>
-              <TableCell>小计</TableCell>
-            </TableRow>
-            </TableHead>
-            <TableBody>
-            {recordsTable}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+      <>
+        <Card>
+          <CardHeader
+            title="库存查询"
+            action={<>
+              <Button onClick={() => this.form.reset()}>重置</Button>
+              <Button color="primary" onClick={() => this.form.submit()}>查询</Button>
+            </>}
+          />
+          <CardContent>
+            <StoreForm ref={form => this.form = form} onSubmit={this.query}/>
+          </CardContent>
+        </Card>
+        <Card style={{ marginTop: '16px' }}>
+          <CardContent>
+            <Table padding="dense">
+              <TableHead>
+                <TableRow>
+                  <TableCell>类型</TableCell>
+                  <TableCell>名称</TableCell>
+                  <TableCell>规格</TableCell>
+                  <TableCell>入库数量</TableCell>
+                  <TableCell>出库数量</TableCell>
+                  <TableCell>结存数量</TableCell>
+                  <TableCell>小计</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {recordsTable}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      </>
     )
   }
 }

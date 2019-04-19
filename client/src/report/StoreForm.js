@@ -42,7 +42,8 @@ const StoreForm = ({ store, handleSubmit, change }) => (
       </div>
     </div>
     <div className="form-group">
-      <div className="col-md-10">
+      <label className="control-label col-md-1">仓库</label>
+      <div className="col-md-11">
         <Field
           component={FilterSelect}
           name="project"
@@ -55,9 +56,6 @@ const StoreForm = ({ store, handleSubmit, change }) => (
           }]}
           filterOption={filterOption}
         />
-      </div>
-      <div className="col-md-2">
-        <Button color="primary" size="small" type="submit">查询</Button>
       </div>
     </div>
   </form>
