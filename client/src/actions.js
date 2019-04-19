@@ -2,7 +2,6 @@ import { push, goBack } from 'react-router-redux'
 import { reset } from 'redux-form'
 
 import { ajax, updateEntry } from './utils'
-import config from './config'
 
 export const SYSTEM_LOADED = 'SYSTEM_LOADED'
 export const ONLINE_USER_CHANGE = 'ONLINE_USER_CHANGE'
@@ -315,7 +314,7 @@ export const requestStore = (condition) => (dispatch, getState) => {
 
 export const SELECT_STORE = 'SELECT_STORE'
 
-export const selectStore = (store) => {
+export const selectStore = (config, store) => {
   localStorage.setItem(`store-${ config.db }`, JSON.stringify(store))
 
   return {

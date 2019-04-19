@@ -10,8 +10,6 @@ import {
 } from '@material-ui/core'
 
 import { toFixedWithoutTrailingZero as fixed, total_, getUnit, parseMode } from '../utils'
-import config from './../config'
-
 
 class TransferOrder extends React.Component {
 
@@ -29,7 +27,7 @@ class TransferOrder extends React.Component {
   }
 
   render() {
-    const { record, store, projects, router, printCompany } = this.props
+    const { config, record, store, projects, router, printCompany } = this.props
     const articles = this.props.articles
 
     let orderName = ''
@@ -233,6 +231,7 @@ const mapStateToProps = state => ({
   store: state.system.store,
   user: state.system.user,
   printCompany: state.system.printCompany,
+  config: state.system.config,
 })
 
 export default connect(mapStateToProps)(TransferOrder)

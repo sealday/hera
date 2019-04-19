@@ -18,7 +18,6 @@ import {
 } from 'react-router'
 import io from 'socket.io-client'
 
-import config from './config'
 import * as reducers from './reducers'
 import { systemLoaded, updateOnlineUser, updateOnlineUsers, selectStore } from './actions'
 import { Profile } from './components'
@@ -91,10 +90,11 @@ ajax('/api/load').then(res => {
     socket.emit('client:user', res.data.user)
   })
 
+  const config = res.data.config
   try {
     const store_ = JSON.parse(localStorage.getItem(`store-${ config.db }`))
     console.log(`store-${ config.db }`)
-    store.dispatch(selectStore(store_))
+    store.dispatch(selectStore(config, store_))
   } catch (e) {
     console.warn(e)
   }

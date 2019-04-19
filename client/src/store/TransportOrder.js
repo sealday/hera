@@ -12,7 +12,6 @@ import {
 
 import { requestRecord } from '../actions'
 import { toFixedWithoutTrailingZero as fixed, transformArticle, total_, isUpdatable, getUnit } from '../utils'
-import config from './../config'
 
 
 class TransportOrder extends Component {
@@ -45,7 +44,7 @@ class TransportOrder extends Component {
   }
 
   render() {
-    const { record, user, store, articles } = this.props
+    const { record, user, store, articles, config } = this.props
 
     const nameArticleMap = transformArticle(articles.toArray()).nameArticleMap
     if (!record) {
@@ -227,6 +226,7 @@ const mapStateToProps = (state, props) => {
     articles: state.system.articles,
     user: state.system.user,
     store: state.system.store,
+    config: state.system.config,
   }
 }
 

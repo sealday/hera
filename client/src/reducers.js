@@ -1,7 +1,3 @@
-/**
- * Created by seal on 21/01/2017.
- */
-
 import * as actionTypes from './actions'
 import { Map, OrderedMap } from 'immutable'
 import { makeKeyFromNameSize } from'./utils'
@@ -20,6 +16,7 @@ export function system(state = new SystemRecord(), action) {
     case actionTypes.SYSTEM_LOADED:
       const base = action.data.base
       const user = action.data.user
+      const config = action.data.config
       const projects = new Map(action.data.projects.map(project => [project._id, project]))
       const users = new Map(action.data.users.map(user => [user._id, user]))
       const products = {}
@@ -34,6 +31,7 @@ export function system(state = new SystemRecord(), action) {
         .set('products', products)
         .set('users', users)
         .set('user', user)
+        .set('config', config)
     case actionTypes.ONLINE_USER_CHANGE:
       return state.set('online', action.data)
     case actionTypes.ONLINE_USERS_CHANGE:

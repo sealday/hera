@@ -1,11 +1,8 @@
-/**
- * Created by seal on 13/01/2017.
- */
-
 const User = require('../models').User
-
 const Product = require('../models').Product
 const Project = require('../models').Project
+const config = require('../../config')
+
 exports.login = (req, res, next) => {
   const username = req.body['username'] || '';
   const password = req.body['password'] || '';
@@ -73,6 +70,7 @@ exports.load = (req, res, next) => {
         users,
         base,
         user:req.session.user,
+        config,
       }
     })
   }).catch(err => {

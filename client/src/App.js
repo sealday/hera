@@ -18,7 +18,6 @@ import { push } from 'react-router-redux'
 import { Notification, CurrentStore, MenuList } from './components'
 import { ajax, wrapper } from './utils'
 import { selectStore, selectPrintCompany } from './actions'
-import config from './config'
 import './App.css'
 
 
@@ -108,9 +107,9 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const { dispatch } = this.props
+    const { dispatch, config } = this.props
     if (!this.isCurrentStorePermit()) {
-      dispatch(selectStore(false))
+      dispatch(selectStore(config, false))
     }
   }
 
@@ -119,7 +118,7 @@ class App extends Component {
   }
 
   render() {
-    const { classes, store, num, user, onlineUsers, children, dispatch } = this.props
+    const { config, classes, store, num, user, onlineUsers, children, dispatch } = this.props
     return (
       <div className="App">
         <Notification/>
@@ -226,6 +225,7 @@ const mapStateToProps = state => ({
   onlineUsers: state.system.onlineUsers,
   store: state.system.store,
   user: state.system.user,
+  config: state.system.config,
 })
 
 export default wrapper([
