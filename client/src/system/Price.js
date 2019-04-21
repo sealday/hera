@@ -8,6 +8,10 @@ import {
   CardHeader,
   CardContent,
 } from '@material-ui/core'
+import {
+  Popconfirm,
+} from 'antd'
+import 'antd/lib/popconfirm/style/css'
 
 import { ajax } from '../utils'
 import { newErrorNotify, newInfoNotify, newSuccessNotify, queryPricePlan, PRICE_PLAN } from '../actions'
@@ -60,9 +64,16 @@ class Price extends React.Component {
                 <td>{moment(plan.date).format('YYYY-MM-DD')}</td>
                 <td>{plan.comments}</td>
                 <td>
-                  <button><Link component="button" to={`/price/${plan._id}`}>编辑</Link></button>
-                  <button onClick={() => this.handleDelete(plan._id)}>删除</button>
-                  <button><Link to={`/price/create/${plan._id}`}>克隆</Link></button>
+                  <Link component="button" to={`/price/${plan._id}`}>编辑</Link>
+                  <Popconfirm
+                    title={`确认删除“${plan.name}”方案吗？`}
+                    onConfirm={() => this.handleDelete(plan._id)}
+                    okText="确认"
+                    cancelText="取消"
+                  >
+                    <Link>删除</Link>
+                  </Popconfirm>
+                  <Link to={`/price/create/${plan._id}`}>克隆</Link>
                 </td>
               </tr>
             ))}

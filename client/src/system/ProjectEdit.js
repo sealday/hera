@@ -1,9 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import shortid from 'shortid'
-import {
-  Button,
-} from '@material-ui/core'
 
 import { alterProject } from '../actions'
 import ProjectForm from './ProjectForm'
@@ -30,7 +27,7 @@ class ProjectEdit extends Component {
       <ProjectForm
         onSubmit={this.handleSubmit}
         initialValues={project}
-        action={<Button onClick={() => router.goBack()}>返回</Button>}
+        router={router}
         title={"项目信息修改"}
       />
     )

@@ -14,20 +14,28 @@ class OperatorForm extends Component {
           <fieldset>
             <legend>基本资料</legend>
             <div className="form-group">
-              <label>用户名</label>
-              <Field name="username" component={Input} validate={value => value ? undefined : '不能为空'} />
+              <label className="control-label col-md-1">用户名</label>
+              <div className="col-md-5">
+                <Field name="username" component={Input} validate={value => value ? undefined : '不能为空'} />
+              </div>
             </div>
             <div className="form-group">
-              <label>密码</label>
-              <Field name="password" component={Input} type="password" />
+              <label className="control-label col-md-1">密码</label>
+              <div className="col-md-5">
+                <Field name="password" component={Input} type="password" />
+              </div>
             </div>
             <div className="form-group">
-              <label>姓名</label>
-              <Field name="profile.name" component={Input} />
+              <label className="control-label col-md-1">姓名</label>
+              <div className="col-md-5">
+                <Field name="profile.name" component={Input} />
+              </div>
             </div>
             <div className="form-group">
-              <label>备注</label>
-              <Field name="comments" component={Input} />
+              <label className="control-label col-md-1">备注</label>
+              <div className="col-md-5">
+                <Field name="comments" component={Input} />
+              </div>
             </div>
           </fieldset>
           <fieldset>
@@ -61,7 +69,6 @@ class OperatorForm extends Component {
           {operator && (operator.role === '基地仓库管理员' || operator.role === '项目部管理员') &&
           <fieldset>
             <legend>项目权限</legend>
-            <p>修改权限暂时无效</p>
             <table className="table table-bordered">
               <thead>
               <tr>
@@ -84,9 +91,6 @@ class OperatorForm extends Component {
             </table>
           </fieldset>
           }
-          <div className="form-group">
-            <button className="btn btn-primary btn-block">{this.props.btnName}</button>
-          </div>
         </form>
       </div>
     )

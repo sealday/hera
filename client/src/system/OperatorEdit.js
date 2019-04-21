@@ -1,11 +1,14 @@
-/**
- * Created by seal on 25/01/2017.
- */
-
-import React, { Component } from 'react';
-import OperatorForm from './OperatorForm'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { getFormValues } from 'redux-form'
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+} from '@material-ui/core'
+
+import OperatorForm from './OperatorForm'
 import { updateOperator } from '../actions'
 
 class OperatorEdit extends Component {
@@ -50,17 +53,24 @@ class OperatorEdit extends Component {
     }
 
     return (
-      <div>
-        <button className="btn btn-default" onClick={e => this.props.router.goBack()}>取消</button>
-        <h2 className="page-header">操作员编辑</h2>
-        <OperatorForm
-          initialValues={initialValues}
-          projects={projects}
-          onSubmit={this.handleSubmit}
-          btnName="保存"
-          operator={operator}
+      <Card>
+        <CardHeader
+          title="操作员编辑"
+          action={<>
+            <Button onClick={e => this.props.router.goBack()}>取消</Button>
+            <Button color="primary" onClick={e => this.form.submit()}>保存</Button>
+          </>}
         />
-      </div>
+        <CardContent>
+          <OperatorForm
+            initialValues={initialValues}
+            projects={projects}
+            onSubmit={this.handleSubmit}
+            operator={operator}
+            ref={form => this.form = form}
+          />
+        </CardContent>
+      </Card>
     )
   }
 }

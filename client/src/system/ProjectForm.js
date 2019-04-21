@@ -13,43 +13,46 @@ import { Input, Select } from '../components'
 
 class ProjectForm extends Component {
   render() {
-    const { action, title } = this.props
+    const { title, router } = this.props
     return (
       <form className="form-horizontal project-modify-form" method="post" onSubmit={this.props.handleSubmit}>
         <Card>
-          <CardHeader title={title} action={action} />
+          <CardHeader title={title} action={<>
+            <Button onClick={() => router.goBack()}>返回</Button>
+            <Button color="primary" type="submit">保存</Button>
+          </>} />
           <CardContent>
             <div className="form-group">
-              <label className="control-label col-sm-2">单位名称<span className="important-star">(*)</span></label>
-              <div className="col-sm-3">
+              <label className="control-label col-md-2">单位名称<span className="important-star">(*)</span></label>
+              <div className="col-md-3">
                 <Field name="company" component={Input}/>
               </div>
-              <label className="control-label col-sm-2">项目名称<span className="important-star">(*)</span></label>
-              <div className="col-sm-5">
+              <label className="control-label col-md-2">项目名称<span className="important-star">(*)</span></label>
+              <div className="col-md-5">
                 <Field name="name" component={Input}/>
               </div>
             </div>
             <div className="form-group">
-              <label className="control-label col-sm-2">单位电话</label>
-              <div className="col-sm-3">
+              <label className="control-label col-md-2">单位电话</label>
+              <div className="col-md-3">
                 <Field name="companyTel" component={Input}/>
               </div>
-              <label className="control-label col-sm-2">项目电话</label>
-              <div className="col-sm-5">
+              <label className="control-label col-md-2">项目电话</label>
+              <div className="col-md-5">
                 <Field name="tel" component={Input}/>
               </div>
             </div>
             <div className="form-group">
-              <label className="control-label col-sm-2">地址</label>
-              <div className="col-sm-10">
+              <label className="control-label col-md-2">地址</label>
+              <div className="col-md-10">
                 <Field name="address" component={Input}/>
               </div>
             </div>
             <Field name="contacts" component={ContactList}/>
             <Field name="banks" component={BankList}/>
             <div className="form-group">
-              <label className="control-label col-sm-2">仓库类型</label>
-              <div className="col-sm-3">
+              <label className="control-label col-md-2">仓库类型</label>
+              <div className="col-md-3">
                 <Field name="type" component={Select}>
                   <option>项目部仓库</option>
                   <option>基地仓库</option>
@@ -60,12 +63,11 @@ class ProjectForm extends Component {
               </div>
             </div>
             <div className="form-group">
-              <label className="control-label col-sm-2">备注</label>
-              <div className="col-sm-10">
+              <label className="control-label col-md-2">备注</label>
+              <div className="col-md-10">
                 <Field name="comments" component={Input}/>
               </div>
             </div>
-            <Button variant="contained" color="primary" type="submit" fullWidth={true}>保存</Button>
           </CardContent>
         </Card>
       </form>

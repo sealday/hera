@@ -7,6 +7,10 @@ import {
   CardContent,
   CardHeader,
 } from '@material-ui/core'
+import {
+  Popconfirm,
+} from 'antd'
+import 'antd/lib/popconfirm/style/css'
 
 import { deleteOperator } from '../actions'
 
@@ -40,16 +44,14 @@ class Operator extends Component {
                 <td>{user.comments}</td>
                 <td>
                   <Link to={`/operator/${user._id}/edit`}>编辑</Link>
-                  <Link to="#" onClick={e => {
-                    e.preventDefault()
-                    if (window.confirm(`确定要删除用户 ${user.username}`)) {
-                      this.props.dispatch(deleteOperator(user))
-                    }
-                  }} >删除</Link>
-                  <Link to="#" onClick={e => {
-                    e.preventDefault()
-                    alert('还不支持禁用操作！')
-                  }} >禁用</Link>
+                  <Popconfirm
+                    title={`确定要删除用户 ${user.username}`}
+                    onConfirm={() => this.props.dispatch(deleteOperator(user))}
+                    okText="确认"
+                    cancelText="取消"
+                  >
+                    <Link>删除</Link>
+                  </Popconfirm>
                 </td>
               </tr>
             ))}

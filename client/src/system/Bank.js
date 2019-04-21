@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import ReactMaskedInput from 'react-text-mask'
 import PropTypes from 'prop-types'
+import { Input, Icon } from 'antd'
+import 'antd/lib/input/style/css'
 
 
 class Bank extends Component {
@@ -30,18 +32,24 @@ class Bank extends Component {
     return (
       <>
         <div className="form-group" >
-          <label className="control-label col-sm-2">开户行</label>
-          <div className="col-sm-3">
-            <input className="form-control" name="bank" type="text" value={bank} onChange={this.handleChange} />
+          <label className="control-label col-md-2">开户行</label>
+          <div className="col-md-3">
+            <Input name="bank" type="text" value={bank} onChange={this.handleChange} />
+          </div>
+          <label className="control-label col-md-2">账户名</label>
+          <div className="col-md-5">
+            <Input
+              name="name" type="text" value={name} onChange={this.handleChange}
+              addonAfter={<>
+                <span onClick={onAdd} style={{ marginRight: '5px', cursor: 'pointer' }}><Icon type="plus"/></span>
+                <span onClick={e => onRemove(id)} style={{ cursor: 'pointer' }}><Icon type="minus"/></span>
+              </>}
+            />
           </div>
         </div>
         <div className="form-group">
-          <label className="control-label col-sm-2">账户名</label>
-          <div className="col-sm-3">
-            <input className="form-control" name="name" type="text" value={name} onChange={this.handleChange} />
-          </div>
-          <label className="control-label col-sm-2">卡号</label>
-          <div className="col-sm-5">
+          <label className="control-label col-md-2">卡号</label>
+          <div className="col-md-10">
             <div className="input-group">
               <ReactMaskedInput
                 guide={false}
@@ -52,22 +60,12 @@ class Bank extends Component {
                   /\d/, /\d/, /\d/, /\d/, ' ',
                   /\d/, /\d/, /\d/,
                 ]}
-                className="form-control"
+                className="ant-input"
                 name="account"
                 type="text"
                 value={account}
                 onChange={this.handleChange}
               />
-              <span className="input-group-btn">
-              <span className="btn btn-default" onClick={onAdd}>
-                <span className="glyphicon glyphicon-plus"/>
-              </span>
-            </span>
-              <span className="input-group-btn">
-              <span className="btn btn-default" onClick={e => onRemove(id)}>
-                <span className="glyphicon glyphicon-minus"/>
-              </span>
-            </span>
             </div>
           </div>
         </div>

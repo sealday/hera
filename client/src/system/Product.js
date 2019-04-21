@@ -1,6 +1,8 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Field, reduxForm, getFormValues } from 'redux-form'
 import { connect } from 'react-redux'
+import { Link } from 'react-router'
 import {
   Button,
   Card,
@@ -11,8 +13,11 @@ import {
   DialogContent,
   DialogTitle,
 } from '@material-ui/core'
+import {
+  withStyles,
+} from '@material-ui/core/styles'
 
-import { ajax } from '../utils'
+import { ajax, wrapper } from '../utils'
 import { newErrorNotify, newInfoNotify } from '../actions'
 import { Input } from '../components'
 import ProductForm from './ProductForm'
@@ -24,6 +29,12 @@ const ProductFilterForm = reduxForm({ form: 'PRODUCT_FILTER', initialValues: { k
     <Field name="keyword" component={Input} placeholder="过滤出指定名称产品"/>
   </form>
 )
+
+const FormDialog = withStyles(theme => ({
+  paper: {
+    width: '1024px',
+  }
+}))(Dialog)
 
 class Product extends React.Component {
   constructor(props) {
@@ -148,18 +159,18 @@ class Product extends React.Component {
                 <td>{product.unit}</td>
                 <td>{product.scale}</td>
                 <td>{product.isScaled ? '是' : '否'}</td>
-                <td><button onClick={() => {
+                <td><Link onClick={() => {
                   this.setState({
                     current: product,
                     open: true,
                   })
-                }} >编辑</button>
-                  <button onClick={() => {this.handleDeleteConfirmOpen(product)}} >删除</button></td>
+                }} >编辑</Link>
+                  <Link onClick={() => {this.handleDeleteConfirmOpen(product)}} >删除</Link></td>
               </tr>
             ))}
             </tbody>
           </table>
-          <Dialog open={this.state.open}>
+          <FormDialog open={this.state.open}>
             <DialogTitle>编辑</DialogTitle>
             <DialogContent>
               <ProductEditForm
@@ -172,8 +183,8 @@ class Product extends React.Component {
               <Button onClick={this.handleClose}>取消</Button>
               <Button color="primary" onClick={() => this.editForm.submit()}>保存</Button>
             </DialogActions>
-          </Dialog>
-          <Dialog open={this.state.createOpen}>
+          </FormDialog>
+          <FormDialog open={this.state.createOpen}>
             <DialogTitle>新增</DialogTitle>
             <DialogContent>
               <ProductCreateForm
@@ -185,7 +196,7 @@ class Product extends React.Component {
               <Button onClick={this.handleClose}>取消</Button>
               <Button color="primary" onClick={() => this.createForm.submit()}>保存</Button>
             </DialogActions>
-          </Dialog>
+          </FormDialog>
           <Dialog open={this.state.deleteConfirm}>
             <DialogTitle>确认删除</DialogTitle>
             <DialogContent>
@@ -202,4 +213,7 @@ class Product extends React.Component {
   }
 }
 
-export default connect(state => ({ productFilter: getFormValues('PRODUCT_FILTER')(state) }))(Product)
+export default wrapper([
+  connect(state => ({ productFilter: getFormValues('PRODUCT_FILTER')(state) })),
+  Product,
+])
