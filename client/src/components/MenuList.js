@@ -109,7 +109,7 @@ const allMenu = [
   {
     name: '系统信息',
     icon: Settings,
-    roles: ['系统管理员'],
+    roles: ['系统管理员', '基地仓库管理员'],
     children: [
       {
         name: '产品信息',
@@ -122,6 +122,7 @@ const allMenu = [
       {
         name: '用户管理',
         path: '/operator',
+        roles: ['系统管理员'],
       },
       {
         name: '项目列表',
