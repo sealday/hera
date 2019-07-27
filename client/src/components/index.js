@@ -102,7 +102,7 @@ export const DatePicker = ({ input, style, meta: { touched, error }, ...custom }
     <AntDatePicker
       style={style}
       {...input}
-      value={moment(input.value)}
+      value={input.value ? moment(input.value) : null}
       onChange={date => input.onChange(date)}
       allowClear={false}
       disabledDate={current => {
