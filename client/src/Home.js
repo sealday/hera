@@ -37,21 +37,21 @@ class Home extends Component {
   componentDidMount() {
     const { system } = this.props
     this.props.dispatch(queryLatestOperations())
-    fetch(`api/status/new_in_records?store=${system.store._id}`)
+    fetch(`/api/status/new_in_records?store=${system.store._id}`)
       .then(r => r.json())
       .then(res => {
         this.setState({
           newInRecords: res.data.num,
         })
       })
-    fetch(`api/status/new_out_records?store=${system.store._id}`)
+    fetch(`/api/status/new_out_records?store=${system.store._id}`)
       .then(r => r.json())
       .then(res => {
         this.setState({
           newOutRecords: res.data.num,
         })
       })
-    fetch(`api/status/update_records?store=${system.store._id}`)
+    fetch(`/api/status/update_records?store=${system.store._id}`)
       .then(r => r.json())
       .then(res => {
         this.setState({
