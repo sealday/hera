@@ -12,12 +12,14 @@ class PurchaseCreate extends Component {
       this.props.dispatch(postTransfer({
         ...record,
         inStock: record.project,
+        outStock: record.vendor,
         type: '采购',
       }))
     } else if (direction === 'out') { // 销售单
       this.props.dispatch(postTransfer({
         ...record,
         outStock: record.project,
+        inStock: record.vendor,
         type: '销售',
       }))
     }

@@ -2,35 +2,37 @@ import React, { Component } from 'react'
 import { reduxForm, Field, FieldArray } from 'redux-form'
 import { connect } from 'react-redux'
 import moment from 'moment'
-import { withStyles } from '@material-ui/core/styles'
-import PropTypes from 'prop-types'
-import Button from '@material-ui/core/Button'
-import Card from '@material-ui/core/Card'
-import CardHeader from '@material-ui/core/CardHeader'
-import CardContent from '@material-ui/core/CardContent'
-import Table from '@material-ui/core/Table'
-import TableHead from '@material-ui/core/TableHead'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import TableRow from '@material-ui/core/TableRow'
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+} from '@material-ui/core'
 
 import { Input, DatePicker, FilterSelect, Select, TextArea, ReportFooter } from '../components'
-import { transformArticle,total_, toFixedWithoutTrailingZero as fixed, validator, filterOption } from '../utils'
-
-const styles = theme => ({
-  root: {
-  },
-  submitButton: {
-    width: '100%',
-  },
-})
+import {
+  transformArticle,
+  total_,
+  toFixedWithoutTrailingZero as fixed,
+  validator,
+  filterOption,
+  getProjects,
+  getVendors,
+  wrapper,
+} from '../utils'
 
 const EntryTable = connect(
   state => ({
-    ...transformArticle(state.system.articles.toArray()),
+    articles: state.system.articles,
     products: state.system.products,
   })
-)(({ fields, typeNameMap, nameArticleMap, products }) => {
+)(({ fields, articles, products }) => {
+  const { typeNameMap, nameArticleMap } = transformArticle(articles.toArray())
   const add = () => {
     if (fields.length > 0) {
       let name = fields.get(fields.length - 1).name
@@ -130,8 +132,8 @@ const EntryTable = connect(
   }
 
   return (
-    [
-      <Table className="table" id="purchase-table">
+    <>
+      <Table className="form-table">
         <TableHead>
           <TableRow>
             <TableCell>类型</TableCell>
@@ -149,13 +151,6 @@ const EntryTable = connect(
             <TableCell>综合单价</TableCell>
             <TableCell>综合金额</TableCell>
             <TableCell>备注</TableCell>
-            <TableCell>
-              <Button
-                variant="raised"
-                color="primary"
-                onClick={add}
-              >增加</Button>
-            </TableCell>
             <TableCell/>
           </TableRow>
         </TableHead>
@@ -207,13 +202,6 @@ const EntryTable = connect(
               <TableCell><Field name={`${entry}.comments`} component={Input}/></TableCell>
               <TableCell>
                 <Button
-                  variant="raised"
-                  color="primary"
-                  onClick={add}
-                >增加</Button>
-              </TableCell>
-              <TableCell>
-                <Button
                   color="secondary"
                   onClick={() => fields.remove(index)}
                 >删除</Button>
@@ -221,21 +209,23 @@ const EntryTable = connect(
             </TableRow>
           )}
         </TableBody>
-      </Table>,
-      <ReportFooter report={getReport()} noWeight={true}/>,
-    ]
+      </Table>
+      <Button style={{ marginTop: '8px' }} onClick={add} color="primary" variant="outlined" fullWidth>增加</Button>
+      <ReportFooter report={getReport()} noWeight={true}/>
+    </>
   )
 })
 
 
 class TransferForm extends Component {
   render() {
-    const { classes, title, action } = this.props
+    const { title, action } = this.props
+    const projects = this.props.projects.toArray()
     return (
-      <Card className={classes.root}>
-        <CardHeader title={title} action={action}/>
-        <CardContent>
-          <form className="form-horizontal" onSubmit={this.props.handleSubmit}>
+      <form onSubmit={this.props.handleSubmit}>
+        <Card>
+          <CardHeader title={title} action={action}/>
+          <CardContent>
             <div className="form-group">
               <label className="control-label col-md-1">项目部</label>
               <div className="col-md-3">
@@ -243,7 +233,7 @@ class TransferForm extends Component {
                   name="project"
                   component={FilterSelect}
                   validate={validator.required}
-                  options={this.props.projects.map(project => ({
+                  options={getProjects(projects).map(project => ({
                     value: project._id,
                     label: project.company + project.name,
                     pinyin: project.pinyin
@@ -253,7 +243,17 @@ class TransferForm extends Component {
               </div>
               <label className="control-label col-md-1">对方单位</label>
               <div className="col-md-3">
-                <Field name="vendor" component={Input} validate={validator.required}/>
+                <Field
+                  name="vendor"
+                  component={FilterSelect}
+                  validate={validator.required}
+                  options={getVendors(projects).map(project => ({
+                    value: project._id,
+                    label: project.company + project.name,
+                    pinyin: project.pinyin
+                  }))}
+                  filterOption={filterOption}
+                  placeholder="请选择供应商" />
               </div>
               <label className="control-label col-md-1">日期</label>
               <div className="col-md-3">
@@ -281,29 +281,26 @@ class TransferForm extends Component {
                 <FieldArray name="entries" component={EntryTable}/>
               </div>
             </div>
-            <Button type="submit" color="primary" variant="raised" className={classes.submitButton}>保存</Button>
-          </form>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+        <Button style={{ marginTop: '16px' }} type="submit" color="primary" variant="contained" fullWidth>保存</Button>
+      </form>
     )
   }
 }
 
-TransferForm = reduxForm({
-  form: 'purchase',
-  initialValues: {
-    outDate: moment()
-  }
-})(TransferForm)
-
-TransferForm.propTypes = {
-  classes: PropTypes.object.isRequired,
-}
-
 const mapStateToProps = state => ({
-  projects: state.system.projects.toArray(),
+  projects: state.system.projects,
   stocks: state.store.stocks,
 })
 
-
-export default connect(mapStateToProps)(withStyles(styles)(TransferForm))
+export default wrapper([
+  reduxForm({
+    form: 'purchase',
+    initialValues: {
+      outDate: moment()
+    }
+  }),
+  connect(mapStateToProps),
+  TransferForm,
+])

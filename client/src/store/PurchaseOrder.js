@@ -2,18 +2,23 @@ import React from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import { Link } from 'react-router'
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+} from '@material-ui/core'
 
 import { toFixedWithoutTrailingZero as fixed, total_, isUpdatable, getUnit } from '../utils'
 
 class PurchaseOrder extends React.Component {
 
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      columnStyle: 'single', // 栏目样式，支持单栏和双栏
-    }
-
+  state = {
+    columnStyle: 'single', // 栏目样式，支持单栏和双栏
+    isPrint: false,
   }
 
   handleTransport = () => {
@@ -21,8 +26,18 @@ class PurchaseOrder extends React.Component {
     router.push(`/transport/${record._id}`)
   }
 
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (this.state.isPrint) {
+      window.print()
+      this.setState({
+        isPrint: false,
+      })
+    }
+  }
+
   render() {
-    const { record, store, projects, articles, router, user, printCompany } = this.props
+    const { record, store, projects, articles: imArticles, router, user, printCompany } = this.props
+    const articles = imArticles.toArray()
 
     let orderName = ''
     let company = ''
@@ -49,7 +64,7 @@ class PurchaseOrder extends React.Component {
         outLabel = '出售单位'
         inLabel = '采购项目'
         companyLabel = '出售单位'
-        company = record.vendor
+        company = projects.get(record.outStock).company + projects.get(record.outStock).name
         nameLabel = '采购项目'
         signer = '出售方'
         name = projects.get(record.inStock).company + projects.get(record.inStock).name
@@ -66,7 +81,7 @@ class PurchaseOrder extends React.Component {
         outLabel = '出售项目'
         inLabel = '采购单位'
         companyLabel = '采购单位'
-        company = record.vendor
+        company = projects.get(record.inStock).company + projects.get(record.inStock).name
         nameLabel = '出售项目'
         signer = '采购方'
         name = projects.get(record.outStock).company + projects.get(record.outStock).name
@@ -129,12 +144,11 @@ class PurchaseOrder extends React.Component {
 
     printEntries.push(['', '', '', '', '总金额', '￥' + fixed(amount), ''])
 
-    if (printEntries.length % 2 !== 0) {
-      printEntries.push(['', '', '', '', '', '', ''])
-    }
-
     let rows = []
     if (this.state.columnStyle === 'double') {
+      if (printEntries.length % 2 !== 0) {
+        printEntries.push(['', '', '', '', '', '', ''])
+      }
       const half = printEntries.length / 2
       for (let i = 0; i < half; i++) {
         rows.push(printEntries[i].concat(printEntries[i + half]))
@@ -153,117 +167,119 @@ class PurchaseOrder extends React.Component {
       columnNames = columnNames.concat(columnNames)
     }
 
-    return (
-      <div>
-        <div className="btn-group hidden-print">
-          <button className="btn btn-default" onClick={() => router.goBack()}>返回</button>
-          {isUpdatable(store, user) && <span>
+    // 表格内容
+    const PrintContent = () => <div style={{ position: 'relative', paddingRight: '1.2em', minHeight: '30em' }}>
+      <div style={{
+        position: 'absolute',
+        top: '6.5em',
+        fontSize: '9px',
+        right: 0,
+        width: '1.2em'
+      }}>①发货方存根②收货方存根③承运方存根</div>
+      <h4 className="text-center">{printCompany}</h4>
+      <h4 className="text-center">{orderName}</h4>
+      <table style={{tableLayout: 'fixed', fontSize: '11px', width: '100%'}}>
+        <colgroup>
+          <col style={{width: '50%'}}/>
+        </colgroup>
+        <tbody>
+        <tr>
+          <td>{companyLabel}：{company}</td>
+          <td>日期：{moment(record.outDate).format('YYYY-MM-DD')}</td>
+          <td>流水号：{record.number}</td>
+        </tr>
+        <tr>
+          <td>{nameLabel}：{name}</td>
+          <td>车号：{record.carNumber}</td>
+          <td>原始单号：{record.originalOrder}</td>
+        </tr>
+        </tbody>
+      </table>
+      <table className="table table-bordered table--tight" style={{
+        tableLayout: 'fixed',
+        fontSize: '9px',
+        marginBottom: '0',
+        width: '100%',
+      }}>
+        <thead>
+        <tr>
+          {columnNames.map((name, index) => (
+            <th key={index}>{name}</th>
+          ))}
+        </tr>
+        </thead>
+        <tbody>
+        {rows.map((row, index) => (
+          <tr className="text-right" key={index}>
+            {row.map((col, index) => (
+              <td key={index}>{col}</td>
+            ))}
+          </tr>
+        ))}
+        <tr>
+          <td colSpan={this.state.columnStyle === 'single' ? 4 : 7} >
+            <span>说明：如供需双方未签正式合同，本{orderName}经供需双方代表签字确认后，将作为合同</span>
+            <span>及发生业务往来的有效凭证，如已签合同，则成为该合同的组成部分。{signer}须核对</span>
+            <span>以上产品规格、数量确认后可签字认可。</span>
+          </td>
+          <td colSpan={this.state.columnStyle === 'single' ? 3 : 7}>
+            备注 {record.comments}
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <table style={{tableLayout: 'fixed', fontSize: '11px', width: '100%'}}>
+        <tbody>
+        <tr>
+          <td>制单人：{record.username}</td>
+          <td>{outLabel}（签名）：</td>
+          <td>{inLabel}（签名）：</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    return this.state.isPrint ? <PrintContent/> : <Card>
+      <CardHeader
+        title={
+          <RadioGroup
+            style={{ flexDirection: 'row' }}
+            value={this.state.columnStyle}
+            onChange={e => this.setState({ columnStyle: e.target.value })}>
+            <FormControlLabel control={<Radio />} value="single" label="单栏" />
+            <FormControlLabel control={<Radio />} value="double" label="双栏" />
+          </RadioGroup>
+        }
+        action={<>
+          <Button onClick={() => router.goBack()}>返回</Button>
+          {isUpdatable(store, user) && <>
             {record.type === '调拨' &&
-            <Link className="btn btn-primary" to={`/transfer/${direction}/${record._id}/edit`}>编辑</Link>
+            <Button color="primary" component={Link} to={`/transfer/${direction}/${record._id}/edit`}>编辑</Button>
             }
             {record.type === '销售' &&
-            <Link className="btn btn-primary" to={`/purchase/out/${record._id}/edit`}>编辑</Link>
+            <Button color="primary" component={Link} to={`/purchase/out/${record._id}/edit`}>编辑</Button>
             }
             {record.type === '采购' &&
-            <Link className="btn btn-primary" to={`/purchase/in/${record._id}/edit`}>编辑</Link>
+            <Button color="primary" component={Link} to={`/purchase/in/${record._id}/edit`}>编辑</Button>
             }
-          </span>}
-          <button className="btn btn-default" onClick={this.handleTransport}>运输单</button>
-          <button className="btn btn-default" onClick={() => window.print()}>打印</button>
-          <a className="btn btn-default" href="check">审核确认</a>
-
-        </div>
-        <div className="btn-group pull-right hidden-print">
-          <label className="btn btn-default">
-            <input
-              type="radio"
-              autoComplete="off"
-              value="single"
-              checked={this.state.columnStyle === 'single'}
-              onChange={e => this.setState({ columnStyle: e.target.value })}/>单栏
-          </label>
-          <label className="btn btn-default">
-            <input
-              type="radio"
-              autoComplete="off"
-              value="double"
-              checked={this.state.columnStyle === 'double'}
-              onChange={e => this.setState({ columnStyle: e.target.value })}/>双栏
-          </label>
-        </div>
-        <div style={{ position: 'relative', paddingRight: '1.2em', minHeight: '30em' }}> {/* 表格开始 */}
-          <div style={{
-            position: 'absolute',
-            top: '6.5em',
-            fontSize: '9px',
-            right: 0,
-            width: '1.2em'
-          }}>①发货方存根②收货方存根③承运方存根</div>
-          <h4 className="text-center">{printCompany}</h4>
-          <h4 className="text-center">{orderName}</h4>
-          <table style={{tableLayout: 'fixed', fontSize: '11px', width: '100%'}}>
-            <colgroup>
-              <col style={{width: '50%'}}/>
-            </colgroup>
-            <tbody>
-            <tr>
-              <td>{companyLabel}：{company}</td>
-              <td>日期：{moment(record.outDate).format('YYYY-MM-DD')}</td>
-              <td>流水号：{record.number}</td>
-            </tr>
-            <tr>
-              <td>{nameLabel}：{name}</td>
-              <td>车号：{record.carNumber}</td>
-              <td>原始单号：{record.originalOrder}</td>
-            </tr>
-            </tbody>
-          </table>
-          <table className="table table-bordered table--tight" style={{tableLayout: 'fixed', fontSize: '9px', marginBottom: '0'}}>
-            <thead>
-            <tr>
-              {columnNames.map((name, index) => (
-                <th key={index}>{name}</th>
-              ))}
-            </tr>
-            </thead>
-            <tbody>
-            {rows.map((row, index) => (
-              <tr className="text-right" key={index}>
-                {row.map((col, index) => (
-                  <td key={index}>{col}</td>
-                ))}
-              </tr>
-            ))}
-            <tr>
-              <td colSpan={this.state.columnStyle === 'single' ? 4 : 7} >
-                <span>说明：如供需双方未签正式合同，本{orderName}经供需双方代表签字确认后，将作为合同</span>
-                <span>及发生业务往来的有效凭证，如已签合同，则成为该合同的组成部分。{signer}须核对</span>
-                <span>以上产品规格、数量确认后可签字认可。</span>
-              </td>
-              <td colSpan={this.state.columnStyle === 'single' ? 3 : 7}>
-                备注 {record.comments}
-              </td>
-            </tr>
-            </tbody>
-          </table>
-          <table style={{tableLayout: 'fixed', fontSize: '11px', width: '100%'}}>
-            <tbody>
-            <tr>
-              <td>制单人：{record.username}</td>
-              <td>{outLabel}（签名）：</td>
-              <td>{inLabel}（签名）：</td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    );
+          </>}
+          <Button onClick={this.handleTransport}>运输单</Button>
+          <Button onClick={() => {
+            this.setState({ isPrint: true })
+          }}>打印</Button>
+          <Button >审核确认</Button>
+        </>}
+      />
+      <CardContent>
+        <PrintContent/>
+      </CardContent>
+    </Card>
   }
 }
 
 const mapStateToProps = state => ({
   projects: state.system.projects,
-  articles: state.system.articles.toArray(),
+  articles: state.system.articles,
   products: state.system.products,
   store: state.system.store,
   user: state.system.user,

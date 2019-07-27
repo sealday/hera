@@ -1,18 +1,17 @@
-/**
- * Created by seal on 31/01/2017.
- */
-
 import React from 'react'
 import { reduxForm, Field, formValueSelector } from 'redux-form'
-import { FilterSelect, DatePicker, Input } from '../components'
 import { connect } from 'react-redux'
 import moment from 'moment'
-import { filterOption, transformArticle } from '../utils'
+
+import {
+  FilterSelect,
+  DatePicker,
+  Input,
+  DateRangeModifier,
+} from '../components'
+import { filterOption, transformArticle, wrapper } from '../utils'
 import { fetchAllPayer } from '../actions'
 
-/**
- * 搜索用的表单
- */
 class SimpleSearchForm extends React.Component {
 
   defaultOption = {
@@ -43,7 +42,7 @@ class SimpleSearchForm extends React.Component {
   }
 
   render() {
-    const { handleSubmit, projects, startDate, endDate, reset, payers } = this.props
+    const { handleSubmit, projects, startDate, endDate, payers } = this.props
     return (
       <form onSubmit={handleSubmit} className="form-horizontal">
         <div className="form-group">
@@ -94,21 +93,11 @@ class SimpleSearchForm extends React.Component {
             />
           </div>
           <div className="col-md-6">
-            <a href="#" onClick={e => {
-              e.preventDefault()
-              this.props.change('startDate', moment().startOf('year'))
-              this.props.change('endDate', moment().startOf('day'))
-            }} style={{paddingTop: '7px', display: 'inline-block'}}>今年</a>
-            <a href="#" onClick={e => {
-              e.preventDefault()
-              this.props.change('startDate', moment().startOf('day').add(-1, 'month'))
-              this.props.change('endDate', moment().startOf('day'))
-            }} style={{paddingTop: '7px', display: 'inline-block', marginLeft: '1em'}}>最近一个月</a>
-            <a href="#" onClick={e => {
-              e.preventDefault()
-              this.props.change('startDate', moment().startOf('day').add(-2, 'month'))
-              this.props.change('endDate', moment().startOf('day'))
-            }} style={{paddingTop: '7px', display: 'inline-block', marginLeft: '1em'}}>两个月</a>
+            <DateRangeModifier
+              change={this.props.change}
+              key_start="startDate"
+              key_end="endDate"
+            />
           </div>
         </div>
         <div className="form-group">
@@ -125,32 +114,12 @@ class SimpleSearchForm extends React.Component {
             <Field name="originalOrder" className="form-control" component={Input} />
           </div>
         </div>
-        <div className="form-group">
-          <div className="col-md-offset-6 col-md-2">
-            <button type="submit" className="btn btn-primary btn-block">查询</button>
-          </div>
-          <div className="col-md-2">
-            <button type="reset" className="btn btn-primary btn-block" onClick={e => reset()}>重置</button>
-          </div>
-          {this.props.onExcelExport && <div className="col-md-2">
-            <button type="button" className="btn btn-primary btn-block" onClick={e => this.props.onExcelExport() }>导出excel</button>
-          </div>}
-        </div>
       </form>
     )
   }
 }
 
-SimpleSearchForm = reduxForm({
-  form: 'companyTransportSearchForm',
-  initialValues: {
-    startDate: moment().startOf('day'),
-    endDate: moment().startOf('day')
-  }
-})(SimpleSearchForm)
-
-
-const selector = formValueSelector('simpleSearchForm')
+const selector = formValueSelector('CompanyTransportSearchForm')
 const mapStateToProps = state => {
   const articles = state.system.articles.toArray()
   return {
@@ -164,6 +133,15 @@ const mapStateToProps = state => {
   }
 }
 
-SimpleSearchForm = connect(mapStateToProps)(SimpleSearchForm)
+export default wrapper([
+  reduxForm({
+    form: 'CompanyTransportSearchForm',
+    initialValues: {
+      startDate: moment().startOf('day'),
+      endDate: moment().startOf('day')
+    }
+  }),
+  connect(mapStateToProps),
+  SimpleSearchForm,
+])
 
-export default SimpleSearchForm

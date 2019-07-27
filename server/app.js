@@ -125,13 +125,6 @@ app.onSocketConnection = io => {
       service.socketMap.set(socket, user)
       io.emit('server:users', [...service.socketMap.values()])
     })
-    socket.on('client:click', (click) => {
-      const op = new Op(click)
-      op.type = 'click'
-      op.save().catch((err) => {
-        console.error(JSON.stringify(err, null, 4))
-      })
-    })
   }
 }
 

@@ -1,12 +1,17 @@
 import React from 'react'
-import ReactDatePicker from 'react-datepicker'
-import ReactSelect from 'react-select'
 import ReactMaskedInput from 'react-text-mask'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemText from '@material-ui/core/ListItemText'
+import fuzzysearch from 'fuzzysearch'
 
-import { toFixedWithoutTrailingZero as fixed } from '../utils'
+import {
+  Input as AntInput,
+  Select as AntSelect,
+  DatePicker as AntDatePicker,
+} from 'antd'
+import * as moment  from 'moment'
+import 'antd/lib/input/style/css'
+import 'antd/lib/select/style/css'
+import 'antd/lib/date-picker/style/css'
+
 
 const errorStyle = {
   borderColor: '#a94442',
@@ -21,7 +26,7 @@ export const Input = ({ input, meta: { touched, error, warning }, style, ...cust
     }
   }
   return (
-  <input {...input} className="form-control" {...custom}
+  <AntInput {...input} {...custom}
     style={style}
   />
 )}
@@ -34,8 +39,11 @@ export const MaskedInput = ({ input, meta: { touched, error, warning }, style, .
     }
   }
   return (
-    <ReactMaskedInput {...input} className="form-control" {...custom}
-           style={style}
+    <ReactMaskedInput
+      {...input}
+      {...custom}
+      style={style}
+      className="ant-input"
     />
   )}
 
@@ -47,61 +55,124 @@ export const TextArea = ({ input, meta: { touched, error, warning }, style, ...c
     }
   }
   return (
-    <textarea {...input} className="form-control" {...custom}
+    <AntInput.TextArea {...input} {...custom}
            style={style}
     />
   )}
 
-export const Select = ({ input, children }) => (
-  <select {...input} className="form-control" >{children}</select>
-)
-
-export const DatePicker = ({ input, ...custom }) => (
-  <ReactDatePicker selected={input.value} className="form-control" onChange={date => input.onChange(date)} autoComplete="off" {...custom} />
-)
-
-export const FilterSelect = ({ input, options, style, ...custom, meta: { touched, error, warning } }) => {
-  const {onChange, value, onFocus } = input
-  const { placeholder, filterOption, disabled } = custom
-
+export const Select = ({ input, style, meta: { touched, error }, ...custom }) => {
   if (touched && error) {
     style = {
+      width: '100%',
       ...style,
       ...errorStyle,
     }
+  } else {
+    style = {
+      width: '100%',
+      ...style,
+    }
   }
-
-  return <ReactSelect
-    style={style}
-    onFocus={onFocus}
-    value={value}
-    disabled={disabled}
-    placeholder={placeholder}
-    onChange={e => onChange(e.value)}
-    clearable={false}
-    options={options}
-    filterOption={filterOption}
-  />
+  return (
+    <AntSelect style={style} {...input} {...custom}>{custom.children.map(child =>
+      <AntSelect.Option
+        key={child.props.value ? child.props.value : child.props.children}
+        value={child.props.value ? child.props.value : child.props.children}>
+          {child.props.children}
+      </AntSelect.Option>)}
+    </AntSelect>
+  )
 }
 
-export const ReportFooter = ({ report, noWeight }) => (
-  <List>
-    {report.map((report, index) => (
-      <ListItem divider={true} dense={true} key={index}>
-        {noWeight ?
-          <ListItemText primary={`${report.name} ${report.total} ${report.unit}`}/>
-          :
-          <ListItemText primary={`
-        ${report.name} ${report.total} ${report.unit}
-        ${report.weight === 0 ? ' *' : ' ' + fixed(report.weight / 1000, 3)} 吨
-        `}/>
-        }
-      </ListItem>
-    ))}
-  </List>
-)
+export const DatePicker = ({ input, style, meta: { touched, error }, ...custom }) => {
+  if (touched && error) {
+    style = {
+      width: '100%',
+      ...style,
+      ...errorStyle,
+    }
+  } else {
+    style = {
+      width: '100%',
+      ...style,
+    }
+  }
+
+  return (
+    <AntDatePicker
+      style={style}
+      {...input}
+      value={moment(input.value)}
+      onChange={date => input.onChange(date)}
+      {...custom} />
+  )
+}
+
+export const RangePicker = ({ input, style, meta: { touched, error }, ...custom }) => {
+  if (touched && error) {
+    style = {
+      width: '100%',
+      ...style,
+      ...errorStyle,
+    }
+  } else {
+    style = {
+      width: '100%',
+      ...style,
+    }
+  }
+
+  return (
+    <AntDatePicker.RangePicker
+      style={style}
+      {...input}
+      value={moment(input.value)}
+      onChange={date => input.onChange(date)}
+      {...custom} />
+  )
+}
+
+const defaultFilterOption = (filter, option) => {
+  return fuzzysearch(filter, option.props.label)
+}
+
+export const FilterSelect = ({ input, options, style, meta: { touched, error, warning }, ...custom }) => {
+  const { filterOption } = custom
+
+  if (touched && error) {
+    style = {
+      width: '100%',
+      ...style,
+      ...errorStyle,
+    }
+  } else {
+    style = {
+      width: '100%',
+      ...style,
+    }
+  }
+
+  return <AntSelect
+    {...input}
+    {...custom}
+    showSearch
+    filterOption={filterOption ? filterOption : defaultFilterOption}
+    style={style}>
+    {options.map(option => <AntSelect.Option
+      pinyin={option.pinyin}
+      label={option.label}
+      key={option.value}
+      value={option.value}
+    >
+      {option.label}
+    </AntSelect.Option>)}
+  </AntSelect>
+}
+
 
 export { default as Notification } from './Notification'
 export { default as CurrentStore } from './CurrentStore'
 export { default as Profile } from './Profile'
 export { default as MenuList } from './MenuList'
+export { default as ReportFooter } from './ReportFooter'
+export { default as DateRangeModifier } from './DateRangeModifier'

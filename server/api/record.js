@@ -1,6 +1,3 @@
-/**
- * Created by seal on 15/01/2017.
- */
 const pinyin = require('pinyin')
 const _ = require('lodash')
 

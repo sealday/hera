@@ -1,7 +1,3 @@
-/**
- * Created by seal on 20/01/2017.
- */
-
 export { default as TransportOrder } from './TransportOrder'
 export { default as TransportOrderEdit } from './TransportOrderEdit'
 

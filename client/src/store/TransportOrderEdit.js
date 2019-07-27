@@ -1,11 +1,9 @@
-/**
- * Created by seal on 20/01/2017.
- */
-
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
-import Button from '@material-ui/core/Button'
+import {
+  Button,
+} from '@material-ui/core'
 
 import TransportForm from './TransportForm'
 import { ajax } from '../utils'
@@ -62,34 +60,14 @@ class TransportOrderEdit extends Component {
     let receivingContact
     let receivingAddress
 
-    switch (record.type) {
-      case '销售':
-        deliveryParty = outStock.company + outStock.name
-        deliveryContact = outStock.contacts[0].name
-        deliveryPhone = outStock.contacts[0].phone
-        deliveryAddress = outStock.address
-        receivingParty = record.vendor
-        break
-      case '采购':
-        deliveryParty = record.vendor
-        receivingParty = inStock.company + inStock.name
-        receivingContact = inStock.contacts[0].name
-        receivingPhone = inStock.contacts[0].phone
-        receivingAddress = inStock.address
-        break
-      case'调拨':
-        receivingParty = inStock.company + inStock.name
-        receivingContact = inStock.contacts[0].name
-        receivingPhone = inStock.contacts[0].phone
-        receivingAddress = inStock.address
-        deliveryParty = outStock.company + outStock.name
-        deliveryContact = outStock.contacts[0].name
-        deliveryPhone = outStock.contacts[0].phone
-        deliveryAddress = outStock.address
-        break
-      default:
-        throw new Error('不支持的订单类型')
-    }
+    receivingParty = inStock.company + inStock.name
+    receivingContact = inStock.contacts[0].name
+    receivingPhone = inStock.contacts[0].phone
+    receivingAddress = inStock.address
+    deliveryParty = outStock.company + outStock.name
+    deliveryContact = outStock.contacts[0].name
+    deliveryPhone = outStock.contacts[0].phone
+    deliveryAddress = outStock.address
 
     if (record.hasTransport) {
       this.setState({
@@ -114,6 +92,7 @@ class TransportOrderEdit extends Component {
         'receiving-address': receivingAddress, // 收货地址
         'carrier-car': record.carNumber,
         'payer': deliveryParty,
+        'payDate': moment().startOf('day'),
       })
     }
   }
@@ -142,19 +121,15 @@ class TransportOrderEdit extends Component {
     if (this.state['delivery-party']) {
       const record = this.props.records.get(this.props.params.id)
       return (
-        <div>
-          <div style={{ display: 'flex' }}>
-            <h2 className="page-header" style={{ flex: 1 }}>运输单编辑</h2>
-            <span><Button onClick={this.handleCancel}>返回</Button></span>
-          </div>
-          <TransportForm
-            onSubmit={this.handleSubmit}
-            initialValues={this.state}
-            record={record}
-            optionA={this.state['delivery-party']}
-            optionB={this.state['receiving-party']}
-          />
-        </div>
+        <TransportForm
+          title="运输单编辑"
+          action={<Button onClick={this.handleCancel}>返回</Button>}
+          onSubmit={this.handleSubmit}
+          initialValues={this.state}
+          record={record}
+          optionA={this.state['delivery-party']}
+          optionB={this.state['receiving-party']}
+        />
       )
     } else {
       return null

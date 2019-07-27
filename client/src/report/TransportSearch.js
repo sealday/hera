@@ -1,14 +1,16 @@
-/**
- * Created by seal on 31/01/2017.
- */
-
 import React from 'react'
+import { connect } from 'react-redux'
+import moment from 'moment'
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+} from '@material-ui/core'
+
 import SearchForm from './TransportSearchForm'
 import SearchTable from './TransportSearchTable'
-import { connect } from 'react-redux'
 import { queryStore } from '../actions'
-import moment from 'moment'
-
 const key = '运输单查询'
 
 class Search extends React.Component {
@@ -24,11 +26,24 @@ class Search extends React.Component {
   render() {
     const { records } = this.props
     return (
-      <div>
-        <h3 className="page-header">运输单查询</h3>
-        <SearchForm onSubmit={this.search}/>
+      <>
+        <Card>
+          <CardHeader
+            title="运输单查询"
+            action={<>
+              <Button onClick={() => this.form.reset()}>重置</Button>
+              <Button color="primary" onClick={() => this.form.submit()}>查询</Button>
+            </>}
+          />
+          <CardContent>
+            <SearchForm
+              onSubmit={this.search}
+              ref={form => this.form = form}
+            />
+          </CardContent>
+        </Card>
         <SearchTable search={records} />
-      </div>
+      </>
     )
   }
 }

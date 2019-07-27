@@ -1,11 +1,7 @@
-/**
- * Created by seal on 21/01/2017.
- */
-
-import { ajax, updateEntry } from './utils'
 import { push, goBack } from 'react-router-redux'
 import { reset } from 'redux-form'
-import config from './config'
+
+import { ajax, updateEntry } from './utils'
 
 export const SYSTEM_LOADED = 'SYSTEM_LOADED'
 export const ONLINE_USER_CHANGE = 'ONLINE_USER_CHANGE'
@@ -318,7 +314,7 @@ export const requestStore = (condition) => (dispatch, getState) => {
 
 export const SELECT_STORE = 'SELECT_STORE'
 
-export const selectStore = (store) => {
+export const selectStore = (config, store) => {
   localStorage.setItem(`store-${ config.db }`, JSON.stringify(store))
 
   return {
@@ -844,7 +840,7 @@ export const projectDeleteItem = (condition) => (dispatch, getState) => {
     }).catch(err => {
       const res = err.responseJSON
       dispatch(search.endFailure)
-      dispatch(newErrorNotify('错误', `删除对账单失败：${ err }`, 2000))
+      dispatch(newErrorNotify('错误', `删除对账单失败：${ res.message }`, 2000))
     })
   }
 }

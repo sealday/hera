@@ -1,10 +1,12 @@
 import React from 'react'
-import Button from '@material-ui/core/Button'
 import { reduxForm, Field, formValueSelector } from 'redux-form'
 import moment from 'moment'
 import { connect } from 'react-redux'
-import CardHeader from '@material-ui/core/CardHeader'
-import CardContent from '@material-ui/core/CardContent'
+import {
+  Button,
+  CardHeader,
+  CardContent,
+} from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 
 import { FilterSelect, DatePicker } from '../components'
@@ -13,13 +15,10 @@ import { PRICE_PLAN, queryPricePlan } from '../actions'
 
 const styles = {
   rangeFirst: {
-    paddingTop: '7px',
-    display: 'inline-block',
+    // display: 'inline-block',
   },
   range: {
-    paddingTop: '7px',
-    display: 'inline-block',
-    marginLeft: '1em'
+    // marginLeft: '1em'
   },
 }
 
@@ -104,29 +103,34 @@ class SimpleSearchForm extends React.Component {
                 />
               </div>
               <div className="col-md-6">
-                <a href="#"
-                   onClick={this.changeRange(moment().startOf('year'), moment())}
-                   className={classes.rangeFirst}>今年</a>
-                <a href="#"
-                   onClick={
-                     this.changeRange(
-                       moment(startDate).subtract(1, 'year').startOf('year'),
-                       moment(startDate).subtract(1, 'year').endOf('year'))
-                   }
-                   className={classes.range}>上一年</a>
-                <a href="#"
-                   onClick={
-                     this.changeRange(
-                       moment(startDate).add(1, 'year').startOf('year'),
-                       moment(startDate).add(1, 'year').endOf('year'))
-                   }
-                   className={classes.range}>下一年</a>
-                <a href="#"
-                   onClick={this.changeRange(moment().subtract(1, 'month'), moment())}
-                   className={classes.range}>最近一个月</a>
-                <a href="#"
-                   onClick={this.changeRange(moment().subtract(2, 'month'), moment())}
-                   className={classes.range}>两个月</a>
+                <Button
+                  size="small"
+                  onClick={this.changeRange(moment().startOf('year'), moment())}
+                  className={classes.rangeFirst}>今年</Button>
+                <Button
+                  size="small"
+                  onClick={
+                    this.changeRange(
+                      moment(startDate).subtract(1, 'year').startOf('year'),
+                      moment(startDate).subtract(1, 'year').endOf('year'))
+                  }
+                  className={classes.range}>上一年</Button>
+                <Button
+                  size="small"
+                  onClick={
+                    this.changeRange(
+                      moment(startDate).add(1, 'year').startOf('year'),
+                      moment(startDate).add(1, 'year').endOf('year'))
+                  }
+                  className={classes.range}>下一年</Button>
+                <Button
+                  size="small"
+                  onClick={this.changeRange(moment().subtract(1, 'month'), moment())}
+                  className={classes.range}>最近一个月</Button>
+                <Button
+                  size="small"
+                  onClick={this.changeRange(moment().subtract(2, 'month'), moment())}
+                  className={classes.range}>两个月</Button>
               </div>
             </div>
             <div className="form-group">

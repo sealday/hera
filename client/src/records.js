@@ -1,7 +1,3 @@
-/**
- * Created by seal on 22/01/2017.
- */
-
 import { Map, Record } from 'immutable'
 
 export const SystemRecord = Record({
@@ -16,6 +12,7 @@ export const SystemRecord = Record({
   user: {},
   notifications: Map(),
   store: false, // 选择的仓库
+  config: {},
 })
 
 export const StoreRecord = Record({

@@ -1,8 +1,6 @@
-/**
- * Created by seal on 7/11/17.
- */
 import React from 'react'
 import { connect } from 'react-redux'
+
 import { saveProfile } from '../actions'
 import ProfileForm from './ProfileForm'
 

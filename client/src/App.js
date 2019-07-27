@@ -2,21 +2,22 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withStyles } from '@material-ui/core/styles'
-import Drawer from '@material-ui/core/Drawer'
-import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
-import List from '@material-ui/core/List'
-import Typography from '@material-ui/core/Typography'
-import Button from '@material-ui/core/Button'
-import MenuItem from '@material-ui/core/MenuItem'
-import Popover from '@material-ui/core/Popover'
+import {
+  AppBar,
+  Button,
+  Drawer,
+  List,
+  MenuItem,
+  Popover,
+  Toolbar,
+  Typography,
+} from '@material-ui/core'
 import short_id from 'shortid'
 import { push } from 'react-router-redux'
 
 import { Notification, CurrentStore, MenuList } from './components'
-import { ajax } from './utils'
+import { ajax, wrapper } from './utils'
 import { selectStore, selectPrintCompany } from './actions'
-import config from './config'
 import './App.css'
 
 
@@ -106,9 +107,9 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const { dispatch } = this.props
+    const { dispatch, config } = this.props
     if (!this.isCurrentStorePermit()) {
-      dispatch(selectStore(false))
+      dispatch(selectStore(config, false))
     }
   }
 
@@ -117,24 +118,17 @@ class App extends Component {
   }
 
   render() {
-    const { classes, store, num, user, onlineUsers, children, system, dispatch } = this.props
+    const { config, classes, store, num, user, onlineUsers, children, dispatch } = this.props
     return (
-      <div className="App" onClick={(e) => {
-        global.socket.emit('client:click', {
-          base: e.target.baseURI,
-          text: e.target.textContent,
-          tag: e.target.tagName,
-          username: system.user.username,
-        })
-      }}>
+      <div className="App">
         <Notification/>
         <div className={classes.root}>
           <AppBar position="absolute" className={classes.appBar + " hidden-print"}>
             <Toolbar>
-              <Typography variant="headline" color="inherit" noWrap className={classes.marginRight}>
+              <Typography variant="h5" color="inherit" noWrap className={classes.marginRight}>
                 {config.name}
               </Typography>
-              <Typography variant="subheading" color="inherit" noWrap className={classes.marginRight}>
+              <Typography variant="subtitle1" color="inherit" noWrap className={classes.marginRight}>
                 {store && store.company + store.name}
               </Typography>
               <Button
@@ -220,19 +214,23 @@ class App extends Component {
           </main>
         </div>
       </div>
-    );
+    )
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    nav: state.nav,
-    system: state.system,
-    num: state.system.online,
-    onlineUsers: state.system.onlineUsers,
-    store: state.system.store,
-    user: state.system.user,
-  }
-}
+const mapStateToProps = state => ({
+  nav: state.nav,
+  system: state.system,
+  num: state.system.online,
+  onlineUsers: state.system.onlineUsers,
+  store: state.system.store,
+  user: state.system.user,
+  config: state.system.config,
+})
 
-export default connect(mapStateToProps)(withStyles(styles)(App));
+export default wrapper([
+  withStyles(styles),
+  connect(mapStateToProps),
+  App,
+])
+

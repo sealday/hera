@@ -1,39 +1,49 @@
-/**
- * Created by seal on 7/11/17.
- */
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+} from '@material-ui/core'
+
 import { Input } from './index'
 
-const ProfileForm = (props) => (
-  <div>
-    <h2 className="page-header">个人信息修改</h2>
-
-    <form onSubmit={props.handleSubmit}>
-      <fieldset>
-        <legend>基本资料</legend>
+const ProfileForm = props => (
+  <Card>
+    <CardHeader title="个人信息修改"/>
+    <CardContent>
+      <form onSubmit={props.handleSubmit}>
         <div className="form-group">
-          <label>用户名</label>
-          <Field name="username" component={Input} validate={value => value ? undefined : '不能为空'} />
+          <label className="col-md-2 control-label">用户名</label>
+          <div className="col-md-10">
+            <Field name="username" component={Input} validate={value => value ? undefined : '不能为空'} />
+          </div>
         </div>
         <div className="form-group">
-          <label>密码</label>
-          <Field name="password" component={Input} type="password" autoComplete={false} />
+          <label className="col-md-2 control-label">密码</label>
+          <div className="col-md-10">
+            <Field name="password" component={Input} type="password" autoComplete={false} />
+          </div>
         </div>
         <div className="form-group">
-          <label>姓名</label>
-          <Field name="profile.name" component={Input} />
+          <label className="col-md-2 control-label">姓名</label>
+          <div className="col-md-10">
+            <Field name="profile.name" component={Input} />
+          </div>
         </div>
         <div className="form-group">
-          <label>备注</label>
-          <Field name="comments" component={Input} />
+          <label className="col-md-2 control-label">备注</label>
+          <div className="col-md-10">
+            <Field name="comments" component={Input} />
+          </div>
         </div>
-      </fieldset>
-      <button className="btn btn-primary">保存修改</button>
-    </form>
-  </div>
+        <Button color="primary" fullWidth type="submit">保存修改</Button>
+      </form>
+    </CardContent>
+  </Card>
 )
 
 export default reduxForm({
-  form: 'profile'
+  form: 'ProfileForm'
 })(ProfileForm)

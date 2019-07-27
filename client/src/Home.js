@@ -1,19 +1,21 @@
-/**
- * Created by seal on 10/01/2017.
- */
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { queryLatestOperations, queryMoreOperations } from './actions'
 import moment from 'moment'
-import Table from '@material-ui/core/Table'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
-import Card from '@material-ui/core/Card'
-import CardHeader from '@material-ui/core/CardHeader'
-import CardContent from '@material-ui/core/CardContent'
-import Button from '@material-ui/core/Button'
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  Grid,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Typography,
+} from '@material-ui/core'
+
+import { queryLatestOperations, queryMoreOperations } from './actions'
 
 const styles = {
   diffAdd: {
@@ -78,50 +80,86 @@ class Home extends Component {
       return null
     }
     return (
-      <Card>
-        <CardHeader
-          title="日志"
-          action={
-            <Button color="primary" onClick={() => {
-                this.props.dispatch(queryLatestOperations())
-              }}>刷新</Button>
-          }
-        />
-        <Table className="Table Table-bordered">
-          <TableHead>
-            <TableRow>
-              <TableCell>操作时间</TableCell>
-              <TableCell>操作类型</TableCell>
-              <TableCell>操作人</TableCell>
-              <TableCell>修改内容</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {this.props.operations.map((op) => (
-              <TableRow key={op._id}>
-                <TableCell>{moment(op.timestamp).format('MMMM Do YYYY, h:mm:ss a')}</TableCell>
-                <TableCell>{op.type || '修改'}</TableCell>
-                <TableCell>{op.user.username}</TableCell>
-                <TableCell>
-                  <p key="number">单号：{op.report.number}</p>
-                  {this.renderReport(op.report)}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-          <CardContent>
-            <Button
-              onClick={() => {
-                const ops = this.props.operations
-                if (ops.length > 0) {
-                  this.props.dispatch(queryMoreOperations(ops[ops.length - 1]._id))
-                }
-              }}
-            >加载更多</Button>
-          </CardContent>
-        </Table>
-      </Card>
-    );
+      <Grid container spacing={24}>
+        <Grid item xs={12}>
+          <Card>
+            <CardHeader title="赫拉管理系统"/>
+            <CardContent>
+              <Typography>亲爱的，欢迎使用赫拉管理系统，祝您心情愉快，工作顺利！</Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={4}>
+          <Card>
+            <CardContent>
+              <Typography>当日订单量</Typography>
+              <Typography>0</Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={4}>
+          <Card>
+            <CardContent>
+              <Typography>今日运输单量</Typography>
+              <Typography>0</Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={4}>
+          <Card>
+            <CardContent>
+              <Typography>今日修改量</Typography>
+              <Typography>0</Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12}>
+          <Card>
+            <CardHeader
+              title="日志"
+              action={
+                <Button color="primary" onClick={() => {
+                  this.props.dispatch(queryLatestOperations())
+                }}>刷新</Button>
+              }
+            />
+            <Table className="Table Table-bordered">
+              <TableHead>
+                <TableRow>
+                  <TableCell>操作时间</TableCell>
+                  <TableCell>操作类型</TableCell>
+                  <TableCell>操作人</TableCell>
+                  <TableCell>修改内容</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {this.props.operations.map((op) => (
+                  <TableRow key={op._id}>
+                    <TableCell>{moment(op.timestamp).format('MMMM Do YYYY, h:mm:ss a')}</TableCell>
+                    <TableCell>{op.type || '修改'}</TableCell>
+                    <TableCell>{op.user.username}</TableCell>
+                    <TableCell>
+                      <p key="number">单号：{op.report.number}</p>
+                      {this.renderReport(op.report)}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+            <CardContent>
+              <Button
+                onClick={() => {
+                  const ops = this.props.operations
+                  if (ops.length > 0) {
+                    this.props.dispatch(queryMoreOperations(ops[ops.length - 1]._id))
+                  }
+                }}
+              >加载更多</Button>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+    )
   }
 }
 
@@ -130,4 +168,4 @@ const mapStateToProps = state => ({
   operations: state.results.get('operations', []),
 })
 
-export default connect(mapStateToProps)(Home);
+export default connect(mapStateToProps)(Home)

@@ -7,9 +7,6 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Fade from '@material-ui/core/Fade'
 import Button from '@material-ui/core/Button'
-import {
-  TextField,
-} from 'redux-form-material-ui'
 
 class ContractFormDialog extends React.Component {
 
@@ -26,7 +23,7 @@ class ContractFormDialog extends React.Component {
           <DialogContent>
             <Field
               name="taxRate"
-              component={TextField}
+              component="input"
               style={{ width: '100%' }}
               props={{
                 label: '税率',

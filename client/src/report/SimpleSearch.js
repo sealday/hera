@@ -1,13 +1,16 @@
-/**
- * Created by seal on 31/01/2017.
- */
-
 import React from 'react'
+import { connect } from 'react-redux'
+import moment from 'moment'
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+} from '@material-ui/core'
+
 import SearchForm from './SimpleSearchForm'
 import SearchTable from './SimpleSearchTable'
-import { connect } from 'react-redux'
 import { simpleSearch } from '../actions'
-import moment from 'moment'
 
 class Search extends React.Component {
   search = condition => {
@@ -20,17 +23,30 @@ class Search extends React.Component {
 
   render() {
     return (
-      <div>
-        <h3 className="page-header">仓库出入库查询</h3>
-        <SearchForm onSubmit={this.search}/>
+      <>
+        <Card>
+          <CardHeader
+            title="出入库查询"
+            action={<>
+              <Button onClick={() => this.form.reset()}>重置</Button>
+              <Button color="primary" onClick={() => this.form.submit()}>查询</Button>
+            </>}
+          />
+          <CardContent>
+            <SearchForm
+              ref={form => this.form = form}
+              onSubmit={this.search}
+            />
+          </CardContent>
+        </Card>
         <SearchTable/>
-      </div>
+      </>
     )
   }
 }
 
 const mapStateToProps = state => ({
-  store: state.system.store
+  store: state.system.store,
 })
 
 export default connect(mapStateToProps)(Search)

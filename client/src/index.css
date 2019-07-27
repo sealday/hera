@@ -1,7 +1,3 @@
-* {
-  border-radius: 0 !important;
-}
-
 html {
   height: 100%;
 }
@@ -9,15 +5,6 @@ html {
 body {
   font: 14px "微软雅黑", "Lucida Grande", Helvetica, Arial, sans-serif;
   height: 100%;
-}
-
-.navbar {
-  margin-bottom: 0;
-  border: none;
-}
-
-.navbar-fixed-top {
-  z-index: 900;
 }
 
 #root {
@@ -33,44 +20,6 @@ body {
   margin-right: 1em;
 }
 
-
-/*NOTE: this is needed in order to make react-datepicker work with bootstrap's input group / input group addon functionatily*/
-.react-datepicker__input-container {
-  width: 100%;
-  /*NOTE: using table instead of block as it is needed in order to make this element set the height since the input is floating*/
-  display: table;
-}
-
-.form-inline .react-datepicker__input-container {
-  width: auto;
-  display: inline;
-}
-
-/* TODO 查看一下这个修改会不会引起其他地方的布局问题 */
-.form-inline .react-datepicker__input-container input {
-  width: 8em;
-}
-
-.react-datepicker {
-  font-size: 1.3rem !important;
-}
-
-.react-datepicker__current-month {
-  font-size: 1.5rem !important;
-}
-
-.react-datepicker__header {
-  padding-top: 6px !important;
-}
-
-.react-datepicker__navigation {
-  top: 13px !important;
-}
-
-.react-datepicker__day-name, .react-datepicker__day {
-  margin: 0.5rem !important;
-}
-
 .important-star {
   color: red;
 }
@@ -84,6 +33,10 @@ body {
   .reset-to-print {
     padding: 0 !important;
     margin: 0 !important;
+  }
+
+  .hidden-print {
+    display: none !important;
   }
 }
 
@@ -135,37 +88,9 @@ body {
   border-top: 1px solid black;
 }
 
-/* 修复 Select 在内联form的情况下的问题 */
-/*.form-inline .Select {*/
-  /*display: inline-block;*/
-  /*vertical-align: middle;*/
-/*}*/
-
-/*.form-inline  .Select-control {*/
-  /*width: 10em;*/
-/*}*/
-@media (min-width: 768px)  {
-  .form-inline .Select {
-    display: inline-block;
-    width: auto;
-    vertical-align: middle;
-  }
-  .form-inline .Select-control {
-    width: 10em;
-  }
-}
-
-.nav-enter {
-  animation: 0.8s fadeIn ease;
-}
-
-.nav-leave {
-  animation: 0.6s fadeOut ease;
-}
-
-/* 采购、销售页面的样式设置 */
-#purchase-table th,
-#purchase-table td {
+/* 作为表单的表格样式 */
+.form-table th,
+.form-table td {
   padding-left: 2px;
   padding-right: 2px;
   text-align: center;
@@ -180,43 +105,101 @@ body {
   font-size: 11px;
 }
 
-.h-checkbox {
-  display: none;
-}
-
-.h-checkbox + label {
-  position: relative;
-  padding-right: 22px;
-}
-
-.h-checkbox + label:after {
-  content: ' ';
-  border-radius: 10px;
-  width: 20px;
-  height: 20px;
-  position: absolute;
-  top: 0;
-  right: 0;
-  box-shadow: inset 0 16px 40px rgba(0, 0, 0, 0.4);
-}
-
-.h-checkbox + label:before {
-  content: ' ';
-  border-radius: 6px;
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  top: 4px;
-  right: 4px;
-  z-index: 999;
-  display: none;
-  box-shadow: inset 0 16px 40px #FFF;
-}
-
-.h-checkbox:checked + label:before {
-  display: block;
-}
-
 .h-left-margin-1-em {
     margin-left: 1em;
+}
+
+.form-group {
+  display: flex;
+}
+
+.col-md-1 {
+  padding: 8px;
+  flex-grow: 0;
+  max-width: 8.3%;
+  flex-basis: 8.3%;
+}
+
+.col-md-2 {
+  padding: 8px;
+  flex-grow: 0;
+  max-width: 16.7%;
+  flex-basis: 16.7%;
+}
+
+.col-md-3 {
+  padding: 8px;
+  flex-grow: 0;
+  max-width: 25%;
+  flex-basis: 25%;
+}
+
+.col-md-4 {
+  padding: 8px;
+  flex-grow: 0;
+  max-width: 33.3%;
+  flex-basis: 33.3%;
+}
+
+.col-md-5 {
+  padding: 8px;
+  flex-grow: 0;
+  max-width: 41.7%;
+  flex-basis: 41.7%;
+}
+
+.col-md-6 {
+  padding: 8px;
+  flex-grow: 0;
+  max-width: 50%;
+  flex-basis: 50%;
+}
+
+.col-md-10 {
+  padding: 8px;
+  flex-grow: 0;
+  max-width: 83.3%;
+  flex-basis: 83.3%;
+}
+.col-md-11 {
+  padding: 8px;
+  flex-grow: 0;
+  max-width: 91.7%;
+  flex-basis: 91.7%;
+}
+
+.col-md-12 {
+  padding: 8px;
+  flex-grow: 0;
+  max-width: 100%;
+  flex-basis: 100%;
+}
+
+.control-label {
+  line-height: 30px;
+  text-align: right;
+  font-weight: 600;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.table-bordered>thead>tr>th,
+.table-bordered>thead>tr>td,
+.table-bordered>tbody>tr>th,
+.table-bordered>tbody>tr>td {
+	border: 1px solid black;
+}
+
+.hidden {
+  display: none;
 }

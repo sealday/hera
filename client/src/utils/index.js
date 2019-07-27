@@ -1,10 +1,7 @@
-/**
- * Created by seal on 20/01/2017.
- */
-
-import $ from 'jquery';
+import $ from 'jquery'
 import fuzzysearch from 'fuzzysearch'
 import moment from 'moment'
+import { flowRight, last, dropRight } from 'lodash'
 
 import * as validator from './validator'
 
@@ -145,8 +142,8 @@ export const parseMode = mode => {
   return !mode || mode === 'L' ? '' : names[mode]
 }
 
-export const filterOption = (option, filter) => {
-  return fuzzysearch(filter, option.pinyin) || fuzzysearch(filter, option.label)
+export const filterOption = (filter, option) => {
+  return fuzzysearch(filter, option.props.pinyin) || fuzzysearch(filter, option.props.label)
 }
 
 let formatNumber_
@@ -230,3 +227,32 @@ export const isInsertable = (store, user) => {
 }
 
 export { default as theme } from './theme'
+
+const PROJECT_TYPE_SET = new Set(['基地仓库', '第三方仓库', '项目部仓库'])
+/**
+ * 筛选仓库列表
+ * @param projects
+ * @returns {*}
+ */
+export const getProjects = projects => projects.filter(project => PROJECT_TYPE_SET.has(project.type))
+
+/**
+ * 筛选供应商列表
+ * @param projects
+ * @returns {*}
+ */
+export const getVendors = projects => projects.filter(project => project.type === '供应商')
+
+
+/**
+ * 包装 HOC
+ * @param fns
+ * @returns {*}
+ */
+export const wrapper = (fns) => {
+  if (fns.length < 2) {
+    throw new Error('函数列表个数不得少于 2 个')
+  }
+  return flowRight(dropRight(fns))(last(fns))
+}
+

@@ -1,12 +1,8 @@
-/**
- * Created by seal on 13/01/2017.
- */
-
-const Project = require('../models').Project;
+const Project = require('../models').Project
 const helper = require('../utils/my').helper
 const rentService = require('../service/Rent')
 const moment = require('moment')
-const ObjectId = require('mongoose').Types.ObjectId;
+const ObjectId = require('mongoose').Types.ObjectId
 
 /*
 列出所有的项目
@@ -17,17 +13,17 @@ exports.list = (req, res, next) => {
       data: {
         projects
       }
-    });
+    })
   }).catch(err => {
-    next(err);
-  });
-};
+    next(err)
+  })
+}
 
 /*
 创建新的项目
  */
 exports.create = (req, res, next) => {
-  let project = new Project(req.body);
+  let project = new Project(req.body)
   project.save().then(project => {
     res.json({
       message: '保存成功',
@@ -36,7 +32,7 @@ exports.create = (req, res, next) => {
       }
     })
   }).catch(err => {
-    next(err);
+    next(err)
   })
 }
 

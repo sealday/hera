@@ -1,10 +1,7 @@
-/**
- * Created by seal on 26/12/2016.
- */
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 const pinyin = require('pinyin')
 
-const Schema = mongoose.Schema;
+const Schema = mongoose.Schema
 const productSchema = new Schema({
   type: String, // 类型
   number: Number, // 内部编号
@@ -18,7 +15,7 @@ const productSchema = new Schema({
   isScaled: Boolean, // 是否需要换算
 
   pinyin: String, // 产品名称的拼音
-});
+})
 
 
 productSchema.pre('save', function(next) {

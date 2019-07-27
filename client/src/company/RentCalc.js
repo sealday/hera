@@ -3,7 +3,6 @@ import RentCalcForm from './RentCalcForm'
 import RentCalcTable from './RentCalcTable'
 import { connect } from 'react-redux'
 import moment from 'moment'
-import XLSX from 'xlsx'
 import { saveAs } from 'file-saver'
 import Card from '@material-ui/core/Card'
 
@@ -26,7 +25,18 @@ class RentCalc extends React.Component {
     }))
   }
 
+  state = {
+    XLSX: null,
+  }
+
+  async componentDidMount() {
+    const XLSX = await import('xlsx')
+    this.setState({ XLSX })
+  }
+
   render() {
+    if (!this.state.XLSX) return null
+    const XLSX = this.state.XLSX
     const { rent } = this.props
     return (
       <Card>
