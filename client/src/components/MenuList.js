@@ -1,18 +1,23 @@
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 import React from 'react'
+
 import { withStyles } from '@material-ui/core/styles'
-import List from '@material-ui/core/List'
-import ListItemText from '@material-ui/core/ListItemText'
-import ListItemIcon from '@material-ui/core/ListItemIcon'
-import MenuItem from '@material-ui/core/MenuItem'
-import Collapse from '@material-ui/core/Collapse'
-import ExpandLess from '@material-ui/icons/ExpandLess'
-import ExpandMore from '@material-ui/icons/ExpandMore'
-import Dashboard from '@material-ui/icons/Dashboard'
-import Work from '@material-ui/icons/Work'
-import Storage from '@material-ui/icons/Storage'
-import GroupWork from '@material-ui/icons/GroupWork'
-import AccountBox from '@material-ui/icons/AccountBox'
+import {
+  List,
+  ListItemText,
+  ListItemIcon,
+  MenuItem,
+  Collapse,
+} from '@material-ui/core'
+import {
+  Dashboard,
+  ExpandLess,
+  ExpandMore,
+  GroupWork,
+  Search,
+  Settings,
+  Store,
+} from '@material-ui/icons'
 
 import { isInsertable } from '../utils'
 
@@ -24,8 +29,8 @@ const allMenu = [
     icon: Dashboard,
   },
   {
-    name: '仓库操作',
-    icon: Work,
+    name: '仓库管理',
+    icon: Store,
     roles: ['项目部管理员', '系统管理员', '基地仓库管理员'],
     // TODO 解决这个权限特殊处理
     isInsertable: isInsertable,
@@ -41,20 +46,20 @@ const allMenu = [
         roles: ['系统管理员', '基地仓库管理员'],
       },
       {
-        name: '调拨出库（发料）',
+        name: '租赁出库',
         path: '/transfer/out/create',
       },
       {
-        name: '调拨入库（收料）',
+        name: '租赁入库',
         path: '/transfer/in/create',
       },
       {
-        name: '盘点盈余入库',
+        name: '盘盈入库',
         path: '/stocktaking/in/create',
         roles: ['系统管理员', '基地仓库管理员'],
       },
       {
-        name: '盘点亏损出库',
+        name: '盘亏出库',
         path: '/stocktaking/out/create',
         roles: ['系统管理员', '基地仓库管理员'],
       },
@@ -62,7 +67,7 @@ const allMenu = [
   },
   {
     name: '仓库查询',
-    icon: Storage,
+    icon: Search,
     children: [
       {
         name: '库存查询',
@@ -103,7 +108,7 @@ const allMenu = [
   },
   {
     name: '系统信息',
-    icon: AccountBox,
+    icon: Settings,
     roles: ['系统管理员'],
     children: [
       {
