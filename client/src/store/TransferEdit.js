@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
-import Button from '@material-ui/core/Button'
+import {
+  Button,
+}from '@material-ui/core'
 
 import TransferForm from './TransferForm'
 import { updateTransfer, requestRecord } from '../actions'

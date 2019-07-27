@@ -28,9 +28,9 @@ class TransferCreate extends Component {
     const { direction } = this.props.params
     let pageTitle
     if (direction === 'out') {
-      pageTitle = '调拨出库（发料）'
+      pageTitle = '租赁出库'
     } else if (direction === 'in') {
-      pageTitle = '调拨入库（收料）'
+      pageTitle = '租赁入库'
     } else {
       return <div className="alert alert-danger">
         <p>你访问的页面不正确</p>

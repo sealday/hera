@@ -51,7 +51,7 @@ class ProjectForm extends Component {
             <Field name="contacts" component={ContactList}/>
             <Field name="banks" component={BankList}/>
             <div className="form-group">
-              <label className="control-label col-md-2">仓库类型</label>
+              <label className="control-label col-md-2">类型</label>
               <div className="col-md-3">
                 <Field name="type" component={Select}>
                   <option>项目部仓库</option>
