@@ -93,8 +93,10 @@ ajax('/api/load').then(res => {
   const config = res.data.config
   try {
     const store_ = JSON.parse(localStorage.getItem(`store-${ config.db }`))
-    console.log(`store-${ config.db }`)
-    store.dispatch(selectStore(config, store_))
+    if ('_id' in store_) {
+      store.dispatch(selectStore(store_))
+      console.log(`store-${ config.db }`)
+    }
   } catch (e) {
     console.warn(e)
   }
