@@ -83,6 +83,7 @@ class SimpleSearchTable extends React.Component {
             <table className="table table-bordered" style={{ width: '100%' }}>
               <thead>
               <tr>
+                <th>类型</th>
                 <th>时间</th>
                 <th>车号</th>
                 <th>单号</th>
@@ -96,6 +97,7 @@ class SimpleSearchTable extends React.Component {
               <tbody>
               {search && search.map((entry, index) => (
                 <tr key={index}>
+                  <td>{entry.type}</td>
                   <td>{moment(entry.outDate).format('YYYY-MM-DD')}</td>
                   <td>{entry.carNumber}</td>
                   <td>{entry.number}</td>

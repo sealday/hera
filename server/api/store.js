@@ -241,6 +241,11 @@ exports.simpleSearch = (req, res, next) => {
       }
     }
 
+    // 记录类型
+    if (condition.type) {
+      match['type'] = condition.type
+    }
+
     // 查询运输单
     if (condition.hasTransport) {
       match['hasTransport'] = true

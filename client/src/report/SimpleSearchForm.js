@@ -30,6 +30,13 @@ class SimpleSearchForm extends React.Component {
     })))
   }
 
+  getTypeOptions = () => {
+    return [{
+      value: '',
+      label: '全部',
+    }].concat(['采购', '调拨', '销售', '盘点入库', '盘点出库'].map(v => ({ value: v, label: v })))
+  }
+
   getNameOptions = () => {
     const articles = this.props.articles
     return [this.defaultOption].concat(articles.map(article => ({
@@ -64,6 +71,14 @@ class SimpleSearchForm extends React.Component {
                    placeholder="仓库"
                    options={this.getStockOptions(projects)}
                    filterOption={filterOption}
+            />
+          </div>
+          <label className="control-label col-md-1">类型</label>
+          <div className="col-md-2">
+            <Field name="type"
+                   component={FilterSelect}
+                   placeholder="类型"
+                   options={this.getTypeOptions()}
             />
           </div>
         </div>
