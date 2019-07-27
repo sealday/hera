@@ -60,7 +60,7 @@ class Project extends React.Component {
                 <TableCell rowSpan="2">项目部电话</TableCell>
                 <TableCell rowSpan="2">项目部地址</TableCell>
                 <TableCell colSpan="2">联系人</TableCell>
-                <TableCell rowSpan="2">仓库类型</TableCell>
+                <TableCell rowSpan="2">类型</TableCell>
                 <TableCell rowSpan="2">备注</TableCell>
                 <TableCell rowSpan="2">操作</TableCell>
               </TableRow>
