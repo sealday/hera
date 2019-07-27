@@ -29,8 +29,35 @@ const styles = {
 }
 
 class Home extends Component {
+  state = {
+    newInRecords: '加载中...',
+    newOutRecords: '加载中...',
+    updateRecords: '加载中...',
+  }
   componentDidMount() {
+    const { system } = this.props
     this.props.dispatch(queryLatestOperations())
+    fetch(`api/status/new_in_records?store=${system.store._id}`)
+      .then(r => r.json())
+      .then(res => {
+        this.setState({
+          newInRecords: res.data.num,
+        })
+      })
+    fetch(`api/status/new_out_records?store=${system.store._id}`)
+      .then(r => r.json())
+      .then(res => {
+        this.setState({
+          newOutRecords: res.data.num,
+        })
+      })
+    fetch(`api/status/update_records?store=${system.store._id}`)
+      .then(r => r.json())
+      .then(res => {
+        this.setState({
+          updateRecords: res.data.num,
+        })
+      })
   }
   renderReport(report) {
     const items = []
@@ -92,24 +119,24 @@ class Home extends Component {
         <Grid item xs={4}>
           <Card>
             <CardContent>
-              <Typography>当日订单量</Typography>
-              <Typography>0</Typography>
+              <Typography>入库单新增量</Typography>
+              <Typography>{this.state.newInRecords}</Typography>
             </CardContent>
           </Card>
         </Grid>
         <Grid item xs={4}>
           <Card>
             <CardContent>
-              <Typography>今日运输单量</Typography>
-              <Typography>0</Typography>
+              <Typography>出库单新增量</Typography>
+              <Typography>{this.state.newOutRecords}</Typography>
             </CardContent>
           </Card>
         </Grid>
         <Grid item xs={4}>
           <Card>
             <CardContent>
-              <Typography>今日修改量</Typography>
-              <Typography>0</Typography>
+              <Typography>出入库修改量</Typography>
+              <Typography>{this.state.updateRecords}</Typography>
             </CardContent>
           </Card>
         </Grid>

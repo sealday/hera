@@ -15,6 +15,7 @@ const workercheckin = require('./worker')
 const record = require('./record')
 const payable = require('./payable')
 const operation = require('./operation')
+const status = require('./status')
 
 const router = express.Router();
 
@@ -81,5 +82,9 @@ router.get('/store/search', store.search)
 router.get('/store/simple_search', store.simpleSearch)
 router.get('/store/rent', store.rent)
 router.get('/store/:id', store.queryAll)
+
+router.get('/status/new_in_records', status.newInRecords)
+router.get('/status/new_out_records', status.newOutRecords)
+router.get('/status/update_records', status.updateRecords)
 
 module.exports = router;
