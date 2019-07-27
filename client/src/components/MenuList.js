@@ -73,10 +73,6 @@ const allMenu = [
         path: '/simple_search',
       },
       {
-        name: '明细检索',
-        path: '/search',
-      },
-      {
         name: '运输单查询',
         path: '/transport_table',
       },

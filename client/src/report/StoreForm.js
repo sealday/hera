@@ -1,5 +1,5 @@
 import React from 'react'
-import { reduxForm, Field } from 'redux-form'
+import { reduxForm, Field, formValueSelector } from 'redux-form'
 import { connect } from 'react-redux'
 import moment from 'moment'
 
@@ -13,7 +13,7 @@ import {
   wrapper,
 } from '../utils'
 
-const StoreForm = ({ store, handleSubmit, change }) => (
+const StoreForm = ({ store, handleSubmit, change, startDate, endDate }) => (
   <form className="form-horizontal" onSubmit={handleSubmit}>
     <div className="form-group">
       <label className="control-label col-md-1">开始日期</label>
@@ -21,6 +21,9 @@ const StoreForm = ({ store, handleSubmit, change }) => (
         <Field
           component={DatePicker}
           name="startDate"
+          selectsStart
+          startDate={startDate}
+          endDate={endDate}
         />
       </div>
       <label className="control-label col-md-1">结束日期</label>
@@ -28,6 +31,9 @@ const StoreForm = ({ store, handleSubmit, change }) => (
         <Field
           component={DatePicker}
           name="endDate"
+          selectsEnd
+          startDate={startDate}
+          endDate={endDate}
         />
       </div>
       <div className="col-md-6">
@@ -35,6 +41,7 @@ const StoreForm = ({ store, handleSubmit, change }) => (
           change={change}
           key_start="startDate"
           key_end="endDate"
+          current={startDate}
         />
       </div>
     </div>
@@ -58,16 +65,22 @@ const StoreForm = ({ store, handleSubmit, change }) => (
   </form>
 )
 
+
+const selector = formValueSelector('StoreForm')
+
 const mapStateToProps = state => ({
   products: state.system.products,
   stocks: state.store.stocks,
   store: state.system.store,
+  startDate: selector(state, 'startDate'),
+  endDate: selector(state, 'endDate'),
 })
 
 export default wrapper([
   reduxForm({
     form: 'StoreForm',
-    initialValues: { startDate: moment().startOf('day'),
+    initialValues: {
+      startDate: moment().startOf('day'),
       endDate: moment().startOf('day')
     }
   }),

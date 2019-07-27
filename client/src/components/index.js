@@ -104,6 +104,16 @@ export const DatePicker = ({ input, style, meta: { touched, error }, ...custom }
       {...input}
       value={moment(input.value)}
       onChange={date => input.onChange(date)}
+      allowClear={false}
+      disabledDate={current => {
+        if (custom.selectsStart) {
+          return current.valueOf() > moment(custom.endDate).valueOf()
+        } else if (custom.selectsEnd) {
+          return current.valueOf() < moment(custom.startDate).valueOf()
+        } else {
+          return false
+        }
+      }}
       {...custom} />
   )
 }
@@ -144,6 +154,10 @@ export const FilterSelect = ({ input, options, style, meta: { touched, error, wa
       width: '100%',
       ...style,
       ...errorStyle,
+      // Ant 选择框外部样式
+      borderWidth: '1px',
+      borderRadius: '4px',
+      borderStyle: 'solid',
     }
   } else {
     style = {

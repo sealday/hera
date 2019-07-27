@@ -97,6 +97,7 @@ class SimpleSearchForm extends React.Component {
               change={this.props.change}
               key_start="startDate"
               key_end="endDate"
+              current={startDate}
             />
           </div>
         </div>
