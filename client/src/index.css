@@ -26,6 +26,7 @@ body {
 
 @media print {
   body {
+    color: black;
     font-family: 'SimSun';
     padding-top: 0;
     margin-bottom: 0;
