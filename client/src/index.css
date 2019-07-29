@@ -26,6 +26,7 @@ body {
 
 @media print {
   body {
+    font-family: 'FangSong';
     padding-top: 0;
     margin-bottom: 0;
   }
