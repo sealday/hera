@@ -84,7 +84,7 @@ export const Select = ({ input, style, meta: { touched, error }, ...custom }) =>
   )
 }
 
-export const DatePicker = ({ input, style, meta: { touched, error }, ...custom }) => {
+export const DatePicker = ({ input: { value, onChange }, style, meta: { touched, error }, ...custom }) => {
   if (touched && error) {
     style = {
       width: '100%',
@@ -101,9 +101,8 @@ export const DatePicker = ({ input, style, meta: { touched, error }, ...custom }
   return (
     <AntDatePicker
       style={style}
-      {...input}
-      value={input.value ? moment(input.value) : null}
-      onChange={date => input.onChange(date)}
+      value={value ? moment(value) : null}
+      onChange={date => onChange(date)}
       allowClear={false}
       disabledDate={current => {
         if (custom.selectsStart) {
