@@ -1,9 +1,47 @@
-const Operation = require('../models').Operation
 const diff = require('deep-diff').diff
 const _ = require('lodash')
 
+const Operation = require('../models').Operation
+
+/**
+ * 日志服务
+ * TODO
+ * 1. 用户存储 ID 和名字，防止同名
+ * 2. 对于记录的编辑存储不属于日志基础服务，重构出去
+ * 3. 改善操作中出现的系统错误
+ */
 class Logger {
-  constructor () {
+
+  /**
+   * 记录常规操作
+   */
+  logInfo(user, type, content) {
+    const operation = new Operation({
+      level: 'INFO',
+      type: type,
+      timestamp: Date.now(),
+      user: _.pick(user, ['username', 'profile.name']),
+      report: content,
+    })
+    operation.save().catch((err) => {
+      console.error(err);
+    })
+  }
+
+  /**
+   * 记录危险操作
+   */
+  logDanger(user, type, content) {
+    const operation = new Operation({
+      level: 'DANGER',
+      type: type,
+      timestamp: Date.now(),
+      user: _.pick(user, ['username', 'profile.name']),
+      report: content,
+    })
+    operation.save().catch((err) => {
+      console.error(err);
+    })
   }
 
   logNewRecord(record, user) {

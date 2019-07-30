@@ -2,6 +2,8 @@ const User = require('../models').User
 const Product = require('../models').Product
 const Project = require('../models').Project
 const config = require('../../config')
+const service = require('../service')
+const logger = service.logger
 
 exports.login = (req, res, next) => {
   const username = req.body['username'] || '';
@@ -27,6 +29,7 @@ exports.login = (req, res, next) => {
   }).then(([matched, user]) => {
     if (matched) {
       req.session.user = user;
+      logger.logInfo(user, '登录', { message: '成功登录' })
       return res.send('登录成功！');
     } else {
       throw {
@@ -127,6 +130,7 @@ exports.update = (req, res, next) => {
   let id = req.params.id
   User.findById(id).then(user => {
     delete req.body._id // 阻止客户端传来改变的 id
+    logger.logDanger(req.session.user, '修改', { message: '更新' + user.profile.name + '的资料' })
     Object.assign(user, req.body)
     return user.save()
   }).then(user => {
@@ -146,6 +150,7 @@ exports.saveProfile = (req, res, next) => {
   if (!password) {
     return res.end();
   }
+  logger.logDanger(req.session.user, '修改', { message: '更新了自己的资料' })
   let id = req.params.id
   User.findById(id).then(user => {
     delete req.body._id // 阻止客户端传来改变的 id

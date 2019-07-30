@@ -256,3 +256,33 @@ export const wrapper = (fns) => {
   return flowRight(dropRight(fns))(last(fns))
 }
 
+/**
+ * @param level 日志内部名称
+ * @returns 日志对外名称
+ */
+export const getLevelName = level => {
+  switch (level) {
+    case 'INFO':
+      return '提示'
+    case 'DANGER':
+      return '危险'
+    default:
+      return ''
+  }
+}
+
+/**
+ *
+ * @param user 当前用户
+ * @param roles 允许的角色
+ * returns 是否允许
+ */
+export const isCurrentUserPermit = (user, roles) => {
+  for (let i = 0; i < roles.length; i++) {
+    if (user.role === roles[i]) {
+      return true
+    }
+  }
+  return false
+}
+

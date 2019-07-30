@@ -16,6 +16,7 @@ import {
 } from '@material-ui/core'
 
 import { queryLatestOperations, queryMoreOperations } from './actions'
+import { getLevelName, isCurrentUserPermit } from './utils'
 
 const styles = {
   diffAdd: {
@@ -73,6 +74,7 @@ class Home extends Component {
       other2Fee: '其他费用2',
       comments: '备注',
     }
+    items.push(<p key="number">单号：{report.number}</p>)
     let entries = report.recordEdit || []
     entries.forEach((diff) => {
       items.push(<p key={diff.field}>
@@ -103,9 +105,6 @@ class Home extends Component {
     return items
   }
   render() {
-    if (this.props.system.user.role  !== '系统管理员') {
-      return null
-    }
     return (
       <Grid container spacing={24}>
         <Grid item xs={12}>
@@ -116,6 +115,8 @@ class Home extends Component {
             </CardContent>
           </Card>
         </Grid>
+        {isCurrentUserPermit(this.props.system.user, ['系统管理员', '基地仓库管理员']) &&
+        <>
         <Grid item xs={4}>
           <Card>
             <CardContent>
@@ -140,6 +141,7 @@ class Home extends Component {
             </CardContent>
           </Card>
         </Grid>
+        </>}
         <Grid item xs={12}>
           <Card>
             <CardHeader
@@ -153,6 +155,7 @@ class Home extends Component {
             <Table className="Table Table-bordered">
               <TableHead>
                 <TableRow>
+                  <TableCell>日志等级</TableCell>
                   <TableCell>操作时间</TableCell>
                   <TableCell>操作类型</TableCell>
                   <TableCell>操作人</TableCell>
@@ -162,12 +165,12 @@ class Home extends Component {
               <TableBody>
                 {this.props.operations.map((op) => (
                   <TableRow key={op._id}>
+                    <TableCell>{getLevelName(op.level)}</TableCell>
                     <TableCell>{moment(op.timestamp).format('MMMM Do YYYY, h:mm:ss a')}</TableCell>
                     <TableCell>{op.type || '修改'}</TableCell>
                     <TableCell>{op.user.username}</TableCell>
                     <TableCell>
-                      <p key="number">单号：{op.report.number}</p>
-                      {this.renderReport(op.report)}
+                      {op.report.message ? op.report.message : this.renderReport(op.report)}
                     </TableCell>
                   </TableRow>
                 ))}

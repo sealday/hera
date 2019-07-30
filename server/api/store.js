@@ -1,15 +1,14 @@
-/**
- * Created by seal on 05/01/2017.
- */
-const Project = require('../models').Project;
-const Record = require('../models').Record;
-const ObjectId = require('mongoose').Types.ObjectId;
-const Price = require('../models').Price
-const service = require('../service')
+const ObjectId = require('mongoose').Types.ObjectId
 const mongoose = require('mongoose')
 const moment = require('moment')
+
+const Project = require('../models').Project
+const Record = require('../models').Record;
+const Price = require('../models').Price
+const service = require('../service')
 const rentService = require('../service/Rent')
 const helper = require('../utils/my').helper
+const logger = service.logger
 
 /**
  * 查询指定 project 的库存
@@ -87,6 +86,7 @@ function queryAll(projectId, params) {
 }
 
 exports.queryAll = (req, res, next) => {
+  logger.logInfo(req.session.user, '查询', { message: '查询库存信息' })
   let condition = req.query['condition']
   if (!condition) {
     return res.status(400).json({
@@ -223,6 +223,7 @@ exports.search = (req, res, next) => {
  *
  */
 exports.simpleSearch = (req, res, next) => {
+  logger.logInfo(req.session.user, '查询', { message: '查询出入库或运输信息' })
   let condition = req.query['condition']
 
   if (condition) {
@@ -369,6 +370,7 @@ const test = () => {
  *
  */
 const rent = async (req, res) => {
+  logger.logInfo(req.session.user, '查询', { message: '计算租金信息' })
   let condition = req.query['condition']
 
   if (condition) {
