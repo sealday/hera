@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
+import { withStyles } from '@material-ui/core/styles'
 import {
   Button,
   Card,
@@ -16,7 +17,8 @@ import {
 } from '@material-ui/core'
 
 import { queryLatestOperations, queryMoreOperations } from './actions'
-import { getLevelName, isCurrentUserPermit } from './utils'
+import { getLevelName, isCurrentUserPermit, wrapper } from './utils'
+import { Flow } from './components'
 
 const styles = {
   diffAdd: {
@@ -26,8 +28,14 @@ const styles = {
   diffRemove: {
     backgroundColor: '#ffb6ba',
     padding: '2px',
-  }
+  },
 }
+
+const style = theme => ({
+  flow: {
+    maxHeight: '300px'
+  }
+})
 
 class Home extends Component {
   state = {
@@ -105,6 +113,7 @@ class Home extends Component {
     return items
   }
   render() {
+    const { classes } = this.props
     return (
       <Grid container spacing={24}>
         <Grid item xs={12}>
@@ -142,6 +151,14 @@ class Home extends Component {
           </Card>
         </Grid>
         </>}
+        <Grid item xs={12}>
+          <Flow 
+            className={classes.flow}
+            items={
+            []
+            }
+          />
+        </Grid>
         <Grid item xs={12}>
           <Card>
             <CardHeader
@@ -198,4 +215,8 @@ const mapStateToProps = state => ({
   operations: state.results.get('operations', []),
 })
 
-export default connect(mapStateToProps)(Home)
+export default wrapper([
+  connect(mapStateToProps),
+  withStyles(style),
+  Home,
+])
