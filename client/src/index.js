@@ -55,6 +55,7 @@ import {
   TransportSearch,
 } from './report'
 import * as company from './company'
+import Login from './Login'
 import { ajax } from './utils'
 
 // css 除非是模块自己的，否则直接在这里进行全局 import
@@ -74,81 +75,82 @@ const store = createStore(combineReducers({
   applyMiddleware(thunkMiddleware, routerMiddleware(hashHistory))
 ))
 
-ajax('/api/load').then(res => {
-  store.dispatch(systemLoaded(res.data))
-  const socket = io()
+const onLogined = () => {
+  ajax('/api/load').then(res => {
+    store.dispatch(systemLoaded(res.data))
+    const socket = io()
 
-  socket.on('server:num', num => {
-    store.dispatch(updateOnlineUser(num))
+    socket.on('server:num', num => {
+      store.dispatch(updateOnlineUser(num))
+    })
+
+    socket.on('server:users', (users) => {
+      store.dispatch(updateOnlineUsers(users))
+    })
+
+    socket.on('connect', () => {
+      socket.emit('client:user', res.data.user)
+    })
+
+    const config = res.data.config
+    try {
+      const store_ = JSON.parse(localStorage.getItem(`store-${config.db}`))
+      if ('_id' in store_) {
+        // 简单验证是否为有效的仓库信息
+        store.dispatch(selectStore(config, store_))
+      }
+    } catch (e) { }
+
   })
+}
 
-  socket.on('server:users', (users) => {
-    store.dispatch(updateOnlineUsers(users))
-  })
-
-  socket.on('connect', () => {
-    socket.emit('client:user', res.data.user)
-  })
-
-  const config = res.data.config
-  try {
-    const store_ = JSON.parse(localStorage.getItem(`store-${ config.db }`))
-    if ('_id' in store_) {
-      store.dispatch(selectStore(config, store_))
-      console.log(`load store-${ config.db }`)
-    }
-  } catch (e) {
-    console.warn(e)
-  }
-
-  ReactDOM.render((
-      <Provider store={store}>
-        <MuiThemeProvider theme={theme}>
-          <Router history={syncHistoryWithStore(hashHistory, store)}>
-            <Route path="/" component={App}>
-              <IndexRedirect to="/dashboard"/>
-              <Route path="dashboard" component={Home}/>
-              <Route path="operator" component={Operator}/>
-              <Route path="operator/create" component={OperatorCreate}/>
-              <Route path="operator/:id/edit" component={OperatorEdit}/>
-              <Route path="project" component={Project}/>
-              <Route path="project/create" component={ProjectCreate}/>
-              <Route path="project/:id/edit" component={ProjectEdit}/>
-              <Route path="search" component={Search}/>
-              <Route path="simple_search" component={SimpleSearch}/>
-              <Route path="simple_search_company" component={company.SimpleSearch}/>
-              <Route path="product" component={Product} />
-              <Route path="price" component={Price} />
-              <Route path="price/create" component={PriceCreate} />
-              <Route path="price/:id" component={PriceEdit} />
-              <Route path="price/create/:id" component={PriceCreate} />
-              {/* direction 表示调拨的方向 取值为 in 和 out  */}
-              <Route path="transfer/:direction/create" component={TransferCreate}/>
-              <Route path="transfer/:direction/:id/edit" component={TransferEdit}/>
-              <Route path="purchase/:direction/create" component={PurchaseCreate}/>
-              <Route path="purchase/:direction/:id/edit" component={PurchaseEdit}/>
-              <Route path="stocktaking/:direction/create" component={StocktakingCreate}/>
-              <Route path="stocktaking/:direction/:id/edit" component={StocktakingEdit}/>
-              <Route path="record/:id" component={Record}/>
-              <Route path="record/:id/preview" component={RecordPreview}/>
-              <Route path="company_record/:id" component={company.Record}/>
-              <Route path="rent_calc" component={company.RentCalc}/>
-              <Route path="rent_calc_preview" component={company.RentCalcPreview}/>
-              <Route path="contract" component={company.Contract}/>
-              <Route path="contract/:id" component={company.ContractContent}/>
-              <Route path="contract/:id/item/:itemId" component={company.ContractItem}/>
-              <Route path="contract/:id/item/:itemId/preview" component={company.RentCalcPreview}/>
-              <Route path="transport/:id" component={TransportOrder}/>
-              <Route path="transport/:id/edit" component={TransportOrderEdit}/>
-              <Route path="store" component={Store} />
-              <Route path="transport_table" component={TransportSearch}/>
-              <Route path="transport_table_company" component={company.TransportSearch}/>
-              <Route path="profile" component={Profile}/>
-              <Redirect path="*" to="/dashboard"/>
-            </Route>
-          </Router>
-        </MuiThemeProvider>
-      </Provider>
-    ), document.getElementById('root')
-  )
-})
+ReactDOM.render((
+  <Provider store={store}>
+    <MuiThemeProvider theme={theme}>
+      <Router history={syncHistoryWithStore(hashHistory, store)}>
+        <Route path="/login" component={Login} />
+        <Route path="/" component={App} onEnter={onLogined}>
+          <IndexRedirect to="/dashboard" />
+          <Route path="dashboard" component={Home} />
+          <Route path="operator" component={Operator} />
+          <Route path="operator/create" component={OperatorCreate} />
+          <Route path="operator/:id/edit" component={OperatorEdit} />
+          <Route path="project" component={Project} />
+          <Route path="project/create" component={ProjectCreate} />
+          <Route path="project/:id/edit" component={ProjectEdit} />
+          <Route path="search" component={Search} />
+          <Route path="simple_search" component={SimpleSearch} />
+          <Route path="simple_search_company" component={company.SimpleSearch} />
+          <Route path="product" component={Product} />
+          <Route path="price" component={Price} />
+          <Route path="price/create" component={PriceCreate} />
+          <Route path="price/:id" component={PriceEdit} />
+          <Route path="price/create/:id" component={PriceCreate} />
+          {/* direction 表示调拨的方向 取值为 in 和 out  */}
+          <Route path="transfer/:direction/create" component={TransferCreate} />
+          <Route path="transfer/:direction/:id/edit" component={TransferEdit} />
+          <Route path="purchase/:direction/create" component={PurchaseCreate} />
+          <Route path="purchase/:direction/:id/edit" component={PurchaseEdit} />
+          <Route path="stocktaking/:direction/create" component={StocktakingCreate} />
+          <Route path="stocktaking/:direction/:id/edit" component={StocktakingEdit} />
+          <Route path="record/:id" component={Record} />
+          <Route path="record/:id/preview" component={RecordPreview} />
+          <Route path="company_record/:id" component={company.Record} />
+          <Route path="rent_calc" component={company.RentCalc} />
+          <Route path="rent_calc_preview" component={company.RentCalcPreview} />
+          <Route path="contract" component={company.Contract} />
+          <Route path="contract/:id" component={company.ContractContent} />
+          <Route path="contract/:id/item/:itemId" component={company.ContractItem} />
+          <Route path="contract/:id/item/:itemId/preview" component={company.RentCalcPreview} />
+          <Route path="transport/:id" component={TransportOrder} />
+          <Route path="transport/:id/edit" component={TransportOrderEdit} />
+          <Route path="store" component={Store} />
+          <Route path="transport_table" component={TransportSearch} />
+          <Route path="transport_table_company" component={company.TransportSearch} />
+          <Route path="profile" component={Profile} />
+          <Redirect path="*" to="/dashboard" />
+        </Route>
+      </Router>
+    </MuiThemeProvider>
+  </Provider>
+), document.getElementById('root'))

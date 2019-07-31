@@ -32,6 +32,7 @@ export function system(state = new SystemRecord(), action) {
         .set('users', users)
         .set('user', user)
         .set('config', config)
+        .set('loading', false)
     case actionTypes.ONLINE_USER_CHANGE:
       return state.set('online', action.data)
     case actionTypes.ONLINE_USERS_CHANGE:

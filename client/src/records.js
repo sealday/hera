@@ -13,6 +13,7 @@ export const SystemRecord = Record({
   notifications: Map(),
   store: false, // 选择的仓库
   config: {},
+  loading: true,
 })
 
 export const StoreRecord = Record({

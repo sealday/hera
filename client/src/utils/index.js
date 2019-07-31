@@ -57,7 +57,7 @@ export function getShortOrder(id) {
 export function ajax(url, settings) {
   return $.ajax(url, settings).catch(res => {
     if (res.status === 401) {
-      window.location.href = 'login.html';
+      window.location.href = '#/login';
     }
     // 无论如何总是抛出，以便于后面的 catch 可以捕捉
     throw res;

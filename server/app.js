@@ -86,6 +86,10 @@ app.get('/system/', (req, res, next) => {
   res.send('网站在维护中，请稍后访问！')
 })
 
+// 重定向到新版登录页面
+app.get('/system/login.html', (req, res, next) => {
+  res.redirect('./#/login')
+})
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

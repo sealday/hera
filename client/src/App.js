@@ -5,13 +5,16 @@ import { withStyles } from '@material-ui/core/styles'
 import {
   AppBar,
   Button,
+  CircularProgress,
   Drawer,
   List,
   MenuItem,
+  Paper,
   Popover,
   Toolbar,
   Typography,
 } from '@material-ui/core'
+
 import short_id from 'shortid'
 import { push } from 'react-router-redux'
 
@@ -52,6 +55,27 @@ const styles = theme => ({
     marginRight: '1em',
   },
   toolbar: theme.mixins.toolbar,
+  progress: {
+    margin: theme.spacing.unit * 2,
+  },
+  paper: {
+    marginTop: theme.spacing.unit * 8,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
+  },
+  main: {
+    width: 'auto',
+    display: 'block', // Fix IE 11 issue.
+    marginLeft: theme.spacing.unit * 3,
+    marginRight: theme.spacing.unit * 3,
+    [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
+      width: 400,
+      marginLeft: 'auto',
+      marginRight: 'auto',
+    },
+  },
 });
 
 class App extends Component {
@@ -85,14 +109,11 @@ class App extends Component {
   }
 
   logout = () => {
-    // TODO 这里出错？？？ 总是重定向到首页
     ajax('/api/logout', {
       method: 'POST'
-    }).then(res => {
-    }).catch(err => {
     }).then(() => {
-      window.location.href = "login.html";
-    });
+      window.location.href = "#/login"
+    })
   }
 
   isCurrentStorePermit () {
@@ -118,7 +139,18 @@ class App extends Component {
   }
 
   render() {
-    const { config, classes, store, num, user, onlineUsers, children, dispatch } = this.props
+    const { config, classes, store, num, user, onlineUsers, children, dispatch, loading } = this.props
+
+    if (loading) {
+      return (
+        <main className={classes.main}>
+          <div className={classes.paper}>
+            <CircularProgress className={classes.progress} />
+            <Typography>加载中</Typography>
+          </div>
+        </main>
+      )
+    }
     return (
       <div className="App">
         <Notification/>
@@ -226,6 +258,7 @@ const mapStateToProps = state => ({
   store: state.system.store,
   user: state.system.user,
   config: state.system.config,
+  loading: state.system.loading,
 })
 
 export default wrapper([
