@@ -34,7 +34,7 @@ const projectSchema = new Schema({
     taxRate: { type: String, default: "0.03" }, // 税率
     content: Schema.Types.Mixed, // 内容
   }],
-  status: String, // 已完结
+  status: { type: String, default: 'UNDERWAY' }, // 已完结 UNDERWAY/FINISHED
   base: String, // 关联的基地仓库，用来制作三方的库存记录
 }, { timestamps: true })
 

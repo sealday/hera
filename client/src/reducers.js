@@ -48,6 +48,9 @@ export function system(state = new SystemRecord(), action) {
     case actionTypes.UPDATE_PROJECT:
       const project = action.data
       return state.update('projects', projects => projects.set(project._id, project))
+    case actionTypes.REMOVE_PROJECT:
+      const projectId = action.data
+      return state.update('projects', projects => projects.delete(projectId))
     case actionTypes.SELECT_STORE:
       return state.set('store', action.data)
     case actionTypes.NEW_OPERATOR:

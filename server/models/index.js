@@ -1,7 +1,3 @@
-/**
- * Created by seal on 22/02/2017.
- */
-
 exports.Counter = require('./counter')
 /** @type Model */
 exports.User = require('./user')
@@ -19,3 +15,4 @@ exports.Op = require('./op')
 exports.Operation = require('./operation')
 /** @type Model */
 exports.Price = require('./price')
+exports.Recycle = require('./recycle')

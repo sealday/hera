@@ -49,6 +49,8 @@ router.get('/project', project.list);
 router.post('/project', project.create)
 router.get('/project/:id', project.detail)
 router.post('/project/:id', project.update)
+router.post('/project/:id/delete', project.doDelete) // 删除项目
+router.post('/project/:id/status', project.doStatus) // 改变项目状态
 router.post('/project/:id/add_item', project.addItem)
 router.get('/project/:id/item/:itemId', project.itemDetail)
 router.post('/project/:id/item/:itemId/delete', project.deleteItem)

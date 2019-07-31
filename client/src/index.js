@@ -9,6 +9,8 @@ import { syncHistoryWithStore, routerReducer, routerMiddleware } from 'react-rou
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
 import moment from 'moment'
 import 'moment/locale/zh-cn'
+import zh_CN from 'antd/lib/locale-provider/zh_CN'
+import { LocaleProvider } from 'antd'
 import {
   Router,
   Route,
@@ -107,6 +109,7 @@ const onLogined = () => {
 ReactDOM.render((
   <Provider store={store}>
     <MuiThemeProvider theme={theme}>
+    <LocaleProvider locale={zh_CN}>
       <Router history={syncHistoryWithStore(hashHistory, store)}>
         <Route path="/login" component={Login} />
         <Route path="/" component={App} onEnter={onLogined}>
@@ -151,6 +154,7 @@ ReactDOM.render((
           <Redirect path="*" to="/dashboard" />
         </Route>
       </Router>
+    </LocaleProvider>
     </MuiThemeProvider>
   </Provider>
 ), document.getElementById('root'))

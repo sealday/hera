@@ -2,7 +2,10 @@ const Project = require('../models').Project
 const helper = require('../utils/my').helper
 const rentService = require('../service/Rent')
 const moment = require('moment')
+const recycle = require('../service').recycle
+const logger = require('../service').logger
 const ObjectId = require('mongoose').Types.ObjectId
+const _ = require('lodash')
 
 /*
 列出所有的项目
@@ -65,6 +68,31 @@ exports.detail = (req, res, next) => {
     })
   }).catch(err => {
     next(err)
+  })
+}
+
+const doDelete = async (req, res, next) => {
+  const project = await Project.findOneAndRemove({ _id: ObjectId(req.params.id) })
+  await recycle.remove('Project', project.toObject(), req.session.user)
+  logger.logDanger(req.session.user, '删除', { message: `删除项目 ${project.completeName}` })
+  res.json({
+    data: {
+      project
+    }
+  })
+}
+
+const doStatus = async (req, res, next) => {
+  const id = req.params.id
+  const body = _.pick(req.body, 'status')
+  console.log(body)
+  const project = await Project.findByIdAndUpdate(id, body, { new: true })
+
+  res.json({
+    message: '更新成功',
+    data: {
+      project
+    }
   })
 }
 
@@ -150,3 +178,5 @@ const deleteItem = async (req, res) => {
 exports.addItem = helper(addItem)
 exports.itemDetail = helper(itemDetail)
 exports.deleteItem = helper(deleteItem)
+exports.doDelete = helper(doDelete)
+exports.doStatus = helper(doStatus)

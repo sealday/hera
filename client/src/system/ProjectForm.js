@@ -23,6 +23,18 @@ class ProjectForm extends Component {
           </>} />
           <CardContent>
             <div className="form-group">
+              <label className="control-label col-md-2">类型</label>
+              <div className="col-md-3">
+                <Field name="type" component={Select}>
+                  <option>项目部仓库</option>
+                  <option>基地仓库</option>
+                  <option>第三方仓库</option>
+                  <option>供应商</option>
+                  <option>承运商</option>
+                </Field>
+              </div>
+            </div>
+            <div className="form-group">
               <label className="control-label col-md-2">单位名称<span className="important-star">(*)</span></label>
               <div className="col-md-3">
                 <Field name="company" component={Input}/>
@@ -50,18 +62,6 @@ class ProjectForm extends Component {
             </div>
             <Field name="contacts" component={ContactList}/>
             <Field name="banks" component={BankList}/>
-            <div className="form-group">
-              <label className="control-label col-md-2">类型</label>
-              <div className="col-md-3">
-                <Field name="type" component={Select}>
-                  <option>项目部仓库</option>
-                  <option>基地仓库</option>
-                  <option>第三方仓库</option>
-                  <option>供应商</option>
-                  <option>承运商</option>
-                </Field>
-              </div>
-            </div>
             <div className="form-group">
               <label className="control-label col-md-2">备注</label>
               <div className="col-md-10">

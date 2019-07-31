@@ -1,20 +1,27 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { formValueSelector } from 'redux-form'
+import { includes } from 'lodash'
+import { 
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Card,
+  CardHeader,
+} from '@material-ui/core'
+
 import ContractForm from './ContractForm'
-import Table from '@material-ui/core/Table'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
-import Card from '@material-ui/core/Card'
-import CardHeader from '@material-ui/core/CardHeader'
 
 class Contract extends React.Component {
 
   render() {
     let { projects, router, project } = this.props
     const projectId = project
+    projects = projects.valueSeq().filter(project =>
+      includes(['项目部仓库', '第三方仓库'], project.type) &&
+      (projectId ? project._id === projectId : true))
     return (
       <Card>
         {/* TODO 综合访问频率、上次访问排序 */}
@@ -29,7 +36,7 @@ class Contract extends React.Component {
             </TableRow>
           </TableHead>
           <TableBody>
-          {projects.valueSeq().filter(project => project.type !== '基地仓库' && (projectId ? project._id === projectId : true) ).map(project => (
+          {projects.map(project => (
             <TableRow key={project._id}
                       id={project._id}
                       onClick={() => router.push(`/contract/${ project._id }`)}

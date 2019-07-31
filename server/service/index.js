@@ -3,6 +3,7 @@
  */
 const Payable = require('../models').Payable
 const Logger = require('./Logger')
+const Recycle = require('./Recycle')
 
 exports.num = 0
 exports.io = null
@@ -63,3 +64,4 @@ exports.transportUpdated = record => {
 }
 
 exports.logger = new Logger
+exports.recycle = new Recycle
