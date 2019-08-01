@@ -14,6 +14,7 @@ export const SystemRecord = Record({
   store: false, // 选择的仓库
   config: {},
   loading: true,
+  rawProjects: Map(), // 未过滤过的
 })
 
 export const StoreRecord = Record({

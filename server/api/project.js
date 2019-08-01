@@ -85,9 +85,12 @@ const doDelete = async (req, res, next) => {
 const doStatus = async (req, res, next) => {
   const id = req.params.id
   const body = _.pick(req.body, 'status')
-  console.log(body)
   const project = await Project.findByIdAndUpdate(id, body, { new: true })
-
+  if (body.status === 'FINISHED') {
+    logger.logDanger(req.session.user, '禁用', { message: `禁用项目 ${project.completeName}` })
+  } else if (body.status === 'UNDERWAY') {
+    logger.logDanger(req.session.user, '启用', { message: `启用项目 ${project.completeName}` })
+  }
   res.json({
     message: '更新成功',
     data: {

@@ -26,7 +26,8 @@ export function system(state = new SystemRecord(), action) {
       }))
 
       return state.set('base', base)
-        .set('projects', projects)
+        .set('projects', projects.filter(project => project.status !== 'FINISHED'))
+        .set('rawProjects', projects)
         .set('articles', articles)
         .set('products', products)
         .set('users', users)
@@ -48,9 +49,12 @@ export function system(state = new SystemRecord(), action) {
     case actionTypes.UPDATE_PROJECT:
       const project = action.data
       return state.update('projects', projects => projects.set(project._id, project))
+        .update('projects', projects => projects.filter(project => project.status !== 'FINISHED'))
+        .update('rawProjects', projects => projects.set(project._id, project))
     case actionTypes.REMOVE_PROJECT:
       const projectId = action.data
       return state.update('projects', projects => projects.delete(projectId))
+        .update('rawProjects', projects => projects.delete(projectId))
     case actionTypes.SELECT_STORE:
       return state.set('store', action.data)
     case actionTypes.NEW_OPERATOR:

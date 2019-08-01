@@ -24,6 +24,9 @@ import {
   updateProject,
   removeProject,
 } from '../actions'
+import {
+  wrapper,
+} from '../utils'
 
 const TAB2TYPE = ['基地仓库', '第三方仓库', '项目部仓库', '供应商', '承运商']
 const btnStatusName = project => {
@@ -139,7 +142,7 @@ class Project extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    projects: state.system.projects,
+    projects: state.system.rawProjects,
   }
 }
 
@@ -168,4 +171,7 @@ const mapDispatchToProps = dispatch => ({
   }
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Project)
+export default wrapper([
+  connect(mapStateToProps, mapDispatchToProps),
+  Project,
+])
