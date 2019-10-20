@@ -22,6 +22,7 @@ import EntryTable from './TransferEntryTable'
 import {
   filterOption,
   validator,
+  getProjects,
 } from '../utils'
 import { Input, DatePicker, FilterSelect, TextArea } from '../components'
 
@@ -59,7 +60,7 @@ class TransferForm extends Component {
                   name="project"
                   component={FilterSelect}
                   validate={validator.required}
-                  options={projects.map(project => ({
+                  options={getProjects(projects).map(project => ({
                     value: project._id,
                     label: project.company + project.name,
                     pinyin: project.pinyin
