@@ -34,7 +34,7 @@ class SimpleSearchForm extends React.Component {
     return [{
       value: '',
       label: '全部',
-    }].concat(['采购', '调拨', '销售', '盘点入库', '盘点出库'].map(v => ({ value: v, label: v })))
+    }].concat(['采购', '调拨', '销售', '暂存', '盘点入库', '盘点出库'].map(v => ({ value: v, label: v })))
   }
 
   getNameOptions = () => {
