@@ -14,22 +14,30 @@ class PurchaseCreate extends Component {
         ...record,
         inStock: store._id,
         outStock: record.project,
-        type: '采购',
+        type: record.isFree ? '暂存' : '采购',
       }))
     } else if (direction === 'out') { // 销售单
       this.props.dispatch(postTransfer({
         ...record,
         outStock: store._id,
         inStock: record.project,
-        type: '销售',
+        type: record.isFree ? '暂存' : '销售',
       }))
     }
   }
 
   render() {
-    const { store, params: { direction } } = this.props
+    const { store, params: { direction }, route } = this.props
     let pageTitle
-    if (direction === 'out') {
+    let isFree = false
+    if (route.path.startsWith('transfer_free')) {
+      if (direction == 'out') {
+        pageTitle = '暂存出库'
+      } else {
+        pageTitle = '暂存入库'
+      }
+      isFree = true
+    } else if (direction === 'out') {
       pageTitle = '销售出库'
     } else if (direction === 'in') {
       pageTitle = '采购入库'
@@ -45,6 +53,7 @@ class PurchaseCreate extends Component {
         initialValues={{
           outDate: moment(),
           projectType: '项目部仓库',
+          isFree,
         }}
         onSubmit={this.handleSubmit}
       />

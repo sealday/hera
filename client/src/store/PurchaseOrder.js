@@ -68,6 +68,15 @@ class PurchaseOrder extends React.Component {
         nameLabel = '采购项目'
         signer = '出售方'
         name = projects.get(record.inStock).company + projects.get(record.inStock).name
+      } else if (record.type == '暂存') {
+        orderName = '暂存入库单'
+        outLabel = '出库单位'
+        inLabel = '入库单位'
+        companyLabel = '出库单位'
+        company = projects.get(record.outStock).company + projects.get(record.outStock).name
+        nameLabel = '入库单位'
+        signer = '出库方'
+        name = projects.get(record.inStock).company + projects.get(record.inStock).name
       }
     } else if (record.outStock === store._id) {
       // 出库是当前操作仓库时，是出库单
@@ -84,6 +93,15 @@ class PurchaseOrder extends React.Component {
         company = projects.get(record.inStock).company + projects.get(record.inStock).name
         nameLabel = '出售项目'
         signer = '采购方'
+        name = projects.get(record.outStock).company + projects.get(record.outStock).name
+      } else if (record.type === '暂存') {
+        orderName = '暂存出库单'
+        outLabel = '出库单位'
+        inLabel = '入库单位'
+        companyLabel = '出库单位'
+        company = projects.get(record.inStock).company + projects.get(record.inStock).name
+        nameLabel = '入库单位'
+        signer = '入库方'
         name = projects.get(record.outStock).company + projects.get(record.outStock).name
       }
     } else {
@@ -261,6 +279,9 @@ class PurchaseOrder extends React.Component {
             }
             {record.type === '采购' &&
             <Button color="primary" component={Link} to={`/purchase/in/${record._id}/edit`}>编辑</Button>
+            }
+            {record.type === '暂存' &&
+            <Button color="primary" component={Link} to={`/transfer_free/in/${record._id}/edit`}>编辑</Button>
             }
           </>}
           <Button onClick={this.handleTransport}>运输单</Button>

@@ -30,6 +30,7 @@ const create = async (req, res) => {
       record.status = historyRecord.status = '未支付'
       break
     case '调拨':
+    case '暂存':
       record.status = historyRecord.status = '未确认'
       break
     case '盘点入库':

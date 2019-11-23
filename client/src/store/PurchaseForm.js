@@ -130,6 +130,8 @@ const EntryTable = connect(
     return total
   }
 
+  const isFree = true
+
   return (
     <>
       <Table className="form-table">
@@ -143,12 +145,14 @@ const EntryTable = connect(
             <TableCell>单位</TableCell>
             <TableCell>单价</TableCell>
             <TableCell>金额</TableCell>
+            {!isFree && <>
             <TableCell>吨/趟</TableCell>
             <TableCell>运费单位</TableCell>
             <TableCell>运费单价</TableCell>
             <TableCell>运费</TableCell>
             <TableCell>综合单价</TableCell>
             <TableCell>综合金额</TableCell>
+            </>}
             <TableCell>备注</TableCell>
             <TableCell/>
           </TableRow>
@@ -187,6 +191,7 @@ const EntryTable = connect(
               <TableCell>{getUnit(index)}</TableCell>
               <TableCell><Field name={`${entry}.price`} component={Input}/></TableCell>
               <TableCell>{fixed(getSum(index))}</TableCell>
+              {!isFree && <>
               <TableCell><Field name={`${entry}.freightCount`} component={Input}/></TableCell>
               <TableCell style={{minWidth: '5em'}}>
                 <Field name={`${entry}.freightUnit`} component={Select}>
@@ -198,6 +203,7 @@ const EntryTable = connect(
               <TableCell>{fixed(getFreight(index))}</TableCell>
               <TableCell>{fixed(getMixPrice(index))}</TableCell>
               <TableCell>{fixed(getMixSum(index))}</TableCell>
+              </>}
               <TableCell><Field name={`${entry}.comments`} component={Input}/></TableCell>
               <TableCell>
                 <Button

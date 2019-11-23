@@ -36,6 +36,8 @@ class Record extends React.Component {
       return <PurchaseOrder record={record} router={router}/>
     } else if (record.type === '采购') {
       return <PurchaseOrder record={record} router={router}/>
+    } else if (record.type === '暂存') {
+      return <PurchaseOrder record={record} router={router}/>
     } else if (record.type === '盘点入库') {
       return <StocktakingOrder record={record} router={router}/>
     } else if (record.type === '盘点出库') {

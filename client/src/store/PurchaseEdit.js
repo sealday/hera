@@ -34,10 +34,20 @@ class PurchaseEdit extends React.Component {
   }
 
   render() {
-    const { projects, records, params: { direction, id } } = this.props
+    const { route, projects, records, params: { direction, id } } = this.props
     let pageTitle
     let stock
-    if (direction === 'out') {
+    let isFree = false
+    if (route.path.startsWith('transfer_free')) {
+      if (direction == 'out') {
+        pageTitle = '暂存出库'
+        stock = 'inStock'
+      } else {
+        pageTitle = '暂存入库'
+        stock = 'outStock'
+      }
+      isFree = true
+    } else if (direction === 'out') {
       pageTitle = '销售出库'
       stock = 'inStock'
     } else if (direction === 'in') {
@@ -61,6 +71,7 @@ class PurchaseEdit extends React.Component {
       projectType: projects.get(record[stock]).type,
       project: record[stock],
       outDate: moment(record.outDate),
+      isFree,
     }
 
     return (

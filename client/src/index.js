@@ -134,6 +134,8 @@ ReactDOM.render((
           <Route path="transfer/:direction/:id/edit" component={TransferEdit} />
           <Route path="purchase/:direction/create" component={PurchaseCreate} />
           <Route path="purchase/:direction/:id/edit" component={PurchaseEdit} />
+          <Route path="transfer_free/:direction/create" component={PurchaseCreate} />
+          <Route path="transfer_free/:direction/:id/edit" component={PurchaseEdit} />
           <Route path="stocktaking/:direction/create" component={StocktakingCreate} />
           <Route path="stocktaking/:direction/:id/edit" component={StocktakingEdit} />
           <Route path="record/:id" component={Record} />
