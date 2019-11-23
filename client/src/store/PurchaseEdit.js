@@ -10,17 +10,18 @@ class PurchaseEdit extends React.Component {
 
   handleSubmit = (record) => {
     const { direction } = this.props.params
+    const { store } = this.props
     if (direction === 'in') { // 采购单
       this.props.dispatch(updateTransfer({
         ...record,
-        inStock: record.project,
-        outStock: record.vendor,
+        inStock: store._id,
+        outStock: record.project,
       }))
     } else if (direction === 'out') { // 销售单
       this.props.dispatch(updateTransfer({
         ...record,
-        outStock: record.project,
-        inStock: record.vendor,
+        outStock: store._id,
+        inStock: record.project,
       }))
     }
   }
@@ -33,15 +34,15 @@ class PurchaseEdit extends React.Component {
   }
 
   render() {
-    const { records, params: { direction, id } } = this.props
+    const { projects, records, params: { direction, id } } = this.props
     let pageTitle
     let stock
     if (direction === 'out') {
       pageTitle = '销售出库'
-      stock = 'outStock'
+      stock = 'inStock'
     } else if (direction === 'in') {
       pageTitle = '采购入库'
-      stock = 'inStock'
+      stock = 'outStock'
     } else {
       return <div className="alert alert-danger">
         <p>你访问的页面不正确</p>
@@ -57,6 +58,7 @@ class PurchaseEdit extends React.Component {
     let record = records.get(id)
     record = {
       ...record,
+      projectType: projects.get(record[stock]).type,
       project: record[stock],
       outDate: moment(record.outDate),
     }
@@ -75,6 +77,7 @@ class PurchaseEdit extends React.Component {
 const mapStateToProps = state => ({
   store: state.system.store,
   records: state.store.records, // Immutable Map
+  projects: state.system.projects,
 })
 
 export default connect(mapStateToProps)(PurchaseEdit)

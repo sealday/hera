@@ -8,18 +8,19 @@ import { postTransfer } from '../actions'
 class PurchaseCreate extends Component {
   handleSubmit = (record) => {
     const { direction } = this.props.params
+    const { store } = this.props
     if (direction === 'in') { // 采购单
       this.props.dispatch(postTransfer({
         ...record,
-        inStock: record.project,
-        outStock: record.vendor,
+        inStock: store._id,
+        outStock: record.project,
         type: '采购',
       }))
     } else if (direction === 'out') { // 销售单
       this.props.dispatch(postTransfer({
         ...record,
-        outStock: record.project,
-        inStock: record.vendor,
+        outStock: store._id,
+        inStock: record.project,
         type: '销售',
       }))
     }
@@ -42,8 +43,8 @@ class PurchaseCreate extends Component {
       <PurchaseForm
         title={pageTitle}
         initialValues={{
-          project: store._id,
           outDate: moment(),
+          projectType: '项目部仓库',
         }}
         onSubmit={this.handleSubmit}
       />

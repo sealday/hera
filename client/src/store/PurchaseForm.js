@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { reduxForm, Field, FieldArray } from 'redux-form'
+import { reduxForm, Field, FieldArray, formValueSelector } from 'redux-form'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import {
@@ -21,7 +21,6 @@ import {
   toFixedWithoutTrailingZero as fixed,
   validator,
   filterOption,
-  getProjects,
   getVendors,
   wrapper,
 } from '../utils'
@@ -219,7 +218,7 @@ const EntryTable = connect(
 
 class TransferForm extends Component {
   render() {
-    const { title, action } = this.props
+    const { title, action, projectType } = this.props
     const projects = this.props.projects.toArray()
     return (
       <form onSubmit={this.props.handleSubmit}>
@@ -227,33 +226,38 @@ class TransferForm extends Component {
           <CardHeader title={title} action={action}/>
           <CardContent>
             <div className="form-group">
+              <label className="control-label col-md-1">类型</label>
+              <div className="col-md-3">
+                <Field
+                  name="projectType"
+                  component={Select}
+                  validate={validator.required}
+                  onChange={() => {
+                    this.props.change('project', '')
+                    this.props.untouch('project')
+                  }}
+                  placeholder="请选择项目" >
+                    <option>项目部仓库</option>
+                    <option>第三方仓库</option>
+                    <option>基地仓库</option>
+                    <option>供应商</option>
+                </Field>
+              </div>
               <label className="control-label col-md-1">项目部</label>
               <div className="col-md-3">
                 <Field
                   name="project"
                   component={FilterSelect}
                   validate={validator.required}
-                  options={getProjects(projects).map(project => ({
+                  options={getVendors(projects)
+                    .filter(project => project.type === projectType)
+                    .map(project => ({
                     value: project._id,
                     label: project.company + project.name,
                     pinyin: project.pinyin
                   }))}
                   filterOption={filterOption}
                   placeholder="请选择项目" />
-              </div>
-              <label className="control-label col-md-1">对方单位</label>
-              <div className="col-md-3">
-                <Field
-                  name="vendor"
-                  component={FilterSelect}
-                  validate={validator.required}
-                  options={getVendors(projects).map(project => ({
-                    value: project._id,
-                    label: project.company + project.name,
-                    pinyin: project.pinyin
-                  }))}
-                  filterOption={filterOption}
-                  placeholder="请选择供应商" />
               </div>
               <label className="control-label col-md-1">日期</label>
               <div className="col-md-3">
@@ -289,9 +293,11 @@ class TransferForm extends Component {
   }
 }
 
+const selector = formValueSelector('purchase')
 const mapStateToProps = state => ({
   projects: state.system.projects,
   stocks: state.store.stocks,
+  projectType: selector(state, 'projectType'),
 })
 
 export default wrapper([
