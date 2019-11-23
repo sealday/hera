@@ -43,6 +43,7 @@ class Store extends Component {
   query = data => {
     if (data.project) {
       this.props.dispatch(requestStore({
+        type: data.type,
         project: data.project,
         startDate: data.startDate,
         endDate: moment(data.endDate).add(1, 'day'),
@@ -221,7 +222,18 @@ class Store extends Component {
             </>}
           />
           <CardContent>
-            <StoreForm ref={form => this.form = form} onSubmit={this.query}/>
+            <StoreForm 
+              ref={form => this.form = form} 
+              onSubmit={this.query} 
+              initialValues={
+                {
+                  startDate: moment().startOf('day'),
+                  endDate: moment().startOf('day'),
+                  type: '',
+                  project: this.props.store._id,
+                }
+              }
+            />
           </CardContent>
         </Card>
         <Card style={{ marginTop: '16px' }}>

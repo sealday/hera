@@ -7,6 +7,7 @@ import {
   DatePicker,
   FilterSelect,
   DateRangeModifier,
+  Select,
 } from '../components'
 import {
   filterOption,
@@ -46,8 +47,22 @@ const StoreForm = ({ store, handleSubmit, change, startDate, endDate }) => (
       </div>
     </div>
     <div className="form-group">
+      <label className="control-label col-md-1">类型</label>
+      <div className="col-md-2">
+        <Field
+          component={Select}
+          name="type"
+          clearable={false}
+        >
+          <option value="">全部</option>
+          <option>调拨</option>
+          <option>购销</option>
+          <option>暂存</option>
+          <option>盘点</option>
+        </Field>
+      </div>
       <label className="control-label col-md-1">仓库</label>
-      <div className="col-md-11">
+      <div className="col-md-8">
         <Field
           component={FilterSelect}
           name="project"
@@ -79,10 +94,6 @@ const mapStateToProps = state => ({
 export default wrapper([
   reduxForm({
     form: 'StoreForm',
-    initialValues: {
-      startDate: moment().startOf('day'),
-      endDate: moment().startOf('day')
-    }
   }),
   connect(mapStateToProps),
   StoreForm,

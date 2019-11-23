@@ -10,102 +10,110 @@ const rentService = require('../service/Rent')
 const helper = require('../utils/my').helper
 const logger = service.logger
 
+const QUERY_MAP = {
+  '购销': { $or: [{ type: '采购', }, { type: '销售', }] },
+  '调拨': { type: '调拨' },
+  '暂存': { type: '暂存' },
+  '盘点': { $or: [{ type: '盘点入库' }, { type: '盘点出库' }] },
+}
+
 /**
  * 查询指定 project 的库存
  * @param projectId
  * @param params
  */
-
-function queryAll(projectId, params) {
-  return Record.aggregate([
+const queryAll = async (projectId, params) => {
+  let aggregateExpr = [
+    {},
     {
-      $match: {
-        outStock: ObjectId(projectId),
-        outDate: {
-          $gte: new Date(params.startDate),
-          $lt: new Date(params.endDate)
-        }
-      },
-    },
-    {
-      $unwind: '$entries'
-    },
-    {
-      $match: {
-        'entries.mode': {
-          $ne: 'R'
-        }
-      }
-    },
-    {
-      $group: {
-        _id: {
-          name: '$entries.name',
-          size: '$entries.size'
-        },
-        sum: {
-          $sum: '$entries.count'
-        }
+      $facet: {
+        outRecords: [
+          {
+            $match: {
+              outStock: ObjectId(projectId),
+              outDate: {
+                $gte: new Date(params.startDate),
+                $lt: new Date(params.endDate)
+              }
+            },
+          },
+          {
+            $unwind: '$entries'
+          },
+          {
+            $match: {
+              'entries.mode': {
+                $ne: 'R'
+              }
+            }
+          },
+          {
+            $group: {
+              _id: {
+                name: '$entries.name',
+                size: '$entries.size'
+              },
+              sum: {
+                $sum: '$entries.count'
+              }
+            }
+          }
+        ],
+        inRecords: [
+          {
+            $match: {
+              inStock: ObjectId(projectId),
+              outDate: {
+                $gte: new Date(params.startDate),
+                $lt: new Date(params.endDate)
+              }
+            },
+          },
+          {
+            $unwind: '$entries'
+          },
+          {
+            $match: {
+              'entries.mode': {
+                $ne: 'R'
+              }
+            }
+          },
+          {
+            $group: {
+              _id: {
+                name: '$entries.name',
+                size: '$entries.size'
+              },
+              sum: {
+                $sum: '$entries.count'
+              }
+            }
+          }
+        ]
       }
     }
-  ]).then(outRecords => {
-    console.log(outRecords)
-    return Promise.all([Record.aggregate([
-      {
-        $match: {
-          inStock: ObjectId(projectId),
-          outDate: {
-            $gte: new Date(params.startDate),
-            $lt: new Date(params.endDate)
-          }
-        },
-      },
-      {
-        $unwind: '$entries'
-      },
-      {
-        $match: {
-          'entries.mode': {
-            $ne: 'R'
-          }
-        }
-      },
-      {
-        $group: {
-          _id: {
-            name: '$entries.name',
-            size: '$entries.size'
-          },
-          sum: {
-            $sum: '$entries.count'
-          }
-        }
-      }
-    ]), outRecords])
-  })
+  ]
+  if (params.type) {
+    aggregateExpr[0] = { $match: QUERY_MAP[params.type] }
+  } else {
+    aggregateExpr = aggregateExpr.slice(1)
+  }
+  return await Record.aggregate(aggregateExpr)
 }
 
-exports.queryAll = (req, res, next) => {
+const storeSummary = async (req, res, next) => {
   logger.logInfo(req.session.user, '查询', { message: '查询库存信息' })
   let condition = req.query['condition']
-  if (!condition) {
-    return res.status(400).json({
-      message: '错误的请求格式'
-    })
-  }
-  if (req.params.id) {
+  if (condition && req.params.id) {
     const params = JSON.parse(condition)
-    queryAll(req.params.id, params).then(([inRecords, outRecords]) => {
-      service.refreshStockCache(req.params.id, inRecords, outRecords)
-      res.json({
-        message: '查询成功',
-        data   : {
-          inRecords,
-          outRecords
-        }
-      })
-    }).catch(err => {
-      next(err)
+    const [{ inRecords, outRecords }] = await queryAll(req.params.id, params)
+    res.json({
+      message: '查询成功',
+      data: {
+        inRecords,
+        outRecords
+      }
     })
   } else {
     res.status(400).json({
@@ -403,3 +411,4 @@ const rent = async (req, res) => {
 }
 
 exports.rent = helper(rent)
+exports.queryAll = helper(storeSummary)

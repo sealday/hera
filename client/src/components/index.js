@@ -11,6 +11,7 @@ import * as moment  from 'moment'
 import 'antd/lib/input/style/css'
 import 'antd/lib/select/style/css'
 import 'antd/lib/date-picker/style/css'
+import { isUndefined } from 'lodash'
 
 
 const errorStyle = {
@@ -76,8 +77,8 @@ export const Select = ({ input, style, meta: { touched, error }, ...custom }) =>
   return (
     <AntSelect style={style} {...input} {...custom}>{custom.children.map(child =>
       <AntSelect.Option
-        key={child.props.value ? child.props.value : child.props.children}
-        value={child.props.value ? child.props.value : child.props.children}>
+        key={!isUndefined(child.props.value) ? child.props.value : child.props.children}
+        value={!isUndefined(child.props.value) ? child.props.value : child.props.children}>
           {child.props.children}
       </AntSelect.Option>)}
     </AntSelect>
