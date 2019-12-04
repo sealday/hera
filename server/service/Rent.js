@@ -15,6 +15,7 @@ class Rent {
               outStock: project
             }
           ],
+          type: '调拨',
           outDate: {
             $lt: endDate,
           }
