@@ -28,7 +28,7 @@ import {
   wrapper,
 } from '../utils'
 
-const TAB2TYPE = ['基地仓库', '第三方仓库', '项目部仓库', '供应商', '承运商']
+const TAB2TYPE = ['基地仓库', '项目部仓库', '第三方仓库', '供应商', '承运商']
 const btnStatusName = project => {
   if (project.status === 'FINISHED') {
     return '启用'
