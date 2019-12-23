@@ -48,7 +48,7 @@ class Project extends React.Component {
       <>
         <Card style={{ minHeight: '120px' }}>
           <CardHeader
-            title="项目列表"
+            title="客户管理"
             action={<>
               <Button component={Link} to="/project/create">新增</Button>
             </>}

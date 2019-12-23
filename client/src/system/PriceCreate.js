@@ -47,7 +47,7 @@ class PriceCreate extends React.Component {
     return (
       <Card>
         <CardHeader
-          title="价格方案创建"
+          title="合同方案创建"
           action={<>
             <Button color="primary" onClick={() => this.form.submit()}>保存</Button>
           </>}

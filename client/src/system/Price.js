@@ -42,7 +42,7 @@ class Price extends React.Component {
     return (
       <Card>
         <CardHeader
-          title="价格方案"
+          title="合同方案"
           action={<>
             <Button color="primary" component={Link} to="/price/create">新增</Button>
           </>}

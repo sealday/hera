@@ -19,7 +19,7 @@ class Operator extends Component {
     return (
       <Card>
         <CardHeader
-          title="用户管理"
+          title="操作员管理"
           action={<>
             <Button component={Link} to="/operator/create" color="primary">新增</Button>
           </>}

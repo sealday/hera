@@ -112,11 +112,11 @@ class SimpleSearchForm extends React.Component {
               </div>
             </div>
             <div className="form-group">
-              <label className="control-label col-md-1">价格方案</label>
+              <label className="control-label col-md-1">合同方案</label>
               <div className="col-md-5">
                 <Field name="planId"
                        component={FilterSelect}
-                       placeholder="请选择要使用的价格方案"
+                       placeholder="请选择要使用的合同方案"
                        validate={[validator.required]}
                        options={this.getPlanOptions(this.props.plans)}
                        filterOption={filterOption}

@@ -124,16 +124,16 @@ const allMenu = [
         path: '/product',
       },
       {
-        name: '价格方案',
+        name: '合同方案',
         path: '/price',
       },
       {
-        name: '用户管理',
+        name: '操作员管理',
         path: '/operator',
         roles: ['系统管理员'],
       },
       {
-        name: '项目列表',
+        name: '客户列表',
         path: '/project',
       },
     ]

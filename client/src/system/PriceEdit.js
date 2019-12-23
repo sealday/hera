@@ -48,7 +48,7 @@ class PriceEdit extends React.Component {
     return (
       <Card>
         <CardHeader
-          title="价格方案编辑"
+          title="合同方案编辑"
           action={<>
             <Button color="primary" onClick={() => this.form.submit()}>保存</Button>
           </>}
