@@ -229,7 +229,7 @@ class Store extends Component {
                 {
                   startDate: moment().startOf('day'),
                   endDate: moment().startOf('day'),
-                  type: '',
+                  type: '调拨',
                   project: this.props.store._id,
                 }
               }
