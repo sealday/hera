@@ -9,7 +9,7 @@ import {
   Input,
   DateRangeModifier,
 } from '../components'
-import { filterOption, transformArticle, wrapper } from '../utils'
+import { filterOption, transformArticle, wrapper, RECORD_TYPES } from '../utils'
 
 /**
  * 搜索用的表单
@@ -34,7 +34,14 @@ class SimpleSearchForm extends React.Component {
     return [{
       value: '',
       label: '全部',
-    }].concat(['采购', '调拨', '销售', '暂存', '盘点入库', '盘点出库'].map(v => ({ value: v, label: v })))
+    }].concat(RECORD_TYPES.map(v => ({ value: v, label: v })))
+  }
+
+  getInOutOptions = () => {
+    return [{
+      value: '',
+      label: '全部',
+    }].concat(['出库', '入库'].map(v => ({ value: v, label: v })))
   }
 
   getNameOptions = () => {
@@ -79,6 +86,14 @@ class SimpleSearchForm extends React.Component {
                    component={FilterSelect}
                    placeholder="类型"
                    options={this.getTypeOptions()}
+            />
+          </div>
+          <label className="control-label col-md-1">出入库</label>
+          <div className="col-md-2">
+            <Field name="inOut"
+                   component={FilterSelect}
+                   placeholder="出入库"
+                   options={this.getInOutOptions()}
             />
           </div>
         </div>

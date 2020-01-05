@@ -296,3 +296,8 @@ export const TAB2TYPE = ['基地仓库', '项目部仓库', '租赁仓库', '第
  * 采购支持客户类型
  */
 export const PURCHASING_CLIENT_TYPES = ['项目部仓库', '租赁仓库', '第三方仓库', '基地仓库', '供应商']
+
+/**
+ * 支持的订单类型
+ */
+export const RECORD_TYPES = ['购销', '调拨', '暂存', '盘点']

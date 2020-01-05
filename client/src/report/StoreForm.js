@@ -12,6 +12,7 @@ import {
 import {
   filterOption,
   wrapper,
+  RECORD_TYPES,
 } from '../utils'
 
 const StoreForm = ({ store, handleSubmit, change, startDate, endDate }) => (
@@ -54,11 +55,9 @@ const StoreForm = ({ store, handleSubmit, change, startDate, endDate }) => (
           name="type"
           clearable={false}
         >
-          <option value="">全部</option>
-          <option>调拨</option>
-          <option>购销</option>
-          <option>暂存</option>
-          <option>盘点</option>
+          {['全部', ...RECORD_TYPES].map((name, i) => (
+            <option key={i} value={name === '全部' ? '' : name}>{name}</option>
+          ))}
         </Field>
       </div>
       <label className="control-label col-md-1">仓库</label>

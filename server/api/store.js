@@ -11,10 +11,10 @@ const helper = require('../utils/my').helper
 const logger = service.logger
 
 const QUERY_MAP = {
-  '购销': { $or: [{ type: '采购', }, { type: '销售', }] },
+  '购销': { type: '购销' },
   '调拨': { type: '调拨' },
   '暂存': { type: '暂存' },
-  '盘点': { $or: [{ type: '盘点入库' }, { type: '盘点出库' }] },
+  '盘点': { type: '盘点' },
 }
 
 /**
@@ -293,24 +293,47 @@ exports.simpleSearch = (req, res, next) => {
 
     // 需要查询对方仓库 调拨单
     if (id) {
-      match['$or'] = [
-        { outStock: id, inStock: ObjectId(condition.self) },
-        { inStock: id, outStock: ObjectId(condition.self) },
-      ]
       // 如果是公司角度搜索，不加限制条件
       if (condition.company) {
         match['$or'] = [
           { outStock: id },
           { inStock: id },
         ]
+      } else {
+        // 处理出入库
+        if (condition.inOut == '出库') {
+          match['$or'] = [
+            { inStock: id, outStock: ObjectId(condition.self) },
+          ]
+        } else if (condition.inOut == '入库') {
+          match['$or'] = [
+            { outStock: id, inStock: ObjectId(condition.self) },
+          ]
+        } else {
+          match['$or'] = [
+            { outStock: id, inStock: ObjectId(condition.self) },
+            { inStock: id, outStock: ObjectId(condition.self) },
+          ]
+        }
       }
     } else {
       // 如果不是公司角度搜索，加限制条件
       if (!condition.company) {
-        match['$or'] = [
-          { inStock: ObjectId(condition.self) },
-          { outStock: ObjectId(condition.self) },
-        ]
+        // 处理出入库
+        if (condition.inOut == '出库') {
+          match['$or'] = [
+            { outStock: ObjectId(condition.self) },
+          ]
+        } else if (condition.inOut == '入库') {
+          match['$or'] = [
+            { inStock: ObjectId(condition.self) },
+          ]
+        } else {
+          match['$or'] = [
+            { inStock: ObjectId(condition.self) },
+            { outStock: ObjectId(condition.self) },
+          ]
+        }
       }
     }
 
