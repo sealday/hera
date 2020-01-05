@@ -643,6 +643,32 @@ export const saveProfile = (user) => (dispatch, getState) => {
   }
 }
 
+export const SYSTEM_SETTINGS = 'SYSTEM_SETTINGS'
+export const SYSTEM_SETTINGS_UPDATED = 'SYSTEM_SETTINGS_UPDATED'
+
+export const saveSettings = (settings) => (dispatch, getState) => {
+  const search = network(SYSTEM_SETTINGS)
+  if (search.shouldProceed(getState())) {
+    dispatch(search.begin)
+    dispatch(newInfoNotify('提示', '正在保存系统基础配置', 1000))
+    ajax(`/api/system/settings`, {
+      data: JSON.stringify(settings),
+      method: 'POST',
+      contentType: 'application/json'
+    }).then((res) => {
+      dispatch({
+        type: SYSTEM_SETTINGS_UPDATED,
+        data: res.data.settings,
+      })
+      dispatch(search.endSuccess)
+      dispatch(newSuccessNotify('提示', '保存系统基础配置成功', 1000))
+    }).catch((err) => {
+      dispatch(search.endFailure)
+      dispatch(newErrorNotify('提示', '保存系统基础配置失败', 1000))
+    })
+  }
+}
+
 const UPDATE_TRANSPORT_PAID_STATUS = "UPDATE_TRANSPORT_PAID_STATUS"
 export const PAYER_TRANSPORT_PAID_STATUS_CHANGED = 'PAYER_TRANSPORT_PAID_STATUS_CHANGED'
 

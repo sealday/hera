@@ -20,6 +20,7 @@ const status = require('./status')
 const router = express.Router();
 
 const store = require('./store')
+const settings = require('./settings')
 
 router.get('/operation/top_k', operation.topK)
 router.get('/operation/next_k', operation.nextK)
@@ -88,5 +89,7 @@ router.get('/store/:id', store.queryAll)
 router.get('/status/new_in_records', status.newInRecords)
 router.get('/status/new_out_records', status.newOutRecords)
 router.get('/status/update_records', status.updateRecords)
+
+router.post('/system/settings', settings.update)
 
 module.exports = router;

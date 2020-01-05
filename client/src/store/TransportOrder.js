@@ -115,7 +115,7 @@ class TransportOrder extends Component {
               style={{
                 width: '1em',
                 verticalAlign: 'middle',
-              }}>{config.print.side}</td>
+              }}>{config.printSideComment}</td>
         </tr>
         <tr>
           <th>货物名称及<br/>数量</th>

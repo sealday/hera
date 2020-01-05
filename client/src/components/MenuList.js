@@ -120,6 +120,10 @@ const allMenu = [
     roles: ['系统管理员', '基地仓库管理员'],
     children: [
       {
+        name: '基础配置',
+        path: '/settings',
+      },
+      {
         name: '产品信息',
         path: '/product',
       },

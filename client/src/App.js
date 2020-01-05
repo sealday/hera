@@ -158,7 +158,7 @@ class App extends Component {
           <AppBar position="absolute" className={classes.appBar + " hidden-print"}>
             <Toolbar>
               <Typography variant="h5" color="inherit" noWrap className={classes.marginRight}>
-                {config.name}
+                {config.systemName}
               </Typography>
               <Typography variant="subtitle1" color="inherit" noWrap className={classes.marginRight}>
                 {store && store.company + store.name}
@@ -189,7 +189,7 @@ class App extends Component {
                 onClose={this.handleMenuClose('printCompany')}
               >
                 <List>
-                  {['上海创兴建筑设备租赁有限公司', '上海标济建材有限公司', '上海领隆建筑设备租赁中心'].map(name => <MenuItem
+                  {config.externalNames.map(name => <MenuItem
                     key={short_id.generate()}
                     onClick={(e) => {
                       this.setState({

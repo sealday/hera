@@ -63,6 +63,8 @@ export function system(state = new SystemRecord(), action) {
       return state.removeIn(['users', action.data._id]);
     case actionTypes.PRINT_COMPANY_UPDATE:
       return state.set('printCompany', action.data)
+    case actionTypes.SYSTEM_SETTINGS_UPDATED:
+      return state.set('config', { ...state.config, ...action.data })
     default:
       return state
   }

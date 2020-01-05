@@ -16,3 +16,4 @@ exports.Operation = require('./operation')
 /** @type Model */
 exports.Price = require('./price')
 exports.Recycle = require('./recycle')
+exports.Setting = require('./setting')

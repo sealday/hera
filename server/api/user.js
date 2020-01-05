@@ -4,6 +4,8 @@ const Project = require('../models').Project
 const config = require('../../config')
 const service = require('../service')
 const logger = service.logger
+const Settings = require('../service/Settings.js')
+const helper = require('../utils/my').helper
 
 exports.login = (req, res, next) => {
   const username = req.body['username'] || '';
@@ -54,32 +56,35 @@ exports.isLogin = (req, res) => {
 // 初始化数据
 // 加载系统初始化数据
 // 包括项目信息、基地数据、用户数据以及
-exports.load = (req, res, next) => {
-  Promise.all([
+const load = async (req, res, next) => {
+  const [products, projects, users, settings] = await Promise.all([
     Product.find().sort({ number: 1 }),
     Project.find(),
     User.find(),
-  ]).then(([products, projects, users]) => {
+    Settings.getLatestSettings(),
+  ])
 
-    // TODO 这里暂定为第一个找到第一个找到的为基地
-    const bases = projects.filter(project => project.type === '基地仓库')
-    const base = bases.length > 0 ? bases[0] : null
+  // TODO 这里暂定为第一个找到第一个找到的为基地
+  const bases = projects.filter(project => project.type === '基地仓库')
+  const base = bases.length > 0 ? bases[0] : null
 
-    res.json({
-      message: '加载成功！',
-      data: {
-        products,
-        projects,
-        users,
-        base,
-        user:req.session.user,
-        config,
+  res.json({
+    message: '加载成功！',
+    data: {
+      products,
+      projects,
+      users,
+      base,
+      user:req.session.user,
+      config: {
+        ...config,
+        ...settings,
       }
-    })
-  }).catch(err => {
-    next(err)
+    }
   })
 }
+
+exports.load = helper(load)
 
 exports.logout = (req, res) => {
   req.session.destroy(err => {

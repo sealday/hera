@@ -11,8 +11,10 @@ import * as moment  from 'moment'
 import 'antd/lib/input/style/css'
 import 'antd/lib/select/style/css'
 import 'antd/lib/date-picker/style/css'
+import 'antd/lib/tooltip/style/css'
 import { isUndefined } from 'lodash'
 
+import RawEditableTagGroup from './EditableTagGroup.js'
 
 const errorStyle = {
   borderColor: '#a94442',
@@ -181,6 +183,11 @@ export const FilterSelect = ({ input, options, style, meta: { touched, error, wa
       {option.label}
     </AntSelect.Option>)}
   </AntSelect>
+}
+
+export const EditableTagGroup = ({ input: { value, onChange }, style, meta: { touched, error }, ...custom }) => {
+  return <RawEditableTagGroup tags={value} onChange={onChange}>
+  </RawEditableTagGroup>
 }
 
 

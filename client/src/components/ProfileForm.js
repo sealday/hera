@@ -38,7 +38,7 @@ const ProfileForm = props => (
             <Field name="comments" component={Input} />
           </div>
         </div>
-        <Button color="primary" fullWidth type="submit">保存修改</Button>
+        <Button color="primary" fullWidth type="submit" variant="outlined">保存</Button>
       </form>
     </CardContent>
   </Card>

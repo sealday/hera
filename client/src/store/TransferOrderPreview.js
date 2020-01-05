@@ -137,7 +137,7 @@ class TransferOrder extends React.Component {
           fontSize: '9px',
           right: 0,
           width: '1.2em'
-        }}>{config.print.side}</div>
+        }}>{config.printSideComment}</div>
         <h4 className="text-center">{printCompany}</h4>
         <h4 className="text-center">{orderName}</h4>
         <table style={{tableLayout: 'fixed', fontSize: '11px', width: '100%'}}>

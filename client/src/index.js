@@ -37,6 +37,7 @@ import {
   Price,
   PriceEdit,
   PriceCreate,
+  Settings,
 } from './system'
 import {
   Record,
@@ -153,6 +154,7 @@ ReactDOM.render((
           <Route path="transport_table" component={TransportSearch} />
           <Route path="transport_table_company" component={company.TransportSearch} />
           <Route path="profile" component={Profile} />
+          <Route path="settings" component={Settings} />
           <Redirect path="*" to="/dashboard" />
         </Route>
       </Router>
