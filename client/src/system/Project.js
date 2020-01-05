@@ -26,9 +26,9 @@ import {
 } from '../actions'
 import {
   wrapper,
+  TAB2TYPE,
 } from '../utils'
 
-const TAB2TYPE = ['基地仓库', '项目部仓库', '第三方仓库', '供应商', '承运商']
 const btnStatusName = project => {
   if (project.status === 'FINISHED') {
     return '启用'
@@ -40,7 +40,7 @@ const btnStatusName = project => {
 class Project extends React.Component {
 
   state = {
-    tab: 2,
+    tab: TAB2TYPE.indexOf('项目部仓库'),
   }
   render() {
     let { projects, onDeleteClick, projectType, onStatusChange } = this.props
@@ -59,11 +59,9 @@ class Project extends React.Component {
             value={this.state.tab}
             onChange={(e, tab) => this.setState({ tab })}
           >
-            <Tab label="基地仓库" />
-            <Tab label="项目部仓库" />
-            <Tab label="第三方仓库" />
-            <Tab label="供应商" />
-            <Tab label="承运商" />
+            {TAB2TYPE.map((name, i) => (
+              <Tab key={i} label={name} />
+            ))}
           </Tabs>
         </AppBar>
         <Card>

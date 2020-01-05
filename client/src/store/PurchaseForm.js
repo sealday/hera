@@ -23,6 +23,7 @@ import {
   filterOption,
   getVendors,
   wrapper,
+  PURCHASING_CLIENT_TYPES,
 } from '../utils'
 
 const EntryTable = connect(
@@ -243,10 +244,9 @@ class TransferForm extends Component {
                     this.props.untouch('project')
                   }}
                   placeholder="请选择项目" >
-                    <option>项目部仓库</option>
-                    <option>第三方仓库</option>
-                    <option>基地仓库</option>
-                    <option>供应商</option>
+                    {PURCHASING_CLIENT_TYPES.map((name, i) => (
+                      <option key={i}>{name}</option>
+                    ))}
                 </Field>
               </div>
               <label className="control-label col-md-1">项目部</label>

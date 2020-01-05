@@ -287,3 +287,12 @@ export const isCurrentUserPermit = (user, roles) => {
   return false
 }
 
+/**
+ * 支持仓库类型、客户类型
+ */
+export const TAB2TYPE = ['基地仓库', '项目部仓库', '租赁仓库', '第三方仓库', '供应商', '承运商']
+
+/**
+ * 采购支持客户类型
+ */
+export const PURCHASING_CLIENT_TYPES = ['项目部仓库', '租赁仓库', '第三方仓库', '基地仓库', '供应商']

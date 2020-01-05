@@ -11,6 +11,11 @@ import ContactList from './ContactList'
 import BankList from './BankList'
 import { Input, Select } from '../components'
 
+import {
+  wrapper,
+  TAB2TYPE,
+} from '../utils'
+
 class ProjectForm extends Component {
   render() {
     const { title, router } = this.props
@@ -26,11 +31,9 @@ class ProjectForm extends Component {
               <label className="control-label col-md-2">类型</label>
               <div className="col-md-3">
                 <Field name="type" component={Select}>
-                  <option>项目部仓库</option>
-                  <option>基地仓库</option>
-                  <option>第三方仓库</option>
-                  <option>供应商</option>
-                  <option>承运商</option>
+                  {TAB2TYPE.map((name, i) => (
+                    <option key={i}>{name}</option>
+                  ))}
                 </Field>
               </div>
             </div>
