@@ -16,14 +16,6 @@ import { total_, toFixedWithoutTrailingZero } from '../utils'
  */
 class SimpleSearchTable extends React.Component {
 
-  getDirection = entry => entry.type === '调拨'
-    ? entry.inStock === this.props.store._id ? '入库' : '出库'
-    : entry.type === '销售' ? '出库' : '入库'
-
-  getOtherSize = entry => {
-    return this.getDirection(entry) === '出库' ? this.getProjectName(entry.inStock): this.getProjectName(entry.outStock)
-  }
-
   getProjectName = id => {
     const { projects } = this.props
     const project = projects.get(id)
@@ -42,39 +34,6 @@ class SimpleSearchTable extends React.Component {
 
       return names
     }
-
-    let inStore = new Map() // 入库
-    let outStore = new Map() // 出库
-    let store = new Map()
-
-    if (search) {
-      search.forEach(entry => {
-        let totals = []
-        getTotal(entry.entries).forEach((v, k) => {
-          totals.push(k + '：' + toFixedWithoutTrailingZero(v)) //拼凑显示的字符串
-
-          if (this.getDirection(entry) === '入库') {
-            inStore = inStore.update(k, 0, total => total + v)
-            store = store.update(k, 0, total => total + v)
-          } else {
-            outStore = outStore.update(k, 0, total => total + v)
-            store = store.update(k, 0, total => total - v)
-          }
-        })
-
-        entry.totalString = totals.join(' ')
-      })
-    }
-
-    let storeRows = []
-    store.forEach((v, k) => {
-      storeRows.push(<tr key={v}>
-        <td>{k}</td>
-        <td>{toFixedWithoutTrailingZero(outStore.get(k, 0))}</td>
-        <td>{toFixedWithoutTrailingZero(inStore.get(k, 0))}</td>
-        <td>{toFixedWithoutTrailingZero(v)}</td>
-      </tr>)
-    })
 
     return (
       <>
@@ -112,27 +71,6 @@ class SimpleSearchTable extends React.Component {
             </table>
           </CardContent>
         </Card>
-
-        {storeRows.length > 0 && <Card style={{ marginTop: '16px' }}>
-          <CardHeader
-            title="结果统计"
-          />
-          <CardContent>
-            <table className="table table-bordered">
-              <thead>
-              <tr>
-                <th>名称</th>
-                <th>出库数量</th>
-                <th>入库数量</th>
-                <th>小计</th>
-              </tr>
-              </thead>
-              <tbody>
-              {storeRows}
-              </tbody>
-            </table>
-          </CardContent>
-        </Card>}
       </>
     )
   }

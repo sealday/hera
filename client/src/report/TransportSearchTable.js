@@ -22,10 +22,7 @@ class SimpleSearchTable extends React.Component {
       return project ? project.company + project.name : '';
     }
 
-    // FIXME 只考虑了 销售、调拨、采购 三种情况
-    const getDirection = entry => entry.type === '调拨'
-      ? entry.inStock === this.props.store._id ? '入库' : '出库'
-      : entry.type === '销售' ? '出库' : '入库'
+    const getDirection = entry => entry.inStock === this.props.store._id ? '入库' : '出库'
 
     const getTotal = (entries) => {
 

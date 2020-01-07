@@ -12,13 +12,13 @@ class PurchaseCreate extends Component {
       this.props.dispatch(postTransfer({
         ...record,
         inStock: store._id,
-        type: '盘点入库',
+        type: '盘点',
       }))
     } else if (direction === 'out') {
       this.props.dispatch(postTransfer({
         ...record,
         outStock: store._id,
-        type: '盘点出库',
+        type: '盘点',
       }))
     }
   }

@@ -29,24 +29,12 @@ class PurchaseOrder extends React.Component {
     // 判断是收料单还是发料单
     if (record.inStock === store._id) {
       // 入库是当前操作仓库时，是入库单
-      orderName = '收料单'
+      orderName = '盘点入库单'
       direction = 'in'
-      if (record.type === '调拨') {
-      } else if (record.type === '采购') {
-        orderName = '采购入库单'
-      }
     } else if (record.outStock === store._id) {
       // 出库是当前操作仓库时，是出库单
-      orderName = '出库单'
+      orderName = '盘点出库单'
       direction = 'out'
-      if (record.type === '调拨') {
-      } else if (record.type === '销售') {
-        orderName = '销售出库单'
-      } else if (record.type === '盘点入库') {
-        orderName = '盘点入库单'
-      } else if (record.type === '盘点出库') {
-        orderName = '盘点出库单'
-      }
     } else {
       // FIXME 当两者都不是的时候，属于非法访问
       return <div>非法访问</div>
@@ -133,23 +121,9 @@ class PurchaseOrder extends React.Component {
       <div>
         <div className="btn-group hidden-print">
           <button className="btn btn-default" onClick={() => router.goBack()}>返回</button>
-          {isUpdatable(store, user) && <span>
-            {record.type === '调拨' &&
-            <Link className="btn btn-primary" to={`/transfer/${direction}/${record._id}/edit`}>编辑</Link>
-            }
-            {record.type === '销售' &&
-            <Link className="btn btn-primary" to={`/purchase/out/${record._id}/edit`}>编辑</Link>
-            }
-            {record.type === '采购' &&
-            <Link className="btn btn-primary" to={`/purchase/in/${record._id}/edit`}>编辑</Link>
-            }
-            {record.type === '盘点入库' &&
-            <Link className="btn btn-primary" to={`/stocktaking/in/${record._id}/edit`}>编辑</Link>
-            }
-            {record.type === '盘点出库' &&
-            <Link className="btn btn-primary" to={`/stocktaking/out/${record._id}/edit`}>编辑</Link>
-            }
-          </span>}
+          {isUpdatable(store, user) && 
+            <Link className="btn btn-primary" to={`/stocktaking/${direction}/${record._id}/edit`}>编辑</Link>
+          }
           <button className="btn btn-default" onClick={() => window.print()}>打印</button>
           <a className="btn btn-default" href="check">审核确认</a>
 

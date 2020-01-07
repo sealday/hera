@@ -62,12 +62,12 @@ const allMenu = [
         path: '/transfer_free/in/create',
       },
       {
-        name: '盘盈入库',
+        name: '盘点入库',
         path: '/stocktaking/in/create',
         roles: ['系统管理员', '基地仓库管理员'],
       },
       {
-        name: '盘亏出库',
+        name: '盘点出库',
         path: '/stocktaking/out/create',
         roles: ['系统管理员', '基地仓库管理员'],
       },

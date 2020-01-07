@@ -12,7 +12,7 @@ import {
   FormControlLabel,
 } from '@material-ui/core'
 
-import { toFixedWithoutTrailingZero as fixed, total_, isUpdatable, getUnit } from '../utils'
+import { toFixedWithoutTrailingZero as fixed, total_, isUpdatable, getUnit, RECORD_TYPE2URL_PART } from '../utils'
 
 class PurchaseOrder extends React.Component {
 
@@ -59,14 +59,14 @@ class PurchaseOrder extends React.Component {
       if (record.type === '调拨') {
         company = projects.get(record.outStock).company
         name = projects.get(record.outStock).name
-      } else if (record.type === '采购') {
+      } else if (record.type === '购销') {
         orderName = '采购入库单'
-        outLabel = '出售单位'
-        inLabel = '采购项目'
-        companyLabel = '出售单位'
+        outLabel = '销售单位'
+        inLabel = '采购单位'
+        companyLabel = '销售单位'
         company = projects.get(record.outStock).company + projects.get(record.outStock).name
-        nameLabel = '采购项目'
-        signer = '出售方'
+        nameLabel = '采购单位'
+        signer = '销售方'
         name = projects.get(record.inStock).company + projects.get(record.inStock).name
       } else if (record.type == '暂存') {
         orderName = '暂存入库单'
@@ -85,13 +85,13 @@ class PurchaseOrder extends React.Component {
       if (record.type === '调拨') {
         company = projects.get(record.inStock).company
         name = projects.get(record.inStock).name
-      } else if (record.type === '销售') {
+      } else if (record.type === '购销') {
         orderName = '销售出库单'
-        outLabel = '出售项目'
+        outLabel = '销售单位'
         inLabel = '采购单位'
         companyLabel = '采购单位'
         company = projects.get(record.inStock).company + projects.get(record.inStock).name
-        nameLabel = '出售项目'
+        nameLabel = '销售单位'
         signer = '采购方'
         name = projects.get(record.outStock).company + projects.get(record.outStock).name
       } else if (record.type === '暂存') {
@@ -270,19 +270,8 @@ class PurchaseOrder extends React.Component {
         }
         action={<>
           <Button onClick={() => router.goBack()}>返回</Button>
-          {isUpdatable(store, user) && <>
-            {record.type === '调拨' &&
-            <Button color="primary" component={Link} to={`/transfer/${direction}/${record._id}/edit`}>编辑</Button>
-            }
-            {record.type === '销售' &&
-            <Button color="primary" component={Link} to={`/purchase/out/${record._id}/edit`}>编辑</Button>
-            }
-            {record.type === '采购' &&
-            <Button color="primary" component={Link} to={`/purchase/in/${record._id}/edit`}>编辑</Button>
-            }
-            {record.type === '暂存' &&
-            <Button color="primary" component={Link} to={`/transfer_free/in/${record._id}/edit`}>编辑</Button>
-            }
+          {isUpdatable(store, user) && record.type in RECORD_TYPE2URL_PART && <>
+            <Button color="primary" component={Link} to={`/${RECORD_TYPE2URL_PART[record.type]}/${direction}/${record._id}/edit`}>编辑</Button>
           </>}
           <Button onClick={this.handleTransport}>运输单</Button>
           <Button onClick={() => {

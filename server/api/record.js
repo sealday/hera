@@ -25,16 +25,14 @@ const create = async (req, res) => {
   let record = new Record(body)
   let historyRecord = new HistoryRecord(body)
   switch (record.type) {
-    case '采购':
-    case '销售':
+    case '购销':
       record.status = historyRecord.status = '未支付'
       break
     case '调拨':
     case '暂存':
       record.status = historyRecord.status = '未确认'
       break
-    case '盘点入库':
-    case '盘点出库':
+    case '盘点':
       // 没有状态信息
       break
     default:

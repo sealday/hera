@@ -96,7 +96,7 @@ const recordSchema = {
   number: Number, // 订单编号
 
   valid: { type: Boolean, default: true }, // 是否有效，用来删除时标记为无效
-  type: String,  // 采购、调拨、销售、报废、结转、盘点入库、盘点出库、暂存
+  type: String,  // 购销、调拨、盘点、暂存
 }
 
 const RecordSchema = new Schema(recordSchema, { timestamps: true }); // 时间戳反映真正的制单时间（以录入系统为准）

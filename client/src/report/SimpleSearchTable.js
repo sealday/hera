@@ -16,9 +16,7 @@ import { total_, toFixedWithoutTrailingZero } from '../utils'
  */
 class SimpleSearchTable extends React.Component {
 
-  getDirection = entry => entry.type === '调拨'
-    ? entry.inStock === this.props.store._id ? '入库' : '出库'
-    : entry.type === '销售' ? '出库' : '入库'
+  getDirection = entry => entry.inStock === this.props.store._id ? '入库' : '出库'
 
   getOtherSize = entry => {
     return this.getDirection(entry) === '出库' ? this.getProjectName(entry.inStock): this.getProjectName(entry.outStock)

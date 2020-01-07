@@ -32,15 +32,11 @@ class Record extends React.Component {
 
     if (record.type === '调拨') {
       return <TransferOrder record={record} router={router}/>
-    } else if (record.type === '销售') {
-      return <PurchaseOrder record={record} router={router}/>
-    } else if (record.type === '采购') {
+    } else if (record.type === '购销') {
       return <PurchaseOrder record={record} router={router}/>
     } else if (record.type === '暂存') {
       return <PurchaseOrder record={record} router={router}/>
-    } else if (record.type === '盘点入库') {
-      return <StocktakingOrder record={record} router={router}/>
-    } else if (record.type === '盘点出库') {
+    } else if (record.type === '盘点') {
       return <StocktakingOrder record={record} router={router}/>
     } else {
       return <div>暂时不支持显示 {record.type} 类型的详情</div>

@@ -14,14 +14,14 @@ class PurchaseCreate extends Component {
         ...record,
         inStock: store._id,
         outStock: record.project,
-        type: record.isFree ? '暂存' : '采购',
+        type: record.isFree ? '暂存' : '购销',
       }))
     } else if (direction === 'out') { // 销售单
       this.props.dispatch(postTransfer({
         ...record,
         outStock: store._id,
         inStock: record.project,
-        type: record.isFree ? '暂存' : '销售',
+        type: record.isFree ? '暂存' : '购销',
       }))
     }
   }

@@ -53,7 +53,6 @@ import {
 } from './store'
 import {
   Store,
-  Search,
   SimpleSearch,
   TransportSearch,
 } from './report'
@@ -122,7 +121,6 @@ ReactDOM.render((
           <Route path="project" component={Project} />
           <Route path="project/create" component={ProjectCreate} />
           <Route path="project/:id/edit" component={ProjectEdit} />
-          <Route path="search" component={Search} />
           <Route path="simple_search" component={SimpleSearch} />
           <Route path="simple_search_company" component={company.SimpleSearch} />
           <Route path="product" component={Product} />

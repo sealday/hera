@@ -29,7 +29,7 @@ class Search extends React.Component {
       <>
         <Card>
           <CardHeader
-            title="仓库出入库查询"
+            title="出入库查询"
             action={<>
               <Button onClick={() => this.form.reset()}>重置</Button>
               <Button color="primary" onClick={() => this.form.submit()}>查询</Button>

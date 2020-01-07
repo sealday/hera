@@ -35,10 +35,10 @@ class PurchaseEdit extends React.Component {
     let pageTitle
     let stock
     if (direction === 'out') {
-      pageTitle = '销售出库'
+      pageTitle = '盘点出库'
       stock = 'outStock'
     } else if (direction === 'in') {
-      pageTitle = '采购入库'
+      pageTitle = '盘点入库'
       stock = 'inStock'
     } else {
       return <div className="alert alert-danger">

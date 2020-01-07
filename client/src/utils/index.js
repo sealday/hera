@@ -301,3 +301,8 @@ export const PURCHASING_CLIENT_TYPES = ['项目部仓库', '租赁仓库', '第�
  * 支持的订单类型
  */
 export const RECORD_TYPES = ['购销', '调拨', '暂存', '盘点']
+
+/**
+ * 订单类型的路径映射
+ */
+export const RECORD_TYPE2URL_PART = { '调拨': 'transfer', '购销': 'purchase', '暂存': 'transfer_free' }
