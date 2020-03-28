@@ -228,7 +228,7 @@ export const isInsertable = (store, user) => {
 
 export { default as theme } from './theme'
 
-const PROJECT_TYPE_SET = new Set(['基地仓库', '第三方仓库', '项目部仓库'])
+const PROJECT_TYPE_SET = new Set(['基地仓库', '同行客户', '项目仓库'])
 /**
  * 筛选仓库列表
  * @param projects
@@ -241,7 +241,7 @@ export const getProjects = projects => projects.filter(project => PROJECT_TYPE_S
  * @param projects
  * @returns {*}
  */
-const VENDOR_TYPE_SET = new Set(['基地仓库', '第三方仓库', '项目部仓库', '供应商'])
+const VENDOR_TYPE_SET = new Set(['基地仓库', '同行客户', '项目仓库', '供应商'])
 export const getVendors = projects => projects.filter(project => VENDOR_TYPE_SET.has(project.type))
 
 
@@ -290,12 +290,12 @@ export const isCurrentUserPermit = (user, roles) => {
 /**
  * 支持仓库类型、客户类型
  */
-export const TAB2TYPE = ['基地仓库', '项目部仓库', '租赁仓库', '第三方仓库', '供应商', '承运商']
+export const TAB2TYPE = ['基地仓库', '项目仓库', '租赁客户', '同行客户', '供应商', '承运商']
 
 /**
  * 默认仓库类型
  */
-export const DEFAULT_STORE_TYPE = '项目部仓库'
+export const DEFAULT_STORE_TYPE = '项目仓库'
 
 /**
  * 默认仓库类型索引
@@ -305,17 +305,17 @@ export const DEFAULT_TAB_INDEX = TAB2TYPE.indexOf(DEFAULT_STORE_TYPE)
 /**
  * 支持仓库类型
  */
-export const STORE2TYPE = ['基地仓库', '项目部仓库', '租赁仓库', '第三方仓库']
+export const STORE2TYPE = ['基地仓库', '项目仓库', '租赁客户', '同行客户']
 
 /**
  * 支持合同仓库
  */
-export const CONTRACT_TYPES = ['项目部仓库', '租赁仓库', '第三方仓库']
+export const CONTRACT_TYPES = ['项目仓库', '租赁客户', '同行客户']
 
 /**
  * 采购支持客户类型
  */
-export const PURCHASING_CLIENT_TYPES = ['项目部仓库', '租赁仓库', '第三方仓库', '基地仓库', '供应商']
+export const PURCHASING_CLIENT_TYPES = ['项目仓库', '租赁客户', '同行客户', '基地仓库', '供应商']
 
 /**
  * 支持的订单类型
