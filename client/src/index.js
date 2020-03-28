@@ -38,6 +38,9 @@ import {
   PriceEdit,
   PriceCreate,
   Settings,
+  Weight,
+  WeightEdit,
+  WeightCreate,
 } from './system'
 import {
   Record,
@@ -123,11 +126,15 @@ ReactDOM.render((
           <Route path="project/:id/edit" component={ProjectEdit} />
           <Route path="simple_search" component={SimpleSearch} />
           <Route path="simple_search_company" component={company.SimpleSearch} />
+          {/* system */}
           <Route path="product" component={Product} />
           <Route path="price" component={Price} />
           <Route path="price/create" component={PriceCreate} />
           <Route path="price/:id" component={PriceEdit} />
           <Route path="price/create/:id" component={PriceCreate} />
+          <Route path="weight" component={Weight} />
+          <Route path="weight/:id" component={Weight} />
+          <Route path="weight/create/:id" component={Weight} />
           {/* direction 表示调拨的方向 取值为 in 和 out  */}
           <Route path="transfer/:direction/create" component={TransferCreate} />
           <Route path="transfer/:direction/:id/edit" component={TransferEdit} />

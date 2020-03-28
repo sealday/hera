@@ -782,17 +782,40 @@ export const queryPricePlan = () => (dispatch, getState) => {
   const key = PRICE_PLAN
   if (search.shouldProceed(getState())) {
     dispatch(search.begin)
-    dispatch(newInfoNotify('提示', '正在加载定价方案', 2000))
+    dispatch(newInfoNotify('提示', '正在加载合同方案', 2000))
     ajax('/api/price').then(res => {
       dispatch(search.endSuccess)
       dispatch({ type: SAVE_RESULTS, data: {
           key,
           result: res.data.prices
         }})
-      dispatch(newSuccessNotify('提示', '加载定价方案成功', 2000))
+      dispatch(newSuccessNotify('提示', '加载合同方案成功', 2000))
     }).catch(err => {
       dispatch(search.endFailure)
-      dispatch(newErrorNotify('错误', '加载定价方案失败', 2000))
+      dispatch(newErrorNotify('错误', '加载合同方案失败', 2000))
+      throw err
+    })
+  }
+}
+
+export const WEIGHT_PLAN = 'WEIGHT_PLAN'
+
+export const queryWeightPlan = () => (dispatch, getState) => {
+  const key = WEIGHT_PLAN
+  const search = network(key) // 让查询网络不会重复
+  if (search.shouldProceed(getState())) {
+    dispatch(search.begin)
+    dispatch(newInfoNotify('提示', '正在加载计重方案', 2000))
+    ajax('/api/weight').then(res => {
+      dispatch(search.endSuccess)
+      dispatch({ type: SAVE_RESULTS, data: {
+          key,
+          result: res.data.prices
+        }})
+      dispatch(newSuccessNotify('提示', '加载计重方案成功', 2000))
+    }).catch(err => {
+      dispatch(search.endFailure)
+      dispatch(newErrorNotify('错误', '加载计重方案失败', 2000))
       throw err
     })
   }
