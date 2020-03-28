@@ -13,6 +13,7 @@ import {
 } from '@material-ui/core'
 
 import ContractForm from './ContractForm'
+import { CONTRACT_TYPES } from '../utils'
 
 class Contract extends React.Component {
 
@@ -20,7 +21,7 @@ class Contract extends React.Component {
     let { projects, router, project } = this.props
     const projectId = project
     projects = projects.valueSeq().filter(project =>
-      includes(['项目部仓库', '第三方仓库'], project.type) &&
+      includes(CONTRACT_TYPES, project.type) &&
       (projectId ? project._id === projectId : true))
     return (
       <Card>

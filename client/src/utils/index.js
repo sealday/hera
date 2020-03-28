@@ -293,9 +293,24 @@ export const isCurrentUserPermit = (user, roles) => {
 export const TAB2TYPE = ['基地仓库', '项目部仓库', '租赁仓库', '第三方仓库', '供应商', '承运商']
 
 /**
+ * 默认仓库类型
+ */
+export const DEFAULT_STORE_TYPE = '项目部仓库'
+
+/**
+ * 默认仓库类型索引
+ */
+export const DEFAULT_TAB_INDEX = TAB2TYPE.indexOf(DEFAULT_STORE_TYPE)
+
+/**
  * 支持仓库类型
  */
 export const STORE2TYPE = ['基地仓库', '项目部仓库', '租赁仓库', '第三方仓库']
+
+/**
+ * 支持合同仓库
+ */
+export const CONTRACT_TYPES = ['项目部仓库', '租赁仓库', '第三方仓库']
 
 /**
  * 采购支持客户类型

@@ -4,6 +4,7 @@ import moment from 'moment'
 
 import PurchaseForm from './PurchaseForm'
 import { postTransfer } from '../actions'
+import { DEFAULT_STORE_TYPE } from '../utils'
 
 class PurchaseCreate extends Component {
   handleSubmit = (record) => {
@@ -52,7 +53,7 @@ class PurchaseCreate extends Component {
         title={pageTitle}
         initialValues={{
           outDate: moment(),
-          projectType: '项目部仓库',
+          projectType: DEFAULT_STORE_TYPE,
           isFree,
         }}
         onSubmit={this.handleSubmit}

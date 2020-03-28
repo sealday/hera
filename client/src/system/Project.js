@@ -27,6 +27,7 @@ import {
 import {
   wrapper,
   TAB2TYPE,
+  DEFAULT_TAB_INDEX,
 } from '../utils'
 
 const btnStatusName = project => {
@@ -40,7 +41,7 @@ const btnStatusName = project => {
 class Project extends React.Component {
 
   state = {
-    tab: TAB2TYPE.indexOf('项目部仓库'),
+    tab: DEFAULT_TAB_INDEX,
   }
   render() {
     let { projects, onDeleteClick, projectType, onStatusChange } = this.props

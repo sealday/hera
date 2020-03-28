@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 
 import ProjectForm from './ProjectForm'
 import { postProject } from '../actions'
+import { DEFAULT_STORE_TYPE } from '../utils'
 
 class ProjectCreate extends Component {
   handleSubmit = (project) => {
@@ -24,7 +25,7 @@ class ProjectCreate extends Component {
         account: '',
         bank: '',
       }],
-      type: '项目部仓库'}
+      type: DEFAULT_STORE_TYPE}
     return (
       <ProjectForm
         initialValues={initialValues}
