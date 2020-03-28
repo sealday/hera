@@ -6,7 +6,7 @@ import {
 } from '@material-ui/core'
 
 import { selectStore } from '../actions'
-import { filterOption } from '../utils'
+import { filterOption, STORE2TYPE } from '../utils'
 
 class CurrentStore extends React.Component {
   constructor(props) {
@@ -14,6 +14,7 @@ class CurrentStore extends React.Component {
     this.state = {
       project: '',
       base: props.system.base._id,
+      type: '基地仓库',
       other: '',
     }
   }
@@ -48,6 +49,16 @@ class CurrentStore extends React.Component {
     this.props.dispatch(selectStore(this.props.config, this.props.system.projects.get(this.state.other)))
   }
 
+  onStoreTypeChange = type => {
+    const { base } = this.props.system;
+    // TODO 暂时特殊处理基地仓库，之后可以根据频率优化或者配置优化
+    if (type === '基地仓库') {
+      this.setState({ type: type, base: base._id })
+    } else {
+      this.setState({ type: type, base: '' })
+    }
+  }
+
   render() {
     const { projects, user } = this.props.system;
     let filteredProjects = projects;
@@ -61,7 +72,17 @@ class CurrentStore extends React.Component {
         <h2 className="page-header">仓库选择</h2>
         <div>
           <Select
-            style={{ width: '100%' }}
+            style={{ width: '25%' }}
+            value={this.state.type}
+            onChange={this.onStoreTypeChange}
+          >
+            {STORE2TYPE.map(type => <Select.Option
+              key={type}
+              value={type}
+            >{type}</Select.Option>)}
+          </Select>
+          <Select
+            style={{ width: '72%', float: 'right' }}
             value={this.state.base}
             placeholder='选择仓库'
             showSearch
@@ -69,58 +90,15 @@ class CurrentStore extends React.Component {
             filterOption={filterOption}
             clearable={false}
           >
-            {filteredProjects.filter(project => project.type === '基地仓库').toArray().map(project =>
+            {filteredProjects.filter(project => project.type === this.state.type).toArray().map(project =>
               <Select.Option
                 pinyin={project.pinyin}
-                label={project.company + project.name}
                 key={project._id}
                 value={project._id}
               >{project.company + project.name}</Select.Option>
             )}
           </Select>
-          <Button style={{marginTop: '1em'}} variant="contained" color="primary" fullWidth onClick={this.onBaseSelect}>基地管理</Button>
-        </div>
-        <div style={{marginTop: '2em'}}>
-          <Select
-            style={{ width: '100%' }}
-            value={this.state.project}
-            placeholder='选择项目'
-            showSearch
-            onChange={this.onProjectChange}
-            filterOption={filterOption}
-            clearable={false}
-          >
-            {filteredProjects.filter(project => project.type === '项目部仓库').toArray().map(project =>
-              <Select.Option
-                pinyin={project.pinyin}
-                label={project.company + project.name}
-                key={project._id}
-                value={project._id}
-              >{project.company + project.name}</Select.Option>
-            )}
-          </Select>
-          <Button style={{marginTop: '1em'}} fullWidth variant="contained" color="primary"  onClick={this.onProjectSelect}>项目部管理</Button>
-        </div>
-        <div style={{marginTop: '2em'}}>
-          <Select
-            style={{ width: '100%' }}
-            value={this.state.other}
-            placeholder='选择项目'
-            showSearch
-            onChange={this.onOtherChange}
-            filterOption={filterOption}
-            clearable={false}
-          >
-            {filteredProjects.filter(project => project.type === '第三方仓库').toArray().map(project =>
-              <Select.Option
-                pinyin={project.pinyin}
-                label={project.company + project.name}
-                key={project._id}
-                value={project._id}
-              >{project.company + project.name}</Select.Option>
-            )}
-          </Select>
-          <Button style={{marginTop: '1em'}} fullWidth variant="contained" color="primary" onClick={this.onOtherSelect}>第三方管理</Button>
+          <Button style={{marginTop: '1em'}} variant="contained" color="primary" fullWidth onClick={this.onBaseSelect}>进入管理</Button>
         </div>
       </div>
     )
