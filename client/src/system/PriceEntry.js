@@ -120,7 +120,6 @@ const PriceEntry = connect(
                 <option value="数量">根据数量计算</option>
                 <option value="换算数量">根据换算后数量计算</option>
                 <option value="重量">根据理论重量计算</option>
-                <option value="实际重量">根据实际重量计算</option>
               </Field>
             </td>
             <td><Field name={`${entry}.comments`} component={Input}/></td>

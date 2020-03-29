@@ -1,11 +1,15 @@
 const _ = require('lodash')
 
 const Record = require('../models').Record
+const Price = require('../models').Price
 
 class Rent {
   async calculate({startDate, endDate, timezone, project, pricePlanId})  {
+    const pricePlan = await Price.findOne({ _id: pricePlanId })
+    const weightPlanId = pricePlan.weightPlan
     const result = await Record.aggregate([
       {
+        // 关联调拨单
         $match: {
           $or: [
             {
@@ -21,15 +25,12 @@ class Rent {
           }
         }
       },
+      // 添加历史、出库时间、出入库标志
       {
         $addFields: {
           history: {
             $lt: ['$outDate', startDate]
           },
-        }
-      },
-      {
-        $addFields: {
           outDate: {
             $cond: {
               if: '$history',
@@ -48,9 +49,11 @@ class Rent {
           }
         }
       },
+      // 展开明细
       {
         $unwind: '$entries'
       },
+      // 只保留租赁
       {
         $match: {
           $or: [
@@ -59,6 +62,7 @@ class Rent {
           ]
         }
       },
+      // 关联单位数量
       {
         $lookup: {
           from: 'products',
@@ -70,6 +74,40 @@ class Rent {
       {
         $unwind: '$products'
       },
+      // 关联重量
+      {
+        $lookup: {
+          from: 'weights',
+          let: { productType: '$entries.type', productName: '$entries.name', productSize: '$entries.size' },
+          pipeline: [
+            {
+              $match: { _id: weightPlanId },
+            },
+            {
+              $unwind: '$entries',
+            },
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: [ '$entries.type', '$$productType' ] },
+                    { $eq: [ '$entries.name', '$$productName' ] },
+                    { $eq: [ '$entries.size', '$$productSize' ] },
+                  ]
+                }
+              }
+            }
+          ],
+          as: 'weightPlan',
+        }
+      },
+      {
+        $unwind: {
+          path: '$weightPlan',
+          preserveNullAndEmptyArrays: true,
+        }
+      },
+      // 天数、重量
       {
         $addFields: {
           days: {
@@ -80,10 +118,11 @@ class Rent {
             }
           },
           weight: {
-            $multiply: ['$entries.count', '$products.weight']
+            $multiply: ['$entries.count', { $ifNull: [ '$weightPlan.entries.unitWeight', '$products.weight'] } ]
           },
         }
       },
+      // 关联价格
       {
         $lookup: {
           from: 'prices',
@@ -111,6 +150,7 @@ class Rent {
           path: '$prices',
         }
       },
+      //
       {
         $addFields: {
           count: {
@@ -126,7 +166,7 @@ class Rent {
                 },
                 {
                   case: { $eq: ['$prices.entries.type', '重量'] },
-                  then: { $multiply: ['$entries.count', '$products.weight', '$inOut'] },
+                  then: { $multiply: ['$weight', '$inOut'] },
                 },
               ],
               default:  {
@@ -182,7 +222,7 @@ class Rent {
                 },
                 {
                   case: { $eq: ['$prices.entries.type', '重量'] },
-                  then: { $multiply: ['$entries.count', '$products.weight', '$prices.entries.unitPrice', '$days', '$inOut'] },
+                  then: { $multiply: ['$weight', '$prices.entries.unitPrice', '$days', '$inOut'] },
                 },
               ],
               default: 0
@@ -206,7 +246,7 @@ class Rent {
                   }
                 ]
               },
-              then: { $multiply: ['$entries.count', '$products.weight', '$prices.freight', 0.001] },
+              then: { $multiply: ['$weight', '$prices.freight', 0.001] },
               else: 0,
             },
           }
