@@ -25,12 +25,17 @@ class Rent {
           }
         }
       },
-      // 添加历史、出库时间、出入库标志
+      // 添加历史
       {
         $addFields: {
           history: {
             $lt: ['$outDate', startDate]
           },
+        }
+      },
+      // 和上面不能合并，我们需要先计算是否是历史再进行日期设置
+      {
+        $addFields: {
           outDate: {
             $cond: {
               if: '$history',
