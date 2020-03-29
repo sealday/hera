@@ -61,6 +61,7 @@ class CurrentStore extends React.Component {
 
   render() {
     const { projects, user } = this.props.system;
+    console.log(projects)
     let filteredProjects = projects;
     if (user.role === '项目部管理员' || user.role === '基地仓库管理员') {
       const perms = user.perms || [];
@@ -93,6 +94,7 @@ class CurrentStore extends React.Component {
             {filteredProjects.filter(project => project.type === this.state.type).toArray().map(project =>
               <Select.Option
                 pinyin={project.pinyin}
+                label={project.company + project.name}
                 key={project._id}
                 value={project._id}
               >{project.company + project.name}</Select.Option>
