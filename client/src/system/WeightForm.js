@@ -18,20 +18,6 @@ class WeightForm extends React.Component {
             <div className="col-md-3">
               <Field name="date" component={DatePicker} validate={[validator.required]}/>
             </div>
-            <label className="control-label col-md-2">运费（元/每吨）</label>
-            <div className="col-md-2">
-              <Field name="freight" component={Input} validate={[validator.required, validator.num]}  />
-            </div>
-          </div>
-          <div className="form-group">
-            <label className="control-label col-md-1">运费类型</label>
-            <div className="col-md-3">
-              <Field name="freightType" component={Select} validate={[validator.required]}>
-                <option>出库</option>
-                <option>入库</option>
-                <option>双向</option>
-              </Field>
-            </div>
           </div>
         </div>
         <div className="form-group">
@@ -40,7 +26,7 @@ class WeightForm extends React.Component {
             <Field name="comments" component={TextArea}  />
           </div>
         </div>
-        <FieldArray name="userPlans" component={WeightEntry}/>
+        <FieldArray name="entries" component={WeightEntry}/>
       </form>
     )
   }

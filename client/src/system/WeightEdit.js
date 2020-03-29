@@ -10,13 +10,13 @@ import {
   CardHeader,
 } from '@material-ui/core'
 
-import Form from './PriceForm'
+import Form from './WeightForm'
 import { ajax } from '../utils'
-import { PRICE_PLAN, queryPricePlan, newSuccessNotify, newInfoNotify, newErrorNotify  } from '../actions'
+import { WEIGHT_PLAN, queryPricePlan, newSuccessNotify, newInfoNotify, newErrorNotify  } from '../actions'
 
-const PriceForm = reduxForm({ form: 'PRICE_EDIT', action: 'edit' })(Form)
+const WeightForm = reduxForm({ form: 'WEIGHT_EDIT', action: 'edit' })(Form)
 
-class PriceEdit extends React.Component {
+class WeightEdit extends React.Component {
   componentDidMount() {
     if (!this.props.plan) {
       this.props.dispatch(queryPricePlan())
@@ -26,13 +26,13 @@ class PriceEdit extends React.Component {
   handleSubmit = (data) => {
     const { params: { id } } = this.props
     this.props.dispatch(newInfoNotify('提示', '正在保存', 1000))
-    ajax(`/api/price/${ id }`, {
+    ajax(`/api/weight/${ id }`, {
       data: JSON.stringify(data),
       method: 'POST',
       contentType: 'application/json'
     }).then((res) => {
       this.props.dispatch(newSuccessNotify('提示', '保存成功', 1000))
-      this.props.dispatch(push(`/price`))
+      this.props.dispatch(push(`/weight`))
     }).catch((err) => {
       this.props.dispatch(newErrorNotify('警告', '保存失败', 1000))
     })
@@ -48,13 +48,14 @@ class PriceEdit extends React.Component {
     return (
       <Card>
         <CardHeader
-          title="合同方案编辑"
+          title="计重方案编辑"
           action={<>
+            <Button onClick={e => this.props.router.goBack()}>取消</Button>
             <Button color="primary" onClick={() => this.form.submit()}>保存</Button>
           </>}
         />
         <CardContent>
-          <PriceForm
+          <WeightForm
             ref={form => this.form = form}
             onSubmit={this.handleSubmit}
             initialValues={{
@@ -69,7 +70,7 @@ class PriceEdit extends React.Component {
 }
 
 const mapStateToProps = (state, props) => {
-  const plans = state.results.get(PRICE_PLAN, [])
+  const plans = state.results.get(WEIGHT_PLAN, [])
   const { params: { id } } = props
   const list = plans.filter((plan) => plan._id === id)
   const plan = list.length > 0 ? list[0] : null
@@ -78,4 +79,4 @@ const mapStateToProps = (state, props) => {
   }
 }
 
-export default connect(mapStateToProps)(PriceEdit)
+export default connect(mapStateToProps)(WeightEdit)

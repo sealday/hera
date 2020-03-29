@@ -810,7 +810,7 @@ export const queryWeightPlan = () => (dispatch, getState) => {
       dispatch(search.endSuccess)
       dispatch({ type: SAVE_RESULTS, data: {
           key,
-          result: res.data.prices
+          result: res.data.weights
         }})
       dispatch(newSuccessNotify('提示', '加载计重方案成功', 2000))
     }).catch(err => {

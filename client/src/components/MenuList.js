@@ -131,10 +131,10 @@ const allMenu = [
         name: '合同方案',
         path: '/price',
       },
-      // {
-      //   name: '计重方案',
-      //   path: '/weight',
-      // },
+      {
+        name: '计重方案',
+        path: '/weight',
+      },
       {
         name: '操作员管理',
         path: '/operator',

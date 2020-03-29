@@ -47,8 +47,9 @@ class WeightCreate extends React.Component {
     return (
       <Card>
         <CardHeader
-          title="合同方案创建"
+          title="计重方案创建"
           action={<>
+            <Button onClick={e => this.props.router.goBack()}>取消</Button>
             <Button color="primary" onClick={() => this.form.submit()}>保存</Button>
           </>}
         />
@@ -71,7 +72,6 @@ class WeightCreate extends React.Component {
               onSubmit={this.handleSubmit}
               initialValues={{
                 date: moment(),
-                freightType: '入库',
               }}
             />
           }

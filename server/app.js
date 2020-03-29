@@ -109,7 +109,7 @@ app.use(function(err, req, res, next) {
   } else {
     res.json({
       message: '出错了！',
-      originalError: err
+      originalError: err.message ? err.message : err
     })
   }
 })

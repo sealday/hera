@@ -12,7 +12,7 @@ import {
 
 import Form from './PriceForm'
 import { ajax } from '../utils'
-import { PRICE_PLAN, queryPricePlan, newSuccessNotify, newInfoNotify, newErrorNotify  } from '../actions'
+import { PRICE_PLAN, queryPricePlan, newSuccessNotify, newInfoNotify, newErrorNotify, queryWeightPlan } from '../actions'
 
 const PriceForm = reduxForm({ form: 'PRICE_EDIT', action: 'edit' })(Form)
 
@@ -21,6 +21,7 @@ class PriceEdit extends React.Component {
     if (!this.props.plan) {
       this.props.dispatch(queryPricePlan())
     }
+    this.props.dispatch(queryWeightPlan())
   }
 
   handleSubmit = (data) => {
@@ -50,6 +51,7 @@ class PriceEdit extends React.Component {
         <CardHeader
           title="合同方案编辑"
           action={<>
+            <Button onClick={e => this.props.router.goBack()}>取消</Button>
             <Button color="primary" onClick={() => this.form.submit()}>保存</Button>
           </>}
         />

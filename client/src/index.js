@@ -133,8 +133,9 @@ ReactDOM.render((
           <Route path="price/:id" component={PriceEdit} />
           <Route path="price/create/:id" component={PriceCreate} />
           <Route path="weight" component={Weight} />
-          <Route path="weight/:id" component={Weight} />
-          <Route path="weight/create/:id" component={Weight} />
+          <Route path="weight/create" component={WeightCreate} />
+          <Route path="weight/:id" component={WeightEdit} />
+          <Route path="weight/create/:id" component={WeightCreate} />
           {/* direction 表示调拨的方向 取值为 in 和 out  */}
           <Route path="transfer/:direction/create" component={TransferCreate} />
           <Route path="transfer/:direction/:id/edit" component={TransferEdit} />

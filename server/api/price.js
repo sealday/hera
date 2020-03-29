@@ -89,7 +89,7 @@ exports.list = (req, res, next) => {
 };
 
 exports.create = (req, res, next) => {
-  const newPlan = req.body
+  const newPlan = req.body.weightPlan ? req.body :  _.omit(req.body, ['weightPlan'])
   generate(newPlan).then((plan) => {
     const price = new Price(plan)
     return price.save()
@@ -111,7 +111,7 @@ exports.delete = (req, res, next) => {
 
 const update = async (req, res, next) => {
   const id = req.params.id
-  const newPlan = _.omit(req.body, ['_id'])
+  const newPlan = req.body.weightPlan ? _.omit(req.body, ['_id']) :  _.omit(req.body, ['_id', 'weightPlan'])
 
   const plan = await generate(newPlan)
   const oldPlan = await Price.findOne({ _id: ObjectId(id) })

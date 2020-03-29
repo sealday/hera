@@ -11,6 +11,7 @@ const middleware = require('./middleware');
 const user = require('./user');
 const project = require('./project');
 const price = require('./price')
+const weight = require('./weight')
 const workercheckin = require('./worker')
 const record = require('./record')
 const payable = require('./payable')
@@ -45,6 +46,11 @@ router.get('/price', price.list)
 router.post('/price', price.create)
 router.post('/price/:id', price.update)
 router.post('/price/:id/delete', price.delete)
+
+router.get('/weight', weight.list)
+router.post('/weight', weight.create)
+router.post('/weight/:id', weight.update)
+router.post('/weight/:id/delete', weight.delete)
 
 router.get('/project', project.list);
 router.post('/project', project.create)

@@ -16,6 +16,7 @@ const priceSchema = new Schema({
   name: String,
   date: Date,
   comments: String,
+  weightPlan: Schema.Types.ObjectId, // 使用的计重方案
   userPlans: [{
     productType: String, // 产品类型
     name: String, // 名称
