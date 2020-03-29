@@ -9339,6 +9339,11 @@ react-event-listener@^0.6.2:
     prop-types "^15.6.0"
     warning "^4.0.1"
 
+react-fast-compare@^2.0.2:
+  version "2.0.4"
+  resolved "https://registry.npm.taobao.org/react-fast-compare/download/react-fast-compare-2.0.4.tgz#e84b4d455b0fec113e0402c329352715196f81f9"
+  integrity sha1-6EtNRVsP7BE+BALDKTUnFRlvgfk=
+
 react-form@^3.5.5:
   version "3.5.5"
   resolved "http://registry.npm.taobao.org/react-form/download/react-form-3.5.5.tgz#fea29ed2012a503169040f50a5470342badf238e"
@@ -9348,6 +9353,16 @@ react-form@^3.5.5:
     react-redux "^5.0.6"
     redux "^3.7.2"
     redux-thunk "^2.2.0"
+
+react-helmet@^5.2.1:
+  version "5.2.1"
+  resolved "https://registry.npm.taobao.org/react-helmet/download/react-helmet-5.2.1.tgz#16a7192fdd09951f8e0fe22ffccbf9bb3e591ffa"
+  integrity sha1-FqcZL90JlR+OD+Iv/Mv5uz5ZH/o=
+  dependencies:
+    object-assign "^4.1.1"
+    prop-types "^15.5.4"
+    react-fast-compare "^2.0.2"
+    react-side-effect "^1.1.0"
 
 react-is@^16.6.3, react-is@^16.7.0, react-is@^16.8.1:
   version "16.8.6"
@@ -9448,6 +9463,13 @@ react-scripts@^2.1.8:
     workbox-webpack-plugin "3.6.3"
   optionalDependencies:
     fsevents "1.2.4"
+
+react-side-effect@^1.1.0:
+  version "1.2.0"
+  resolved "https://registry.npm.taobao.org/react-side-effect/download/react-side-effect-1.2.0.tgz#0e940c78faba0c73b9b0eba9cd3dda8dfb7e7dae"
+  integrity sha1-DpQMePq6DHO5sOupzT3ajft+fa4=
+  dependencies:
+    shallowequal "^1.0.1"
 
 react-slick@~0.23.2:
   version "0.23.2"

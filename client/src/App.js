@@ -17,6 +17,7 @@ import {
 
 import short_id from 'shortid'
 import { push } from 'react-router-redux'
+import { Helmet } from "react-helmet"
 
 import { Notification, CurrentStore, MenuList } from './components'
 import { ajax, wrapper } from './utils'
@@ -154,6 +155,9 @@ class App extends Component {
     return (
       <div className="App">
         <Notification/>
+        <Helmet>
+          <title>{config.systemName}</title>
+        </Helmet>
         <div className={classes.root}>
           <AppBar position="absolute" className={classes.appBar + " hidden-print"}>
             <Toolbar>
