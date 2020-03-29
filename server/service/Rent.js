@@ -126,18 +126,35 @@ class Rent {
       {
         $lookup: {
           from: 'prices',
-          let: { number: '$products.number' },
+          let: { productType: '$entries.type', productName: '$entries.name', productSize: '$entries.size' },
           pipeline: [
             {
               $match: { _id: pricePlanId }
             },
             {
-              $unwind: '$entries'
+              $unwind: '$userPlans'
             },
             {
               $match: {
                 $expr: {
-                  $eq: ['$entries.number', '$$number']
+                  $cond: {
+                    if: {
+                      $eq: ['$userPlans.level', '产品']
+                    },
+                    then: {
+                      $and: [
+                        { $eq: ['$userPlans.productType', '$$productType'] },
+                        { $eq: ['$userPlans.name', '$$productName'] },
+                      ]
+                    },
+                    else: { 
+                      $and: [
+                        { $eq: ['$userPlans.productType', '$$productType'] },
+                        { $eq: ['$userPlans.name', '$$productName'] },
+                        { $eq: ['$userPlans.size', '$$productSize'] },
+                      ]
+                    }
+                  },
                 }
               }
             }
@@ -157,15 +174,15 @@ class Rent {
             $switch: {
               branches: [
                 {
-                  case: { $eq: ['$prices.entries.type', '换算数量'] },
+                  case: { $eq: ['$prices.userPlans.type', '换算数量'] },
                   then: { $multiply: ['$entries.count', '$products.scale', '$inOut'] },
                 },
                 {
-                  case: { $eq: ['$prices.entries.type', '数量'] },
+                  case: { $eq: ['$prices.userPlans.type', '数量'] },
                   then: { $multiply: ['$entries.count', '$inOut'] },
                 },
                 {
-                  case: { $eq: ['$prices.entries.type', '重量'] },
+                  case: { $eq: ['$prices.userPlans.type', '重量'] },
                   then: { $multiply: ['$weight', '$inOut'] },
                 },
               ],
@@ -184,15 +201,15 @@ class Rent {
             $switch: {
               branches: [
                 {
-                  case: { $eq: ['$prices.entries.type', '换算数量'] },
+                  case: { $eq: ['$prices.userPlans.type', '换算数量'] },
                   then: '$products.unit',
                 },
                 {
-                  case: { $eq: ['$prices.entries.type', '数量'] },
+                  case: { $eq: ['$prices.userPlans.type', '数量'] },
                   then: '$products.countUnit',
                 },
                 {
-                  case: { $eq: ['$prices.entries.type', '重量'] },
+                  case: { $eq: ['$prices.userPlans.type', '重量'] },
                   then: '千克',
                 },
               ],
@@ -213,16 +230,16 @@ class Rent {
             $switch: {
               branches: [
                 {
-                  case: { $eq: ['$prices.entries.type', '换算数量'] },
-                  then: { $multiply: ['$entries.count', '$products.scale', '$prices.entries.unitPrice', '$days', '$inOut'] },
+                  case: { $eq: ['$prices.userPlans.type', '换算数量'] },
+                  then: { $multiply: ['$entries.count', '$products.scale', '$prices.userPlans.unitPrice', '$days', '$inOut'] },
                 },
                 {
-                  case: { $eq: ['$prices.entries.type', '数量'] },
-                  then: { $multiply: ['$entries.count', '$prices.entries.unitPrice', '$days', '$inOut'] },
+                  case: { $eq: ['$prices.userPlans.type', '数量'] },
+                  then: { $multiply: ['$entries.count', '$prices.userPlans.unitPrice', '$days', '$inOut'] },
                 },
                 {
-                  case: { $eq: ['$prices.entries.type', '重量'] },
-                  then: { $multiply: ['$weight', '$prices.entries.unitPrice', '$days', '$inOut'] },
+                  case: { $eq: ['$prices.userPlans.type', '重量'] },
+                  then: { $multiply: ['$weight', '$prices.userPlans.unitPrice', '$days', '$inOut'] },
                 },
               ],
               default: 0
@@ -275,7 +292,7 @@ class Rent {
                 },
                 price: {
                   $sum: {
-                    $multiply: [ '$prices.entries.unitPrice', '$days', '$count' ],
+                    $multiply: [ '$prices.userPlans.unitPrice', '$days', '$count' ],
                   }
                 },
                 unit: {
@@ -320,7 +337,7 @@ class Rent {
                 count: '$count',
                 days: '$days',
                 inOut: { $cond: { if: { $eq: ['$inOut', 1] }, then: '出库', else: '入库' } },
-                unitPrice: '$prices.entries.unitPrice',
+                unitPrice: '$prices.userPlans.unitPrice',
                 unitFreight: '$prices.freight',
                 price: '$price',
                 freight: '$freight',
