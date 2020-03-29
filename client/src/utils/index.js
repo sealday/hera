@@ -241,7 +241,7 @@ export const getProjects = projects => projects.filter(project => PROJECT_TYPE_S
  * @param projects
  * @returns {*}
  */
-const VENDOR_TYPE_SET = new Set(['基地仓库', '同行客户', '项目仓库', '供应商'])
+const VENDOR_TYPE_SET = new Set(['基地仓库', '同行客户', '项目仓库', '租赁客户', '供应商'])
 export const getVendors = projects => projects.filter(project => VENDOR_TYPE_SET.has(project.type))
 
 
