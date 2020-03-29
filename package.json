@@ -1,0 +1,14 @@
+{
+  "name": "hera",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/sealday/hera.git",
+  "author": "",
+  "license": "MIT",
+  "scripts": {
+    "start": "concurrently \"cd server && nodemon\" \"cd client && yarn start\""
+  },
+  "dependencies": {
+    "concurrently": "^5.1.0"
+  }
+}
