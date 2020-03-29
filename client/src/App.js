@@ -173,12 +173,12 @@ class App extends Component {
                   e.preventDefault()
                   dispatch(selectStore(false))
                 }}
-              >其他仓库</Button>
+              >选择仓库</Button>
               <span className={classes.flex} />
               <Button
                 color="inherit"
                 onClick={this.handleMenu('printCompany')}
-              >切换公司（打印）</Button>
+              >切换打印用公司名称</Button>
               <Popover
                 open={this.state.menuOpen['printCompany']}
                 anchorEl={this.state.menuAnchorEl['printCompany']}
