@@ -17,10 +17,9 @@ client 目录下执行 `npm start` 来开发（注意，服务器端口一定需
 - 租金计算关联合同
 - 运输单输入简化
 
-## 启动说明
+## 快速启动说明
 
 1. 确保mongodb服务开启
 2. 确保nodejs，yarn或者npm等工具正常
 3. 在 client 和 server 目录下各自执行一次 `yarn install`（或者 `npm install` ）来安装依赖项
-4. 在根目录执行 `yarn` 安装根目录的依赖
-5. 在根目录执行 `yarn start` 启动项目
+4. 在client目录执行 `yarn run dev` 启动项目
