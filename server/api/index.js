@@ -12,6 +12,7 @@ const user = require('./user');
 const project = require('./project');
 const price = require('./price')
 const weight = require('./weight')
+const repair = require('./repair')
 const workercheckin = require('./worker')
 const record = require('./record')
 const payable = require('./payable')
@@ -51,6 +52,11 @@ router.get('/weight', weight.list)
 router.post('/weight', weight.create)
 router.post('/weight/:id', weight.update)
 router.post('/weight/:id/delete', weight.delete)
+
+router.get('/repair', repair.list)
+router.post('/repair', repair.create)
+router.post('/repair/:id', repair.update)
+router.post('/repair/:id/delete', repair.delete)
 
 router.get('/project', project.list);
 router.post('/project', project.create)
