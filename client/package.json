@@ -2,7 +2,7 @@
   "name": "hera-frontend",
   "version": "3.0.0",
   "private": true,
-  "dependencies": {
+  "devDependencies": {
     "concurrently": "^5.1.0"
   },
   "dependencies": {
@@ -37,7 +37,7 @@
     "xlsx": "^0.11.2"
   },
   "scripts": {
-    "dev": "concurrently \"cd ../server && nodemon\" \"yarn start\"",
+    "dev": "concurrently --handle-input \"cd ../server && nodemon\" \"yarn start\"",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
