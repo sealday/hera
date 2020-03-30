@@ -23,130 +23,134 @@ import { isInsertable } from '../utils'
 
 
 const allMenu = [
-  {
-    name: '仪表盘',
-    path: '/dashboard',
-    icon: Dashboard,
-  },
-  {
-    name: '仓库管理',
-    icon: Store,
-    roles: ['项目部管理员', '系统管理员', '基地仓库管理员'],
-    // TODO 解决这个权限特殊处理
-    isInsertable: isInsertable,
-    children: [
-      {
-        name: '采购入库',
-        path: '/purchase/in/create',
-        roles: ['系统管理员', '基地仓库管理员'],
-      },
-      {
-        name: '销售出库',
-        path: '/purchase/out/create',
-        roles: ['系统管理员', '基地仓库管理员'],
-      },
-      {
-        name: '租赁出库',
-        path: '/transfer/out/create',
-      },
-      {
-        name: '租赁入库',
-        path: '/transfer/in/create',
-      },
-      {
-        name: '暂存出库',
-        path: '/transfer_free/out/create',
-      },
-      {
-        name: '暂存入库',
-        path: '/transfer_free/in/create',
-      },
-      {
-        name: '盘点入库',
-        path: '/stocktaking/in/create',
-        roles: ['系统管理员', '基地仓库管理员'],
-      },
-      {
-        name: '盘点出库',
-        path: '/stocktaking/out/create',
-        roles: ['系统管理员', '基地仓库管理员'],
-      },
-    ]
-  },
-  {
-    name: '仓库查询',
-    icon: Search,
-    children: [
-      {
-        name: '库存查询',
-        path: '/store',
-      },
-      {
-        name: '出入库查询',
-        path: '/simple_search',
-      },
-      {
-        name: '运输单查询',
-        path: '/transport_table',
-      },
-    ]
-  },
-  {
-    name: '公司',
-    icon: GroupWork,
-    roles: ['系统管理员', '财务管理员', '基地仓库管理员'],
-    children: [
-      {
-        name: '租金计算',
-        path: '/rent_calc',
-      },
-      {
-        name: '出入库查询',
-        path: '/simple_search_company',
-      },
-      {
-        name: '运输单查询',
-        path: '/transport_table_company',
-      },
-      {
-        name: '合同',
-        path: '/contract',
-      },
-    ]
-  },
-  {
-    name: '系统信息',
-    icon: Settings,
-    roles: ['系统管理员', '基地仓库管理员'],
-    children: [
-      {
-        name: '基础配置',
-        path: '/settings',
-      },
-      {
-        name: '产品信息',
-        path: '/product',
-      },
-      {
-        name: '合同方案',
-        path: '/price',
-      },
-      {
-        name: '计重方案',
-        path: '/weight',
-      },
-      {
-        name: '操作员管理',
-        path: '/operator',
-        roles: ['系统管理员'],
-      },
-      {
-        name: '客户列表',
-        path: '/project',
-      },
-    ]
-  },
-];
+	{
+		name: '仪表盘',
+		path: '/dashboard',
+		icon: Dashboard
+	},
+	{
+		name: '仓库管理',
+		icon: Store,
+		roles: ['项目部管理员', '系统管理员', '基地仓库管理员'],
+		// TODO 解决这个权限特殊处理
+		isInsertable: isInsertable,
+		children: [
+			{
+				name: '采购入库',
+				path: '/purchase/in/create',
+				roles: ['系统管理员', '基地仓库管理员']
+			},
+			{
+				name: '销售出库',
+				path: '/purchase/out/create',
+				roles: ['系统管理员', '基地仓库管理员']
+			},
+			{
+				name: '租赁出库',
+				path: '/transfer/out/create'
+			},
+			{
+				name: '租赁入库',
+				path: '/transfer/in/create'
+			},
+			{
+				name: '暂存出库',
+				path: '/transfer_free/out/create'
+			},
+			{
+				name: '暂存入库',
+				path: '/transfer_free/in/create'
+			},
+			{
+				name: '盘点入库',
+				path: '/stocktaking/in/create',
+				roles: ['系统管理员', '基地仓库管理员']
+			},
+			{
+				name: '盘点出库',
+				path: '/stocktaking/out/create',
+				roles: ['系统管理员', '基地仓库管理员']
+			}
+		]
+	},
+	{
+		name: '仓库查询',
+		icon: Search,
+		children: [
+			{
+				name: '库存查询',
+				path: '/store'
+			},
+			{
+				name: '出入库查询',
+				path: '/simple_search'
+			},
+			{
+				name: '运输单查询',
+				path: '/transport_table'
+			}
+		]
+	},
+	{
+		name: '公司',
+		icon: GroupWork,
+		roles: ['系统管理员', '财务管理员', '基地仓库管理员'],
+		children: [
+			{
+				name: '租金计算',
+				path: '/rent_calc'
+			},
+			{
+				name: '出入库查询',
+				path: '/simple_search_company'
+			},
+			{
+				name: '运输单查询',
+				path: '/transport_table_company'
+			},
+			{
+				name: '合同',
+				path: '/contract'
+			}
+		]
+	},
+	{
+		name: '系统信息',
+		icon: Settings,
+		roles: ['系统管理员', '基地仓库管理员'],
+		children: [
+			{
+				name: '基础配置',
+				path: '/settings'
+			},
+			{
+				name: '产品信息',
+				path: '/product'
+			},
+			{
+				name: '合同方案',
+				path: '/price'
+			},
+			{
+				name: '计重方案',
+				path: '/weight'
+			},
+			{
+				name: '维修方案',
+				path: '/compensation'
+			},
+			{
+				name: '操作员管理',
+				path: '/operator',
+				roles: ['系统管理员']
+			},
+			{
+				name: '客户列表',
+				path: '/project'
+			}
+		]
+	}
+]
 
 const styles = theme => ({
   root: {
