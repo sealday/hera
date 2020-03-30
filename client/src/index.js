@@ -10,7 +10,7 @@ import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
 import moment from 'moment'
 import 'moment/locale/zh-cn'
 import zh_CN from 'antd/lib/locale-provider/zh_CN'
-import { LocaleProvider } from 'antd'
+import { ConfigProvider } from 'antd'
 import {
   Router,
   Route,
@@ -19,6 +19,7 @@ import {
   Redirect,
 } from 'react-router'
 import io from 'socket.io-client'
+import axios from 'axios'
 
 import * as reducers from './reducers'
 import { systemLoaded, updateOnlineUser, updateOnlineUsers, selectStore } from './actions'
@@ -80,22 +81,34 @@ const store = createStore(combineReducers({
   applyMiddleware(thunkMiddleware, routerMiddleware(hashHistory))
 ))
 
+const socket = io()
+
+socket.on('server:num', num => {
+  store.dispatch(updateOnlineUser(num))
+})
+
+socket.on('server:users', (users) => {
+  store.dispatch(updateOnlineUsers(users))
+})
+
 const onLogined = () => {
+  const token = localStorage.getItem('X-Hera-Token')
+  axios.defaults.headers.common['X-Hera-Token'] = token
   ajax('/api/load').then(res => {
     store.dispatch(systemLoaded(res.data))
-    const socket = io()
 
-    socket.on('server:num', num => {
-      store.dispatch(updateOnlineUser(num))
+    socket.on('connection', () => {
+      socket.emit('client:user', { 
+        user: res.data.user,
+        token: token,
+      })
     })
-
-    socket.on('server:users', (users) => {
-      store.dispatch(updateOnlineUsers(users))
-    })
-
-    socket.on('connect', () => {
-      socket.emit('client:user', res.data.user)
-    })
+    if (socket.connected) {
+      socket.emit('client:user', { 
+        user: res.data.user,
+        token: token,
+      })
+    }
 
     const config = res.data.config
     try {
@@ -112,7 +125,7 @@ const onLogined = () => {
 ReactDOM.render((
   <Provider store={store}>
     <MuiThemeProvider theme={theme}>
-    <LocaleProvider locale={zh_CN}>
+    <ConfigProvider locale={zh_CN}>
       <Router history={syncHistoryWithStore(hashHistory, store)}>
         <Route path="/login" component={Login} />
         <Route path="/" component={App} onEnter={onLogined}>
@@ -164,7 +177,7 @@ ReactDOM.render((
           <Redirect path="*" to="/dashboard" />
         </Route>
       </Router>
-    </LocaleProvider>
+    </ConfigProvider>
     </MuiThemeProvider>
   </Provider>
 ), document.getElementById('root'))

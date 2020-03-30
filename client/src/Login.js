@@ -16,11 +16,11 @@ import withStyles from '@material-ui/core/styles/withStyles'
 import { 
   LockOutlined as LockOutlinedIcon,
 } from '@material-ui/icons'
-import $ from 'jquery'
 import { push } from 'react-router-redux'
 import { connect } from 'react-redux'
 import { message } from 'antd'
 import 'antd/lib/message/style/css'
+import axios from 'axios'
 
 import { wrapper } from './utils'
 
@@ -59,14 +59,21 @@ const styles = theme => ({
 const Login = ({ dispatch, classes }) => {
 
   const [company, setCompany] = useState('上海创兴建筑设备租赁有限公司')
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault()
-    $.post('/api/login', $(e.target).serialize()).then(() => {
+    try {
+      const res = await axios.post('/api/login', {
+        company, username, password
+      })
+      localStorage.setItem('X-Hera-Token', res.data.message)
       dispatch(push('/dashboard'))
-    }).catch(() => {
+      axios.defaults.headers.common['X-Hera-Token'] = res.data.message
+    } catch {
       message.error('登录失败，请检查账号或者密码是否有问题！');
-    })
+    }
   }
 
   return (
@@ -88,11 +95,11 @@ const Login = ({ dispatch, classes }) => {
           </FormControl>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="username">操作员</InputLabel>
-            <Input id="username" name="username" autoFocus autoComplete="username" />
+            <Input onChange={e => setUsername(e.target.value)} id="username" name="username" autoFocus autoComplete="username" value={username} />
           </FormControl>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="password">密码</InputLabel>
-            <Input name="password" type="password" id="password" autoComplete="current-password" />
+            <Input onChange={e => setPassword(e.target.value)} name="password" type="password" id="password" autoComplete="current-password" value={password} />
           </FormControl>
           <Button
             type="submit"

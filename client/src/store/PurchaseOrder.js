@@ -68,7 +68,7 @@ class PurchaseOrder extends React.Component {
         nameLabel = '采购单位'
         signer = '销售方'
         name = projects.get(record.inStock).company + projects.get(record.inStock).name
-      } else if (record.type == '暂存') {
+      } else if (record.type === '暂存') {
         orderName = '暂存入库单'
         outLabel = '出库单位'
         inLabel = '入库单位'

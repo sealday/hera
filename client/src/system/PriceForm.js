@@ -12,7 +12,6 @@ class PriceForm extends React.Component {
   getWeightPlanOptions = () => {
     const { plans } = this.props
 
-    console.log(plans)
     return plans.map(plan => ({
       value: plan._id,
       label: plan.name,

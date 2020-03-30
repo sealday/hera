@@ -1,19 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import moment from 'moment'
 import { withStyles } from '@material-ui/core/styles'
 import {
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
   Grid,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Typography,
 } from '@material-ui/core'
 
 import SettingsForm from './SettingsForm.js'
@@ -29,7 +18,7 @@ class Home extends Component {
   }
 
   render() {
-    const { classes, config } = this.props
+    const { config } = this.props
     return (
       <Grid container spacing={24}>
         <Grid item xs={12}>

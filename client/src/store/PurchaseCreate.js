@@ -28,11 +28,11 @@ class PurchaseCreate extends Component {
   }
 
   render() {
-    const { store, params: { direction }, route } = this.props
+    const { params: { direction }, route } = this.props
     let pageTitle
     let isFree = false
     if (route.path.startsWith('transfer_free')) {
-      if (direction == 'out') {
+      if (direction === 'out') {
         pageTitle = '暂存出库'
       } else {
         pageTitle = '暂存入库'

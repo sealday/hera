@@ -31,8 +31,13 @@ exports.login = (req, res, next) => {
   }).then(([matched, user]) => {
     if (matched) {
       req.session.user = user;
+      const signature = require('cookie-signature')
+      const sid = 's:' + signature.sign(req.sessionID, 'Hera God')
       logger.logInfo(user, '登录', { message: '成功登录' })
-      return res.send('登录成功！');
+      return res.json({
+        status: 200,
+        message: sid,
+      })
     } else {
       throw {
         status: 400,

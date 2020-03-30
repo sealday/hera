@@ -15,6 +15,7 @@ import {
   TableRow,
   Typography,
 } from '@material-ui/core'
+import axios from 'axios'
 
 import { queryLatestOperations, queryMoreOperations } from './actions'
 import { getLevelName, isCurrentUserPermit, wrapper } from './utils'
@@ -43,31 +44,24 @@ class Home extends Component {
     newOutRecords: '加载中...',
     updateRecords: '加载中...',
   }
-  componentDidMount() {
+
+  async componentDidMount() {
     const { system } = this.props
     this.props.dispatch(queryLatestOperations())
-    fetch(`/api/status/new_in_records?store=${system.store._id}`, { credentials: 'same-origin' })
-      .then(r => r.json())
-      .then(res => {
-        this.setState({
-          newInRecords: res.data.num,
-        })
-      })
-    fetch(`/api/status/new_out_records?store=${system.store._id}`, { credentials: 'same-origin' })
-      .then(r => r.json())
-      .then(res => {
-        this.setState({
-          newOutRecords: res.data.num,
-        })
-      })
-    fetch(`/api/status/update_records?store=${system.store._id}`, { credentials: 'same-origin' })
-      .then(r => r.json())
-      .then(res => {
-        this.setState({
-          updateRecords: res.data.num,
-        })
-      })
+    const doRequest = async type => axios.get(`/api/status/${type}`, {
+      params: { store: system.store._id }
+    })
+    const res = await axios.all([
+      'new_in_records', 
+      'new_out_records', 
+      'update_records'].map(type => doRequest(type)))
+
+    const [ newInRecords, newOutRecords, updateRecords ] = res.map(res => res.data.data.num)
+    this.setState({
+      newInRecords, newOutRecords, updateRecords
+    })
   }
+
   renderReport(report) {
     const items = []
     const nameMap = {

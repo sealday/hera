@@ -14,7 +14,6 @@ const MongoStore = require('connect-mongo')(session)
 const compression = require('compression')
 const service = require('./service')
 const Op = require('./models/op')
-const pug = require('pug')
 const Project = require('./models').Project;
 const User = require('./models').User;
 const config = require('../config');
@@ -65,7 +64,18 @@ app.use(logger('[:method] (:log-time) :url :status :remote-addr :response-time m
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
-app.use(cookieParser())
+// app.use(cookieParser())
+
+app.use((req, _, next) => {
+  req.headers.cookie = ''
+  console.log('req.headers', req.headers)
+  req.cookies = {
+    'connect.sid': req.headers['x-hera-token']
+  }
+  next()
+})
+
+
 
 app.use(express.static(path.join(__dirname, 'public')))
 service.root = __dirname
@@ -80,6 +90,10 @@ app.use(session({
   })
 }))
 
+app.use((req, res, next) => {
+  // console.log('---', req.cookies['connect.sid'])
+  next()
+})
 app.use('/api',  apiIndex)
 
 app.get('/system/', (req, res, next) => {
@@ -117,15 +131,11 @@ app.use(function(err, req, res, next) {
 // TODO 增加认证的机制
 app.onSocketConnection = io => {
   return socket => {
-    service.num++
-    io.emit('server:num', service.num)
     socket.on('disconnect', () => {
       service.socketMap.delete(socket)
-      service.num--
-      io.emit('server:num', service.num)
       io.emit('server:users', [...service.socketMap.values()])
     });
-    socket.on('client:user', (user) => {
+    socket.on('client:user', ({ user, token }) => {
       service.socketMap.set(socket, user)
       io.emit('server:users', [...service.socketMap.values()])
     })

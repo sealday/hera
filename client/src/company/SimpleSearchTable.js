@@ -2,14 +2,10 @@ import React from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import { Link } from 'react-router'
-import { Map } from 'immutable'
 import {
   Card,
   CardContent,
-  CardHeader,
 } from '@material-ui/core'
-
-import { total_, toFixedWithoutTrailingZero } from '../utils'
 
 /**
  * 提供排序功能的搜索结果表
@@ -24,16 +20,6 @@ class SimpleSearchTable extends React.Component {
 
   render() {
     const { search } = this.props
-
-    const getTotal = (entries) => {
-
-      let names = new Map()
-      entries.forEach(entry => {
-        names = names.update(entry.name, 0, total => total + total_(entry, this.props.products))
-      })
-
-      return names
-    }
 
     return (
       <>

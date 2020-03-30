@@ -40,7 +40,6 @@ class OperatorEdit extends Component {
     const id = this.props.params.id
     const user = this.props.users.get(id)
     const { projects, operator } = this.props;
-    console.log(operator)
     const perms = user.perms || [];
     const perm = {};
     perms.forEach((p) => {

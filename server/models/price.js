@@ -32,14 +32,6 @@ const priceSchema = new Schema({
     },
     comments: String, // 备注
   }],
-  entries: [{
-    number: Number, // 规格编号
-    unitPrice: Number, // 单价
-    type: {
-      type: String,
-      enum: ['数量', '换算数量', '重量'],
-    }, // 数量类型
-  }],
   freight: Number, // 运费
   freightType: {
     type: String,

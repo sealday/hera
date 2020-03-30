@@ -47,11 +47,6 @@ class ContractItem extends React.Component {
     this.handleClose()
   }
 
-  componentDidMount() {
-    let { projects, params } = this.props
-    console.log(projects.get(params.id))
-  }
-
   render() {
     let { projects, params, router } = this.props
 

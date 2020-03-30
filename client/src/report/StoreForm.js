@@ -1,7 +1,6 @@
 import React from 'react'
 import { reduxForm, Field, formValueSelector } from 'redux-form'
 import { connect } from 'react-redux'
-import moment from 'moment'
 
 import {
   DatePicker,

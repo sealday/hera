@@ -61,7 +61,6 @@ class CurrentStore extends React.Component {
 
   render() {
     const { projects, user } = this.props.system;
-    console.log(projects)
     let filteredProjects = projects;
     if (user.role === '项目部管理员' || user.role === '基地仓库管理员') {
       const perms = user.perms || [];

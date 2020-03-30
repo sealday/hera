@@ -1,4 +1,4 @@
-import $ from 'jquery'
+import axios from 'axios'
 import fuzzysearch from 'fuzzysearch'
 import moment from 'moment'
 import { flowRight, last, dropRight } from 'lodash'
@@ -54,14 +54,22 @@ export function getShortOrder(id) {
  * @param url 请求路径
  * @param settings 请求设置
  */
-export function ajax(url, settings) {
-  return $.ajax(url, settings).catch(res => {
-    if (res.status === 401) {
-      window.location.href = '#/login';
+export async function ajax(url, settings = {}) {
+  try {
+    if (settings.method === 'POST' && settings.data) {
+      settings.data = JSON.parse(settings.data)
+    } else if (settings.data) {
+      settings.params = settings.data
     }
-    // 无论如何总是抛出，以便于后面的 catch 可以捕捉
-    throw res;
-  });
+    const res = await axios({ url, ...settings })
+    return res.data
+  } catch (err) {
+    if (err.status === 401) {
+      window.location.href = '#/login';
+    } else {
+      throw err
+    }
+  }
 }
 
 /**

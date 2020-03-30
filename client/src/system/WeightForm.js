@@ -1,6 +1,6 @@
 import React from 'react'
 import { Field, FieldArray } from 'redux-form'
-import { Input, DatePicker, Select, TextArea } from '../components'
+import { Input, DatePicker, TextArea } from '../components'
 import { validator } from '../utils'
 import WeightEntry from './WeightEntry'
 

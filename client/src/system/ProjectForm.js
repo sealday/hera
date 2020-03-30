@@ -12,7 +12,6 @@ import BankList from './BankList'
 import { Input, Select } from '../components'
 
 import {
-  wrapper,
   TAB2TYPE,
 } from '../utils'
 

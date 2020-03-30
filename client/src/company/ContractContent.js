@@ -37,11 +37,6 @@ class ContractContent extends React.Component {
     this.setState({ open: false })
   }
 
-  componentDidMount() {
-    let { projects, params } = this.props
-    console.log(projects.get(params.id))
-  }
-
   total(project) {
     return project.items.map(item => item.content.group[0].price).reduce((a, b) => a + b, 0)
   }

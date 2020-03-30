@@ -54,7 +54,7 @@ class SimpleSearchForm extends React.Component {
   }
 
   render() {
-    const { handleSubmit, projects, startDate, endDate, reset, onAddItem, title, onExcelExport, classes } = this.props
+    const { handleSubmit, projects, startDate, endDate, reset, onAddItem, title, onExcelExport } = this.props
     return (
       <form onSubmit={handleSubmit}>
         <CardHeader

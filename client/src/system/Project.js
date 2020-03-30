@@ -44,7 +44,7 @@ class Project extends React.Component {
     tab: DEFAULT_TAB_INDEX,
   }
   render() {
-    let { projects, onDeleteClick, projectType, onStatusChange } = this.props
+    let { projects, onDeleteClick, onStatusChange } = this.props
     return (
       <>
         <Card style={{ minHeight: '120px' }}>

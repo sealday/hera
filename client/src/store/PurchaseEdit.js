@@ -39,7 +39,7 @@ class PurchaseEdit extends React.Component {
     let stock
     let isFree = false
     if (route.path.startsWith('transfer_free')) {
-      if (direction == 'out') {
+      if (direction === 'out') {
         pageTitle = '暂存出库'
         stock = 'inStock'
       } else {

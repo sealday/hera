@@ -3,15 +3,12 @@ import moment from 'moment'
 import {
   Button,
   Card,
-  CardContent,
   CardHeader,
-  Grid,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
-  Typography,
 } from '@material-ui/core'
 
 const Flow = ({ items, className }) => (

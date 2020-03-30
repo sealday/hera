@@ -9,7 +9,6 @@ import {
   Drawer,
   List,
   MenuItem,
-  Paper,
   Popover,
   Toolbar,
   Typography,
@@ -140,7 +139,7 @@ class App extends Component {
   }
 
   render() {
-    const { config, classes, store, num, user, onlineUsers, children, dispatch, loading } = this.props
+    const { config, classes, store, user, onlineUsers, children, dispatch, loading } = this.props
 
     if (loading) {
       return (
@@ -208,7 +207,7 @@ class App extends Component {
               <Button
                 color="inherit"
                 onClick={this.handleMenu('onlineCount')}
-              >当前在线 {num} 人</Button>
+              >当前在线 {onlineUsers.length} 人</Button>
               <Popover
                 open={this.state.menuOpen['onlineCount']}
                 anchorEl={this.state.menuAnchorEl['onlineCount']}
@@ -257,7 +256,6 @@ class App extends Component {
 const mapStateToProps = state => ({
   nav: state.nav,
   system: state.system,
-  num: state.system.online,
   onlineUsers: state.system.onlineUsers,
   store: state.system.store,
   user: state.system.user,
