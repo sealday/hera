@@ -1,7 +1,6 @@
 /**
  * Created by seal on 20/01/2017.
  */
-
 export { default as Operator } from './Operator'
 export { default as OperatorCreate } from './OperatorCreate'
 export { default as OperatorEdit } from './OperatorEdit'
@@ -16,3 +15,6 @@ export { default as Settings } from './Settings.js'
 export { default as Weight } from './Weight.js'
 export { default as WeightCreate } from './WeightCreate.js'
 export { default as WeightEdit } from './WeightEdit.js'
+export { default as Compensation } from './Compensation/Compensation.js'
+export {default as CompensationCreate} from './Compensation/CompensationCreate.js'
+export {default as CompensationEdit} from './Compensation/CompensationEdit.js'
