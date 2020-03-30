@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+tmux new-session -d 'cd client; yarn start'
+tmux split-window -h
+tmux split-window -t 0
+tmux send 'cd server; nodemon' ENTER
+tmux a
