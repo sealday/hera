@@ -7,6 +7,8 @@ class Rent {
   async calculate({startDate, endDate, timezone, project, pricePlanId})  {
     const pricePlan = await Price.findOne({ _id: pricePlanId })
     const weightPlanId = pricePlan.weightPlan
+    const repairPlanId = pricePlan.repairPlan
+    const compensationPlanId = pricePlan.compensationPlan
     const result = await Record.aggregate([
       {
         // 关联调拨单
