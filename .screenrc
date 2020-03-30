@@ -1,8 +1,8 @@
 mousetrack on
-split
+split -v
 split
 screen -t server bash -c 'cd server/; nodemon'
 focus
-screen -t bash bash
-focus
 screen -t frontend bash -c 'cd client/; yarn start'
+focus
+screen -t bash -l

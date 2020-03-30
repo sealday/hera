@@ -66,17 +66,6 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 // app.use(cookieParser())
 
-app.use((req, _, next) => {
-  req.headers.cookie = ''
-  console.log('req.headers', req.headers)
-  req.cookies = {
-    'connect.sid': req.headers['x-hera-token']
-  }
-  next()
-})
-
-
-
 app.use(express.static(path.join(__dirname, 'public')))
 service.root = __dirname
 
