@@ -6,6 +6,7 @@ const HistoryRecord = require('../models').HistoryRecord
 const service = require('../service')
 const logger = service.logger
 const helper = require('../utils/my').helper
+const recordService = require('../service').record
 
 
 const list = async (req, res) => {
@@ -45,7 +46,6 @@ const create = async (req, res) => {
   // 制单人
   record.username = historyRecord.username = req.session.user.username
   const [savedRecord] = await Promise.all([record.save(), historyRecord.save()])
-  service.recordCreated(savedRecord) // 处理订单创建后置事件
   logger.logNewRecord(savedRecord, req.session.user)
   res.json({
     message: '创建' + savedRecord.type + '单成功！',
@@ -95,7 +95,6 @@ const updateTransport = async (req, res) => {
   Object.assign(record.transport, req.body)
   record.hasTransport = true // 标记存在运输单
   const updatedRecord = await record.save()
-  service.transportUpdated(updatedRecord) // 处理运输单更新后置事件
   res.json({
     message: '保存运输单成功',
     data: {
@@ -151,6 +150,22 @@ const updateTransportCheckedStatus = async (req, res) => {
   })
 }
 
+const deleteRecord = async (req, res) => {
+  const id = req.params.id
+  await recordService.delete(id)
+  res.json({
+    message: '删除成功！'
+  })
+}
+
+const recoverRecord = async (req, res) => {
+  const id = req.params.id
+  await recordService.recover(id)
+  res.json({
+    message: '恢复成功！'
+  })
+}
+
 exports.list = helper(list)
 exports.create = helper(create)
 exports.detail = helper(detail)
@@ -159,3 +174,5 @@ exports.updateTransport = helper(updateTransport)
 exports.findAllPayer = helper(findAllPayer)
 exports.updateTransportPaidStatus = helper(updateTransportPaidStatus)
 exports.updateTransportCheckedStatus = helper(updateTransportCheckedStatus)
+exports.deleteRecord = helper(deleteRecord)
+exports.recoverRecord = helper(recoverRecord)

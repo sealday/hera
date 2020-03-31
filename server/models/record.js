@@ -103,11 +103,6 @@ const RecordSchema = new Schema(recordSchema, { timestamps: true }); // 时间�
 const HistoryRecordSchema = new Schema(recordSchema, { timestamps: true }); // 时间戳反映真正的制单时间（以录入系统为准）
 
 RecordSchema.pre('save', function (next) {
-
-  // 使缓存无效
-  service.invalidStockCache(this.inStock)
-  service.invalidStockCache(this.outStock)
-
   if (!this.number) {
     // 初始化单号
     Counter.findByIdAndUpdate('record', {$inc: {seq: 1}}, {new: true}).then(counter => {

@@ -2,213 +2,26 @@ const ObjectId = require('mongoose').Types.ObjectId
 const mongoose = require('mongoose')
 const moment = require('moment')
 
-const Project = require('../models').Project
-const Record = require('../models').Record;
-const Price = require('../models').Price
+const Record = require('../models').Record
+const storeService = require('../service').store
 const service = require('../service')
 const rentService = require('../service/Rent')
 const helper = require('../utils/my').helper
 const logger = service.logger
 
-const QUERY_MAP = {
-  '购销': { type: '购销' },
-  '调拨': { type: '调拨' },
-  '暂存': { type: '暂存' },
-  '盘点': { type: '盘点' },
-}
 
-/**
- * 查询指定 project 的库存
- * @param projectId
- * @param params
- */
-const queryAll = async (projectId, params) => {
-  let aggregateExpr = [
-    {},
-    {
-      $facet: {
-        outRecords: [
-          {
-            $match: {
-              outStock: ObjectId(projectId),
-              outDate: {
-                $gte: new Date(params.startDate),
-                $lt: new Date(params.endDate)
-              }
-            },
-          },
-          {
-            $unwind: '$entries'
-          },
-          {
-            $match: {
-              'entries.mode': {
-                $ne: 'R'
-              }
-            }
-          },
-          {
-            $group: {
-              _id: {
-                name: '$entries.name',
-                size: '$entries.size'
-              },
-              sum: {
-                $sum: '$entries.count'
-              }
-            }
-          }
-        ],
-        inRecords: [
-          {
-            $match: {
-              inStock: ObjectId(projectId),
-              outDate: {
-                $gte: new Date(params.startDate),
-                $lt: new Date(params.endDate)
-              }
-            },
-          },
-          {
-            $unwind: '$entries'
-          },
-          {
-            $match: {
-              'entries.mode': {
-                $ne: 'R'
-              }
-            }
-          },
-          {
-            $group: {
-              _id: {
-                name: '$entries.name',
-                size: '$entries.size'
-              },
-              sum: {
-                $sum: '$entries.count'
-              }
-            }
-          }
-        ]
-      }
-    }
-  ]
-  if (params.type) {
-    aggregateExpr[0] = { $match: QUERY_MAP[params.type] }
-  } else {
-    aggregateExpr = aggregateExpr.slice(1)
-  }
-  return await Record.aggregate(aggregateExpr)
-}
-
-const storeSummary = async (req, res, next) => {
+const storeSummary = async (req, res) => {
   logger.logInfo(req.session.user, '查询', { message: '查询库存信息' })
   let condition = req.query['condition']
   if (condition && req.params.id) {
     const params = JSON.parse(condition)
-    const [{ inRecords, outRecords }] = await queryAll(req.params.id, params)
+    const [{ inRecords, outRecords }] = await storeService.queryAll(req.params.id, params)
     res.json({
       message: '查询成功',
       data: {
         inRecords,
         outRecords
       }
-    })
-  } else {
-    res.status(400).json({
-      message: '错误的请求格式'
-    })
-  }
-}
-
-/**
- *
- * 按条件搜索仓库信息
- * query.condition 是一个 JSON 字符串
- *
- */
-exports.search = (req, res, next) => {
-  let condition = req.query['condition']
-
-  if (condition) {
-    condition = JSON.parse(condition)
-
-    let match = {
-      outDate: {
-        $gte: new Date(condition.startDate),
-        $lt: new Date(condition.endDate)
-      },
-      'entries.count': {
-        $gte: 0
-      }
-    }
-
-    // 记录类型
-    if (condition.type) {
-      match['type'] = condition.type
-    }
-
-    // 约束最小数量
-    if (condition.startCount) {
-      match['entries.count']['$gte'] = Number(condition.startCount)
-    }
-
-    // 约束最大数量
-    if (condition.endCount) {
-      match['entries.count']['$lte'] = Number(condition.endCount)
-    }
-
-    // 根据名称
-    if (condition.name) {
-      match['entries.name'] = condition.name
-
-      // 根据规格
-      if (condition.size) {
-        match['entries.size'] = condition.size
-      }
-    }
-
-    if (condition.outStock) {
-      match['outStock'] = ObjectId(condition.outStock)
-    }
-
-    if (condition.inStock) {
-      match['inStock'] = ObjectId(condition.inStock)
-    }
-
-    Record.aggregate([
-      {
-        $unwind: '$entries'
-      },
-      {
-        $match: match
-      },
-      {
-        $project: {
-          // 默认包含了id
-          outStock: '$outStock',
-          inStock: '$inStock',
-          outDate: '$outDate',
-          name: '$entries.name',
-          size: '$entries.size',
-          count: '$entries.count',
-          number: '$number',
-          type: '$type',
-          vendor: '$vendor'
-          //recordId: '$recordId'
-        }
-      }
-    ]).then(search => {
-      res.json({
-        message: '查询成功！',
-        data: {
-          search
-        }
-      })
-
-    }).catch(err => {
-      next(err)
     })
   } else {
     res.status(400).json({
@@ -247,7 +60,13 @@ exports.simpleSearch = (req, res, next) => {
       outDate: {
         $gte: new Date(condition.startDate),
         $lt: new Date(condition.endDate)
-      }
+      },
+      valid: true,
+    }
+
+    // 是否查询无效单
+    if (_.isBoolean(condition.valid)) {
+      match['valid'] = condition.valid
     }
 
     // 记录类型
@@ -369,23 +188,6 @@ exports.simpleSearch = (req, res, next) => {
       message: '错误的请求格式'
     })
   }
-}
-
-const test = () => {
-  mongoose
-    .connect('mongodb://localhost/hera')
-  doRent({
-    startDate: moment('2018-02-01').toDate(),
-    endDate: moment('2018-02-28').add(1, 'day').toDate(),
-    timezone: 'Asia/Shanghai',
-    project: ObjectId('587af5e644e35f50b980d2ea'),
-    pricePlanId: ObjectId('5a56ff25af16eb8d5163df9c'),
-  }).then((result) => {
-    console.log(JSON.stringify(result[0].list, null, 4))
-    console.log(JSON.stringify(result[0].group, null, 4))
-  }).catch((err) => {
-    console.log(err)
-  })
 }
 
 /**
