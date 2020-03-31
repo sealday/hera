@@ -88,6 +88,8 @@ router.post('/record/:id/transport', record.updateTransport)
 router.post('/record/:id/transport_paid', record.updateTransportPaidStatus)
 router.post('/record/:id/transport_checked', record.updateTransportCheckedStatus)
 router.post('/record', record.create)
+router.post('/record/:id/delete', record.deleteRecord)
+router.post('/record/:id/recover', record.recoverRecord)
 
 router.get('/file', file.list)
 router.post('/file', upload.single('file'), file.post)
