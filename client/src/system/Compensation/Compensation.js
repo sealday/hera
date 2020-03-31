@@ -14,7 +14,7 @@ import {
 import 'antd/lib/popconfirm/style/css'
 
 import { ajax } from '../../utils'
-import { newErrorNotify, newInfoNotify, newSuccessNotify, queryCompensationPlan, COMPENSATION_PLAN } from '../../actions.js'
+import { newErrorNotify, newInfoNotify, newSuccessNotify, queryCompensationPlan, COMPENSATION_PLAN } from '../../actions'
 
 class Compensation extends React.Component {
   componentDidMount() {
