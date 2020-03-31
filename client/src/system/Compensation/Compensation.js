@@ -14,7 +14,7 @@ import {
 import 'antd/lib/popconfirm/style/css'
 
 import { ajax } from '../../utils'
-import { newErrorNotify, newInfoNotify, newSuccessNotify, queryCompensationPlan, COMPENSATION_PLAN } from '../../actions'
+import { newErrorNotify, newInfoNotify, newSuccessNotify, queryCompensationPlan, COMPENSATION_PLAN } from '../../actions.js'
 
 class Compensation extends React.Component {
   componentDidMount() {
@@ -42,7 +42,7 @@ class Compensation extends React.Component {
     return (
       <Card>
         <CardHeader
-          title="计重方案"
+          title="维修方案"
           action={<>
             <Button color="primary" component={Link} to="/compensation/create">新增</Button>
           </>}
@@ -58,7 +58,7 @@ class Compensation extends React.Component {
             </tr>
             </thead>
             <tbody>
-            {this.props.plans.map((plan) => (
+            {(this.props.plans || []).map((plan) => (
               <tr key={plan._id}>
                 <td>{plan.name}</td>
                 <td>{moment(plan.date).format('YYYY-MM-DD')}</td>
