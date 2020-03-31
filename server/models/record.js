@@ -96,6 +96,7 @@ const recordSchema = {
   number: Number, // 订单编号
 
   valid: { type: Boolean, default: true }, // 是否有效，用来删除时标记为无效
+  flowStatus: { type: String, default: 'finished' }, // 流程状态 cancelled reviewing finished rejected
   type: String,  // 购销、调拨、盘点、暂存
 }
 

@@ -3,6 +3,7 @@ const Recycle = require('./Recycle')
 const Plan = require('./Plan')
 const Store = require('./Store')
 const Record = require('./Record')
+const Flow = require('./Flow')
 
 exports.num = 0
 exports.io = null
@@ -17,3 +18,4 @@ exports.recycle = new Recycle
 exports.plan = new Plan
 exports.store = new Store
 exports.record = new Record
+exports.flow = new Flow

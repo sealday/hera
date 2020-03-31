@@ -1,3 +1,4 @@
+const _ = require('lodash')
 const ObjectId = require('mongoose').Types.ObjectId
 const mongoose = require('mongoose')
 const moment = require('moment')
@@ -62,6 +63,7 @@ exports.simpleSearch = (req, res, next) => {
         $lt: new Date(condition.endDate)
       },
       valid: true,
+      flowStatus: 'finished',
     }
 
     // 是否查询无效单
