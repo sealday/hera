@@ -37,6 +37,7 @@ class CompensationCreate extends React.Component {
       this.props.dispatch(newErrorNotify('警告', '创建失败', 1000))
     })
   }
+
   render() {
     const { params: { id } } = this.props
     if (id && !this.props.plan) {
@@ -47,7 +48,7 @@ class CompensationCreate extends React.Component {
     return (
       <Card>
         <CardHeader
-          title="计重方案创建"
+          title="维修方案创建"
           action={<>
             <Button onClick={e => this.props.router.goBack()}>取消</Button>
             <Button color="primary" onClick={() => this.form.submit()}>保存</Button>
@@ -84,7 +85,7 @@ class CompensationCreate extends React.Component {
 const mapStateToProps = (state, props) => {
   const plans = state.results.get(COMPENSATION_PLAN, [])
   const { params: { id } } = props
-  const list = plans.filter((plan) => plan._id === id)
+  const list = (plans || []).filter((plan) => plan._id === id)
   const plan = list.length > 0 ? list[0] : null
   return {
     plan: plan,

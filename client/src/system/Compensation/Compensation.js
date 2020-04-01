@@ -2,9 +2,9 @@ import React from 'react'
 import moment from 'moment'
 import {Link} from 'react-router'
 import {connect} from 'react-redux'
-import {Button, Card, CardHeader, CardContent} from '@material-ui/core'
-import {Table, Popconfirm} from 'antd'
-import 'antd/lib/popconfirm/style/css'
+import {CardHeader} from '@material-ui/core'
+import {Card, Table, Popconfirm, Button} from 'antd'
+import {PlusOutlined, SnippetsOutlined, DeleteOutlined, CopyOutlined} from '@ant-design/icons'
 
 import {ajax} from '../../utils'
 import {newErrorNotify, newInfoNotify, newSuccessNotify, queryCompensationPlan, COMPENSATION_PLAN} from '../../actions'
@@ -35,42 +35,74 @@ class Compensation extends React.Component {
 
 	columns = [
 		{
-			title: '名称',
+			key: 'name',
 			dataIndex: 'name',
-			key: 'name'
+			title: '名称'
 		},
 		{
-			title: '日期',
+			key: 'date',
 			dataIndex: 'date',
-			key: 'date'
+			title: '日期'
 		},
 		{
-			title: '备注',
+			key: 'comments',
 			dataIndex: 'comments',
-			key: 'comments'
+			title: '备注'
 		},
 		{
-			title: '操作',
-			key: 'action',
-			render: (text, record) => (
-				<span>
-					<Link to={`/compensation/${record._id}`}>
-						编辑
+			key: 'copy',
+			render: (_, {_id, name}) => (
+				<Button type="dashed" danger>
+					<CopyOutlined />
+					<Link to={`/compensation/create/${_id}`}>
+						<span style={{color: 'black'}}>复制</span>
 					</Link>
-					<a style={{marginRight: 16}}>Invite {record.name}</a>
-					<a>Delete</a>
-				</span>
+				</Button>
+			)
+		},
+		{
+			key: 'delete',
+			render: (_, {_id, name}) => (
+				<Popconfirm title={`确认删除“${name}”方案吗？`} onConfirm={() => this.handleDelete(_id)} okText="确认" cancelText="取消">
+					<Button type="primary" danger>
+						<DeleteOutlined />
+						<Link to={`/compensation/${_id}`}>
+							<span style={{color: 'white'}}>删除</span>
+						</Link>
+					</Button>
+				</Popconfirm>
+			)
+		},
+		{
+			key: 'edit',
+			title: (
+				<Button type="primary">
+					<PlusOutlined />
+					<Link to="/compensation/create">
+						<span style={{color: 'white'}}>新增</span>
+					</Link>
+				</Button>
+			),
+			render: (_, {_id}) => (
+				<Button type="primary">
+					<SnippetsOutlined />
+					<Link to={`/compensation/${_id}`}>
+						<span style={{color: 'white'}}>详情</span>
+					</Link>
+				</Button>
 			)
 		}
 	]
 
 	data = [
 		{
+			key: '12',
 			name: '测试维修方案',
 			date: '20200311',
 			comments: '这里是备注信息'
 		},
 		{
+			key: '121',
 			name: '测试维修方案',
 			date: '20200311',
 			comments: '这里是备注信息'
@@ -79,49 +111,14 @@ class Compensation extends React.Component {
 
 	render() {
 		return (
-			<Card>
-				<CardHeader
-					title="维修方案"
-					action={
-						<>
-							<Button color="primary" component={Link} to="/compensation/create">
-								新增
-							</Button>
-						</>
-					}
-				/>
-				<CardContent>
+			<>
+				<Card>
+					<CardHeader title="维修方案" />
+				</Card>
+				<Card>
 					<Table columns={this.columns} dataSource={this.data || this.props.plans} />
-					<table className="table table-bordered" style={{width: '100%', tableLayout: 'fixed'}}>
-						<thead>
-							<tr>
-								<th>名称</th>
-								<th>日期</th>
-								<th>备注</th>
-								<th />
-							</tr>
-						</thead>
-						<tbody>
-							{(this.props.plans || []).map(plan => (
-								<tr key={plan._id}>
-									<td>{plan.name}</td>
-									<td>{moment(plan.date).format('YYYY-MM-DD')}</td>
-									<td>{plan.comments}</td>
-									<td>
-										<Link component="button" to={`/compensation/${plan._id}`}>
-											编辑
-										</Link>
-										<Popconfirm title={`确认删除“${plan.name}”方案吗？`} onConfirm={() => this.handleDelete(plan._id)} okText="确认" cancelText="取消">
-											<Link>删除</Link>
-										</Popconfirm>
-										<Link to={`/compensation/create/${plan._id}`}>克隆</Link>
-									</td>
-								</tr>
-							))}
-						</tbody>
-					</table>
-				</CardContent>
-			</Card>
+				</Card>
+			</>
 		)
 	}
 }
