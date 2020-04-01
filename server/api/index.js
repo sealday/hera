@@ -13,6 +13,7 @@ const repair = require('./repair')
 const compensation = require('./compensation')
 const workercheckin = require('./worker')
 const record = require('./record')
+const flow = require('./flow')
 const payable = require('./payable')
 const operation = require('./operation')
 const status = require('./status')
@@ -90,6 +91,13 @@ router.post('/record/:id/transport_checked', record.updateTransportCheckedStatus
 router.post('/record', record.create)
 router.post('/record/:id/delete', record.deleteRecord)
 router.post('/record/:id/recover', record.recoverRecord)
+
+// 流程
+router.get('/flow/unfinished', flow.unfinished)
+router.get('/flow/finished', flow.finished)
+router.post('/flow/:id/confirm', flow.confirm)
+router.post('/flow/:id/reject', flow.reject)
+router.post('/flow/:id/cancel', flow.cancel)
 
 router.get('/file', file.list)
 router.post('/file', upload.single('file'), file.post)

@@ -16,6 +16,7 @@ class StoreService {
       {
         $match: {
           valid: true,
+          flowStatus: 'finished',
         }
       },
       {
@@ -91,6 +92,7 @@ class StoreService {
       aggregateExpr[0] = { 
         $match: {
           valid: true,
+          flowStatus: 'finished',
           type: params.type,
         }
       }
