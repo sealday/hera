@@ -39,7 +39,10 @@ class Search extends React.Component {
             />
           </CardContent>
         </Card>
-        <SearchTable/>
+        <SearchTable
+          search={this.props.records} 
+          isCompany={false}
+        />
       </>
     )
   }
@@ -47,6 +50,7 @@ class Search extends React.Component {
 
 const mapStateToProps = state => ({
   store: state.system.store,
+  records: state.store.simpleSearch,
 })
 
 export default connect(mapStateToProps)(Search)

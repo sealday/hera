@@ -24,7 +24,11 @@ const apiIndex = require('./api')
 mongoose.Promise = global.Promise
 // 连接 mongo 数据库
 mongoose
-  .connect(`mongodb://localhost/${ config.db }`)
+  .connect(`mongodb://localhost/${ config.db }`, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+  })
   .then(() => {
     return Promise.all([Project.find(), User.find()]);
   })

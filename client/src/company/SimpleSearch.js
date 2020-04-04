@@ -9,8 +9,8 @@ import {
 } from '@material-ui/core'
 
 import { queryStore } from '../actions'
-import SearchForm from './SimpleSearchForm'
-import SearchTable from './SimpleSearchTable'
+import SearchForm from '../report/SimpleSearchForm'
+import SearchTable from '../report/SimpleSearchTable'
 
 const key = '仓库出入库查询公司'
 
@@ -36,10 +36,15 @@ class Search extends React.Component {
             </>}
           />
           <CardContent>
-            <SearchForm onSubmit={this.search} ref={form => this.form = form}/>
+            <SearchForm 
+              onSubmit={this.search} 
+              ref={form => this.form = form} />
           </CardContent>
         </Card>
-        <SearchTable search={this.props.records} />
+        <SearchTable 
+          search={this.props.records} 
+          isCompany={true}
+        />
       </>
     )
   }
