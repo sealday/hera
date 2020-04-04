@@ -67,7 +67,7 @@ class SimpleSearchForm extends React.Component {
   }
 
   render() {
-    const { handleSubmit, projects, startDate, endDate } = this.props
+    const { handleSubmit, projects, startDate, endDate, other, isCompany } = this.props
     return (
       <form onSubmit={handleSubmit}>
         <div className="form-group">
@@ -88,14 +88,16 @@ class SimpleSearchForm extends React.Component {
                    options={this.getTypeOptions()}
             />
           </div>
-          <label className="control-label col-md-1">出入库</label>
-          <div className="col-md-2">
-            <Field name="inOut"
-                   component={FilterSelect}
-                   placeholder="出入库"
-                   options={this.getInOutOptions()}
-            />
-          </div>
+          {(!isCompany || !!other) && <>
+            <label className="control-label col-md-1">出入库</label>
+            <div className="col-md-2">
+              <Field name="inOut"
+                component={FilterSelect}
+                placeholder="出入库"
+                options={this.getInOutOptions()}
+              />
+            </div>
+          </>}
         </div>
         <div className="form-group">
           <label className="control-label col-md-1">开始日期</label>
@@ -151,6 +153,7 @@ const mapStateToProps = state => {
   return {
     projects: state.system.projects.toArray(),
     startDate: selector(state, 'startDate'),
+    other: selector(state, 'other'),
     endDate: selector(state, 'endDate'),
     name: selector(state, 'name'),
     articles,

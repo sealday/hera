@@ -38,6 +38,7 @@ class Search extends React.Component {
           <CardContent>
             <SearchForm 
               onSubmit={this.search} 
+              isCompany={true}
               ref={form => this.form = form} />
           </CardContent>
         </Card>
