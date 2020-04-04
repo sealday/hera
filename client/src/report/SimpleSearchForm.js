@@ -9,7 +9,7 @@ import {
   Input,
   DateRangeModifier,
 } from '../components'
-import { filterOption, transformArticle, wrapper, RECORD_TYPES } from '../utils'
+import { filterOption, transformArticle, wrapper, RECORD_TYPES, DEFAULT_QUERY_TYPE } from '../utils'
 
 /**
  * 搜索用的表单
@@ -163,7 +163,8 @@ export default wrapper([
     form: 'SimpleSearchForm',
     initialValues: {
       startDate: moment().startOf('day'),
-      endDate: moment().startOf('day')
+      endDate: moment().startOf('day'),
+      type: DEFAULT_QUERY_TYPE,
     }
   }),
   connect(mapStateToProps),

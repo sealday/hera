@@ -29,7 +29,7 @@ class SimpleSearchTable extends React.Component {
   }
 
   render() {
-    const { search } = this.props
+    const { search, isCompany } = this.props
 
     const getTotal = (entries) => {
 
@@ -51,12 +51,14 @@ class SimpleSearchTable extends React.Component {
         getTotal(entry.entries).forEach((v, k) => {
           totals.push(k + '：' + toFixedWithoutTrailingZero(v)) //拼凑显示的字符串
 
-          if (this.getDirection(entry) === '入库') {
-            inStore = inStore.update(k, 0, total => total + v)
-            store = store.update(k, 0, total => total + v)
-          } else {
-            outStore = outStore.update(k, 0, total => total + v)
-            store = store.update(k, 0, total => total - v)
+          if (!isCompany) {
+            if (this.getDirection(entry) === '入库') {
+              inStore = inStore.update(k, 0, total => total + v)
+              store = store.update(k, 0, total => total + v)
+            } else {
+              outStore = outStore.update(k, 0, total => total + v)
+              store = store.update(k, 0, total => total - v)
+            }
           }
         })
 
@@ -64,15 +66,17 @@ class SimpleSearchTable extends React.Component {
       })
     }
 
-    let storeRows = []
-    store.forEach((v, k) => {
-      storeRows.push(<tr key={v}>
-        <td>{k}</td>
-        <td>{toFixedWithoutTrailingZero(outStore.get(k, 0))}</td>
-        <td>{toFixedWithoutTrailingZero(inStore.get(k, 0))}</td>
-        <td>{toFixedWithoutTrailingZero(v)}</td>
-      </tr>)
-    })
+    const storeRows = []
+    if (!isCompany) {
+      store.forEach((v, k) => {
+        storeRows.push(<tr key={v}>
+          <td>{k}</td>
+          <td>{toFixedWithoutTrailingZero(outStore.get(k, 0))}</td>
+          <td>{toFixedWithoutTrailingZero(inStore.get(k, 0))}</td>
+          <td>{toFixedWithoutTrailingZero(v)}</td>
+        </tr>)
+      })
+    }
 
     return (
       <div>
@@ -86,10 +90,10 @@ class SimpleSearchTable extends React.Component {
                 <th>车号</th>
                 <th>单号</th>
                 <th>原始单号</th>
-                <th>项目部</th>
-                <th>出入库 </th>
+                {isCompany ? <th>出库</th> : <th>项目部</th>}
+                {isCompany ? <th>入库</th> : <th>出入库</th>}
                 <th>订单内容</th>
-                <th/>
+                <th>操作</th>
               </tr>
               </thead>
               <tbody>
@@ -100,12 +104,20 @@ class SimpleSearchTable extends React.Component {
                   <td>{entry.carNumber}</td>
                   <td>{entry.number}</td>
                   <td>{entry.originalOrder}</td>
-                  <td>{this.getOtherSize(entry)}</td>
-                  {/* 当没有公司情况的时候，会有对方单位，当两个都没有的时候，属于上年结转的单据 */}
-                  <td>{this.getDirection(entry)}</td>
+                  {isCompany
+                    ? <td>{this.getProjectName(entry.outStock) || entry.vendor}</td>
+                    : <td>{this.getOtherSize(entry)}</td>
+                  }
+                  {isCompany
+                    ? <td>{this.getProjectName(entry.inStock) || entry.vendor}</td>
+                    : <td>{this.getDirection(entry)}</td>
+                  }
                   <td>{entry.totalString}</td>
                   <td>
-                    <Link to={`/record/${entry._id}`}>查看详情</Link>
+                    {isCompany
+                      ? <Link to={`/company_record/${entry._id}`}>查看详情</Link>
+                      : <Link to={`/record/${entry._id}`}>查看详情</Link>
+                    }
                   </td>
                 </tr>
               ))}
@@ -114,7 +126,7 @@ class SimpleSearchTable extends React.Component {
           </CardContent>
         </Card>
 
-        {storeRows.length > 0 &&
+        {!isCompany && storeRows.length > 0 &&
         <Card style={{ marginTop: '16px' }}>
           <CardHeader
             title="结果统计"
@@ -142,7 +154,6 @@ class SimpleSearchTable extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  search: state.store.simpleSearch,
   projects: state.system.projects,
   products: state.system.products,
   articles: state.system.articles.toArray(),

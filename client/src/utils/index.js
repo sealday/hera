@@ -64,11 +64,10 @@ export async function ajax(url, settings = {}) {
     const res = await axios({ url, ...settings })
     return res.data
   } catch (err) {
-    if (err.status === 401) {
+    if (err.response.status === 401) {
       window.location.href = '#/login';
-    } else {
-      throw err
     }
+    throw err
   }
 }
 
@@ -334,3 +333,5 @@ export const RECORD_TYPES = ['购销', '调拨', '暂存', '盘点']
  * 订单类型的路径映射
  */
 export const RECORD_TYPE2URL_PART = { '调拨': 'transfer', '购销': 'purchase', '暂存': 'transfer_free' }
+
+export const DEFAULT_QUERY_TYPE = '调拨'
