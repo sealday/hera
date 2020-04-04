@@ -1,8 +1,4 @@
-const _ = require('lodash')
-const mongoose = require('mongoose')
-
 const planService = require('../service').plan
-const ObjectId = mongoose.Types.ObjectId
 const helper = require('../utils/my').helper
 
 const list = async (req, res) => {
