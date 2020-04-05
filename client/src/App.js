@@ -17,6 +17,7 @@ import {
 import short_id from 'shortid'
 import { push } from 'react-router-redux'
 import { Helmet } from "react-helmet"
+import { get } from 'lodash'
 
 import { Notification, CurrentStore, MenuList } from './components'
 import { ajax, wrapper } from './utils'
@@ -225,7 +226,7 @@ class App extends Component {
                   {onlineUsers.map(user => <MenuItem
                     key={short_id.generate()}
                     onClick={this.handleMenuClose('onlineCount')}
-                  >{user.profile.name}</MenuItem>)}
+                  >{get(user, 'profile.name', '异常用户')}</MenuItem>)}
                 </List>
               </Popover>
               <Button color="inherit" onClick={this.logout}>退出</Button>

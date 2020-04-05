@@ -114,12 +114,21 @@ exports.simpleSearch = (req, res, next) => {
 
     // 需要查询对方仓库 调拨单
     if (id) {
-      // 如果是公司角度搜索，不加限制条件
       if (condition.company) {
-        match['$or'] = [
-          { outStock: id },
-          { inStock: id },
-        ]
+        if (condition.inOut == '出库') {
+          match['$or'] = [
+            { outStock: id },
+          ]
+        } else if (condition.inOut == '入库') {
+          match['$or'] = [
+            { inStock: id },
+          ]
+        } else {
+          match['$or'] = [
+            { outStock: id },
+            { inStock: id },
+          ]
+        }
       } else {
         // 处理出入库
         if (condition.inOut == '出库') {
