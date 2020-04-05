@@ -1,0 +1,88 @@
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import * as moment from 'moment';
+import { Model, Types } from 'mongoose';
+
+import { User } from '../users/users.service';
+
+export type Record = any;
+export type Product = any;
+export type Project = any;
+export type Setting = any;
+export type Operation = any;
+
+@Injectable()
+export class AppService {
+
+  constructor(
+    @InjectModel('Users') private userModel: Model<User>,
+    @InjectModel('Record') private recordModel: Model<Record>,
+    @InjectModel('Setting') private settingModel: Model<Setting>,
+    @InjectModel('Project') private projectModel: Model<Project>,
+    @InjectModel('Product') private productModel: Model<Product>,
+    @InjectModel('Operation') private operationModel: Model<Operation>,
+  ) { }
+
+  async recordCount(storeId: string, direction: string, dateType: string) {
+    let today = moment().startOf('day').toDate()
+    if (direction) {
+      return this.recordModel.countDocuments({
+        [direction]: Types.ObjectId(storeId),
+        [dateType]: {
+          '$gte': today,
+        },
+      })
+    } else {
+      return this.recordModel.countDocuments({
+        [dateType]: {
+          '$gte': today,
+        },
+        $expr: {
+          $gt: ['$updatedAt', '$createdAt'],
+        }
+      })
+    }
+  }
+
+  async load() {
+    const [products, projects, users, settings] = await Promise.all([
+      this.productModel.find().sort({ number: 1 }),
+      this.projectModel.find(),
+      this.userModel.find(),
+      this.settingModel.findOne({}).sort({ _id: -1 }),
+    ])
+
+    // FIXME 这里暂定为第一个找到第一个找到的为基地
+    const bases = projects.filter(project => project.type === '基地仓库')
+    const base = bases.length > 0 ? bases[0] : null
+
+    return {
+      products,
+      projects,
+      users,
+      base,
+      config: settings,
+    }
+  }
+
+  private genQeuryCond(user) {
+    if (user.role === '系统管理员') {
+      return {}
+    } else {
+      return { 'user.username': user.username }
+    }
+  }
+
+  async queryTopKLog(user) {
+    const operations = await this.operationModel.find(this.genQeuryCond(user)).sort({ _id: -1 }).limit(10)
+    return operations;
+  }
+
+  async queryNextKLog(user, lastId) {
+    const operations = await this.operationModel
+      .find({ _id: { $lt: Types.ObjectId(lastId) }, ...this.genQeuryCond(user) })
+      .sort({ _id: -1 })
+      .limit(10)
+    return operations;
+  }
+}
