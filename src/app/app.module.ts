@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 import { CounterSchema } from 'src/schemas/counter.schema';
 import { RecycleSchema } from 'src/schemas/recycle.schema';
 import { StoreModule } from 'src/store/store.module';
@@ -24,6 +26,9 @@ import { SettingsService } from './settings/settings.service';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '../../..', 'client')
+    }),
     ConfigModule.forRoot(),
     AuthModule, 
     UsersModule,

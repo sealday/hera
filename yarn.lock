@@ -621,6 +621,13 @@
     "@angular-devkit/schematics" "9.0.6"
     fs-extra "8.1.0"
 
+"@nestjs/serve-static@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.npm.taobao.org/@nestjs/serve-static/download/@nestjs/serve-static-2.1.0.tgz#fe2955d8d176674046d2eb16724803ca409384d3"
+  integrity sha1-/ilV2NF2Z0BG0usWckgDykCThNM=
+  dependencies:
+    path-to-regexp "0.1.7"
+
 "@nestjs/testing@^7.0.0":
   version "7.0.7"
   resolved "https://registry.npm.taobao.org/@nestjs/testing/download/@nestjs/testing-7.0.7.tgz#c734ec7927efeccf24a6c58582ee0ee910d3045a"

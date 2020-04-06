@@ -30,6 +30,7 @@
     "@nestjs/passport": "^7.0.0",
     "@nestjs/platform-express": "^7.0.0",
     "@nestjs/platform-socket.io": "^7.0.7",
+    "@nestjs/serve-static": "^2.1.0",
     "@nestjs/websockets": "^7.0.7",
     "@types/deep-diff": "^1.0.0",
     "@types/lodash": "^4.14.149",
