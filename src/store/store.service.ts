@@ -348,7 +348,7 @@ export class StoreService {
             }
           },
           weight: {
-            $multiply: ['$entries.count', { $ifNull: [ '$weightPlan.entries.unitWeight', '$products.weight'] } ]
+            $multiply: ['$entries.count', { $ifNull: [ '$weightPlan.entries.weight', '$products.weight'] } ]
           },
         }
       },
