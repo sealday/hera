@@ -836,7 +836,7 @@ export const queryCompensationPlan = () => (dispatch, getState) => {
 					type: SAVE_RESULTS,
 					data: {
 						key,
-						result: res.data.compensations
+						result: res.data.repairPlans
 					}
 				})
 				dispatch(newSuccessNotify('提示', '加载赔偿方案成功', 2000))
@@ -849,7 +849,33 @@ export const queryCompensationPlan = () => (dispatch, getState) => {
 	}
 }
 
+export const REPAIR_PLAN = 'REPAIR_PLAN'
 
+export const queryRepairPlan = () => (dispatch, getState) => {
+	const key = REPAIR_PLAN
+	const search = network(key) // 让查询网络不会重复
+	if (search.shouldProceed(getState())) {
+		dispatch(search.begin)
+		dispatch(newInfoNotify('提示', '正在加载赔偿方案', 2000))
+		ajax('/api/repair')
+			.then((res) => {
+				dispatch(search.endSuccess)
+				dispatch({
+					type: SAVE_RESULTS,
+					data: {
+						key,
+						result: res.data.repairPlans,
+					},
+				})
+				dispatch(newSuccessNotify('提示', '加载赔偿方案成功', 2000))
+			})
+			.catch((err) => {
+				dispatch(search.endFailure)
+				dispatch(newErrorNotify('错误', '加载赔偿方案失败', 2000))
+				throw err
+			})
+	}
+}
 
 export const RENT = 'RENT'
 

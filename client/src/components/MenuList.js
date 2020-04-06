@@ -26,7 +26,7 @@ const allMenu = [
 	{
 		name: '仪表盘',
 		path: '/dashboard',
-		icon: Dashboard
+		icon: Dashboard,
 	},
 	{
 		name: '仓库管理',
@@ -38,40 +38,40 @@ const allMenu = [
 			{
 				name: '采购入库',
 				path: '/purchase/in/create',
-				roles: ['系统管理员', '基地仓库管理员']
+				roles: ['系统管理员', '基地仓库管理员'],
 			},
 			{
 				name: '销售出库',
 				path: '/purchase/out/create',
-				roles: ['系统管理员', '基地仓库管理员']
+				roles: ['系统管理员', '基地仓库管理员'],
 			},
 			{
 				name: '租赁出库',
-				path: '/transfer/out/create'
+				path: '/transfer/out/create',
 			},
 			{
 				name: '租赁入库',
-				path: '/transfer/in/create'
+				path: '/transfer/in/create',
 			},
 			{
 				name: '暂存出库',
-				path: '/transfer_free/out/create'
+				path: '/transfer_free/out/create',
 			},
 			{
 				name: '暂存入库',
-				path: '/transfer_free/in/create'
+				path: '/transfer_free/in/create',
 			},
 			{
 				name: '盘点入库',
 				path: '/stocktaking/in/create',
-				roles: ['系统管理员', '基地仓库管理员']
+				roles: ['系统管理员', '基地仓库管理员'],
 			},
 			{
 				name: '盘点出库',
 				path: '/stocktaking/out/create',
-				roles: ['系统管理员', '基地仓库管理员']
-			}
-		]
+				roles: ['系统管理员', '基地仓库管理员'],
+			},
+		],
 	},
 	{
 		name: '仓库查询',
@@ -79,17 +79,17 @@ const allMenu = [
 		children: [
 			{
 				name: '库存查询',
-				path: '/store'
+				path: '/store',
 			},
 			{
 				name: '出入库查询',
-				path: '/simple_search'
+				path: '/simple_search',
 			},
 			{
 				name: '运输单查询',
-				path: '/transport_table'
-			}
-		]
+				path: '/transport_table',
+			},
+		],
 	},
 	{
 		name: '公司',
@@ -98,21 +98,21 @@ const allMenu = [
 		children: [
 			{
 				name: '租金计算',
-				path: '/rent_calc'
+				path: '/rent_calc',
 			},
 			{
 				name: '出入库查询',
-				path: '/simple_search_company'
+				path: '/simple_search_company',
 			},
 			{
 				name: '运输单查询',
-				path: '/transport_table_company'
+				path: '/transport_table_company',
 			},
 			{
 				name: '合同',
-				path: '/contract'
-			}
-		]
+				path: '/contract',
+			},
+		],
 	},
 	{
 		name: '系统信息',
@@ -121,35 +121,39 @@ const allMenu = [
 		children: [
 			{
 				name: '基础配置',
-				path: '/settings'
+				path: '/settings',
 			},
 			{
 				name: '产品信息',
-				path: '/product'
+				path: '/product',
 			},
 			{
 				name: '合同方案',
-				path: '/price'
+				path: '/price',
 			},
 			{
 				name: '计重方案',
-				path: '/weight'
+				path: '/weight',
+			},
+			{
+				name: '赔偿方案',
+				path: '/compensation',
 			},
 			{
 				name: '维修方案',
-				path: '/compensation'
+				path: '/repair',
 			},
 			{
 				name: '操作员管理',
 				path: '/operator',
-				roles: ['系统管理员']
+				roles: ['系统管理员'],
 			},
 			{
 				name: '客户列表',
-				path: '/project'
-			}
-		]
-	}
+				path: '/project',
+			},
+		],
+	},
 ]
 
 const styles = theme => ({

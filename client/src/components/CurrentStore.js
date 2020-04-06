@@ -88,7 +88,7 @@ class CurrentStore extends React.Component {
             showSearch
             onChange={this.onBaseChange}
             filterOption={filterOption}
-            clearable={false}
+            // clearable={"false"}
           >
             {filteredProjects.filter(project => project.type === this.state.type).toArray().map(project =>
               <Select.Option

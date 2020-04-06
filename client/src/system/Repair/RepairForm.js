@@ -2,9 +2,9 @@ import React, {Component} from 'react'
 import {Field, FieldArray} from 'redux-form'
 import {Input, DatePicker, TextArea} from '../../components'
 import {validator} from '../../utils'
-import CompensationEntry from './CompensationEntry'
+import RepairEntry from './RepairEntry'
 
-class CompensationForm extends Component {
+class RepairForm extends Component {
 	render() {
 		return (
 			<form onSubmit={this.props.handleSubmit}>
@@ -26,10 +26,10 @@ class CompensationForm extends Component {
 						<Field name="comments" component={TextArea} />
 					</div>
 				</div>
-				<FieldArray name="entries" component={CompensationEntry} />
+				<FieldArray name="entries" component={RepairEntry} />
 			</form>
 		)
 	}
 }
 
-export default CompensationForm
+export default RepairForm

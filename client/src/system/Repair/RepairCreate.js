@@ -5,12 +5,12 @@ import {push} from 'react-router-redux'
 import moment from 'moment'
 import {Button, Card, CardContent, CardHeader} from '@material-ui/core'
 
-import Form from './CompensationForm'
+import Form from './RepairForm'
 import {ajax} from '../../utils'
-import {newInfoNotify, newErrorNotify, newSuccessNotify, COMPENSATION_PLAN, queryCompensationPlan} from '../../actions'
-const CompensationForm = reduxForm({form: 'COMPENSATION_CREATE', action: 'create'})(Form)
+import {newInfoNotify, newErrorNotify, newSuccessNotify, COMPENSATION_PLAN, queryRepairPlan} from '../../actions'
+const RepairForm = reduxForm({form: 'COMPENSATION_CREATE', action: 'create'})(Form)
 
-class CompensationCreate extends React.Component {
+class RepairCreate extends React.Component {
 	componentDidMount() {
 		const {
 			params: {id}
@@ -19,20 +19,20 @@ class CompensationCreate extends React.Component {
 		console.log('props', {...this.props})
 		console.log('id', id)
 		if (id && !this.props.plan) {
-			this.props.dispatch(queryCompensationPlan())
+			this.props.dispatch(queryRepairPlan())
 		}
 	}
 
 	handleSubmit = data => {
 		this.props.dispatch(newInfoNotify('提示', '正在创建', 1000))
-		ajax('/api/compensation', {
+		ajax('/api/repair', {
 			data: JSON.stringify(data),
 			method: 'POST',
 			contentType: 'application/json'
 		})
 			.then(res => {
 				this.props.dispatch(newSuccessNotify('提示', '创建成功', 1000))
-				this.props.dispatch(push(`/compensation`))
+				this.props.dispatch(push(`/repair`))
 			})
 			.catch(err => {
 				this.props.dispatch(newErrorNotify('警告', '创建失败', 1000))
@@ -49,7 +49,7 @@ class CompensationCreate extends React.Component {
 		return (
 			<Card>
 				<CardHeader
-					title="赔偿方案创建"
+					title="维修方案创建"
 					action={
 						<>
 							<Button onClick={e => this.props.router.goBack()}>取消</Button>
@@ -61,7 +61,7 @@ class CompensationCreate extends React.Component {
 				/>
 				<CardContent>
 					{id ? (
-						<CompensationForm
+						<RepairForm
 							ref={form => (this.form = form)}
 							onSubmit={this.handleSubmit}
 							initialValues={{
@@ -72,7 +72,7 @@ class CompensationCreate extends React.Component {
 							}}
 						/>
 					) : (
-						<CompensationForm
+						<RepairForm
 							ref={form => (this.form = form)}
 							onSubmit={this.handleSubmit}
 							initialValues={{
@@ -98,4 +98,4 @@ const mapStateToProps = (state, props) => {
 	}
 }
 
-export default connect(mapStateToProps)(CompensationCreate)
+export default connect(mapStateToProps)(RepairCreate)

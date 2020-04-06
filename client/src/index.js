@@ -44,7 +44,10 @@ import {
 	WeightCreate,
 	Compensation,
 	CompensationEdit,
-	CompensationCreate
+	CompensationCreate,
+	Repair,
+	RepairEdit,
+	RepairCreate,
 } from './system'
 import {
   Record,
@@ -156,6 +159,10 @@ ReactDOM.render(
 						<Route path="compensation/create" component={CompensationCreate} />
 						<Route path="compensation/:id" component={CompensationEdit} />
 						<Route path="compensation/create/:id" component={CompensationCreate} />
+						<Route path="repair" component={Repair} />
+						<Route path="repair/create" component={RepairCreate} />
+						<Route path="repair/:id" component={RepairEdit} />
+						<Route path="repair/create/:id" component={RepairCreate} />
 						{/* direction 表示调拨的方向 取值为 in 和 out  */}
 						<Route path="transfer/:direction/create" component={TransferCreate} />
 						<Route path="transfer/:direction/:id/edit" component={TransferEdit} />

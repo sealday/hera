@@ -6,20 +6,20 @@ import {Card, Table, Popconfirm, Button} from 'antd'
 import {PlusOutlined, SnippetsOutlined, DeleteOutlined, CopyOutlined} from '@ant-design/icons'
 
 import {ajax} from '../../utils'
-import {newErrorNotify, newInfoNotify, newSuccessNotify, queryCompensationPlan, COMPENSATION_PLAN} from '../../actions'
+import {newErrorNotify, newInfoNotify, newSuccessNotify, queryRepairPlan, COMPENSATION_PLAN} from '../../actions'
 
-class Compensation extends React.Component {
+class Repair extends React.Component {
 	componentDidMount() {
 		this.load()
 	}
 
 	load = () => {
-		this.props.dispatch(queryCompensationPlan())
+		this.props.dispatch(queryRepairPlan())
 	}
 
 	handleDelete = (id) => {
 		this.props.dispatch(newInfoNotify('提示', '正在删除', 1000))
-		ajax(`/api/compensation/${id}/delete`, {
+		ajax(`/api/repair/${id}/delete`, {
 			method: 'POST',
 			contentType: 'application/json',
 		})
@@ -53,7 +53,7 @@ class Compensation extends React.Component {
 			render: (_, { _id, name }) => (
 				<Button type="dashed" danger>
 					<CopyOutlined />
-					<Link to={`/compensation/create/${_id}`} style={{ color: 'black' }}>
+					<Link to={`/repair/create/${_id}`} style={{ color: 'black' }}>
 						复制
 					</Link>
 				</Button>
@@ -65,7 +65,7 @@ class Compensation extends React.Component {
 				<Popconfirm title={`确认删除“${name}”方案吗？`} onConfirm={() => this.handleDelete(_id)} okText="确认" cancelText="取消">
 					<Button type="primary" danger>
 						<DeleteOutlined />
-						<Link to={`/compensation/${_id}`} style={{ color: 'white' }}>
+						<Link to={`/repair/${_id}`} style={{ color: 'white' }}>
 							删除
 						</Link>
 					</Button>
@@ -77,7 +77,7 @@ class Compensation extends React.Component {
 			title: (
 				<Button type="primary">
 					<PlusOutlined />
-					<Link to="/compensation/create" style={{ color: 'white' }}>
+					<Link to="/repair/create" style={{ color: 'white' }}>
 						新增
 					</Link>
 				</Button>
@@ -85,7 +85,7 @@ class Compensation extends React.Component {
 			render: (_, { _id }) => (
 				<Button type="primary">
 					<SnippetsOutlined />
-					<Link to={`/compensation/${_id}`} style={{ color: 'white' }}>
+					<Link to={`/repair/${_id}`} style={{ color: 'white' }}>
 						编辑
 					</Link>
 				</Button>
@@ -96,13 +96,13 @@ class Compensation extends React.Component {
 	data = [
 		{
 			key: '12',
-			name: '测试赔偿方案',
+			name: '测试维修方案',
 			date: '20200311',
 			comments: '这里是备注信息',
 		},
 		{
 			key: '121',
-			name: '测试赔偿方案',
+			name: '测试维修方案',
 			date: '20200311',
 			comments: '这里是备注信息',
 		},
@@ -112,7 +112,7 @@ class Compensation extends React.Component {
 		return (
 			<>
 				<Card>
-					<CardHeader title="赔偿方案" />
+					<CardHeader title="维修方案" />
 				</Card>
 				<Card>
 					<Table columns={this.columns} dataSource={this.props.plans} />
@@ -126,4 +126,4 @@ const mapStateToProps = state => {
 	const plans = state.results.get(COMPENSATION_PLAN, [])
 	return {plans}
 }
-export default connect(mapStateToProps)(Compensation)
+export default connect(mapStateToProps)(Repair)

@@ -7,7 +7,7 @@ import { PlusOutlined } from '@ant-design/icons'
 import { FilterSelect, Input, Select } from '../../components'
 import { validator, filterOption, transformArticle } from '../../utils'
 
-const CompensationEntry = connect(state => ({
+const RepairEntry = connect(state => ({
 	articles: state.system.articles
 }))(({ fields, articles }) => {
 	const { typeNameMap, nameArticleMap } = transformArticle(articles.toArray())
@@ -92,7 +92,7 @@ const CompensationEntry = connect(state => ({
 								</Field>
 							</td>
 							<td>
-								<Field name={`${entry}.unitCompensation`} component={Input} validate={[validator.required, validator.num]} />
+								<Field name={`${entry}.unitRepair`} component={Input} validate={[validator.required, validator.num]} />
 							</td>
 							<td>
 								<Field name={`${entry}.type`} component={Select}>
@@ -121,4 +121,4 @@ const CompensationEntry = connect(state => ({
 	)
 })
 
-export default CompensationEntry
+export default RepairEntry
