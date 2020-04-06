@@ -22,7 +22,7 @@ export class PlanService {
     if (type === 'price') {
       return (new this.priceModel(body)).save()
     } else {
-      return (new this.planModel(body)).save()
+      return (new this.planModel({ ...body, type })).save()
     }
   }
 

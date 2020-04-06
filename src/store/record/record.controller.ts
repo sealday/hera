@@ -17,37 +17,25 @@ export class RecordController {
     return { record }
   }
 
-  @Get(':id')
-  async detail(@Param('id') recordId: string) {
-    const record = await this.recordService.findById(recordId)
-    return { record }
-  }
-
   @Get('all_payer')
   async payers() {
     const payers = await this.recordService.findPayer()
     return { payers }
   }
 
-  @Post(':id')
-  async update(@Param('id') recordId: string, @Body() body: any, @Auth() user: User) {
-    const record = await this.recordService.update(body, recordId, user)
-    return { record }
-  }
-
-  @Post('/record/:id/transport')
+  @Post(':id/transport')
   async updateTransport(@Param('id') recordId: string, @Body() body: any, @Auth() user: User) {
     const record = await this.recordService.updateTransport(body, recordId, user)
     return { record }
   }
 
-  @Post('/record/:id/transport_paid')
+  @Post(':id/transport_paid')
   async updateTransportPaidStatus(@Body('paid') isPaid: boolean, @Param('id') recordId: string) {
     const paid = await this.recordService.updateTransportPaidStatus(isPaid, recordId)
     return { paid }
   }
 
-  @Post('/record/:id/transport_checked')
+  @Post(':id/transport_checked')
   async updateTransportCheckedStatus(@Body('checked') isChecked: boolean, @Param('id') recordId: string) {
     const checked = await this.recordService.updateTransportCheckedStatus(isChecked, recordId)
     return { checked }
@@ -63,5 +51,17 @@ export class RecordController {
   async recover(@Param('id') recordId: string) {
     await this.recordService.recover(recordId)
     return {}
+  }
+
+  @Get(':id')
+  async detail(@Param('id') recordId: string) {
+    const record = await this.recordService.findById(recordId)
+    return { record }
+  }
+
+  @Post(':id')
+  async update(@Param('id') recordId: string, @Body() body: any, @Auth() user: User) {
+    const record = await this.recordService.update(body, recordId, user)
+    return { record }
   }
 }

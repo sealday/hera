@@ -4,7 +4,7 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { WrapperInterceptor } from '../wrapper.interceptor';
 import { SettingsService } from './settings.service';
 
-@Controller('settings')
+@Controller('system/settings')
 @UseGuards(JwtAuthGuard)
 @UseInterceptors(WrapperInterceptor)
 export class SettingsController {

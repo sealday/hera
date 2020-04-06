@@ -53,7 +53,7 @@ export class UsersService {
         this.loggerService.logDanger(user, '修改', { message: '更新' + user.profile.name + '的资料' })
         const findUser = await this.usersModel.findById(userId)
         Object.assign(findUser, body)
-        const savedUser = await user.save()
+        const savedUser = await findUser.save()
         return savedUser
     }
 

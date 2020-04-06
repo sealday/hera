@@ -1,7 +1,8 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-import { Record, AppService } from 'src/app/app.service';
+import { AppService, Record } from 'src/app/app.service';
+import { LoggerService } from 'src/app/logger/logger.service';
 import { User } from 'src/users/users.service';
 import { convert } from 'src/utils/pinyin';
 
@@ -9,6 +10,7 @@ import { convert } from 'src/utils/pinyin';
 export class RecordService {
   constructor(
     @InjectModel('Record') private recordModel: Model<Record>,
+    private loggerService: LoggerService,
     private appService: AppService,
   ) { }
 
@@ -28,9 +30,11 @@ export class RecordService {
     record.number = await this.appService.genNextNumber('record')
     // 3) 制单人
     record.username = user.username
-    // TODO 4) 落下日志
-    // 5) 保存历史订单
-    return record.save()
+    // 4) 保存历史订单
+    const savedRecord = await record.save()
+    // 5) 落下日志
+    this.loggerService.logNewRecord(savedRecord, user)
+    return savedRecord
   }
 
   async findById(recordId: string) {
@@ -39,15 +43,14 @@ export class RecordService {
 
   async update(body: Record, recordId: string, user: User) {
     const record = await this.recordModel.findById(recordId)
-    const lhs = record.lean()
+    const lhs = record.toObject()
     Object.assign(record, body)
     // TODO 记录修改人
     // record.username = user.username
     const updatedRecord = await record.save()
-    const rhs = record.lean()
-    // TODO 落下日志
-    // logger.logRecordDiff(lhs, rhs, user)
-    return updatedRecord.lean()
+    const rhs = updatedRecord.toObject()
+    this.loggerService.logRecordDiff(lhs, rhs, user)
+    return updatedRecord
   }
 
   async updateTransport(body: any, recordId: string, user: User) {
@@ -56,7 +59,7 @@ export class RecordService {
     // 标记存在运输单
     record.hasTransport = true
     const updatedRecord = await record.save()
-    return updatedRecord.lean()
+    return updatedRecord
   }
 
   async findPayer() {

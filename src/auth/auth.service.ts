@@ -3,12 +3,14 @@ import { JwtService } from '@nestjs/jwt';
 import { compare } from 'bcrypt';
 
 import { UsersService } from '../users/users.service';
+import { LoggerService } from 'src/app/logger/logger.service';
 
 @Injectable()
 export class AuthService {
     constructor(
         private usersService: UsersService,
         private jwtService: JwtService,
+        private loggerService: LoggerService,
     ) {}
 
     async validateUser(username: string, pass: string): Promise<any> {
@@ -21,6 +23,7 @@ export class AuthService {
     }
 
     async login(user: any) {
+        this.loggerService.logInfo(user, '登录', { message: '成功登录' })
         return {
             access_token: this.jwtService.sign(user),
         };

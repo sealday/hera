@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
@@ -8,6 +8,7 @@ import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
 import { LocalStrategy } from './local.strategy';
 import { AuthController } from './auth.controller';
+import { AppModule } from 'src/app/app.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { AuthController } from './auth.controller';
       }),
       inject: [ConfigService],
     }),
+    forwardRef(() => AppModule),
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],
   exports: [AuthService],

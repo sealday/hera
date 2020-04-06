@@ -154,19 +154,9 @@ export class StoreService {
     if (condition.originalOrder) {
       match['originalOrder'] = condition.originalOrder
     }
-    // TODO 这段代码不再有效
-    let id, vendor
-    if (condition.other) {
-      // 使用 try catch 来判断是不是 store
-      try {
-        id = Types.ObjectId(condition.other)
-      } catch (e) {
-        // 不能转换成 ObjectId 则是vendor
-        vendor = condition.other
-      }
-    }
     // 需要查询对方仓库 调拨单
-    if (id) {
+    if (condition.other) {
+      const id = Types.ObjectId(condition.other)
       if (condition.company) {
         if (condition.inOut == '出库') {
           match['$or'] = [
@@ -218,10 +208,6 @@ export class StoreService {
           ]
         }
       }
-    }
-    // 需要查询对方单位 采购销售
-    if (vendor) {
-      match['vendor'] = vendor
     }
     // 查询单号 当按单号查询的时候，忽略其他条件
     if (condition.number) {

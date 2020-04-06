@@ -14,18 +14,6 @@ export class StoreController {
 
   constructor(private storeService: StoreService) { }
 
-  @Get(':id')
-  async summary(
-    @Param('id') projectId: string, 
-    @Query('condition') condition: string,
-    @Auth() user: User,
-  ) {
-    // TODO 参数校验
-    const params = JSON.parse(condition)
-    const { inRecords, outRecords } = await this.storeService.summary(projectId, params, user)
-    return { inRecords, outRecords }
-  }
-
   @Get('rent')
   async rent(@Query('condition') condition: string, @Auth() user: User) {
     // TODO 参数检查
@@ -52,5 +40,17 @@ export class StoreController {
     const params = JSON.parse(condition)
     const search = await this.storeService.search(params, user)
     return { search }
+  }
+
+  @Get(':id')
+  async summary(
+    @Param('id') projectId: string, 
+    @Query('condition') condition: string,
+    @Auth() user: User,
+  ) {
+    // TODO 参数校验
+    const params = JSON.parse(condition)
+    const { inRecords, outRecords } = await this.storeService.summary(projectId, params, user)
+    return { inRecords, outRecords }
   }
 }

@@ -1,7 +1,11 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ProductService } from './product.service';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { WrapperInterceptor } from 'src/app/wrapper.interceptor';
 
 @Controller('product')
+@UseGuards(JwtAuthGuard)
+@UseInterceptors(WrapperInterceptor)
 export class ProductController {
   constructor(private productService: ProductService) { }
   @Get()
