@@ -3,18 +3,14 @@ import * as mongoose from 'mongoose';
 export const RecordSchema = new mongoose.Schema({
   outStock: mongoose.Schema.Types.ObjectId, // 出库仓库
   inStock: mongoose.Schema.Types.ObjectId, // 入库仓库
-
   username: String, // 填单子的人
   vendor: String, // 对方单位，采购单和销售单专用
   comments: String, // 备注
-  status: String, // 状态 采购单用来说明是否付款过
-  order: mongoose.Schema.Types.ObjectId, // 单号
   originalOrder: String, // 原始单号
-
+  number: Number, // 订单编号
+  carNumber: String, // 车号
   entries: [{
-    type: { // 类型
-      type: String
-    },
+    type: { type: String }, // 类型
     number: Number, // 编号
     name: String, // 名称
     size: String, // 规格
@@ -43,20 +39,13 @@ export const RecordSchema = new mongoose.Schema({
       default: 'L'
     }, // 模式，
   }], // 订单项
-
   outDate: Date, // 出库时间
-  //FIXME
-  inDate: Date, // 入库时间  暂时用不到
-
-  carNumber: String, // 车号
-
   fee: {
     car: Number, // 车费
     sort: Number, // 整理
     other1: Number, // 其他1
     other2: Number, // 其他2
   },
-
   hasTransport: { type: Boolean, default: false }, // 是否有对应运输单
   transportPaid: { type: Boolean, default: false }, // 是否付过款
   transportChecked: { type: Boolean, default: false }, // 是否核对过
@@ -86,9 +75,6 @@ export const RecordSchema = new mongoose.Schema({
     'carrier-id': String, // 司机身份证号码
     'carrier-car': String, // 车牌号
   },
-
-  number: Number, // 订单编号
-
   valid: { type: Boolean, default: true }, // 是否有效，用来删除时标记为无效
   flowStatus: { type: String, default: 'finished' }, // 流程状态 cancelled reviewing finished rejected
   type: String,  // 购销、调拨、盘点、暂存

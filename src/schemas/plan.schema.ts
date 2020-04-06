@@ -11,7 +11,7 @@ export const PlanSchema = new mongoose.Schema({
   name: String,
   date: Date,
   comments: String,
-  planType: String,
+  type: { type: String }, // 计划类型
   entries: [{
     type: { type: String }, // 产品类型
     name: String, // 产品名称

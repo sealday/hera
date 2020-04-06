@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import * as moment from 'moment';
 import { Model, Types } from 'mongoose';
+import * as _ from 'lodash'
 
 import { User } from '../users/users.service';
 
@@ -10,6 +11,10 @@ export type Product = any;
 export type Project = any;
 export type Setting = any;
 export type Operation = any;
+export type Counter = any;
+export type Recycle = any;
+export type Price = any;
+export type Plan = any;
 
 @Injectable()
 export class AppService {
@@ -21,6 +26,8 @@ export class AppService {
     @InjectModel('Project') private projectModel: Model<Project>,
     @InjectModel('Product') private productModel: Model<Product>,
     @InjectModel('Operation') private operationModel: Model<Operation>,
+    @InjectModel('Counter') private counterModel: Model<Counter>,
+    @InjectModel('Recycle') private recycleModel: Model<Recycle>,
   ) { }
 
   async recordCount(storeId: string, direction: string, dateType: string) {
@@ -84,5 +91,15 @@ export class AppService {
       .sort({ _id: -1 })
       .limit(10)
     return operations;
+  }
+
+  async genNextNumber(type: string) {
+    const counter = await this.counterModel.findByIdAndUpdate(type, {$inc: {seq: 1}}, {new: true})
+    return counter.seq
+  }
+
+  async onDeleted(src: string, obj: object, user: User) {
+    const recycle = new this.recycleModel({ src, obj, user: _.pick(user, ['username', 'profile.name'])})
+    await recycle.save()
   }
 }

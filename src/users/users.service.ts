@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
 import { Model } from 'mongoose';
 import { Socket } from 'socket.io';
+import { LoggerService } from 'src/app/logger/logger.service';
 
 export type User = any;
 
@@ -10,7 +11,10 @@ export type User = any;
 export class UsersService {
     private users: Map<Socket, User> = new Map()
 
-    constructor(@InjectModel('Users') private usersModel: Model<User>) { }
+    constructor(
+        @InjectModel('Users') private usersModel: Model<User>,
+        private loggerService: LoggerService,
+    ) { }
 
     async create(user: User): Promise<User> {
         const salt = await bcrypt.genSalt();
@@ -38,5 +42,23 @@ export class UsersService {
 
     public get onlineUsers() : User[] {
         return [...this.users.values()]
+    }
+
+    async list() {
+        const users = await this.usersModel.find()
+        return users
+    }
+
+    async update(body: User, userId: string, user: User) {
+        this.loggerService.logDanger(user, '修改', { message: '更新' + user.profile.name + '的资料' })
+        const findUser = await this.usersModel.findById(userId)
+        Object.assign(findUser, body)
+        const savedUser = await user.save()
+        return savedUser
+    }
+
+    async remove(userId: string) {
+        const user = await this.usersModel.findByIdAndRemove(userId)
+        return user
     }
 }
