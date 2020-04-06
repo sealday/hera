@@ -110,6 +110,7 @@ class App extends Component {
   }
 
   logout = () => {
+    const { socket } = this.props
     ajax('/api/logout', {
       method: 'POST'
     }).then(() => {
@@ -226,7 +227,7 @@ class App extends Component {
                   {onlineUsers.map(user => <MenuItem
                     key={short_id.generate()}
                     onClick={this.handleMenuClose('onlineCount')}
-                  >{get(user, 'profile.name', '异常用户')}</MenuItem>)}
+                  >{get(user, ['profile', 'name'], '异常用户')}</MenuItem>)}
                 </List>
               </Popover>
               <Button color="inherit" onClick={this.logout}>退出</Button>

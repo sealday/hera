@@ -108,10 +108,6 @@ const allMenu = [
         name: '运输单查询',
         path: '/transport_table_company',
       },
-      {
-        name: '合同',
-        path: '/contract',
-      },
     ]
   },
   {

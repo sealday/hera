@@ -27,7 +27,7 @@ class Weight extends React.Component {
 
   handleDelete = (id) => {
     this.props.dispatch(newInfoNotify('提示', '正在删除', 1000))
-    ajax(`/api/weight/${ id }/delete`, {
+    ajax(`/api/plan/weight/${ id }/delete`, {
       method: 'POST',
       contentType: 'application/json'
     }).then((res) => {

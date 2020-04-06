@@ -27,7 +27,7 @@ class Price extends React.Component {
 
   handleDelete = (id) => {
     this.props.dispatch(newInfoNotify('提示', '正在删除', 1000))
-    ajax(`/api/price/${ id }/delete`, {
+    ajax(`/api/plan/price/${ id }/delete`, {
       method: 'POST',
       contentType: 'application/json'
     }).then((res) => {

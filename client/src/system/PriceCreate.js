@@ -26,7 +26,7 @@ class PriceCreate extends React.Component {
 
   handleSubmit = (data) => {
     this.props.dispatch(newInfoNotify('提示', '正在创建', 1000))
-    ajax('/api/price', {
+    ajax('/api/plan/price', {
       data: JSON.stringify(data),
       method: 'POST',
       contentType: 'application/json'

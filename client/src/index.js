@@ -83,21 +83,17 @@ const store = createStore(combineReducers({
 
 const socket = io()
 
-socket.on('server:num', num => {
-  store.dispatch(updateOnlineUser(num))
-})
-
 socket.on('server:users', (users) => {
   store.dispatch(updateOnlineUsers(users))
 })
 
 const onLogined = () => {
   const token = localStorage.getItem('X-Hera-Token')
-  axios.defaults.headers.common['X-Hera-Token'] = token
+  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
   ajax('/api/load').then(res => {
     store.dispatch(systemLoaded(res.data))
 
-    socket.on('connection', () => {
+    socket.on('connect', () => {
       socket.emit('client:user', { 
         user: res.data.user,
         token: token,
@@ -122,13 +118,20 @@ const onLogined = () => {
   })
 }
 
+const onLogouted = () => {
+  socket.off('connect')
+  if (socket.connected) {
+    socket.emit('client:logout')
+  }
+}
+
 ReactDOM.render((
   <Provider store={store}>
     <MuiThemeProvider theme={theme}>
     <ConfigProvider locale={zh_CN}>
       <Router history={syncHistoryWithStore(hashHistory, store)}>
         <Route path="/login" component={Login} />
-        <Route path="/" component={App} onEnter={onLogined}>
+        <Route path="/" component={App} onEnter={onLogined} onLeave={onLogouted}>
           <IndexRedirect to="/dashboard" />
           <Route path="dashboard" component={Home} />
           <Route path="operator" component={Operator} />

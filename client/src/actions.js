@@ -783,11 +783,11 @@ export const queryPricePlan = () => (dispatch, getState) => {
   if (search.shouldProceed(getState())) {
     dispatch(search.begin)
     dispatch(newInfoNotify('提示', '正在加载合同方案', 2000))
-    ajax('/api/price').then(res => {
+    ajax('/api/plan/price').then(res => {
       dispatch(search.endSuccess)
       dispatch({ type: SAVE_RESULTS, data: {
           key,
-          result: res.data.prices
+          result: res.data.plans
         }})
       dispatch(newSuccessNotify('提示', '加载合同方案成功', 2000))
     }).catch(err => {
@@ -806,11 +806,11 @@ export const queryWeightPlan = () => (dispatch, getState) => {
   if (search.shouldProceed(getState())) {
     dispatch(search.begin)
     dispatch(newInfoNotify('提示', '正在加载计重方案', 2000))
-    ajax('/api/weight').then(res => {
+    ajax('/api/plan/weight').then(res => {
       dispatch(search.endSuccess)
       dispatch({ type: SAVE_RESULTS, data: {
           key,
-          result: res.data.weights
+          result: res.data.plans
         }})
       dispatch(newSuccessNotify('提示', '加载计重方案成功', 2000))
     }).catch(err => {

@@ -92,7 +92,7 @@ const WeightEntry = connect(
               />
             </td>
             <td><Field
-              name={`${entry}.unitWeight`}
+              name={`${entry}.weight`}
               component={Input}
               validate={[validator.required, validator.num]}
             /></td>

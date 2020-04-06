@@ -26,7 +26,7 @@ class WeightEdit extends React.Component {
   handleSubmit = (data) => {
     const { params: { id } } = this.props
     this.props.dispatch(newInfoNotify('提示', '正在保存', 1000))
-    ajax(`/api/weight/${ id }`, {
+    ajax(`/api/plan/weight/${ id }`, {
       data: JSON.stringify(data),
       method: 'POST',
       contentType: 'application/json'

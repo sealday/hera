@@ -68,9 +68,8 @@ const Login = ({ dispatch, classes }) => {
       const res = await axios.post('/api/login', {
         company, username, password
       })
-      localStorage.setItem('X-Hera-Token', res.data.message)
+      localStorage.setItem('X-Hera-Token', res.data.access_token)
       dispatch(push('/dashboard'))
-      axios.defaults.headers.common['X-Hera-Token'] = res.data.message
     } catch {
       message.error('登录失败，请检查账号或者密码是否有问题！');
     }

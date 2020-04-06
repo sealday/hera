@@ -28,6 +28,7 @@ import {
   wrapper,
   TAB2TYPE,
   DEFAULT_TAB_INDEX,
+  ajax,
 } from '../utils'
 
 const btnStatusName = project => {
@@ -147,25 +148,16 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
   onDeleteClick(project) {
-    fetch(`/api/project/${project._id}/delete`, {
-      method: 'POST'
-    })
-      .then(r => r.json())
-      .then(r => {
-        dispatch(removeProject(r.data.project._id))
-      })
+    ajax(`/api/project/${project._id}/delete`, { method: 'POST' })
+      .then(res => dispatch(removeProject(res.data.project._id)))
   },
   onStatusChange(project) {
-    fetch(`/api/project/${project._id}/status`, {
+    ajax(`/api/project/${project._id}/status`, {
       method: 'POST',
-      headers: {
-        "Content-Type": "application/json; charset=utf-8",
-      },
-      body: JSON.stringify({ status: project.status === 'FINISHED' ? 'UNDERWAY' : 'FINISHED' }),
+      data: JSON.stringify({ status: project.status === 'FINISHED' ? 'UNDERWAY' : 'FINISHED' }),
     })
-      .then(r => r.json())
-      .then(r => {
-        dispatch(updateProject(r.data.project))
+      .then(res => {
+        dispatch(updateProject(res.data.project))
       })
   }
 })
