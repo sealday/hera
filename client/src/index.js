@@ -64,10 +64,11 @@ import * as company from './company'
 import Login from './Login'
 import { ajax } from './utils'
 
-Sentry.init({dsn: "https://213cb45f8df943e0b77f89a23ee5a4e8@o374147.ingest.sentry.io/5191691"})
-
 // css 除非是模块自己的，否则直接在这里进行全局 import
 import './index.css'
+
+// 初始化 sentry
+Sentry.init({dsn: "https://213cb45f8df943e0b77f89a23ee5a4e8@o374147.ingest.sentry.io/5191691"})
 
 // 初始化 moment 时间属性
 moment.locale('zh-CN')
