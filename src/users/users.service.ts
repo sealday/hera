@@ -52,6 +52,12 @@ export class UsersService {
     async update(body: User, userId: string, user: User) {
         this.loggerService.logDanger(user, '修改', { message: '更新' + user.profile.name + '的资料' })
         const findUser = await this.usersModel.findById(userId)
+        // 修改密码
+        if (body.password) {
+            const salt = await bcrypt.genSalt();
+            const hashedPassword = await bcrypt.hash(body.password, salt);
+            body.password = hashedPassword;
+        }
         Object.assign(findUser, body)
         const savedUser = await findUser.save()
         return savedUser
