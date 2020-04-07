@@ -1,6 +1,6 @@
-import './before'
 import React from 'react'
 import ReactDOM from 'react-dom'
+import * as Sentry from '@sentry/browser'
 import { createStore, combineReducers, compose, applyMiddleware } from 'redux'
 import thunkMiddleware from 'redux-thunk'
 import { reducer as formReducer } from 'redux-form'
@@ -63,6 +63,8 @@ import {
 import * as company from './company'
 import Login from './Login'
 import { ajax } from './utils'
+
+Sentry.init({dsn: "https://213cb45f8df943e0b77f89a23ee5a4e8@o374147.ingest.sentry.io/5191691"})
 
 // css 除非是模块自己的，否则直接在这里进行全局 import
 import './index.css'
