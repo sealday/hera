@@ -24,8 +24,9 @@ export class AuthService {
 
     async login(user: any) {
         this.loggerService.logInfo(user, '登录', { message: '成功登录' })
+        const { perms, ...u } = user
         return {
-            access_token: this.jwtService.sign(user),
+            access_token: this.jwtService.sign(u),
         };
     }
 }
