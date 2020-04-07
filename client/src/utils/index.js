@@ -64,7 +64,7 @@ export async function ajax(url, settings = {}) {
     const res = await axios({ url, ...settings })
     return res.data
   } catch (err) {
-    if (err.response.status === 401) {
+    if (err.response.statusCode === 401) {
       window.location.href = '#/login';
     }
     throw err
