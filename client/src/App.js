@@ -111,6 +111,8 @@ class App extends Component {
 
   logout = () => {
     const { socket } = this.props
+    // 清理客户端保存的 key
+    localStorage.removeItem('X-Hera-Token')
     ajax('/api/logout', {
       method: 'POST'
     }).then(() => {
