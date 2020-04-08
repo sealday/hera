@@ -307,7 +307,7 @@ export class StoreService {
       // 关联重量
       {
         $lookup: {
-          from: 'weights',
+          from: 'plans',
           let: { productType: '$entries.type', productName: '$entries.name', productSize: '$entries.size' },
           pipeline: [
             {

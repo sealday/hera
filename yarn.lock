@@ -5917,7 +5917,7 @@ mongoose@^5.9.7:
     sift "7.0.1"
     sliced "1.0.1"
 
-morgan@^1.9.1:
+morgan@^1.10.0, morgan@^1.9.1:
   version "1.10.0"
   resolved "https://registry.npm.taobao.org/morgan/download/morgan-1.10.0.tgz?cache=0&sync_timestamp=1584727392857&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fmorgan%2Fdownload%2Fmorgan-1.10.0.tgz#091778abc1fc47cd3509824653dae1faab6b17d7"
   integrity sha1-CRd4q8H8R801CYJGU9rh+qtrF9c=
