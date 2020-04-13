@@ -22,7 +22,7 @@ import io from 'socket.io-client'
 import axios from 'axios'
 
 import * as reducers from './reducers'
-import { systemLoaded, updateOnlineUser, updateOnlineUsers, selectStore } from './actions'
+import { systemLoaded, updateOnlineUsers, selectStore } from './actions'
 import { Profile } from './components'
 import { theme } from './utils'
 import App from './App'

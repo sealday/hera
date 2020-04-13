@@ -9737,6 +9737,11 @@ react-form@^3.5.5:
     redux "^3.7.2"
     redux-thunk "^2.2.0"
 
+react-frame-component@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.npm.taobao.org/react-frame-component/download/react-frame-component-4.1.1.tgz#ea8f7c518ef6b5ad72146dd1f648752369826894"
+  integrity sha1-6o98UY72ta1yFG3R9kh1I2mCaJQ=
+
 react-helmet@^5.2.1:
   version "5.2.1"
   resolved "https://registry.npm.taobao.org/react-helmet/download/react-helmet-5.2.1.tgz#16a7192fdd09951f8e0fe22ffccbf9bb3e591ffa"

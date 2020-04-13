@@ -335,3 +335,110 @@ export const RECORD_TYPES = ['购销', '调拨', '暂存', '盘点']
 export const RECORD_TYPE2URL_PART = { '调拨': 'transfer', '购销': 'purchase', '暂存': 'transfer_free' }
 
 export const DEFAULT_QUERY_TYPE = '调拨'
+
+export const PRINT_STYLE = `
+body {
+  font: 14px "微软雅黑", "Lucida Grande", Helvetica, Arial, sans-serif;
+  color: black;
+  padding: 0;
+  margin: 1px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 0;
+  margin-bottom: .5em;
+  font-weight: 500;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+.table--tight>tbody>tr>td,
+.table--tight>tbody>tr>th,
+.table--tight>tfoot>tr>td,
+.table--tight>tfoot>tr>th,
+.table--tight>thead>tr>td,
+.table--tight>thead>tr>th {
+  padding: 1px;
+}
+
+.row-sum {
+  font-weight: 900;
+  text-decoration: underline;
+}
+
+.table-clean>tbody>tr>td,
+.table-clean>tbody>tr>th,
+.table-clean>tfoot>tr>td,
+.table-clean>tfoot>tr>th,
+.table-clean>thead>tr>td,
+.table-clean>thead>tr>th {
+  border-top: 1px solid white;
+}
+
+.table-bottom-border>tbody>tr>td,
+.table-bottom-border>tbody>tr>th,
+.table-bottom-border>tfoot>tr>td,
+.table-bottom-border>tfoot>tr>th,
+.table-bottom-border>thead>tr>td,
+.table-bottom-border>thead>tr>th {
+  border-bottom: 1px solid black;
+}
+
+.cell-left-border {
+  border-left: 1px solid black;
+}
+
+.cell-right-border {
+  border-right: 1px solid black;
+}
+
+.table-top-border>thead>tr>th {
+  border-top: 1px solid black;
+}
+
+.table-top-border>thead:first-child>tr:first-child>th {
+  border-top: 1px solid black;
+}
+
+/* 作为表单的表格样式 */
+.form-table th,
+.form-table td {
+  padding-left: 2px;
+  padding-right: 2px;
+  text-align: center;
+}
+
+/* 运输单 */
+.table__transport th {
+  min-width: 5.5em;
+}
+
+.table__transport td {
+  font-size: 11px;
+}
+
+.h-left-margin-1-em {
+    margin-left: 1em;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.table-bordered>thead>tr>th,
+.table-bordered>thead>tr>td,
+.table-bordered>tbody>tr>th,
+.table-bordered>tbody>tr>td {
+	border: 1px solid black;
+}
+`
