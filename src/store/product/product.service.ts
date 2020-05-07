@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import * as _ from 'lodash';
 import { Model } from 'mongoose';
 import { Product, Record } from 'src/app/app.service';
+import { convert } from 'src/utils/pinyin';
 
 @Injectable()
 export class ProductService {
@@ -17,7 +18,8 @@ export class ProductService {
   }
 
   async create(body: Product) {
-    const product = await new this.productModel(body)
+    body.pinyin = convert(body.name)
+    const product = await new this.productModel(body).save()
     return product
   }
 
@@ -32,6 +34,7 @@ export class ProductService {
    */
   async update(number: string, body: Product) {
     const newProduct = _.omit(body, ['_id'])
+    newProduct.pinyin = convert(body.name)
     const product = await this.productModel.findOne({ number })
     const shouldUpdate = !_.isEqual(
         _.pick(newProduct, ['type', 'name', 'size']),
