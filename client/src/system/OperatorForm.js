@@ -16,7 +16,7 @@ class OperatorForm extends Component {
             <div className="form-group">
               <label className="control-label col-md-1">用户名</label>
               <div className="col-md-5">
-                <Field name="username" component={Input} validate={value => value ? undefined : '不能为空'} />
+                <Field name="username" component={Input} />
               </div>
             </div>
             <div className="form-group">
