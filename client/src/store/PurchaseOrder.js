@@ -12,27 +12,26 @@ import {
   FormControlLabel,
 } from '@material-ui/core'
 
-import { toFixedWithoutTrailingZero as fixed, total_, isUpdatable, getUnit, RECORD_TYPE2URL_PART } from '../utils'
+import {
+  toFixedWithoutTrailingZero as fixed,
+  total_,
+  isUpdatable,
+  getUnit,
+  RECORD_TYPE2URL_PART,
+} from '../utils'
+import PrintFrame from '../components/PrintFrame'
 
 class PurchaseOrder extends React.Component {
 
   state = {
     columnStyle: 'single', // 栏目样式，支持单栏和双栏
-    isPrint: false,
   }
+
+  printFrame = React.createRef()
 
   handleTransport = () => {
     const { router, record } = this.props
     router.push(`/transport/${record._id}`)
-  }
-
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    if (this.state.isPrint) {
-      window.print()
-      this.setState({
-        isPrint: false,
-      })
-    }
   }
 
   render() {
@@ -257,7 +256,7 @@ class PurchaseOrder extends React.Component {
       </table>
     </div>
 
-    return this.state.isPrint ? <PrintContent/> : <Card>
+    return <Card>
       <CardHeader
         title={
           <RadioGroup
@@ -275,13 +274,15 @@ class PurchaseOrder extends React.Component {
           </>}
           <Button onClick={this.handleTransport}>运输单</Button>
           <Button onClick={() => {
-            this.setState({ isPrint: true })
+            this.printFrame.current.print()
           }}>打印</Button>
           <Button >审核确认</Button>
         </>}
       />
       <CardContent>
-        <PrintContent/>
+        <PrintFrame>
+          <PrintContent />
+        </PrintFrame>
       </CardContent>
     </Card>
   }

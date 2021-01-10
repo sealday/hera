@@ -9,22 +9,16 @@ import {
   CardHeader,
 } from '@material-ui/core'
 
-import { toFixedWithoutTrailingZero as fixed, total_, getUnit, parseMode } from '../utils'
+import {
+  toFixedWithoutTrailingZero as fixed,
+  total_,
+  getUnit,
+  parseMode,
+} from '../utils'
+import PrintFrame from '../components/PrintFrame'
 
 class TransferOrder extends React.Component {
-
-  state = {
-    isPrint: false,
-  }
-
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    if (this.state.isPrint) {
-      window.print()
-      this.setState({
-        isPrint: false,
-      })
-    }
-  }
+  printFrame = React.createRef()
 
   render() {
     const { config, record, store, projects, router, printCompany } = this.props
@@ -208,18 +202,19 @@ class TransferOrder extends React.Component {
     )
 
     return (
-      this.state.isPrint ? <PrintContent/> :
-        <Card>
-          <CardHeader
-            action={<>
-              <Button onClick={() => router.goBack()}>返回</Button>
-              <Button color="primary" onClick={() => this.setState({ isPrint: true })}>打印</Button>
-            </>}
-          />
-          <CardContent>
-            <PrintContent/>
-          </CardContent>
-        </Card>
+      <Card>
+        <CardHeader
+          action={<>
+            <Button onClick={() => router.goBack()}>返回</Button>
+            <Button color="primary" onClick={() => this.printFrame.current.print() }>打印</Button>
+          </>}
+        />
+        <CardContent>
+          <PrintFrame ref={this.printFrame}>
+            <PrintContent />
+          </PrintFrame>
+        </CardContent>
+      </Card>
     )
   }
 }

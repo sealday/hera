@@ -12,12 +12,11 @@ import {
 
 import { requestRecord } from '../actions'
 import { toFixedWithoutTrailingZero as fixed, transformArticle, total_, isUpdatable, getUnit } from '../utils'
+import PrintFrame from '../components/PrintFrame'
 
 
 class TransportOrder extends Component {
-  state = {
-    isPrint: false,
-  }
+  printFrame = React.createRef()
 
   handleEdit = () => {
     this.props.router.push(`/transport/${this.props.router.params.id}/edit`)
@@ -31,15 +30,6 @@ class TransportOrder extends Component {
     const record = this.props.record
     if (!record) {
       this.props.dispatch(requestRecord(this.props.id))
-    }
-  }
-
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    if (this.state.isPrint) {
-      window.print()
-      this.setState({
-        isPrint: false,
-      })
     }
   }
 
@@ -203,7 +193,7 @@ class TransportOrder extends Component {
         action={<>
           <Button onClick={this.handleBack}>返回</Button>
           {isUpdatable(store, user) && <Button onClick={this.handleEdit}>编辑</Button>}
-          <Button variant="text" color="primary" onClick={e => this.setState({ isPrint: true })}>打印</Button>
+          <Button variant="text" color="primary" onClick={() => this.printFrame.current.print() }>打印</Button>
         </>}
       />
       <CardContent>
@@ -211,7 +201,13 @@ class TransportOrder extends Component {
       </CardContent>
     </Card>
 
-    return this.state.isPrint ? <PrintContent/> : <HeaderLayout><PrintContent/></HeaderLayout>
+    return (
+      <HeaderLayout>
+        <PrintFrame ref={this.printFrame}>
+          <PrintContent />
+        </PrintFrame>
+      </HeaderLayout>
+    )
   }
 }
 

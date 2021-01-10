@@ -64,11 +64,6 @@ export const systemLoaded = (data) => ({
   data
 })
 
-export const updateOnlineUser = (num) => ({
-  type: ONLINE_USER_CHANGE,
-  data: num
-})
-
 export const updateOnlineUsers = (users) => ({
   type: ONLINE_USERS_CHANGE,
   data: users,
