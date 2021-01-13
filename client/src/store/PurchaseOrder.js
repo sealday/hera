@@ -280,7 +280,7 @@ class PurchaseOrder extends React.Component {
         </>}
       />
       <CardContent>
-        <PrintFrame>
+        <PrintFrame ref={this.printFrame}>
           <PrintContent />
         </PrintFrame>
       </CardContent>
