@@ -1,7 +1,7 @@
-import { Controller, Get, Request, UseGuards, Param, Query, BadRequestException } from '@nestjs/common';
-
+import { BadRequestException, Controller, Get, Param, Query, Request, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { AppService } from './app.service';
+
 
 @Controller()
 @UseGuards(JwtAuthGuard)

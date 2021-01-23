@@ -5,8 +5,8 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { CounterSchema } from 'src/schemas/counter.schema';
 import { RecycleSchema } from 'src/schemas/recycle.schema';
+import { StoreSchema } from 'src/schemas/store.schema';
 import { StoreModule } from 'src/store/store.module';
-
 import { AuthModule } from '../auth/auth.module';
 import { MongoConfigModule } from '../configs/mongo.module';
 import { EventsModule } from '../events/events.module';
@@ -20,9 +20,12 @@ import { UsersController } from '../users/users.controller';
 import { UsersModule } from '../users/users.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { HookController } from './hook.controller';
 import { LoggerService } from './logger/logger.service';
 import { SettingsController } from './settings/settings.controller';
 import { SettingsService } from './settings/settings.service';
+import { StoreService } from './store.service';
+
 
 @Module({
   imports: [
@@ -44,10 +47,11 @@ import { SettingsService } from './settings/settings.service';
       { name: 'Operation', schema: OperationSchema },
       { name: 'Counter', schema: CounterSchema },
       { name: 'Recycle', schema: RecycleSchema },
+      { name: 'Store', schema: StoreSchema },
     ]),
   ],
-  controllers: [AppController, UsersController, SettingsController],
-  providers: [AppService, LoggerService, SettingsService],
+  controllers: [AppController, UsersController, SettingsController, HookController],
+  providers: [AppService, LoggerService, SettingsService, StoreService],
   exports: [AppService, LoggerService],
 })
 export class AppModule {}
