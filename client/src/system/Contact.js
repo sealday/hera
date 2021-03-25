@@ -64,7 +64,7 @@ class Contact extends Component {
               mask={[
                 /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, ' ',
                 /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, ' ',
-                /\d/, /\d/, /\d/, /\d/,
+                /\d/, /\d/, /\d/, /\d|x|X/,
               ]}
               className="ant-input"
               name="number"
