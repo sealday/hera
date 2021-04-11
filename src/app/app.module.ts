@@ -3,6 +3,8 @@ import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { FinanceModule } from 'src/finance/finance.module';
+import { ContractSchema } from 'src/schemas/contract.schema';
 import { CounterSchema } from 'src/schemas/counter.schema';
 import { RecycleSchema } from 'src/schemas/recycle.schema';
 import { StoreSchema } from 'src/schemas/store.schema';
@@ -38,6 +40,7 @@ import { StoreService } from './store.service';
     MongoConfigModule,
     EventsModule,
     StoreModule,
+    FinanceModule,
     MongooseModule.forFeature([
       { name: 'Users', schema: UsersSchema },
       { name: 'Record', schema: RecordSchema },
@@ -48,6 +51,7 @@ import { StoreService } from './store.service';
       { name: 'Counter', schema: CounterSchema },
       { name: 'Recycle', schema: RecycleSchema },
       { name: 'Store', schema: StoreSchema },
+      { name: 'Contract', schema: ContractSchema },
     ]),
   ],
   controllers: [AppController, UsersController, SettingsController, HookController],

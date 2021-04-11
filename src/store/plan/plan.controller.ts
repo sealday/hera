@@ -2,14 +2,30 @@ import { Body, Controller, Get, Param, Post, UseGuards, UseInterceptors } from '
 import * as _ from 'lodash';
 import { WrapperInterceptor } from 'src/app/wrapper.interceptor';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-
 import { PlanService } from './plan.service';
+
 
 @Controller('plan')
 @UseGuards(JwtAuthGuard)
 @UseInterceptors(WrapperInterceptor)
 export class PlanController {
   constructor(private planService: PlanService) { }
+
+  @Get('all')
+  async listAll() {
+    const pricePlans = await this.planService.find('price')
+    const weightPlans = await this.planService.find('weight')
+    const lossPlans = await this.planService.find('loss')
+    const servicePlans = await this.planService.find('service')
+    return {
+      plans: {
+        price: pricePlans,
+        weight: weightPlans,
+        loss: lossPlans,
+        service: servicePlans,
+      }
+    }
+  }
 
   @Get(':type')
   async list(@Param('type') type: string) {

@@ -16,6 +16,7 @@ export type Recycle = any;
 export type Price = any;
 export type Plan = any;
 export type Store = any;
+export type Contract = any;
 
 @Injectable()
 export class AppService {
