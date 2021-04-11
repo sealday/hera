@@ -888,3 +888,72 @@ export const projectDeleteItem = (condition) => (dispatch, getState) => {
     })
   }
 }
+
+// 合同方案查询
+export const CONTRACT  = 'CONTRACT'
+
+export const queryContracts = () => (dispatch, getState) => {
+  const key = CONTRACT
+  const search = network(key)
+  if (search.shouldProceed(getState())) {
+    dispatch(search.begin)
+    dispatch(newInfoNotify('提示', '正在加载合同列表', 2000))
+    ajax('/api/contract').then(res => {
+      dispatch(search.endSuccess)
+      dispatch({ type: SAVE_RESULTS, data: {
+          key,
+          result: res.data.contract
+        }})
+      dispatch(newSuccessNotify('提示', '加载合同列表成功', 2000))
+    }).catch(err => {
+      dispatch(search.endFailure)
+      dispatch(newErrorNotify('错误', '加载合同列表失败', 2000))
+      throw err
+    })
+  }
+}
+
+// 合同方案详情查询
+export const CONTRACT_DETAILS  = 'CONTRACT_DETAILS'
+
+export const queryContractDetails = id => (dispatch, getState) => {
+  const key = CONTRACT_DETAILS
+  const search = network(key)
+  if (search.shouldProceed(getState())) {
+    dispatch(search.begin)
+    dispatch(newInfoNotify('提示', '正在加载合同', 2000))
+    ajax(`/api/contract/${id}`).then(res => {
+      dispatch(search.endSuccess)
+      dispatch({ type: SAVE_RESULTS, data: {
+          key,
+          result: res.data.contract
+        }})
+      dispatch(newSuccessNotify('提示', '加载合同成功', 2000))
+    }).catch(err => {
+      dispatch(search.endFailure)
+      dispatch(newErrorNotify('错误', '加载合同失败', 2000))
+      throw err
+    })
+  }
+}
+
+export const ALL_PLAN = 'ALL_PLAN'
+
+export const queryAllPlans = () => (dispatch, getState) => {
+  const key = ALL_PLAN
+  const search = network(key) // 让查询网络不会重复
+  if (search.shouldProceed(getState())) {
+    dispatch(search.begin)
+    ajax('/api/plan/all').then(res => {
+      dispatch(search.endSuccess)
+      dispatch({ type: SAVE_RESULTS, data: {
+          key,
+          result: res.data.plans
+        }})
+    }).catch(err => {
+      dispatch(search.endFailure)
+      dispatch(newErrorNotify('错误', '加载方案数据失败', 2000))
+      throw err
+    })
+  }
+}

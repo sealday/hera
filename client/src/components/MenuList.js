@@ -97,6 +97,10 @@ const allMenu = [
     roles: ['系统管理员', '财务管理员', '基地仓库管理员'],
     children: [
       {
+        name: '合同',
+        path: '/contract',
+      },
+      {
         name: '租金计算',
         path: '/rent_calc',
       },

@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import ReactMaskedInput from 'react-text-mask'
 import PropTypes from 'prop-types'
-import { Input, Icon } from 'antd'
+import { Input } from 'antd'
+import { PlusOutlined, MinusOutlined } from '@ant-design/icons'
 import 'antd/lib/input/style/css'
 
 
@@ -41,8 +42,8 @@ class Bank extends Component {
             <Input
               name="name" type="text" value={name} onChange={this.handleChange}
               addonAfter={<>
-                <span onClick={onAdd} style={{ marginRight: '5px', cursor: 'pointer' }}><Icon type="plus"/></span>
-                <span onClick={e => onRemove(id)} style={{ cursor: 'pointer' }}><Icon type="minus"/></span>
+                <span onClick={onAdd} style={{ marginRight: '5px', cursor: 'pointer' }}><PlusOutlined /></span>
+                <span onClick={e => onRemove(id)} style={{ cursor: 'pointer' }}><MinusOutlined /></span>
               </>}
             />
           </div>

@@ -173,9 +173,9 @@ ReactDOM.render((
           <Route path="rent_calc" component={company.RentCalc} />
           <Route path="rent_calc_preview" component={company.RentCalcPreview} />
           <Route path="contract" component={company.Contract} />
-          <Route path="contract/:id" component={company.ContractContent} />
-          <Route path="contract/:id/item/:itemId" component={company.ContractItem} />
-          <Route path="contract/:id/item/:itemId/preview" component={company.RentCalcPreview} />
+          <Route path="contract/create" component={company.ContractCreate} />
+          <Route path="contract/:id" component={company.ContractDetails} />
+          <Route path="contract/:id/calc/:calcId" component={company.ContractDetailsCalc} />
           <Route path="transport/:id" component={TransportOrder} />
           <Route path="transport/:id/edit" component={TransportOrderEdit} />
           <Route path="store" component={Store} />

@@ -1,66 +1,155 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+
+import moment from 'moment'
+import { Button, Card, PageHeader, Table, Space, Tag, Row, Col, Popconfirm } from 'antd'
+import { Link } from 'react-router'
+import 'antd/lib/card/style/css'
+import 'antd/lib/page-header/style/css'
+import 'antd/lib/table/style/css'
+import 'antd/lib/space/style/css'
+import 'antd/lib/tag/style/css'
+import 'antd/lib/row/style/css'
+import 'antd/lib/col/style/css'
 import { connect } from 'react-redux'
-import { formValueSelector } from 'redux-form'
-import { includes } from 'lodash'
-import { 
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Card,
-  CardHeader,
-} from '@material-ui/core'
+import { CONTRACT, newErrorNotify, newInfoNotify, newSuccessNotify, queryContracts } from '../actions'
+import { ajax } from '../utils'
 
-import ContractForm from './ContractForm'
-import { CONTRACT_TYPES } from '../utils'
 
-class Contract extends React.Component {
+const ContractDeleteButton = connect()(({ record, dispatch }) => <Popconfirm
+  title={`确认删除“${record.name}”合同吗？（删除后可通过管理员恢复）`}
+  onConfirm={() => {
+    dispatch(newInfoNotify('提示', '正在删除', 1000))
+    ajax(`/api/contract/${record._id}/delete`, {
+      method: 'POST',
+      contentType: 'application/json'
+    }).then(() => {
+      dispatch(newSuccessNotify('提示', '删除成功', 1000))
+      dispatch(queryContracts())
+    }).catch(() => {
+      dispatch(newErrorNotify('警告', '删除失败', 1000))
+    })
+  }}
+  okText="确认"
+  cancelText="取消"
+>
+  <a style={{ color: 'red' }}>删除</a>
+</Popconfirm>)
 
-  render() {
-    let { projects, router, project } = this.props
-    const projectId = project
-    projects = projects.valueSeq().filter(project =>
-      includes(CONTRACT_TYPES, project.type) &&
-      (projectId ? project._id === projectId : true))
-    return (
-      <Card>
-        {/* TODO 综合访问频率、上次访问排序 */}
-        <CardHeader title="合同列表"/>
-        <ContractForm/>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>合同名称</TableCell>
-              <TableCell>合同编号</TableCell>
-              <TableCell>外部编号</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-          {projects.map(project => (
-            <TableRow key={project._id}
-                      id={project._id}
-                      onClick={() => router.push(`/contract/${ project._id }`)}
-                      hover={true}
-            >
-              <TableCell>{project.company} {project.name}</TableCell>
-              <TableCell>{project._id}</TableCell>
-              <TableCell/>
-            </TableRow>
-          ))}
-          </TableBody>
-        </Table>
-      </Card>
-    )
-  }
-}
+const ContractFinishButton = connect()(({ record, dispatch }) => <Popconfirm
+  title={`确认完结“${record.name}”合同吗？`}
+  onConfirm={() => {
+    dispatch(newInfoNotify('提示', '正在完结', 1000))
+    ajax(`/api/contract/${record._id}/finish`, {
+      method: 'POST',
+      contentType: 'application/json'
+    }).then(() => {
+      dispatch(newSuccessNotify('提示', '完结成功', 1000))
+      dispatch(queryContracts())
+    }).catch(() => {
+      dispatch(newErrorNotify('警告', '完结失败', 1000))
+    })
+  }}
+  okText="确认"
+  cancelText="取消"
+>
+  <a>完结</a>
+</Popconfirm>)
 
-const selector = formValueSelector('contractForm')
-const mapStateToProps = state => {
+const ContractUnfinishButton = connect()(({ record, dispatch }) => <Popconfirm
+  title={`确认取消完结“${record.name}”合同吗？`}
+  onConfirm={() => {
+    dispatch(newInfoNotify('提示', '正在取消完结', 1000))
+    ajax(`/api/contract/${record._id}/unfinish`, {
+      method: 'POST',
+      contentType: 'application/json'
+    }).then(() => {
+      dispatch(newSuccessNotify('提示', '取消完结成功', 1000))
+      dispatch(queryContracts())
+    }).catch(() => {
+      dispatch(newErrorNotify('警告', '取消完结失败', 1000))
+    })
+  }}
+  okText="确认"
+  cancelText="取消"
+>
+  <a>取消完结</a>
+</Popconfirm>)
+
+const columns = [
+  {
+    title: '名称',
+    dataIndex: 'name',
+    key: 'name',
+  },
+  {
+    title: '编号',
+    dataIndex: 'code',
+    key: 'code',
+  },
+  {
+    title: '日期',
+    dataIndex: 'date',
+    key: 'date',
+    render: date => moment(date).format('YYYY-MM-DD'),
+  },
+  {
+    title: '地址',
+    dataIndex: 'address',
+    key: 'address',
+  },
+  {
+    title: '备注',
+    key: 'comments',
+    dataIndex: 'comments',
+  },
+  {
+    title: '状态',
+    dataIndex: 'status',
+    key: 'status',
+    render: tag => {
+      const color = tag === '进行' ? 'green' : 'red';
+      return <Tag color={color}>{tag}</Tag>
+    }
+  },
+  {
+    title: 'Action',
+    key: 'action',
+    render: (text, record) => (
+      <Space size="middle">
+        <Link to={`/contract/${record._id}`}>查看</Link> 
+        <a>克隆</a>
+        {record.status === '完结' ? <ContractUnfinishButton record={record}/> : <ContractFinishButton record={record}/>} 
+        <ContractDeleteButton record={record}/>
+      </Space>
+    ),
+  },
+];
+
+const mapStateToProps = (state) => {
+  const contracts = state.results.get(CONTRACT, [])
   return {
-    projects: state.system.projects,
-    project: selector(state, 'project'),
+    contracts: contracts,
   }
 }
 
-export default connect(mapStateToProps)(Contract)
+export default connect(mapStateToProps)(({ contracts, dispatch }) => {
+
+  useEffect(() => {
+    dispatch(queryContracts())
+  }, [])
+
+  return <div style={
+    {
+      background: '#fff',
+      padding: '0 8px'
+    }
+  }>
+    <PageHeader
+      title="合同列表"
+      extra={[
+        <Link to="/contract/create"><Button type="primary">新增</Button></Link>
+      ]}
+    />
+    <Table columns={columns} dataSource={contracts} rowKey="_id" />
+  </div>
+})

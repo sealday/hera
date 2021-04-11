@@ -76,8 +76,16 @@ export const Select = ({ input, style, meta: { touched, error }, ...custom }) =>
       ...style,
     }
   }
+  const { onBlur, ...otherInput } = input
   return (
-    <AntSelect style={style} {...input} {...custom}>{custom.children.map(child =>
+    <AntSelect
+      style={style}
+      {...custom}
+      onBlur={v => {
+        onBlur(otherInput.value)
+      }}
+    >
+      {custom.children.map(child =>
       <AntSelect.Option
         key={!isUndefined(child.props.value) ? child.props.value : child.props.children}
         value={!isUndefined(child.props.value) ? child.props.value : child.props.children}>
@@ -144,8 +152,13 @@ export const RangePicker = ({ input, style, meta: { touched, error }, ...custom 
   )
 }
 
-const defaultFilterOption = (filter, option) => {
+export const defaultFilterOption = (filter, option) => {
   return fuzzysearch(filter, option.props.label)
+}
+
+export const antFilterOption = (input, option) => {
+  console.log(option)
+  return fuzzysearch(input, option.children) || fuzzysearch(input, option.pinyin)
 }
 
 export const FilterSelect = ({ input, options, style, meta: { touched, error, warning }, ...custom }) => {
@@ -168,11 +181,15 @@ export const FilterSelect = ({ input, options, style, meta: { touched, error, wa
     }
   }
 
+  const { onBlur, ...otherInput } = input
+
   return <AntSelect
-    {...input}
+    {...otherInput}
     {...custom}
     showSearch
+    value={otherInput.value}
     filterOption={filterOption ? filterOption : defaultFilterOption}
+    onBlur={v => onBlur(otherInput.value)}
     style={style}>
     {options.map(option => <AntSelect.Option
       pinyin={option.pinyin}
