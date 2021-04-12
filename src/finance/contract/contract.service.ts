@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import * as moment from 'moment';
 import { Model } from 'mongoose';
 import { Contract } from 'src/app/app.service';
 import { StoreService } from 'src/store/store.service';
@@ -46,7 +47,7 @@ export class ContractService {
     }
     const rent = await this.storeService.calculate({
       startDate: new Date(calc.start),
-      endDate: new Date(calc.end),
+      endDate: moment(calc.end).add(1, 'day').toDate(),
       pricePlanId: pricePlanId,
       user: user,
       project: contract.project,
