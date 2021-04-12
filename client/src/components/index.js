@@ -81,6 +81,7 @@ export const Select = ({ input, style, meta: { touched, error }, ...custom }) =>
     <AntSelect
       style={style}
       {...custom}
+      {...otherInput}
       onBlur={v => {
         onBlur(otherInput.value)
       }}
@@ -187,7 +188,6 @@ export const FilterSelect = ({ input, options, style, meta: { touched, error, wa
     {...otherInput}
     {...custom}
     showSearch
-    value={otherInput.value}
     filterOption={filterOption ? filterOption : defaultFilterOption}
     onBlur={v => onBlur(otherInput.value)}
     style={style}>
