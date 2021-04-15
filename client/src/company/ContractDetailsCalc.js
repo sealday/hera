@@ -14,7 +14,7 @@ import 'antd/lib/descriptions/style/css'
 import 'antd/lib/modal/style/css'
 import { connect } from 'react-redux'
 import { ALL_PLAN, CONTRACT_DETAILS, newErrorNotify, newInfoNotify, newSuccessNotify, queryContractDetails, queryAllPlans } from '../actions'
-import { ajax } from '../utils'
+import { ajax, rentExcelExport } from '../utils'
 import RentCalcTable from './RentCalcTable'
 
 const mapStateToProps = (state) => {
@@ -57,6 +57,13 @@ export default connect(mapStateToProps)(({ router, dispatch, contract, params: {
       title={`${contract.name}结算表`}
       subTitle={contract.code}
       extra={[
+        <Button key={2} onClick={() => {
+          import('xlsx').then(XLSX => {
+            rentExcelExport(XLSX, currentCalc)
+          }).catch(() => {
+            alert('加载 Excel 控件失败，请重试')
+          })
+        }}>导出 EXCEL</Button>,
         <Button key={1} onClick={() => router.goBack()}>返回</Button>,
       ]}
     >

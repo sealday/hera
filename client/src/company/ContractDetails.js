@@ -15,6 +15,7 @@ import 'antd/lib/modal/style/css'
 import { connect } from 'react-redux'
 import { ALL_PLAN, CONTRACT_DETAILS, newErrorNotify, newInfoNotify, newSuccessNotify, queryContractDetails, queryAllPlans } from '../actions'
 import { ajax } from '../utils'
+import DateModifier from './DateModifier'
 
 const NAME_MAP = {
   loss: '赔偿方案',
@@ -247,7 +248,16 @@ export default connect(mapStateToProps)(({ router, dispatch, plans, contract, pa
           name="date"
           rules={[{ required: true, message: '此处为必填项！' }]}
         >
-          <DatePicker.RangePicker />
+          <DatePicker.RangePicker
+            renderExtraFooter={
+              () => <DateModifier
+                setDate={date => {
+                  form.setFieldsValue({ date })
+                }}
+                date={form.getFieldValue('date') ? form.getFieldValue('date')[0] : moment()}
+              />
+            }
+          />
         </Form.Item>
       </Form>
     </Modal>
@@ -294,7 +304,16 @@ export default connect(mapStateToProps)(({ router, dispatch, plans, contract, pa
           name="date"
           rules={[{ required: true, message: '此处为必填项！' }]}
         >
-          <DatePicker.RangePicker />
+          <DatePicker.RangePicker
+            renderExtraFooter={
+              () => <DateModifier
+                setDate={date => {
+                  calcForm.setFieldsValue({ date })
+                }}
+                date={calcForm.getFieldValue('date') ? calcForm.getFieldValue('date')[0] : moment()}
+              />
+            }
+          />
         </Form.Item>
       </Form>
     </Modal>
