@@ -39,6 +39,7 @@ export class ContractService {
 
   async addCalc(id: String, calc: any, user: User) {
     const contract = await this.findById(id)
+    // 查找最新的租金方案
     let pricePlanId = null
     for (let i = contract.items.length - 1; i >= 0; i--) {
       if (contract.items[i].category === 'price') {
@@ -49,10 +50,18 @@ export class ContractService {
     if (!pricePlanId) {
       throw '没有找到合适的租金方案'
     }
+    // 查找最新的重量方案
+    let weightPlanId = null
+    for (let i = contract.items.length - 1; i >= 0; i--) {
+      if (contract.items[i].category === 'weight') {
+        weightPlanId = contract.items[i].plan
+      }
+    }
     const rent = await this.storeService.calculate({
       startDate: new Date(calc.start),
       endDate: moment(calc.end).add(1, 'day').toDate(),
       pricePlanId: pricePlanId,
+      weightPlanId,
       user: user,
       project: contract.project,
     }) 

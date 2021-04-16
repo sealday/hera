@@ -226,10 +226,14 @@ export class StoreService {
    * 计算租金信息
    * @param param0 
    */
-  async calculate({startDate, endDate, project, pricePlanId, user})  {
+  async calculate({startDate, endDate, project, pricePlanId, user, weightPlanId=null})  {
     this.loggerService.logInfo(user, '查询', { message: '计算租金信息' })
     const pricePlan = await this.priceModel.findOne({ _id: pricePlanId })
-    const weightPlanId = pricePlan.weightPlan
+    // 兼容旧方案
+    let weightPlanIdSelected = pricePlan.weightPlan
+    if (weightPlanId) {
+      weightPlanIdSelected =  Types.ObjectId(weightPlanId)
+    }
     const repairPlanId = pricePlan.repairPlan
     const compensationPlanId = pricePlan.compensationPlan
     const result = await this.recordModel.aggregate([
@@ -311,7 +315,7 @@ export class StoreService {
           let: { productType: '$entries.type', productName: '$entries.name', productSize: '$entries.size' },
           pipeline: [
             {
-              $match: { _id: weightPlanId },
+              $match: { _id: weightPlanIdSelected },
             },
             {
               $unwind: '$entries',
