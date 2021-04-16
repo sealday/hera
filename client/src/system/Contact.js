@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import ReactMaskedInput from 'react-text-mask'
 import { Input } from 'antd'
 import { PlusOutlined, MinusOutlined } from '@ant-design/icons'
-import 'antd/lib/input/style/css'
 
 
 class Contact extends Component {

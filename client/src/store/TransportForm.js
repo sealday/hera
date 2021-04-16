@@ -9,7 +9,6 @@ import {
   CardContent,
   CardHeader,
 } from '@material-ui/core'
-import 'antd/lib/tabs/style/css'
 
 import { DatePicker, Input, Select, MaskedInput } from '../components'
 

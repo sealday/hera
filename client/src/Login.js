@@ -19,7 +19,6 @@ import {
 import { push } from 'react-router-redux'
 import { connect } from 'react-redux'
 import { message } from 'antd'
-import 'antd/lib/message/style/css'
 import axios from 'axios'
 
 import { wrapper } from './utils'

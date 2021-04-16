@@ -11,7 +11,6 @@ import {
 import {
   Popconfirm,
 } from 'antd'
-import 'antd/lib/popconfirm/style/css'
 
 import { ajax } from '../utils'
 import { newErrorNotify, newInfoNotify, newSuccessNotify, queryWeightPlan, WEIGHT_PLAN } from '../actions'

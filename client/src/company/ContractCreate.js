@@ -1,6 +1,5 @@
 import React from 'react'
 
-import moment from 'moment'
 import { connect } from 'react-redux'
 import {
   Button,
@@ -14,17 +13,6 @@ import {
 import { antFilterOption } from '../components'
 
 
-import { Link } from 'react-router'
-import 'antd/lib/card/style/css'
-import 'antd/lib/page-header/style/css'
-import 'antd/lib/table/style/css'
-import 'antd/lib/space/style/css'
-import 'antd/lib/tag/style/css'
-import 'antd/lib/row/style/css'
-import 'antd/lib/col/style/css'
-import 'antd/lib/descriptions/style/css'
-import 'antd/lib/form/style/css'
-import 'antd/lib/input/style/css'
 import { newErrorNotify, newInfoNotify, newSuccessNotify } from '../actions'
 import { push } from 'react-router-redux'
 import { ajax } from '../utils'
