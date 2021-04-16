@@ -13,6 +13,7 @@ import 'antd/lib/col/style/css'
 import { connect } from 'react-redux'
 import { CONTRACT, newErrorNotify, newInfoNotify, newSuccessNotify, queryContracts } from '../actions'
 import { ajax } from '../utils'
+import { pick } from 'lodash'
 
 
 const ContractDeleteButton = connect()(({ record, dispatch }) => <Popconfirm
@@ -75,56 +76,6 @@ const ContractUnfinishButton = connect()(({ record, dispatch }) => <Popconfirm
   <a>取消完结</a>
 </Popconfirm>)
 
-const columns = [
-  {
-    title: '名称',
-    dataIndex: 'name',
-    key: 'name',
-  },
-  {
-    title: '编号',
-    dataIndex: 'code',
-    key: 'code',
-  },
-  {
-    title: '日期',
-    dataIndex: 'date',
-    key: 'date',
-    render: date => moment(date).format('YYYY-MM-DD'),
-  },
-  {
-    title: '地址',
-    dataIndex: 'address',
-    key: 'address',
-  },
-  {
-    title: '备注',
-    key: 'comments',
-    dataIndex: 'comments',
-  },
-  {
-    title: '状态',
-    dataIndex: 'status',
-    key: 'status',
-    render: tag => {
-      const color = tag === '进行' ? 'green' : 'red';
-      return <Tag color={color}>{tag}</Tag>
-    }
-  },
-  {
-    title: 'Action',
-    key: 'action',
-    render: (text, record) => (
-      <Space size="middle">
-        <Link to={`/contract/${record._id}`}>查看</Link> 
-        <a>克隆</a>
-        {record.status === '完结' ? <ContractUnfinishButton record={record}/> : <ContractFinishButton record={record}/>} 
-        <ContractDeleteButton record={record}/>
-      </Space>
-    ),
-  },
-];
-
 const mapStateToProps = (state) => {
   const contracts = state.results.get(CONTRACT, [])
   return {
@@ -150,6 +101,49 @@ export default connect(mapStateToProps)(({ contracts, dispatch }) => {
         <Link to="/contract/create"><Button type="primary">新增</Button></Link>
       ]}
     />
-    <Table columns={columns} dataSource={contracts} rowKey="_id" />
+    <Table dataSource={contracts} rowKey="_id">
+      <Table.Column title="名称" key="name" dataIndex="name" />
+      <Table.Column title="编号" key="code" dataIndex="code" />
+      <Table.Column title="日期" key="date" dataIndex="date"
+        render={date => moment(date).format('YYYY-MM-DD')}
+      />
+      <Table.Column title="地址" key="address" dataIndex="address" />
+      <Table.Column title="备注" key="comments" dataIndex="comments" />
+      <Table.Column title="状态" key="status" dataIndex="status"
+        render={
+          tag => {
+            const color = tag === '进行' ? 'green' : 'red';
+            return <Tag color={color}>{tag}</Tag>
+          }
+        }
+      />
+      <Table.Column title="" key="action"
+        render={
+          (text, record) => (
+            <Space size="middle">
+              <Link to={`/contract/${record._id}`}>查看</Link>
+              <a onClick={() => {
+                const v = pick(record, [
+                  'name', 'code', 'project', 'address', 'date', 'comments',
+                ])
+                v.name += '（克隆）'
+                ajax('/api/contract', {
+                  data: JSON.stringify(v),
+                  method: 'POST',
+                  contentType: 'application/json'
+                }).then(() => {
+                  dispatch(newSuccessNotify('提示', '克隆成功', 1000))
+                  dispatch(queryContracts())
+                }).catch(() => {
+                  dispatch(newErrorNotify('警告', '克隆失败', 1000))
+                })
+              }}>克隆</a>
+              {record.status === '完结' ? <ContractUnfinishButton record={record} /> : <ContractFinishButton record={record} />}
+              <ContractDeleteButton record={record} />
+            </Space>
+          )
+        }
+      />
+    </Table>
   </div>
 })

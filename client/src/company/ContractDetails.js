@@ -15,7 +15,8 @@ import 'antd/lib/modal/style/css'
 import { connect } from 'react-redux'
 import { ALL_PLAN, CONTRACT_DETAILS, newErrorNotify, newInfoNotify, newSuccessNotify, queryContractDetails, queryAllPlans } from '../actions'
 import { ajax } from '../utils'
-import DateModifier from './DateModifier'
+import { edit, addItem, addCalc } from './contracts'
+import { pick } from 'lodash'
 
 const NAME_MAP = {
   loss: '赔偿方案',
@@ -67,6 +68,7 @@ const mapStateToProps = (state) => {
   const plans = state.results.get(ALL_PLAN, {})
   return {
     contract: contract,
+    projects: state.system.projects,
     plans: plans,
   }
 }
@@ -93,26 +95,11 @@ const ProjectLabel = connect(state => ({
   return <>projectId</>
 })
 
-export default connect(mapStateToProps)(({ router, dispatch, plans, contract, params: { id } }) => {
-  const [form] = Form.useForm()
-  const [calcForm] = Form.useForm()
-  const [currentPlans, setCurrentPlans] = useState([])
-
+export default connect(mapStateToProps)(({ projects, router, dispatch, plans, contract, params: { id } }) => {
   useEffect(() => {
     dispatch(queryAllPlans())
     dispatch(queryContractDetails(id))
   }, [id])
-
-  useEffect(() => {
-    if (plans[form.getFieldValue('category')]) {
-      setCurrentPlans(plans[form.getFieldValue('category')])
-    } else if (plans[INITIAL_CATEGORY]) {
-      setCurrentPlans(plans[INITIAL_CATEGORY])
-    }
-  }, [plans])
-
-  const [isPlanAddedShow, setPlanAddedShow] = useState(false)
-  const [isCalcAddedShow, setCalcAddedShow] = useState(false)
 
   return <Space direction="vertical">
     <PageHeader
@@ -121,7 +108,29 @@ export default connect(mapStateToProps)(({ router, dispatch, plans, contract, pa
       subTitle={contract.code}
       extra={[
         <Button key={1} onClick={() => router.goBack()}>返回</Button>,
-        <Link key={2} to="/contract/edit"><Button type="primary">编辑</Button></Link>,
+        <Button key={2} type="primary" onClick={() => {
+          const initialValues = pick(contract, ['name', 'code', 'project', 'address', 'comments'])
+          // TODO 统一日期处理在接口层，转换成 moment 对象
+          if (contract.date) {
+            initialValues.date = moment(contract.date)
+          }
+          edit({ 
+            initialValues,
+            onFinish: v => {
+              ajax(`/api/contract/${contract._id}`, {
+                data: JSON.stringify(v),
+                method: 'POST',
+                contentType: 'application/json'
+              }).then(() => {
+                dispatch(newSuccessNotify('提示', '更新成功', 1000))
+                dispatch(queryContractDetails(id))
+              }).catch(() => {
+                dispatch(newErrorNotify('警告', '更新失败', 1000))
+              })
+            },
+            projects,
+          })
+        }}>编辑</Button>,
       ]}
     >
       <Descriptions size="small" column={3}>
@@ -139,7 +148,29 @@ export default connect(mapStateToProps)(({ router, dispatch, plans, contract, pa
       title="合同明细"
       extra={[
         <Button key={1} onClick={() => {
-          setPlanAddedShow(true)
+          addItem({
+            initialValues: {
+              category: INITIAL_CATEGORY,
+            },
+            plans,
+            onFinish: v => {
+              const requestBody = {
+                category: v.category,
+                plan: v.plan,
+                start: v.date[0].startOf('day'),
+                end: v.date[1].startOf('day'),
+              }
+              ajax(`/api/contract/${contract._id}/add_item`, {
+                data: JSON.stringify(requestBody),
+                method: 'POST',
+                contentType: 'application/json'
+              }).then(() => {
+                dispatch(queryContractDetails(id))
+              }).catch(() => {
+                dispatch(newErrorNotify('警告', '添加失败', 1000))
+              })
+            },
+          })
         }} type="primary">新增</Button>
       ]}
     >
@@ -163,7 +194,25 @@ export default connect(mapStateToProps)(({ router, dispatch, plans, contract, pa
     <Card
       title="结算单"
       extra={[
-        <Button key={1} onClick={() => setCalcAddedShow(true)} type="primary">新增</Button>
+        <Button key={1} onClick={() => addCalc({
+          initialValues: { name: moment().format('MM') + ' 月结算表' },
+          onFinish: v => {
+            const requestBody = {
+              name: v.name,
+              start: v.date[0].startOf('day'),
+              end: v.date[1].startOf('day'),
+            }
+            ajax(`/api/contract/${contract._id}/add_calc`, {
+              data: JSON.stringify(requestBody),
+              method: 'POST',
+              contentType: 'application/json'
+            }).then(() => {
+              dispatch(queryContractDetails(id))
+            }).catch(() => {
+              dispatch(newErrorNotify('警告', '添加失败', 1000))
+            })
+          },
+        })} type="primary">新增</Button>
       ]}
     >
       <Table dataSource={contract.calcs}>
@@ -176,146 +225,22 @@ export default connect(mapStateToProps)(({ router, dispatch, plans, contract, pa
           render={(text, record) => (
             <Space size="middle">
               <Link to={`/contract/${contract._id}/calc/${record._id}`}>查看</Link>
-              <a>重新计算</a>
+              <a onClick={() => {
+                ajax(`/api/contract/${contract._id}/calc/${record._id}/restart`, {
+                  data: JSON.stringify(record),
+                  method: 'POST',
+                  contentType: 'application/json'
+                }).then(() => {
+                  dispatch(queryContractDetails(id))
+                }).catch(() => {
+                  dispatch(newErrorNotify('警告', '重新计算失败', 1000))
+                })
+
+              }}>重新计算</a>
               <CalcDeleteButton contractId={contract._id} calcId={record._id} />
             </Space>
           )} />
       </Table>
     </Card>
-    <Modal
-      title="合同明细"
-      visible={isPlanAddedShow}
-      onOk={() => form.submit()}
-      onCancel={() => setPlanAddedShow(false)}>
-      <Form
-        labelCol={{ span: 8 }}
-        wrapperCol={{ span: 16 }}
-        name="合同基础信息"
-        form={form}
-        initialValues={{
-          category: INITIAL_CATEGORY,
-        }}
-        onValuesChange={e => {
-          if (e['category']) {
-            setCurrentPlans(plans[e['category']])
-            form.resetFields(['plan'])
-          }
-        }}
-        onFinish={v => {
-          const requestBody = {
-            category: v.category,
-            plan: v.plan,
-            start: v.date[0].startOf('day'),
-            end: v.date[1].startOf('day'),
-          }
-          ajax(`/api/contract/${contract._id}/add_item`, {
-            data: JSON.stringify(requestBody),
-            method: 'POST',
-            contentType: 'application/json'
-          }).then(() => {
-            setPlanAddedShow(false)
-            dispatch(queryContractDetails(id))
-          }).catch(() => {
-            dispatch(newErrorNotify('警告', '添加失败', 1000))
-          })
-        }}
-      >
-        <Form.Item
-          label="方案分类"
-          name="category"
-          rules={[{ required: true, message: '此处为必填项！' }]}
-        >
-          <Select>
-            <Select.Option key={1} value="price">租金方案</Select.Option>
-            <Select.Option key={2} value="weight">计重方案</Select.Option>
-            <Select.Option key={3} value="loss">赔偿方案</Select.Option>
-            <Select.Option key={4} value="service">维修方案</Select.Option>
-          </Select>
-        </Form.Item>
-        <Form.Item
-          label="方案"
-          name="plan"
-          rules={[{ required: true, message: '此处为必填项！' }]}
-        >
-          <Select>
-            {currentPlans.map(plan => <Select.Option key={plan._id} value={plan.value}>
-              {plan.name}
-            </Select.Option>)}
-          </Select>
-        </Form.Item>
-        <Form.Item
-          label="时间区间"
-          name="date"
-          rules={[{ required: true, message: '此处为必填项！' }]}
-        >
-          <DatePicker.RangePicker
-            renderExtraFooter={
-              () => <DateModifier
-                setDate={date => {
-                  form.setFieldsValue({ date })
-                }}
-                date={form.getFieldValue('date') ? form.getFieldValue('date')[0] : moment()}
-              />
-            }
-          />
-        </Form.Item>
-      </Form>
-    </Modal>
-    <Modal
-      title="结算单"
-      visible={isCalcAddedShow}
-      onOk={() => calcForm.submit()}
-      onCancel={() => setCalcAddedShow(false)}>
-      <Form
-        labelCol={{ span: 8 }}
-        wrapperCol={{ span: 16 }}
-        name="结算单"
-        form={calcForm}
-        initialValues={{
-          name: moment().format('MM') + ' 月结算表',
-        }}
-        onFinish={v => {
-          const requestBody = {
-            name: v.name,
-            start: v.date[0].startOf('day'),
-            end: v.date[1].startOf('day'),
-          }
-          ajax(`/api/contract/${contract._id}/add_calc`, {
-            data: JSON.stringify(requestBody),
-            method: 'POST',
-            contentType: 'application/json'
-          }).then(() => {
-            setCalcAddedShow(false)
-            dispatch(queryContractDetails(id))
-          }).catch(() => {
-            dispatch(newErrorNotify('警告', '添加失败', 1000))
-          })
-        }}
-      >
-        <Form.Item
-          label="结算名称"
-          name="name"
-          rules={[{ required: true, message: '此处为必填项！' }]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="时间区间"
-          name="date"
-          rules={[{ required: true, message: '此处为必填项！' }]}
-        >
-          <DatePicker.RangePicker
-            renderExtraFooter={
-              () => <DateModifier
-                setDate={date => {
-                  calcForm.setFieldsValue({ date })
-                }}
-                date={calcForm.getFieldValue('date') ? calcForm.getFieldValue('date')[0] : moment()}
-              />
-            }
-          />
-        </Form.Item>
-      </Form>
-    </Modal>
   </Space>
 })
