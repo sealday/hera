@@ -14,7 +14,7 @@ import { ConfigProvider } from 'antd'
 import {
   Router,
   Route,
-  hashHistory,
+  browserHistory,
   IndexRedirect,
   Redirect,
 } from 'react-router'
@@ -65,7 +65,7 @@ import Login from './Login'
 import { ajax } from './utils'
 
 // css 除非是模块自己的，否则直接在这里进行全局 import
-import './index.css'
+import './index.less'
 
 // 初始化 sentry
 Sentry.init({
@@ -84,7 +84,7 @@ const store = createStore(combineReducers({
   form: formReducer,
   routing: routerReducer,
 }), composeEnhancers(
-  applyMiddleware(thunkMiddleware, routerMiddleware(hashHistory))
+  applyMiddleware(thunkMiddleware, routerMiddleware(browserHistory))
 ))
 
 const socket = io()
@@ -135,7 +135,7 @@ ReactDOM.render((
   <Provider store={store}>
     <MuiThemeProvider theme={theme}>
     <ConfigProvider locale={zh_CN}>
-      <Router history={syncHistoryWithStore(hashHistory, store)}>
+      <Router history={syncHistoryWithStore(browserHistory, store)}>
         <Route path="/login" component={Login} />
         <Route path="/" component={App} onEnter={onLogined} onLeave={onLogouted}>
           <IndexRedirect to="/dashboard" />
