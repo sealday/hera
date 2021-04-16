@@ -18,6 +18,12 @@ export class ContractController {
     return { contract }
   }
 
+  @Post(':id')
+  async update(@Param('id') id: string, @Body() body: any) {
+    const contract = await this.contractService.update(id, body)
+    return { contract }
+  }
+
   @Get()
   async list() {
     const contract = await this.contractService.find()
@@ -45,6 +51,12 @@ export class ContractController {
   @Post(':id/add_calc')
   async addCalc(@Param('id') id: string, @Body() body: any,  @Auth() user: User) {
     const contract = await this.contractService.addCalc(id, body, user)
+    return { contract }
+  }
+
+  @Post(':id/calc/:calcId/restart')
+  async restartCalc(@Param('id') id: string, @Body() body: any,  @Auth() user: User) {
+    const contract = await this.contractService.restartCalc(id, body, user)
     return { contract }
   }
 

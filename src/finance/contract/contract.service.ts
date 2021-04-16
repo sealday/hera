@@ -21,6 +21,10 @@ export class ContractService {
     return this.contractModel.findById(id)
   }
 
+  async update(id: String, body: any) {
+    return this.contractModel.updateOne({ _id: id }, { $set: body})
+  }
+
   async updateStatus(id: String, status: String) {
     return this.contractModel.updateOne({ _id: id }, { $set: { status: status }})
   }
@@ -58,6 +62,12 @@ export class ContractService {
     calc.nameGroup = rent.nameGroup
     calc.freightGroup = rent.freightGroup
     return this.contractModel.updateOne({ _id: id }, { $push: { calcs: calc }})
+  }
+
+  async restartCalc(id: String, calc: any, user: User) {
+    // TODO 事务实现
+    await this.deleteCalc(id, calc._id)
+    return this.addCalc(id, calc, user)
   }
 
   async deleteCalc(id: String, calcId: String) {
