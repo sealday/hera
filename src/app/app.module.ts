@@ -32,7 +32,10 @@ import { StoreService } from './store.service';
 @Module({
   imports: [
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '../../..', 'client')
+      rootPath: join(__dirname, '../../..', 'client/system'),
+      serveRoot: '/system', 
+      renderPath: '*',
+      exclude: ['/api*'],
     }),
     ConfigModule.forRoot(),
     AuthModule, 
