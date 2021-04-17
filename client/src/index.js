@@ -14,14 +14,13 @@ import { ConfigProvider } from 'antd'
 import {
   Router,
   Route,
-  useRouterHistory,
   IndexRedirect,
   Redirect,
 } from 'react-router'
-import { createHistory, useBasename as asBasename } from 'history'
 import io from 'socket.io-client'
 import axios from 'axios'
 
+import { history } from './globals'
 import * as reducers from './reducers'
 import { systemLoaded, updateOnlineUsers, selectStore } from './actions'
 import { Profile } from './components'
@@ -80,10 +79,6 @@ moment.locale('zh-CN')
 // 启用 REDUX DEVTOOLS，可以在谷歌等浏览器上安装相应插件
 const composeEnhancers = window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] || compose
 
-const history = asBasename(createHistory)({
-  basename: '/system'
-})
-
 const store = createStore(combineReducers({
   ...reducers,
   form: formReducer,
@@ -126,6 +121,9 @@ const onLogined = () => {
       }
     } catch (e) { }
 
+  }).catch(e => {
+    // 加载出错
+    Sentry.captureException(e)
   })
 }
 

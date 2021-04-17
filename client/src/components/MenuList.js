@@ -128,7 +128,7 @@ const allMenu = [
         path: '/product',
       },
       {
-        name: '合同方案',
+        name: '租金方案',
         path: '/price',
       },
       {
