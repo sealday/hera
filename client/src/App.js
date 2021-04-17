@@ -115,7 +115,7 @@ class App extends Component {
     ajax('/api/logout', {
       method: 'POST'
     }).then(() => {
-      window.location.href = "#/login"
+      window.location.href = "/system/login"
     })
   }
 

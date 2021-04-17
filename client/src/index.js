@@ -14,10 +14,11 @@ import { ConfigProvider } from 'antd'
 import {
   Router,
   Route,
-  browserHistory,
+  useRouterHistory,
   IndexRedirect,
   Redirect,
 } from 'react-router'
+import { createHistory, useBasename as asBasename } from 'history'
 import io from 'socket.io-client'
 import axios from 'axios'
 
@@ -79,12 +80,16 @@ moment.locale('zh-CN')
 // 启用 REDUX DEVTOOLS，可以在谷歌等浏览器上安装相应插件
 const composeEnhancers = window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] || compose
 
+const history = asBasename(createHistory)({
+  basename: '/system'
+})
+
 const store = createStore(combineReducers({
   ...reducers,
   form: formReducer,
   routing: routerReducer,
 }), composeEnhancers(
-  applyMiddleware(thunkMiddleware, routerMiddleware(browserHistory))
+  applyMiddleware(thunkMiddleware, routerMiddleware(history))
 ))
 
 const socket = io()
@@ -135,7 +140,7 @@ ReactDOM.render((
   <Provider store={store}>
     <MuiThemeProvider theme={theme}>
     <ConfigProvider locale={zh_CN}>
-      <Router history={syncHistoryWithStore(browserHistory, store)}>
+      <Router history={syncHistoryWithStore(history, store)}>
         <Route path="/login" component={Login} />
         <Route path="/" component={App} onEnter={onLogined} onLeave={onLogouted}>
           <IndexRedirect to="/dashboard" />
