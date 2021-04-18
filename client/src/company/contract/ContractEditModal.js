@@ -1,5 +1,3 @@
-import React, { useState } from 'react'
-
 import {
   Modal,
   Form,
@@ -7,11 +5,10 @@ import {
   Select,
   DatePicker,
 } from 'antd'
-import { useForm } from 'antd/lib/form/Form'
 import { antFilterOption } from '../../components'
 
-export default ({ initialValues, onFinish, projects, visible, onClose}) => {
-  const [form] = useForm()
+const ContractEditModal = ({ initialValues, onFinish, projects, visible, onClose}) => {
+  const [form] = Form.useForm()
   return <Modal
     title="合同基础信息编辑"
     visible={visible}
@@ -81,3 +78,4 @@ export default ({ initialValues, onFinish, projects, visible, onClose}) => {
       </Form>
   </Modal>
 }
+export default ContractEditModal

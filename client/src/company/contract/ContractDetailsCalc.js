@@ -3,9 +3,9 @@ import React, { useEffect } from 'react'
 import moment from 'moment'
 import { Button, Card, PageHeader, Space, Tag, Descriptions } from 'antd'
 import { connect } from 'react-redux'
-import { CONTRACT_DETAILS, queryContractDetails } from '../actions'
-import { rentExcelExport } from '../utils'
-import RentCalcTable from './RentCalcTable'
+import { CONTRACT_DETAILS, queryContractDetails } from '../../actions'
+import { rentExcelExport } from '../../utils'
+import RentCalcTable from '../RentCalcTable'
 
 const mapStateToProps = (state) => {
   const contract = state.results.get(CONTRACT_DETAILS, {})
@@ -23,10 +23,10 @@ const ProjectLabel = connect(state => ({
   return <>projectId</>
 })
 
-export default connect(mapStateToProps)(({ router, dispatch, contract, params: { id, calcId } }) => {
+const ContractDetailsCalc = connect(mapStateToProps)(({ router, dispatch, contract, params: { id, calcId } }) => {
   useEffect(() => {
     dispatch(queryContractDetails(id))
-  }, [id])
+  }, [dispatch, id])
 
   let currentCalc = null
   if (contract && contract.calcs) {
@@ -77,3 +77,4 @@ export default connect(mapStateToProps)(({ router, dispatch, contract, params: {
     </Card>
   </Space>
 })
+export default ContractDetailsCalc

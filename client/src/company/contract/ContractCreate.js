@@ -10,18 +10,18 @@ import {
   DatePicker,
   Select,
 } from 'antd'
-import { antFilterOption } from '../components'
+import { antFilterOption } from '../../components'
 
 
-import { newErrorNotify, newInfoNotify, newSuccessNotify } from '../actions'
+import { newErrorNotify, newInfoNotify, newSuccessNotify } from '../../actions'
 import { push } from 'react-router-redux'
-import { ajax } from '../utils'
+import { ajax } from '../../utils'
 
 const mapStateToProps = state => ({
   projects: state.system.projects,
 })
 
-export default connect(mapStateToProps)(({ router, projects, dispatch }) => {
+const ContractCreate = connect(mapStateToProps)(({ router, projects, dispatch }) => {
   const [form] = Form.useForm()
 
   return <>
@@ -110,3 +110,4 @@ export default connect(mapStateToProps)(({ router, projects, dispatch }) => {
     </Card>
   </>
 })
+export default ContractCreate

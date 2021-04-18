@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom'
 import { ConfigProvider } from 'antd'
 import ContractEditModal from './ContractEditModal'
 import ContractAddItemModal from './ContractAddItemModal'
 import ContractAddCalcModal from './ContractAddCalcModal'
 import zh_CN from 'antd/lib/locale-provider/zh_CN'
+import Contract from './Contract'
 
 const createModal = component => {
   return props => {
@@ -33,3 +34,4 @@ const createModal = component => {
 export const edit = createModal(ContractEditModal) 
 export const addItem = createModal(ContractAddItemModal)
 export const addCalc = createModal(ContractAddCalcModal)
+export default Contract

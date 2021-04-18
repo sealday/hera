@@ -4,9 +4,9 @@ import moment from 'moment'
 import { Popconfirm, Button, Card, PageHeader, Table, Space, Tag, Descriptions } from 'antd'
 import { Link } from 'react-router'
 import { connect } from 'react-redux'
-import { ALL_PLAN, CONTRACT_DETAILS, newErrorNotify, newSuccessNotify, queryContractDetails, queryAllPlans } from '../actions'
-import { ajax } from '../utils'
-import { edit, addItem, addCalc } from './contracts'
+import { ALL_PLAN, CONTRACT_DETAILS, newErrorNotify, newSuccessNotify, queryContractDetails, queryAllPlans } from '../../actions'
+import { ajax } from '../../utils'
+import { edit, addItem, addCalc } from '.'
 import { pick } from 'lodash'
 
 const NAME_MAP = {
@@ -86,7 +86,7 @@ const ProjectLabel = connect(state => ({
   return <>projectId</>
 })
 
-export default connect(mapStateToProps)(({ projects, router, dispatch, plans, contract, params: { id } }) => {
+const ContractDetails = connect(mapStateToProps)(({ projects, router, dispatch, plans, contract, params: { id } }) => {
   useEffect(() => {
     dispatch(queryAllPlans())
     dispatch(queryContractDetails(id))
@@ -235,3 +235,4 @@ export default connect(mapStateToProps)(({ projects, router, dispatch, plans, co
     </Card>
   </Space>
 })
+export default ContractDetails

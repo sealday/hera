@@ -6,7 +6,7 @@ import {
     Space,
 } from 'antd'
 
-export default ({ setDate, date }) => <Space direction="horizontal" size={0}>
+const DateModifier = ({ setDate, date }) => <Space direction="horizontal" size={0}>
     <Button type="link" onClick={() => {
         setDate([
             moment().startOf('year'),
@@ -38,3 +38,4 @@ export default ({ setDate, date }) => <Space direction="horizontal" size={0}>
         ])
     }}>近两个月</Button>
 </Space>
+export default DateModifier

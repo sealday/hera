@@ -1,5 +1,3 @@
-import React, { useState } from 'react'
-
 import {
   Modal,
   Form,
@@ -8,11 +6,10 @@ import {
 } from 'antd'
 import { useForm } from 'antd/lib/form/Form'
 import moment from 'moment'
-import DateModifier from '../DateModifier'
+import { DateModifier } from '../../components'
 
-export default ({ initialValues, onFinish, plans, visible, onClose }) => {
+const ContractAddItemModal = ({ initialValues, onFinish, plans, visible, onClose }) => {
   const [form] = useForm()
-  const [category, setCategory] = useState(initialValues['category'])
   return <Modal
     title="合同规则明细"
     visible={visible}
@@ -24,12 +21,6 @@ export default ({ initialValues, onFinish, plans, visible, onClose }) => {
       name="合同规则明细"
       form={form}
       initialValues={initialValues}
-      onValuesChange={e => {
-        if (e['category']) {
-          setCategory(e['category'])
-          form.resetFields(['plan'])
-        }
-      }}
       onFinish={v => {
         onFinish(v)
         onClose()
@@ -40,7 +31,7 @@ export default ({ initialValues, onFinish, plans, visible, onClose }) => {
         name="category"
         rules={[{ required: true, message: '此处为必填项！' }]}
       >
-        <Select>
+        <Select onChange={() => form.resetFields(['plan'])}>
           <Select.Option key={1} value="price">租金方案</Select.Option>
           <Select.Option key={2} value="weight">计重方案</Select.Option>
           <Select.Option key={3} value="loss">赔偿方案</Select.Option>
@@ -48,16 +39,22 @@ export default ({ initialValues, onFinish, plans, visible, onClose }) => {
         </Select>
       </Form.Item>
       <Form.Item
-        label="方案"
-        name="plan"
-        rules={[{ required: true, message: '此处为必填项！' }]}
-      >
-        <Select>
-          {
-            plans && plans[category] && plans[category]
-              .map(plan => <Select.Option key={plan._id} value={plan._id}>{plan.name}</Select.Option>)
-          }
-        </Select>
+        noStyle
+        dependencies={['category']}>
+        {() => {
+          return <Form.Item
+            label="方案"
+            name="plan"
+            rules={[{ required: true, message: '此处为必填项！' }]}
+          >
+            <Select>
+              {
+                plans[form.getFieldValue('category')] && plans[form.getFieldValue('category')]
+                  .map(plan => <Select.Option key={plan._id} value={plan._id}>{plan.name}</Select.Option>)
+              }
+            </Select>
+          </Form.Item>;
+        }}
       </Form.Item>
       <Form.Item
         label="时间区间"
@@ -76,3 +73,4 @@ export default ({ initialValues, onFinish, plans, visible, onClose }) => {
     </Form>
   </Modal>
 }
+export default ContractAddItemModal

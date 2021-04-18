@@ -1,10 +1,9 @@
-import React from 'react'
 import { useForm } from 'antd/lib/form/Form'
-import DateModifier from '../DateModifier'
+import { DateModifier } from '../../components'
 import moment from 'moment'
 import { Form, Modal, DatePicker, Input } from 'antd'
 
-export default ({ initialValues, onFinish, visible, onClose }) => {
+const ContractAddCalcModal = ({ initialValues, onFinish, visible, onClose }) => {
     const [form] = useForm()
     return <Modal
       title="结算单"
@@ -48,3 +47,4 @@ export default ({ initialValues, onFinish, visible, onClose }) => {
       </Form>
     </Modal>
 }
+export default ContractAddCalcModal
