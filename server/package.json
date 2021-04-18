@@ -27,7 +27,7 @@
     "node-uuid": "^1.4.7",
     "pinyin": "^2.9.0",
     "serve-favicon": "~2.3.0",
-    "socket.io": "^2.3.0"
+    "socket.io": "^2.4.0"
   },
   "devDependencies": {
     "@types/async": "^2.0.46",
