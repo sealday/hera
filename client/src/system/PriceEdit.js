@@ -49,7 +49,7 @@ class PriceEdit extends React.Component {
     return (
       <Card>
         <CardHeader
-          title="合同方案编辑"
+          title="租金方案编辑"
           action={<>
             <Button onClick={e => this.props.router.goBack()}>取消</Button>
             <Button color="primary" onClick={() => this.form.submit()}>保存</Button>

@@ -1,11 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import * as Sentry from '@sentry/browser'
-import { createStore, combineReducers, compose, applyMiddleware } from 'redux'
-import thunkMiddleware from 'redux-thunk'
-import { reducer as formReducer } from 'redux-form'
 import { Provider } from 'react-redux'
-import { syncHistoryWithStore, routerReducer, routerMiddleware } from 'react-router-redux'
+import { syncHistoryWithStore } from 'react-router-redux'
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
 import moment from 'moment'
 import 'moment/locale/zh-cn'
@@ -19,9 +16,7 @@ import {
 } from 'react-router'
 import io from 'socket.io-client'
 import axios from 'axios'
-
-import { history } from './globals'
-import * as reducers from './reducers'
+import { history, store } from './globals'
 import { systemLoaded, updateOnlineUsers, selectStore } from './actions'
 import { Profile } from './components'
 import { theme } from './utils'
@@ -66,33 +61,18 @@ import { ajax } from './utils'
 
 // css 除非是模块自己的，否则直接在这里进行全局 import
 import './index.less'
-
 // 初始化 sentry
 Sentry.init({
   release: 'hera@3.0.0',
   dsn: "https://213cb45f8df943e0b77f89a23ee5a4e8@o374147.ingest.sentry.io/5191691"}
 )
-
 // 初始化 moment 时间属性
 moment.locale('zh-CN')
-
-// 启用 REDUX DEVTOOLS，可以在谷歌等浏览器上安装相应插件
-const composeEnhancers = window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] || compose
-
-const store = createStore(combineReducers({
-  ...reducers,
-  form: formReducer,
-  routing: routerReducer,
-}), composeEnhancers(
-  applyMiddleware(thunkMiddleware, routerMiddleware(history))
-))
-
+// 初始化 socket
 const socket = io()
-
 socket.on('server:users', (users) => {
   store.dispatch(updateOnlineUsers(users))
 })
-
 const onLogined = () => {
   const token = localStorage.getItem('X-Hera-Token')
   axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
@@ -111,7 +91,6 @@ const onLogined = () => {
         token: token,
       })
     }
-
     const config = res.data.config
     try {
       const store_ = JSON.parse(localStorage.getItem(`store-${config.db}`))
@@ -120,20 +99,17 @@ const onLogined = () => {
         store.dispatch(selectStore(config, store_))
       }
     } catch (e) { }
-
   }).catch(e => {
     // 加载出错
     Sentry.captureException(e)
   })
 }
-
 const onLogouted = () => {
   socket.off('connect')
   if (socket.connected) {
     socket.emit('client:logout')
   }
 }
-
 ReactDOM.render((
   <Provider store={store}>
     <MuiThemeProvider theme={theme}>

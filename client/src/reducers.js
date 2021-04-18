@@ -7,8 +7,6 @@ import {
   NavRecord,
   PostRecord,
   PostRecords,
-  WorkerRecord,
-  PaycheckRecord,
 } from './records'
 
 export function system(state = new SystemRecord(), action) {
@@ -69,7 +67,6 @@ export function system(state = new SystemRecord(), action) {
       return state
   }
 }
-
 export function store(state = new StoreRecord(), action) {
   switch (action.type) {
     case actionTypes.UPDATE_RECORD:
@@ -86,7 +83,6 @@ export function store(state = new StoreRecord(), action) {
       return state
   }
 }
-
 export function nav(state = new NavRecord(), action) {
   switch (action.type) {
     case actionTypes.TOGGLE_NAV:
@@ -98,57 +94,6 @@ export function nav(state = new NavRecord(), action) {
       return state
   }
 }
-
-export function payables(state = new PaycheckRecord(),action) {
-    switch (action.type){
-      case actionTypes.PAYABLE:
-        return state.set('payables',action.data)
-      default:
-        return state;
-    }
-}
-
-export function requestWorkerlist(state= new WorkerRecord(),action) {
-    switch (action.type){
-        case actionTypes.REQUEST_WORKERS_SUCCESS:
-            return state.set('requesting',false).set('data',action.data);
-        case actionTypes.REQUEST_WORKERS:
-            return state.set('requesting',true);
-        case actionTypes.REQUEST_WORKERS_FAILURE:
-            return state.set('requesting',false);
-        case actionTypes.POST_WORKERIN:
-            return state.set('posting',true);
-        case actionTypes.POST_WORKERIN_SUCCESS:
-            return state.set('posting',false).update('data',data => data.concat(action.data));
-        case actionTypes.POST_WORKERIN_FAILURE:
-            return state.set('posting',false);
-        case actionTypes.ALTER_WORKER:
-          return state.set('posting',true)
-        case actionTypes.ALTER_WORKER_SUCCESS:
-          const worker = action.data;
-          const workers = state.get('data');
-            workers.forEach((w,i)=>{
-              if (w._id === worker._id){
-                workers[i]= worker
-              }
-            })
-            return state.set('posting',false).set('data',workers)
-        case actionTypes.ALTER_WORKER_FAILURE:
-          return state.set('posting',false)
-        case actionTypes.DELETE_WORKER:
-          return state.set('posting',true)
-        case actionTypes.DELETE_WORKER_SUCCESS:
-          const id = action.data;
-          const workerlist = state.get('data');
-          const newworkers = workerlist.filter(obj =>obj._id !== id);
-          return state.set('posting',false).set('data',newworkers)
-        case actionTypes.DELETE_WORKER_FAILURE:
-          return state.set('posting',false)
-        default:
-          return state;
-    }
-}
-
 export function postProject(state = new PostRecord(), action) {
   switch (action.type) {
     case actionTypes.POST_PROJECT:
@@ -161,7 +106,6 @@ export function postProject(state = new PostRecord(), action) {
       return state
   }
 }
-
 export function alterProject(state = new PostRecord(), action) {
   switch (action.type) {
     case actionTypes.ALTER_PROJECT:
@@ -174,7 +118,6 @@ export function alterProject(state = new PostRecord(), action) {
       return state
   }
 }
-
 export function requestStore(state = new PostRecords(), action) {
   switch (action.type) {
     case actionTypes.REQUEST_STORE:
@@ -187,7 +130,6 @@ export function requestStore(state = new PostRecords(), action) {
       return state
   }
 }
-
 export function networks(state = new Map(), action) {
   switch (action.type) {
     case actionTypes.NETWORK_BEGIN:
@@ -199,10 +141,6 @@ export function networks(state = new Map(), action) {
       return state
   }
 }
-
-/**
- * 网络请求结果
- */
 export function results(state = new Map(), action) {
   switch (action.type) {
     case actionTypes.SAVE_RESULTS:

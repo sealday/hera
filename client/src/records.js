@@ -16,7 +16,6 @@ export const SystemRecord = Record({
   loading: true,
   rawProjects: Map(), // 未过滤过的
 })
-
 export const StoreRecord = Record({
   records: new Map(),
   in: [],
@@ -27,10 +26,8 @@ export const StoreRecord = Record({
   search: [], // 搜索结果
   simpleSearch: [], // 通过项目部名称和对方单位的搜索结果
 })
-
 export const NavRecord = Record({
   drawer: false, // 左侧菜单是否显示（在小屏幕情况下）
-
   store: true,
   report: true,
   system: false,
@@ -39,24 +36,10 @@ export const NavRecord = Record({
   finance: false,
   company: false,
 })
-
 export const PostRecord = Record({
   posting: false,
-
   data: null
 })
-
 export const PostRecords = Record({
   posting: new Map()
-})
-
-export const WorkerRecord = Record({
-  posting:false,
-  requesting:false  ,
-
-  data:[]
-})
-
-export const PaycheckRecord = Record({
-  payables:[]
 })

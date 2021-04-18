@@ -97,10 +97,11 @@ export const updateEntry = (record, products) => {
  * @returns
  */
 export function transformArticle(articles) {
+  const products = articles
   const typeNameMap = {}
   const nameArticleMap = {}
   const names = {}
-  articles.forEach(article => {
+  products.forEach(article => {
     if (!typeNameMap[article.type]) {
       typeNameMap[article.type] = []
     }
