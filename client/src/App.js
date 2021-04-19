@@ -259,7 +259,7 @@ class App extends Component {
 const mapStateToProps = state => ({
   nav: state.nav,
   system: state.system,
-  onlineUsers: state.system.onlineUsers,
+  onlineUsers: state.core.onlineUsers,
   store: state.system.store,
   user: state.system.user,
   config: state.system.config,

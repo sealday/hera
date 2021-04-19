@@ -1,8 +1,6 @@
 import { Map, Record } from 'immutable'
 
 export const SystemRecord = Record({
-  online: 0,
-  onlineUsers: [],
   printCompany: '上海创兴建筑设备租赁有限公司',
   projects: Map(),
   articles: Map(),
