@@ -21,8 +21,8 @@ import { systemLoaded, selectStore } from './actions'
 import { updateOnlineUsers } from './features/coreSlice'
 import { Profile } from './components'
 import { theme } from './utils'
-import App from './App'
-import Home from './Home'
+import App from './pages/App'
+import Home from './pages/Home'
 import {
   Operator,
   OperatorCreate,
@@ -57,7 +57,7 @@ import {
   TransportSearch,
 } from './report'
 import * as company from './company'
-import Login from './Login'
+import Login from './pages/Login'
 import { ajax } from './utils'
 
 // css 除非是模块自己的，否则直接在这里进行全局 import

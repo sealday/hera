@@ -21,7 +21,7 @@ import { connect } from 'react-redux'
 import { message } from 'antd'
 import axios from 'axios'
 
-import { wrapper } from './utils'
+import { wrapper } from '../utils'
 
 const styles = theme => ({
   main: {

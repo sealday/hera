@@ -19,9 +19,9 @@ import { push } from 'react-router-redux'
 import { Helmet } from "react-helmet"
 import { get } from 'lodash'
 
-import { Notification, CurrentStore, MenuList } from './components'
-import { ajax, wrapper } from './utils'
-import { selectStore, selectPrintCompany } from './actions'
+import { Notification, CurrentStore, MenuList } from '../components'
+import { ajax, wrapper } from '../utils'
+import { selectStore, selectPrintCompany } from '../actions'
 import './App.css'
 
 
