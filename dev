@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-
-# 需要至少 screen 4.01 版本来支持配置文件中的说明的鼠标支持
-screen -c .screenrc
-
