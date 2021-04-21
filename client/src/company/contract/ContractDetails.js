@@ -7,14 +7,8 @@ import { connect } from 'react-redux'
 import { ALL_PLAN, CONTRACT_DETAILS, newErrorNotify, newSuccessNotify, queryContractDetails, queryAllPlans } from '../../actions'
 import { ajax } from '../../utils'
 import { edit, addItem, addCalc } from '.'
+import { PLAN_CATEGORY_MAP } from '../../constants'
 import { pick } from 'lodash'
-
-const NAME_MAP = {
-  loss: '赔偿方案',
-  weight: '计重方案',
-  price: '租金方案',
-  service: '维修方案',
-}
 
 const INITIAL_CATEGORY = 'price'
 
@@ -167,7 +161,7 @@ const ContractDetails = connect(mapStateToProps)(({ projects, router, dispatch, 
     >
       <Table dataSource={contract.items}>
         <Table.Column key="category" title="分类" dataIndex="category"
-          render={category => NAME_MAP[category]} />
+          render={category => PLAN_CATEGORY_MAP[category]} />
         <Table.Column key="plan" title="名称" dataIndex="plan"
           render={plan => <PlanLabel planId={plan} />} />
         <Table.Column key="start" title="开始日期" dataIndex="start"

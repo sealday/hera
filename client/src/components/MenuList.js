@@ -101,6 +101,10 @@ const allMenu = [
         path: '/contract',
       },
       {
+        name: '合同计算方案',
+        path: '/plan',
+      },
+      {
         name: '租金计算',
         path: '/rent_calc',
       },
