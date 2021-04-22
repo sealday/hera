@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import moment from 'moment'
 import {
   Button,
@@ -6,6 +7,11 @@ import {
   Table,
   Tag,
   Card,
+  Form,
+  Input,
+  Select,
+  Row,
+  Col,
 } from 'antd'
 import {
   SaveOutlined,
@@ -18,6 +24,7 @@ import { PLAN_CATEGORY_MAP } from '../../constants'
 import { BackButton, LinkButton } from '../../components'
 
 const PlanCreate = ({ router }) => {
+  const [form] = Form.useForm()
   const plans = [
     {
       _id: 1,
@@ -36,6 +43,7 @@ const PlanCreate = ({ router }) => {
       status: '弃用',
     }
   ]
+  console.log('===')
   return <>
     <PageHeader
       title="新增合同计算方案"
@@ -45,8 +53,61 @@ const PlanCreate = ({ router }) => {
         <Link key={2} to="/plan/create"><Button type="primary"><SaveOutlined />保存</Button></Link>
       ]}
     />
+    <Form form={form}>
+      <div style={{ height: '8px' }}></div>
+      <Card title="基础信息" bordered={false}>
+        <Row gutter={16}>
+          <Col span={8}>
+            <Form.Item name="category" label="类型">
+              <Select>
+                {_.map(PLAN_CATEGORY_MAP, (v, k) => <Select.Option key={k} value={k}>{v}</Select.Option>)}
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item name="name" label="名称">
+              <Input />
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item name="date" label="日期">
+              <Input />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Form.Item name="comments" label="备注">
+          <Input.TextArea />
+        </Form.Item>
+      </Card>
+      <Form.Item noStyle dependencies={['category']}>
+        {() => form.getFieldValue('category') === 'price' && <>
+          <div style={{ height: '8px' }}></div>
+          <Card title="补充信息" bordered={false}>
+            <Row gutter={16}>
+              <Col span={8}>
+                <Form.Item name="no" label="运费（元/吨）">
+                  <Select>
+                    {_.map(PLAN_CATEGORY_MAP, (v, k) => <Select.Option key={k} value={k}>{v}</Select.Option>)}
+                  </Select>
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item name="name" label="运费类型">
+                  <Input />
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item name="date" label="计重方案">
+                  <Input />
+                </Form.Item>
+              </Col>
+            </Row>
+          </Card>
+        </>}
+      </Form.Item>
+    </Form>
     <div style={{ height: '8px' }}></div>
-    <Card title="方案细节" bordered={false}>
+    <Card title="方案明细" bordered={false}>
       <Table dataSource={plans} rowKey="_id">
         <Table.Column title="分类" key="category" dataIndex="category"
           render={category => PLAN_CATEGORY_MAP[category]}

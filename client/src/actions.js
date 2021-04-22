@@ -932,12 +932,33 @@ export const queryContractDetails = id => (dispatch, getState) => {
 
 export const ALL_PLAN = 'ALL_PLAN'
 
-export const queryAllPlans = () => (dispatch, getState) => {
+export const queryAllPlans = (returnType = 'tree') => (dispatch, getState) => {
   const key = ALL_PLAN
   const search = network(key) // 让查询网络不会重复
   if (search.shouldProceed(getState())) {
     dispatch(search.begin)
-    ajax('/api/plan/all').then(res => {
+    ajax('/api/plan/all', { data: { returnType } }).then(res => {
+      dispatch(search.endSuccess)
+      dispatch({ type: SAVE_RESULTS, data: {
+          key,
+          result: res.data.plans
+        }})
+    }).catch(err => {
+      dispatch(search.endFailure)
+      dispatch(newErrorNotify('错误', '加载方案数据失败', 2000))
+      throw err
+    })
+  }
+}
+
+export const ALL_PLAN_FLAT = 'ALL_PLAN_FLAT'
+
+export const queryAllPlansFlat = (returnType = 'flat') => (dispatch, getState) => {
+  const key = ALL_PLAN_FLAT
+  const search = network(key) // 让查询网络不会重复
+  if (search.shouldProceed(getState())) {
+    dispatch(search.begin)
+    ajax('/api/plan/all', { data: { returnType } }).then(res => {
       dispatch(search.endSuccess)
       dispatch({ type: SAVE_RESULTS, data: {
           key,
