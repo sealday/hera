@@ -179,36 +179,6 @@ class App extends Component {
               <span className={classes.flex} />
               <Button
                 color="inherit"
-                onClick={this.handleMenu('printCompany')}
-              >切换打印用公司名称</Button>
-              <Popover
-                open={this.state.menuOpen['printCompany']}
-                anchorEl={this.state.menuAnchorEl['printCompany']}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'center',
-                }}
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'center',
-                }}
-                onClose={this.handleMenuClose('printCompany')}
-              >
-                <List>
-                  {config.externalNames.map(name => <MenuItem
-                    key={short_id.generate()}
-                    onClick={(e) => {
-                      this.setState({
-                        showSwitchList: false
-                      })
-                      this.props.dispatch(selectPrintCompany(name))
-                      this.handleMenuClose('printCompany')(e)
-                    }}
-                  >{name}</MenuItem>)}
-                </List>
-              </Popover>
-              <Button
-                color="inherit"
                 onClick={this.handleMenu('onlineCount')}
               >当前在线 {onlineUsers.length} 人</Button>
               <Popover
