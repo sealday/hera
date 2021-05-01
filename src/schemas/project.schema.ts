@@ -21,6 +21,7 @@ export const ProjectSchema = new mongoose.Schema({
   address: String, // 项目部地址
   comments: String, // 备注
   type: String, // 仓库类型
+  associatedCompany: String, // 关联公司
   items: [{
     name: String, // 名称
     startDate: Date, // 开始时间

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, UseGuards, UseInterceptors } from '@nestjs/common';
 import * as _ from 'lodash';
 import { WrapperInterceptor } from 'src/app/wrapper.interceptor';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
@@ -12,18 +12,28 @@ export class PlanController {
   constructor(private planService: PlanService) { }
 
   @Get('all')
-  async listAll() {
+  async listAll(@Query('returnType') returnType) {
     const pricePlans = await this.planService.find('price')
     const weightPlans = await this.planService.find('weight')
     const lossPlans = await this.planService.find('loss')
     const servicePlans = await this.planService.find('service')
-    return {
-      plans: {
-        price: pricePlans,
-        weight: weightPlans,
-        loss: lossPlans,
-        service: servicePlans,
+    if (returnType === 'tree') {
+      return {
+        plans: {
+          price: pricePlans,
+          weight: weightPlans,
+          loss: lossPlans,
+          service: servicePlans,
+        }
       }
+    } else if (returnType === 'flat') {
+      const plans = [...pricePlans, ...weightPlans, ...lossPlans, ...servicePlans]
+      const result = plans.map(plan => ({
+        ...plan.toObject(),
+        category: plan.type ? plan.type : 'price', // 兼容
+        status: '在用',
+      }))
+      return { plans: result }
     }
   }
 
