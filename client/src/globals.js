@@ -16,7 +16,10 @@ export const store = configureStore({
         routing: routerReducer,
     },
     middleware: getDefaultMiddleware => {
-        console.dir(getDefaultMiddleware())
-        return getDefaultMiddleware().slice(1).concat(routerMiddleware(history))
+        if (getDefaultMiddleware().length === 3) {
+            return getDefaultMiddleware().slice(1).concat(routerMiddleware(history))
+        } else {
+            return getDefaultMiddleware().concat(routerMiddleware(history))
+        }
     },
 })
