@@ -50,16 +50,17 @@ const TransferOrder = ({ router, record,  }) => {
       company = projects.get(record.inStock).company
       name = projects.get(record.inStock).name
     }
-  } else {
-    // FIXME 当两者都不是的时候，属于非法访问
-    return <div>非法访问</div>
-  }
+  } 
 
   useEffect(() => {
     if (project.associatedCompany) {
       setPrintCompany(project.associatedCompany)
     }
   }, [project.associatedCompany])
+
+  if (!project) {
+    return <div>非法访问</div>
+  }
 
   let entries = {}
   let total = {}
