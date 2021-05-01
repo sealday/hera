@@ -2,6 +2,7 @@ import axios from 'axios'
 import fuzzysearch from 'fuzzysearch'
 import moment from 'moment'
 import { flowRight, last, dropRight } from 'lodash'
+import _ from 'lodash'
 import { saveAs } from 'file-saver'
 
 import * as validator from './validator'
@@ -121,6 +122,83 @@ export function transformArticle(articles) {
   }
 }
 
+/**
+ * root: {
+ *   value: 'root',
+ *   label: 'root',
+ *   children: [
+ *     {
+ *       value: '租赁类',
+ *       label: '租赁类',
+ *       children: [
+ *         {
+ *           value: '钢管',
+ *           label: '钢管',
+ *           children: [
+ *             {
+ *                value: "0.1",
+ *                label: "0.1"
+ *             }
+ *           ]
+ *         }
+ *       ]
+ *     }
+ *   ]
+ * }
+ * @param {*} products 
+ */
+export function buildProductTree(products, keepSize=true) {
+  const root = {
+    value: 'root',
+    label: 'root',
+    children: []
+  }
+  const remind = {}
+  products.forEach(product => {
+    // 类型
+    if (!(product.type in remind)) {
+      remind[product.type] = root.children.length
+      root
+        .children.push({
+          value: product.type,
+          label: product.type,
+          children: [],
+        })
+    }
+    // 名称
+    if (!(`${product.name}@${product.type}` in remind)) {
+      remind[`${product.name}@${product.type}`]
+        = root.children[remind[product.type]].children.length
+      const child = {
+        value: product.name,
+        label: product.name,
+      }
+      if (keepSize) {
+        child.children = []
+      }
+      root
+        .children[remind[product.type]]
+        .children.push(child)
+    }
+    if (keepSize) {
+      // 规格
+      root
+        .children[remind[product.type]]
+        .children[remind[`${product.name}@${product.type}`]]
+        .children.push({
+          value: product.size,
+          label: product.size,
+        })
+    }
+  })
+  return root
+}
+
+/**
+ * 
+ * @param {*} products 
+ * @returns 
+ */
 export const oldProductStructure = (products) => {
   const names = {}
   const results = []

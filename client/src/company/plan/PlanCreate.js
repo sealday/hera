@@ -1,11 +1,7 @@
 import _ from 'lodash'
-import moment from 'moment'
 import {
   Button,
   PageHeader,
-  Space,
-  Table,
-  Tag,
   Card,
   Form,
   Input,
@@ -16,50 +12,41 @@ import {
 import {
   SaveOutlined,
 } from '@ant-design/icons'
-import {
-  Link,
-} from 'react-router'
 
 import { PLAN_CATEGORY_MAP } from '../../constants'
-import { BackButton, LinkButton } from '../../components'
+import { BackButton } from '../../components'
+import PlanPriceItem from './PlanPriceItem'
+import PlanWeightItem from './PlanWeightItem'
+import PlanLossItem from './PlanLossItem'
+import PlanServiceItem from './PlanServiceItem'
+
+const withDependencies = (dependencies, comp) => {
+  return <Form.Item noStyle dependencies={dependencies}>{comp}</Form.Item>
+}
 
 const PlanCreate = ({ router }) => {
   const [form] = Form.useForm()
-  const plans = [
-    {
-      _id: 1,
-      category: 'weight',
-      name: '中建八局租金方案',
-      date: moment(),
-      comments: '',
-      status: '在用',
-    },
-    {
-      _id: 1,
-      category: 'weight',
-      name: '中建八局租金方案',
-      date: moment(),
-      comments: '',
-      status: '弃用',
-    }
-  ]
-  console.log('===')
+  const onSubmit = v => {
+    console.log(v)
+  }
+  const initialValues = { category: 'price' }
+  const onCategorySelect = () => form.resetFields(['items'])
   return <>
     <PageHeader
       title="新增合同计算方案"
       ghost={false}
       extra={[
         <BackButton key={1} />,
-        <Link key={2} to="/plan/create"><Button type="primary"><SaveOutlined />保存</Button></Link>
+        <Button type="primary" onClick={() => form.submit()}><SaveOutlined />保存</Button>
       ]}
     />
-    <Form form={form}>
+    <Form form={form} onFinish={onSubmit} initialValues={initialValues}>
       <div style={{ height: '8px' }}></div>
       <Card title="基础信息" bordered={false}>
         <Row gutter={16}>
           <Col span={8}>
             <Form.Item name="category" label="类型">
-              <Select>
+              <Select onSelect={onCategorySelect}>
                 {_.map(PLAN_CATEGORY_MAP, (v, k) => <Select.Option key={k} value={k}>{v}</Select.Option>)}
               </Select>
             </Form.Item>
@@ -105,43 +92,26 @@ const PlanCreate = ({ router }) => {
           </Card>
         </>}
       </Form.Item>
-    </Form>
-    <div style={{ height: '8px' }}></div>
-    <Card title="方案明细" bordered={false}>
-      <Table dataSource={plans} rowKey="_id">
-        <Table.Column title="分类" key="category" dataIndex="category"
-          render={category => PLAN_CATEGORY_MAP[category]}
-        />
-        <Table.Column title="名称" key="name" dataIndex="name" />
-        <Table.Column title="日期" key="date" dataIndex="date"
-          render={date => moment(date).format('YYYY-MM-DD')}
-        />
-        <Table.Column title="备注" key="comments" dataIndex="comments" />
-        <Table.Column title="状态" key="status" dataIndex="status"
-          onFilter={
-            (value, record) => record.status.indexOf(value) === 0
-          }
-          render={
-            tag => {
-              const color = tag === '在用' ? 'green' : 'red';
-              return <Tag color={color}>{tag}</Tag>
+      <div style={{ height: '8px' }}></div>
+      <Card title="方案明细" bordered={false}>
+        {withDependencies(['category'], () => <Form.List name="items">
+          {(fields, { add, remove }) => {
+            switch (form.getFieldValue('category')) {
+              case 'price':
+                return <PlanPriceItem fields={fields} add={add} remove={remove} form={form} />
+              case 'weight':
+                return <PlanWeightItem fields={fields} add={add} remove={remove} form={form} />
+              case 'loss':
+                return <PlanLossItem fields={fields} add={add} remove={remove} form={form} />
+              case 'service':
+                return <PlanServiceItem fields={fields} add={add} remove={remove} form={form} />
+              default:
+                return <PlanPriceItem fields={fields} add={add} remove={remove} form={form} />
             }
-          }
-        />
-        <Table.Column title="" key="action"
-          render={
-            (text, record) => (
-              <Space size="middle">
-                <a>查看</a>
-                <a>废弃</a>
-                <a>编辑</a>
-                <a>克隆</a>
-              </Space>
-            )
-          }
-        />
-      </Table>
-    </Card>
+          }}
+        </Form.List>)}
+      </Card>
+    </Form>
   </>
 }
 export default PlanCreate
