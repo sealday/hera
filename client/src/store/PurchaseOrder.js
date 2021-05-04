@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import moment from 'moment'
 import { Link } from 'react-router'
@@ -23,7 +23,7 @@ const PurchaseOrder = ({ record, router }) => {
   const [printCompany, setPrintCompany] = useState(config.externalNames[0])
   const [columnStyle, setColumnStyle] = useState('single')
 
-  const printFrame = React.createRef()
+  const printFrame = useRef()
 
   const handleTransport = () => {
     router.push(`/transport/${record._id}`)

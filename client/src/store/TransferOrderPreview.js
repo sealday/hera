@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { connect, useSelector } from 'react-redux'
+import React, { useEffect, useRef, useState } from 'react'
+import { useSelector } from 'react-redux'
 import moment from 'moment'
 import _ from 'lodash'
 import { Button, Card, Dropdown, Menu, PageHeader } from 'antd'
@@ -12,8 +12,42 @@ import {
 } from '../utils'
 import PrintFrame from '../components/PrintFrame'
 
+const entries2table = (items, productTypeMap, products) => {
+  const entries = {}
+  const total = {}
+  const printEntries = []
+  items.forEach(entry => {
+    const result = total_(entry, products)
+    if (entry.name in entries) {
+      total[entry.name] += result
+      entries[entry.name].push(entry)
+    } else {
+      entries[entry.name] = [entry]
+      total[entry.name] = result
+    }
+  })
+
+  _.forEach(entries, (_entry, name) => {
+    printEntries.push(...entries[name].map(entry => [
+      entry.name,
+      entry.size,
+      entry.count + ' ' + productTypeMap[name].countUnit,
+      entry.comments ? entry.comments : '',
+    ]))
+    printEntries.push(
+      [
+        name,
+        '小计',
+        fixed(total[name]) + ' ' + getUnit(productTypeMap[name]),
+        '',
+      ]
+    )
+  })
+  return printEntries
+}
+
 const TransferOrder = ({ router, record,  }) => {
-  const printFrame = React.createRef()
+  const printFrame = useRef()
   const config = useSelector(state => state.system.config)
   const store = useSelector(state => state.system.store)
   const projects = useSelector(state => state.system.projects)
@@ -62,73 +96,47 @@ const TransferOrder = ({ router, record,  }) => {
     return <div>非法访问</div>
   }
 
-  let entries = {}
-  let total = {}
-  record.entries.forEach(entry => {
-    let result = total_(entry, products)
-
-    if (entry.name in entries) {
-      total[entry.name] += result
-      entries[entry.name].push(entry)
-    } else {
-      entries[entry.name] = [entry]
-      total[entry.name] = result
-    }
-  })
-
-  let productTypeMap = {}
+  const productTypeMap = {}
   articles.forEach(article => {
     productTypeMap[article.name] = article
   })
-
-  let printEntries = []
-
-  _.forEach(entries, (entry, name) => {
-    printEntries = printEntries.concat(entries[name].map(entry => [
-      entry.name,
-      entry.size,
-      entry.count + ' ' + productTypeMap[name].countUnit,
-      parseMode(entry.mode) + ' ' + (entry.comments ? entry.comments : ''),
-    ]))
-    printEntries.push(
-      [
-        name,
-        '小计',
-        fixed(total[name]) + ' ' + getUnit(productTypeMap[name]),
-        '',
-      ]
-    )
+  const rows = []
+  console.dir(record.entries)
+  _.each(['L', 'S', 'C', 'R'], mode => {
+    const items = record.entries.filter(entry => entry.mode === mode)
+    const printEntries = entries2table(items, productTypeMap, products)
+    if (mode === 'L') {
+      record.fee = record.fee || {}
+      printEntries.push(
+        [
+          '运费：',
+          `￥${record.fee.car || 0} `,
+          '整理费：',
+          `￥${record.fee.sort || 0}`,
+        ]
+      );
+      printEntries.push(
+        [
+          '其他费用1：',
+          `￥${record.fee.other1 || 0}`,
+          `其他费用2：`,
+          `￥${record.fee.other2 || 0}`,
+        ]
+      );
+    }
+    if (printEntries.length % 2 !== 0) {
+      printEntries.push(['', '', '', ''])
+    }
+    if (printEntries.length > 0) {
+      const half = printEntries.length / 2
+      const firstIndex = rows.length
+      for (let i = 0; i < half; i++) {
+        rows.push(printEntries[i].concat(printEntries[i + half]))
+      }
+      rows[firstIndex].unshift({ value: parseMode(mode), span: rows.length - firstIndex, type: 'type' })
+    }
   })
 
-  if (record.type === '调拨') {
-    record.fee = record.fee || {}
-    printEntries.push(
-      [
-        '运费：',
-        `￥${record.fee.car || 0} `,
-        '整理费：',
-        `￥${record.fee.sort || 0}`,
-      ]
-    );
-    printEntries.push(
-      [
-        '其他费用1：',
-        `￥${record.fee.other1 || 0}`,
-        `其他费用2：`,
-        `￥${record.fee.other2 || 0}`,
-      ]
-    );
-  }
-
-  if (printEntries.length % 2 !== 0) {
-    printEntries.push(['', '', '', ''])
-  }
-
-  let rows = []
-  const half = printEntries.length / 2
-  for (let i = 0; i < half; i++) {
-    rows.push(printEntries[i].concat(printEntries[i + half]))
-  }
 
   const PrintContent = () => (
     <div style={{ position: 'relative', paddingRight: '1.2em', minHeight: '30em' }}> {/* 表格开始 */}
@@ -166,6 +174,7 @@ const TransferOrder = ({ router, record,  }) => {
       }}>
         <thead>
           <tr>
+            <th style={{ width: '1.2em' }} />
             <th className="text-right">名称</th>
             <th className="text-right">规格</th>
             <th className="text-right">数量</th>
@@ -179,12 +188,18 @@ const TransferOrder = ({ router, record,  }) => {
         <tbody>
           {rows.map((row, index) => (
             <tr className="text-right" key={index}>
-              {row.map((col, index) => (
-                <td key={index}>{col}</td>
-              ))}
+              {row.map((col, index) => {
+                if (col.type === 'type') {
+                  return <td key={index} rowSpan={col.span}>{col.value}</td>
+                }
+                return (
+                  <td key={index}>{col}</td>
+                )
+              })}
             </tr>
           ))}
           <tr>
+            <td />
             <td colSpan="4" >
               <span>说明：如供需双方未签正式合同，本{orderName}经供需双方代表签字确认后，将作为合同</span>
               <span>及发生业务往来的有效凭证，如已签合同，则成为该合同的组成部分。{signer}须核对</span>

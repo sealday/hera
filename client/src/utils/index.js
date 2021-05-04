@@ -229,7 +229,7 @@ export const parseMode = mode => {
     C: '赔偿',
     R: '服务',
   }
-  return !mode || mode === 'L' ? '' : names[mode]
+  return !mode || mode === 'L' ? '租赁' : names[mode]
 }
 
 export const filterOption = (filter, option) => {
