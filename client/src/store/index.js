@@ -16,3 +16,6 @@ export { default as StocktakingOrder } from './StocktakingOrder'
 
 export { default as Record } from './Record'
 export { default as RecordPreview } from './RecordPreview'
+
+export { default as OrderCreate } from './order/OrderCreate'
+export { default as OrderDetails } from './order/OrderDetails'

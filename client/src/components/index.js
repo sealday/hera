@@ -9,6 +9,7 @@ import {
 } from 'antd'
 import * as moment  from 'moment'
 import { isUndefined } from 'lodash'
+import { createFromIconfontCN } from '@ant-design/icons'
 
 import RawEditableTagGroup from './EditableTagGroup.js'
 
@@ -203,6 +204,9 @@ export const EditableTagGroup = ({ input: { value, onChange }, style, meta: { to
   </RawEditableTagGroup>
 }
 
+export const IconFont = createFromIconfontCN({
+  scriptUrl: '//at.alicdn.com/t/font_2526589_v10vs24wgbr.js',
+});
 
 export { default as Notification } from './Notification'
 export { default as CurrentStore } from './CurrentStore'

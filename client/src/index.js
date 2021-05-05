@@ -51,6 +51,7 @@ import {
   StocktakingCreate,
   StocktakingEdit,
 } from './store'
+import * as storePages from './store'
 import {
   Store,
   SimpleSearch,
@@ -147,6 +148,8 @@ ReactDOM.render((
           <Route path="transfer_free/:direction/:id/edit" component={PurchaseEdit} />
           <Route path="stocktaking/:direction/create" component={StocktakingCreate} />
           <Route path="stocktaking/:direction/:id/edit" component={StocktakingEdit} />
+          <Route path="order/create" component={storePages.OrderCreate} />
+          <Route path="order/:id" component={storePages.OrderDetails} />
           <Route path="record/:id" component={Record} />
           <Route path="record/:id/preview" component={RecordPreview} />
           <Route path="company_record/:id" component={company.Record} />

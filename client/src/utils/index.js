@@ -147,7 +147,7 @@ export function transformArticle(articles) {
  * }
  * @param {*} products 
  */
-export function buildProductTree(products, keepSize=true) {
+export function buildProductTree(products, keepSize=true, numberAsValue=false) {
   const root = {
     value: 'root',
     label: 'root',
@@ -186,10 +186,41 @@ export function buildProductTree(products, keepSize=true) {
         .children[remind[product.type]]
         .children[remind[`${product.name}@${product.type}`]]
         .children.push({
-          value: product.size,
+          value: numberAsValue ? product.number : product.size,
           label: product.size,
         })
     }
+  })
+  return root
+}
+
+/**
+ * 
+ * @param {*} projects 
+ * @returns 
+ */
+export function buildProjectTree(projects) {
+  const root = {
+    value: 'root',
+    label: 'root',
+    children: []
+  }
+  const remind = {}
+  PROJECT_TYPES.forEach(type => {
+    const child = {
+      value: type,
+      label: type,
+      children: []
+    }
+    remind[type] = child
+    root.children.push(child)
+  })
+  projects.forEach(project => {
+    if (!(project.type in remind)) return
+    remind[project.type].children.push({
+      value: project._id,
+      label: project.company + project.name,
+    })
   })
   return root
 }
@@ -406,6 +437,11 @@ export const CONTRACT_TYPES = ['项目仓库', '租赁客户', '同行客户']
  * 采购支持客户类型
  */
 export const PURCHASING_CLIENT_TYPES = ['项目仓库', '租赁客户', '同行客户', '基地仓库', '供应商']
+
+/**
+ * 项目类型
+ */
+export const PROJECT_TYPES = ['项目仓库', '租赁客户', '同行客户', '基地仓库', '供应商']
 
 /**
  * 支持的订单类型
