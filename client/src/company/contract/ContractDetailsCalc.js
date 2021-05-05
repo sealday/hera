@@ -64,7 +64,7 @@ const ContractDetailsCalc = connect(mapStateToProps)(({ router, dispatch, contra
         </Descriptions.Item>
         <Descriptions.Item label="签约时间">{moment(contract.date).format('YYYY-MM-DD')}</Descriptions.Item>
         <Descriptions.Item label="结算名称">{currentCalc.name}</Descriptions.Item>
-        <Descriptions.Item label="结算开始日期">{moment(currentCalc.start).format('YYYY-MM-HH')}</Descriptions.Item>
+        <Descriptions.Item label="结算开始日期">{moment(currentCalc.start).format('YYYY-MM-DD')}</Descriptions.Item>
         <Descriptions.Item label="结算结束日期">{moment(currentCalc.end).format('YYYY-MM-DD')}</Descriptions.Item>
 
         <Descriptions.Item label="备注">
