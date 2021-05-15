@@ -10,7 +10,7 @@ import {
   CardHeader,
 } from '@material-ui/core'
 
-import { DatePicker, Input, Select, MaskedInput } from '../components'
+import { DatePicker, Input, Select, MaskedInput } from '../../components'
 
 class TransportForm extends React.Component {
   render() {

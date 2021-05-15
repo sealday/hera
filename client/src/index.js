@@ -150,6 +150,9 @@ ReactDOM.render((
           <Route path="stocktaking/:direction/:id/edit" component={StocktakingEdit} />
           <Route path="order/create" component={storePages.OrderCreate} />
           <Route path="order/:id" component={storePages.OrderDetails} />
+          <Route path="order/:id/preview" component={storePages.OrderPreview} />
+          <Route path="transport/:id" component={TransportOrder} />
+          <Route path="transport/:id/edit" component={TransportOrderEdit} />
           <Route path="record/:id" component={Record} />
           <Route path="record/:id/preview" component={RecordPreview} />
           <Route path="company_record/:id" component={company.Record} />
@@ -161,8 +164,6 @@ ReactDOM.render((
           <Route path="contract/:id/calc/:calcId" component={company.ContractDetailsCalc} />
           <Route path="plan" component={company.Plan} />
           <Route path="plan/create" component={company.PlanCreate} />
-          <Route path="transport/:id" component={TransportOrder} />
-          <Route path="transport/:id/edit" component={TransportOrderEdit} />
           <Route path="store" component={Store} />
           <Route path="transport_table" component={TransportSearch} />
           <Route path="transport_table_company" component={company.TransportSearch} />

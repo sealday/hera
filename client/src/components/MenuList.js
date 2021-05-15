@@ -36,6 +36,10 @@ const allMenu = [
     isInsertable: isInsertable,
     children: [
       {
+        name: '制单',
+        path: '/order/create',
+      },
+      {
         name: '采购入库',
         path: '/purchase/in/create',
         roles: ['系统管理员', '基地仓库管理员'],

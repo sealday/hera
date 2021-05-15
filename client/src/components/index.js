@@ -205,7 +205,7 @@ export const EditableTagGroup = ({ input: { value, onChange }, style, meta: { to
 }
 
 export const IconFont = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_2526589_v10vs24wgbr.js',
+  scriptUrl: '//at.alicdn.com/t/font_2526589_g0td8ua0u9i.js',
 });
 
 export { default as Notification } from './Notification'

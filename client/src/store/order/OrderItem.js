@@ -23,8 +23,6 @@ const OrderItem = ({ fields, add, remove, mode, form }) => {
     }))
   const initialValues = {
     mode,
-    level: '产品',
-    type: '数量',
   }
   const footer = <Descriptions title="小结">
     <Descriptions.Item title="钢管">钢管 73.6 米 0.223 吨</Descriptions.Item>
@@ -62,12 +60,12 @@ const OrderItem = ({ fields, add, remove, mode, form }) => {
       <Table.Column
         title="数量"
         dataIndex="field"
-        key="number"
+        key="count"
         render={({ key, name, fieldKey, ...restField }) => {
           return <Form.Item
             wrapperCol={{ span: 24 }}
-            name={[name, 'number']}
-            fieldKey={[fieldKey, 'number']}
+            name={[name, 'count']}
+            fieldKey={[fieldKey, 'count']}
             {...restField}
           >
             <Input />
@@ -75,17 +73,9 @@ const OrderItem = ({ fields, add, remove, mode, form }) => {
         }}
       />
       <Table.Column
-        title="重量"
-        dataIndex="field"
-        key="number"
-        render={({ key, name, fieldKey }) => {
-          return <span style={{ display: 'inline-block', minWidth: '2em' }}>重量</span>
-        }}
-      />
-      <Table.Column
         title="小计"
         dataIndex="field"
-        key="number"
+        key="subtotal"
         render={({ key, name, fieldKey }) => {
           return <span style={{ display: 'inline-block', minWidth: '2em' }}>小计</span>
         }}
@@ -93,9 +83,9 @@ const OrderItem = ({ fields, add, remove, mode, form }) => {
       <Table.Column
         title="单位"
         dataIndex="field"
-        key="number"
+        key="unit"
         render={({ key, name, fieldKey }) => {
-          return withDependencies([['items', name, 'product']], () => <span style={{ display: 'inline-block', minWidth: '2em' }}>单位{JSON.stringify(form.getFieldValue(['items', name, 'product']))}</span>)
+          return withDependencies([['items', name, 'product']], () => <span style={{ display: 'inline-block', minWidth: '2em' }}>单位</span>)
         }}
       />
       <Table.Column
@@ -115,9 +105,9 @@ const OrderItem = ({ fields, add, remove, mode, form }) => {
         }}
       />
       <Table.Column
-        title="小计"
+        title="金额"
         dataIndex="field"
-        key="number"
+        key="sum"
         render={({ key, name, fieldKey }) => {
           return <span style={{ display: 'inline-block', minWidth: '2em' }}>金额</span>
         }}

@@ -1,5 +1,5 @@
-export { default as TransportOrder } from './TransportOrder'
-export { default as TransportOrderEdit } from './TransportOrderEdit'
+export { default as TransportOrder } from './transport/TransportOrder'
+export { default as TransportOrderEdit } from './transport/TransportOrderEdit'
 
 export { default as TransferCreate } from './TransferCreate'
 export { default as TransferEdit } from './TransferEdit'
@@ -19,3 +19,4 @@ export { default as RecordPreview } from './RecordPreview'
 
 export { default as OrderCreate } from './order/OrderCreate'
 export { default as OrderDetails } from './order/OrderDetails'
+export { default as OrderPreview } from './order/OrderPreview'

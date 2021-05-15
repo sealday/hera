@@ -259,6 +259,8 @@ export const parseMode = mode => {
     S: '销售',
     C: '赔偿',
     R: '服务',
+    temp: '暂存',
+    check: '盘点',
   }
   return !mode || mode === 'L' ? '租赁' : names[mode]
 }

@@ -4,10 +4,11 @@ import { SaveOutlined } from '@ant-design/icons'
 import { Button, Card, Col, Form, Input, PageHeader, Row, Select, DatePicker, Cascader, Space, Descriptions } from 'antd'
 import { IconFont} from '../../components'
 import { STORE_CATEGORIES } from '../../constants'
-import { buildProjectTree } from '../../utils'
+import { buildProjectTree, parseMode } from '../../utils'
 import { useSelector } from 'react-redux'
 import OrderItem from './OrderItem'
 import { useState } from 'react'
+import orderConfig, { DEFAULT_ORDER_CATEGORY, MODE_FIELDS_MAP } from './config'
 
 const withDependencies = (dependencies, comp) => {
   return <Form.Item noStyle dependencies={dependencies}>{comp}</Form.Item>
@@ -16,28 +17,42 @@ const withDependencies = (dependencies, comp) => {
 const OrderCreate = () => {
   const [form] = Form.useForm()
   const projects = useSelector(state => state.system.projects)
+  const store = useSelector(state => state.system.store)
   const projectRoot = buildProjectTree(projects)
-  const [tabKey, setTabKey] = useState('L')
+  const [tabKey, setTabKey] = useState(orderConfig[DEFAULT_ORDER_CATEGORY].defaultMode)
   const onSubmit = values => {
     console.log(values)
   }
   const onCategorySelect = category => {
-
+    if (category.endsWith('入库')) {
+      form.setFieldsValue({
+        inProject: [store.type, store._id],
+        outProject: undefined,
+      })
+    } else if (category.endsWith('出库')) {
+      form.setFieldsValue({
+        inProject: undefined,
+        outProject: [store.type, store._id],
+      })
+    }
+    // 重置明细
+    form.setFieldsValue({ items: [] })
+    setTabKey(orderConfig[category].defaultMode)
   }
   const initialValues = {
-    category: '采购入库',
+    category: DEFAULT_ORDER_CATEGORY,
+    outProject: [store.type, store._id],
     date: moment(),
   }
   const layout = {
     labelCol: { span: 6 },
     wrapperCol: { span: 18 },
   }
-  const tabList = [
-    { key: 'L', tab: '租赁' },
-    { key: 'S', tab: '出售' },
-    { key: 'C', tab: '赔偿' },
-    { key: 'R', tab: '服务' },
-  ]
+  const getTabList = modes => {
+    return modes.map(mode => ({
+      key: mode, tab: parseMode(mode)
+    }))
+  }
   return <>
     <Form {...layout} form={form} onFinish={onSubmit} initialValues={initialValues}>
       {withDependencies(['category'], () =>
@@ -103,20 +118,25 @@ const OrderCreate = () => {
         </Row>
       </Card>
       <div style={{ height: '8px' }}></div>
-      <Card activeTabKey={tabKey} onTabChange={setTabKey} title="明细" bordered={false} tabList={tabList} extra={[
-        <Space>
-          <Button shape="circle" icon={<IconFont type="iconzulinyuyue" />} />
-          <Button shape="circle" icon={<IconFont type="icontubiaozhizuomoban" />} />
-          <Button shape="circle" icon={<IconFont type="iconpeichangjisuan" />} />
-          <Button shape="circle" icon={<IconFont type="iconweixiu" />} />
-        </Space>
-      ]}>
-        {withDependencies(['category'], () => <Form.List name="items">
-          {(fields, { add, remove }) => {
-            return <OrderItem mode={tabKey} fields={fields} add={add} remove={remove} form={form} />
-          }}
-        </Form.List>)}
-      </Card>
+      {withDependencies(['category'], () => <>
+        <Card activeTabKey={tabKey} onTabChange={setTabKey} title="明细" bordered={false} 
+          tabList={getTabList(orderConfig[form.getFieldValue('category')].modes)}
+          extra={[
+          <Space>
+              {orderConfig[form.getFieldValue('category')].modes.map(mode => <Button
+                shape="circle"
+                key={mode}
+                icon={<IconFont type={MODE_FIELDS_MAP[mode].icon} />}
+              />)}
+          </Space>
+        ]}>
+          <Form.List name="items">
+            {(fields, { add, remove }) => {
+              return <OrderItem mode={tabKey} fields={fields} add={add} remove={remove} form={form} />
+            }}
+          </Form.List>
+        </Card>
+      </>)}
     </Form>
   </>
 }

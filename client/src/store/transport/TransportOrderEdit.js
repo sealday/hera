@@ -6,8 +6,8 @@ import {
 } from '@material-ui/core'
 
 import TransportForm from './TransportForm'
-import { ajax } from '../utils'
-import { updateRecord } from '../actions'
+import { ajax } from '../../utils'
+import { updateRecord } from '../../actions'
 
 class TransportOrderEdit extends Component {
   constructor(props) {
