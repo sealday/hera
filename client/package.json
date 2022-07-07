@@ -22,7 +22,7 @@
     "fuzzysearch": "^1.0.3",
     "immutable": "^3.8.1",
     "lodash": "^4.17.11",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "prop-types": "^15.6.1",
     "raven-js": "^3.24.2",
     "react": "^17.0.2",
