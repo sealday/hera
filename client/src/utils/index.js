@@ -589,3 +589,14 @@ export const rentExcelExport = (XLSX, rent) => {
   }
   saveAs(new Blob([s2ab(out)], { type: "application/octet-stream" }), "租金计算表.xlsx")
 }
+
+export const enableFilters = [
+  {
+    'text': '在用',
+    'value': 'enable'
+  },
+  {
+    'text': '禁用',
+    'value': 'disabled',
+  },
+]

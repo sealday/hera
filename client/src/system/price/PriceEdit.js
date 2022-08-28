@@ -11,8 +11,8 @@ import {
 } from '@material-ui/core'
 
 import Form from './PriceForm'
-import { ajax } from '../utils'
-import { PRICE_PLAN, queryPricePlan, newSuccessNotify, newInfoNotify, newErrorNotify, queryWeightPlan } from '../actions'
+import { ajax } from '../../utils'
+import { PRICE_PLAN, queryPricePlan, newSuccessNotify, newInfoNotify, newErrorNotify, queryWeightPlan } from '../../actions'
 
 const PriceForm = reduxForm({ form: 'PRICE_EDIT', action: 'edit' })(Form)
 

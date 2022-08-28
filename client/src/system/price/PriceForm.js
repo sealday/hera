@@ -2,9 +2,9 @@ import React from 'react'
 import { Field, FieldArray } from 'redux-form'
 import { connect } from 'react-redux'
 
-import { WEIGHT_PLAN } from '../actions'
-import { Input, DatePicker, Select, TextArea, FilterSelect } from '../components'
-import { validator } from '../utils'
+import { WEIGHT_PLAN } from '../../actions'
+import { Input, DatePicker, Select, TextArea, FilterSelect } from '../../components'
+import { validator } from '../../utils'
 import PriceEntry from './PriceEntry'
 
 class PriceForm extends React.Component {

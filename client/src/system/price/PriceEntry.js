@@ -5,8 +5,8 @@ import {
   Button,
 } from '@material-ui/core'
 
-import { FilterSelect, Input, Select } from '../components'
-import { validator, filterOption, transformArticle } from '../utils'
+import { FilterSelect, Input, Select } from '../../components'
+import { validator, filterOption, transformArticle } from '../../utils'
 
 const PriceEntry = connect(
   state => ({
