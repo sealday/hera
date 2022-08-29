@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { Outlet, Location } from 'react-router-dom'
 import { withStyles } from '@material-ui/core/styles'
 import {
   AppBar,
@@ -19,9 +20,9 @@ import { push } from 'react-router-redux'
 import { Helmet } from "react-helmet"
 import { get } from 'lodash'
 
-import { Notification, CurrentStore, MenuList } from '../components'
+import { Notification, CurrentStore, MenuList, withRouter } from '../components'
 import { ajax, wrapper } from '../utils'
-import { selectStore, selectPrintCompany } from '../actions'
+import { selectStore } from '../actions'
 import './App.css'
 
 
@@ -115,7 +116,7 @@ class App extends Component {
     ajax('/api/logout', {
       method: 'POST'
     }).then(() => {
-      this.props.router.push('/login')
+      this.props.navigate('/login')
     })
   }
 
@@ -130,8 +131,14 @@ class App extends Component {
     }
   }
 
+  componentWillUnmount() {
+    const { onLeave } = this.props
+    onLeave()
+  }
+
   componentDidMount() {
-    const { dispatch, config } = this.props
+    const { dispatch, config, onEnter } = this.props
+    onEnter()
     if (!this.isCurrentStorePermit()) {
       dispatch(selectStore(config, false))
     }
@@ -142,7 +149,7 @@ class App extends Component {
   }
 
   render() {
-    const { config, classes, store, user, onlineUsers, children, dispatch, loading } = this.props
+    const { config, classes, store, user, onlineUsers, dispatch, loading } = this.props
 
     if (loading) {
       return (
@@ -217,7 +224,7 @@ class App extends Component {
           </Drawer>}
           <main className={classes.content + " reset-to-print"}>
             <div className={classes.toolbar + " hidden-print"} />
-            {this.isStoreSelected() && children}
+            {this.isStoreSelected() && <Outlet />}
             {!this.isStoreSelected() && <CurrentStore/>}
           </main>
         </div>
@@ -237,6 +244,7 @@ const mapStateToProps = state => ({
 })
 
 export default wrapper([
+  withRouter,
   withStyles(styles),
   connect(mapStateToProps),
   App,

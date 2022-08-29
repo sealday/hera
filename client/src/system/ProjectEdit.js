@@ -1,41 +1,41 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { useParams } from 'react-router-dom'
 import shortid from 'shortid'
 
 import { alterProject } from '../actions'
+import { withRouter } from '../components'
 import ProjectForm from './ProjectForm'
 
-class ProjectEdit extends Component {
+const ProjectEdit = ({ project, dispatch, handleSubmit }) => {
+  const params = useParams()
   handleSubmit = project => {
-    project._id = this.props.params.id
-    this.props.dispatch(alterProject(project))
+    project._id = params.id
+    dispatch(alterProject(project))
   }
-
-  render() {
-    const { project, router } = this.props
-    project.contacts.forEach(contact => {
-      if (!contact.key) {
-        contact.key = shortid.generate()
-      }
-    })
-    project.banks.forEach(bank => {
-      if (!bank.key) {
-        bank.key = shortid.generate()
-      }
-    })
-    return (
-      <ProjectForm
-        onSubmit={this.handleSubmit}
-        initialValues={project}
-        router={router}
-        title={"项目信息修改"}
-      />
-    )
-  }
+  project.contacts.forEach(contact => {
+    if (!contact.key) {
+      contact.key = shortid.generate()
+    }
+  })
+  project.banks.forEach(bank => {
+    if (!bank.key) {
+      bank.key = shortid.generate()
+    }
+  })
+  return (
+    <ProjectForm
+      onSubmit={handleSubmit}
+      initialValues={project}
+      title={"项目信息修改"}
+    />
+  )
 }
 
-const mapStateToProps = (state, props) => ({
-  project: state.system.projects.get(props.params.id)
-})
+const mapStateToProps = (state, props) => {
+  return ({
+    project: state.system.projects.get(props.params.id)
+  })
+}
 
-export default connect(mapStateToProps)(ProjectEdit)
+export default withRouter(connect(mapStateToProps)(ProjectEdit))

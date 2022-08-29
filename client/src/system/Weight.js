@@ -1,87 +1,87 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import moment from 'moment'
-import { Link } from 'react-router'
 import { connect } from 'react-redux'
+import { useNavigate, Link } from 'react-router-dom'
 import {
   Button,
-  Card,
-  CardHeader,
-  CardContent,
-} from '@material-ui/core'
-import {
   Popconfirm,
+  Space,
+  Table,
 } from 'antd'
 
 import { ajax } from '../utils'
 import { newErrorNotify, newInfoNotify, newSuccessNotify, queryWeightPlan, WEIGHT_PLAN } from '../actions'
+import { PageHeader } from '../components'
 
-class Weight extends React.Component {
-  componentDidMount() {
-    this.load()
+const Weight = ({ dispatch, plans }) => {
+  const navigate = useNavigate()
+  const load = () => {
+    dispatch(queryWeightPlan())
   }
-
-  load = () => {
-    this.props.dispatch(queryWeightPlan())
-  }
-
-  handleDelete = (id) => {
-    this.props.dispatch(newInfoNotify('提示', '正在删除', 1000))
+  useEffect(() => {
+    load()
+  }, [])
+  const handleDelete = (id) => {
+    dispatch(newInfoNotify('提示', '正在删除', 1000))
     ajax(`/api/plan/weight/${ id }/delete`, {
       method: 'POST',
       contentType: 'application/json'
     }).then((res) => {
-      this.props.dispatch(newSuccessNotify('提示', '删除成功', 1000))
-      this.load()
+      dispatch(newSuccessNotify('提示', '删除成功', 1000))
+      load()
     }).catch((err) => {
-      this.props.dispatch(newErrorNotify('警告', '删除失败', 1000))
+      dispatch(newErrorNotify('警告', '删除失败', 1000))
     })
   }
-
-  render() {
+  const columns = [
+    {
+      title: '名称',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: "日期",
+      dataIndex: "date",
+      key: "date",
+      render: date => moment(date).format('YYYY-MM-DD'),
+      sorter: (a, b) => moment(a.date) - moment(b.date),
+      width: "150px",
+    },
+    {
+      title: '备注',
+      dataIndex: 'comments',
+      key: 'comments',
+    },
+    {
+      title: '动作',
+      dataIndex: 'action',
+      key: 'action',
+      render: (_, plan) => {
+        return <Space>
+          <Link to={`/weight/${plan._id}`}>编辑</Link>
+          <Popconfirm
+            title={`确认删除“${plan.name}”方案吗？`}
+            onConfirm={() => handleDelete(plan._id)}
+            okText="确认"
+            cancelText="取消"
+          >
+            <Button type='text' danger>删除</Button>
+          </Popconfirm>
+          <Link to={`/weight/create/${plan._id}`}>克隆</Link>
+        </Space>
+      }
+    },
+  ]
     return (
-      <Card>
-        <CardHeader
-          title="计重方案"
-          action={<>
-            <Button color="primary" component={Link} to="/weight/create">新增</Button>
-          </>}
+      <div>
+        <PageHeader 
+          title='计重方案'
+          subTitle='在计重方案里面设计项目独有的理论重量'
+          onCreate={() => navigate('/weight/create')}
         />
-        <CardContent>
-          <table className="table table-bordered" style={{ width: '100%', tableLayout: 'fixed' }}>
-            <thead>
-            <tr>
-              <th>名称</th>
-              <th>日期</th>
-              <th>备注</th>
-              <th/>
-            </tr>
-            </thead>
-            <tbody>
-            {this.props.plans.map((plan) => (
-              <tr key={plan._id}>
-                <td>{plan.name}</td>
-                <td>{moment(plan.date).format('YYYY-MM-DD')}</td>
-                <td>{plan.comments}</td>
-                <td>
-                  <Link component="button" to={`/weight/${plan._id}`}>编辑</Link>
-                  <Popconfirm
-                    title={`确认删除“${plan.name}”方案吗？`}
-                    onConfirm={() => this.handleDelete(plan._id)}
-                    okText="确认"
-                    cancelText="取消"
-                  >
-                    <Link>删除</Link>
-                  </Popconfirm>
-                  <Link to={`/weight/create/${plan._id}`}>克隆</Link>
-                </td>
-              </tr>
-            ))}
-            </tbody>
-          </table>
-        </CardContent>
-      </Card>
+        <Table dataSource={plans} columns={columns} rowKey='_id'  />
+      </div>
     )
-  }
 }
 
 const mapStateToProps = (state) => {

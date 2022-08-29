@@ -6,6 +6,8 @@ import {
   CardHeader,
   CardContent,
 } from '@material-ui/core'
+import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 import ContactList from './ContactList'
 import BankList from './BankList'
@@ -14,15 +16,15 @@ import { Input, Select } from '../components'
 import {
   TAB2TYPE,
 } from '../utils'
-import { useSelector } from 'react-redux'
 
-let ProjectForm = ({ router, title, handleSubmit }) => {
+let ProjectForm = ({ title, handleSubmit }) => {
+  const navigate = useNavigate()
   const config = useSelector(state => state.system.config)
   return (
     <form className="form-horizontal project-modify-form" method="post" onSubmit={handleSubmit}>
       <Card>
         <CardHeader title={title} action={<>
-          <Button onClick={() => router.goBack()}>返回</Button>
+          <Button onClick={() => navigate(-1)}>返回</Button>
           <Button color="primary" type="submit">保存</Button>
         </>} />
         <CardContent>

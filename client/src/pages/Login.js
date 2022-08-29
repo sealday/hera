@@ -16,7 +16,7 @@ import withStyles from '@material-ui/core/styles/withStyles'
 import { 
   LockOutlined as LockOutlinedIcon,
 } from '@material-ui/icons'
-import { push } from 'react-router-redux'
+import { useNavigate } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { message } from 'antd'
 import axios from 'axios'
@@ -60,6 +60,7 @@ const Login = ({ dispatch, classes }) => {
   const [company, setCompany] = useState('上海创兴建筑设备租赁有限公司')
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const navigate = useNavigate()
 
   const handleSubmit = async e => {
     e.preventDefault()
@@ -68,7 +69,7 @@ const Login = ({ dispatch, classes }) => {
         company, username, password
       })
       localStorage.setItem('X-Hera-Token', res.data.access_token)
-      dispatch(push('/dashboard'))
+      dispatch(navigate('/dashboard'))
     } catch {
       message.error('登录失败，请检查账号或者密码是否有问题！');
     }

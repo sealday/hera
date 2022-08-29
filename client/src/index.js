@@ -2,18 +2,12 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import * as Sentry from '@sentry/browser'
 import { Provider } from 'react-redux'
-import { syncHistoryWithStore } from 'react-router-redux'
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
 import moment from 'moment'
 import 'moment/locale/zh-cn'
 import zh_CN from 'antd/lib/locale-provider/zh_CN'
 import { ConfigProvider } from 'antd'
-import {
-  Router,
-  Route,
-  IndexRedirect,
-  Redirect,
-} from 'react-router'
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
 import io from 'socket.io-client'
 import axios from 'axios'
 import { history, store } from './globals'
@@ -114,61 +108,62 @@ const onLogouted = () => {
 ReactDOM.render((
   <Provider store={store}>
     <MuiThemeProvider theme={theme}>
-    <ConfigProvider locale={zh_CN}>
-      <Router history={syncHistoryWithStore(history, store)}>
-        <Route path="/login" component={Login} />
-        <Route path="/" component={App} onEnter={onLogined} onLeave={onLogouted}>
-          <IndexRedirect to="/dashboard" />
-          <Route path="dashboard" component={Home} />
-          <Route path="operator" component={Operator} />
-          <Route path="operator/create" component={OperatorCreate} />
-          <Route path="operator/:id/edit" component={OperatorEdit} />
-          <Route path="project" component={Project} />
-          <Route path="project/create" component={ProjectCreate} />
-          <Route path="project/:id/edit" component={ProjectEdit} />
-          <Route path="simple_search" component={SimpleSearch} />
-          <Route path="simple_search_company" component={company.SimpleSearch} />
-          {/* system */}
-          <Route path="product" component={Product} />
-          <Route path="price" component={Price} />
-          <Route path="price/create" component={PriceCreate} />
-          <Route path="price/:id" component={PriceEdit} />
-          <Route path="price/create/:id" component={PriceCreate} />
-          <Route path="weight" component={Weight} />
-          <Route path="weight/create" component={WeightCreate} />
-          <Route path="weight/:id" component={WeightEdit} />
-          <Route path="weight/create/:id" component={WeightCreate} />
-          {/* direction 表示调拨的方向 取值为 in 和 out  */}
-          <Route path="transfer/:direction/create" component={TransferCreate} />
-          <Route path="transfer/:direction/:id/edit" component={TransferEdit} />
-          <Route path="purchase/:direction/create" component={PurchaseCreate} />
-          <Route path="purchase/:direction/:id/edit" component={PurchaseEdit} />
-          <Route path="transfer_free/:direction/create" component={PurchaseCreate} />
-          <Route path="transfer_free/:direction/:id/edit" component={PurchaseEdit} />
-          <Route path="stocktaking/:direction/create" component={StocktakingCreate} />
-          <Route path="stocktaking/:direction/:id/edit" component={StocktakingEdit} />
-          <Route path="record/:id" component={Record} />
-          <Route path="record/:id/preview" component={RecordPreview} />
-          <Route path="company_record/:id" component={company.Record} />
-          <Route path="rent_calc" component={company.RentCalc} />
-          <Route path="rent_calc_preview" component={company.RentCalcPreview} />
-          <Route path="contract" component={company.Contract} />
-          <Route path="contract/create" component={company.ContractCreate} />
-          <Route path="contract/:id" component={company.ContractDetails} />
-          <Route path="contract/:id/calc/:calcId" component={company.ContractDetailsCalc} />
-          <Route path="plan" component={company.Plan} />
-          <Route path="plan/create" component={company.PlanCreate} />
-          <Route path="transport/:id" component={TransportOrder} />
-          <Route path="transport/:id/edit" component={TransportOrderEdit} />
-          <Route path="store" component={Store} />
-          <Route path="transport_table" component={TransportSearch} />
-          <Route path="transport_table_company" component={company.TransportSearch} />
-          <Route path="profile" component={Profile} />
-          <Route path="settings" component={Settings} />
-          <Redirect path="*" to="/dashboard" />
-        </Route>
-      </Router>
-    </ConfigProvider>
+      <ConfigProvider locale={zh_CN}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<App onEnter={onLogined} onLeave={onLogouted} />}>
+              <Route path="*" element={<Home />} />
+              <Route path="dashboard" element={<Home />} />
+              <Route path="operator" element={<Operator />} />
+              <Route path="operator/create" element={<OperatorCreate />} />
+              <Route path="operator/:id/edit" element={<OperatorEdit />} />
+              <Route path="project" element={<Project />} />
+              <Route path="project/create" element={<ProjectCreate />} />
+              <Route path="project/:id/edit" element={<ProjectEdit />} />
+              <Route path="simple_search" element={<SimpleSearch />} />
+              <Route path="simple_search_company" element={<company.SimpleSearch />} />
+              {/* system */}
+              <Route path="product" element={<Product />} />
+              <Route path="price" element={<Price />} />
+              <Route path="price/create" element={<PriceCreate />} />
+              <Route path="price/:id" element={<PriceEdit />} />
+              <Route path="price/create/:id" element={<PriceCreate />} />
+              <Route path="weight" element={<Weight />} />
+              <Route path="weight/create" element={<WeightCreate />} />
+              <Route path="weight/:id" element={<WeightEdit />} />
+              <Route path="weight/create/:id" element={<WeightCreate />} />
+              {/* direction 表示调拨的方向 取值为 in 和 out  */}
+              <Route path="transfer/:direction/create" element={<TransferCreate />} />
+              <Route path="transfer/:direction/:id/edit" element={<TransferEdit />} />
+              <Route path="purchase/:direction/create" element={<PurchaseCreate />} />
+              <Route path="purchase/:direction/:id/edit" element={<PurchaseEdit />} />
+              <Route path="transfer_free/:direction/create" element={<PurchaseCreate />} />
+              <Route path="transfer_free/:direction/:id/edit" element={<PurchaseEdit />} />
+              <Route path="stocktaking/:direction/create" element={<StocktakingCreate />} />
+              <Route path="stocktaking/:direction/:id/edit" element={<StocktakingEdit />} />
+              <Route path="record/:id" element={<Record />} />
+              <Route path="record/:id/preview" element={<RecordPreview />} />
+              <Route path="company_record/:id" element={<company.Record />} />
+              <Route path="rent_calc" element={<company.RentCalc />} />
+              <Route path="rent_calc_preview" element={<company.RentCalcPreview />} />
+              <Route path="contract" element={<company.Contract />} />
+              <Route path="contract/create" element={<company.ContractCreate />} />
+              <Route path="contract/:id" element={<company.ContractDetails />} />
+              <Route path="contract/:id/calc/:calcId" element={<company.ContractDetailsCalc />} />
+              <Route path="plan" element={<company.Plan />} />
+              <Route path="plan/create" element={<company.PlanCreate />} />
+              <Route path="transport/:id" element={<TransportOrder />} />
+              <Route path="transport/:id/edit" element={<TransportOrderEdit />} />
+              <Route path="store" element={<Store />} />
+              <Route path="transport_table" element={<TransportSearch />} />
+              <Route path="transport_table_company" element={<company.TransportSearch />} />
+              <Route path="profile" element={<Profile />} />
+              <Route path="settings" element={<Settings />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </ConfigProvider>
     </MuiThemeProvider>
   </Provider>
 ), document.getElementById('root'))

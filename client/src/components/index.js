@@ -1,12 +1,21 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ReactMaskedInput from 'react-text-mask'
 import fuzzysearch from 'fuzzysearch'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import {
+  Button as AntButton,
   Input as AntInput,
   Select as AntSelect,
   DatePicker as AntDatePicker,
+  PageHeader as AntPageHeader,
+  Card,
+  Form,
+  Row,
+  Col,
+  Space,
 } from 'antd'
+import { PlusCircleOutlined } from '@ant-design/icons'
 import * as moment  from 'moment'
 import { isUndefined } from 'lodash'
 
@@ -215,3 +224,74 @@ export { default as DateModifier } from './DateModifier'
 export { default as BackButton } from './button/BackButton'
 export { default as LinkButton } from './button/LinkButton'
 export { default as EnableTag } from './EnableTag'
+
+export const withRouter = (Component) => {
+  const Wrapper = (props) => {
+    const navigate = useNavigate()
+    const params = useParams()
+    
+    return (
+      <Component
+        navigate={navigate}
+        params={params}
+        {...props}
+        />
+    )
+  }
+  
+  return Wrapper
+}
+
+
+export const PageHeader = ({ title, subTitle, onCreate }) => {
+  const [filterValues, setFilterValues] = useState({})
+  const [form] = Form.useForm()
+  const recentItems = []
+  return <>
+    <AntPageHeader
+      title={title}
+      subTitle={subTitle}
+      ghost={false}
+      extra={onCreate ? <AntButton type='primary' onClick={onCreate} icon={<PlusCircleOutlined />}>创建</AntButton> : <></>}
+    />
+    <Card bordered={false}>
+      <Form
+        onFinish={values => setFilterValues(values)}
+        onReset={() => setFilterValues({})}
+        form={form}
+      >
+        <Row gutter={24}>
+          <Col span={8}>
+            <Form.Item
+              label="名称"
+              name="name"
+            >
+              <AntInput autoComplete='off' />
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Space size="middle">
+              <AntButton type='primary' htmlType='submit'>查询</AntButton>
+              <AntButton htmlType='reset'>重置</AntButton>
+            </Space>
+          </Col>
+        </Row>
+        <Row gutter={24}>
+          <Col span={24}>
+            <Space>
+              <span>最近搜索过：</span>
+              {recentItems.map(item => (
+                <AntButton type='dashed' key={item}
+                  onClick={() => {
+                    form.setFieldsValue({ name: item })
+                    form.submit()
+                  }}
+                >{item}</AntButton>
+              ))}
+            </Space>
+          </Col>
+        </Row>
+      </Form>
+    </Card>
+  </>
+}

@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import { matchPath, useNavigate } from 'react-router-dom'
 
 import { withStyles } from '@material-ui/core/styles'
 import {
@@ -163,50 +164,33 @@ const styles = theme => ({
   },
 });
 
-class MenuList extends React.Component {
-  state = {
-    open: { },
-  }
-
-  static contextTypes = {
-    router: PropTypes.object.isRequired,
-  }
-
-  static propTypes = {
-    classes: PropTypes.object.isRequired,
-  }
-
-  handleClick = (item) => {
-    const { router } = this.context
+const MenuList = ({ user, store, classes }) => {
+  const [open, setOpen] = useState({})
+  const navigate = useNavigate()
+  const handleClick = (item) => {
     if (item.path) {
-      router.push(item.path)
+      navigate(item.path)
     }
-    this.setState(prev => ({
-      open: {
-        [item.name]: !prev.open[item.name],
-      }
-    }));
-  };
-
-  componentDidMount() {
-    const { router } = this.context
+    setOpen(open => ({
+      [item.name]: !open[item.name]
+    }))
+  }
+  useEffect(() => {
+    // 第一次页面加载时，根据路径展开目录
     allMenu.forEach(menuItem => {
       if (menuItem.children) {
         menuItem.children.forEach(subMenuItem => {
-          if (router.isActive(subMenuItem.path)) {
-            this.setState({
-              open: {
-                [menuItem.name]: true
-              }
+          if (matchPath(subMenuItem.path, document.location.pathname)) {
+            setOpen({
+              [menuItem.name]: true
             })
           }
         })
       }
     })
-  }
+  }, [])
 
-  getFilteredMenu = (menu) => {
-    const { user, store } = this.props
+  const getFilteredMenu = (menu) => {
     return menu.filter(menuItem => {
       if (menuItem.roles && menuItem.roles.indexOf(user.role) === -1) {
         return false
@@ -222,47 +206,45 @@ class MenuList extends React.Component {
     })
   }
 
-  render() {
-    const { classes } = this.props
-    const { router } = this.context
-    const menu = this.getFilteredMenu(allMenu)
+  const menu = getFilteredMenu(allMenu)
 
-    return (
-      <div className={classes.root}>
-        <List component="nav">
-          {menu.map(menuItem =>
-            (<div key={menuItem.name}>
-              <MenuItem
-                button
-                onClick={() => this.handleClick(menuItem)}
-                selected={!menuItem.children && router.isActive(menuItem.path)}
-              >
-                <ListItemIcon>
-                  <menuItem.icon />
-                </ListItemIcon>
-                <ListItemText inset primary={menuItem.name}/>
-                {menuItem.children && (this.state.open[menuItem.name] ? <ExpandLess /> : <ExpandMore />)}
-              </MenuItem>
-              {menuItem.children && (<Collapse in={this.state.open[menuItem.name]} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                  {menuItem.children.map(subMenuItem => (
-                    <MenuItem
-                      onClick={() => router.push(subMenuItem.path)}
-                      button
-                      key={subMenuItem.name}
-                      className={classes.nested}
-                      selected={router.isActive(subMenuItem.path)}
-                    >
-                      <ListItemText inset primary={subMenuItem.name} />
-                    </MenuItem>
-                  ))}
-                </List>
-              </Collapse>)}
-            </div>))}
-        </List>
-      </div>
-    );
-  }
+  return (
+    <div className={classes.root}>
+      <List component="nav">
+        {menu.map(menuItem =>
+        (<div key={menuItem.name}>
+          <MenuItem
+            button
+            onClick={() => handleClick(menuItem)}
+            selected={!menuItem.children && matchPath(menuItem.path, document.location.pathname)}
+          >
+            <ListItemIcon>
+              <menuItem.icon />
+            </ListItemIcon>
+            <ListItemText inset primary={menuItem.name} />
+            {menuItem.children && (open[menuItem.name] ? <ExpandLess /> : <ExpandMore />)}
+          </MenuItem>
+          {menuItem.children && (<Collapse in={open[menuItem.name]} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              {menuItem.children.map(subMenuItem => (
+                <MenuItem
+                  onClick={() => navigate(subMenuItem.path)}
+                  button
+                  key={subMenuItem.name}
+                  className={classes.nested}
+                  selected={matchPath(subMenuItem.path, document.location.pathname)}
+                >
+                  <ListItemText inset primary={subMenuItem.name} />
+                </MenuItem>
+              ))}
+            </List>
+          </Collapse>)}
+        </div>))}
+      </List>
+    </div>
+  );
 }
 
-export default  withStyles(styles)(MenuList)
+MenuList.classes = PropTypes.object.isRequired
+
+export default withStyles(styles)(MenuList)
