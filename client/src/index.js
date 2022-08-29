@@ -53,6 +53,9 @@ import {
 import * as company from './company'
 import Profile from './pages/Profile'
 import Login from './pages/Login'
+import Staff from './pages/project/staff.page'
+import Attendance from './pages/project/attendance.page'
+import Contract from './pages/project/contract.page'
 import { ajax } from './utils'
 
 // css 除非是模块自己的，否则直接在这里进行全局 import
@@ -162,6 +165,8 @@ ReactDOM.render((
               <Route path="profile" element={<Profile />} />
               <Route path="settings" element={<Settings />} />
               <Route path='company' element={<Company />} />
+              <Route path='staff' element={<Staff />} />
+              <Route path='attendance' element={<Attendance />} />
             </Route>
           </Routes>
         </BrowserRouter>

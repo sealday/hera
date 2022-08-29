@@ -93,6 +93,25 @@ const allMenu = [
     ]
   },
   {
+    name: '项目管理',
+    icon: GroupWork,
+    roles: ['系统管理员', '财务管理员', '基地仓库管理员'],
+    children: [
+      {
+        name: '合同管理',
+        path: '/contract',
+      },
+      {
+        name: '员工档案',
+        path: '/staff',
+      },
+      {
+        name: '员工考勤',
+        path: '/attendance',
+      },
+    ]
+  },
+  {
     name: '财务',
     icon: GroupWork,
     roles: ['系统管理员', '财务管理员', '基地仓库管理员'],
@@ -116,6 +135,18 @@ const allMenu = [
       {
         name: '运输单查询',
         path: '/transport_table_company',
+      },
+      {
+        name: '发票管理',
+        path: '/invoice',
+      },
+      {
+        name: '凭证录入',
+        path: '/voucher',
+      },
+      {
+        name: '报表',
+        path: '/report',
       },
     ]
   },
