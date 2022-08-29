@@ -13,7 +13,6 @@ import axios from 'axios'
 import { history, store } from './globals'
 import { systemLoaded, selectStore } from './actions'
 import { updateOnlineUsers } from './features/coreSlice'
-import { Profile } from './components'
 import { theme } from './utils'
 import App from './pages/App'
 import Home from './pages/Home'
@@ -52,16 +51,17 @@ import {
   TransportSearch,
 } from './report'
 import * as company from './company'
+import Profile from './pages/Profile'
 import Login from './pages/Login'
 import { ajax } from './utils'
 
 // css 除非是模块自己的，否则直接在这里进行全局 import
 import './index.less'
 // 初始化 sentry
-Sentry.init({
-  release: 'hera@3.0.0',
-  dsn: "https://213cb45f8df943e0b77f89a23ee5a4e8@o374147.ingest.sentry.io/5191691"}
-)
+// Sentry.init({
+//   release: 'hera@3.0.0',
+//   dsn: "https://213cb45f8df943e0b77f89a23ee5a4e8@o374147.ingest.sentry.io/5191691"}
+// )
 // 初始化 moment 时间属性
 moment.locale('zh-CN')
 // 初始化 socket
