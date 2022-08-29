@@ -16,7 +16,6 @@ import {
 } from '@material-ui/core'
 
 import short_id from 'shortid'
-import { push } from 'react-router-redux'
 import { Helmet } from "react-helmet"
 import { get } from 'lodash'
 
@@ -209,7 +208,7 @@ class App extends Component {
                 </List>
               </Popover>
               <Button color="inherit" onClick={this.logout}>退出</Button>
-              <Button color="inherit" onClick={() => dispatch(push('/profile'))}>{user.username}</Button>
+              <Button color="inherit" onClick={() => this.props.navigate('/profile')}>{user.username}</Button>
             </Toolbar>
           </AppBar>
           {this.isStoreSelected() && <Drawer

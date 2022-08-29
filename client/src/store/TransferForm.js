@@ -16,7 +16,7 @@ import {
 import {
   PlusCircleOutlined
 } from '@ant-design/icons'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 
 import EntryTable from './TransferEntryTable'
 import {

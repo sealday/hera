@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 
 import moment from 'moment'
 import { Popconfirm, Button, Card, PageHeader, Table, Space, Tag, Descriptions } from 'antd'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { ALL_PLAN, CONTRACT_DETAILS, newErrorNotify, newSuccessNotify, queryContractDetails, queryAllPlans } from '../../actions'
 import { ajax } from '../../utils'

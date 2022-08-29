@@ -2,7 +2,6 @@ import React from 'react'
 import { reduxForm } from 'redux-form'
 import moment from 'moment'
 import { connect } from 'react-redux'
-import { push } from 'react-router-redux'
 import {
   Button,
   Card,
@@ -13,6 +12,7 @@ import {
 import Form from './WeightForm'
 import { ajax } from '../utils'
 import { WEIGHT_PLAN, queryPricePlan, newSuccessNotify, newInfoNotify, newErrorNotify  } from '../actions'
+import { withRouter } from '../components'
 
 const WeightForm = reduxForm({ form: 'WEIGHT_EDIT', action: 'edit' })(Form)
 
@@ -32,7 +32,7 @@ class WeightEdit extends React.Component {
       contentType: 'application/json'
     }).then((res) => {
       this.props.dispatch(newSuccessNotify('提示', '保存成功', 1000))
-      this.props.dispatch(push(`/weight`))
+      this.props.navigate(`/weight`)
     }).catch((err) => {
       this.props.dispatch(newErrorNotify('警告', '保存失败', 1000))
     })
@@ -79,4 +79,4 @@ const mapStateToProps = (state, props) => {
   }
 }
 
-export default connect(mapStateToProps)(WeightEdit)
+export default connect(mapStateToProps)(withRouter(WeightEdit))

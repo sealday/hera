@@ -2,7 +2,6 @@ import React from 'react'
 import { reduxForm } from 'redux-form'
 import moment from 'moment'
 import { connect } from 'react-redux'
-import { push } from 'react-router-redux'
 import {
   Button,
   Card,
@@ -13,6 +12,7 @@ import {
 import Form from './PriceForm'
 import { ajax } from '../../utils'
 import { PRICE_PLAN, queryPricePlan, newSuccessNotify, newInfoNotify, newErrorNotify, queryWeightPlan } from '../../actions'
+import { withRouter } from '../../components'
 
 const PriceForm = reduxForm({ form: 'PRICE_EDIT', action: 'edit' })(Form)
 
@@ -33,7 +33,7 @@ class PriceEdit extends React.Component {
       contentType: 'application/json'
     }).then((res) => {
       this.props.dispatch(newSuccessNotify('提示', '保存成功', 1000))
-      this.props.dispatch(push(`/price`))
+      this.props.navigate(`/price`)
     }).catch((err) => {
       this.props.dispatch(newErrorNotify('警告', '保存失败', 1000))
     })
@@ -80,4 +80,4 @@ const mapStateToProps = (state, props) => {
   }
 }
 
-export default connect(mapStateToProps)(PriceEdit)
+export default connect(mapStateToProps)(withRouter(PriceEdit))

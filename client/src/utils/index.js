@@ -6,7 +6,7 @@ import _ from 'lodash'
 import { saveAs } from 'file-saver'
 
 import * as validator from './validator'
-import { history } from '../globals'
+// import { history } from '../globals'
 
 /**
  * 计算规格的数值表达
@@ -70,7 +70,7 @@ export async function ajax(url, settings = {}) {
     if (err.response.status === 401) {
       // FIXME 怎么阻止后续的操作？现在如果不抛出异常，对应请求后续会当做是是正常请求从而导致不正确的行为
       // 但是目前总是抛出异常的方法，后续请求没有处理，会导致调试时页面出错
-      history.push('/login')
+      // history.push('/login')
     }
     throw err
   }

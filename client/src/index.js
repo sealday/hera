@@ -32,6 +32,7 @@ import {
   Weight,
   WeightEdit,
   WeightCreate,
+  Company,
 } from './system'
 import {
   Record,
@@ -109,7 +110,7 @@ ReactDOM.render((
   <Provider store={store}>
     <MuiThemeProvider theme={theme}>
       <ConfigProvider locale={zh_CN}>
-        <BrowserRouter>
+        <BrowserRouter basename='/system'>
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/" element={<App onEnter={onLogined} onLeave={onLogouted} />}>
@@ -160,6 +161,7 @@ ReactDOM.render((
               <Route path="transport_table_company" element={<company.TransportSearch />} />
               <Route path="profile" element={<Profile />} />
               <Route path="settings" element={<Settings />} />
+              <Route path='company' element={<Company />} />
             </Route>
           </Routes>
         </BrowserRouter>

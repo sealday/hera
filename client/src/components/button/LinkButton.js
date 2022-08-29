@@ -1,4 +1,4 @@
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import { Button } from 'antd'
 import { SaveOutlined } from '@ant-design/icons'
 

@@ -1,7 +1,5 @@
-import { push, goBack } from 'react-router-redux'
-import { reset } from 'redux-form'
-
 import { ajax, updateEntry } from './utils'
+import { history } from './globals'
 
 export const SYSTEM_LOADED = 'SYSTEM_LOADED'
 export const UPDATE_ARTICLE_SIZES = 'UPDATE_ARTICLE_SIZES'
@@ -74,153 +72,6 @@ export const toggleMenu = (name) => ({
   data: name
 })
 
-/**
- * 查询签到情况，后台还没有写完
- * @type {string}
- * FIXME
- */
-export const SEARCH_SIGNIN_WORKER = 'SEARCH_SIGNIN_WORKER'
-export const SEARCH_SIGNIN_WORKER_SUCCESS = 'SEARCH_SIGNIN_WORKER_SUCCESS'
-export const SEARCH_SIGNIN_WORKER_FAILURE = 'SEARCH_SIGNIN_WORKER_FAILURE'
-export const searchSignin = (data)=>(dispatch,getState)=>{
-  dispatch({type:SEARCH_SIGNIN_WORKER})
-  dispatch(newInfoNotify('提示','正在查询',2000))
-  ajax('/api/sign/search',{
-    data:JSON.stringify(data),
-    method:'POST',
-    contentType:'application/json'
-  }).then(res=>{
-    dispatch({type:SEARCH_SIGNIN_WORKER_SUCCESS})
-    dispatch(newSuccessNotify('提示','查询成功',2000))
-
-  }).catch(err=>{
-    dispatch({type:SEARCH_SIGNIN_WORKER_FAILURE})
-    dispatch(newErrorNotify('警告','查询失败',2000))
-  })
-}
-
-
-export const SIGNIN_WORKER = 'SIGNIN_WORKER'
-export const SIGNIN_WORKER_SUCCESS = 'SIGNIN_WORKER_SUCCESS'
-export const SIGNIN_WORKER_FAILURE = 'SIGNIN_WORKER_FAILURE'
-export const signinWorker = (time)=>(dispatch,getState)=>{
-  dispatch({type:SIGNIN_WORKER});
-  dispatch(newInfoNotify('提示','正在签到',2000))
-    ajax('/api/workercheckin/58a1b55e54928b30e823e7cd/signin',{
-      data:JSON.stringify({signintime:time,signinaddition:'hello'}),
-      method:'POST',
-      contentType:'application/json'
-    }).then(res=>{
-      dispatch({type:SIGNIN_WORKER_SUCCESS})
-      dispatch(newSuccessNotify('提示','签到成功',2000))
-    }).catch(err=>{
-      dispatch({type:SIGNIN_WORKER_FAILURE})
-      dispatch(newErrorNotify('警告','签到失败',2000))
-    })
-}
-
-export const DELETE_WORKER = 'DELETE_WORKER'
-export const DELETE_WORKER_SUCCESS = 'DELETE_WORKER_SUCCESS'
-export const DELETE_WORKER_FAILURE = 'DELETE_WORKER_FAILURE'
-
-export const removeWorker =(id)=>(dispatch,getState)=>{
-  if(!getState().requestWorkerlist.posting){
-    dispatch({type:DELETE_WORKER});
-    dispatch(newInfoNotify('提示','正在删除',2000))
-      ajax(`/api/workercheckin/${id}/delete`,{
-          method: 'POST',
-          contentType: 'application/json'
-      }).then(res=>{
-        dispatch({type:DELETE_WORKER_SUCCESS,data:id})
-        dispatch(newSuccessNotify('提示','删除成功',2000))
-        dispatch(push(`/worker_checkin`))
-      }).catch(err=>{
-        dispatch({type:DELETE_WORKER_FAILURE})
-        dispatch(newErrorNotify('警告','删除失败',2000))
-      })
-  }
-}
-
-export const REQUEST_WORKERS = 'REQUEST_WORKERS'
-export const REQUEST_WORKERS_SUCCESS='REQUEST_WORKERS_SUCCESS'
-export const REQUEST_WORKERS_FAILURE = 'REQUEST_WORKERS_FAILURE'
-
-export const requestWorkerlist =(flag)=> (dispatch,getState)=>{
-  if (!getState().requestWorkerlist.requesting){
-    dispatch({type:REQUEST_WORKERS})
-    if (flag === "displaysignin"){
-
-    }else {
-      dispatch(newInfoNotify("提示", '正在请求数据', 2000))
-    }
-    ajax('/api/workercheckin').then(res=>{
-      const workers = res.data.workers
-        dispatch({type:REQUEST_WORKERS_SUCCESS,data:workers})
-        if (flag === "displaysignin"){
-
-        }else{
-          dispatch(newSuccessNotify('提示','请求数据成功',2000))
-        }
-
-    }).catch(err=>{
-      dispatch({type:REQUEST_WORKERS_FAILURE})
-      if (flag === "displaysignin"){
-
-      }else {
-        dispatch(newErrorNotify('警告', '请求数据失败', 2000))
-      }
-    })
-  }
-}
-
-export const ALTER_WORKER = 'ALTER_WORKER'
-export const ALTER_WORKER_SUCCESS = 'ALTER_WORKER_SUCCESS'
-export const ALTER_WORKER_FAILURE= 'ALTER_WORKER_FAILURE'
-
-export const alterWorker = (worker)=>(dispatch,getState)=>{
-    if(!getState().requestWorkerlist.posting){
-      dispatch({type:ALTER_WORKER})
-      dispatch(newInfoNotify('提示','正在修改工人信息',2000))
-      ajax(`/api/workercheckin/${worker._id}/edit`,{
-          data: JSON.stringify(worker),
-          method: 'POST',
-          contentType: 'application/json'
-    }).then(res =>{
-      const workerinfo = res.data.workerinfo;
-      dispatch({type:ALTER_WORKER_SUCCESS,data:workerinfo})
-      dispatch(newSuccessNotify('提示','修改工人信息成功',2000))
-      dispatch(push(`/worker/create`))
-      }).catch(err=>{
-      dispatch({type:ALTER_WORKER_FAILURE})
-      dispatch(newErrorNotify('警告','修改工人信息失败',2000))
-    })
-    }
-}
-
-export const POST_WORKERIN = 'POST_WORKERIN'
-export const POST_WORKERIN_SUCCESS = 'POST_WORKERIN_SUCCESS'
-export const POST_WORKERIN_FAILURE = 'POST_WORKERIN_FAILUER'
-
-export const postWorkerCheckin = (workerin)=>(dispatch,getState)=>{
-  if (!getState().requestWorkerlist.posting){
-    dispatch({type:POST_WORKERIN})
-    dispatch(newInfoNotify('提示','正在保存工人信息',2000))
-    ajax('/api/workercheckin',{
-      data:JSON.stringify(workerin),
-      method:'POST',
-      contentType:'application/json'
-    }).then(res=>{
-      dispatch(reset('WorkerCheckinForm'))
-        dispatch({ type: POST_WORKERIN_SUCCESS,data:res.data.workerinfo })
-        dispatch(newSuccessNotify('提示', '保存工人信息成功', 2000))
-    }).catch(err=>{
-      dispatch({type:POST_WORKERIN_FAILURE,data:err})
-      dispatch(newErrorNotify('警告','保存工人信息失败',2000))
-        throw err
-    })
-  }
-}
-
 export const POST_PROJECT = 'POST_PROJECT'
 export const POST_PROJECT_SUCCESS = 'POST_PROJECT_SUCCESS'
 export const POST_PROJECT_FAILURE = 'POST_PROJECT_FAILURE'
@@ -237,7 +88,7 @@ export const postProject = (project) => (dispatch, getState) => {
       dispatch({ type: POST_PROJECT_SUCCESS })
       dispatch({ type: UPDATE_PROJECT, data: res.data.project })
       dispatch(newSuccessNotify('提示', '保存项目信息成功', 2000))
-      dispatch(push(`/project?id=${res.data.project._id}`))
+      history.push(`/project?id=${res.data.project._id}`)
     }).catch(err => {
       dispatch({ type: POST_PROJECT_FAILURE })
       dispatch(newErrorNotify('出错', '保存项目信息出错', 2000))
@@ -262,7 +113,7 @@ export const alterProject = (project) => (dispatch, getState) => {
       dispatch({ type: ALTER_PROJECT_SUCCESS })
       dispatch({ type: UPDATE_PROJECT, data: res.data.project })
       dispatch(newSuccessNotify('提示', '保存项目信息成功', 2000))
-      dispatch(push(`/project?id=${res.data.project._id}`))
+      history.push(`/project?id=${res.data.project._id}`)
     }).catch(err => {
       dispatch({ type: ALTER_PROJECT_FAILURE })
       dispatch(newErrorNotify('出错', '保存项目信息出错', 2000))
@@ -383,7 +234,7 @@ export const createOperator = operator => (dispatch, getState) => {
       dispatch(networking.endSuccess)
       dispatch({ type: NEW_OPERATOR, data: res.data.user })
       dispatch(newSuccessNotify('提示', '创建操作员成功！', 2000))
-      dispatch(push('/operator'))
+      history.push('/operator')
     }).catch(err => {
       dispatch(networking.endFailure)
       dispatch(newErrorNotify('错误', '创建操作员失败！', 2000))
@@ -405,7 +256,7 @@ export const updateOperator = operator => (dispatch, getState) => {
       dispatch(networking.endSuccess)
       dispatch({ type: NEW_OPERATOR, data: res.data.user })
       dispatch(newSuccessNotify('提示', '更新操员成功！', 2000))
-      dispatch(push('/operator'))
+      history.push('/operator')
     }).catch(err => {
       dispatch(networking.endFailure)
       dispatch(newErrorNotify('错误', '更新操作员失败！', 2000))
@@ -455,7 +306,7 @@ export const postTransfer = (record) => (dispatch, getState) => {
       dispatch(networking.endSuccess)
       dispatch(updateRecord(res.data.record))
       dispatch(newSuccessNotify('提示', '创建成功！', 2000))
-      dispatch(push(`/record/${res.data.record._id}`))
+      history.push(`/record/${res.data.record._id}`)
     }).catch(err => {
       dispatch(networking.endFailure)
       dispatch(newErrorNotify('错误', '创建失败！', 3000))
@@ -485,7 +336,7 @@ export const updateTransfer = (record) => (dispatch, getState) => {
       dispatch(updateRecord(res.data.record)) // 更新出入库记录缓存
       dispatch(newSuccessNotify('提示', '更新调拨单成功！', 2000))
       // FIXME 为了保证用户可以直接通过返回回到查询界面，这里没有使用 push
-      dispatch(goBack())
+      history.back()
     }).catch(err => {
       dispatch(networking.endFailure)
       dispatch(newErrorNotify('错误', '更新调拨单失败！', 2000))
@@ -853,7 +704,7 @@ export const projectAddItem = (condition) => (dispatch, getState) => {
       dispatch(search.endSuccess)
       dispatch({ type: UPDATE_PROJECT, data: res.data.project })
       dispatch(newSuccessNotify('提示', '生成对账单成功', 2000))
-      dispatch(push(`/contract/${ condition.project }`))
+      history.push(`/contract/${ condition.project }`)
     }).catch(err => {
       const res = err.responseJSON
       dispatch(search.endFailure)
@@ -873,7 +724,7 @@ export const projectDeleteItem = (condition) => (dispatch, getState) => {
       dispatch(search.endSuccess)
       dispatch({ type: UPDATE_PROJECT, data: res.data.project })
       dispatch(newSuccessNotify('提示', '删除对账单成功', 2000))
-      dispatch(push(`/contract/${ condition.project }`))
+      history.push(`/contract/${ condition.project }`)
     }).catch(err => {
       const res = err.responseJSON
       dispatch(search.endFailure)

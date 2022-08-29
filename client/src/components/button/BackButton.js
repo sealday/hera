@@ -1,10 +1,9 @@
 import { Button } from 'antd'
-import { useDispatch } from 'react-redux'
-import { goBack } from 'react-router-redux'
+import { useNavigate } from 'react-router-dom'
 
 const BackButton = () => {
-    const dispatch = useDispatch()
-    return <Button onClick={() => dispatch(goBack())}>返回</Button>
+    const navigate = useNavigate()
+    return <Button onClick={() => navigate(-1)}>返回</Button>
 }
 
 export default BackButton

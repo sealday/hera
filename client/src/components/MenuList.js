@@ -93,7 +93,7 @@ const allMenu = [
     ]
   },
   {
-    name: '公司',
+    name: '财务',
     icon: GroupWork,
     roles: ['系统管理员', '财务管理员', '基地仓库管理员'],
     children: [
@@ -144,6 +144,10 @@ const allMenu = [
         name: '操作员管理',
         path: '/operator',
         roles: ['系统管理员'],
+      },
+      {
+        name: '公司信息',
+        path: '/company',
       },
       {
         name: '客户列表',

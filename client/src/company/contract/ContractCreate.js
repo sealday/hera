@@ -14,8 +14,8 @@ import { antFilterOption } from '../../components'
 
 
 import { newErrorNotify, newInfoNotify, newSuccessNotify } from '../../actions'
-import { push } from 'react-router-redux'
 import { ajax } from '../../utils'
+import { useNavigate } from 'react-router-dom'
 
 const mapStateToProps = state => ({
   projects: state.system.projects,
@@ -23,6 +23,7 @@ const mapStateToProps = state => ({
 
 const ContractCreate = connect(mapStateToProps)(({ router, projects, dispatch }) => {
   const [form] = Form.useForm()
+  const navigate = useNavigate()
 
   return <>
     <PageHeader
@@ -50,7 +51,7 @@ const ContractCreate = connect(mapStateToProps)(({ router, projects, dispatch })
             contentType: 'application/json'
           }).then(() => {
             dispatch(newSuccessNotify('提示', '创建成功', 1000))
-            dispatch(push(`/contract`))
+            navigate('/contract')
           }).catch(() => {
             dispatch(newErrorNotify('警告', '创建失败', 1000))
           })

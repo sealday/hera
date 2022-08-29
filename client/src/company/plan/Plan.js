@@ -13,7 +13,7 @@ import {
 } from '@ant-design/icons'
 import {
   Link,
-} from 'react-router'
+} from 'react-router-dom'
 
 import { PLAN_CATEGORY_MAP } from '../../constants'
 import { useDispatch, useSelector } from 'react-redux'
