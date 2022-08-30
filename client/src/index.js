@@ -7,10 +7,10 @@ import moment from 'moment'
 import 'moment/locale/zh-cn'
 import zh_CN from 'antd/lib/locale-provider/zh_CN'
 import { ConfigProvider } from 'antd'
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import io from 'socket.io-client'
 import axios from 'axios'
-import { history, store } from './globals'
+import { store } from './globals'
 import { systemLoaded, selectStore } from './actions'
 import { updateOnlineUsers } from './features/coreSlice'
 import { theme } from './utils'
@@ -32,7 +32,7 @@ import {
   WeightEdit,
   WeightCreate,
   Company,
-} from './system'
+} from './pages/system'
 import {
   Record,
   RecordPreview,
@@ -44,18 +44,17 @@ import {
   PurchaseEdit,
   StocktakingCreate,
   StocktakingEdit,
-} from './store'
+} from './pages/store'
 import {
   Store,
   SimpleSearch,
   TransportSearch,
-} from './report'
-import * as company from './company'
+} from './pages/report'
+import * as company from './pages/finance'
 import Profile from './pages/Profile'
 import Login from './pages/Login'
 import Staff from './pages/project/staff.page'
 import Attendance from './pages/project/attendance.page'
-import Contract from './pages/project/contract.page'
 import { ajax } from './utils'
 
 // css 除非是模块自己的，否则直接在这里进行全局 import

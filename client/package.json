@@ -3,7 +3,8 @@
   "version": "3.0.0",
   "private": true,
   "devDependencies": {
-    "concurrently": "^5.1.0"
+    "concurrently": "^5.1.0",
+    "eslint": "8.22"
   },
   "dependencies": {
     "@ant-design/icons": "^4.6.2",
