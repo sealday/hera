@@ -23,28 +23,60 @@ const baseQueryAuth = async (args, api, extraOptions) => {
 export const heraApi = createApi({
     reducerPath: 'heraApi',
     baseQuery: baseQueryAuth,
+    tagTypes: ['Company'],
     endpoints: (builder) => ({
         // 获取产品表数据
         getProduct: builder.query({
             query: () => 'product',
-            transformResponse(baseQueryReturnValue) {
-                return baseQueryReturnValue.data.products
-            }
+            transformResponse: res => res.data.products,
         }),
         // 获取公司信息
         getCompanyList: builder.query({
-            query: () => 'product',
-            transformResponse(baseQueryReturnValue) {
-                return baseQueryReturnValue.data.company
-            }
+            query: () => 'company',
+            transformResponse: res => res.data.company,
+            providesTags: result => result
+                ? [...result.map(({ _id: id }) => ({ type: 'Company', id }) ), { type: 'Company', id: 'LIST'}]
+                : [{ type: 'Company', id: 'LIST'}]
         }),
         getCompany: builder.query({
-            query: (id) => `product/${id}`,
-            transformResponse(baseQueryReturnValue) {
-                return baseQueryReturnValue.data.company
-            }
+            query: (id) => `company/${id}`,
+            transformResponse: res => res.data.company,
+            providesTags: (result, error, id) => [{ type: 'Company', id }],
+        }),
+        createCompany: builder.mutation({
+            query: (company) => ({
+                url: 'company',
+                method: 'POST',
+                body: company,
+            }),
+            transformResponse: res => res.data.company,
+            invalidatesTags: [{ type: 'Company', id: 'LIST' }],
+        }),
+        updateCompany: builder.mutation({
+            query: (id, company) => ({
+                url: `company/${id}`,
+                method: 'POST',
+                body: company,
+            }),
+            transformResponse: res => res.data.company,
+            invalidatesTags: (result, error, id) => [{ type: 'Company', id }],
+        }),
+        deleteCompany: builder.mutation({
+            query: (id) => ({
+                url: `company/${id}/delete`,
+                method: 'POST',
+            }),
+            transformResponse: res => res.data.company,
+            invalidatesTags: (result, error, id) => [{ type: 'Company', id }],
         }),
     })
 })
 
-export const { useGetProductQuery } = heraApi
+export const {
+    useGetProductQuery,
+    useGetCompanyListQuery,
+    useGetCompanyQuery,
+    useCreateCompanyMutation,
+    useUpdateCompanyMutation,
+    useDeleteCompanyMutation,
+} = heraApi
