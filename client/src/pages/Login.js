@@ -69,8 +69,8 @@ const Login = ({ dispatch, classes }) => {
         company, username, password
       })
       localStorage.setItem('X-Hera-Token', res.data.access_token)
-      dispatch(navigate('/dashboard'))
-    } catch {
+      navigate('/dashboard')
+    } catch (e) {
       message.error('登录失败，请检查账号或者密码是否有问题！');
     }
   }

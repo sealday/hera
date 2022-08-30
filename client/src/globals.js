@@ -6,6 +6,8 @@ import { createBrowserHistory } from 'history'
 import { setupListeners } from '@reduxjs/toolkit/query'
 import { heraApi } from './api'
 
+export const BASENAME = '/system'
+
 export const history = createBrowserHistory()
 
 export const store = configureStore({

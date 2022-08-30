@@ -10,7 +10,7 @@ import { ConfigProvider } from 'antd'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import io from 'socket.io-client'
 import axios from 'axios'
-import { store } from './globals'
+import { store, BASENAME } from './globals'
 import { systemLoaded, selectStore } from './actions'
 import { updateOnlineUsers } from './features/coreSlice'
 import { theme } from './utils'
@@ -112,7 +112,7 @@ ReactDOM.render((
   <Provider store={store}>
     <MuiThemeProvider theme={theme}>
       <ConfigProvider locale={zh_CN}>
-        <BrowserRouter basename='/system'>
+        <BrowserRouter basename={BASENAME}>
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/" element={<App onEnter={onLogined} onLeave={onLogouted} />}>
