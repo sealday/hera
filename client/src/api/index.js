@@ -1,23 +1,49 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { history, BASENAME } from '../globals'
+
+const baseQuery = fetchBaseQuery({
+    baseUrl: '/api/',
+    prepareHeaders: (headers, api) => {
+        // FIXME 每一次都从 localStorage 中取是否不太合适
+        const token = localStorage.getItem('X-Hera-Token')
+        headers.set('Authorization', `Bearer ${token}`)
+        return headers
+    },
+})
+const baseQueryAuth = async (args, api, extraOptions) => {
+    let result = await baseQuery(args, api, extraOptions)
+    if (result.error && result.error.status === 401) {
+        // 跳转到登录页面
+        // 目前有应用预加载的拦截下，不会走到这里
+        history.push(BASENAME + '/login')
+    }
+    return result
+}
 
 export const heraApi = createApi({
     reducerPath: 'heraApi',
-    baseQuery: fetchBaseQuery({
-        baseUrl: '/api/',
-        prepareHeaders: (headers, api) => {
-            // FIXME 每一次都从 localStorage 中取是否不太合适
-            const token = localStorage.getItem('X-Hera-Token')
-            headers.set('Authorization', `Bearer ${token}`)
-            return headers
-        },
-    }),
+    baseQuery: baseQueryAuth,
     endpoints: (builder) => ({
+        // 获取产品表数据
         getProduct: builder.query({
             query: () => 'product',
             transformResponse(baseQueryReturnValue) {
                 return baseQueryReturnValue.data.products
             }
-        })
+        }),
+        // 获取公司信息
+        getCompanyList: builder.query({
+            query: () => 'product',
+            transformResponse(baseQueryReturnValue) {
+                return baseQueryReturnValue.data.company
+            }
+        }),
+        getCompany: builder.query({
+            query: (id) => `product/${id}`,
+            transformResponse(baseQueryReturnValue) {
+                return baseQueryReturnValue.data.company
+            }
+        }),
     })
 })
 

@@ -7,10 +7,10 @@ import moment from 'moment'
 import 'moment/locale/zh-cn'
 import zh_CN from 'antd/lib/locale-provider/zh_CN'
 import { ConfigProvider } from 'antd'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { unstable_HistoryRouter as HistoryRouter, Routes, Route } from 'react-router-dom'
 import io from 'socket.io-client'
 import axios from 'axios'
-import { store, BASENAME } from './globals'
+import { store, history, BASENAME } from './globals'
 import { systemLoaded, selectStore } from './actions'
 import { updateOnlineUsers } from './features/coreSlice'
 import { theme } from './utils'
@@ -112,7 +112,7 @@ ReactDOM.render((
   <Provider store={store}>
     <MuiThemeProvider theme={theme}>
       <ConfigProvider locale={zh_CN}>
-        <BrowserRouter basename={BASENAME}>
+        <HistoryRouter history={history} basename={BASENAME}>
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/" element={<App onEnter={onLogined} onLeave={onLogouted} />}>
@@ -168,7 +168,7 @@ ReactDOM.render((
               <Route path='attendance' element={<Attendance />} />
             </Route>
           </Routes>
-        </BrowserRouter>
+        </HistoryRouter>
       </ConfigProvider>
     </MuiThemeProvider>
   </Provider>

@@ -70,10 +70,8 @@ export async function ajax(url, settings = {}) {
       // FIXME 怎么阻止后续的操作？现在如果不抛出异常，对应请求后续会当做是是正常请求从而导致不正确的行为
       // 但是目前总是抛出异常的方法，后续请求没有处理，会导致调试时页面出错
       history.push(BASENAME + '/login')
-      return {}
-    } else {
-      throw err
     }
+    throw err
   }
 }
 
