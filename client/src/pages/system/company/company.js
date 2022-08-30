@@ -1,5 +1,6 @@
 import { Table } from 'antd'
 import { PageHeader } from '../../../components'
+import { useGetProductQuery } from '../../../api'
 const Company = () => {
   const columns = [
     {
@@ -60,6 +61,7 @@ const Company = () => {
       role: '租赁客户',
     }
   ]
+  const { data, error, isLoading } = useGetProductQuery()
   return <div>
     <PageHeader
       title='公司信息'
