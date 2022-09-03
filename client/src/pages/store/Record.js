@@ -1,4 +1,4 @@
-import { Spin, Table } from 'antd'
+import { Button, Table } from 'antd'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useGetRecordQuery } from '../../api'
 import { Error, Loading, PageHeader } from '../../components'
@@ -29,6 +29,7 @@ const Record = () => {
   return <PageHeader
     onEdit={onEdit}
     onPrintPreview={onPrintPreview}
+    extra={[<Button onClick={() => navigate(`/transport/${params.id}`)}>运输单</Button>]}
     title="订单信息"
   >
     <Table columns={columns} dataSource={data.entries} rowKey={item => ({ name: item.name, size: item.size })} />

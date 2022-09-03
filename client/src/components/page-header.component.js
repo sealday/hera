@@ -2,10 +2,16 @@ import { useState } from 'react'
 import { Button, Card, Col, Form, PageHeader, Row, Space, Input, Descriptions } from 'antd'
 import { PlusCircleOutlined, EditOutlined, PrinterOutlined, ArrowLeftOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
+import { isUpdatable } from '../utils'
+import { useSelector } from 'react-redux'
 
 export default ({ title, subTitle, onCreate, onEdit, children, onPrintPreview, onPrint, searchInfo, onSearch, description, extra }) => {
   const [filterValues, setFilterValues] = useState({})
   const navigate = useNavigate()
+  const { user, store } = useSelector(state => ({
+    user: state.system.user,
+    store: state.system.store,
+  }))
   const [form] = Form.useForm()
   const recentItems = []
   const actions = []
@@ -24,7 +30,7 @@ export default ({ title, subTitle, onCreate, onEdit, children, onPrintPreview, o
   if (onCreate) {
     actions.push(<Button key='onCreate' type='primary' onClick={onCreate} icon={<PlusCircleOutlined />}>创建</Button>)
   }
-  if (onEdit) {
+  if (isUpdatable(store, user) && onEdit) {
     actions.push(<Button key='onEdit' type='primary' onClick={onEdit} icon={<EditOutlined />}>编辑</Button>)
   }
   if (onPrint) {

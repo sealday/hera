@@ -5,7 +5,7 @@ import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
 import moment from 'moment'
 import 'moment/locale/zh-cn'
 import zh_CN from 'antd/lib/locale-provider/zh_CN'
-import { ConfigProvider } from 'antd'
+import { Alert, ConfigProvider } from 'antd'
 import { unstable_HistoryRouter as HistoryRouter } from 'react-router-dom'
 import io from 'socket.io-client'
 import axios from 'axios'
@@ -70,9 +70,11 @@ const MyApp = () => (
   <Provider store={store}>
     <MuiThemeProvider theme={theme}>
       <ConfigProvider locale={zh_CN}>
-        <HistoryRouter history={history} basename={BASENAME}>
-          <Routes onLogin={onLogined} onLogout={onLogouted} />
-        </HistoryRouter>
+        <Alert.ErrorBoundary>
+          <HistoryRouter history={history} basename={BASENAME}>
+            <Routes onLogin={onLogined} onLogout={onLogouted} />
+          </HistoryRouter>
+        </Alert.ErrorBoundary>
       </ConfigProvider>
     </MuiThemeProvider>
   </Provider>
