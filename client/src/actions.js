@@ -19,14 +19,14 @@ export const updateProject = project => ({
   data: project
 })
 
-export const newNotify = (title, msg, time, theme) => dispatch => {
+export const newNotify = (msg, time, theme) => () => {
   message[theme](msg, time / 1000)
 }
 
 // notification helper function
-export const newSuccessNotify = (title, msg, time) => newNotify(title, msg, time, 'success')
-export const newErrorNotify = (title, msg, time) => newNotify(title, msg, time, 'error')
-export const newInfoNotify = (title, msg, time) => newNotify(title, msg, time, 'info')
+export const newSuccessNotify = (title, msg, time) => newNotify(msg, time, 'success')
+export const newErrorNotify = (title, msg, time) => newNotify(msg, time, 'error')
+export const newInfoNotify = (title, msg, time) => newNotify(msg, time, 'info')
 
 export const updateArticleSizes = (id, sizes) => ({
   type: UPDATE_ARTICLE_SIZES,

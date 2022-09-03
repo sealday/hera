@@ -21,6 +21,7 @@ import {
 } from '@material-ui/icons'
 
 import { isInsertable } from '../utils'
+import { BASENAME } from '../globals'
 
 
 const allMenu = [
@@ -215,7 +216,7 @@ const MenuList = ({ user, store, classes }) => {
     allMenu.forEach(menuItem => {
       if (menuItem.children) {
         menuItem.children.forEach(subMenuItem => {
-          if (matchPath(subMenuItem.path, document.location.pathname)) {
+          if (matchPath(BASENAME + subMenuItem.path, document.location.pathname)) {
             setOpen({
               [menuItem.name]: true
             })
@@ -251,7 +252,7 @@ const MenuList = ({ user, store, classes }) => {
           <MenuItem
             button
             onClick={() => handleClick(menuItem)}
-            selected={!menuItem.children && matchPath(menuItem.path, document.location.pathname)}
+            selected={!menuItem.children && matchPath(BASENAME + menuItem.path, document.location.pathname)}
           >
             <ListItemIcon>
               <menuItem.icon />
@@ -267,7 +268,7 @@ const MenuList = ({ user, store, classes }) => {
                   button
                   key={subMenuItem.name}
                   className={classes.nested}
-                  selected={matchPath(subMenuItem.path, document.location.pathname)}
+                  selected={matchPath(BASENAME + subMenuItem.path, document.location.pathname)}
                 >
                   <ListItemText inset primary={subMenuItem.name} />
                 </MenuItem>
