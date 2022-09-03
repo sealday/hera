@@ -12,7 +12,7 @@ import {
 
 import { requestRecord } from '../../actions'
 import { toFixedWithoutTrailingZero as fixed, transformArticle, total_, isUpdatable, getUnit } from '../../utils'
-import PrintFrame from '../../components/print_frame'
+import PrintFrame from '../../components/print-frame.component'
 
 
 class TransportOrder extends Component {

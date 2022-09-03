@@ -107,9 +107,13 @@ const Project = ({ projects, onDeleteClick, onStatusChange }) => {
     <div>
       <PageHeader
         title='客户管理'
-        onCreate={() => {  navigate('/project/create') }}
-      />
-      <Table columns={columns} size='middle' rowKey='_id' dataSource={projects.toArray()} />
+        searchInfo={true}
+        onCreate={() => { navigate('/project/create') }}
+      >
+        <Card bordered={false}>
+          <Table columns={columns} size='middle' rowKey='_id' dataSource={projects.toArray()} />
+        </Card>
+      </PageHeader>
     </div>
   )
 }

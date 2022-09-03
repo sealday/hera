@@ -11,7 +11,7 @@ import {
   getUnit,
   RECORD_TYPE2URL_PART,
 } from '../../utils'
-import PrintFrame from '../../components/print_frame'
+import PrintFrame from '../../components/print-frame.component'
 
 const PurchaseOrder = ({ record, router }) => {
   const store = useSelector(state => state.system.store)

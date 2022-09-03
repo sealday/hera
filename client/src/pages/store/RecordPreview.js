@@ -1,54 +1,50 @@
-import React from 'react'
-import { connect } from 'react-redux'
+import { SettingOutlined } from "@ant-design/icons"
+import { Button, Card, Col, Popover, Radio, Row, Select } from "antd"
+import React, { useState } from "react"
+import { useSelector } from "react-redux"
+import { useParams } from "react-router-dom"
+import { useGetRecordQuery } from "../../api"
+import { Error, Loading, PageHeader, PrintFrame } from "../../components"
+import PrintContent from './PrintContent'
 
-import TransferOrder from './TransferOrderPreview'
-import PurchaseOrder from './PurchaseOrder'
-import StocktakingOrder from './StocktakingOrder'
-import { requestRecord } from '../../actions'
-
-class Record extends React.Component {
-
-  componentDidMount() {
-    const { id, records } = this.props
-    const record = records.get(id)
-
-    if (!record) {
-      this.props.dispatch(requestRecord(id))
-    }
+const RecordPreview = () => {
+  const params = useParams()
+  const config = useSelector(state => state.system.config)
+  const recordResult = useGetRecordQuery(params.id)
+  const [columnStyle, setColumnStyle] = useState('single')
+  const [selectedTitle, setSelectedTitle] = useState('')
+  const printFrame = React.createRef()
+  if (recordResult.isError) {
+    return <Error />
   }
-
-  render() {
-    const { id, records, router } = this.props
-    const record = records.get(id)
-
-    // 假设本地缓存中没有则进行一次网络请求
-    if (!record) {
-      return (
-        <div className="alert alert-info">
-          <p>请求数据中，请稍后</p>
-        </div>
-      )
-    }
-
-    if (record.type === '调拨') {
-      return <TransferOrder record={record} router={router}/>
-    } else if (record.type === '购销') {
-      return <PurchaseOrder record={record} router={router}/>
-    } else if (record.type === '暂存') {
-      return <PurchaseOrder record={record} router={router}/>
-    } else if (record.type === '盘点') {
-      return <StocktakingOrder record={record} router={router}/>
-    } else {
-      return <div>暂时不支持显示 {record.type} 类型的详情</div>
-    }
+  if (recordResult.isLoading) {
+    return <Loading />
   }
+  // 打印样式
+  const options = [
+    { label: '单栏', value: 'single' },
+    { label: '双栏', value: 'double' },
+  ]
+
+  const content = <div style={{ width: '240px' }}>
+    <Row gutter={24}>
+      <Col span={8}>样式选择</Col><Col span={16}><Radio.Group key='columnStyle' options={options} onChange={e => setColumnStyle(e.target.value)} value={columnStyle} optionType="button" /></Col>
+    </Row>
+    <Row gutter={24} style={{ marginTop: '8px' }}>
+      <Col span={8}>公司选择</Col><Col span={16}><Select dropdownMatchSelectWidth={false} placeholder='选择公司' style={{ width: '160px' }} value={selectedTitle} onChange={setSelectedTitle}>{config.externalNames.map(name => <Select.Option key={name}>{name}</Select.Option>)}</Select></Col>
+    </Row>
+  </div>
+
+  const extra = [
+    <Popover key='printSettings' trigger='click' content={content}><Button icon={<SettingOutlined />}>打印设置</Button></Popover>,
+  ]
+  return <PageHeader title='打印预览' onPrint={() => printFrame.current.print()} extra={extra}>
+    <Card bordered={false}>
+      <PrintFrame ref={printFrame}>
+        <PrintContent record={recordResult.data} columnStyle={columnStyle} selectedTitle={selectedTitle} />
+      </PrintFrame>
+    </Card>
+  </PageHeader>
 }
 
-const mapStateToProps = (state, props) => ({
-  records: state.store.records,
-  projects: state.system.projects,
-  store: state.system.store,
-  id: props.params.id
-})
-
-export default connect(mapStateToProps)(Record)
+export default RecordPreview

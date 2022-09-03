@@ -15,10 +15,10 @@ const Record = () => {
     return <Loading />
   }
   const onEdit = () => {
-    navigate(`record/${params.id}/edit`)
+    navigate(`/record/${params.id}/edit`)
   }
   const onPrintPreview = () => {
-    navigate(`record/${params.id}/preview`)
+    navigate(`/record/${params.id}/preview`)
   }
   const entriesSchema = recordSchema.find(item => item.name === 'entries')
   const columns = entriesSchema.form

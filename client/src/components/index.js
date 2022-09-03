@@ -227,6 +227,7 @@ export { default as EnableTag } from './EnableTag'
 export { default as Error } from './error.component'
 export { default as PageHeader } from './page-header.component'
 export { default as Loading } from './loading.component'
+export { default as PrintFrame } from './print-frame.component'
 
 export const withRouter = (Component) => {
   const Wrapper = (props) => {

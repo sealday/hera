@@ -10,7 +10,7 @@ import {
   getUnit,
   parseMode,
 } from '../../utils'
-import PrintFrame from '../../components/print_frame'
+import PrintFrame from '../../components/print-frame.component'
 
 const TransferOrder = ({ router, record,  }) => {
   const printFrame = React.createRef()
