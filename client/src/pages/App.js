@@ -19,7 +19,7 @@ import short_id from 'shortid'
 import { Helmet } from "react-helmet"
 import { get } from 'lodash'
 
-import { Notification, CurrentStore, MenuList, withRouter } from '../components'
+import { CurrentStore, MenuList, withRouter } from '../components'
 import { ajax, wrapper } from '../utils'
 import { selectStore } from '../actions'
 import './App.css'
@@ -162,7 +162,6 @@ class App extends Component {
     }
     return (
       <div className="App">
-        <Notification/>
         <Helmet>
           <title>{config.systemName}</title>
         </Helmet>

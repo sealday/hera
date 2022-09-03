@@ -8,7 +8,6 @@ export const SystemRecord = Record({
   users: Map(),
   base: {},
   user: {},
-  notifications: Map(),
   store: false, // 选择的仓库
   config: {},
   loading: true,

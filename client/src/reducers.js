@@ -34,12 +34,6 @@ export function system(state = new SystemRecord(), action) {
         .set('loading', false)
     case actionTypes.UPDATE_ARTICLE_SIZES:
       return state.updateIn(['articles', action.data.id], article => ({ ...article, sizes: action.data.sizes }) )
-    case actionTypes.NEW_NOTIFY:
-      const item = action.data
-      return state.update('notifications', notifications => notifications.set(item.key, item))
-    case actionTypes.DELETE_NOTIFY:
-      const key = action.data
-      return state.update('notifications', notifications => notifications.delete(key))
     case actionTypes.UPDATE_PROJECT:
       const project = action.data
       return state.update('projects', projects => projects.set(project._id, project))

@@ -214,7 +214,6 @@ export const EditableTagGroup = ({ input: { value, onChange }, style, meta: { to
 }
 
 
-export { default as Notification } from './Notification'
 export { default as CurrentStore } from './CurrentStore'
 export { default as MenuList } from './MenuList'
 export { default as ReportFooter } from './ReportFooter'

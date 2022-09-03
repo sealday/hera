@@ -1,17 +1,10 @@
 import { ajax } from './utils'
 import { history, BASENAME } from './globals'
+import { message } from 'antd'
 
 export const SYSTEM_LOADED = 'SYSTEM_LOADED'
 export const UPDATE_ARTICLE_SIZES = 'UPDATE_ARTICLE_SIZES'
 export const REMOVE_PROJECT = 'REMOVE_PROJECT'
-
-export const NEW_NOTIFY = 'NEW_NOTIFY'
-export const DELETE_NOTIFY = 'DELETE_NOTIFY'
-
-export const deleteNotify = key => ({
-  type: DELETE_NOTIFY,
-  data: key
-})
 
 export const UPDATE_RECORD =  'UPDATE_RECORD'
 export const UPDATE_PROJECT = 'UPDATE_PROJECT'
@@ -27,14 +20,7 @@ export const updateProject = project => ({
 })
 
 export const newNotify = (title, msg, time, theme) => dispatch => {
-  const key = Date.now()
-  dispatch({ type: NEW_NOTIFY, data: {
-    key, title, msg, time, theme
-  }})
-  // 时间到自动删除
-  setTimeout(() => {
-    dispatch(deleteNotify(key))
-  }, time)
+  message[theme](msg, time / 1000)
 }
 
 // notification helper function
