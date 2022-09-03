@@ -1,8 +1,5 @@
-import PropTypes from 'prop-types'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-
-
 import { isInsertable } from '../utils'
 import { Menu } from 'antd'
 import { DashboardOutlined, FundOutlined, ProjectOutlined, SearchOutlined, SettingOutlined, ShopOutlined } from '@ant-design/icons'
@@ -218,7 +215,5 @@ const MenuList = ({ user, store}) => {
 
   return <Menu items={items} mode='inline' defaultSelectedKeys={[location.pathname]} onOpenChange={onOpenChange} openKeys={openKeys} onSelect={v => navigate(v.key)} />
 }
-
-MenuList.classes = PropTypes.object.isRequired
 
 export default MenuList

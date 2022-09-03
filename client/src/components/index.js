@@ -215,7 +215,7 @@ export const EditableTagGroup = ({ input: { value, onChange }, style, meta: { to
 
 
 export { default as CurrentStore } from './CurrentStore'
-export { default as MenuList } from './MenuList'
+export { default as MenuList } from './menu-list.component'
 export { default as ReportFooter } from './ReportFooter'
 export { default as DateRangeModifier } from './DateRangeModifier'
 export { default as Flow } from './Flow'
