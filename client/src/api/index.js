@@ -75,6 +75,16 @@ export const heraApi = createApi({
             transformResponse: res => res.data.record,
             providesTags: (result, error, id) => [{ type: 'Record', id }],
         }),
+        // 更新运输单
+        updateTransport: builder.mutation({
+            query: ({ id, transport }) => ({
+                url: `record/${id}/transport`,
+                method: 'POST',
+                body: transport,
+            }),
+            transformResponse: res => res.data.record,
+            invalidatesTags: (result, error, { id }) => [{ type: 'Record', id }],
+        }),
     })
 })
 
@@ -86,4 +96,5 @@ export const {
     useUpdateCompanyMutation,
     useDeleteCompanyMutation,
     useGetRecordQuery,
+    useUpdateTransportMutation,
 } = heraApi
