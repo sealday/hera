@@ -1,5 +1,5 @@
 import { ajax, updateEntry } from './utils'
-import { history } from './globals'
+import { history, BASENAME } from './globals'
 
 export const SYSTEM_LOADED = 'SYSTEM_LOADED'
 export const UPDATE_ARTICLE_SIZES = 'UPDATE_ARTICLE_SIZES'
@@ -88,7 +88,7 @@ export const postProject = (project) => (dispatch, getState) => {
       dispatch({ type: POST_PROJECT_SUCCESS })
       dispatch({ type: UPDATE_PROJECT, data: res.data.project })
       dispatch(newSuccessNotify('提示', '保存项目信息成功', 2000))
-      history.push(`/project?id=${res.data.project._id}`)
+      history.push(`${BASENAME}/project?id=${res.data.project._id}`)
     }).catch(err => {
       dispatch({ type: POST_PROJECT_FAILURE })
       dispatch(newErrorNotify('出错', '保存项目信息出错', 2000))
@@ -113,7 +113,7 @@ export const alterProject = (project) => (dispatch, getState) => {
       dispatch({ type: ALTER_PROJECT_SUCCESS })
       dispatch({ type: UPDATE_PROJECT, data: res.data.project })
       dispatch(newSuccessNotify('提示', '保存项目信息成功', 2000))
-      history.push(`/project?id=${res.data.project._id}`)
+      history.push(`${BASENAME}/project?id=${res.data.project._id}`)
     }).catch(err => {
       dispatch({ type: ALTER_PROJECT_FAILURE })
       dispatch(newErrorNotify('出错', '保存项目信息出错', 2000))
@@ -234,7 +234,7 @@ export const createOperator = operator => (dispatch, getState) => {
       dispatch(networking.endSuccess)
       dispatch({ type: NEW_OPERATOR, data: res.data.user })
       dispatch(newSuccessNotify('提示', '创建操作员成功！', 2000))
-      history.push('/operator')
+      history.push(`${BASENAME}/operator`)
     }).catch(err => {
       dispatch(networking.endFailure)
       dispatch(newErrorNotify('错误', '创建操作员失败！', 2000))
@@ -256,7 +256,7 @@ export const updateOperator = operator => (dispatch, getState) => {
       dispatch(networking.endSuccess)
       dispatch({ type: NEW_OPERATOR, data: res.data.user })
       dispatch(newSuccessNotify('提示', '更新操员成功！', 2000))
-      history.push('/operator')
+      history.push(`${BASENAME}/operator`)
     }).catch(err => {
       dispatch(networking.endFailure)
       dispatch(newErrorNotify('错误', '更新操作员失败！', 2000))
@@ -306,7 +306,7 @@ export const postTransfer = (record) => (dispatch, getState) => {
       dispatch(networking.endSuccess)
       dispatch(updateRecord(res.data.record))
       dispatch(newSuccessNotify('提示', '创建成功！', 2000))
-      history.push(`/record/${res.data.record._id}`)
+      history.push(`${BASENAME}/record/${res.data.record._id}`)
     }).catch(err => {
       dispatch(networking.endFailure)
       dispatch(newErrorNotify('错误', '创建失败！', 3000))
@@ -704,7 +704,7 @@ export const projectAddItem = (condition) => (dispatch, getState) => {
       dispatch(search.endSuccess)
       dispatch({ type: UPDATE_PROJECT, data: res.data.project })
       dispatch(newSuccessNotify('提示', '生成对账单成功', 2000))
-      history.push(`/contract/${ condition.project }`)
+      history.push(`${BASENAME}/contract/${ condition.project }`)
     }).catch(err => {
       const res = err.responseJSON
       dispatch(search.endFailure)
@@ -724,7 +724,7 @@ export const projectDeleteItem = (condition) => (dispatch, getState) => {
       dispatch(search.endSuccess)
       dispatch({ type: UPDATE_PROJECT, data: res.data.project })
       dispatch(newSuccessNotify('提示', '删除对账单成功', 2000))
-      history.push(`/contract/${ condition.project }`)
+      history.push(`${BASENAME}/contract/${ condition.project }`)
     }).catch(err => {
       const res = err.responseJSON
       dispatch(search.endFailure)

@@ -15,11 +15,12 @@ import {
   Col,
   Space,
 } from 'antd'
-import { PlusCircleOutlined } from '@ant-design/icons'
+import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons'
 import * as moment  from 'moment'
 import { isUndefined } from 'lodash'
 
 import RawEditableTagGroup from './EditableTagGroup.js'
+import { SettingsApplicationsSharp } from '@material-ui/icons'
 
 const errorStyle = {
   borderColor: '#a94442',
@@ -223,6 +224,9 @@ export { default as DateModifier } from './DateModifier'
 export { default as BackButton } from './button/BackButton'
 export { default as LinkButton } from './button/LinkButton'
 export { default as EnableTag } from './EnableTag'
+export { default as Error } from './error.component'
+export { default as PageHeader } from './page-header.component'
+export { default as Loading } from './loading.component'
 
 export const withRouter = (Component) => {
   const Wrapper = (props) => {
@@ -241,56 +245,3 @@ export const withRouter = (Component) => {
   return Wrapper
 }
 
-
-export const PageHeader = ({ title, subTitle, onCreate }) => {
-  const [filterValues, setFilterValues] = useState({})
-  const [form] = Form.useForm()
-  const recentItems = []
-  return <>
-    <AntPageHeader
-      title={title}
-      subTitle={subTitle}
-      ghost={false}
-      extra={onCreate ? <AntButton type='primary' onClick={onCreate} icon={<PlusCircleOutlined />}>创建</AntButton> : <></>}
-    />
-    <Card bordered={false}>
-      <Form
-        onFinish={values => setFilterValues(values)}
-        onReset={() => setFilterValues({})}
-        form={form}
-      >
-        <Row gutter={24}>
-          <Col span={8}>
-            <Form.Item
-              label="名称"
-              name="name"
-            >
-              <AntInput autoComplete='off' />
-            </Form.Item>
-          </Col>
-          <Col span={8}>
-            <Space size="middle">
-              <AntButton type='primary' htmlType='submit'>查询</AntButton>
-              <AntButton htmlType='reset'>重置</AntButton>
-            </Space>
-          </Col>
-        </Row>
-        <Row gutter={24}>
-          <Col span={24}>
-            <Space>
-              <span>最近搜索过：</span>
-              {recentItems.map(item => (
-                <AntButton type='dashed' key={item}
-                  onClick={() => {
-                    form.setFieldsValue({ name: item })
-                    form.submit()
-                  }}
-                >{item}</AntButton>
-              ))}
-            </Space>
-          </Col>
-        </Row>
-      </Form>
-    </Card>
-  </>
-}

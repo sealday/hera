@@ -23,7 +23,7 @@ const baseQueryAuth = async (args, api, extraOptions) => {
 export const heraApi = createApi({
     reducerPath: 'heraApi',
     baseQuery: baseQueryAuth,
-    tagTypes: ['Company'],
+    tagTypes: ['Company', 'Record'],
     endpoints: (builder) => ({
         // 获取产品表数据
         getProduct: builder.query({
@@ -69,6 +69,12 @@ export const heraApi = createApi({
             transformResponse: res => res.data.company,
             invalidatesTags: (result, error, id) => [{ type: 'Company', id }],
         }),
+        // 获取订单信息
+        getRecord: builder.query({
+            query: (id) => `record/${id}`,
+            transformResponse: res => res.data.record,
+            providesTags: (result, error, id) => [{ type: 'Record', id }],
+        }),
     })
 })
 
@@ -79,4 +85,5 @@ export const {
     useCreateCompanyMutation,
     useUpdateCompanyMutation,
     useDeleteCompanyMutation,
+    useGetRecordQuery,
 } = heraApi

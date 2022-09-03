@@ -1,0 +1,74 @@
+import { useState } from 'react'
+import { Button, Card, Col, Form, PageHeader, Row, Space, Input, Descriptions } from 'antd'
+import { PlusCircleOutlined, EditOutlined, PrinterOutlined } from '@ant-design/icons'
+
+export default ({ title, subTitle, onCreate, onEdit, children, onPrintPreview }) => {
+  const [filterValues, setFilterValues] = useState({})
+  const [form] = Form.useForm()
+  const recentItems = []
+  const actions = []
+  if (onPrintPreview) {
+    actions.push(<Button key='onCreate' type='default' onClick={onCreate} icon={<PrinterOutlined />}>打印</Button>)
+  }
+  if (onCreate) {
+    actions.push(<Button key='onCreate' type='primary' onClick={onCreate} icon={<PlusCircleOutlined />}>创建</Button>)
+  }
+  if (onEdit) {
+    actions.push(<Button key='onEdit' type='primary' onClick={onEdit} icon={<EditOutlined />}>编辑</Button>)
+  }
+  return <>
+    <PageHeader
+      title={title}
+      subTitle={subTitle}
+      ghost={false}
+      extra={<Space>{actions}</Space>}
+    >
+      <Descriptions>
+        <Descriptions.Item label='出库项目'>abc</Descriptions.Item>
+        <Descriptions.Item label='入库项目'>abc</Descriptions.Item>
+      </Descriptions>
+    </PageHeader>
+    <Card bordered={false}>
+      <Form
+        onFinish={values => setFilterValues(values)}
+        onReset={() => setFilterValues({})}
+        form={form}
+      >
+        <Row gutter={24}>
+          <Col span={8}>
+            <Form.Item
+              label="名称"
+              name="name"
+            >
+              <Input autoComplete='off' />
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Space size="middle">
+              <Button type='primary' htmlType='submit'>查询</Button>
+              <Button htmlType='reset'>重置</Button>
+            </Space>
+          </Col>
+        </Row>
+        <Row gutter={24}>
+          <Col span={24}>
+            <Space>
+              <span>最近搜索过：</span>
+              {recentItems.map(item => (
+                <Button type='dashed' key={item}
+                  onClick={() => {
+                    form.setFieldsValue({ name: item })
+                    form.submit()
+                  }}
+                >{item}</Button>
+              ))}
+            </Space>
+          </Col>
+        </Row>
+      </Form>
+    </Card>
+    <div>
+      {children}
+    </div>
+  </>
+}
