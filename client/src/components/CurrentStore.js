@@ -1,9 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Select } from 'antd'
-import {
-  Button,
-} from '@material-ui/core'
+import { Select, Button, Card } from 'antd'
 
 import { selectStore } from '../actions'
 import { filterOption, STORE2TYPE } from '../utils'
@@ -68,8 +65,7 @@ class CurrentStore extends React.Component {
       filteredProjects = projects.filter((project) => userProjects.indexOf(project._id) !== -1);
     }
     return (
-      <div style={{maxWidth: '500px', margin: '0 auto', paddingTop: '50px'}}>
-        <h2 className="page-header">仓库选择</h2>
+      <Card bordered={false} title='仓库选择' style={{maxWidth: '500px', margin: '0 auto'}}>
         <div>
           <Select
             style={{ width: '25%' }}
@@ -84,7 +80,7 @@ class CurrentStore extends React.Component {
           <Select
             style={{ width: '72%', float: 'right' }}
             value={this.state.base}
-            placeholder='选择仓库'
+            placeholder='仓库选择'
             showSearch
             onChange={this.onBaseChange}
             filterOption={filterOption}
@@ -99,9 +95,9 @@ class CurrentStore extends React.Component {
               >{project.company + project.name}</Select.Option>
             )}
           </Select>
-          <Button style={{marginTop: '1em'}} variant="contained" color="primary" fullWidth onClick={this.onBaseSelect}>进入管理</Button>
+          <Button style={{marginTop: '24px'}} type='primary' block onClick={this.onBaseSelect}>进入管理</Button>
         </div>
-      </div>
+      </Card>
     )
   }
 }
