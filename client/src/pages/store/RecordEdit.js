@@ -1,8 +1,8 @@
 import moment from "moment"
-import { useDispatch, useSelector } from "react-redux"
-import { useParams } from "react-router-dom"
-import { updateTransfer } from "../../actions"
-import { useGetRecordQuery } from "../../api"
+import { useEffect } from "react"
+import { useSelector } from "react-redux"
+import { useNavigate, useParams } from "react-router-dom"
+import { useGetRecordQuery, useUpdateRecordMutation } from "../../api"
 import { Error, Loading, PageHeader } from "../../components"
 import PurchaseForm from "./PurchaseForm"
 import StocktakingForm from './StocktakingForm'
@@ -11,9 +11,16 @@ import TransferForm from "./TransferForm"
 export default () => {
   const { id } = useParams()
   const { data: record, error, isLoading } = useGetRecordQuery(id)
+  const [updateRecord, updateResult] = useUpdateRecordMutation()
+  const navigate = useNavigate()
   const store = useSelector(state => state.system.store)
   const projects = useSelector(state => state.system.projects)
-  const dispatch = useDispatch()
+  useEffect(() => {
+    if (updateResult.isSuccess) {
+      navigate(-1)
+    }
+  }, [updateResult.isSuccess])
+
   if (error) {
     return <Error />
   }
@@ -35,33 +42,40 @@ export default () => {
   } else {
     return <Error message='暂时不支持跨仓库编辑' />
   }
-
   const handleSubmit = (record) => {
     if (record.type !== '盘点') {
-      if (direction === 'in') { // 采购单
-        dispatch(updateTransfer({
-          ...record,
-          inStock: store._id,
-          outStock: record.project,
-        }))
-      } else if (direction === 'out') { // 销售单
-        dispatch(updateTransfer({
-          ...record,
-          outStock: store._id,
-          inStock: record.project,
-        }))
+      if (direction === 'in') {
+        updateRecord({
+          id, record: {
+            ...record,
+            inStock: store._id,
+            outStock: record.project,
+          }
+        })
+      } else if (direction === 'out') {
+        updateRecord({
+          id, record: {
+            ...record,
+            outStock: store._id,
+            inStock: record.project,
+          }
+        })
       }
     } else {
       if (direction === 'in') {
-        dispatch(updateTransfer({
-          ...record,
-          inStock: store._id,
-        }))
+        updateRecord({
+          id, record: {
+            ...record,
+            inStock: store._id,
+          }
+        })
       } else if (direction === 'out') {
-        dispatch(updateTransfer({
-          ...record,
-          outStock: store._id,
-        }))
+        updateRecord({
+          id, record: {
+            ...record,
+            outStock: store._id,
+          }
+        })
       }
     }
   }
