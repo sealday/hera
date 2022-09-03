@@ -100,30 +100,6 @@ class TransferForm extends Component {
             <FieldArray name="entries" component={EntryTable} mode="L"/>
           </ExpansionPanelDetails>
         </ExpansionPanel>
-        <ExpansionPanel>
-          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
-            <Typography variant="h6">{direction === 'in' ? '销售（入库）' : '销售（出库）'}</Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails className={classes.panel}>
-            <FieldArray name="entries" component={EntryTable} mode="S"/>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
-        <ExpansionPanel>
-          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
-            <Typography variant="h6">{direction === 'in' ? '赔偿（出库）' : '赔偿（入库）'}</Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails className={classes.panel}>
-            <FieldArray name="entries" component={EntryTable} mode="C"/>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
-        <ExpansionPanel>
-          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
-            <Typography variant="h6">服务（维修或者运费等不影响库存）</Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails className={classes.panel}>
-            <FieldArray name="entries" component={EntryTable} mode="R"/>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
         <Button variant="contained" color="primary" type="submit" className={classes.submitButton}>保存</Button>
       </form>
     )

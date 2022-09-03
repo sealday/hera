@@ -1,21 +1,24 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import moment from 'moment'
 
 import PurchaseForm from './StocktakingForm'
 import { postTransfer } from '../../actions'
+import { useParams } from 'react-router-dom'
+import { Error } from '../../components'
 
-class PurchaseCreate extends Component {
-  handleSubmit = (record) => {
-    const { params: { direction }, store } = this.props
+export default () => {
+  const store = useSelector(state => state.system.store)
+  const { direction }= useParams()
+  const dispatch = useDispatch()
+  const handleSubmit = (record) => {
     if (direction === 'in') {
-      this.props.dispatch(postTransfer({
+      dispatch(postTransfer({
         ...record,
         inStock: store._id,
         type: '盘点',
       }))
     } else if (direction === 'out') {
-      this.props.dispatch(postTransfer({
+      dispatch(postTransfer({
         ...record,
         outStock: store._id,
         type: '盘点',
@@ -23,34 +26,23 @@ class PurchaseCreate extends Component {
     }
   }
 
-  render() {
-    const { store, params: { direction } } = this.props
-    let pageTitle
-    if (direction === 'out') {
-      pageTitle = '盘点出库'
-    } else if (direction === 'in') {
-      pageTitle = '盘点入库'
-    } else {
-      return <div className="alert alert-danger">
-        <p>你访问的页面不正确</p>
-      </div>
-    }
-
-    return (
-      <PurchaseForm
-        title={pageTitle}
-        initialValues={{
-          project: store._id,
-          outDate: moment(),
-        }}
-        onSubmit={this.handleSubmit}
-      />
-    )
+  let pageTitle
+  if (direction === 'out') {
+    pageTitle = '盘点出库'
+  } else if (direction === 'in') {
+    pageTitle = '盘点入库'
+  } else {
+    return <Error />
   }
+
+  return (
+    <PurchaseForm
+      title={pageTitle}
+      initialValues={{
+        project: store._id,
+        outDate: moment().toDate(),
+      }}
+      onSubmit={handleSubmit}
+    />
+  )
 }
-
-const mapStateToProps = state => ({
-  store: state.system.store
-})
-
-export default connect(mapStateToProps)(PurchaseCreate)

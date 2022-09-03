@@ -7,8 +7,6 @@ export { default as TransferOrder } from './TransferOrder'
 export { default as TransferOrderPreview } from './TransferOrderPreview'
 
 export { default as PurchaseCreate } from './PurchaseCreate'
-export { default as PurchaseEdit } from './PurchaseEdit'
-export { default as PurchaseOrder } from './PurchaseOrder'
 
 export { default as StocktakingCreate } from './StocktakingCreate'
 export { default as StocktakingEdit } from './StocktakingEdit'

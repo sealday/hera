@@ -246,3 +246,4 @@ export const withRouter = (Component) => {
   return Wrapper
 }
 
+export const IfShow = ({ cond, children, ifNot }) => cond ? <>{children}</> : <>{ifNot}</>

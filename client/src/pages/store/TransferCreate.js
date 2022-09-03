@@ -1,54 +1,47 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 import TransferForm from './TransferForm'
 import { postTransfer } from '../../actions'
+import { useParams } from 'react-router-dom'
+import { Error } from '../../components'
 
-class TransferCreate extends Component {
-  handleSubmit = (transfer) => {
-    const { direction } = this.props.params
+export default () => {
+  const store = useSelector(state => state.system.store)
+  const { direction } = useParams()
+  const dispatch = useDispatch()
+  const handleSubmit = (transfer) => {
     if (direction === 'in') { // 入库单
-      this.props.dispatch(postTransfer({
+      dispatch(postTransfer({
         ...transfer,
         outStock: transfer.project,
-        inStock: this.props.store._id,
+        inStock: store._id,
         type: '调拨',
       }))
     } else if (direction === 'out') { // 出库单
-      this.props.dispatch(postTransfer({
+      dispatch(postTransfer({
         ...transfer,
         inStock: transfer.project,
-        outStock: this.props.store._id,
+        outStock: store._id,
         type: '调拨'
       }))
     }
   }
 
-  render() {
-    const { direction } = this.props.params
-    let pageTitle
-    if (direction === 'out') {
-      pageTitle = '租赁出库'
-    } else if (direction === 'in') {
-      pageTitle = '租赁入库'
-    } else {
-      return <div className="alert alert-danger">
-        <p>你访问的页面不正确</p>
-      </div>
-    }
-
-    return (
-      <TransferForm
-        title={pageTitle}
-        onSubmit={this.handleSubmit}
-        direction={direction}
-      />
-    )
+  let pageTitle
+  if (direction === 'out') {
+    pageTitle = '租赁出库'
+  } else if (direction === 'in') {
+    pageTitle = '租赁入库'
+  } else {
+    return <Error />
   }
+
+  return (
+    <TransferForm
+      title={pageTitle}
+      onSubmit={handleSubmit}
+      direction={direction}
+    />
+  )
 }
-
-const mapStateToProps = state => ({
-  store: state.system.store
-})
-
-export default connect(mapStateToProps)(TransferCreate)

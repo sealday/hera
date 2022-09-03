@@ -599,3 +599,5 @@ export const enableFilters = [
     'value': 'disabled',
   },
 ]
+
+export const shouldShow = (condition, view) => condition ? view : null

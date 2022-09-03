@@ -25,11 +25,8 @@ import {
   TransportOrder,
   TransportOrderEdit,
   TransferCreate,
-  TransferEdit,
   PurchaseCreate,
-  PurchaseEdit,
   StocktakingCreate,
-  StocktakingEdit,
   RecordEdit,
 } from '../pages/store'
 import {
@@ -68,13 +65,9 @@ export default ({ onLogin, onLogout }) => <Routes>
     <Route path="weight/create/:id" element={<WeightCreate />} />
     {/* direction 表示调拨的方向 取值为 in 和 out  */}
     <Route path="transfer/:direction/create" element={<TransferCreate />} />
-    <Route path="transfer/:direction/:id/edit" element={<TransferEdit />} />
     <Route path="purchase/:direction/create" element={<PurchaseCreate />} />
-    <Route path="purchase/:direction/:id/edit" element={<PurchaseEdit />} />
     <Route path="transfer_free/:direction/create" element={<PurchaseCreate />} />
-    <Route path="transfer_free/:direction/:id/edit" element={<PurchaseEdit />} />
     <Route path="stocktaking/:direction/create" element={<StocktakingCreate />} />
-    <Route path="stocktaking/:direction/:id/edit" element={<StocktakingEdit />} />
     <Route path="record/:id" element={<Record />} />
     <Route path="record/:id/preview" element={<RecordPreview />} />
     <Route path='record/:id/edit' element={<RecordEdit />} />

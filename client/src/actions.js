@@ -1,4 +1,4 @@
-import { ajax, updateEntry } from './utils'
+import { ajax } from './utils'
 import { history, BASENAME } from './globals'
 
 export const SYSTEM_LOADED = 'SYSTEM_LOADED'
@@ -295,7 +295,6 @@ export const POST_TRANSFER = 'POST_TRANSFER'
 export const postTransfer = (record) => (dispatch, getState) => {
   const networking = network(POST_TRANSFER)
   if (networking.shouldProceed(getState())) {
-    updateEntry(record, getState().system.products)
     dispatch(networking.begin)
     dispatch(newInfoNotify('提示', '创建中', 2000))
     ajax('/api/record', {
@@ -324,7 +323,6 @@ export const UPDATE_TRANSFER = 'UPDATE_TRANSFER'
 export const updateTransfer = (record) => (dispatch, getState) => {
   const networking = network(UPDATE_TRANSFER)
   if (networking.shouldProceed(getState())) {
-    updateEntry(record, getState().system.products)
     dispatch(networking.begin)
     dispatch(newInfoNotify('提示', '正在更新调拨单', 2000))
     ajax(`/api/record/${record._id}`, {

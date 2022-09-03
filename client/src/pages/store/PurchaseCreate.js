@@ -1,15 +1,17 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { useParams, useMatch } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { useParams, useMatch, useNavigate } from 'react-router-dom'
 import moment from 'moment'
 
 import PurchaseForm from './PurchaseForm'
 import { postTransfer } from '../../actions'
 import { DEFAULT_STORE_TYPE } from '../../utils'
+import { Error } from '../../components'
 
-const PurchaseCreate = ({ store, dispatch }) => {
+export default () => {
+  const store = useSelector(state => state.system.store)
+  const dispatch = useDispatch()
   const params = useParams()
-  // const match = useMatch()
+  const match = useMatch('/transfer_free/*')
   const direction = params.direction
   const handleSubmit = (record) => {
     if (direction === 'in') { // 采购单
@@ -31,8 +33,7 @@ const PurchaseCreate = ({ store, dispatch }) => {
 
   let pageTitle
   let isFree = false
-  // if (match.pathname.startsWith('transfer_free')) {
-  if (false) {
+  if (match) {
     if (direction === 'out') {
       pageTitle = '暂存出库'
     } else {
@@ -44,9 +45,7 @@ const PurchaseCreate = ({ store, dispatch }) => {
   } else if (direction === 'in') {
     pageTitle = '采购入库'
   } else {
-    return <div className="alert alert-danger">
-      <p>你访问的页面不正确</p>
-    </div>
+    return <Error />
   }
 
   return (
@@ -61,9 +60,3 @@ const PurchaseCreate = ({ store, dispatch }) => {
     />
   )
 }
-
-const mapStateToProps = state => ({
-  store: state.system.store
-})
-
-export default connect(mapStateToProps)(PurchaseCreate)

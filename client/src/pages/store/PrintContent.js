@@ -2,6 +2,7 @@ import { each } from "lodash"
 import moment from "moment"
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
+import { IfShow } from "../../components"
 import {
   toFixedWithoutTrailingZero as fixed,
   total_,
@@ -156,12 +157,12 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
         </colgroup>
         <tbody>
           <tr>
-            <td>{content.partALabel}：{content.partA}</td>
+            <td><IfShow cond={content.partA}>{content.partALabel}：{content.partA}</IfShow></td>
             <td>日期：{moment(record.outDate).format('YYYY-MM-DD')}</td>
             <td>流水号：{record.number}</td>
           </tr>
           <tr>
-            <td>{content.partBLabel}：{content.partB}</td>
+            <td><IfShow cond={content.partB}>{content.partBLabel}：{content.partB}</IfShow></td>
             <td>车号：{record.carNumber}</td>
             <td>原始单号：{record.originalOrder}</td>
           </tr>
@@ -204,8 +205,8 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
         <tbody>
           <tr>
             <td>制单人：{record.username}</td>
-            <td>{content.outLabel}（签名）：</td>
-            <td>{content.inLabel}（签名）：</td>
+            <td><IfShow cond={record.type !== '盘点' || !!record.outStock}>{content.outLabel}（签名）：</IfShow></td>
+            <td><IfShow cond={record.type !== '盘点' || !!record.inStock}>{content.inLabel}（签名）：</IfShow></td>
           </tr>
         </tbody>
       </table>
