@@ -1,38 +1,23 @@
 import PropTypes from 'prop-types'
-import React, { useState, useEffect } from 'react'
-import { matchPath, useNavigate } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 
-import { withStyles } from '@material-ui/core/styles'
-import {
-  List,
-  ListItemText,
-  ListItemIcon,
-  MenuItem,
-  Collapse,
-} from '@material-ui/core'
-import {
-  Dashboard,
-  ExpandLess,
-  ExpandMore,
-  GroupWork,
-  Search,
-  Settings,
-  Store,
-} from '@material-ui/icons'
 
 import { isInsertable } from '../utils'
-import { BASENAME } from '../globals'
+import { Menu } from 'antd'
+import { DashboardOutlined, FundOutlined, ProjectOutlined, SearchOutlined, SettingOutlined, ShopOutlined } from '@ant-design/icons'
+import _ from 'lodash'
 
 
 const allMenu = [
   {
     name: '仪表盘',
     path: '/dashboard',
-    icon: Dashboard,
+    icon: <DashboardOutlined />,
   },
   {
     name: '仓库管理',
-    icon: Store,
+    icon: <ShopOutlined />,
     roles: ['项目部管理员', '系统管理员', '基地仓库管理员'],
     // TODO 解决这个权限特殊处理
     isInsertable: isInsertable,
@@ -77,7 +62,7 @@ const allMenu = [
   },
   {
     name: '仓库查询',
-    icon: Search,
+    icon: <SearchOutlined />,
     children: [
       {
         name: '库存查询',
@@ -95,7 +80,7 @@ const allMenu = [
   },
   {
     name: '项目管理',
-    icon: GroupWork,
+    icon: <ProjectOutlined />,
     roles: ['系统管理员', '财务管理员', '基地仓库管理员'],
     children: [
       {
@@ -114,13 +99,9 @@ const allMenu = [
   },
   {
     name: '财务',
-    icon: GroupWork,
+    icon: <FundOutlined />,
     roles: ['系统管理员', '财务管理员', '基地仓库管理员'],
     children: [
-      {
-        name: '合同',
-        path: '/contract',
-      },
       {
         name: '合同计算方案',
         path: '/plan',
@@ -153,7 +134,7 @@ const allMenu = [
   },
   {
     name: '系统信息',
-    icon: Settings,
+    icon: <SettingOutlined />,
     roles: ['系统管理员', '基地仓库管理员'],
     children: [
       {
@@ -189,42 +170,11 @@ const allMenu = [
   },
 ];
 
-const styles = theme => ({
-  root: {
-    width: '100%',
-    maxWidth: 360,
-    backgroundColor: theme.palette.background.paper,
-  },
-  nested: {
-    paddingLeft: theme.spacing.unit * 4,
-  },
-});
 
-const MenuList = ({ user, store, classes }) => {
-  const [open, setOpen] = useState({})
+const MenuList = ({ user, store}) => {
+  const [openKeys, setOpenKeys] = useState(['/dashboard']);
   const navigate = useNavigate()
-  const handleClick = (item) => {
-    if (item.path) {
-      navigate(item.path)
-    }
-    setOpen(open => ({
-      [item.name]: !open[item.name]
-    }))
-  }
-  useEffect(() => {
-    // 第一次页面加载时，根据路径展开目录
-    allMenu.forEach(menuItem => {
-      if (menuItem.children) {
-        menuItem.children.forEach(subMenuItem => {
-          if (matchPath(BASENAME + subMenuItem.path, document.location.pathname)) {
-            setOpen({
-              [menuItem.name]: true
-            })
-          }
-        })
-      }
-    })
-  }, [])
+  const location = useLocation()
 
   const getFilteredMenu = (menu) => {
     return menu.filter(menuItem => {
@@ -241,46 +191,34 @@ const MenuList = ({ user, store, classes }) => {
       }
     })
   }
-
   const menu = getFilteredMenu(allMenu)
 
-  return (
-    <div className={classes.root}>
-      <List component="nav">
-        {menu.map(menuItem =>
-        (<div key={menuItem.name}>
-          <MenuItem
-            button
-            onClick={() => handleClick(menuItem)}
-            selected={!menuItem.children && matchPath(BASENAME + menuItem.path, document.location.pathname)}
-          >
-            <ListItemIcon>
-              <menuItem.icon />
-            </ListItemIcon>
-            <ListItemText inset primary={menuItem.name} />
-            {menuItem.children && (open[menuItem.name] ? <ExpandLess /> : <ExpandMore />)}
-          </MenuItem>
-          {menuItem.children && (<Collapse in={open[menuItem.name]} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              {menuItem.children.map(subMenuItem => (
-                <MenuItem
-                  onClick={() => navigate(subMenuItem.path)}
-                  button
-                  key={subMenuItem.name}
-                  className={classes.nested}
-                  selected={matchPath(BASENAME + subMenuItem.path, document.location.pathname)}
-                >
-                  <ListItemText inset primary={subMenuItem.name} />
-                </MenuItem>
-              ))}
-            </List>
-          </Collapse>)}
-        </div>))}
-      </List>
-    </div>
-  );
+  const items = menu.map(item => {
+    const children = item.children ? item.children.map(subItem => ({ label: subItem.name, key: subItem.path })) : null
+    const key = item.children ? item.name : item.path
+    return ({ label: item.name, key, icon: item.icon, children })
+  })
+  const rootSubmenuKeys = menu.filter(item => item.children).map(item => item.name)
+  const childMap = _.extend({}, ...menu
+    .filter(item => item.children)
+    .map(item => item.children.map(childItem => [childItem.path, item.name]))
+    .map(_.fromPairs))
+
+  const onOpenChange = (keys) => {
+    const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
+    if (rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
+      setOpenKeys(keys);
+    } else {
+      setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
+    }
+  };
+  useEffect(() => {
+    setOpenKeys([childMap[location.pathname]])
+  }, [location.pathname])
+
+  return <Menu items={items} mode='inline' defaultSelectedKeys={[location.pathname]} onOpenChange={onOpenChange} openKeys={openKeys} onSelect={v => navigate(v.key)} />
 }
 
 MenuList.classes = PropTypes.object.isRequired
 
-export default withStyles(styles)(MenuList)
+export default MenuList
