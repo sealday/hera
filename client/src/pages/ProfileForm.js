@@ -11,7 +11,6 @@ import { Input } from '../components'
 
 const ProfileForm = props => (
   <Card>
-    <CardHeader title="个人信息修改"/>
     <CardContent>
       <form onSubmit={props.handleSubmit}>
         <div className="form-group">

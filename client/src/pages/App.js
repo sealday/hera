@@ -1,28 +1,22 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Outlet, Location } from 'react-router-dom'
+import { Outlet } from 'react-router-dom'
 import { withStyles } from '@material-ui/core/styles'
 import {
-  AppBar,
-  Button,
   CircularProgress,
-  Drawer,
-  List,
-  MenuItem,
-  Popover,
-  Toolbar,
   Typography,
 } from '@material-ui/core'
+import { Layout, Button, Dropdown, Menu } from 'antd'
 
 import short_id from 'shortid'
-import { Helmet } from "react-helmet"
 import { get } from 'lodash'
 
 import { CurrentStore, MenuList, withRouter } from '../components'
 import { ajax, wrapper } from '../utils'
 import { selectStore } from '../actions'
 import './App.css'
+import { UserOutlined } from '@ant-design/icons'
 
 
 const drawerWidth = 240;
@@ -160,73 +154,41 @@ class App extends Component {
         </main>
       )
     }
+                    
+    const menu = (
+      <Menu
+        items={onlineUsers.map(user => ({
+          key: short_id.generate(),
+          label: get(user, ['profile', 'name'], '异常用户'),
+        }))}
+      />
+    )
     return (
-      <div className="App">
-        <Helmet>
-          <title>{config.systemName}</title>
-        </Helmet>
-        <div className={classes.root}>
-          <AppBar position="absolute" className={classes.appBar + " hidden-print"}>
-            <Toolbar>
-              <Typography variant="h5" color="inherit" noWrap className={classes.marginRight}>
-                {config.systemName}
-              </Typography>
-              <Typography variant="subtitle1" color="inherit" noWrap className={classes.marginRight}>
-                {store && store.company + store.name}
-              </Typography>
-              <Button
-                color="inherit"
-                onClick={e => {
-                  e.preventDefault()
-                  dispatch(selectStore(false))
-                }}
-              >选择仓库</Button>
-              <span className={classes.flex} />
-              <Button
-                color="inherit"
-                onClick={this.handleMenu('onlineCount')}
-              >当前在线 {onlineUsers.length} 人</Button>
-              <Popover
-                open={this.state.menuOpen['onlineCount']}
-                anchorEl={this.state.menuAnchorEl['onlineCount']}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'center',
-                }}
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'center',
-                }}
-                onClose={this.handleMenuClose('onlineCount')}
-              >
-                <List>
-                  {onlineUsers.map(user => <MenuItem
-                    key={short_id.generate()}
-                    onClick={this.handleMenuClose('onlineCount')}
-                  >{get(user, ['profile', 'name'], '异常用户')}</MenuItem>)}
-                </List>
-              </Popover>
-              <Button color="inherit" onClick={this.logout}>退出</Button>
-              <Button color="inherit" onClick={() => this.props.navigate('/profile')}>{user.username}</Button>
-            </Toolbar>
-          </AppBar>
-          {this.isStoreSelected() && <Drawer
-            variant="permanent"
-            className="hidden-print"
-            classes={{
-              paper: classes.drawerPaper,
-            }}
-          >
-            <div className={classes.toolbar} />
-            <MenuList user={user} store={store}/>
-          </Drawer>}
-          <main className={classes.content}>
-            <div className={classes.toolbar} />
+      <Layout className='App'>
+        <Layout.Header className='header'>
+          <h5 className='title'>{config.systemName}</h5>
+          <p style={{ marginLeft: '2em', float: 'left', color: '#fff' }}>{store && store.company + store.name}</p>
+          <Button style={{ color: '#fff' }} onClick={() => { dispatch(selectStore(false)) }} type='text'>选择仓库</Button>
+          <div style={{ float: 'right' }}>
+            <Dropdown overlay={menu}>
+              <Button style={{ color: '#fff' }} type='text'>当前在线 {onlineUsers.length} 人</Button>
+            </Dropdown>
+            <Button style={{ color: '#fff' }} type='text' onClick={this.logout}>退出</Button>
+            <Button 
+              onClick={() => this.props.navigate('/profile')}
+              icon={<UserOutlined />} style={{ color: '#fff' }} type='text'>{user.username}</Button>
+          </div>
+        </Layout.Header>
+        <Layout>
+          <Layout.Sider width={240} className='sider'>
+            <MenuList user={user} store={store} />
+          </Layout.Sider>
+          <Layout className='content'>
             {this.isStoreSelected() && <Outlet />}
-            {!this.isStoreSelected() && <CurrentStore/>}
-          </main>
-        </div>
-      </div>
+            {!this.isStoreSelected() && <CurrentStore />}
+          </Layout>
+        </Layout>
+      </Layout>
     )
   }
 }
@@ -247,4 +209,3 @@ export default wrapper([
   connect(mapStateToProps),
   App,
 ])
-

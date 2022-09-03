@@ -1,32 +1,25 @@
-import React from 'react'
-import { connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { saveProfile } from '../actions'
+import { PageHeader } from '../components'
 import ProfileForm from './ProfileForm'
 
-class Profile extends React.Component {
-  handleSubmit(profile) {
-    this.props.dispatch(saveProfile({
+export default () => {
+
+  const user = useSelector(state => state.system.user)
+  const dispatch = useDispatch()
+  const handleSubmit = (profile) => {
+    dispatch(saveProfile({
       ...profile,
       _id: this.props.user._id
     }))
   }
-  render() {
-    return (
-      <div>
-        <ProfileForm
-          initialValues={{ ...this.props.user, password: undefined }}
-          onSubmit={this.handleSubmit.bind(this)}
-        />
-      </div>
-    )
-  }
+  return (
+    <PageHeader title='个人信息修改'>
+      <ProfileForm
+        initialValues={{ ...user, password: undefined }}
+        onSubmit={handleSubmit}
+      />
+    </PageHeader>
+  )
 }
-
-const mapStateToProps = state => {
-  return {
-    user: state.system.user,
-  }
-}
-
-export default connect(mapStateToProps)(Profile)
