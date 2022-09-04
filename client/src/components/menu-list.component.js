@@ -21,38 +21,38 @@ const allMenu = [
     children: [
       {
         name: '采购入库',
-        path: '/purchase/in/create',
+        path: '/record/create?type=purchase&direction=in',
         roles: ['系统管理员', '基地仓库管理员'],
       },
       {
         name: '销售出库',
-        path: '/purchase/out/create',
+        path: '/record/create?type=purchase&direction=out',
         roles: ['系统管理员', '基地仓库管理员'],
       },
       {
-        name: '租赁出库',
-        path: '/transfer/out/create',
-      },
-      {
         name: '租赁入库',
-        path: '/transfer/in/create',
+        path: '/record/create?type=rent&direction=in',
       },
       {
-        name: '暂存出库',
-        path: '/transfer_free/out/create',
+        name: '租赁出库',
+        path: '/record/create?type=rent&direction=out',
       },
       {
         name: '暂存入库',
-        path: '/transfer_free/in/create',
+        path: '/record/create?type=transfer&direction=in',
+      },
+      {
+        name: '暂存出库',
+        path: '/record/create?type=transfer&direction=out',
       },
       {
         name: '盘点入库',
-        path: '/stocktaking/in/create',
+        path: '/record/create?type=check&direction=in',
         roles: ['系统管理员', '基地仓库管理员'],
       },
       {
         name: '盘点出库',
-        path: '/stocktaking/out/create',
+        path: '/record/create?type=check&direction=out',
         roles: ['系统管理员', '基地仓库管理员'],
       },
     ]
@@ -210,10 +210,10 @@ const MenuList = ({ user, store}) => {
     }
   };
   useEffect(() => {
-    setOpenKeys([childMap[location.pathname]])
-  }, [location.pathname])
+    setOpenKeys([childMap[location.pathname + location.search]])
+  }, [location.pathname, location.search])
 
-  return <Menu items={items} mode='inline' defaultSelectedKeys={[location.pathname]} onOpenChange={onOpenChange} openKeys={openKeys} onSelect={v => navigate(v.key)} />
+  return <Menu items={items} mode='inline' defaultSelectedKeys={[location.pathname + location.search]} onOpenChange={onOpenChange} openKeys={openKeys} onSelect={v => navigate(v.key)} />
 }
 
 export default MenuList

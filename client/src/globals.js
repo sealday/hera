@@ -11,6 +11,13 @@ export const BASENAME = '/system'
 
 export const history = createBrowserHistory()
 
+export const RECORD_TYPE_MAP = {
+    'purchase': '购销',
+    'rent': '调拨',
+    'check': '盘点',
+    'transfer': '暂存',
+}
+
 const rtkQueryErrorLogger = (api) => (next) => (action) => {
     // RTK Query uses `createAsyncThunk` from redux-toolkit under the hood, so we're able to utilize these matchers!
     if (isRejectedWithValue(action)) {
@@ -30,9 +37,9 @@ export const store = configureStore({
     },
     middleware: getDefaultMiddleware => {
         if (getDefaultMiddleware().length === 3) {
-            return getDefaultMiddleware().slice(1).concat(heraApi.middleware)
+            return getDefaultMiddleware().slice(1).concat(heraApi.middleware).concat(rtkQueryErrorLogger)
         } else {
-            return getDefaultMiddleware().concat(heraApi.middleware)
+            return getDefaultMiddleware().concat(heraApi.middleware).concat(rtkQueryErrorLogger)
         }
     },
 })

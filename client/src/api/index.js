@@ -69,6 +69,16 @@ export const heraApi = createApi({
             transformResponse: res => res.data.company,
             invalidatesTags: (result, error, id) => [{ type: 'Company', id }],
         }),
+        // 创建订单
+        createRecord: builder.mutation({
+            query: ( record ) => ({
+                url: `record`,
+                method: 'POST',
+                body: record,
+            }),
+            transformResponse: res => res.data.record,
+            invalidatesTags: () => [{ type: 'Record', id: 'LIST' }],
+        }),
         // 获取订单信息
         getRecord: builder.query({
             query: (id) => `record/${id}`,
@@ -105,6 +115,7 @@ export const {
     useCreateCompanyMutation,
     useUpdateCompanyMutation,
     useDeleteCompanyMutation,
+    useCreateRecordMutation,
     useGetRecordQuery,
     useUpdateRecordMutation,
     useUpdateTransportMutation,

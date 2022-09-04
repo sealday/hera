@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 
 import App from '../pages/App'
-import Home from '../pages/Home'
+import Home from '../pages/common/Home'
 import {
   Operator,
   OperatorCreate,
@@ -19,24 +19,15 @@ import {
   WeightCreate,
   Company,
 } from '../pages/system'
-import {
-  Record,
-  RecordPreview,
-  TransportOrder,
-  TransportOrderEdit,
-  TransferCreate,
-  PurchaseCreate,
-  StocktakingCreate,
-  RecordEdit,
-} from '../pages/store'
+import * as store from '../pages/store'
 import {
   Store,
   SimpleSearch,
   TransportSearch,
 } from '../pages/report'
 import * as company from '../pages/finance'
-import Profile from '../pages/Profile'
-import Login from '../pages/Login'
+import Profile from '../pages/common/Profile'
+import Login from '../pages/common/Login'
 import Staff from '../pages/project/staff.page'
 import Attendance from '../pages/project/attendance.page'
 
@@ -63,14 +54,14 @@ export default ({ onLogin, onLogout }) => <Routes>
     <Route path="weight/create" element={<WeightCreate />} />
     <Route path="weight/:id" element={<WeightEdit />} />
     <Route path="weight/create/:id" element={<WeightCreate />} />
-    {/* direction 表示调拨的方向 取值为 in 和 out  */}
-    <Route path="transfer/:direction/create" element={<TransferCreate />} />
-    <Route path="purchase/:direction/create" element={<PurchaseCreate />} />
-    <Route path="transfer_free/:direction/create" element={<PurchaseCreate />} />
-    <Route path="stocktaking/:direction/create" element={<StocktakingCreate />} />
-    <Route path="record/:id" element={<Record />} />
-    <Route path="record/:id/preview" element={<RecordPreview />} />
-    <Route path='record/:id/edit' element={<RecordEdit />} />
+    {/* 仓库 start */}
+    <Route path="record/create" element={<store.RecordCreate />} />
+    <Route path="record/:id" element={<store.Record />} />
+    <Route path="record/:id/preview" element={<store.RecordPreview />} />
+    <Route path='record/:id/edit' element={<store.RecordEdit />} />
+    <Route path="transport/:id" element={<store.TransportOrder />} />
+    <Route path="transport/:id/edit" element={<store.TransportOrderEdit />} />
+    {/* 仓库 end */}
     <Route path="company_record/:id" element={<company.Record />} />
     <Route path="rent_calc" element={<company.RentCalc />} />
     <Route path="rent_calc_preview" element={<company.RentCalcPreview />} />
@@ -80,8 +71,6 @@ export default ({ onLogin, onLogout }) => <Routes>
     <Route path="contract/:id/calc/:calcId" element={<company.ContractDetailsCalc />} />
     <Route path="plan" element={<company.Plan />} />
     <Route path="plan/create" element={<company.PlanCreate />} />
-    <Route path="transport/:id" element={<TransportOrder />} />
-    <Route path="transport/:id/edit" element={<TransportOrderEdit />} />
     <Route path="store" element={<Store />} />
     <Route path="transport_table" element={<TransportSearch />} />
     <Route path="transport_table_company" element={<company.TransportSearch />} />

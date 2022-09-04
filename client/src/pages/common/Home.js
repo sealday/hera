@@ -17,9 +17,9 @@ import {
 } from '@material-ui/core'
 import axios from 'axios'
 
-import { queryLatestOperations, queryMoreOperations } from '../actions'
-import { getLevelName, isCurrentUserPermit, wrapper } from '../utils'
-import { Flow } from '../components'
+import { queryLatestOperations, queryMoreOperations } from '../../actions'
+import { getLevelName, isCurrentUserPermit, wrapper } from '../../utils'
+import { Flow } from '../../components'
 
 const styles = {
   diffAdd: {

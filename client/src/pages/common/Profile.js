@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 
-import { saveProfile } from '../actions'
-import { PageHeader } from '../components'
+import { saveProfile } from '../../actions'
+import { PageHeader } from '../../components'
 import ProfileForm from './ProfileForm'
 
 export default () => {

@@ -7,7 +7,7 @@ import {
   CardHeader,
 } from '@material-ui/core'
 
-import { Input } from '../components'
+import { Input } from '../../components'
 
 const ProfileForm = props => (
   <Card>

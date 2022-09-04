@@ -1,80 +1,67 @@
 import moment from "moment"
 import { useEffect } from "react"
 import { useSelector } from "react-redux"
-import { useNavigate, useParams } from "react-router-dom"
-import { useGetRecordQuery, useUpdateRecordMutation } from "../../api"
-import { Error, Loading, PageHeader } from "../../components"
+import { useNavigate, useParams, useSearchParams } from "react-router-dom"
+import { useCreateRecordMutation } from "../../api"
+import { Error, PageHeader } from "../../components"
+import { RECORD_TYPE_MAP } from "../../globals"
+import { DEFAULT_STORE_TYPE } from "../../utils"
 import PurchaseForm from "./PurchaseForm"
 import StocktakingForm from './StocktakingForm'
 import TransferForm from "./TransferForm"
 
 export default () => {
-  const { id } = useParams()
-  const { data: record, error, isLoading } = useGetRecordQuery(id)
-  const [updateRecord, updateResult] = useUpdateRecordMutation()
+  const [searchParams] = useSearchParams()
+  const [createRecord, createResult] = useCreateRecordMutation()
   const navigate = useNavigate()
+  const type = searchParams.get('type')
+  const direction = searchParams.get('direction')
   const store = useSelector(state => state.system.store)
-  const projects = useSelector(state => state.system.projects)
+  // 创建结果
   useEffect(() => {
-    if (updateResult.isSuccess) {
-      navigate(-1)
+    if (createResult.isSuccess) {
+      navigate(`/record/${createResult.data._id}`)
+      console.dir(createResult)
     }
-  }, [updateResult.isSuccess])
-
-  if (error) {
-    return <Error />
-  }
-  if (isLoading) {
-    return <Loading />
-  }
-
-  let direction = ''
-  let stock
+  }, [createResult.isSuccess])
+  // 名称后缀
   let pageTitleSuffix = ''
-  if (store._id === record.inStock) {
-    direction = 'in'
-    stock = 'outStock'
+  if (direction == 'in') {
     pageTitleSuffix = '入库'
-  } else if (store._id === record.outStock) {
-    direction = 'out'
-    stock = 'inStock'
+  } else if (direction == 'out') {
     pageTitleSuffix = '出库'
   } else {
-    return <Error message='暂时不支持跨仓库编辑' />
+    return <Error message='不支持的操作' />
   }
   const handleSubmit = (record) => {
-    if (record.type !== '盘点') {
+    if (type !== 'check') {
       if (direction === 'in') {
-        updateRecord({
-          id, record: {
-            ...record,
-            inStock: store._id,
-            outStock: record.project,
-          }
+        createRecord({
+          ...record,
+          inStock: store._id,
+          outStock: record.project,
+          type: RECORD_TYPE_MAP[type],
         })
       } else if (direction === 'out') {
-        updateRecord({
-          id, record: {
-            ...record,
-            outStock: store._id,
-            inStock: record.project,
-          }
+        createRecord({
+          ...record,
+          outStock: store._id,
+          inStock: record.project,
+          type: RECORD_TYPE_MAP[type],
         })
       }
     } else {
       if (direction === 'in') {
-        updateRecord({
-          id, record: {
-            ...record,
-            inStock: store._id,
-          }
+        createRecord({
+          ...record,
+          inStock: store._id,
+          type: RECORD_TYPE_MAP[type],
         })
       } else if (direction === 'out') {
-        updateRecord({
-          id, record: {
-            ...record,
-            outStock: store._id,
-          }
+        createRecord({
+          ...record,
+          outStock: store._id,
+          type: RECORD_TYPE_MAP[type],
         })
       }
     }
@@ -82,21 +69,22 @@ export default () => {
 
   let pageTitlePrefix = ''
   let isFree = false
-  switch (record.type) {
-    case '暂存':
+  switch (type) {
+    case 'transfer':
+      isFree = true
       pageTitlePrefix = '暂存'
       break;
-    case '购销':
+    case 'purchase':
       if (direction === 'in') {
         pageTitlePrefix = '采购'
       } else {
         pageTitlePrefix = '销售'
       }
       break;
-    case '调拨':
+    case 'rent':
       pageTitlePrefix = '租赁'
       break;
-    case '盘点':
+    case 'check':
       pageTitlePrefix = '盘点'
       break;
     default:
@@ -104,38 +92,36 @@ export default () => {
   }
 
   const pageTitle = pageTitlePrefix + pageTitleSuffix
-
   const initialValues = {
-    ...record,
-    projectType: projects.get(record[stock]).type,
-    project: record[stock],
-    outDate: moment(record.outDate),
+    outDate: moment(),
+    projectType: DEFAULT_STORE_TYPE,
     isFree,
   }
 
   let form = ''
-  switch (record.type) {
-    case '暂存':
+  switch (type) {
+    case 'transfer':
       form = <PurchaseForm
         initialValues={initialValues}
         onSubmit={handleSubmit}
       />
       break;
-    case '购销':
+    case 'purchase':
       form = <PurchaseForm
         initialValues={initialValues}
         onSubmit={handleSubmit}
       />
       break;
-    case '调拨':
+    case 'rent':
       form = <TransferForm
         onSubmit={handleSubmit}
         initialValues={initialValues}
+        direction={direction}
       />
       break;
-    case '盘点':
+    case 'check':
       form = <StocktakingForm
-        initialValues={initialValues}
+        initialValues={{ ...initialValues, project: store._id }}
         onSubmit={handleSubmit}
       />
       break;
@@ -145,7 +131,7 @@ export default () => {
 
   return <PageHeader
     title={pageTitle}
-    subTitle='编辑'
+    subTitle='创建'
   >
     {form}
   </PageHeader>
