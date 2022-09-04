@@ -116,7 +116,6 @@ export default () => {
       form = <TransferForm
         onSubmit={handleSubmit}
         initialValues={initialValues}
-        direction={direction}
       />
       break;
     case 'check':

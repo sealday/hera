@@ -8,15 +8,8 @@ import {
   Card,
   CardContent,
   CardHeader,
-  ExpansionPanel,
-  ExpansionPanelDetails,
-  ExpansionPanelSummary,
-  Typography,
   withStyles,
 } from '@material-ui/core'
-import {
-  ExpandMore as ExpandMoreIcon,
-} from '@material-ui/icons'
 
 import EntryTable from './TransferEntryTable'
 import {
@@ -46,7 +39,7 @@ class TransferForm extends Component {
   }
 
   render() {
-    const { direction, classes, title, action } = this.props
+    const { classes, title, action } = this.props
     const projects = this.props.projects.toArray()
     return (
       <form className="form-horizontal" onSubmit={this.props.handleSubmit}>
@@ -90,16 +83,13 @@ class TransferForm extends Component {
                 <Field name="comments" component={TextArea}/>
               </div>
             </div>
+            <div className="form-group">
+              <div className="col-md-12">
+                <FieldArray name="entries" component={EntryTable} mode="L" />
+              </div>
+            </div>
           </CardContent>
         </Card>
-        <ExpansionPanel defaultExpanded={true}>
-          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
-            <Typography variant="h6">{direction === 'in' ? '租赁（入库）' : '租赁（出库）'}</Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails className={classes.panel}>
-            <FieldArray name="entries" component={EntryTable} mode="L"/>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
         <Button variant="contained" color="primary" type="submit" className={classes.submitButton}>保存</Button>
       </form>
     )
