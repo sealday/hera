@@ -7,6 +7,7 @@ import { Error, PageHeader } from "../../components"
 import { RECORD_TYPE_MAP } from "../../globals"
 import { DEFAULT_STORE_TYPE } from "../../utils"
 import PurchaseForm from "./PurchaseForm"
+import RecordForm from "./RecordForm"
 import StocktakingForm from './StocktakingForm'
 import TransferForm from "./TransferForm"
 
@@ -132,6 +133,7 @@ export default () => {
     title={pageTitle}
     subTitle='创建'
   >
+    <RecordForm />
     {form}
   </PageHeader>
 }

@@ -1,0 +1,1 @@
+export { default as DamageIcon } from './Damage'
