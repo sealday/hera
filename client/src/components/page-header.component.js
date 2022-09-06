@@ -1,11 +1,11 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { Button, Card, Col, Form, PageHeader, Row, Space, Input, Descriptions } from 'antd'
-import { PlusCircleOutlined, EditOutlined, PrinterOutlined, ArrowLeftOutlined } from '@ant-design/icons'
+import { PlusCircleOutlined, EditOutlined, PrinterOutlined, ArrowLeftOutlined, SearchOutlined, ClearOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
 import { isUpdatable } from '../utils'
 import { useSelector } from 'react-redux'
 
-export default ({ title, subTitle, onCreate, onEdit, children, onPrintPreview, onPrint, searchInfo, onSearch, description, extra }) => {
+export default ({ title, subTitle, onCreate, onEdit, children, onPrintPreview, onPrint, searchInfo, onSearch, searchForm, description, extra }) => {
   const [filterValues, setFilterValues] = useState({})
   const navigate = useNavigate()
   const { user, store } = useSelector(state => ({
@@ -36,6 +36,11 @@ export default ({ title, subTitle, onCreate, onEdit, children, onPrintPreview, o
   if (onPrint) {
     actions.push(<Button key='onCreate' type='primary' onClick={onPrint} icon={<PrinterOutlined />}>打印</Button>)
   }
+  const mSearchForm = React.createRef()
+  if (searchForm) {
+    actions.push(<Button key='onReset'  onClick={() => mSearchForm.current.reset()} icon={<ClearOutlined />}>重置</Button>)
+    actions.push(<Button key='onSearch' type='primary' onClick={() => mSearchForm.current.submit()} icon={<SearchOutlined />}>查询</Button>)
+  }
   return <>
     <PageHeader
       title={title}
@@ -49,6 +54,10 @@ export default ({ title, subTitle, onCreate, onEdit, children, onPrintPreview, o
           <Descriptions.Item label='入库项目'>abc</Descriptions.Item>
         </Descriptions>
         : <></>}
+      {searchForm ?
+        <searchForm.Form initialValues={searchForm.initialValues} ref={mSearchForm} onSubmit={searchForm.onSubmit} />
+        : <></>}
+
     </PageHeader>
     {searchInfo ?
       <Card bordered={false}>
@@ -92,7 +101,7 @@ export default ({ title, subTitle, onCreate, onEdit, children, onPrintPreview, o
       </Card>
       : <></>}
     {children ?
-      <div style={{ marginTop: '8px' }}>
+      <div style={{ padding: '8px' }}>
         {children}
       </div>
       : <></>}

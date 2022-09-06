@@ -1,19 +1,7 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import moment from 'moment'
 import { Map } from 'immutable'
-import {
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-} from '@material-ui/core'
-
 import {
   toFixedWithoutTrailingZero,
   makeKeyFromNameSize,
@@ -23,38 +11,38 @@ import {
 } from '../../utils'
 import { requestStore } from '../../actions'
 import StoreForm from './StoreForm'
+import { PageHeader, TreeTable } from '../../components'
 
-class Store extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      records: [],
-      project: props.store._id,
-      startDate: moment().startOf('year'),
-      endDate: moment().endOf('year').startOf('day'),
-      showing: new Map()
-    }
-  }
+const Store = () => {
+  const form = React.useRef()
+  const dispatch = useDispatch()
+  const { thisArticles, products, store } = useSelector(state => ({
+    thisArticles: state.system.articles,
+    products: state.system.products,
+    store: state.system.store,
+  }))
+  const stocks = useSelector(state => state.store.stocks)
+  const [state, setState] = useState({
+    project: store._id,
+    showing: new Map(),
+  })
 
-  handleProjectChange = (project) => {
-    this.setState({ project: project.value })
-  }
-
-  query = data => {
+  const query = data => {
     if (data.project) {
-      this.props.dispatch(requestStore({
+      dispatch(requestStore({
         type: data.type,
         project: data.project,
         startDate: data.startDate,
         endDate: moment(data.endDate).add(1, 'day'),
       }))
-      this.setState({
+      setState({
+        project: store._id,
         showing: new Map() // 重置状态显示
       })
     }
   }
 
-  getRecords = (stock) => {
+  const getRecords = (stock) => {
     const inRecords = stock.inRecords
     const outRecords = stock.outRecords
     let inRecordMap = {}
@@ -67,7 +55,7 @@ class Store extends Component {
     })
 
     let records = [] // [{ total, entries }]
-    const articles = oldProductStructure(this.props.articles.toArray())
+    const articles = oldProductStructure(thisArticles.toArray())
     articles.forEach(article => {
       // 算每一项
       let inTotal = 0
@@ -88,14 +76,14 @@ class Store extends Component {
         if (key in inRecordMap) {
           value.in = inRecordMap[key]
           value.delta = value.in;
-          value.inTotal = toFixedWithoutTrailingZero(inRecordMap[key] * getScale(this.props.products[key]))
+          value.inTotal = toFixedWithoutTrailingZero(inRecordMap[key] * getScale(products[key]))
           inTotal += Number(value.inTotal)
           exists = true
         }
         if (key in outRecordMap) {
           value.out = outRecordMap[key]
           value.delta -= value.out;
-          value.outTotal = toFixedWithoutTrailingZero(outRecordMap[key] * getScale(this.props.products[key]))
+          value.outTotal = toFixedWithoutTrailingZero(outRecordMap[key] * getScale(products[key]))
           outTotal += Number(value.outTotal)
           exists = true
         }
@@ -121,14 +109,14 @@ class Store extends Component {
         if (key in inRecordMap) {
           value.in = inRecordMap[key]
           value.delta += value.in
-          value.inTotal = toFixedWithoutTrailingZero(inRecordMap[key] * getScale(this.props.products[key]))
+          value.inTotal = toFixedWithoutTrailingZero(inRecordMap[key] * getScale(products[key]))
           inTotal += Number(value.inTotal)
           exists = true
         }
         if (key in outRecordMap) {
           value.out = outRecordMap[key]
           value.delta -= value.out
-          value.outTotal = toFixedWithoutTrailingZero(outRecordMap[key] * getScale(this.props.products[key]))
+          value.outTotal = toFixedWithoutTrailingZero(outRecordMap[key] * getScale(products[key]))
           outTotal += Number(value.outTotal)
           exists = true
         }
@@ -161,111 +149,93 @@ class Store extends Component {
     return records
   }
 
-  render() {
-    let project = this.state.project
-    let stocks = this.props.stocks
-
-    let recordsTable = []
-    if (project && stocks.get(project)) {
-      const records = this.getRecords(stocks.get(project))
-
-      records.forEach((record, index) => {
-        recordsTable.push(
-          <TableRow key={index} onClick={e => {
-            this.setState(state => ({
-              showing: state.showing.update(record.total.name, showing => !showing)
-            }))
-          }}>
-            <TableCell>{record.total.type}</TableCell>
-            <TableCell>{record.total.name}</TableCell>
-            <TableCell>{record.total.size}</TableCell>
-            <TableCell>{formatNumber(record.total.in)}</TableCell>
-            <TableCell>{formatNumber(record.total.out)}</TableCell>
-            <TableCell/>
-            <TableCell>{formatNumber(record.total.total)}</TableCell>
-          </TableRow>
-        )
-
-        const rowSpan = record.entries.length
-        record.entries.forEach((record, recordIndex) => {
-          let typeLine
-          let nameLine
-          if (recordIndex === 0) {
-            typeLine = <TableCell rowSpan={rowSpan}/>
-            nameLine = <TableCell rowSpan={rowSpan}/>
-          }
-
-          recordsTable.push(
-            // 设计不显示时样式为 none
-            <TableRow key={index + ',' + recordIndex} style={{display: this.state.showing.get(record.name) ? 'table-row' : 'none'}}>
-              {typeLine}
-              {nameLine}
-              <TableCell>{record.size}</TableCell>
-              <TableCell>{formatNumber(record.in)}</TableCell>
-              <TableCell>{formatNumber(record.out)}</TableCell>
-              <TableCell>{formatNumber(record.delta)}</TableCell>
-              <TableCell>{formatNumber(record.total)}</TableCell>
-            </TableRow>
-          )
-        })
+  const columns = [
+    {
+      key: 'type',
+      title: '类别',
+      dataIndex: 'type',
+    },
+    {
+      key: 'name',
+      title: '名称',
+      dataIndex: 'name',
+    },
+    {
+      key: 'size',
+      title: '规格',
+      dataIndex: 'size',
+    },
+    {
+      key: 'size',
+      title: '规格',
+      dataIndex: 'size',
+    },
+    {
+      key: 'in',
+      title: '入库数量',
+      dataIndex: 'in',
+    },
+    {
+      key: 'out',
+      title: '出库数量',
+      dataIndex: 'out',
+    },
+    {
+      key: 'delta',
+      title: '结存数量',
+      dataIndex: 'delta',
+    },
+    {
+      key: 'total',
+      title: '小计',
+      dataIndex: 'total',
+    },
+  ]
+  const dataSource = []
+  if (state.project && stocks.get(state.project)) {
+    const records = getRecords(stocks.get(state.project))
+    records.forEach((record, index) => {
+      dataSource.push({
+        key: index,
+        type: record.total.type,
+        name: record.total.name,
+        size: record.total.size,
+        in: formatNumber(record.total.in),
+        out: formatNumber(record.total.out),
+        delta: '',
+        total: formatNumber(record.total.total),
+        children: record.entries.map((record, subIndex) => ({
+          key: index + '.' + subIndex,
+          type: '',
+          name: '',
+          size: record.size,
+          in: formatNumber(record.in),
+          out: formatNumber(record.out),
+          delta: formatNumber(record.delta),
+          total: formatNumber(record.total),
+        }))
       })
-    }
-
-    return (
-      <>
-        <Card>
-          <CardHeader
-            title="库存查询"
-            action={<>
-              <Button onClick={() => this.form.reset()}>重置</Button>
-              <Button color="primary" onClick={() => this.form.submit()}>查询</Button>
-            </>}
-          />
-          <CardContent>
-            <StoreForm 
-              ref={form => this.form = form} 
-              onSubmit={this.query} 
-              initialValues={
-                {
-                  startDate: moment().startOf('day'),
-                  endDate: moment().startOf('day'),
-                  type: '调拨',
-                  project: this.props.store._id,
-                }
-              }
-            />
-          </CardContent>
-        </Card>
-        <Card style={{ marginTop: '16px' }}>
-          <CardContent>
-            <Table padding="dense">
-              <TableHead>
-                <TableRow>
-                  <TableCell>类型</TableCell>
-                  <TableCell>名称</TableCell>
-                  <TableCell>规格</TableCell>
-                  <TableCell>入库数量</TableCell>
-                  <TableCell>出库数量</TableCell>
-                  <TableCell>结存数量</TableCell>
-                  <TableCell>小计</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {recordsTable}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
-      </>
-    )
+    })
   }
+
+  return (
+    <PageHeader
+      title='库存查询'
+      searchForm={{
+        Form: StoreForm,
+        initialValues: {
+          startDate: moment().startOf('day'),
+          endDate: moment().startOf('day'),
+          type: '调拨',
+          project: store._id,
+        },
+        onSubmit: query,
+      }}
+    >
+      <TreeTable columns={columns} dataSource={dataSource} />
+    </PageHeader>
+
+  )
 }
 
-const mapStateToProps = state => ({
-  articles: state.system.articles,
-  products: state.system.products,
-  stocks: state.store.stocks,
-  store: state.system.store,
-})
-
-export default connect(mapStateToProps)(Store);
+export default Store
