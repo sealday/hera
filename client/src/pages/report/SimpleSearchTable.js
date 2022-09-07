@@ -3,21 +3,15 @@ import { useSelector } from 'react-redux'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
 import { Map } from 'immutable'
-import {
-  Card,
-  CardContent,
-  CardHeader,
-} from '@material-ui/core'
 
 import { total_, toFixedWithoutTrailingZero } from '../../utils'
 import { ResultTable } from '../../components'
 
-const SimpleSearchTable = ({ search, isCompany }) => {
+export default ({ search, isCompany }) => {
 
-  const { projects, products, articles, store } = useSelector(state => ({
+  const { projects, products, store } = useSelector(state => ({
     projects: state.system.projects,
     products: state.system.products,
-    articles: state.system.articles.toArray(),
     store: state.system.store,
   }))
 
@@ -87,10 +81,10 @@ const SimpleSearchTable = ({ search, isCompany }) => {
     { key: 'number', title: '单号', dataIndex: 'number', width: '58px' },
     { key: 'originalOrder', title: '原始单号', dataIndex: 'originalOrder', width: '100px' },
     isCompany
-      ? { key: 'outStock', title: '出库', dataIndex: 'outStock' }
+      ? { key: 'outStock', title: '出库', dataIndex: 'outStock', render: projectId => getProjectName(projectId) }
       : { key: 'project', title: '项目部', render: (_, entry) => getOtherSize(entry) },
     isCompany
-      ? { key: 'inStock', title: '入库', dataIndex: 'inStock' }
+      ? { key: 'inStock', title: '入库', dataIndex: 'inStock', render: projectId => getProjectName(projectId) }
       : { key: 'direction', title: '出入库', render: (_, entry) => getDirection(entry), width: '58px' },
     { key: 'totalString', title: '内容', dataIndex: 'totalString'},
     isCompany
@@ -116,5 +110,3 @@ const SimpleSearchTable = ({ search, isCompany }) => {
     </div>
   )
 }
-
-export default SimpleSearchTable

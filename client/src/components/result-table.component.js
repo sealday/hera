@@ -1,11 +1,12 @@
 import { Card, Table } from "antd"
+import _ from "lodash"
 
 export default ({ columns, dataSource, summaryColumns, summaryDataSource}) => {
-  const summaryTable = () => <Table
+  const summaryTable = () => !_.isEmpty(summaryDataSource) ? <Table
     columns={summaryColumns}
     dataSource={summaryDataSource}
     pagination={false}
-  />
+  /> : null
   return (
     <Card bordered={false} title='查询结果' size='small'>
       <Table

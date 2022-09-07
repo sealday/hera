@@ -12,9 +12,6 @@ import ListItem from '@material-ui/core/ListItem'
 
 import { currencyFormat, numberFormat, dateFormat } from '../../utils'
 
-/**
- * 提供排序功能的搜索结果表
- */
 class SimpleSearchTable extends React.Component {
 
   render() {
@@ -80,7 +77,4 @@ class SimpleSearchTable extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
-})
-
-export default connect(mapStateToProps)(SimpleSearchTable)
+export default connect()(SimpleSearchTable)

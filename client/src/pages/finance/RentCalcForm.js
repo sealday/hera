@@ -2,25 +2,10 @@ import React from 'react'
 import { reduxForm, Field, formValueSelector } from 'redux-form'
 import moment from 'moment'
 import { connect } from 'react-redux'
-import {
-  Button,
-  CardHeader,
-  CardContent,
-} from '@material-ui/core'
-import { withStyles } from '@material-ui/core/styles'
 
 import { FilterSelect, DatePicker, DateRangeModifier } from '../../components'
-import { filterOption, validator } from '../../utils'
+import { filterOption, validator, wrapper } from '../../utils'
 import { PRICE_PLAN, queryPricePlan } from '../../actions'
-
-const styles = {
-  rangeFirst: {
-    // display: 'inline-block',
-  },
-  range: {
-    // marginLeft: '1em'
-  },
-}
 
 /**
  * 搜索用的表单
@@ -54,22 +39,9 @@ class SimpleSearchForm extends React.Component {
   }
 
   render() {
-    const { handleSubmit, projects, startDate, endDate, reset, onAddItem, title, onExcelExport } = this.props
+    const { handleSubmit, projects, startDate, endDate } = this.props
     return (
       <form onSubmit={handleSubmit}>
-        <CardHeader
-          title={title}
-          action={
-            [
-              <Button key={0} type="submit">查询</Button>,
-              <Button key={1} type="reset" onClick={() => reset()}>重置</Button>,
-              onExcelExport &&
-              <Button key={2} type="button" onClick={onExcelExport}>导出excel</Button>,
-              <Button key={4} type="button" onClick={handleSubmit(onAddItem)}>生成对账单</Button>,
-            ]
-          }
-        />
-        <CardContent>
           <div className="form-horizontal">
             <div className="form-group">
               <label className="control-label col-md-1">项目部</label>
@@ -124,20 +96,10 @@ class SimpleSearchForm extends React.Component {
               </div>
             </div>
           </div>
-        </CardContent>
       </form>
     )
   }
 }
-
-SimpleSearchForm = reduxForm({
-  form: 'rentCalcForm',
-  initialValues: {
-    startDate: moment().startOf('day'),
-    endDate: moment().startOf('day')
-  }
-})(SimpleSearchForm)
-
 
 const selector = formValueSelector('rentCalcForm')
 const mapStateToProps = state => {
@@ -151,4 +113,14 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps)(withStyles(styles)(SimpleSearchForm))
+export default wrapper([
+  reduxForm({
+    form: 'rentCalcForm',
+    initialValues: {
+      startDate: moment().startOf('day'),
+      endDate: moment().startOf('day')
+    }
+  }),
+  connect(mapStateToProps),
+  SimpleSearchForm,
+])
