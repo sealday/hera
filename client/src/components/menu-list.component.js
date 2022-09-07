@@ -85,6 +85,18 @@ const allMenu = [
         path: '/contract',
       },
       {
+        name: '计算方案',
+        path: '/plan',
+      },
+      { // 临时
+        name: '租金方案',
+        path: '/price',
+      },
+      { // 临时
+        name: '计重方案',
+        path: '/weight',
+      },
+      {
         name: '员工档案',
         path: '/staff',
       },
@@ -99,10 +111,6 @@ const allMenu = [
     icon: <FundOutlined />,
     roles: ['系统管理员', '财务管理员', '基地仓库管理员'],
     children: [
-      {
-        name: '合同计算方案',
-        path: '/plan',
-      },
       {
         name: '租金计算',
         path: '/rent_calc',
@@ -141,14 +149,6 @@ const allMenu = [
       {
         name: '产品信息',
         path: '/product',
-      },
-      {
-        name: '租金方案',
-        path: '/price',
-      },
-      {
-        name: '计重方案',
-        path: '/weight',
       },
       {
         name: '操作员管理',

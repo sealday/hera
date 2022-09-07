@@ -1,49 +1,34 @@
 import moment from 'moment'
 import _ from 'lodash'
 import {
-  Button,
-  PageHeader,
   Space,
   Table,
   Tag,
   Card,
+  Tabs,
 } from 'antd'
 import {
-  PlusOutlined,
-} from '@ant-design/icons'
-import {
-  Link,
+  useNavigate,
 } from 'react-router-dom'
 
 import { PLAN_CATEGORY_MAP } from '../../../constants'
 import { useDispatch, useSelector } from 'react-redux'
 import { ALL_PLAN_FLAT, queryAllPlansFlat } from '../../../actions'
 import { useEffect } from 'react'
+import { PageHeader } from '../../../components'
 
 const Plan = () => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const plans = useSelector(state => state.results.get(ALL_PLAN_FLAT, []))
   useEffect(() => {
     dispatch(queryAllPlansFlat())
   }, [dispatch])
-  return <>
-    <PageHeader
-      title="合同计算方案"
-      ghost={false}
-      extra={[
-        <Link to="/plan/create"><Button type="primary"><PlusOutlined />新增</Button></Link>
-      ]}
-    />
-    <div style={{ height: '8px' }}></div>
-    <Card title="方案列表" bordered={false}>
-      <Table dataSource={plans} rowKey="_id">
-        <Table.Column title="分类" key="category" dataIndex="category"
-          render={category => PLAN_CATEGORY_MAP[category]}
-          filters={
-            _.map(PLAN_CATEGORY_MAP, (v, k) => ({ text: v, value: k }))
-          }
-          onFilter={(value, record) => record.category.indexOf(value) === 0}
-        />
+  const tabs = _.map(PLAN_CATEGORY_MAP, (v, k) => ({ key: k, label: v, children: null }))
+  // 设置 tab 内容
+  tabs.forEach(tab => {
+    tab.children = (
+      <Table dataSource={_.filter(plans, plan => plan.category === tab.key)} rowKey="_id">
         <Table.Column title="名称" key="name" dataIndex="name" />
         <Table.Column title="关联项目" key="project" dataIndex="project" />
         <Table.Column title="日期" key="date" dataIndex="date"
@@ -80,7 +65,17 @@ const Plan = () => {
           }
         />
       </Table>
-    </Card>
-  </>
+    )
+  })
+  return (
+    <PageHeader
+      title="计算方案"
+      onCreate={() => navigate('/plan/create')}
+    >
+      <Card bordered={false}>
+        <Tabs items={tabs} />
+      </Card>
+    </PageHeader>
+  )
 }
 export default Plan
