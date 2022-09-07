@@ -6,6 +6,7 @@ import {
   Tag,
   Card,
   Tabs,
+  Button,
 } from 'antd'
 import {
   useNavigate,
@@ -28,7 +29,7 @@ const Plan = () => {
   // 设置 tab 内容
   tabs.forEach(tab => {
     tab.children = (
-      <Table dataSource={_.filter(plans, plan => plan.category === tab.key)} rowKey="_id">
+      <Table dataSource={_.filter(plans, plan => plan.type === tab.key)} rowKey="_id">
         <Table.Column title="名称" key="name" dataIndex="name" />
         <Table.Column title="关联项目" key="project" dataIndex="project" />
         <Table.Column title="日期" key="date" dataIndex="date"
@@ -55,11 +56,11 @@ const Plan = () => {
         />
         <Table.Column title="" key="action"
           render={
-            (text, record) => (
-              <Space size="middle">
-                <a>编辑</a>
-                <a>克隆</a>
-                <a>废弃</a>
+            (_text, record) => (
+              <Space size="small">
+                <Button type='text' onClick={() => navigate(`/plan/${record._id}/edit`)}>编辑</Button>
+                <Button type='text'>克隆</Button>
+                <Button type='text'>废弃</Button>
               </Space>
             )
           }

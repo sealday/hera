@@ -71,6 +71,7 @@ export default ({ onLogin, onLogout }) => <Routes>
     <Route path="contract/:id/calc/:calcId" element={<company.ContractDetailsCalc />} />
     <Route path="plan" element={<company.Plan />} />
     <Route path="plan/create" element={<company.PlanCreate />} />
+    <Route path="plan/:id/edit" element={<company.PlanEdit />} />
     <Route path="store" element={<Store />} />
     <Route path="transport_table" element={<TransportSearch />} />
     <Route path="transport_table_company" element={<company.TransportSearch />} />

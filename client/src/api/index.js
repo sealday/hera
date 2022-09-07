@@ -3,7 +3,7 @@ import { history, BASENAME } from '../globals'
 
 const baseQuery = fetchBaseQuery({
     baseUrl: '/api/',
-    prepareHeaders: (headers, api) => {
+    prepareHeaders: (headers, _api) => {
         // FIXME 每一次都从 localStorage 中取是否不太合适
         const token = localStorage.getItem('X-Hera-Token')
         headers.set('Authorization', `Bearer ${token}`)
@@ -23,7 +23,7 @@ const baseQueryAuth = async (args, api, extraOptions) => {
 export const heraApi = createApi({
     reducerPath: 'heraApi',
     baseQuery: baseQueryAuth,
-    tagTypes: ['Company', 'Record'],
+    tagTypes: ['Company', 'Record', 'Plan'],
     endpoints: (builder) => ({
         // 获取产品表数据
         getProduct: builder.query({
@@ -41,7 +41,7 @@ export const heraApi = createApi({
         getCompany: builder.query({
             query: (id) => `company/${id}`,
             transformResponse: res => res.data.company,
-            providesTags: (result, error, id) => [{ type: 'Company', id }],
+            providesTags: (_result, _error, id) => [{ type: 'Company', id }],
         }),
         createCompany: builder.mutation({
             query: (company) => ({
@@ -59,7 +59,7 @@ export const heraApi = createApi({
                 body: company,
             }),
             transformResponse: res => res.data.company,
-            invalidatesTags: (result, error, id) => [{ type: 'Company', id }],
+            invalidatesTags: (_result, _error, id) => [{ type: 'Company', id }],
         }),
         deleteCompany: builder.mutation({
             query: (id) => ({
@@ -67,7 +67,7 @@ export const heraApi = createApi({
                 method: 'POST',
             }),
             transformResponse: res => res.data.company,
-            invalidatesTags: (result, error, id) => [{ type: 'Company', id }],
+            invalidatesTags: (_result, _error, id) => [{ type: 'Company', id }],
         }),
         // 创建订单
         createRecord: builder.mutation({
@@ -83,7 +83,7 @@ export const heraApi = createApi({
         getRecord: builder.query({
             query: (id) => `record/${id}`,
             transformResponse: res => res.data.record,
-            providesTags: (result, error, id) => [{ type: 'Record', id }],
+            providesTags: (_result, _error, id) => [{ type: 'Record', id }],
         }),
         // 更新订单信息
         updateRecord: builder.mutation({
@@ -93,7 +93,7 @@ export const heraApi = createApi({
                 body: record,
             }),
             transformResponse: res => res.data.record,
-            invalidatesTags: (result, error, { id }) => [{ type: 'Record', id }],
+            invalidatesTags: (_result, _error, { id }) => [{ type: 'Record', id }],
         }),
         // 更新运输单
         updateTransport: builder.mutation({
@@ -103,7 +103,23 @@ export const heraApi = createApi({
                 body: transport,
             }),
             transformResponse: res => res.data.record,
-            invalidatesTags: (result, error, { id }) => [{ type: 'Record', id }],
+            invalidatesTags: (_result, _error, { id }) => [{ type: 'Record', id }],
+        }),
+        // 创建计算方案
+        createPlan: builder.mutation({
+            query: ( plan ) => ({
+                url: `plan/${plan.type}`,
+                method: 'POST',
+                body: plan,
+            }),
+            transformResponse: res => res.data.plan,
+            invalidatesTags: () => [{ type: 'Plan', id: 'LIST' }],
+        }),
+        // 获取计算方案
+        getPlan: builder.query({
+            query: (id) => `plan/${id}`,
+            transformResponse: res => res.data.plan,
+            providesTags: (_result, _error, id) => [{ type: 'Plan', id }],
         }),
     })
 })
@@ -119,4 +135,6 @@ export const {
     useGetRecordQuery,
     useUpdateRecordMutation,
     useUpdateTransportMutation,
+    useCreatePlanMutation,
+    useGetPlanQuery,
 } = heraApi

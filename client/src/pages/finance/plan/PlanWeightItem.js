@@ -25,8 +25,8 @@ const PlanWeightItem = ({ fields, add, remove, form }) => {
         render={({ key, name, fieldKey, ...restField }) => {
           return withUpdate(
             (prevValues, curValues) => {
-              if (prevValues.items[name] && curValues.items[name]) {
-                return prevValues.items[name].level !== curValues.items[name].level
+              if (prevValues.entries[name] && curValues.entries[name]) {
+                return prevValues.entries[name].level !== curValues.entries[name].level
               } else {
                 return true
               }

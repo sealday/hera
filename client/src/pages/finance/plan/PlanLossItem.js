@@ -17,7 +17,7 @@ const PlanLossItem = ({ fields, add, remove, form }) => {
     field,
   }))
   const isLevelName = (name) => {
-    return form.getFieldValue(['items', name, 'level']) === '产品'
+    return form.getFieldValue(['entries', name, 'level']) === '产品'
   }
   const initialValues = {
     level: '产品',
@@ -58,7 +58,7 @@ const PlanLossItem = ({ fields, add, remove, form }) => {
           >
             <Select
               onSelect={() => {
-                form.resetFields([['items', name, 'product']])
+                form.resetFields([['entries', name, 'product']])
               }}
               style={{ minWidth: '8em' }}
             >
@@ -75,8 +75,8 @@ const PlanLossItem = ({ fields, add, remove, form }) => {
         render={({ key, name, fieldKey, ...restField }) => {
           return withUpdate(
             (prevValues, curValues) => {
-              if (prevValues.items[name] && curValues.items[name]) {
-                return prevValues.items[name].level !== curValues.items[name].level
+              if (prevValues.entries[name] && curValues.entries[name]) {
+                return prevValues.entries[name].level !== curValues.entries[name].level
               } else {
                 return true
               }
