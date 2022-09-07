@@ -1,19 +1,24 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { getFormValues } from 'redux-form'
-import {
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-} from '@material-ui/core'
 
 import OperatorForm from './OperatorForm'
 import { updateOperator } from '../../actions'
+import { useParams } from 'react-router-dom'
+import { PageHeader } from '../../components'
 
-class OperatorEdit extends Component {
+export default () => {
 
-  handleSubmit = (operator) => {
+  const form = React.createRef()
+  const dispatch = useDispatch()
+  const { id } = useParams()
+  const { users, projects, operator } = useSelector(state => ({
+    users: state.system.users,
+    projects: state.system.projects,
+    operator: getFormValues('operator')(state)
+  }))
+
+  const handleSubmit = (operator) => {
     const perm = operator.perm || {};
     const perms = [];
     for (let projectId in perm) {
@@ -26,61 +31,40 @@ class OperatorEdit extends Component {
         });
       }
     }
-    this.props.dispatch(updateOperator(
+    dispatch(updateOperator(
       {
         ...operator,
         perms,
         perm: undefined,
-        _id: this.props.params.id
+        _id: id
       }
     ))
   }
 
-  render() {
-    const id = this.props.params.id
-    const user = this.props.users.get(id)
-    const { projects, operator } = this.props;
-    const perms = user.perms || [];
-    const perm = {};
-    perms.forEach((p) => {
-      perm[p.projectId] = p;
-    });
-    user.perm = perm;
-    const initialValues = {
-      ...user,
-      password: undefined
-    }
-
-    return (
-      <Card>
-        <CardHeader
-          title="操作员编辑"
-          action={<>
-            <Button onClick={e => this.props.router.goBack()}>取消</Button>
-            <Button color="primary" onClick={e => this.form.submit()}>保存</Button>
-          </>}
-        />
-        <CardContent>
-          <OperatorForm
-            initialValues={initialValues}
-            projects={projects}
-            onSubmit={this.handleSubmit}
-            operator={operator}
-            ref={form => this.form = form}
-          />
-        </CardContent>
-      </Card>
-    )
+  const user = users.get(id)
+  const perms = user.perms || [];
+  const perm = {};
+  perms.forEach((p) => {
+    perm[p.projectId] = p;
+  });
+  user.perm = perm;
+  const initialValues = {
+    ...user,
+    password: undefined
   }
+
+  return (
+    <PageHeader
+      title='编辑操作员'
+      onSave={() => form.current.submit()}
+    >
+      <OperatorForm
+        initialValues={initialValues}
+        projects={projects}
+        onSubmit={handleSubmit}
+        operator={operator}
+        ref={form}
+      />
+    </PageHeader>
+  )
 }
-
-
-const mapStateToProps = state => {
-  return {
-    users: state.system.users,
-    projects: state.system.projects,
-    operator: getFormValues('operator')(state)
-  }
-}
-
-export default connect(mapStateToProps)(OperatorEdit);

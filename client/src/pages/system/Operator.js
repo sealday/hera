@@ -7,7 +7,7 @@ import {
   Space,
   Table,
 } from 'antd'
-import { PageHeader } from '../../components'
+import { PageHeader, ResultTable } from '../../components'
 import { deleteOperator } from '../../actions'
 
 const Operator = ({ users, dispatch }) => {
@@ -54,13 +54,12 @@ const Operator = ({ users, dispatch }) => {
     },
   ]
   return (
-    <div>
-      <PageHeader 
-        title='操作员管理'
-        onCreate={() => navigate('/operator/create')}
-      />
-      <Table columns={columns} dataSource={users} rowKey='_id' size='small' />
-    </div>
+    <PageHeader
+      title='操作员管理'
+      onCreate={() => navigate('/operator/create')}
+    >
+      <ResultTable columns={columns} dataSource={users} rowKey='_id' />
+    </PageHeader>
   )
 
 }

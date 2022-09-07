@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import moment from 'moment'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { PlusCircleOutlined } from '@ant-design/icons'
 import {
@@ -12,7 +12,6 @@ import {
   Col,
   Space,
   Table,
-  PageHeader
 } from 'antd'
 import {
   Popconfirm,
@@ -20,9 +19,10 @@ import {
 import { ajax, enableFilters } from '../../../utils'
 import { newErrorNotify, newInfoNotify, newSuccessNotify, queryPricePlan, PRICE_PLAN } from '../../../actions'
 import _ from 'lodash'
-import { EnableTag } from '../../../components'
+import { EnableTag, PageHeader } from '../../../components'
 
 const Price = ({ dispatch, plans }) => {
+  const navigate = useNavigate()
   const [filterValues, setFilterValues] = useState({})
   const [form] = Form.useForm()
   const handleDelete = (id) => {
@@ -104,15 +104,11 @@ const Price = ({ dispatch, plans }) => {
     },
   ]
   return (
-    <div>
-      <PageHeader
-        ghost={false}
-        title="租金方案"
-        subTitle="在这里可以设定租金方案，通过在合同中关联实现租金计算"
-        extra={[
-          <Link to="/price/create"><Button icon={<PlusCircleOutlined />} type='primary' key="1">创建</Button></Link>
-        ]}
-      />
+    <PageHeader
+      title="租金方案"
+      subTitle="在这里可以设定租金方案，通过在合同中关联实现租金计算"
+      onCreate={() => navigate('/price/create')}
+    >
       <Card bordered={false}>
         <Form
           onFinish={values => setFilterValues(values)}
@@ -153,7 +149,7 @@ const Price = ({ dispatch, plans }) => {
         </Form>
       </Card>
       <Table dataSource={plans} columns={columns}></Table>
-    </div>
+    </PageHeader>
   )
 }
 const mapStateToProps = (state) => {

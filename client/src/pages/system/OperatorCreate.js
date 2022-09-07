@@ -10,6 +10,7 @@ import {
 
 import OperatorForm from './OperatorForm'
 import { createOperator } from '../../actions'
+import { PageHeader } from '../../components'
 
 class OperatorCreate extends Component {
 
@@ -33,23 +34,17 @@ class OperatorCreate extends Component {
   render() {
     const { projects, operator } = this.props;
     return (
-      <Card>
-        <CardHeader
-          title="新增操作员"
-          action={<>
-            <Button onClick={e => this.props.router.goBack()}>取消</Button>
-            <Button color="primary" onClick={e => this.form.submit()}>保存</Button>
-          </>}
+      <PageHeader
+        title='新增操作员'
+        onSave={() => this.form.submit()}
+      >
+        <OperatorForm
+          projects={projects}
+          onSubmit={this.handleSubmit}
+          operator={operator}
+          ref={form => this.form = form}
         />
-        <CardContent>
-          <OperatorForm
-            projects={projects}
-            onSubmit={this.handleSubmit}
-            operator={operator}
-            ref={form => this.form = form}
-          />
-        </CardContent>
-      </Card>
+      </PageHeader>
     )
   }
 }

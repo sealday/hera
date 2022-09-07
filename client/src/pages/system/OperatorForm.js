@@ -1,3 +1,4 @@
+import { Card } from 'antd'
 import React, { Component } from 'react'
 import {
   reduxForm,
@@ -9,7 +10,7 @@ class OperatorForm extends Component {
   render() {
     const { projects, operator } = this.props
     return (
-      <div>
+      <Card>
         <form onSubmit={this.props.handleSubmit}>
           <fieldset>
             <legend>基本资料</legend>
@@ -92,7 +93,7 @@ class OperatorForm extends Component {
           </fieldset>
           }
         </form>
-      </div>
+      </Card>
     )
   }
 }
