@@ -9,6 +9,7 @@ import {
 } from '@material-ui/core'
 
 import { total_, toFixedWithoutTrailingZero } from '../../utils'
+import { ResultTable } from '../../components'
 
 /**
  * 提供排序功能的搜索结果表
@@ -57,52 +58,42 @@ class SimpleSearchTable extends React.Component {
       })
     }
 
-    let storeRows = []
+  const columns = [
+    { key: 'outDate', title: '日期', dataIndex: 'outDate', render: (date) => moment(date).format('YYYY-MM-DD'), width: '114px' },
+    { key: 'carNumber', title: '车号', dataIndex: 'carNumber', width: '100px' },
+    { key: 'number', title: '单号', dataIndex: 'number', width: '58px' },
+    { key: 'originalOrder', title: '原始单号', dataIndex: 'originalOrder', width: '100px' },
+    { key: 'project', title: '项目部', render: (_, entry) => getDirection(entry) === '出库' ? getProjectName(entry.inStock) : getProjectName(entry.outStock) || entry.vendor },
+    { key: 'direction', title: '出入库', render: (_, entry) => getDirection(entry), width: '58px' },
+    { key: 'totalString', title: '内容', dataIndex: 'totalString'},
+    { key: 'action', title: '操作', render: (_, entry) => <Link to={`/record/${entry._id}`}>详情</Link>, width: '44px' },
+  ]
+
+    const storeRows = []
     store.forEach((v, k) => {
-      storeRows.push(<tr key={v}>
-        <td>{k}</td>
-        <td>{toFixedWithoutTrailingZero(outStore.get(k, 0))}</td>
-        <td>{toFixedWithoutTrailingZero(inStore.get(k, 0))}</td>
-        <td>{toFixedWithoutTrailingZero(v)}</td>
-      </tr>)
+      storeRows.push({
+        key: k,
+        name: k,
+        out: toFixedWithoutTrailingZero(outStore.get(k, 0)),
+        in: toFixedWithoutTrailingZero(inStore.get(k, 0)),
+        total: toFixedWithoutTrailingZero(v),
+      })
     })
 
+    const summaryColumns = [
+      { key: 'name', title: '名称', dataIndex: 'name' },
+      { key: 'out', title: '出库数量', dataIndex: 'out' },
+      { key: 'in', title: '入库数量', dataIndex: 'in' },
+      { key: 'total', title: '小计', dataIndex: 'total' },
+    ]
+
     return (
-      <Card style={{ marginTop: '16px' }}>
-        <CardContent>
-          <table className="table table-bordered" style={{ width: '100%' }}>
-            <thead>
-            <tr>
-              <th>时间</th>
-              <th>车号</th>
-              <th>单号</th>
-              <th>原始单号</th>
-              <th>项目部</th>
-              <th>出入库 </th>
-              <th>订单内容</th>
-              <th/>
-            </tr>
-            </thead>
-            <tbody>
-            {search && search.map((entry, index) => (
-              <tr key={index}>
-                <td>{moment(entry.outDate).format('YYYY-MM-DD')}</td>
-                <td>{entry.carNumber}</td>
-                <td>{entry.number}</td>
-                <td>{entry.originalOrder}</td>
-                <td>{getDirection(entry) === '出库' ? getProjectName(entry.inStock) : getProjectName(entry.outStock) || entry.vendor}</td>
-                {/* 当没有公司情况的时候，会有对方单位，当两个都没有的时候，属于上年结转的单据 */}
-                <td>{getDirection(entry)}</td>
-                <td>{entry.totalString}</td>
-                <td>
-                  <Link to={`/transport/${entry._id}`}>查看运输单</Link>
-                </td>
-              </tr>
-            ))}
-            </tbody>
-          </table>
-        </CardContent>
-      </Card>
+      <ResultTable
+        columns={columns}
+        dataSource={search}
+        summaryColumns={summaryColumns}
+        summaryDataSource={storeRows}
+      />
     )
   }
 }

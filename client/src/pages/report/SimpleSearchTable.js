@@ -10,6 +10,7 @@ import {
 } from '@material-ui/core'
 
 import { total_, toFixedWithoutTrailingZero } from '../../utils'
+import { ResultTable } from '../../components'
 
 const SimpleSearchTable = ({ search, isCompany }) => {
 
@@ -69,85 +70,49 @@ const SimpleSearchTable = ({ search, isCompany }) => {
   const storeRows = []
   if (!isCompany) {
     summary.forEach((v, k) => {
-      storeRows.push(<tr key={v}>
-        <td>{k}</td>
-        <td>{toFixedWithoutTrailingZero(outStore.get(k, 0))}</td>
-        <td>{toFixedWithoutTrailingZero(inStore.get(k, 0))}</td>
-        <td>{toFixedWithoutTrailingZero(v)}</td>
-      </tr>)
+      storeRows.push({
+        key: k,
+        name: k,
+        out: toFixedWithoutTrailingZero(outStore.get(k, 0)),
+        in: toFixedWithoutTrailingZero(inStore.get(k, 0)),
+        total: toFixedWithoutTrailingZero(v),
+      })
     })
   }
 
+  const columns = [
+    { key: 'type', title: '类别', dataIndex: 'type', width: '44px' },
+    { key: 'outDate', title: '日期', dataIndex: 'outDate', render: (date) => moment(date).format('YYYY-MM-DD'), width: '114px' },
+    { key: 'carNumber', title: '车号', dataIndex: 'carNumber', width: '100px' },
+    { key: 'number', title: '单号', dataIndex: 'number', width: '58px' },
+    { key: 'originalOrder', title: '原始单号', dataIndex: 'originalOrder', width: '100px' },
+    isCompany
+      ? { key: 'outStock', title: '出库', dataIndex: 'outStock' }
+      : { key: 'project', title: '项目部', render: (_, entry) => getOtherSize(entry) },
+    isCompany
+      ? { key: 'inStock', title: '入库', dataIndex: 'inStock' }
+      : { key: 'direction', title: '出入库', render: (_, entry) => getDirection(entry), width: '58px' },
+    { key: 'totalString', title: '内容', dataIndex: 'totalString'},
+    isCompany
+      ? { key: 'action', title: '操作', render: (_, entry) => <Link to={`/company_record/${entry._id}`}>详情</Link>, width: '44px' }
+      : { key: 'action', title: '操作', render: (_, entry) => <Link to={`/record/${entry._id}`}>详情</Link>, width: '44px' },
+  ]
+
+  const summaryColumns = [
+    { key: 'name', title: '名称', dataIndex: 'name' },
+    { key: 'out', title: '出库数量', dataIndex: 'out' },
+    { key: 'in', title: '入库数量', dataIndex: 'in' },
+    { key: 'total', title: '小计', dataIndex: 'total' },
+  ]
+
   return (
     <div>
-      <Card style={{ marginTop: '16px' }}>
-        <CardContent>
-          <table className="table table-bordered" style={{ width: '100%' }}>
-            <thead>
-              <tr>
-                <th>类型</th>
-                <th>时间</th>
-                <th>车号</th>
-                <th>单号</th>
-                <th>原始单号</th>
-                {isCompany ? <th>出库</th> : <th>项目部</th>}
-                {isCompany ? <th>入库</th> : <th>出入库</th>}
-                <th>订单内容</th>
-                <th>操作</th>
-              </tr>
-            </thead>
-            <tbody>
-              {search && search.map((entry, index) => (
-                <tr key={index}>
-                  <td>{entry.type}</td>
-                  <td>{moment(entry.outDate).format('YYYY-MM-DD')}</td>
-                  <td>{entry.carNumber}</td>
-                  <td>{entry.number}</td>
-                  <td>{entry.originalOrder}</td>
-                  {isCompany
-                    ? <td>{getProjectName(entry.outStock) || entry.vendor}</td>
-                    : <td>{getOtherSize(entry)}</td>
-                  }
-                  {isCompany
-                    ? <td>{getProjectName(entry.inStock) || entry.vendor}</td>
-                    : <td>{getDirection(entry)}</td>
-                  }
-                  <td>{entry.totalString}</td>
-                  <td>
-                    {isCompany
-                      ? <Link to={`/company_record/${entry._id}`}>查看详情</Link>
-                      : <Link to={`/record/${entry._id}`}>查看详情</Link>
-                    }
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </CardContent>
-      </Card>
-
-      {!isCompany && storeRows.length > 0 &&
-        <Card style={{ marginTop: '16px' }}>
-          <CardHeader
-            title="结果统计"
-          />
-          <CardContent>
-            <table className="table table-bordered">
-              <thead>
-                <tr>
-                  <th>名称</th>
-                  <th>出库数量</th>
-                  <th>入库数量</th>
-                  <th>小计</th>
-                </tr>
-              </thead>
-              <tbody>
-                {storeRows}
-              </tbody>
-            </table>
-          </CardContent>
-        </Card>
-      }
+      <ResultTable
+        dataSource={search}
+        columns={columns}
+        summaryColumns={summaryColumns}
+        summaryDataSource={storeRows}
+      />
     </div>
   )
 }
