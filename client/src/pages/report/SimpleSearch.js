@@ -1,16 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
-import {
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-} from '@material-ui/core'
 
 import SearchForm from './SimpleSearchForm'
 import SearchTable from './SimpleSearchTable'
 import { simpleSearch } from '../../actions'
+import { PageHeader } from '../../components'
 
 class Search extends React.Component {
   search = condition => {
@@ -23,28 +18,19 @@ class Search extends React.Component {
 
   render() {
     return (
-      <>
-        <Card>
-          <CardHeader
-            title="出入库查询"
-            action={<>
-              <Button onClick={() => this.form.reset()}>重置</Button>
-              <Button color="primary" onClick={() => this.form.submit()}>查询</Button>
-            </>}
-          />
-          <CardContent>
-            <SearchForm
-              ref={form => this.form = form}
-              onSubmit={this.search}
-              isCompany={false}
-            />
-          </CardContent>
-        </Card>
+      <PageHeader
+        title='出入库查询'
+        searchForm={{
+          Form: SearchForm,
+          onSubmit: this.search,
+          isCompany: false,
+        }}
+      >
         <SearchTable
-          search={this.props.records} 
+          search={this.props.records}
           isCompany={false}
         />
-      </>
+      </PageHeader>
     )
   }
 }

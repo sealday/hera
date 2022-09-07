@@ -37,9 +37,14 @@ export default ({ title, subTitle, onCreate, onEdit, children, onPrintPreview, o
     actions.push(<Button key='onCreate' type='primary' onClick={onPrint} icon={<PrinterOutlined />}>打印</Button>)
   }
   const mSearchForm = React.createRef()
+  const forms = []
   if (searchForm) {
-    actions.push(<Button key='onReset'  onClick={() => mSearchForm.current.reset()} icon={<ClearOutlined />}>重置</Button>)
+    const { Form: SearchForm, initialValues, onSubmit, ...otherSearchFormProps } = searchForm
+    actions.push(<Button key='onReset' onClick={() => mSearchForm.current.reset()} icon={<ClearOutlined />}>重置</Button>)
     actions.push(<Button key='onSearch' type='primary' onClick={() => mSearchForm.current.submit()} icon={<SearchOutlined />}>查询</Button>)
+    forms.push(
+      <searchForm.Form key='searchForm' initialValues={searchForm.initialValues} ref={mSearchForm} onSubmit={searchForm.onSubmit} {...otherSearchFormProps} />
+    )
   }
   return <>
     <PageHeader
@@ -54,10 +59,7 @@ export default ({ title, subTitle, onCreate, onEdit, children, onPrintPreview, o
           <Descriptions.Item label='入库项目'>abc</Descriptions.Item>
         </Descriptions>
         : <></>}
-      {searchForm ?
-        <searchForm.Form initialValues={searchForm.initialValues} ref={mSearchForm} onSubmit={searchForm.onSubmit} />
-        : <></>}
-
+      {forms}
     </PageHeader>
     {searchInfo ?
       <Card bordered={false}>

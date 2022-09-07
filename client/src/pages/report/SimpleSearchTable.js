@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect } from 'react-redux'
+import { useSelector } from 'react-redux'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
 import { Map } from 'immutable'
@@ -11,79 +11,79 @@ import {
 
 import { total_, toFixedWithoutTrailingZero } from '../../utils'
 
-/**
- * 提供排序功能的搜索结果表
- */
-class SimpleSearchTable extends React.Component {
+const SimpleSearchTable = ({ search, isCompany }) => {
 
-  getDirection = entry => entry.inStock === this.props.store._id ? '入库' : '出库'
+  const { projects, products, articles, store } = useSelector(state => ({
+    projects: state.system.projects,
+    products: state.system.products,
+    articles: state.system.articles.toArray(),
+    store: state.system.store,
+  }))
 
-  getOtherSize = entry => {
-    return this.getDirection(entry) === '出库' ? this.getProjectName(entry.inStock): this.getProjectName(entry.outStock)
+  const getDirection = entry => entry.inStock === store._id ? '入库' : '出库'
+
+  const getOtherSize = entry => {
+    return getDirection(entry) === '出库' ? getProjectName(entry.inStock) : getProjectName(entry.outStock)
   }
 
-  getProjectName = id => {
-    const { projects } = this.props
+  const getProjectName = id => {
     const project = projects.get(id)
     return project ? project.company + project.name : '';
   }
 
-  render() {
-    const { search, isCompany } = this.props
+  const getTotal = (entries) => {
 
-    const getTotal = (entries) => {
+    let names = new Map()
+    entries.forEach(entry => {
+      names = names.update(entry.name, 0, total => total + total_(entry, products))
+    })
 
-      let names = new Map()
-      entries.forEach(entry => {
-        names = names.update(entry.name, 0, total => total + total_(entry, this.props.products))
-      })
+    return names
+  }
 
-      return names
-    }
+  let inStore = new Map() // 入库
+  let outStore = new Map() // 出库
+  let summary = new Map()
 
-    let inStore = new Map() // 入库
-    let outStore = new Map() // 出库
-    let store = new Map()
+  if (search) {
+    search.forEach(entry => {
+      let totals = []
+      getTotal(entry.entries).forEach((v, k) => {
+        totals.push(k + '：' + toFixedWithoutTrailingZero(v)) //拼凑显示的字符串
 
-    if (search) {
-      search.forEach(entry => {
-        let totals = []
-        getTotal(entry.entries).forEach((v, k) => {
-          totals.push(k + '：' + toFixedWithoutTrailingZero(v)) //拼凑显示的字符串
-
-          if (!isCompany) {
-            if (this.getDirection(entry) === '入库') {
-              inStore = inStore.update(k, 0, total => total + v)
-              store = store.update(k, 0, total => total + v)
-            } else {
-              outStore = outStore.update(k, 0, total => total + v)
-              store = store.update(k, 0, total => total - v)
-            }
+        if (!isCompany) {
+          if (getDirection(entry) === '入库') {
+            inStore = inStore.update(k, 0, total => total + v)
+            summary = summary.update(k, 0, total => total + v)
+          } else {
+            outStore = outStore.update(k, 0, total => total + v)
+            summary = summary.update(k, 0, total => total - v)
           }
-        })
-
-        entry.totalString = totals.join(' ')
+        }
       })
-    }
 
-    const storeRows = []
-    if (!isCompany) {
-      store.forEach((v, k) => {
-        storeRows.push(<tr key={v}>
-          <td>{k}</td>
-          <td>{toFixedWithoutTrailingZero(outStore.get(k, 0))}</td>
-          <td>{toFixedWithoutTrailingZero(inStore.get(k, 0))}</td>
-          <td>{toFixedWithoutTrailingZero(v)}</td>
-        </tr>)
-      })
-    }
+      entry.totalString = totals.join(' ')
+    })
+  }
 
-    return (
-      <div>
-        <Card style={{ marginTop: '16px' }}>
-          <CardContent>
-            <table className="table table-bordered" style={{ width: '100%' }}>
-              <thead>
+  const storeRows = []
+  if (!isCompany) {
+    summary.forEach((v, k) => {
+      storeRows.push(<tr key={v}>
+        <td>{k}</td>
+        <td>{toFixedWithoutTrailingZero(outStore.get(k, 0))}</td>
+        <td>{toFixedWithoutTrailingZero(inStore.get(k, 0))}</td>
+        <td>{toFixedWithoutTrailingZero(v)}</td>
+      </tr>)
+    })
+  }
+
+  return (
+    <div>
+      <Card style={{ marginTop: '16px' }}>
+        <CardContent>
+          <table className="table table-bordered" style={{ width: '100%' }}>
+            <thead>
               <tr>
                 <th>类型</th>
                 <th>时间</th>
@@ -95,8 +95,8 @@ class SimpleSearchTable extends React.Component {
                 <th>订单内容</th>
                 <th>操作</th>
               </tr>
-              </thead>
-              <tbody>
+            </thead>
+            <tbody>
               {search && search.map((entry, index) => (
                 <tr key={index}>
                   <td>{entry.type}</td>
@@ -105,12 +105,12 @@ class SimpleSearchTable extends React.Component {
                   <td>{entry.number}</td>
                   <td>{entry.originalOrder}</td>
                   {isCompany
-                    ? <td>{this.getProjectName(entry.outStock) || entry.vendor}</td>
-                    : <td>{this.getOtherSize(entry)}</td>
+                    ? <td>{getProjectName(entry.outStock) || entry.vendor}</td>
+                    : <td>{getOtherSize(entry)}</td>
                   }
                   {isCompany
-                    ? <td>{this.getProjectName(entry.inStock) || entry.vendor}</td>
-                    : <td>{this.getDirection(entry)}</td>
+                    ? <td>{getProjectName(entry.inStock) || entry.vendor}</td>
+                    : <td>{getDirection(entry)}</td>
                   }
                   <td>{entry.totalString}</td>
                   <td>
@@ -121,12 +121,12 @@ class SimpleSearchTable extends React.Component {
                   </td>
                 </tr>
               ))}
-              </tbody>
-            </table>
-          </CardContent>
-        </Card>
+            </tbody>
+          </table>
+        </CardContent>
+      </Card>
 
-        {!isCompany && storeRows.length > 0 &&
+      {!isCompany && storeRows.length > 0 &&
         <Card style={{ marginTop: '16px' }}>
           <CardHeader
             title="结果统计"
@@ -134,30 +134,22 @@ class SimpleSearchTable extends React.Component {
           <CardContent>
             <table className="table table-bordered">
               <thead>
-              <tr>
-                <th>名称</th>
-                <th>出库数量</th>
-                <th>入库数量</th>
-                <th>小计</th>
-              </tr>
+                <tr>
+                  <th>名称</th>
+                  <th>出库数量</th>
+                  <th>入库数量</th>
+                  <th>小计</th>
+                </tr>
               </thead>
               <tbody>
-              {storeRows}
+                {storeRows}
               </tbody>
             </table>
           </CardContent>
         </Card>
-        }
-      </div>
-    )
-  }
+      }
+    </div>
+  )
 }
 
-const mapStateToProps = state => ({
-  projects: state.system.projects,
-  products: state.system.products,
-  articles: state.system.articles.toArray(),
-  store: state.system.store,
-})
-
-export default connect(mapStateToProps)(SimpleSearchTable)
+export default SimpleSearchTable
