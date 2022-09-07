@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { Field, reduxForm, getFormValues } from 'redux-form'
+import { reduxForm, getFormValues } from 'redux-form'
 import { connect } from 'react-redux'
 import {
-  Card,
   CardContent,
-  CardHeader,
   Dialog,
   DialogActions,
   DialogContent,
@@ -16,17 +14,12 @@ import {
 
 import { ajax, wrapper } from '../../utils'
 import { newErrorNotify, newInfoNotify } from '../../actions'
-import { Input, PageHeader } from '../../components'
+import { PageHeader } from '../../components'
 import ProductForm from './ProductForm'
 import { Space, Table, Button } from 'antd'
 
 const ProductCreateForm = reduxForm({ form: 'PRODUCT_CREATE' })(ProductForm)
 const ProductEditForm = reduxForm({ form: 'PRODUCT_EDIT' })(ProductForm)
-const ProductFilterForm = reduxForm({ form: 'PRODUCT_FILTER', initialValues: { keyword: '' } })(
-  (props) => <form className="navbar-form" role="search">
-    <Field name="keyword" component={Input} placeholder="过滤出指定名称产品" />
-  </form>
-)
 
 const FormDialog = withStyles(theme => ({
   paper: {
@@ -137,55 +130,15 @@ const Product = ({ dispatch, productFilter }) => {
     },
   ]
   return (
-    <div>
-      <PageHeader 
-        title='产品信息'
-        subTitle='在这里可以编辑产品信息'
-        onCreate={() => { setCreateOpen(true) }}
-      />
+    <PageHeader
+      title='产品信息'
+      subTitle='在这里可以编辑产品信息'
+      onCreate={() => { setCreateOpen(true) }}
+    >
       <Table
         pagination={{ pageSize: 60 }}
         size='small' columns={columns} rowKey='number' dataSource={products} />
       <CardContent>
-        <ProductFilterForm />
-        {/* <table className="table table-bordered" style={{ marginTop: '16px', width: '100%' }}>
-          <thead>
-            <tr>
-              <th>编号</th>
-              <th>类型</th>
-              <th>型号</th>
-              <th>名称</th>
-              <th>规格</th>
-              <th>理论重量（千克）</th>
-              <th>计量单位</th>
-              <th>换算单位</th>
-              <th>换算比例</th>
-              <th>是否需要换算</th>
-              <th />
-            </tr>
-          </thead>
-          <tbody>
-            {products.filter((product) => new RegExp(productFilter.keyword).test(product.name)).map((product) => (
-              <tr key={product.number}>
-                <td>{product.number}</td>
-                <td>{product.type}</td>
-                <td>{product.model}</td>
-                <td>{product.name}</td>
-                <td>{product.size}</td>
-                <td>{product.weight}</td>
-                <td>{product.countUnit}</td>
-                <td>{product.unit}</td>
-                <td>{product.scale}</td>
-                <td>{product.isScaled ? '是' : '否'}</td>
-                <td><Link onClick={() => {
-                  setCurrent(product)
-                  setOpen(true)
-                }} >编辑</Link>
-                  <Link onClick={() => { handleDeleteConfirmOpen(product) }} >删除</Link></td>
-              </tr>
-            ))}
-          </tbody>
-        </table> */}
         <FormDialog open={open}>
           <DialogTitle>编辑</DialogTitle>
           <DialogContent>
@@ -224,7 +177,7 @@ const Product = ({ dispatch, productFilter }) => {
           </DialogActions>
         </Dialog>
       </CardContent>
-    </div>
+    </PageHeader>
   )
 }
 

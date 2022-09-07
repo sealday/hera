@@ -109,7 +109,7 @@ class Home extends Component {
   render() {
     const { classes } = this.props
     return (
-      <Grid container spacing={24}>
+      <Grid container spacing={24} style={{ padding: '8px' }}>
         <Grid item xs={12}>
           <Card>
             <CardHeader title="赫拉管理系统"/>
