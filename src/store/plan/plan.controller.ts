@@ -30,17 +30,17 @@ export class PlanController {
       const plans = [...pricePlans, ...weightPlans, ...lossPlans, ...servicePlans]
       const result = plans.map(plan => ({
         ...plan.toObject(),
-        category: plan.type ? plan.type : 'price', // 兼容
+        type: plan.type ? plan.type : 'price', // 兼容
         status: '在用',
       }))
       return { plans: result }
     }
   }
 
-  @Get(':type')
-  async list(@Param('type') type: string) {
-    const plans = await this.planService.find(type)
-    return { plans }
+  @Get(':id')
+  async get(@Param('id') id: string) {
+    const plan = await this.planService.findById(id)
+    return { plan }
   }
 
   @Post(':type')

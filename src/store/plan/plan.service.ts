@@ -18,6 +18,15 @@ export class PlanService {
     }
   }
 
+  async findById(id: string) {
+    const pricePlan = await this.priceModel.findById(id)
+    if (pricePlan) {
+      return pricePlan
+    }
+    const plan = await this.planModel.findById(id)
+    return plan
+  }
+
   async create(type: string, body: any) {
     if (type === 'price') {
       return (new this.priceModel(body)).save()

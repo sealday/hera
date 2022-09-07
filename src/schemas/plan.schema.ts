@@ -23,6 +23,8 @@ export const PlanSchema = new mongoose.Schema({
     level: { type: String, enum: ['产品', '规格'] },
     price: Number, // 单价
     calType: { type: String, enum: ['数量', '换算数量', '重量'] }, // 计算类型
+    lossType: { type: String, enum: ['全额赔偿', '部分赔偿'] }, // 赔偿类型
+    unitPrice: Number, // 单价
     comments: String, // 备注
   }],
 });

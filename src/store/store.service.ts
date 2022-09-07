@@ -671,4 +671,47 @@ export class StoreService {
       freightGroup: result[0].freightGroup,
     }
   }
+
+  async queryStock(projectId: string) {
+    const expr = []
+    const project = Types.ObjectId(projectId)
+    // TODO 过滤出合适的表单
+    // 选出需要计算的 project 的所有相关数据
+    expr.push({
+      $match: {
+        $or: [
+          {
+            inStock: project,
+          },
+          {
+            outStock: project,
+          },
+        ]
+      }
+    })
+    // 计算出入库
+    expr.push(
+      {
+        $addFields: {
+          inOut: {
+            $cond: {
+              if: {
+                $eq: ['$inStock', project]
+              },
+              then: 1,
+              else: -1,
+            }
+          }
+        }
+      },
+    )
+    // 拉出子表单
+    expr.push(
+      {
+        $unwind: '$entries'
+      },
+    )
+    const result = await this.recordModel.aggregate(expr)
+    return result
+  }
 }

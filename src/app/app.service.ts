@@ -17,6 +17,7 @@ export type Price = any;
 export type Plan = any;
 export type Store = any;
 export type Contract = any;
+export type Company = any;
 
 @Injectable()
 export class AppService {
