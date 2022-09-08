@@ -5,7 +5,22 @@ import { useNavigate } from 'react-router-dom'
 import { isUpdatable } from '../utils'
 import { useSelector } from 'react-redux'
 
-export default ({ title, subTitle, onCreate, onEdit, children, onPrintPreview, onPrint, searchInfo, onSearch, onSave, searchForm, description, extra }) => {
+export default ({
+  title,
+  subTitle,
+  onCreate,
+  onEdit,
+  children,
+  onPrintPreview,
+  onPrint,
+  searchInfo,
+  onSearch,
+  onSave,
+  searchForm,
+  description,
+  descriptions,
+  extra
+}) => {
   const [filterValues, setFilterValues] = useState({})
   const navigate = useNavigate()
   const { user, store } = useSelector(state => ({
@@ -62,6 +77,11 @@ export default ({ title, subTitle, onCreate, onEdit, children, onPrintPreview, o
           <Descriptions.Item label='入库项目'>abc</Descriptions.Item>
         </Descriptions>
         : <></>}
+      {descriptions ?
+        <Descriptions size="small" column={3}>
+          {descriptions.map(item => <Descriptions.Item key={item.label} label={item.label}>{item.children}</Descriptions.Item>)}
+        </Descriptions>
+        : null}
       {forms}
     </PageHeader>
     {searchInfo ?
