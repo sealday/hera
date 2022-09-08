@@ -14,7 +14,7 @@ import {
 
 import { ajax, wrapper } from '../../utils'
 import { newErrorNotify, newInfoNotify } from '../../actions'
-import { PageHeader } from '../../components'
+import { PageHeader, ResultTable } from '../../components'
 import ProductForm from './ProductForm'
 import { Space, Table, Button } from 'antd'
 
@@ -94,30 +94,12 @@ const Product = ({ dispatch, productFilter }) => {
     })
   }
   const columns = [
+    { title: '编号', dataIndex: 'number', key: 'number', },
+    { title: '类别', dataIndex: 'type', key: 'type' },
+    { title: '名称', dataIndex: 'name', key: 'name' },
+    { title: '规格', dataIndex: 'size', key: 'size' },
     {
-      title: '编号',
-      dataIndex: 'number',
-      key: 'number',
-    },
-    {
-      title: '类别',
-      dataIndex: 'type',
-      key: 'type',
-    },
-    {
-      title: '名称',
-      dataIndex: 'name',
-      key: 'name',
-    },
-    {
-      title: '规格',
-      dataIndex: 'size',
-      key: 'size',
-    },
-    {
-      title: '动作',
-      dataIndex: 'action',
-      key: 'action',
+      title: '动作', key: 'action',
       render: (_, product) => {
         return <Space>
           <Button type='link' onClick={() => {
@@ -135,9 +117,12 @@ const Product = ({ dispatch, productFilter }) => {
       subTitle='在这里可以编辑产品信息'
       onCreate={() => { setCreateOpen(true) }}
     >
-      <Table
+      <ResultTable
         pagination={{ pageSize: 60 }}
-        size='small' columns={columns} rowKey='number' dataSource={products} />
+        columns={columns}
+        rowKey='number'
+        dataSource={products}
+      />
       <CardContent>
         <FormDialog open={open}>
           <DialogTitle>编辑</DialogTitle>

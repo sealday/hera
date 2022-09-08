@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import {Table, Spin, Modal, Form, Row, Col, Input, Radio, Select, message, Space, Button} from 'antd'
-import { PageHeader } from '../../../components'
+import { PageHeader, ResultTable } from '../../../components'
 import { useGetCompanyListQuery, useCreateCompanyMutation, useDeleteCompanyMutation } from '../../../api'
 const Company = () => {
   const columns = [
@@ -55,7 +55,6 @@ const Company = () => {
   const [deleteCompany, deleteResult] = useDeleteCompanyMutation()
   columns.push({
     title: '操作',
-    dataIndex: 'action',
     key: 'action',
     render(_, record) {
       return <Space>
@@ -77,7 +76,7 @@ const Company = () => {
       subTitle='这里编辑所有的公司信息'
       onCreate={() => { if (ref && ref.current) { ref.current.open() } }}
     >
-      <Table columns={columns} dataSource={data} rowKey='name' />
+      <ResultTable columns={columns} dataSource={data} rowKey='name' pagination={{ pageSize: 50 }} />
     </PageHeader>
   </div>
 }

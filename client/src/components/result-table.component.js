@@ -16,12 +16,25 @@ export default ({ columns, dataSource, summaryColumns, summaryDataSource, rowKey
         column.filterSearch = true
         column.onFilter = (value, record) => {
           if (value === '__未填写__') {
-            return !record[column.dataIndex]
+            return !_.toString(record[column.dataIndex])
           }
           return record[column.dataIndex] === value
         } 
-        column.filters = _.uniq(dataSource.map(record => record[column.dataIndex])).map(v => ({ text: v ? v : '未填写', value: v ? v : '__未填写__' }))
+        column.filters = _.uniq(dataSource.map(record => record[column.dataIndex])).map(v => ({ text: _.toString(v) ? v : '未填写', value: _.toString(v) ? v : '__未填写__' }))
       }
+      if (column.dataIndex
+        // 没有自带排序行数
+        && !column.sorter
+        && dataSource && dataSource.length > 0
+        ) {
+          if (_.isNumber(dataSource[0][column.dataIndex])) {
+            column.sorter = (a, b) => a[column.dataIndex] - b[column.dataIndex]
+          } else {
+            column.sorter = (a, b) => a[column.dataIndex] > b[column.dataIndex]
+              ? 1
+              : a[column.dataIndex] === b[column.dataIndex] ? 0 : -1
+          }
+        }
     })
   }
   return (
