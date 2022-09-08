@@ -139,6 +139,31 @@ export const heraApi = createApi({
             transformResponse: res => res.data.employee,
             invalidatesTags: [{ type: 'Employee', id: 'LIST' }],
         }),
+        // 获取员工信息
+        getEmployee: builder.query({
+            query: (id) => `employees/${id}`,
+            transformResponse: res => res.data.employee,
+            providesTags: (_result, _error, id) => [{ type: 'Employee', id }],
+        }),
+        // 更新员工
+        updateEmployee: builder.mutation({
+            query: (id, employee) => ({
+                url: `employees/${id}`,
+                method: 'PATCH',
+                body: employee,
+            }),
+            transformResponse: res => res.data.employee,
+            invalidatesTags: (_result, _error, id) => [{ type: 'Employee', id }],
+        }),
+        // 删除员工
+        deleteEmployee: builder.mutation({
+            query: (id) => ({
+                url: `employees/${id}`,
+                method: 'DELETE',
+            }),
+            transformResponse: res => res.data.employee,
+            invalidatesTags: (_result, _error, id) => [{ type: 'Employee', id }],
+        }),
     })
 })
 
