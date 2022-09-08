@@ -98,7 +98,7 @@ const allMenu = [
       },
       {
         name: '员工档案',
-        path: '/staff',
+        path: '/employee',
       },
       {
         name: '员工考勤',

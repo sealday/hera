@@ -1,7 +1,7 @@
-[
+export default [
     {
         "label": "工号",
-        "name": "number",
+        "name": "employeeID",
         "type": "text"
     },
     {
@@ -13,7 +13,10 @@
         "label": "性别",
         "name": "gendor",
         "type": "option",
-        "options": ["男", "女"]
+        "option": {
+            "type": "fixed",
+            "values": ["男", "女"]
+        }
     },
     {
         "label": "身份证",

@@ -75,9 +75,10 @@ const Company = () => {
     <PageHeader
       title='公司信息'
       subTitle='这里编辑所有的公司信息'
-      onCreate={() => { if (ref && ref.current) { ref.current.open() }}}
-    />
-    <Table columns={columns} dataSource={data} rowKey='name' />
+      onCreate={() => { if (ref && ref.current) { ref.current.open() } }}
+    >
+      <Table columns={columns} dataSource={data} rowKey='name' />
+    </PageHeader>
   </div>
 }
 

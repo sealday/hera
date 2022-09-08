@@ -23,7 +23,7 @@ const baseQueryAuth = async (args, api, extraOptions) => {
 export const heraApi = createApi({
     reducerPath: 'heraApi',
     baseQuery: baseQueryAuth,
-    tagTypes: ['Company', 'Record', 'Plan'],
+    tagTypes: ['Company', 'Record', 'Plan', 'Employee'],
     endpoints: (builder) => ({
         // 获取产品表数据
         getProduct: builder.query({
@@ -121,6 +121,24 @@ export const heraApi = createApi({
             transformResponse: res => res.data.plan,
             providesTags: (_result, _error, id) => [{ type: 'Plan', id }],
         }),
+        // 获取员工列表
+        getEmployeeList: builder.query({
+            query: () => 'employees',
+            transformResponse: res => res.data.employee,
+            providesTags: result => result
+                ? [...result.map(({ _id: id }) => ({ type: 'Employee', id }) ), { type: 'Employee', id: 'LIST'}]
+                : [{ type: 'Employee', id: 'LIST'}]
+        }),
+        // 创建员工
+        createEmployee: builder.mutation({
+            query: (employee) => ({
+                url: 'employees',
+                method: 'POST',
+                body: employee,
+            }),
+            transformResponse: res => res.data.employee,
+            invalidatesTags: [{ type: 'Employee', id: 'LIST' }],
+        }),
     })
 })
 
@@ -138,3 +156,5 @@ export const {
     useCreatePlanMutation,
     useGetPlanQuery,
 } = heraApi
+
+export default heraApi

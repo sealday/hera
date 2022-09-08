@@ -28,8 +28,10 @@ import {
 import * as company from '../pages/finance'
 import Profile from '../pages/common/Profile'
 import Login from '../pages/common/Login'
-import Staff from '../pages/project/staff.page'
+import Employee from '../pages/project/employee.page'
 import Attendance from '../pages/project/attendance.page'
+import EmployeeCreatePage from '../pages/project/employee-create.page'
+import EmployeeEditPage from '../pages/project/employee-edit.page'
 
 export default ({ onLogin, onLogout }) => <Routes>
   <Route path="/login" element={<Login />} />
@@ -78,7 +80,9 @@ export default ({ onLogin, onLogout }) => <Routes>
     <Route path="profile" element={<Profile />} />
     <Route path="settings" element={<Settings />} />
     <Route path='company' element={<Company />} />
-    <Route path='staff' element={<Staff />} />
+    <Route path='employee' element={<Employee />} />
+    <Route path='employee/create' element={<EmployeeCreatePage />} />
+    <Route path='employee/:id/edit' element={<EmployeeEditPage />} />
     <Route path='attendance' element={<Attendance />} />
   </Route>
 </Routes>

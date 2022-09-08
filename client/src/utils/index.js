@@ -601,3 +601,5 @@ export const enableFilters = [
 ]
 
 export const shouldShow = (condition, view) => condition ? view : null
+
+export { generateFormContent  } from './antd'
