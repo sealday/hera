@@ -34,7 +34,7 @@ export class StoreService {
           outRecords: [
             {
               $match: {
-                outStock: Types.ObjectId(projectId),
+                outStock: new Types.ObjectId(projectId),
                 outDate: {
                   $gte: new Date(params.startDate),
                   $lt: new Date(params.endDate)
@@ -66,7 +66,7 @@ export class StoreService {
           inRecords: [
             {
               $match: {
-                inStock: Types.ObjectId(projectId),
+                inStock: new Types.ObjectId(projectId),
                 outDate: {
                   $gte: new Date(params.startDate),
                   $lt: new Date(params.endDate)
@@ -156,7 +156,7 @@ export class StoreService {
     }
     // 需要查询对方仓库 调拨单
     if (condition.other) {
-      const id = Types.ObjectId(condition.other)
+      const id = new Types.ObjectId(condition.other)
       if (condition.company) {
         if (condition.inOut == '出库') {
           match['$or'] = [
@@ -176,16 +176,16 @@ export class StoreService {
         // 处理出入库
         if (condition.inOut == '出库') {
           match['$or'] = [
-            { inStock: id, outStock: Types.ObjectId(condition.self) },
+            { inStock: id, outStock: new Types.ObjectId(condition.self) },
           ]
         } else if (condition.inOut == '入库') {
           match['$or'] = [
-            { outStock: id, inStock: Types.ObjectId(condition.self) },
+            { outStock: id, inStock: new Types.ObjectId(condition.self) },
           ]
         } else {
           match['$or'] = [
-            { outStock: id, inStock: Types.ObjectId(condition.self) },
-            { inStock: id, outStock: Types.ObjectId(condition.self) },
+            { outStock: id, inStock: new Types.ObjectId(condition.self) },
+            { inStock: id, outStock: new Types.ObjectId(condition.self) },
           ]
         }
       }
@@ -195,16 +195,16 @@ export class StoreService {
         // 处理出入库
         if (condition.inOut == '出库') {
           match['$or'] = [
-            { outStock: Types.ObjectId(condition.self) },
+            { outStock: new Types.ObjectId(condition.self) },
           ]
         } else if (condition.inOut == '入库') {
           match['$or'] = [
-            { inStock: Types.ObjectId(condition.self) },
+            { inStock: new Types.ObjectId(condition.self) },
           ]
         } else {
           match['$or'] = [
-            { inStock: Types.ObjectId(condition.self) },
-            { outStock: Types.ObjectId(condition.self) },
+            { inStock: new Types.ObjectId(condition.self) },
+            { outStock: new Types.ObjectId(condition.self) },
           ]
         }
       }
@@ -232,7 +232,7 @@ export class StoreService {
     // 兼容旧方案
     let weightPlanIdSelected = pricePlan.weightPlan
     if (weightPlanId) {
-      weightPlanIdSelected =  Types.ObjectId(weightPlanId)
+      weightPlanIdSelected =  new Types.ObjectId(weightPlanId)
     }
     const repairPlanId = pricePlan.repairPlan
     const compensationPlanId = pricePlan.compensationPlan
@@ -674,7 +674,7 @@ export class StoreService {
 
   async queryStock(projectId: string) {
     const expr = []
-    const project = Types.ObjectId(projectId)
+    const project = new Types.ObjectId(projectId)
     // TODO 过滤出合适的表单
     // 选出需要计算的 project 的所有相关数据
     expr.push({
@@ -711,6 +711,18 @@ export class StoreService {
         $unwind: '$entries'
       },
     )
+    // 映射结果
+    expr.push({
+      $project: {
+        name: '$entries.name',
+        size: '$entries.size',
+        count: { $multiply: ['$entries.count', '$inOut'] },
+      }
+    })
+    // 汇总
+    expr.push({
+
+    })
     const result = await this.recordModel.aggregate(expr)
     return result
   }

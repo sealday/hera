@@ -15,12 +15,12 @@ export class RecordService {
   ) { }
 
   async delete(recordId: string) {
-    const res = await this.recordModel.updateOne({ _id: Types.ObjectId(recordId) }, { valid: false })
-    return res.nModified
+    const res = await this.recordModel.updateOne({ _id: new Types.ObjectId(recordId) }, { valid: false })
+    return res.modifiedCount
   }
   async recover(recordId: string) {
-    const res = await this.recordModel.updateOne({ _id: Types.ObjectId(recordId) }, { valid: true })
-    return res.nModified
+    const res = await this.recordModel.updateOne({ _id: new Types.ObjectId(recordId) }, { valid: true })
+    return res.modifiedCount
   }
 
   async create(body: Record, user: User) {

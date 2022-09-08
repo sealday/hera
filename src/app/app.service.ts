@@ -37,7 +37,7 @@ export class AppService {
     let today = moment().startOf('day').toDate()
     if (direction) {
       return this.recordModel.countDocuments({
-        [direction]: Types.ObjectId(storeId),
+        [direction]: new Types.ObjectId(storeId),
         [dateType]: {
           '$gte': today,
         },
@@ -90,7 +90,7 @@ export class AppService {
 
   async queryNextKLog(user, lastId) {
     const operations = await this.operationModel
-      .find({ _id: { $lt: Types.ObjectId(lastId) }, ...this.genQeuryCond(user) })
+      .find({ _id: { $lt: new Types.ObjectId(lastId) }, ...this.genQeuryCond(user) })
       .sort({ _id: -1 })
       .limit(10)
     return operations;

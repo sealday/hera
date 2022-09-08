@@ -13,8 +13,6 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
         uri: configService.get('MONGODB_URI'),
         useNewUrlParser: true,
         useUnifiedTopology: true,
-        useCreateIndex: true,
-        useFindAndModify: false,
       }),
       inject: [ConfigService],
     }),

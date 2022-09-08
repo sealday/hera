@@ -22,8 +22,8 @@ export class StoreController {
     condition = JSON.parse(condition)
     const startDate = new Date(params.startDate)
     const endDate = new Date(params.endDate)
-    const project = Types.ObjectId(params.project)
-    const pricePlanId = Types.ObjectId(params.planId)
+    const project = new Types.ObjectId(params.project)
+    const pricePlanId = new Types.ObjectId(params.planId)
     const rent = await this.storeService.calculate({
       startDate,
       endDate,
