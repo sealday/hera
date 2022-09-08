@@ -80,4 +80,4 @@ const mapStateToProps = (state, props) => {
   }
 }
 
-export default connect(mapStateToProps)(withRouter(PriceEdit))
+export default withRouter(connect(mapStateToProps)(withRouter(PriceEdit)))

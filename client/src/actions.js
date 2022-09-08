@@ -606,7 +606,7 @@ export const queryPricePlan = () => (dispatch, getState) => {
   if (search.shouldProceed(getState())) {
     dispatch(search.begin)
     dispatch(newInfoNotify('提示', '正在加载合同方案', 2000))
-    ajax('/api/plan/price').then(res => {
+    ajax('/api/plan/price/list').then(res => {
       dispatch(search.endSuccess)
       dispatch({ type: SAVE_RESULTS, data: {
           key,
