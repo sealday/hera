@@ -25,6 +25,9 @@ export const heraApi = createApi({
     baseQuery: baseQueryAuth,
     tagTypes: ['Company', 'Record', 'Plan', 'Employee', 'Subject'],
     endpoints: (builder) => ({
+        logout: builder.mutation({
+            query: () => 'logout',
+        }),
         // 获取产品表数据
         getProduct: builder.query({
             query: () => 'product',
