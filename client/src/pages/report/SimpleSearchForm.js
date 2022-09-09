@@ -10,6 +10,7 @@ import {
   DateRangeModifier,
 } from '../../components'
 import { filterOption, transformArticle, wrapper, RECORD_TYPES, DEFAULT_QUERY_TYPE } from '../../utils'
+import _ from 'lodash'
 
 /**
  * 搜索用的表单

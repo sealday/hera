@@ -108,10 +108,10 @@ export function transformArticle(articles) {
     if (names[article.name]) {
       names[article.name].sizes.push(article.size)
     } else {
-      names[article.name] = article
+      names[article.name] = { ...article }
       typeNameMap[article.type].push(article.name)
-      nameArticleMap[article.name] = article
-      article.sizes = [article.size]
+      nameArticleMap[article.name] = names[article.name]
+      names[article.name].sizes = [article.size]
     }
   })
 
