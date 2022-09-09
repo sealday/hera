@@ -116,7 +116,7 @@ const TransferEntryTable = connect(
     products: state.system.products,
   })
 )(({ fields, articles, products, mode }) => {
-  const { typeNameMap, nameArticleMap } = transformArticle(articles.toArray())
+  const { typeNameMap, nameArticleMap } = transformArticle(articles.valueSeq().toArray())
   const add = () => {
     if (fields.length > 0) {
       let name = fields.get(fields.length - 1).name

@@ -13,7 +13,7 @@ const PriceEntry = connect(
     articles: state.system.articles,
   })
 )(({ fields, articles }) => {
-  const { typeNameMap, nameArticleMap } = transformArticle(articles.toArray())
+  const { typeNameMap, nameArticleMap } = transformArticle(articles.valueSeq().toArray())
   const add = () => {
     if (fields.length > 0) {
       const name = fields.get(fields.length - 1).name

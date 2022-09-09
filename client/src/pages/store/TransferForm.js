@@ -40,7 +40,7 @@ class TransferForm extends Component {
 
   render() {
     const { classes, title, action } = this.props
-    const projects = this.props.projects.toArray()
+    const projects = this.props.projects.valueSeq().toArray()
     return (
       <form className="form-horizontal" onSubmit={this.props.handleSubmit}>
         <Card>

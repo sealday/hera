@@ -122,9 +122,9 @@ class SimpleSearchForm extends React.Component {
 
 const selector = formValueSelector('CompanyTransportSearchForm')
 const mapStateToProps = state => {
-  const articles = state.system.articles.toArray()
+  const articles = state.system.articles.valueSeq().toArray()
   return {
-    projects: state.system.projects.toArray(),
+    projects: state.system.projects.valueSeq().toArray(),
     startDate: selector(state, 'startDate'),
     endDate: selector(state, 'endDate'),
     name: selector(state, 'name'),

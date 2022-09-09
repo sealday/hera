@@ -32,7 +32,7 @@ const EntryTable = connect(
     products: state.system.products,
   })
 )(({ fields, articles, products }) => {
-  const { typeNameMap, nameArticleMap } = transformArticle(articles.toArray())
+  const { typeNameMap, nameArticleMap } = transformArticle(articles.valueSeq().toArray())
   const add = () => {
     if (fields.length > 0) {
       let name = fields.get(fields.length - 1).name
@@ -226,7 +226,7 @@ const EntryTable = connect(
 class TransferForm extends Component {
   render() {
     const { title, action, projectType } = this.props
-    const projects = this.props.projects.toArray()
+    const projects = this.props.projects.valueSeq().toArray()
     return (
       <form onSubmit={this.props.handleSubmit}>
         <Card>

@@ -86,7 +86,7 @@ class CurrentStore extends React.Component {
             filterOption={filterOption}
             clearable={false}
           >
-            {filteredProjects.filter(project => project.type === this.state.type).toArray().map(project =>
+            {filteredProjects.filter(project => project.type === this.state.type).valueSeq().toArray().map(project =>
               <Select.Option
                 pinyin={project.pinyin}
                 label={project.company + project.name}

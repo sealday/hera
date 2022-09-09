@@ -66,7 +66,7 @@ const Operator = ({ users, dispatch }) => {
 
 const mapStateToProps = state => {
   return {
-    users: state.system.users.valueSeq().toArray(),
+    users: state.system.users.valueSeq().valueSeq().toArray(),
   }
 }
 

@@ -69,7 +69,7 @@ const Project = ({ projects, onDeleteClick, onStatusChange }) => {
       searchInfo={true}
       onCreate={() => { navigate('/project/create') }}
     >
-      <ResultTable columns={columns} rowKey='_id' dataSource={projects.toArray()} />
+      <ResultTable columns={columns} rowKey='_id' dataSource={projects.valueSeq().toArray()} />
     </PageHeader>
   )
 }

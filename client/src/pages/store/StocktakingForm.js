@@ -28,7 +28,7 @@ const styles = theme => ({
 
 const EntryTable = connect(
   state => ({
-    ...transformArticle(state.system.articles.toArray()),
+    ...transformArticle(state.system.articles.valueSeq().toArray()),
     products: state.system.products,
   })
 )(({ fields, typeNameMap, nameArticleMap, products }) => {
@@ -222,7 +222,7 @@ TransferForm = reduxForm({
 })(TransferForm)
 
 const mapStateToProps = state => ({
-  projects: state.system.projects.toArray(),
+  projects: state.system.projects.valueSeq().toArray(),
   stocks: state.store.stocks,
 })
 

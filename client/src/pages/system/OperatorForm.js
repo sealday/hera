@@ -80,7 +80,7 @@ class OperatorForm extends Component {
               </tr>
               </thead>
               <tbody>
-              {projects.toArray().map((project) => (
+              {projects.valueSeq().toArray().map((project) => (
                 <tr key={project._id}>
                   <td>{project.company} - {project.name}</td>
                   <td><Field type="checkbox" component="input" name={`perm.${project._id}.query`} /></td>

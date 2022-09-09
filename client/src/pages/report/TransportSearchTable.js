@@ -100,7 +100,7 @@ class SimpleSearchTable extends React.Component {
 
 const mapStateToProps = state => ({
   projects: state.system.projects,
-  articles: state.system.articles.toArray(),
+  articles: state.system.articles.valueSeq().toArray(),
   products: state.system.products,
   store: state.system.store,
 })

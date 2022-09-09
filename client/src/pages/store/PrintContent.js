@@ -15,7 +15,7 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
   const projects = useSelector(state => state.system.projects)
   const config = useSelector(state => state.system.config)
   const products = useSelector(state => state.system.products)
-  const articles = useSelector(state => state.system.articles.toArray())
+  const articles = useSelector(state => state.system.articles.valueSeq().toArray())
   const [orderTitle, setOrderTitle] = useState(config.externalNames[0])
   const content = {
     orderName: record.type + '单',

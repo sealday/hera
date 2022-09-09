@@ -17,7 +17,7 @@ class TransportForm extends React.Component {
     const { record, title, action, handleSubmit, projects: imProjects, change } = this.props
     const inProject = imProjects.get(record.inStock)
     const outProject = imProjects.get(record.outStock)
-    const projects = imProjects.toArray()
+    const projects = imProjects.valueSeq().toArray()
 
     return (
       <Card>

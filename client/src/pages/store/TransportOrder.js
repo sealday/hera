@@ -39,7 +39,7 @@ export default () => {
     return <Loading />
   }
 
-  const nameArticleMap = transformArticle(articles.toArray()).nameArticleMap
+  const nameArticleMap = transformArticle(articles.valueSeq().toArray()).nameArticleMap
 
   if (!record.hasTransport) {
     return (

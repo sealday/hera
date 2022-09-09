@@ -106,7 +106,7 @@ const mapStateToProps = state => {
   const plans = state.results.get(PRICE_PLAN, [])
 
   return {
-    projects: state.system.projects.toArray(),
+    projects: state.system.projects.valueSeq().toArray(),
     startDate: selector(state, 'startDate'),
     endDate: selector(state, 'endDate'),
     plans: plans,

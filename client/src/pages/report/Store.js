@@ -55,7 +55,7 @@ const Store = () => {
     })
 
     let records = [] // [{ total, entries }]
-    const articles = oldProductStructure(thisArticles.toArray())
+    const articles = oldProductStructure(thisArticles.valueSeq().toArray())
     articles.forEach(article => {
       // 算每一项
       let inTotal = 0
