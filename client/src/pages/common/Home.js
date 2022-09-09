@@ -17,6 +17,12 @@ const styles = {
     backgroundColor: '#ffb6ba',
     padding: '2px',
   },
+  button: {
+    margin: '0 8px 0 8px',
+  },
+  row: {
+    width: '100%',
+  }
 }
 export default () => {
 
@@ -33,17 +39,19 @@ export default () => {
   const doRequest = async type => axios.get(`/api/status/${type}`, {
     params: { store: system.store._id }
   })
-  useEffect(async () => {
+  useEffect(() => {
     dispatch(queryLatestOperations())
-    const res = await axios.all([
+    axios.all([
       'new_in_records',
       'new_out_records',
       'update_records'].map(type => doRequest(type)))
+      .then(res => {
+        const [newInRecords, newOutRecords, updateRecords] = res.map(res => res.data.data.num)
+        setState({
+          newInRecords, newOutRecords, updateRecords
+        })
+      })
 
-    const [newInRecords, newOutRecords, updateRecords] = res.map(res => res.data.data.num)
-    setState({
-      newInRecords, newOutRecords, updateRecords
-    })
   }, [])
 
   const renderReport = report => {
@@ -102,7 +110,7 @@ export default () => {
     <PageHeader
       title='仪表盘'
     >
-      <Row gutter={[24, 12]}>
+      <Row gutter={[8, 8]} style={styles.row}>
         <Col span={24}>
           <Card>
             <Typography.Paragraph>亲爱的，欢迎使用{system.config.systemName}，祝您心情愉快，工作顺利！</Typography.Paragraph>
