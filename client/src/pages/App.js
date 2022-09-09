@@ -12,7 +12,7 @@ import { Layout, Button, Dropdown, Menu } from 'antd'
 import short_id from 'shortid'
 import { get } from 'lodash'
 
-import { CurrentStore, MenuList, withRouter } from '../components'
+import { CurrentStore, Loading, MenuList, withRouter } from '../components'
 import { ajax, wrapper } from '../utils'
 import { selectStore } from '../actions'
 import './App.css'
@@ -146,12 +146,7 @@ class App extends Component {
 
     if (loading) {
       return (
-        <main className={classes.main}>
-          <div className={classes.paper}>
-            <CircularProgress className={classes.progress} />
-            <Typography>加载中</Typography>
-          </div>
-        </main>
+        <Loading />
       )
     }
                     

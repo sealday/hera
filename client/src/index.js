@@ -1,7 +1,7 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
+import { ThemeProvider } from '@material-ui/core'
 import moment from 'moment'
 import 'moment/locale/zh-cn'
 import zh_CN from 'antd/lib/locale-provider/zh_CN'
@@ -68,7 +68,7 @@ const onLogouted = () => {
 }
 const MyApp = () => (
   <Provider store={store}>
-    <MuiThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
       <ConfigProvider locale={zh_CN}>
         <Alert.ErrorBoundary>
           <HistoryRouter history={history} basename={BASENAME}>
@@ -76,7 +76,7 @@ const MyApp = () => (
           </HistoryRouter>
         </Alert.ErrorBoundary>
       </ConfigProvider>
-    </MuiThemeProvider>
+    </ThemeProvider>
   </Provider>
 )
 // react 18 之后用法
