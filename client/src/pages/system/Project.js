@@ -2,14 +2,12 @@ import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import {
-  Card,
   Button,
   Popconfirm,
-  Table,
   Space,
 } from 'antd'
 import {
-  PageHeader,
+  PageHeader, ResultTable,
 } from '../../components'
 
 import {
@@ -18,7 +16,6 @@ import {
 } from '../../actions'
 import {
   wrapper,
-  TAB2TYPE,
   DEFAULT_TAB_INDEX,
   ajax,
 } from '../../utils'
@@ -37,54 +34,17 @@ const Project = ({ projects, onDeleteClick, onStatusChange }) => {
   const navigate = useNavigate()
 
   const columns = [
+    { title: '类型', dataIndex: 'type', key: 'type', width: '100px', },
+    { title: '公司名称', dataIndex: 'company', key: 'company', ellipsis: true },
+    { title: '公司电话', dataIndex: 'companyTel', key: 'companyTel' },
+    { title: '名称', dataIndex: 'name', key: 'name' },
+    { title: '电话', dataIndex: 'tel', key: 'tel', },
+    { title: '地址', dataIndex: 'address', key: 'address', ellipsis: true, },
+    { title: '备注', dataIndex: 'comments', key: 'comments', ellipsis: true, },
     {
-      title: '类型',
-      dataIndex: 'type',
-      key: 'type',
-      filters: TAB2TYPE.map(name => ({ value: name, text: name })),
-      width: '100px',
-      onFilter: (value, record) => record.type.indexOf(value) === 0,
-    },
-    {
-      title: '公司名称',
-      dataIndex: 'company',
-      key: 'company',
-      ellipsis: true,
-    },
-    {
-      title: '公司电话',
-      dataIndex: 'companyTel',
-      key: 'companyTel',
-    },
-    {
-      title: '名称',
-      dataIndex: 'name',
-      key: 'name',
-    },
-    {
-      title: '电话',
-      dataIndex: 'tel',
-      key: 'tel',
-    },
-    {
-      title: '地址',
-      dataIndex: 'address',
-      key: 'address',
-      ellipsis: true,
-    },
-    {
-      title: '备注',
-      dataIndex: 'comments',
-      key: 'comments',
-      ellipsis: true,
-    },
-    {
-      title: '操作',
-      dataIndex: 'action',
-      key: 'action',
-      width: '240px',
+      title: '操作', key: 'action', width: '200px',
       render: (_, project) => {
-        return <Space size='middle'>
+        return <Space size='small'>
           <Link to={`/project/${project._id}/edit`}><Button type='text'>编辑</Button></Link>
           <Popconfirm
             title={`确定要删除？`}
@@ -104,17 +64,13 @@ const Project = ({ projects, onDeleteClick, onStatusChange }) => {
   ]
 
   return (
-    <div>
-      <PageHeader
-        title='客户管理'
-        searchInfo={true}
-        onCreate={() => { navigate('/project/create') }}
-      >
-        <Card bordered={false}>
-          <Table columns={columns} size='middle' rowKey='_id' dataSource={projects.toArray()} />
-        </Card>
-      </PageHeader>
-    </div>
+    <PageHeader
+      title='客户管理'
+      searchInfo={true}
+      onCreate={() => { navigate('/project/create') }}
+    >
+      <ResultTable columns={columns} rowKey='_id' dataSource={projects.toArray()} />
+    </PageHeader>
   )
 }
 
