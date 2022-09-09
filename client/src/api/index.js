@@ -12,6 +12,7 @@ const baseQuery = fetchBaseQuery({
 })
 const baseQueryAuth = async (args, api, extraOptions) => {
     let result = await baseQuery(args, api, extraOptions)
+    console.log(result)
     if (result.error && result.error.status === 401) {
         // 跳转到登录页面
         // 目前有应用预加载的拦截下，不会走到这里
@@ -26,7 +27,18 @@ export const heraApi = createApi({
     tagTypes: ['Company', 'Record', 'Plan', 'Employee', 'Subject'],
     endpoints: (builder) => ({
         logout: builder.mutation({
-            query: () => 'logout',
+            query: () => ({
+                url: 'logout',
+                method: 'POST',
+            }),
+        }),
+        login: builder.mutation({
+            query: (user) => ({
+                url: 'login',
+                method: 'POST',
+                body: user, 
+            }),
+            transformResponse: res => res.access_token,
         }),
         // 获取产品表数据
         getProduct: builder.query({

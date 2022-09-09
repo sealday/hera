@@ -13,9 +13,7 @@ import { UserOutlined } from '@ant-design/icons'
 import heraApi from '../api'
 
 export default ({ onEnter, onLeave }) => {
-  const { nav, system, onlineUsers, store, user, config, loading } = useSelector(state => ({
-    nav: state.nav,
-    system: state.system,
+  const { onlineUsers, store, user, config, loading } = useSelector(state => ({
     onlineUsers: state.core.onlineUsers,
     store: state.system.store,
     user: state.system.user,
@@ -27,12 +25,6 @@ export default ({ onEnter, onLeave }) => {
   const isStoreSelected = () => !!store
   const [logout, logoutResult] = heraApi.useLogoutMutation()
   useEffect(() => {
-    if (logoutResult.isLoading) {
-      localStorage.removeItem('X-Hera-Token')
-      navigate('/login')
-    }
-  }, logoutResult.isLoading)
-  useEffect(() => {
     onEnter()
     if (!isCurrentStorePermit()) {
       dispatch(selectStore(config, false))
@@ -41,6 +33,12 @@ export default ({ onEnter, onLeave }) => {
       onLeave()
     }
   }, [])
+  useEffect(() => {
+    if (logoutResult.isSuccess) {
+      localStorage.removeItem('X-Hera-Token')
+      navigate('/login')
+    }
+  }, [logoutResult.isSuccess])
 
   const isCurrentStorePermit = () => {
     if (user.role === '项目部管理员' || user.role === '基地仓库管理员') {
@@ -74,9 +72,9 @@ export default ({ onEnter, onLeave }) => {
           <Dropdown overlay={menu}>
             <Button style={{ color: '#fff' }} type='text'>当前在线 {onlineUsers.length} 人</Button>
           </Dropdown>
-          <Button style={{ color: '#fff' }} type='text' onClick={this.logout}>退出</Button>
+          <Button style={{ color: '#fff' }} type='text' onClick={logout}>退出</Button>
           <Button
-            onClick={() => this.props.navigate('/profile')}
+            onClick={() => navigate('/profile')}
             icon={<UserOutlined />} style={{ color: '#fff' }} type='text'>{user.username}</Button>
         </div>
       </Layout.Header>

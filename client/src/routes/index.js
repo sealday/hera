@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 
 import App from '../pages/App'
 import Home from '../pages/common/Home'
@@ -38,7 +38,8 @@ import InvoicePage from '../pages/finance/invoice/invoice.page'
 export default ({ onLogin, onLogout }) => <Routes>
   <Route path="/login" element={<Login />} />
   <Route path="/" element={<App onEnter={onLogin} onLeave={onLogout} />}>
-    <Route path="*" element={<Home />} />
+    <Route path="" element={<Navigate to='/dashboard' replace />} />
+    <Route path="*" element={<Navigate to='/dashboard' replace />} />
     <Route path="dashboard" element={<Home />} />
     <Route path="operator" element={<Operator />} />
     <Route path="operator/create" element={<OperatorCreate />} />
