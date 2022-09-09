@@ -25,6 +25,7 @@ class Search extends React.Component {
         title='出入库查询'
         searchForm={{
           Form: SearchForm,
+          onSubmit: this.search,
           isCompany: true,
         }}
       >

@@ -1,25 +1,12 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import moment from 'moment'
-import { withStyles } from '@material-ui/core/styles'
-import {
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  Grid,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Typography,
-} from '@material-ui/core'
 import axios from 'axios'
 
 import { queryLatestOperations, queryMoreOperations } from '../../actions'
-import { getLevelName, isCurrentUserPermit, wrapper } from '../../utils'
-import { Flow } from '../../components'
+import { getLevelName, isCurrentUserPermit } from '../../utils'
+import { PageHeader } from '../../components'
+import { Button, Card, Col, Row, Statistic, Table, Typography } from 'antd'
 
 const styles = {
   diffAdd: {
@@ -31,38 +18,35 @@ const styles = {
     padding: '2px',
   },
 }
+export default () => {
 
-const style = theme => ({
-  flow: {
-    maxHeight: '300px'
-  }
-})
-
-class Home extends Component {
-  state = {
+  const { system, operations } = useSelector(state => ({
+    system: state.system,
+    operations: state.results.get('operations', []),
+  }))
+  const dispatch = useDispatch()
+  const [state, setState] = useState({
     newInRecords: '加载中...',
     newOutRecords: '加载中...',
     updateRecords: '加载中...',
-  }
-
-  async componentDidMount() {
-    const { system } = this.props
-    this.props.dispatch(queryLatestOperations())
-    const doRequest = async type => axios.get(`/api/status/${type}`, {
-      params: { store: system.store._id }
-    })
+  })
+  const doRequest = async type => axios.get(`/api/status/${type}`, {
+    params: { store: system.store._id }
+  })
+  useEffect(async () => {
+    dispatch(queryLatestOperations())
     const res = await axios.all([
-      'new_in_records', 
-      'new_out_records', 
+      'new_in_records',
+      'new_out_records',
       'update_records'].map(type => doRequest(type)))
 
-    const [ newInRecords, newOutRecords, updateRecords ] = res.map(res => res.data.data.num)
-    this.setState({
+    const [newInRecords, newOutRecords, updateRecords] = res.map(res => res.data.data.num)
+    setState({
       newInRecords, newOutRecords, updateRecords
     })
-  }
+  }, [])
 
-  renderReport(report) {
+  const renderReport = report => {
     const items = []
     const nameMap = {
       outStock: '出库',
@@ -81,8 +65,8 @@ class Home extends Component {
     entries.forEach((diff) => {
       items.push(<p key={diff.field}>
         <span>{nameMap[diff.field]}：</span>
-        { diff.old && <span style={styles.diffRemove}>{JSON.stringify(diff.old)}</span> }
-        { diff.new && <span style={styles.diffAdd}>{JSON.stringify(diff.new)}</span> }
+        {diff.old && <span style={styles.diffRemove}>{JSON.stringify(diff.old)}</span>}
+        {diff.new && <span style={styles.diffAdd}>{JSON.stringify(diff.new)}</span>}
       </p>)
     })
     entries = report.entryAdd || []
@@ -106,111 +90,60 @@ class Home extends Component {
 
     return items
   }
-  render() {
-    const { classes } = this.props
-    return (
-      <Grid container spacing={24} style={{ padding: '8px' }}>
-        <Grid item xs={12}>
+
+  const columns = [
+    { key: 'level', title: '日志等级', dataIndex: 'level', render: getLevelName },
+    { key: 'timestamp', title: '操作时间', dataIndex: 'timestamp', render: t => moment(t).format('MMMM Do YYYY, h:mm:ss a') },
+    { key: 'type', title: '操作类型', dataIndex: 'type', render: t => t ? t : '修改' },
+    { key: 'user.username', title: '操作人', dataIndex: ['user', 'username'] },
+    { key: 'content', title: '修改内容', render: (_t, op) => op.report.message ? op.report.message : renderReport(op.report) },
+  ]
+  return (
+    <PageHeader
+      title='仪表盘'
+    >
+      <Row gutter={[24, 12]}>
+        <Col span={24}>
           <Card>
-            <CardHeader title="赫拉管理系统"/>
-            <CardContent>
-              <Typography>亲爱的，欢迎使用赫拉管理系统，祝您心情愉快，工作顺利！</Typography>
-            </CardContent>
+            <Typography.Paragraph>亲爱的，欢迎使用{system.config.systemName}，祝您心情愉快，工作顺利！</Typography.Paragraph>
           </Card>
-        </Grid>
-        {isCurrentUserPermit(this.props.system.user, ['系统管理员', '基地仓库管理员']) &&
-        <>
-        <Grid item xs={4}>
-          <Card>
-            <CardContent>
-              <Typography>入库单新增量</Typography>
-              <Typography>{this.state.newInRecords}</Typography>
-            </CardContent>
+        </Col>
+        {isCurrentUserPermit(system.user, ['系统管理员', '基地仓库管理员']) && (
+          <>
+            <Col span={8}>
+              <Card>
+                <Statistic title='入库单新增量' value={state.newInRecords} suffix='单' />
+              </Card>
+            </Col>
+            <Col span={8}>
+              <Card>
+                <Statistic title='出库单新增量' value={state.newOutRecords} suffix='单' />
+              </Card>
+            </Col>
+            <Col span={8}>
+              <Card>
+                <Statistic title='出入库修改量' value={state.updateRecords} suffix='单' />
+              </Card>
+            </Col>
+          </>
+        )}
+        <Col span={24}>
+          <Card
+            title='日志'
+            extra={[<Button key='refresh' type='primary' onClick={() => dispatch(queryLatestOperations())}>刷新</Button>]}
+            actions={[<Button key='more' type='primary' block
+              onClick={() => {
+                const ops = operations
+                if (ops.length > 0) {
+                  dispatch(queryMoreOperations(ops[ops.length - 1]._id))
+                }
+              }}
+            >加载更多</Button>]}
+          >
+            <Table columns={columns} dataSource={operations} rowKey='_id' pagination={false} />
           </Card>
-        </Grid>
-        <Grid item xs={4}>
-          <Card>
-            <CardContent>
-              <Typography>出库单新增量</Typography>
-              <Typography>{this.state.newOutRecords}</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={4}>
-          <Card>
-            <CardContent>
-              <Typography>出入库修改量</Typography>
-              <Typography>{this.state.updateRecords}</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        </>}
-        <Grid item xs={12}>
-          <Flow 
-            className={classes.flow}
-            items={
-            []
-            }
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Card>
-            <CardHeader
-              title="日志"
-              action={
-                <Button color="primary" onClick={() => {
-                  this.props.dispatch(queryLatestOperations())
-                }}>刷新</Button>
-              }
-            />
-            <Table className="Table Table-bordered">
-              <TableHead>
-                <TableRow>
-                  <TableCell>日志等级</TableCell>
-                  <TableCell>操作时间</TableCell>
-                  <TableCell>操作类型</TableCell>
-                  <TableCell>操作人</TableCell>
-                  <TableCell>修改内容</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {this.props.operations.map((op) => (
-                  <TableRow key={op._id}>
-                    <TableCell>{getLevelName(op.level)}</TableCell>
-                    <TableCell>{moment(op.timestamp).format('MMMM Do YYYY, h:mm:ss a')}</TableCell>
-                    <TableCell>{op.type || '修改'}</TableCell>
-                    <TableCell>{op.user.username}</TableCell>
-                    <TableCell>
-                      {op.report.message ? op.report.message : this.renderReport(op.report)}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-            <CardContent>
-              <Button
-                onClick={() => {
-                  const ops = this.props.operations
-                  if (ops.length > 0) {
-                    this.props.dispatch(queryMoreOperations(ops[ops.length - 1]._id))
-                  }
-                }}
-              >加载更多</Button>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
-    )
-  }
+        </Col>
+      </Row>
+    </PageHeader>
+  )
 }
-
-const mapStateToProps = state => ({
-  system: state.system,
-  operations: state.results.get('operations', []),
-})
-
-export default wrapper([
-  connect(mapStateToProps),
-  withStyles(style),
-  Home,
-])
