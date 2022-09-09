@@ -81,7 +81,6 @@ export default () => {
   return (
     <PageHeader
       title='科目设定'
-      onCreate={() => { navigate('/subject/create') }}
     >
       <TabTreeTable 
         footers={tab => [

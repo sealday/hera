@@ -33,6 +33,7 @@ import Attendance from '../pages/project/attendance.page'
 import EmployeeCreatePage from '../pages/project/employee-create.page'
 import EmployeeEditPage from '../pages/project/employee-edit.page'
 import SubjectPage from '../pages/finance/subject/subject.page'
+import InvoicePage from '../pages/finance/invoice/invoice.page'
 
 export default ({ onLogin, onLogout }) => <Routes>
   <Route path="/login" element={<Login />} />
@@ -84,6 +85,7 @@ export default ({ onLogin, onLogout }) => <Routes>
     <Route path='employee' element={<Employee />} />
     <Route path='employee/create' element={<EmployeeCreatePage />} />
     <Route path='employee/:id/edit' element={<EmployeeEditPage />} />
+    <Route path='invoice/:direction' element={<InvoicePage />} />
     <Route path='subject' element={<SubjectPage />} />
     <Route path='attendance' element={<Attendance />} />
   </Route>

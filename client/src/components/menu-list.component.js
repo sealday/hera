@@ -124,8 +124,12 @@ const allMenu = [
         path: '/transport_table_company',
       },
       {
-        name: '发票管理',
-        path: '/invoice',
+        name: '进项发票',
+        path: '/invoice/in',
+      },
+      {
+        name: '销项发票',
+        path: '/invoice/out',
       },
       {
         name: '凭证录入',
