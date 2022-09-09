@@ -20,6 +20,7 @@ export class SubjectService {
   }
 
   async update(id: string, subject: Subject) {
+    console.log(subject)
     return await this.subjectModel.findByIdAndUpdate(id, { $set: subject })
   }
 

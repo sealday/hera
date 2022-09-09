@@ -16,6 +16,9 @@ export class Subject {
 
   @Prop()
   parentId: string;
+
+  @Prop()
+  comments: string;
 }
 
 export const SubjectSchema = SchemaFactory.createForClass(Subject)

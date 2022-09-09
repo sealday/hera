@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseInterceptors, Put } from '@nestjs/common';
 import { WrapperInterceptor } from 'src/app/wrapper.interceptor';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Subject } from 'src/schemas/subject.schema';
@@ -11,8 +11,8 @@ export class SubjectController {
   constructor(private readonly subjectService: SubjectService) {}
 
   @Post()
-  create(@Body() body: Subject) {
-    return this.subjectService.create(body);
+  async create(@Body() body: Subject) {
+    return await this.subjectService.create(body);
   }
 
   @Get()
@@ -25,8 +25,9 @@ export class SubjectController {
     return await this.subjectService.findOne(id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   async update(@Param('id') id: string, @Body() body: Subject) {
+    console.log(body)
     return await this.subjectService.update(id, body);
   }
 

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UseGuards, Put } from '@nestjs/common';
 import { WrapperInterceptor } from 'src/app/wrapper.interceptor';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Employee } from 'src/schemas/employee.schema';
@@ -25,7 +25,7 @@ export class EmployeesController {
     return { employee: await this.employeesService.findOne(id) };
   }
 
-  @Patch(':id')
+  @Put(':id')
   async update(@Param('id') id: string, @Body() body: Employee) {
     return { employee: await this.employeesService.update(id, body) };
   }
