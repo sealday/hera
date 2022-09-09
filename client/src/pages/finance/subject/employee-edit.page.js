@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react"
 import { useNavigate, useParams } from "react-router-dom"
-import heraApi from "../../api"
-import { Error, Loading, PageHeader } from "../../components"
+import heraApi from "../../../api"
+import { Error, Loading, PageHeader } from "../../../components"
 import EmployeeForm from "./employee.form"
 
 export default () => {
@@ -9,12 +9,12 @@ export default () => {
   const navigate = useNavigate()
   const { id } = useParams()
   const getEmployeeQuery = heraApi.useGetEmployeeQuery(id)
-  const [updateEmployee, updateResult] = heraApi.useUpdateEmployeeMutation()
+  const [createEmployee, createResult] = heraApi.useCreateEmployeeMutation()
   useEffect(() => {
-    if (updateResult.isSuccess) {
+    if (createResult.isSuccess) {
       navigate(-1)
     }
-  }, [updateResult.isSuccess])
+  }, [createResult.isSuccess])
   if (getEmployeeQuery.isError) {
     return <Error />
   }
@@ -23,10 +23,10 @@ export default () => {
   }
   return (
     <PageHeader
-      title='编辑员工'
+      title='新增员工'
       onSave={() => form.current.submit()}
     >
-      <EmployeeForm form={form} onSubmit={v => updateEmployee({ id, employee: v })} initialValues={getEmployeeQuery.data} />
+      <EmployeeForm form={form} onSubmit={v => createEmployee(v)} initialValues={getEmployeeQuery.data} />
     </PageHeader>
   )
 }

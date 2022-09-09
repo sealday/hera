@@ -230,6 +230,8 @@ export { default as PrintFrame } from './print-frame.component'
 export { default as ExpandableTable } from './expandable-table.component'
 export { default as TreeTable } from './tree-table.component'
 export { default as ResultTable } from './result-table.component'
+export { default as TabTreeTable } from './tab-tree-table.component'
+export { default as PopoverFormButton } from './popover-form-button.component'
 
 export const withRouter = (Component) => {
   const Wrapper = (props) => {

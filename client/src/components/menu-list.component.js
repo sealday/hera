@@ -135,6 +135,10 @@ const allMenu = [
         name: '报表',
         path: '/report',
       },
+      {
+        name: '科目设定',
+        path: '/subject',
+      },
     ]
   },
   {

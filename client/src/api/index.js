@@ -23,7 +23,7 @@ const baseQueryAuth = async (args, api, extraOptions) => {
 export const heraApi = createApi({
     reducerPath: 'heraApi',
     baseQuery: baseQueryAuth,
-    tagTypes: ['Company', 'Record', 'Plan', 'Employee'],
+    tagTypes: ['Company', 'Record', 'Plan', 'Employee', 'Subject'],
     endpoints: (builder) => ({
         // 获取产品表数据
         getProduct: builder.query({
@@ -147,13 +147,13 @@ export const heraApi = createApi({
         }),
         // 更新员工
         updateEmployee: builder.mutation({
-            query: (id, employee) => ({
+            query: ({ id, employee }) => ({
                 url: `employees/${id}`,
-                method: 'PATCH',
+                method: 'PUT',
                 body: employee,
             }),
             transformResponse: res => res.data.employee,
-            invalidatesTags: (_result, _error, id) => [{ type: 'Employee', id }],
+            invalidatesTags: (_result, _error, { id }) => [{ type: 'Employee', id }],
         }),
         // 删除员工
         deleteEmployee: builder.mutation({
@@ -163,6 +163,45 @@ export const heraApi = createApi({
             }),
             transformResponse: res => res.data.employee,
             invalidatesTags: (_result, _error, id) => [{ type: 'Employee', id }],
+        }),
+        // 科目设定相关 API
+        getSubjectList: builder.query({
+            query: () => 'subject',
+            transformResponse: res => res.data,
+            providesTags: result => result
+                ? [...result.map(({ _id: id }) => ({ type: 'Subject', id }) ), { type: 'Subject', id: 'LIST'}]
+                : [{ type: 'Subject', id: 'LIST'}]
+        }),
+        createSubject: builder.mutation({
+            query: (subject) => ({
+                url: 'subject',
+                method: 'POST',
+                body: subject,
+            }),
+            transformResponse: res => res.data,
+            invalidatesTags: [{ type: 'Subject', id: 'LIST' }],
+        }),
+        getSubject: builder.query({
+            query: (id) => `subject/${id}`,
+            transformResponse: res => res.data,
+            providesTags: (_result, _error, id) => [{ type: 'Subject', id }],
+        }),
+        updateSubject: builder.mutation({
+            query: ({ id, subject }) => ({
+                url: `subject/${id}`,
+                method: 'PUT',
+                body: subject,
+            }),
+            transformResponse: res => res.data,
+            invalidatesTags: (_result, _error, { id }) => [{ type: 'Subject', id }],
+        }),
+        deleteSubject: builder.mutation({
+            query: (id) => ({
+                url: `subject/${id}`,
+                method: 'DELETE',
+            }),
+            transformResponse: res => res.data,
+            invalidatesTags: (_result, _error, id) => [{ type: 'Subject', id }],
         }),
     })
 })
