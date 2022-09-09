@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { FinanceModule } from 'src/finance/finance.module';
+import { ProjectModule } from 'src/project/project.module';
 import { ContractSchema } from 'src/schemas/contract.schema';
 import { CounterSchema } from 'src/schemas/counter.schema';
 import { RecycleSchema } from 'src/schemas/recycle.schema';
@@ -44,6 +45,7 @@ import { StoreService } from './store.service';
     EventsModule,
     StoreModule,
     FinanceModule,
+    ProjectModule,
     MongooseModule.forFeature([
       { name: 'Users', schema: UsersSchema },
       { name: 'Record', schema: RecordSchema },

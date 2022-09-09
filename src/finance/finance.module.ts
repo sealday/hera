@@ -11,6 +11,7 @@ import { ContractController } from './contract/contract.controller';
 import { ContractService } from './contract/contract.service';
 import { CompanyService } from './company/company.service';
 import { CompanyController } from './company/company.controller';
+import { SubjectModule } from './subject/subject.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { CompanyController } from './company/company.controller';
       { name: 'Company', schema: CompanySchema },
     ]),
     forwardRef(() => AppModule),
+    SubjectModule,
   ],
   controllers: [ContractController, CompanyController],
   providers: [ContractService, CompanyService,StoreService]

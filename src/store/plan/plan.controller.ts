@@ -43,6 +43,12 @@ export class PlanController {
     return { plan }
   }
 
+  @Get(':type/list')
+  async list(@Param('type') type: string) {
+    const plans = await this.planService.find(type)
+    return { plans }
+  }
+
   @Post(':type')
   async create(@Param('type') type: string, @Body() body: any) {
     if (type === 'price') {
