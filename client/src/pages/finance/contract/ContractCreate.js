@@ -1,114 +1,93 @@
-import React from 'react'
-
-import { connect } from 'react-redux'
+import React, { useEffect } from 'react'
+import { useSelector } from 'react-redux'
 import {
-  Button,
   Card,
   Form,
   Input,
-  PageHeader,
   DatePicker,
   Select,
 } from 'antd'
-import { antFilterOption } from '../../../components'
-
-
-import { newErrorNotify, newInfoNotify, newSuccessNotify } from '../../../actions'
-import { ajax } from '../../../utils'
+import { antFilterOption, PageHeader } from '../../../components'
 import { useNavigate } from 'react-router-dom'
+import heraApi from '../../../api'
 
-const mapStateToProps = state => ({
-  projects: state.system.projects,
-})
-
-const ContractCreate = connect(mapStateToProps)(({ router, projects, dispatch }) => {
+export default ({ dispatch }) => {
+  const projects = useSelector(state => state.system.projects)
   const [form] = Form.useForm()
+  const [createContract, createResult] = heraApi.useCreateContractMutation()
   const navigate = useNavigate()
+  useEffect(() => {
+    if (createResult.isSuccess) {
+      navigate('/contract')
+    }
+  }, [createResult.isSuccess])
 
-  return <>
+  return (
     <PageHeader
-      ghost={false}
       title="创建合同"
-      extra={[
-        <Button key={1} onClick={() => router.goBack()}>返回</Button>,
-        <Button type="primary" onClick={() => {
-          form.submit()
-        }}>保存</Button>,
-      ]}
+      onSave={() => { form.submit() }}
     >
-    </PageHeader>
-    <Card title="基础信息" style={{ marginTop: '8px' }}>
-      <Form
-        labelCol={{ span: 8 }}
-        wrapperCol={{ span: 8 }}
-        name="合同基础信息"
-        form={form}
-        onFinish={v => {
-          dispatch(newInfoNotify('提示', '正在创建', 1000))
-          ajax('/api/contract', {
-            data: JSON.stringify(v),
-            method: 'POST',
-            contentType: 'application/json'
-          }).then(() => {
-            dispatch(newSuccessNotify('提示', '创建成功', 1000))
-            navigate('/contract')
-          }).catch(() => {
-            dispatch(newErrorNotify('警告', '创建失败', 1000))
-          })
-        }}
-      >
-        <Form.Item
-          label="合同名称"
-          name="name"
-          rules={[{ required: true, message: '此处为必填项！' }]}
+      <Card title="基础信息" style={{ marginTop: '8px' }}>
+        <Form
+          colon={false}
+          labelCol={{ span: 8 }}
+          wrapperCol={{ span: 8 }}
+          name="合同基础信息"
+          form={form}
+          onFinish={v => createContract(v)}
         >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="合同编号"
-          name="code"
-          rules={[{ required: true, message: '此处为必填项！' }]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="项目部"
-          name="project"
-          rules={[{ required: true, message: '此处为必填项！' }]}
-        >
-          <Select
-            showSearch
-            filterOption={antFilterOption}
+          <Form.Item
+            label="合同名称"
+            name="name"
+            rules={[{ required: true, message: '此处为必填项！' }]}
           >
-            {projects.map(p => <Select.Option
-              key={p._id}
-              value={p._id}
-              pinyin={p.pinyin}
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="合同编号"
+            name="code"
+            rules={[{ required: true, message: '此处为必填项！' }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="项目部"
+            name="project"
+            rules={[{ required: true, message: '此处为必填项！' }]}
+          >
+            <Select
+              showSearch
+              filterOption={antFilterOption}
             >
-              {p.completeName}
-            </Select.Option>)}
-          </Select>
-        </Form.Item>
-        <Form.Item
-          label="地址"
-          name="address"
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="日期"
-          name="date"
-        >
-          <DatePicker />
-        </Form.Item>
-        <Form.Item
-          label="备注"
-          name="comments"
-        >
-          <Input.TextArea />
-        </Form.Item>
-      </Form>
-    </Card>
-  </>
-})
-export default ContractCreate
+              {projects.map(p => <Select.Option
+                key={p._id}
+                value={p._id}
+                pinyin={p.pinyin}
+              >
+                {p.completeName}
+              </Select.Option>)}
+            </Select>
+          </Form.Item>
+          <Form.Item
+            label="地址"
+            name="address"
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="日期"
+            name="date"
+          >
+            <DatePicker />
+          </Form.Item>
+          <Form.Item
+            label="备注"
+            name="comments"
+          >
+            <Input.TextArea />
+          </Form.Item>
+        </Form>
+      </Card>
+    </PageHeader>
+  )
+}
