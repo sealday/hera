@@ -7,6 +7,7 @@ import {
   Card,
   Tabs,
   Button,
+  ConfigProvider,
 } from 'antd'
 import {
   useNavigate,
@@ -54,10 +55,10 @@ const Plan = () => {
             }
           }
         />
-        <Table.Column title="" key="action"
+        <Table.Column title="操作" key="action"
           render={
             (_text, record) => (
-              <Space size="small">
+              <Space>
                 <Button type='text' onClick={() => navigate(`/plan/${record._id}/edit`)}>编辑</Button>
                 <Button type='text'>克隆</Button>
                 <Button type='text'>废弃</Button>
@@ -73,9 +74,11 @@ const Plan = () => {
       title="计算方案"
       onCreate={() => navigate('/plan/create')}
     >
-      <Card bordered={false}>
-        <Tabs items={tabs} />
-      </Card>
+      <ConfigProvider componentSize='small'>
+        <Card bordered={false}>
+          <Tabs items={tabs} />
+        </Card>
+      </ConfigProvider>
     </PageHeader>
   )
 }

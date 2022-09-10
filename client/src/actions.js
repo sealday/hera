@@ -629,7 +629,7 @@ export const queryWeightPlan = () => (dispatch, getState) => {
   if (search.shouldProceed(getState())) {
     dispatch(search.begin)
     dispatch(newInfoNotify('提示', '正在加载计重方案', 2000))
-    ajax('/api/plan/weight').then(res => {
+    ajax('/api/plan/weight/list').then(res => {
       dispatch(search.endSuccess)
       dispatch({ type: SAVE_RESULTS, data: {
           key,

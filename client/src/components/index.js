@@ -164,7 +164,6 @@ export const defaultFilterOption = (filter, option) => {
 }
 
 export const antFilterOption = (input, option) => {
-  console.log(option)
   return fuzzysearch(input, option.children) || fuzzysearch(input, option.pinyin)
 }
 
@@ -220,7 +219,6 @@ export { default as ReportFooter } from './ReportFooter'
 export { default as DateRangeModifier } from './DateRangeModifier'
 export { default as DateModifier } from './DateModifier'
 export { default as BackButton } from './button/BackButton'
-export { default as LinkButton } from './button/LinkButton'
 export { default as EnableTag } from './EnableTag'
 export { default as Error } from './error.component'
 export { default as PageHeader } from './page-header.component'
@@ -231,6 +229,8 @@ export { default as TreeTable } from './tree-table.component'
 export { default as ResultTable } from './result-table.component'
 export { default as TabTreeTable } from './tab-tree-table.component'
 export { default as PopoverFormButton } from './popover-form-button.component'
+export { default as PopconfirmButton } from './button/popconfirm.button'
+export { default as LinkButton } from './button/link.button'
 
 export const withRouter = (Component) => {
   const Wrapper = (props) => {

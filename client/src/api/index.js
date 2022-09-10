@@ -12,7 +12,6 @@ const baseQuery = fetchBaseQuery({
 })
 const baseQueryAuth = async (args, api, extraOptions) => {
     let result = await baseQuery(args, api, extraOptions)
-    console.log(result)
     if (result.error && result.error.status === 401) {
         // 跳转到登录页面
         // 目前有应用预加载的拦截下，不会走到这里
@@ -217,6 +216,47 @@ export const heraApi = createApi({
             }),
             transformResponse: res => res.data,
             invalidatesTags: (_result, _error, id) => [{ type: 'Subject', id }],
+        }),
+        // 合同
+        getContractList: builder.query({
+            query: () => 'contract',
+            transformResponse: res => res.data.contract,
+            providesTags: result => result
+                ? [...result.map(({ _id: id }) => ({ type: 'Contract', id }) ), { type: 'Contract', id: 'LIST'}]
+                : [{ type: 'Contract', id: 'LIST'}]
+        }),
+        createContract: builder.mutation({
+            query: v => ({
+                url: 'contract',
+                method: 'POST',
+                body: v,
+            }),
+            transformResponse: res => res.data.contract,
+            invalidatesTags: [{ type: 'Contract', id: 'LIST' }],
+        }),
+        deleteContract: builder.mutation({
+            query: (id) => ({
+                url: `contract/${id}/delete`,
+                method: 'POST',
+            }),
+            transformResponse: res => res.data,
+            invalidatesTags: (_result, _error, id) => [{ type: 'Contract', id }],
+        }),
+        finishContract: builder.mutation({
+            query: (id) => ({
+                url: `contract/${id}/finish`,
+                method: 'POST',
+            }),
+            transformResponse: res => res.data,
+            invalidatesTags: (_result, _error, id) => [{ type: 'Contract', id }],
+        }),
+        unfinishContract: builder.mutation({
+            query: (id) => ({
+                url: `contract/${id}/unfinish`,
+                method: 'POST',
+            }),
+            transformResponse: res => res.data,
+            invalidatesTags: (_result, _error, id) => [{ type: 'Contract', id }],
         }),
     })
 })

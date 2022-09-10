@@ -9,7 +9,6 @@ export default () => {
   const navigate = useNavigate()
   const [login, loginResult] = heraApi.useLoginMutation()
   useEffect(() => {
-    console.log(loginResult)
     if (loginResult.isSuccess) {
       localStorage.setItem('X-Hera-Token', loginResult.data)
       navigate('/dashboard')

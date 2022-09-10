@@ -12,7 +12,6 @@ import { deleteOperator } from '../../actions'
 
 const Operator = ({ users, dispatch }) => {
   const navigate = useNavigate()
-  console.log(users)
   const columns = [
     {
       title: '用户名',
