@@ -12,6 +12,7 @@ import { ContractService } from './contract/contract.service';
 import { CompanyService } from './company/company.service';
 import { CompanyController } from './company/company.controller';
 import { SubjectModule } from './subject/subject.module';
+import { InvoiceModule } from './invoice/invoice.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { SubjectModule } from './subject/subject.module';
     ]),
     forwardRef(() => AppModule),
     SubjectModule,
+    InvoiceModule,
   ],
   controllers: [ContractController, CompanyController],
   providers: [ContractService, CompanyService,StoreService]
