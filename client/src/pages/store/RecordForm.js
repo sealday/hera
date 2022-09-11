@@ -131,24 +131,6 @@ export default () => {
       </Form.List>
     },
   ];
-  const items2 = [
-    {
-      label: `Tab 1`,
-      key: '1',
-      children: `Content of Tab Pane 1`,
-    },
-    {
-      label: `Tab 2`,
-      key: '2',
-      children: `Content of Tab Pane 2`,
-    },
-    {
-      label: `Tab 3`,
-      key: '3',
-      children: `Content of Tab Pane 3`,
-    },
-  ]
-
   return (
     <Card bordered={false}>
       <Form form={form} colon={false} labelCol={{ flex: '5em' }} labelWrap>

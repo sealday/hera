@@ -6,17 +6,29 @@ export default [
     option: {
       type: 'static_value_only',
       values: ['增值税专用发票', '增值税普通发票']
+    },
+    required: true,
+  },
+  {
+    label: '发票类别',
+    name: 'direction',
+    type: 'text',
+    option: {
+      type: 'static_value_only',
+      values: ['进项发票', '销项发票']
     }
   },
   {
     label: '开票日期',
     name: 'date',
     type: 'date',
+    required: true,
   },
   {
     label: '发票号码',
     name: 'id',
     type: 'text',
+    required: true,
   },
   {
     label: '销售方',
@@ -41,13 +53,19 @@ export default [
     }
   },
   {
+    label: '备注',
+    name: 'comments',
+    type: 'text',
+    col: 'fullwidth',
+  },
+  {
     label: '明细',
     name: 'items',
     type: 'list',
     schema: [
       {
         label: '项目名称',
-        name: 'name',
+        name: 'projectId',
         type: 'text',
         option: {
           type: 'ref',

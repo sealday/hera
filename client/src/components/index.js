@@ -232,6 +232,7 @@ export { default as PopoverFormButton } from './popover-form-button.component'
 export { default as PopconfirmButton } from './button/popconfirm.button'
 export { default as LinkButton } from './button/link.button'
 export { default as ModalFormButton } from './button/modal-form.button'
+export { default as RefSelect } from './ref-select.component'
 
 export const withRouter = (Component) => {
   const Wrapper = (props) => {

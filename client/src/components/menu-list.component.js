@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { isInsertable } from '../utils'
+import { canInsert } from '../utils'
 import { Menu } from 'antd'
 import { DashboardOutlined, FundOutlined, ProjectOutlined, SearchOutlined, SettingOutlined, ShopOutlined } from '@ant-design/icons'
 import _ from 'lodash'
-
 
 const allMenu = [
   {
@@ -17,7 +16,7 @@ const allMenu = [
     icon: <ShopOutlined />,
     roles: ['项目部管理员', '系统管理员', '基地仓库管理员'],
     // TODO 解决这个权限特殊处理
-    isInsertable: isInsertable,
+    isInsertable: canInsert,
     children: [
       {
         name: '采购入库',

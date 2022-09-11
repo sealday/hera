@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { genTableColumn } from '../../utils'
+import { genTableColumn } from '../../utils/antd'
 import { Error, Loading, ModalFormButton, PageHeader, PopconfirmButton, ResultTable } from '../../components'
 import { Space, ConfigProvider } from 'antd'
 import heraApi from '../../api'

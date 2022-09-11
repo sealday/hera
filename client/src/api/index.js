@@ -23,7 +23,7 @@ const baseQueryAuth = async (args, api, extraOptions) => {
 export const heraApi = createApi({
     reducerPath: 'heraApi',
     baseQuery: baseQueryAuth,
-    tagTypes: ['Company', 'Record', 'Plan', 'Employee', 'Subject', 'Product'],
+    tagTypes: ['Company', 'Record', 'Plan', 'Employee', 'Subject', 'Product', 'Invoice', 'Project'],
     endpoints: (builder) => ({
         logout: builder.mutation({
             query: () => ({
@@ -297,6 +297,46 @@ export const heraApi = createApi({
             transformResponse: res => res.data,
             invalidatesTags: (_result, _error, id) => [{ type: 'Product', id }],
         }),
+        // 发票
+        getInvoiceList: builder.query({
+            query: () => 'invoice',
+            transformResponse: res => res.data,
+            providesTags: result => result
+                ? [...result.map(({ _id: id }) => ({ type: 'Invoice', id }) ), { type: 'Invoice', id: 'LIST'}]
+                : [{ type: 'Invoice', id: 'LIST'}]
+        }),
+        createInvoice: builder.mutation({
+            query: (invoice) => ({
+                url: 'invoice',
+                method: 'POST',
+                body: invoice,
+            }),
+            transformResponse: res => res.data,
+            invalidatesTags: [{ type: 'Invoice', id: 'LIST' }],
+        }),
+        getInvoice: builder.query({
+            query: (id) => `invoice/${id}`,
+            transformResponse: res => res.data,
+            providesTags: (_result, _error, id) => [{ type: 'Invoice', id }],
+        }),
+        updateInvoice: builder.mutation({
+            query: ({ id, invoice }) => ({
+                url: `invoice/${id}`,
+                method: 'PUT',
+                body: invoice,
+            }),
+            transformResponse: res => res.data,
+            invalidatesTags: (_result, _error, { id }) => [{ type: 'Invoice', id }],
+        }),
+        deleteInvoice: builder.mutation({
+            query: (id) => ({
+                url: `invoice/${id}`,
+                method: 'DELETE',
+            }),
+            transformResponse: res => res.data,
+            invalidatesTags: (_result, _error, id) => [{ type: 'Invoice', id }],
+        }),
+        // 仓库/项目列表
     })
 })
 

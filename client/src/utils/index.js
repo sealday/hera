@@ -302,7 +302,7 @@ export const isUpdatable = (store, user) => {
   return false;
 }
 
-export const isInsertable = (store, user) => {
+export const canInsert = (store, user) => {
   if (user.role === '系统管理员') {
     return true;
   }
@@ -601,5 +601,3 @@ export const enableFilters = [
 ]
 
 export const shouldShow = (condition, view) => condition ? view : null
-
-export { generateFormContent, genTableColumn  } from './antd'

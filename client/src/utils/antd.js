@@ -1,8 +1,7 @@
-import { Col, Form, Input, Radio, Row, Select } from "antd"
+import { Col, DatePicker, Form, Input, Radio, Row, Select } from "antd"
+import { RefSelect } from "../components"
 
-const generateFormContent = (schema, cols = 0) => {
-
-
+const genFormContent = (schema, cols = 0) => {
   const formItems = []
   schema.forEach(item => {
     if (item.option) {
@@ -26,6 +25,10 @@ const generateFormContent = (schema, cols = 0) => {
             </Form.Item>
           ))
         }
+      } else if (item.option.type === 'ref') {
+          formItems.push((
+            <RefSelect item={item} key={item.name} />
+          ))
       }
     } else if (item.type === 'boolean') {
       formItems.push((
@@ -36,6 +39,12 @@ const generateFormContent = (schema, cols = 0) => {
           </Radio.Group>
         </Form.Item>
       ))
+    } else if (item.type === 'date') {
+      formItems.push((
+        <Form.Item key={item.name} name={item.name} label={item.label} required={item.required}>
+          <DatePicker style={{ width: '100%' }} />
+        </Form.Item>
+      ))
     } else {
       formItems.push((
         <Form.Item key={item.name} name={item.name} label={item.label} required={item.required}>
@@ -44,6 +53,7 @@ const generateFormContent = (schema, cols = 0) => {
       ))
     }
   })
+  console.dir(formItems)
 
   // 处理排版逻辑
   if (cols) {
@@ -52,7 +62,7 @@ const generateFormContent = (schema, cols = 0) => {
       <Row gutter={24}>
         {
           formItems.map((item, i) => (
-            <Col span={schema[i].col === 'fullwidth' ? 24 : colSpan} key={schema[i].name}>
+            <Col span={schema.find(schemaItem => schemaItem.name === item.key).col === 'fullwidth' ? 24 : colSpan} key={item.key}>
               {item}
             </Col>
           ))
@@ -79,6 +89,6 @@ const genTableColumn = schema => {
 }
 
 export {
-  generateFormContent,
+  genFormContent,
   genTableColumn,
 }

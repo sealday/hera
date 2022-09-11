@@ -1,6 +1,6 @@
 import { Button, ConfigProvider, Form, Modal } from "antd";
 import { useState } from "react";
-import { generateFormContent } from "../../utils";
+import { genFormContent } from "../../utils/antd";
 export default ({ onSubmit, title, schema, initialValues, children, ...btnProps }) => {
   const [open, setOpen] = useState(false);
   const [form] = Form.useForm()
@@ -18,7 +18,7 @@ export default ({ onSubmit, title, schema, initialValues, children, ...btnProps 
     hideModal()
   }
 
-  const formContent = generateFormContent(schema, 2)
+  const formContent = genFormContent(schema, 2)
   return (
     <>
       <Button {...btnProps} onClick={showModal}>

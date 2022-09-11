@@ -1,6 +1,6 @@
 import { Button, Col, Form, Popover, Row, Space } from "antd"
 import { useState } from "react"
-import { generateFormContent } from "../utils"
+import { genFormContent } from "../utils/antd"
 
 export default ({ block = false, type = 'link', children, schema, onSubmit, initialValues, size = 'middle' }) => {
   const [open, setOpen] = useState(false)
@@ -15,7 +15,7 @@ export default ({ block = false, type = 'link', children, schema, onSubmit, init
   }
   const content = (
     <Form form={form} onFinish={(v) => { onSubmit(v); hide() }} initialValues={initialValues}>
-      {generateFormContent(schema)}
+      {genFormContent(schema)}
       <Form.Item>
         <Row gutter={24}>
           <Col span={12}>

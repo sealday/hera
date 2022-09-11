@@ -2,7 +2,7 @@ import { Space, Button } from 'antd'
 import { Error, Loading, ModalFormButton, PageHeader, ResultTable } from '../../../components'
 import { useCreateCompanyMutation, useDeleteCompanyMutation, useGetCompanyListQuery, useUpdateCompanyMutation } from '../../../api'
 import { companySchema } from '../../../schema'
-import { genTableColumn } from '../../../utils'
+import { genTableColumn } from '../../../utils/antd'
 
 export default () => {
   const { data, error, isloading } = useGetCompanyListQuery()
