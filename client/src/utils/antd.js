@@ -1,7 +1,21 @@
-import { Col, DatePicker, Form, Input, Radio, Row, Select } from "antd"
+import { PlusCircleOutlined } from "@ant-design/icons"
+import { Button, Col, DatePicker, Form, Input, Radio, Row, Select, Table } from "antd"
+import _ from "lodash"
 import moment from "moment"
 import { RefLabel, RefSelect } from "../components"
 
+
+const ListTable = ({ fields, operation, meta, item }) => {
+  console.log(fields)
+  console.log(genTableColumn(item.schema))
+  return (
+    <>
+      <Table title={() => item.label} columns={genTableFormColumn(item.schema)} dataSource={fields} pagination={false} />
+      <Button type="dashed" block icon={<PlusCircleOutlined />} onClick={() => operation.add()}>新增</Button>
+    </>
+  )
+}
+          
 const genFormContent = (schema, cols = 0) => {
   const formItems = []
   schema.forEach(item => {
@@ -46,6 +60,12 @@ const genFormContent = (schema, cols = 0) => {
           <DatePicker style={{ width: '100%' }} disabled={item.disabled}/>
         </Form.Item>
       ))
+    } else if (item.type === 'list') {
+      formItems.push((
+        <Form.List key={item.name} name={item.name} rules={[{ required: item.required }]} noStyle>
+          {(fields, operation, meta) => <ListTable fields={fields} operation={operation} meta={meta} item={item} />}
+        </Form.List>
+      ))
     } else {
       formItems.push((
         <Form.Item key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
@@ -55,6 +75,11 @@ const genFormContent = (schema, cols = 0) => {
     }
   })
 
+  const isFullwidth = (item) => {
+    const schemaItem = schema.find(schemaItem => schemaItem.name === item.key)
+    return schemaItem.col === 'fullwidth' || schemaItem.type === 'list'
+  }
+
   // 处理排版逻辑
   if (cols) {
     const colSpan = 24 / cols
@@ -62,7 +87,7 @@ const genFormContent = (schema, cols = 0) => {
       <Row gutter={24}>
         {
           formItems.map((item, i) => (
-            <Col span={schema.find(schemaItem => schemaItem.name === item.key).col === 'fullwidth' ? 24 : colSpan} key={item.key}>
+            <Col span={isFullwidth(item) ? 24 : colSpan} key={item.key}>
               {item}
             </Col>
           ))
@@ -97,6 +122,64 @@ const genTableColumn = schema => {
       columns.push({ title: item.label, dataIndex: item.name, key: item.name })
     }
   })
+  return columns
+}
+
+const genTableFormColumn = (schema) => {
+  const columns = []
+  schema.forEach(item => {
+    const column = { title: item.label, key: item.name, render: null }
+    if (item.option) {
+      if (item.option.type === 'static_value_only') {
+        column.render = (_text, field) => (
+          <Form.Item noStyle name={[field.name, item.name]} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
+            <Select disabled={item.disabled}>
+              {item.option.values.map(v => <Select.Option key={v} value={v}>{v}</Select.Option>)}
+            </Select>
+          </Form.Item>
+        )
+      } else if (item.option.type === 'static') {
+        
+        column.render = (_text, field) => (
+          <Form.Item noStyle name={[field.name, item.name]} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
+            <Select disabled={item.disabled}>
+              {_
+                .zip(item.option.labels, item.option.values)
+                .map(([label, value]) => <Select.Option key={value} value={value}>{label}</Select.Option>)}
+            </Select>
+          </Form.Item>
+        )
+      } else if (item.option.type === 'ref') {
+        column.render = (_text, field) => (
+          <RefSelect noStyle item={{ ...item, name: [field.name, item.name] }} key={item.name} />
+        )
+      }
+    } else if (item.type === 'boolean') {
+      column.render = (_text, field) => (
+        <Form.Item noStyle name={[field.name, item.name]} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
+          <Select disabled={item.disabled}>
+            {item.option.values.map(v => <Select.Option key={v} value={v}>{v}</Select.Option>)}
+            <Select.Option key='是' value={true}>是</Select.Option>
+            <Select.Option key='否' value={false}>否</Select.Option>
+          </Select>
+        </Form.Item>
+      )
+    } else if (item.type === 'date') {
+      column.render = (_text, field) => (
+        <Form.Item noStyle name={[field.name, item.name]} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
+          <DatePicker disabled={item.disabled} />
+        </Form.Item>
+      )
+    } else {
+      column.render = (_text, field) => (
+        <Form.Item noStyle name={[field.name, item.name]} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
+          <Input addonAfter={item.suffix ? item.suffix : null} disabled={item.disabled}/>
+        </Form.Item>
+      )
+    }
+    columns.push(column)
+  })
+
   return columns
 }
 

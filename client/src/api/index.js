@@ -337,6 +337,13 @@ export const heraApi = createApi({
             invalidatesTags: (_result, _error, id) => [{ type: 'Invoice', id }],
         }),
         // 仓库/项目列表
+        getProjectList: builder.query({
+            query: () => 'project',
+            transformResponse: res => res.data.projects,
+            providesTags: result => result
+                ? [...result.map(({ _id: id }) => ({ type: 'Project', id }) ), { type: 'Project', id: 'LIST'}]
+                : [{ type: 'Project', id: 'LIST'}]
+        }),
     })
 })
 

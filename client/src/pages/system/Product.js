@@ -30,7 +30,6 @@ export default () => {
     return <Loading />
   }
   const columns = genTableColumn(productSchema)
-  console.log(columns)
   columns.push({
     title: '动作', key: 'action',
     render: (_, product) => {
