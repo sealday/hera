@@ -23,22 +23,23 @@ export class ProductService {
     return product
   }
 
-  async delete(number: string) {
-    await this.productModel.remove({ number })
+  async delete(id: string) {
+    await this.productModel.findByIdAndRemove(id)
   }
 
   /**
    * 更新产品信息
-   * @param number 编号
+   * @param id
    * @param body 
    */
-  async update(number: string, body: Product) {
+  async update(id: string, body: Product) {
     const newProduct = _.omit(body, ['_id'])
     newProduct.pinyin = convert(body.name)
-    const product = await this.productModel.findOne({ number })
+    const product = await this.productModel.findById(id)
     const shouldUpdate = !_.isEqual(
         _.pick(newProduct, ['type', 'name', 'size']),
         _.pick(product, ['type', 'name', 'size']))
+    const oldProduct = _.pick(product, ['type', 'name', 'size'])
     Object.assign(product, newProduct)
     const updatedProduct = await product.save()
     if (shouldUpdate) {
@@ -49,9 +50,13 @@ export class ProductService {
           "entries.$[e].type": product.type,
         }
       }, {
-        // FIXME 检查这里是否有问题
-        // multi: true,
-        arrayFilters: [{ 'e.number': Number(product.number) }]
+        arrayFilters: [
+          {
+            'e.name': oldProduct.name,
+            'e.size': oldProduct.size,
+            'e.type': oldProduct.type
+          },
+        ]
       })
     }
     return updatedProduct

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseGuards, UseInterceptors, Delete, Put } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { WrapperInterceptor } from 'src/app/wrapper.interceptor';
@@ -10,25 +10,21 @@ export class ProductController {
   constructor(private productService: ProductService) { }
   @Get()
   async list() {
-    const products = await this.productService.find()
-    return { products }
+    return await this.productService.find()
   }
 
   @Post()
   async create(@Body() body: any) {
-    const product = await this.productService.create(body)
-    return { product }
+    return await this.productService.create(body)
   }
 
-  @Post(':number')
-  async update(@Body() body: any, @Param('number') number: string) {
-    const product = await this.productService.update(number, body)
-    return { product }
+  @Put(':id')
+  async update(@Body() body: any, @Param('id') id: string) {
+    return await this.productService.update(id, body)
   }
 
-  @Post(':number/delete')
-  async delete(@Param('number') number: string) {
-    await this.productService.delete(number)
-    return {}
+  @Delete(':id')
+  async delete(@Param('id') id: string) {
+    return await this.productService.delete(id)
   }
 }
