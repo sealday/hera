@@ -14,8 +14,10 @@ export default ({ onSubmit, title, schema, initialValues, children, ...btnProps 
   };
 
   const onOk = () => {
-    form.submit()
-    hideModal()
+    form.validateFields().then(() => {
+      form.submit()
+      hideModal()
+    })
   }
 
   const formContent = genFormContent(schema, 2)

@@ -10,7 +10,7 @@ const genFormContent = (schema, cols = 0) => {
         if (item.option.values.length < 5) {
           // 少于 5 个直接显示
           formItems.push((
-            <Form.Item key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden}>
+            <Form.Item key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
               <Radio.Group disabled={item.disabled}>
                 {item.option.values.map(v => <Radio key={v} value={v}>{v}</Radio>)}
               </Radio.Group>
@@ -19,7 +19,7 @@ const genFormContent = (schema, cols = 0) => {
         } else {
           // 多于 5 个下拉框显示
           formItems.push((
-            <Form.Item key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden}>
+            <Form.Item key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
               <Select disabled={item.disabled}>
                 {item.option.values.map(v => <Select.Option key={v} value={v}>{v}</Select.Option>)}
               </Select>
@@ -33,7 +33,7 @@ const genFormContent = (schema, cols = 0) => {
       }
     } else if (item.type === 'boolean') {
       formItems.push((
-        <Form.Item key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden}>
+        <Form.Item key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
           <Radio.Group disabled={item.disabled}>
             <Radio key='是' value={true}>是</Radio>
             <Radio key='否' value={false}>否</Radio>
@@ -42,13 +42,13 @@ const genFormContent = (schema, cols = 0) => {
       ))
     } else if (item.type === 'date') {
       formItems.push((
-        <Form.Item key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden}>
+        <Form.Item key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
           <DatePicker style={{ width: '100%' }} disabled={item.disabled}/>
         </Form.Item>
       ))
     } else {
       formItems.push((
-        <Form.Item key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden}>
+        <Form.Item key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
           <Input addonAfter={item.suffix ? item.suffix : null} disabled={item.disabled}/>
         </Form.Item>
       ))
