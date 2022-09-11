@@ -2,21 +2,18 @@ import { PlusCircleOutlined } from "@ant-design/icons"
 import { Button, Col, DatePicker, Form, Input, Radio, Row, Select, Table } from "antd"
 import _ from "lodash"
 import moment from "moment"
-import { RefLabel, RefSelect } from "../components"
+import { DepLabel, RefLabel, RefSelect } from "../components"
 
-
-const ListTable = ({ fields, operation, meta, item }) => {
-  console.log(fields)
-  console.log(genTableColumn(item.schema))
+const ListTable = ({ fields, operation, meta, item, form}) => {
   return (
     <>
-      <Table title={() => item.label} columns={genTableFormColumn(item.schema)} dataSource={fields} pagination={false} />
+      <Table title={() => item.label} columns={genTableFormColumn(item, form)} dataSource={fields} pagination={false} />
       <Button type="dashed" block icon={<PlusCircleOutlined />} onClick={() => operation.add()}>新增</Button>
     </>
   )
 }
           
-const genFormContent = (schema, cols = 0) => {
+const genFormContent = (schema, cols = 0, form = null) => {
   const formItems = []
   schema.forEach(item => {
     if (item.option) {
@@ -63,7 +60,7 @@ const genFormContent = (schema, cols = 0) => {
     } else if (item.type === 'list') {
       formItems.push((
         <Form.List key={item.name} name={item.name} rules={[{ required: item.required }]} noStyle>
-          {(fields, operation, meta) => <ListTable fields={fields} operation={operation} meta={meta} item={item} />}
+          {(fields, operation, meta) => <ListTable fields={fields} operation={operation} meta={meta} item={item} form={form} />}
         </Form.List>
       ))
     } else {
@@ -125,14 +122,15 @@ const genTableColumn = schema => {
   return columns
 }
 
-const genTableFormColumn = (schema) => {
+const genTableFormColumn = (parent, form = null) => {
+  const schema = parent.schema
   const columns = []
   schema.forEach(item => {
     const column = { title: item.label, key: item.name, render: null }
     if (item.option) {
       if (item.option.type === 'static_value_only') {
         column.render = (_text, field) => (
-          <Form.Item noStyle name={[field.name, item.name]} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
+          <Form.Item initialValue={item.default} noStyle name={[field.name, item.name]} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
             <Select disabled={item.disabled}>
               {item.option.values.map(v => <Select.Option key={v} value={v}>{v}</Select.Option>)}
             </Select>
@@ -141,7 +139,7 @@ const genTableFormColumn = (schema) => {
       } else if (item.option.type === 'static') {
         
         column.render = (_text, field) => (
-          <Form.Item noStyle name={[field.name, item.name]} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
+          <Form.Item initialValue={item.default} noStyle name={[field.name, item.name]} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
             <Select disabled={item.disabled}>
               {_
                 .zip(item.option.labels, item.option.values)
@@ -156,7 +154,7 @@ const genTableFormColumn = (schema) => {
       }
     } else if (item.type === 'boolean') {
       column.render = (_text, field) => (
-        <Form.Item noStyle name={[field.name, item.name]} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
+        <Form.Item initialValue={item.default} noStyle name={[field.name, item.name]} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
           <Select disabled={item.disabled}>
             {item.option.values.map(v => <Select.Option key={v} value={v}>{v}</Select.Option>)}
             <Select.Option key='是' value={true}>是</Select.Option>
@@ -166,16 +164,22 @@ const genTableFormColumn = (schema) => {
       )
     } else if (item.type === 'date') {
       column.render = (_text, field) => (
-        <Form.Item noStyle name={[field.name, item.name]} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
+        <Form.Item initialValue={item.default} noStyle name={[field.name, item.name]} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
           <DatePicker disabled={item.disabled} />
         </Form.Item>
       )
     } else {
-      column.render = (_text, field) => (
-        <Form.Item noStyle name={[field.name, item.name]} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
-          <Input addonAfter={item.suffix ? item.suffix : null} disabled={item.disabled}/>
-        </Form.Item>
-      )
+      if (item.formula) {
+        column.render = (_text, field) => (
+          <DepLabel form={form} field={field} item={item} parent={parent} />
+        )
+      } else {
+        column.render = (_text, field) => (
+          <Form.Item initialValue={item.default} noStyle name={[field.name, item.name]} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
+            <Input addonAfter={item.suffix ? item.suffix : null} disabled={item.disabled} />
+          </Form.Item>
+        )
+      }
     }
     columns.push(column)
   })

@@ -85,6 +85,9 @@ export default [
         label: '金额',
         name: 'amount',
         type: 'number',
+        disabled: true,
+        formula: '[total] / (1 + [taxRate])',
+        watch: ['total', 'taxRate'],
       },
       {
         label: '发票税率',
@@ -94,17 +97,22 @@ export default [
           type: 'static',
           labels: ['1%', '3%', '6%', '9%', '13%'],
           values: [0.01, 0.03, 0.06, 0.09, 0.13],
-        }
+        },
+        default: 0.13,
       },
       {
         label: '税额',
         name: 'tax',
         type: 'number',
+        formula: '[total] - [total] / (1 + [taxRate])',
+        watch: ['total', 'taxRate'],
+        disabled: true,
       },
       {
         label: '价税合计',
         name: 'total',
         type: 'number',
+        default: 0,
       },
     ],
   }

@@ -13,7 +13,7 @@ export default ({ item, noStyle }) => {
     return <Loading />
   }
   return (
-    <Form.Item noStyle={noStyle} key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
+    <Form.Item initialValue={item.default} noStyle={noStyle} key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
       <Select disabled={item.disabled}>
         {result.data.map(v => <Select.Option key={v[value]} value={v[value]}>{v[label]}</Select.Option>)}
       </Select>

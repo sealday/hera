@@ -20,7 +20,7 @@ export default ({ onSubmit, title, schema, initialValues, children, ...btnProps 
     })
   }
 
-  const formContent = genFormContent(schema, 2)
+  const formContent = genFormContent(schema, 2, form)
   return (
     <>
       <Button {...btnProps} onClick={showModal}>
