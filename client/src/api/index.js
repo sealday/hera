@@ -67,13 +67,13 @@ export const heraApi = createApi({
             invalidatesTags: [{ type: 'Company', id: 'LIST' }],
         }),
         updateCompany: builder.mutation({
-            query: (id, company) => ({
+            query: ({ id, company }) => ({
                 url: `company/${id}`,
                 method: 'POST',
                 body: company,
             }),
             transformResponse: res => res.data.company,
-            invalidatesTags: (_result, _error, id) => [{ type: 'Company', id }],
+            invalidatesTags: (_result, _error, { id }) => [{ type: 'Company', id }],
         }),
         deleteCompany: builder.mutation({
             query: (id) => ({

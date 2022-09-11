@@ -46,13 +46,11 @@ export default () => {
     <PageHeader
       title='产品信息'
       subTitle='在这里可以编辑产品信息'
-      extra={[
-        <ModalFormButton
-          key='onCreate'
-          onSubmit={v => onCreate(v)}
-          icon={<PlusCircleOutlined />}
-          title='创建产品' type='primary' schema={productSchema}>创建</ModalFormButton>
-      ]}
+      onCreate={{
+        title: '新增产品',
+        schema: productSchema,
+        onSubmit: onCreate,
+      }}
     >
       <ConfigProvider componentSize='small'>
         <ResultTable

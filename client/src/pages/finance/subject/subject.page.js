@@ -59,7 +59,7 @@ export default () => {
   if (getSubjectListQuery.isLoading) {
     return <Loading />
   }
-  const subjects = _.cloneDeep(getSubjectListQuery.data)
+  const subjects = _.cloneDeep(getSubjectListQuery.data).sort((a, b) => Number(a.id) - Number(b.id))
   const dataSource = []
   _.forEach(subjects, subject => {
     if (subject.parentId === '-1') {

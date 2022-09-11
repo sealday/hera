@@ -18,7 +18,7 @@ export default ({ onSubmit, title, schema, initialValues, children, ...btnProps 
     hideModal()
   }
 
-  const formContent = generateFormContent(schema)
+  const formContent = generateFormContent(schema, 2)
   return (
     <>
       <Button {...btnProps} onClick={showModal}>
@@ -26,6 +26,7 @@ export default ({ onSubmit, title, schema, initialValues, children, ...btnProps 
       </Button>
       <ConfigProvider componentSize='middle'>
         <Modal
+          width={768}
           title={title}
           open={open}
           onOk={onOk}

@@ -4,6 +4,7 @@ import { PlusCircleOutlined, EditOutlined, PrinterOutlined, ArrowLeftOutlined, S
 import { useNavigate } from 'react-router-dom'
 import { isUpdatable } from '../utils'
 import { useSelector } from 'react-redux'
+import ModalFormButton from './button/modal-form.button'
 
 export default ({
   title,
@@ -43,7 +44,21 @@ export default ({
     actions.push(<Button key='onCreate' type='default' onClick={onPrintPreview} icon={<PrinterOutlined />}>打印预览</Button>)
   }
   if (onCreate) {
-    actions.push(<Button key='onCreate' type='primary' onClick={onCreate} icon={<PlusCircleOutlined />}>创建</Button>)
+    // TODO 有没有更合适的判断方式，这里的依据是创建要么以对话框，要么是以页面
+    if (onCreate.schema) {
+      actions.push(
+        <ModalFormButton
+          key='onCreate'
+          type='primary'
+          icon={<PlusCircleOutlined />}
+          title={onCreate.title}
+          onSubmit={onCreate.onSubmit}
+          schema={onCreate.schema}
+        >新增</ModalFormButton>
+      )
+    } else {
+      actions.push(<Button key='onCreate' type='primary' onClick={onCreate} icon={<PlusCircleOutlined />}>新增</Button>)
+    }
   }
   if (onSave) {
     actions.push(<Button key='onSave' type='primary' onClick={onSave} icon={<SaveOutlined />}>保存</Button>)
