@@ -13,8 +13,8 @@ export default ({ item }) => {
     return <Loading />
   }
   return (
-    <Form.Item key={item.name} name={item.name} label={item.label} required={item.required}>
-      <Select>
+    <Form.Item key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden}>
+      <Select disabled={item.disabled}>
         {result.data.map(v => <Select.Option key={v[value]} value={v[value]}>{v[label]}</Select.Option>)}
       </Select>
     </Form.Item>

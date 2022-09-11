@@ -52,6 +52,7 @@ export default ({
           type='primary'
           icon={<PlusCircleOutlined />}
           title={onCreate.title}
+          initialValues={onCreate.initialValues}
           onSubmit={onCreate.onSubmit}
           schema={onCreate.schema}
         >新增</ModalFormButton>

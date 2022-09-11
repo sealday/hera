@@ -20,7 +20,11 @@ export default ({ columns, dataSource, summaryColumns, summaryDataSource, rowKey
           }
           return record[column.dataIndex] === value
         } 
-        column.filters = _.uniq(dataSource.map(record => record[column.dataIndex])).map(v => ({ text: _.toString(v) ? v : '未填写', value: _.toString(v) ? v : '__未填写__' }))
+        if (column.render) {
+          column.filters = _.uniq(dataSource.map(record => [record[column.dataIndex], record])).map(([v, record]) => ({ text: _.toString(v) ? column.render(v, record) : '未填写', value: _.toString(v) ? v : '__未填写__' }))
+        } else {
+          column.filters = _.uniq(dataSource.map(record => record[column.dataIndex])).map(v => ({ text: _.toString(v) ? v : '未填写', value: _.toString(v) ? v : '__未填写__' }))
+        }
       }
       if (column.dataIndex
         // 没有自带排序行数

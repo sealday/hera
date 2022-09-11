@@ -10,13 +10,15 @@ export default [
     required: true,
   },
   {
-    label: '发票类别',
+    label: '进销项发票',
     name: 'direction',
     type: 'text',
     option: {
       type: 'static_value_only',
       values: ['进项发票', '销项发票']
-    }
+    },
+    disabled: true,
+    hidden: true,
   },
   {
     label: '开票日期',
