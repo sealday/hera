@@ -12,11 +12,13 @@ import {
   withStyles,
 } from '@material-ui/core/styles'
 
-import { ajax, wrapper } from '../../utils'
+import { ajax, genTableColumn, wrapper } from '../../utils'
 import { newErrorNotify, newInfoNotify } from '../../actions'
-import { PageHeader, ResultTable } from '../../components'
+import { Error, Loading, PageHeader, ResultTable } from '../../components'
 import ProductForm from './ProductForm'
-import { Space, Table, Button } from 'antd'
+import { Space, Table, Button, ConfigProvider } from 'antd'
+import heraApi from '../../api'
+import { productSchema } from '../../schema'
 
 const ProductCreateForm = reduxForm({ form: 'PRODUCT_CREATE' })(ProductForm)
 const ProductEditForm = reduxForm({ form: 'PRODUCT_EDIT' })(ProductForm)
@@ -27,8 +29,12 @@ const FormDialog = withStyles(theme => ({
   }
 }))(Dialog)
 
-const Product = ({ dispatch, productFilter }) => {
-  const [products, setProducts] = useState([])
+export default () => {
+  const getProductList = heraApi.useGetProductListQuery()
+  const [createProduct, createResult] = heraApi.useCreateProductMutation()
+  const [deleteProduct, deleteResult] = heraApi.useDeleteProductMutation()
+  const [updateProduct, updateResult] = heraApi.useUpdateProductMutation()
+  const products = getProductList.data
   const [open, setOpen] = useState(false)
   const [createOpen, setCreateOpen] = useState(false)
   const [deleteConfirm, setDeleteConfirm] = useState(false)
@@ -37,14 +43,6 @@ const Product = ({ dispatch, productFilter }) => {
   let createForm = null
   let editForm = null
 
-  useEffect(() => {
-    dispatch(newInfoNotify('提示', '正在加载产品列表', 1000))
-    ajax('/api/product').then((res) => {
-      setProducts(res.data.products)
-    }).catch((err) => {
-      dispatch(newErrorNotify('警告', '加载产品列表出错', 1000))
-    })
-  }, [])
   const handleClose = () => {
     setOpen(false)
     setCreateOpen(false)
@@ -57,60 +55,34 @@ const Product = ({ dispatch, productFilter }) => {
     setDeleteConfirm(false)
   }
   const onCreate = (product) => {
-    ajax('/api/product', {
-      data: JSON.stringify(product),
-      method: 'POST',
-      contentType: 'application/json'
-    }).then((res) => {
-      setProducts(products => products.concat(product))
-      setCreateOpen(true)
-    }).catch((err) => {
-      dispatch(newErrorNotify('警告', '创建出错', 1000))
-    })
+    createProduct(product)
   }
   const onEdit = (product) => {
-    ajax(`/api/product/${product.number}`, {
-      data: JSON.stringify(product),
-      method: 'POST',
-      contentType: 'application/json'
-    }).then((res) => {
-      setProducts((products) => {
-        return products.map((old) => old.number === product.number ? product : old)
-      })
-      setOpen(false)
-    }).catch((err) => {
-      dispatch(newErrorNotify('警告', '编辑出错', 1000))
-    })
+    updateProduct({ id: current._id, product })
   }
   const onDelete = () => {
-    ajax(`/api/product/${current.number}/delete`, {
-      method: 'POST',
-      contentType: 'application/json'
-    }).then((res) => {
-      setProducts(products => products.filter((old) => old.number !== current.number))
-      setDeleteConfirm(false)
-    }).catch((err) => {
-      dispatch(newErrorNotify('警告', '删除出错', 1000))
-    })
+    deleteProduct(current._id)
   }
-  const columns = [
-    { title: '编号', dataIndex: 'number', key: 'number', },
-    { title: '类别', dataIndex: 'type', key: 'type' },
-    { title: '名称', dataIndex: 'name', key: 'name' },
-    { title: '规格', dataIndex: 'size', key: 'size' },
-    {
-      title: '动作', key: 'action',
-      render: (_, product) => {
-        return <Space>
-          <Button type='link' onClick={() => {
-            setCurrent(product)
-            setOpen(true)
-          }} >编辑</Button>
-          <Button type='text' danger onClick={() => { handleDeleteConfirmOpen(product) }} >删除</Button>
-        </Space>
-      },
+  if (getProductList.isError) {
+    return <Error />
+  }
+  if (getProductList.isLoading) {
+    return <Loading />
+  }
+  const columns = genTableColumn(productSchema)
+  console.log(columns)
+  columns.push({
+    title: '动作', key: 'action',
+    render: (_, product) => {
+      return <Space>
+        <Button type='link' onClick={() => {
+          setCurrent(product)
+          setOpen(true)
+        }} >编辑</Button>
+        <Button type='text' danger onClick={() => { handleDeleteConfirmOpen(product) }} >删除</Button>
+      </Space>
     },
-  ]
+  })
   return (
     <PageHeader
       title='产品信息'
@@ -165,8 +137,3 @@ const Product = ({ dispatch, productFilter }) => {
     </PageHeader>
   )
 }
-
-export default wrapper([
-  connect(state => ({ productFilter: getFormValues('PRODUCT_FILTER')(state) })),
-  Product,
-])

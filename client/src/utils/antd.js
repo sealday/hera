@@ -1,5 +1,4 @@
 import { Form, Input, Radio, Select } from "antd"
-import { employeeSchema } from "../schema"
 
 const generateFormContent = (schema) => {
 
@@ -38,6 +37,21 @@ const generateFormContent = (schema) => {
   return formItems
 }
 
+const genTableColumn = schema => {
+  const columns = []
+  schema.forEach(item => {
+    if (item.type === 'text') {
+      columns.push({ title: item.label, dataIndex: item.name, key: item.name })
+    } else if (item.type === 'boolean') {
+      columns.push({title: item.label, dataIndex: item.name, key: item.name, render(v) { return v ? '是' : '否' } })
+    } else if (item.type === 'number') {
+      columns.push({ title: item.label, dataIndex: item.name, key: item.name })
+    }
+  })
+  return columns
+}
+
 export {
-  generateFormContent
+  generateFormContent,
+  genTableColumn,
 }

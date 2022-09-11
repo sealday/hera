@@ -8,7 +8,8 @@ import { ajax } from '../../../utils'
 import { edit, addItem, addCalc } from './index'
 import { PLAN_CATEGORY_MAP } from '../../../constants'
 import { pick } from 'lodash'
-import { PageHeader } from '../../../components'
+import { Error, Loading, PageHeader } from '../../../components'
+import heraApi from '../../../api'
 
 const INITIAL_CATEGORY = 'price'
 
@@ -49,10 +50,8 @@ const CalcDeleteButton = connect()(({ contractId, calcId, dispatch }) => <Popcon
 </Popconfirm>)
 
 const mapStateToProps = (state) => {
-  const contract = state.results.get(CONTRACT_DETAILS, {})
   const plans = state.results.get(ALL_PLAN, {})
   return {
-    contract: contract,
     projects: state.system.projects,
     plans: plans,
   }
@@ -80,13 +79,19 @@ const ProjectLabel = connect(state => ({
   return <>projectId</>
 })
 
-const ContractDetails = connect(mapStateToProps)(({ projects, router, dispatch, plans, contract }) => {
+const ContractDetails = connect(mapStateToProps)(({ projects, dispatch, plans }) => {
   const { id } = useParams()
+  const getContract = heraApi.useGetContractQuery(id)
   useEffect(() => {
     dispatch(queryAllPlans())
-    dispatch(queryContractDetails(id))
   }, [id])
-
+  if (getContract.isError) {
+    return <Error />
+  }
+  if (getContract.isLoading) {
+    return <Loading />
+  }
+  const contract = getContract.data
   const descriptions = [
     { label: "项目部", children: <ProjectLabel projectId={contract.project} /> },
     { label: "状态", children: <Tag color="green">{contract.status}</Tag> },

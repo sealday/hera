@@ -23,7 +23,7 @@ const baseQueryAuth = async (args, api, extraOptions) => {
 export const heraApi = createApi({
     reducerPath: 'heraApi',
     baseQuery: baseQueryAuth,
-    tagTypes: ['Company', 'Record', 'Plan', 'Employee', 'Subject'],
+    tagTypes: ['Company', 'Record', 'Plan', 'Employee', 'Subject', 'Product'],
     endpoints: (builder) => ({
         logout: builder.mutation({
             query: () => ({
@@ -225,6 +225,11 @@ export const heraApi = createApi({
                 ? [...result.map(({ _id: id }) => ({ type: 'Contract', id }) ), { type: 'Contract', id: 'LIST'}]
                 : [{ type: 'Contract', id: 'LIST'}]
         }),
+        getContract: builder.query({
+            query: (id) => `contract/${id}`,
+            transformResponse: res => res.data.contract,
+            providesTags: (_result, _error, id) => [{ type: 'Contract', id }],
+        }),
         createContract: builder.mutation({
             query: v => ({
                 url: 'contract',
@@ -257,6 +262,40 @@ export const heraApi = createApi({
             }),
             transformResponse: res => res.data,
             invalidatesTags: (_result, _error, id) => [{ type: 'Contract', id }],
+        }),
+        // 产品
+        getProductList: builder.query({
+            query: () => 'product',
+            transformResponse: res => res.data,
+            providesTags: result => result
+                ? [...result.map(({ _id: id }) => ({ type: 'Product', id }) ), { type: 'Product', id: 'LIST'}]
+                : [{ type: 'Product', id: 'LIST'}]
+        }),
+        createProduct: builder.mutation({
+            query: (product) => ({
+                url: 'product',
+                method: 'POST',
+                body: product,
+            }),
+            transformResponse: res => res.data,
+            invalidatesTags: [{ type: 'Product', id: 'LIST' }],
+        }),
+        updateProduct: builder.mutation({
+            query: ({ id, product }) => ({
+                url: `product/${id}`,
+                method: 'PUT',
+                body: product,
+            }),
+            transformResponse: res => res.data,
+            invalidatesTags: (_result, _error, { id }) => [{ type: 'Product', id }],
+        }),
+        deleteProduct: builder.mutation({
+            query: (id) => ({
+                url: `product/${id}`,
+                method: 'DELETE',
+            }),
+            transformResponse: res => res.data,
+            invalidatesTags: (_result, _error, id) => [{ type: 'Product', id }],
         }),
     })
 })
