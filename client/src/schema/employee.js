@@ -12,10 +12,10 @@ export default [
     {
         "label": "性别",
         "name": "gendor",
-        "type": "option",
-        "option": {
-            "type": "fixed",
-            "values": ["男", "女"]
+        "type": "text",
+        option: {
+            type: 'static_value_only',
+            values: ['男', '女']
         }
     },
     {

@@ -28,16 +28,17 @@ export default [
     label: '理论重量',
     name: 'weight',
     type: 'number',
-  },
-  {
-    label: '理论重量',
-    name: 'weight',
-    type: 'number',
+    suffix: '千克',
   },
   {
     label: '换算单位',
     name: 'unit',
     type: 'text',
+  },
+  {
+    label: '换算比例',
+    name: 'scale',
+    type: 'number',
   },
   {
     label: '是否需要换算',

@@ -231,6 +231,7 @@ export { default as TabTreeTable } from './tab-tree-table.component'
 export { default as PopoverFormButton } from './popover-form-button.component'
 export { default as PopconfirmButton } from './button/popconfirm.button'
 export { default as LinkButton } from './button/link.button'
+export { default as ModalFormButton } from './button/modal-form.button'
 
 export const withRouter = (Component) => {
   const Wrapper = (props) => {
