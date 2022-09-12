@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import {
@@ -16,7 +16,6 @@ import {
 } from '../../actions'
 import {
   wrapper,
-  DEFAULT_TAB_INDEX,
   ajax,
 } from '../../utils'
 
@@ -30,7 +29,6 @@ const btnStatusName = project => {
 
 const Project = ({ projects, onDeleteClick, onStatusChange }) => {
 
-  const [tab, setTab] = useState(DEFAULT_TAB_INDEX)
   const navigate = useNavigate()
 
   const columns = [

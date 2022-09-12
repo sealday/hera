@@ -17,7 +17,7 @@ export default () => {
     if (updateResult.isSuccess) {
       navigate(-1)
     }
-  }, [updateResult.isSuccess])
+  }, [navigate, updateResult.isSuccess])
   let initialValues = {
     'off-date': moment().startOf('day'),
     'arrival-date': moment().startOf('day').add(1, 'day'), // 到达日期

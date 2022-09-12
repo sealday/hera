@@ -15,7 +15,7 @@ export default () => {
     if (createResult.isSuccess) {
       navigate(-1)
     }
-  }, [createResult.isSuccess])
+  }, [navigate, createResult.isSuccess])
   const form = useRef()
   if (getPlanQuery.isError) {
     return  <Error />

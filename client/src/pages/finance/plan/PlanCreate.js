@@ -16,7 +16,7 @@ const PlanCreate = () => {
     if (createResult.isSuccess) {
       navigate(-1)
     }
-  }, [createResult.isSuccess])
+  }, [navigate, createResult.isSuccess])
   const initialValues = { type: 'price' }
   const form = useRef()
   return (

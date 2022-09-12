@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Outlet, useNavigate } from 'react-router-dom'
-import { Layout, Button, Dropdown, Menu } from 'antd'
+import { Layout, Button, Dropdown, Menu, message } from 'antd'
 
 import short_id from 'shortid'
 import { get } from 'lodash'
@@ -35,10 +35,16 @@ export default ({ onEnter, onLeave }) => {
   }, [])
   useEffect(() => {
     if (logoutResult.isSuccess) {
+      message.success('登出成功！')
       localStorage.removeItem('X-Hera-Token')
       navigate('/login')
     }
-  }, [logoutResult.isSuccess])
+  }, [navigate, logoutResult.isSuccess])
+  useEffect(() => {
+    if (logoutResult.isError) {
+      message.error('登出失败，请检查网络！')
+    }
+  }, [logoutResult.isError])
 
   const isCurrentStorePermit = () => {
     if (user.role === '项目部管理员' || user.role === '基地仓库管理员') {

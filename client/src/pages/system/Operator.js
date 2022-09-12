@@ -1,11 +1,10 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   Button,
   Popconfirm,
   Space,
-  Table,
 } from 'antd'
 import { PageHeader, ResultTable } from '../../components'
 import { deleteOperator } from '../../actions'

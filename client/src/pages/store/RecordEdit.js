@@ -19,7 +19,7 @@ export default () => {
     if (updateResult.isSuccess) {
       navigate(-1)
     }
-  }, [updateResult.isSuccess])
+  }, [navigate, updateResult.isSuccess])
 
   if (error) {
     return <Error />

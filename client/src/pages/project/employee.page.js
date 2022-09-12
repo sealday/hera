@@ -2,24 +2,13 @@ import { Error, Loading, PageHeader, ResultTable } from '../../components'
 import { employeeSchema } from '../../schema'
 import heraApi from '../../api'
 import { useNavigate } from 'react-router-dom'
-import { Button, message, Popconfirm, Space } from 'antd'
-import { useEffect } from 'react'
+import { Button, Popconfirm, Space } from 'antd'
 
 
 export default () => {
   const navigate = useNavigate()
-  const [deleteEmployee, deleteResult] = heraApi.useDeleteEmployeeMutation()
+  const [deleteEmployee] = heraApi.useDeleteEmployeeMutation()
   const columns = employeeSchema.map(item => ({ key: item.name, title: item.label, dataIndex: item.name }))
-  useEffect(() => {
-    if (deleteResult.isSuccess) {
-      message.success('删除成功~')
-    }
-  }, [deleteResult.isSuccess])
-  useEffect(() => {
-    if (deleteResult.isError) {
-      message.success('删除失败~')
-    }
-  }, [deleteResult.isError])
   columns.push({
     key: 'action',
     title: '操作',

@@ -1,7 +1,7 @@
 import moment from "moment"
 import { useEffect } from "react"
 import { useSelector } from "react-redux"
-import { useNavigate, useParams, useSearchParams } from "react-router-dom"
+import { useNavigate, useSearchParams } from "react-router-dom"
 import { useCreateRecordMutation } from "../../api"
 import { Error, PageHeader } from "../../components"
 import { RECORD_TYPE_MAP } from "../../globals"
@@ -22,14 +22,13 @@ export default () => {
   useEffect(() => {
     if (createResult.isSuccess) {
       navigate(`/record/${createResult.data._id}`)
-      console.dir(createResult)
     }
-  }, [createResult.isSuccess])
+  }, [navigate, createResult.isSuccess])
   // 名称后缀
   let pageTitleSuffix = ''
-  if (direction == 'in') {
+  if (direction === 'in') {
     pageTitleSuffix = '入库'
-  } else if (direction == 'out') {
+  } else if (direction === 'out') {
     pageTitleSuffix = '出库'
   } else {
     return <Error message='不支持的操作' />

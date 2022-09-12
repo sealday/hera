@@ -1,12 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { getFormValues } from 'redux-form'
-import {
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-} from '@material-ui/core'
 
 import OperatorForm from './OperatorForm'
 import { createOperator } from '../../actions'

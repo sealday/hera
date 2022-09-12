@@ -20,7 +20,7 @@ export default ({ dispatch }) => {
     if (createResult.isSuccess) {
       navigate('/contract')
     }
-  }, [createResult.isSuccess])
+  }, [navigate, createResult.isSuccess])
 
   return (
     <PageHeader

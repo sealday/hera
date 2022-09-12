@@ -1,26 +1,17 @@
-import React, { useState } from 'react'
+import React from 'react'
 import ReactMaskedInput from 'react-text-mask'
 import fuzzysearch from 'fuzzysearch'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import {
-  Button as AntButton,
   Input as AntInput,
   Select as AntSelect,
   DatePicker as AntDatePicker,
-  PageHeader as AntPageHeader,
-  Card,
-  Form,
-  Row,
-  Col,
-  Space,
 } from 'antd'
-import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons'
-import * as moment  from 'moment'
+import moment from 'moment'
 import { isUndefined } from 'lodash'
 
 import RawEditableTagGroup from './EditableTagGroup.js'
-import { SettingsApplicationsSharp } from '@material-ui/icons'
 
 const errorStyle = {
   borderColor: '#a94442',

@@ -49,7 +49,11 @@
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+    "rules": { 
+        "import/no-anonymous-default-export": "off",
+        "no-unused-vars": "off"
+    }
   },
   "homepage": "/system/",
   "proxy": "http://localhost:3000/",

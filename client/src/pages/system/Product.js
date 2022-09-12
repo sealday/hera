@@ -5,7 +5,6 @@ import { Error, Loading, ModalFormButton, PageHeader, PopconfirmButton, ResultTa
 import { Space, ConfigProvider } from 'antd'
 import heraApi from '../../api'
 import { productSchema } from '../../schema'
-import { PlusCircleOutlined } from '@ant-design/icons'
 
 export default () => {
   const getProductList = heraApi.useGetProductListQuery()

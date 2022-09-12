@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import moment from 'moment'
 import { Link, useNavigate } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { PlusCircleOutlined } from '@ant-design/icons'
 import {
   Button,
   Card,
@@ -51,7 +50,7 @@ const Price = ({ dispatch, plans }) => {
   const recentItems = ['中建三局', '中建八局', '上海']
   useEffect(() => {
     dispatch(queryPricePlan())
-  }, [])
+  }, [dispatch])
   const columns = [
     {
       "title": "名称",
