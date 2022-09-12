@@ -27,7 +27,6 @@ export class InvoiceController {
 
   @Put(':id')
   async update(@Param('id') id: string, @Body() body: Invoice) {
-    console.log(body)
     return await this.invoiceService.update(id, body);
   }
 

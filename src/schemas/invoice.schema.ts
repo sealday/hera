@@ -26,15 +26,15 @@ export class Invoice {
   @Prop()
   comments: string;
 
-  @Prop(raw({
+  @Prop([raw({
     projectId: { type: mongoose.Schema.Types.ObjectId },
     content: { type: String },
     amount: { type: Number },
     taxRate: { type: Number },
     tax: { type: Number },
     total: { type: Number },
-  }))
-  list: Record<string, any>[]
+  })])
+  items: Record<string, any>[]
 }
 
 export const InvoiceSchema = SchemaFactory.createForClass(Invoice)
