@@ -66,10 +66,13 @@ const onLogouted = () => {
     socket.emit('client:logout')
   }
 }
+const emptyRenderer = () => (
+  <div></div>
+)
 const MyApp = () => (
   <Provider store={store}>
     <ThemeProvider theme={theme}>
-      <ConfigProvider locale={zh_CN}>
+      <ConfigProvider locale={zh_CN} renderEmpty={emptyRenderer}>
         <Alert.ErrorBoundary>
           <HistoryRouter history={history} basename={BASENAME}>
             <Routes onLogin={onLogined} onLogout={onLogouted} />
