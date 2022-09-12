@@ -344,6 +344,45 @@ export const heraApi = createApi({
                 ? [...result.map(({ _id: id }) => ({ type: 'Project', id }) ), { type: 'Project', id: 'LIST'}]
                 : [{ type: 'Project', id: 'LIST'}]
         }),
+        // 贷款管理
+        getLoanList: builder.query({
+            query: () => 'loan',
+            transformResponse: res => res.data,
+            providesTags: result => result
+                ? [...result.map(({ _id: id }) => ({ type: 'Loan', id }) ), { type: 'Loan', id: 'LIST'}]
+                : [{ type: 'Loan', id: 'LIST'}]
+        }),
+        createLoan: builder.mutation({
+            query: (loan) => ({
+                url: 'loan',
+                method: 'POST',
+                body: loan,
+            }),
+            transformResponse: res => res.data,
+            invalidatesTags: [{ type: 'Loan', id: 'LIST' }],
+        }),
+        getLoan: builder.query({
+            query: (id) => `loan/${id}`,
+            transformResponse: res => res.data,
+            providesTags: (_result, _error, id) => [{ type: 'Loan', id }],
+        }),
+        updateLoan: builder.mutation({
+            query: ({ id, loan }) => ({
+                url: `loan/${id}`,
+                method: 'PUT',
+                body: loan,
+            }),
+            transformResponse: res => res.data,
+            invalidatesTags: (_result, _error, { id }) => [{ type: 'Loan', id }],
+        }),
+        deleteLoan: builder.mutation({
+            query: (id) => ({
+                url: `loan/${id}`,
+                method: 'DELETE',
+            }),
+            transformResponse: res => res.data,
+            invalidatesTags: (_result, _error, id) => [{ type: 'Loan', id }],
+        }),
     })
 })
 

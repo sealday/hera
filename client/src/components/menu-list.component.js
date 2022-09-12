@@ -131,6 +131,10 @@ const allMenu = [
         path: '/invoice/out',
       },
       {
+        name: '贷款管理',
+        path: '/loan'
+      },
+      {
         name: '凭证录入',
         path: '/voucher',
       },
