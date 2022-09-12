@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Button, Card, Col, Form, PageHeader, Row, Space, Input, Descriptions } from 'antd'
-import { PlusCircleOutlined, EditOutlined, PrinterOutlined, ArrowLeftOutlined, SearchOutlined, ClearOutlined, SaveOutlined } from '@ant-design/icons'
+import { PlusCircleOutlined, EditOutlined, PrinterOutlined, ArrowLeftOutlined, SearchOutlined, ClearOutlined, SaveOutlined, ExportOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
 import { isUpdatable } from '../utils'
 import { useSelector } from 'react-redux'
@@ -83,8 +83,11 @@ export default ({
   const mSearchForm = React.createRef()
   const forms = []
   if (searchForm) {
-    const { Form: SearchForm, initialValues, onSubmit, ...otherSearchFormProps } = searchForm
+    const { Form: SearchForm, initialValues, onSubmit, onExcelExport, ...otherSearchFormProps } = searchForm
     actions.push(<Button key='onReset' onClick={() => mSearchForm.current.reset()} icon={<ClearOutlined />}>重置</Button>)
+    if (onExcelExport) {
+      actions.push(<Button key='onExcelExport' onClick={onExcelExport} icon={<ExportOutlined />}>导出 Excel</Button>)
+    }
     actions.push(<Button key='onSearch' type='primary' onClick={() => mSearchForm.current.submit()} icon={<SearchOutlined />}>查询</Button>)
     forms.push(
       <searchForm.Form key='searchForm' initialValues={searchForm.initialValues} ref={mSearchForm} onSubmit={searchForm.onSubmit} {...otherSearchFormProps} />
