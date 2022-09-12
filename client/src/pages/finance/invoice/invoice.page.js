@@ -1,5 +1,6 @@
 import { Space } from "antd"
 import moment from "moment"
+import { useState } from "react"
 import { useParams } from "react-router-dom"
 import heraApi from "../../../api"
 import { Error, Loading, ModalFormButton, PageHeader, PopconfirmButton, ResultTable } from "../../../components"
@@ -14,6 +15,7 @@ const DIRECTION2TITLE = {
 export default () => {
   const { direction } = useParams()
   const title = DIRECTION2TITLE[direction]
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const getInvoiceList = heraApi.useGetInvoiceListQuery()
   const [createInvoice] = heraApi.useCreateInvoiceMutation()
   const [deleteInvoice] = heraApi.useDeleteInvoiceMutation()
@@ -45,9 +47,21 @@ export default () => {
   const initialValues = {
     direction: title,
   }
+  const onSelectChange = (newSelectedRowKeys) => {
+    setSelectedRowKeys(newSelectedRowKeys)
+  }
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+  }
+  const printContent = '还未实现'
   return (
     <PageHeader
       title={title}
+      onPrintPreview={{
+        content: printContent,
+        title: '打印预览',
+      }}
       onCreate={{
         title: '新增发票',
         onSubmit: createInvoice,
@@ -55,7 +69,7 @@ export default () => {
         initialValues,
       }}
     >
-      <ResultTable columns={columns} dataSource={data} rowKey='_id' schema={invoiceSchema} />
+      <ResultTable rowSelection={rowSelection} columns={columns} dataSource={data} rowKey='_id' schema={invoiceSchema} />
     </PageHeader>
   )
 }

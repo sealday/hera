@@ -41,7 +41,8 @@ export default [
       ref: 'company',
       label: 'name',
       value: '_id',
-    }
+    },
+    required: true,
   },
   {
     label: '购买方',
@@ -52,7 +53,8 @@ export default [
       ref: 'company',
       label: 'name',
       value: '_id',
-    }
+    },
+    required: true,
   },
   {
     label: '备注',
@@ -74,12 +76,14 @@ export default [
           ref: 'project',
           label: 'name',
           value: '_id',
-        }
+        },
+        required: true,
       },
       {
         label: '开票内容',
         name: 'content',
         type: 'text',
+        required: true,
       },
       {
         label: '金额',
@@ -99,6 +103,7 @@ export default [
           values: [0.01, 0.03, 0.06, 0.09, 0.13],
         },
         default: 0.13,
+        required: true,
       },
       {
         label: '税额',
@@ -113,6 +118,7 @@ export default [
         name: 'total',
         type: 'number',
         default: 0,
+        required: true,
       },
     ],
   }

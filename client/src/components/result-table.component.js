@@ -1,7 +1,7 @@
 import { Card, Table } from "antd"
 import _ from "lodash"
 
-export default ({ columns, dataSource, summaryColumns, summaryDataSource, rowKey = 'key', pagination = false }) => {
+export default ({ rowSelection, columns, dataSource, summaryColumns, summaryDataSource, rowKey = 'key', pagination = false }) => {
   const summaryTable = () => !_.isEmpty(summaryDataSource) ? <Table
     columns={summaryColumns}
     dataSource={summaryDataSource}
@@ -44,6 +44,7 @@ export default ({ columns, dataSource, summaryColumns, summaryDataSource, rowKey
   return (
     <Card bordered={false} size='small'>
       <Table
+        rowSelection={rowSelection}
         columns={columns} dataSource={dataSource} size='small'
         rowKey={rowKey}
         footer={summaryTable}

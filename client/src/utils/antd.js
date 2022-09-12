@@ -108,7 +108,6 @@ const genTableColumn = schema => {
         }
       }
       columns.push(column)
-      // moment(outDate).format('YYYY-MM-DD')
     } else if (item.type === 'date') {
       const column = { title: item.label, dataIndex: item.name, key: item.name, render: null }
       column.render = date => moment(date).format('YYYY-MM-DD')
@@ -139,7 +138,7 @@ const genTableFormColumn = (parent, form = null) => {
       } else if (item.option.type === 'static') {
         
         column.render = (_text, field) => (
-          <Form.Item initialValue={item.default} noStyle name={[field.name, item.name]} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
+          <Form.Item initialValue={item.default} noStyle name={[field.name, item.name]} label={item.label} hidden={item.hidden} rules={[{ required: item.required }]}>
             <Select disabled={item.disabled}>
               {_
                 .zip(item.option.labels, item.option.values)
@@ -154,7 +153,7 @@ const genTableFormColumn = (parent, form = null) => {
       }
     } else if (item.type === 'boolean') {
       column.render = (_text, field) => (
-        <Form.Item initialValue={item.default} noStyle name={[field.name, item.name]} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
+        <Form.Item initialValue={item.default} noStyle name={[field.name, item.name]} label={item.label} hidden={item.hidden} rules={[{ required: item.required }]}>
           <Select disabled={item.disabled}>
             {item.option.values.map(v => <Select.Option key={v} value={v}>{v}</Select.Option>)}
             <Select.Option key='是' value={true}>是</Select.Option>
@@ -164,7 +163,7 @@ const genTableFormColumn = (parent, form = null) => {
       )
     } else if (item.type === 'date') {
       column.render = (_text, field) => (
-        <Form.Item initialValue={item.default} noStyle name={[field.name, item.name]} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
+        <Form.Item initialValue={item.default} noStyle name={[field.name, item.name]} label={item.label} hidden={item.hidden} rules={[{ required: item.required }]}>
           <DatePicker disabled={item.disabled} />
         </Form.Item>
       )
@@ -175,7 +174,7 @@ const genTableFormColumn = (parent, form = null) => {
         )
       } else {
         column.render = (_text, field) => (
-          <Form.Item initialValue={item.default} noStyle name={[field.name, item.name]} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
+          <Form.Item initialValue={item.default} noStyle name={[field.name, item.name]} label={item.label} hidden={item.hidden} rules={[{ required: item.required }]}>
             <Input addonAfter={item.suffix ? item.suffix : null} disabled={item.disabled} />
           </Form.Item>
         )

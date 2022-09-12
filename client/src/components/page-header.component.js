@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { isUpdatable } from '../utils'
 import { useSelector } from 'react-redux'
 import ModalFormButton from './button/modal-form.button'
+import ModalPrintPreviewButton from './button/modal-print-preview.button'
 
 export default ({
   title,
@@ -41,7 +42,16 @@ export default ({
     actions.push(...extra)
   }
   if (onPrintPreview) {
-    actions.push(<Button key='onCreate' type='default' onClick={onPrintPreview} icon={<PrinterOutlined />}>打印预览</Button>)
+    if (onPrintPreview.content) {
+      actions.push(<ModalPrintPreviewButton
+        key='onCreate' 
+        content={onPrintPreview.content}
+        title={onPrintPreview.title}
+        type='default' 
+        icon={<PrinterOutlined />}>打印预览</ModalPrintPreviewButton>)
+    } else {
+      actions.push(<Button key='onCreate' type='default' onClick={onPrintPreview} icon={<PrinterOutlined />}>打印预览</Button>)
+    }
   }
   if (onCreate) {
     // TODO 有没有更合适的判断方式，这里的依据是创建要么以对话框，要么是以页面
