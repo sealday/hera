@@ -383,6 +383,45 @@ export const heraApi = createApi({
             transformResponse: res => res.data,
             invalidatesTags: (_result, _error, id) => [{ type: 'Loan', id }],
         }),
+        // 考勤管理
+        getAttendanceList: builder.query({
+            query: () => 'attendance',
+            transformResponse: res => res.data,
+            providesTags: result => result
+                ? [...result.map(({ _id: id }) => ({ type: 'Attendance', id }) ), { type: 'Attendance', id: 'LIST'}]
+                : [{ type: 'Attendance', id: 'LIST'}]
+        }),
+        createAttendance: builder.mutation({
+            query: (attendance) => ({
+                url: 'attendance',
+                method: 'POST',
+                body: attendance,
+            }),
+            transformResponse: res => res.data,
+            invalidatesTags: [{ type: 'Attendance', id: 'LIST' }],
+        }),
+        getAttendance: builder.query({
+            query: (id) => `attendance/${id}`,
+            transformResponse: res => res.data,
+            providesTags: (_result, _error, id) => [{ type: 'Attendance', id }],
+        }),
+        updateAttendance: builder.mutation({
+            query: ({ id, attendance }) => ({
+                url: `attendance/${id}`,
+                method: 'PUT',
+                body: attendance,
+            }),
+            transformResponse: res => res.data,
+            invalidatesTags: (_result, _error, { id }) => [{ type: 'Attendance', id }],
+        }),
+        deleteAttendance: builder.mutation({
+            query: (id) => ({
+                url: `attendance/${id}`,
+                method: 'DELETE',
+            }),
+            transformResponse: res => res.data,
+            invalidatesTags: (_result, _error, id) => [{ type: 'Attendance', id }],
+        }),
     })
 })
 
