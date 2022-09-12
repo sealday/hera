@@ -35,6 +35,7 @@ import EmployeeEditPage from '../pages/project/employee-edit.page'
 import SubjectPage from '../pages/finance/subject/subject.page'
 import InvoicePage from '../pages/finance/invoice/invoice.page'
 import LoanPage from '../pages/finance/loan/loan.page'
+import VoucherPage from '../pages/finance/voucher/voucher.page'
 
 export default ({ onLogin, onLogout }) => <Routes>
   <Route path="/login" element={<Login />} />
@@ -89,6 +90,7 @@ export default ({ onLogin, onLogout }) => <Routes>
     <Route path='employee/:id/edit' element={<EmployeeEditPage />} />
     <Route path='invoice/:direction' element={<InvoicePage />} />
     <Route path='loan' element={<LoanPage />} />
+    <Route path='voucher' element={<VoucherPage />} />
     <Route path='subject' element={<SubjectPage />} />
     <Route path='attendance' element={<Attendance />} />
   </Route>

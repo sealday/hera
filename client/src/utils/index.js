@@ -1,7 +1,7 @@
 import axios from 'axios'
 import fuzzysearch from 'fuzzysearch'
 import moment from 'moment'
-import { flowRight, last, dropRight } from 'lodash'
+import { flowRight, last, dropRight, forEach } from 'lodash'
 import { saveAs } from 'file-saver'
 
 import * as validator from './validator'
@@ -601,3 +601,29 @@ export const enableFilters = [
 ]
 
 export const shouldShow = (condition, view) => condition ? view : null
+
+
+/**
+ * @param {[{id, parentId}]} flatItems 
+ * @returns 
+ */
+export const buildTree = (flatItems) => {
+  // 复制并初始化，不影响原来的数据
+  const items = flatItems.map(item => ({ ...item }))
+  const treeLikeItems = []
+  forEach(items, item=> {
+    if (item.parentId === '-1') {
+      treeLikeItems.push(item)
+    } else {
+      const parent = items.find(parent => parent.id === item.parentId)
+      // 忽略没有父节点的
+      if (parent) {
+        if (!parent.children) {
+          parent.children = []
+        }
+        parent.children.push(item)
+      }
+    }
+  })
+  return treeLikeItems
+}

@@ -28,6 +28,7 @@ export default ({ onSubmit, title, schema, initialValues, children, ...btnProps 
       </Button>
       <ConfigProvider componentSize='middle'>
         <Modal
+          destroyOnClose
           width={768}
           title={title}
           open={open}
@@ -36,7 +37,7 @@ export default ({ onSubmit, title, schema, initialValues, children, ...btnProps 
           okText="保存"
           cancelText="取消"
         >
-          <Form onFinish={onSubmit} form={form} initialValues={initialValues} colon={false} labelCol={{ flex: '100px' }}>
+          <Form preserve={false} onFinish={onSubmit} form={form} initialValues={initialValues} colon={false} labelCol={{ flex: '100px' }}>
             {formContent}
           </Form>
         </Modal>

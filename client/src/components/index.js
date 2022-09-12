@@ -234,6 +234,7 @@ export { default as LinkButton } from './button/link.button'
 export { default as ModalFormButton } from './button/modal-form.button'
 export { default as ModalPrintPreviewButton } from './button/modal-print-preview.button'
 export { default as RefSelect } from './ref-select.component'
+export { default as RefCascader } from './ref-cascader.component'
 export { default as RefLabel } from './ref-label.component'
 export { default as DepLabel } from './dep-label.component'
 

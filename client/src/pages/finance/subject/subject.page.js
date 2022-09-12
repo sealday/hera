@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button, message, Popconfirm, Space } from 'antd'
 import { useEffect } from 'react'
 import _ from 'lodash'
+import { buildTree } from '../../../utils'
 
 
 export default () => {
@@ -60,24 +61,7 @@ export default () => {
     return <Loading />
   }
   const subjects = _.cloneDeep(getSubjectListQuery.data).sort((a, b) => Number(a.id) - Number(b.id))
-  const dataSource = []
-  _.forEach(subjects, subject => {
-    if (subject.parentId === '-1') {
-      dataSource.push(subject)
-    } else {
-      const parent = subjects.find(item => item.id === subject.parentId)
-      if (!parent) {
-        // 找不到父亲直接下一个
-        return
-      }
-      if (parent.children) {
-        parent.children.push(subject)
-      } else {
-        parent.children = [subject]
-      }
-    }
-  })
-
+  const dataSource = buildTree(subjects)
   return (
     <PageHeader
       title='科目设定'

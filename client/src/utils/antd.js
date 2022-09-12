@@ -1,13 +1,24 @@
-import { PlusCircleOutlined } from "@ant-design/icons"
+import { MinusCircleOutlined, PlusCircleOutlined } from "@ant-design/icons"
 import { Button, Col, DatePicker, Form, Input, Radio, Row, Select, Table } from "antd"
 import _ from "lodash"
 import moment from "moment"
-import { DepLabel, RefLabel, RefSelect } from "../components"
+import { DepLabel, RefCascader, RefLabel, RefSelect } from "../components"
 
 const ListTable = ({ fields, operation, meta, item, form}) => {
+  const columns = genTableFormColumn(item, form).concat([
+    {
+      key: 'action',
+      title: '操作',
+      render(_text, field) {
+        return (
+          <Button type='text' icon={<MinusCircleOutlined />} onClick={() => operation.remove(field.name)} />
+        )
+      }
+    }
+  ])
   return (
     <>
-      <Table title={() => item.label} columns={genTableFormColumn(item, form)} dataSource={fields} pagination={false} />
+      <Table title={() => item.label} columns={columns} dataSource={fields} pagination={false} />
       <Button type="dashed" block icon={<PlusCircleOutlined />} onClick={() => operation.add()}>新增</Button>
     </>
   )
@@ -38,9 +49,15 @@ const genFormContent = (schema, cols = 0, form = null) => {
           ))
         }
       } else if (item.option.type === 'ref') {
+        if (item.option.select === 'cascader') {
+          formItems.push((
+            <RefCascader item={item} key={item.name} />
+          ))
+        } else {
           formItems.push((
             <RefSelect item={item} key={item.name} />
           ))
+        }
       }
     } else if (item.type === 'boolean') {
       formItems.push((
@@ -64,11 +81,19 @@ const genFormContent = (schema, cols = 0, form = null) => {
         </Form.List>
       ))
     } else {
-      formItems.push((
-        <Form.Item key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
-          <Input addonAfter={item.suffix ? item.suffix : null} disabled={item.disabled}/>
-        </Form.Item>
-      ))
+      if (item.rows) {
+        formItems.push((
+          <Form.Item key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
+            <Input.TextArea disabled={item.disabled} rows={item.rows} />
+          </Form.Item>
+        ))
+      } else {
+        formItems.push((
+          <Form.Item key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
+            <Input addonAfter={item.suffix ? item.suffix : null} disabled={item.disabled} />
+          </Form.Item>
+        ))
+      }
     }
   })
 
@@ -147,9 +172,15 @@ const genTableFormColumn = (parent, form = null) => {
           </Form.Item>
         )
       } else if (item.option.type === 'ref') {
-        column.render = (_text, field) => (
-          <RefSelect noStyle item={{ ...item, name: [field.name, item.name] }} key={item.name} />
-        )
+        if (item.option.select === 'cascader') {
+          column.render = (_text, field) => (
+            <RefCascader noStyle item={{ ...item, name: [field.name, item.name] }} key={item.name} />
+          )
+        } else {
+          column.render = (_text, field) => (
+            <RefSelect noStyle item={{ ...item, name: [field.name, item.name] }} key={item.name} />
+          )
+        }
       }
     } else if (item.type === 'boolean') {
       column.render = (_text, field) => (
@@ -182,7 +213,6 @@ const genTableFormColumn = (parent, form = null) => {
     }
     columns.push(column)
   })
-
   return columns
 }
 
