@@ -5,7 +5,7 @@ export type EmployeeDocument = Employee & Document;
 
 @Schema()
 export class Employee {
-  @Prop()
+  @Prop({ unique: true })
   employeeID: string;
 
   @Prop()
@@ -14,7 +14,7 @@ export class Employee {
   @Prop({ enum: ['男', '女'] })
   gendor: string;
 
-  @Prop()
+  @Prop({ unique: true })
   id: string;
   
   @Prop()
