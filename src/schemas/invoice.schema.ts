@@ -18,10 +18,10 @@ export class Invoice {
   date: Date;
 
   @Prop()
-  sale: string;
+  sale: mongoose.Schema.Types.ObjectId;
 
   @Prop()
-  purchase: string;
+  purchase: mongoose.Schema.Types.ObjectId;
 
   @Prop()
   comments: string;
