@@ -44,13 +44,13 @@ export default ({
   if (onPrintPreview) {
     if (onPrintPreview.content) {
       actions.push(<ModalPrintPreviewButton
-        key='onCreate' 
+        key='onPrintPreview' 
         content={onPrintPreview.content}
         title={onPrintPreview.title}
         type='default' 
         icon={<PrinterOutlined />}>打印预览</ModalPrintPreviewButton>)
     } else {
-      actions.push(<Button key='onCreate' type='default' onClick={onPrintPreview} icon={<PrinterOutlined />}>打印预览</Button>)
+      actions.push(<Button key='onPrintPreview' type='default' onClick={onPrintPreview} icon={<PrinterOutlined />}>打印预览</Button>)
     }
   }
   if (onCreate) {

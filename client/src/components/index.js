@@ -158,6 +158,10 @@ export const antFilterOption = (input, option) => {
   return fuzzysearch(input, option.children) || fuzzysearch(input, option.pinyin)
 }
 
+export const smartFilterOption = (input, option) => {
+  return fuzzysearch(input, option.label) || (option.pinyin && fuzzysearch(input, option.pinyin))
+}
+
 export const FilterSelect = ({ input, options, style, meta: { touched, error, warning }, ...custom }) => {
   const { filterOption } = custom
 

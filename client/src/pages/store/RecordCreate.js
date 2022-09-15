@@ -1,3 +1,5 @@
+import _ from 'lodash'
+import { Form } from "antd"
 import moment from "moment"
 import { useEffect } from "react"
 import { useSelector } from "react-redux"
@@ -6,12 +8,11 @@ import { useCreateRecordMutation } from "../../api"
 import { Error, PageHeader } from "../../components"
 import { RECORD_TYPE_MAP } from "../../globals"
 import { DEFAULT_STORE_TYPE } from "../../utils"
-import PurchaseForm from "./PurchaseForm"
 import RecordForm from "./RecordForm"
-import StocktakingForm from './StocktakingForm'
-import TransferForm from "./TransferForm"
+import { SettingContext } from "./records"
 
 export default () => {
+  const [form] = Form.useForm()
   const [searchParams] = useSearchParams()
   const [createRecord, createResult] = useCreateRecordMutation()
   const navigate = useNavigate()
@@ -24,115 +25,88 @@ export default () => {
       navigate(`/record/${createResult.data._id}`)
     }
   }, [navigate, createResult.isSuccess])
-  // 名称后缀
-  let pageTitleSuffix = ''
-  if (direction === 'in') {
-    pageTitleSuffix = '入库'
-  } else if (direction === 'out') {
-    pageTitleSuffix = '出库'
-  } else {
-    return <Error message='不支持的操作' />
-  }
+  // 提交处理
   const handleSubmit = (record) => {
-    if (type !== 'check') {
-      if (direction === 'in') {
-        createRecord({
-          ...record,
-          inStock: store._id,
-          outStock: record.project,
-          type: RECORD_TYPE_MAP[type],
-        })
-      } else if (direction === 'out') {
-        createRecord({
-          ...record,
-          outStock: store._id,
-          inStock: record.project,
-          type: RECORD_TYPE_MAP[type],
-        })
+    record.entries = _.map(record.entries, item => ({
+      ...item,
+      ..._.zipObject(['type', 'name', 'size'], item.product),
+    }))
+    record.complements = _.map(record.complements, item => {
+      const complement = {
+        ...item,
+        product: _.zipObject(['type', 'name', 'size'], item.product),
       }
-    } else {
-      if (direction === 'in') {
-        createRecord({
-          ...record,
-          inStock: store._id,
-          type: RECORD_TYPE_MAP[type],
-        })
-      } else if (direction === 'out') {
-        createRecord({
-          ...record,
-          outStock: store._id,
-          type: RECORD_TYPE_MAP[type],
-        })
+      if (item.level === 'associated') {
+        const associateArray = JSON.parse(item.associate)
+        complement.associate = _.zipObject(['type', 'name', 'size'], associateArray)
       }
+      return complement
+    })
+    if (type === 'check') {
+      createRecord({
+        ...record,
+        inStock: store._id,
+        type: RECORD_TYPE_MAP[type],
+      })
+      return
+    }
+    if (direction === 'in') {
+      createRecord({
+        ...record,
+        inStock: store._id,
+        outStock: record.projectId,
+        type: RECORD_TYPE_MAP[type],
+      })
+    } else if (direction === 'out') {
+      createRecord({
+        ...record,
+        outStock: store._id,
+        inStock: record.projectId,
+        type: RECORD_TYPE_MAP[type],
+      })
     }
   }
 
-  let pageTitlePrefix = ''
-  let isFree = false
+  const titleParts = []
+  const settings = {
+    price: false,
+    project: true,
+    originalOrder: true,
+    carNumber: true,
+  }
   switch (type) {
     case 'transfer':
-      isFree = true
-      pageTitlePrefix = '暂存'
+      titleParts.push('暂存')
       break;
     case 'purchase':
-      if (direction === 'in') {
-        pageTitlePrefix = '采购'
-      } else {
-        pageTitlePrefix = '销售'
-      }
+      titleParts.push(direction === 'in' ? '采购' : '销售')
+      settings.price = true
       break;
     case 'rent':
-      pageTitlePrefix = '租赁'
+      titleParts.push('租赁')
       break;
     case 'check':
-      pageTitlePrefix = '盘点'
+      titleParts.push('盘点录入')
+      settings.project = false
+      settings.originalOrder = false
+      settings.carNumber = false
       break;
     default:
-      <Error message='暂时不支持这种形式' />
+      <Error>不支持的类型</Error>
   }
-
-  const pageTitle = pageTitlePrefix + pageTitleSuffix
+  // 名称后缀
+  titleParts.push(direction === 'in' ? '入库' : direction === 'out' ? '出库' : '')
+  const pageTitle = titleParts.join('')
   const initialValues = {
     outDate: moment(),
-    projectType: DEFAULT_STORE_TYPE,
-    isFree,
+    type: DEFAULT_STORE_TYPE,
   }
-
-  let form = ''
-  switch (type) {
-    case 'transfer':
-      form = <PurchaseForm
-        initialValues={initialValues}
-        onSubmit={handleSubmit}
-      />
-      break;
-    case 'purchase':
-      form = <PurchaseForm
-        initialValues={initialValues}
-        onSubmit={handleSubmit}
-      />
-      break;
-    case 'rent':
-      form = <TransferForm
-        onSubmit={handleSubmit}
-        initialValues={initialValues}
-      />
-      break;
-    case 'check':
-      form = <StocktakingForm
-        initialValues={{ ...initialValues, project: store._id }}
-        onSubmit={handleSubmit}
-      />
-      break;
-    default:
-      <Error message='暂时不支持这种形式' />
-  }
-
   return <PageHeader
     title={pageTitle}
-    subTitle='创建'
+    onSave={() => form.submit()}
   >
-    <RecordForm />
-    {form}
+    <SettingContext.Provider value={settings}>
+      <RecordForm form={form} onSubmit={handleSubmit} initialValues={initialValues} type={type} />
+    </SettingContext.Provider>
   </PageHeader>
 }

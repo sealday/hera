@@ -45,13 +45,8 @@ const allMenu = [
         path: '/record/create?type=transfer&direction=out',
       },
       {
-        name: '盘点入库',
-        path: '/record/create?type=check&direction=in',
-        roles: ['系统管理员', '基地仓库管理员'],
-      },
-      {
-        name: '盘点出库',
-        path: '/record/create?type=check&direction=out',
+        name: '盘点录入',
+        path: '/record/create?type=check',
         roles: ['系统管理员', '基地仓库管理员'],
       },
     ]

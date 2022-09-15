@@ -407,6 +407,16 @@ export const CONTRACT_TYPES = ['项目仓库', '租赁客户', '同行客户']
 export const PURCHASING_CLIENT_TYPES = ['项目仓库', '租赁客户', '同行客户', '基地仓库', '供应商']
 
 /**
+ * 订单仓库类型
+ */
+export const RECORD_CLIENT_TYPES = ['项目仓库', '租赁客户', '同行客户', '基地仓库', '供应商']
+
+/**
+ * 产品类型
+ */
+export const PRODUCT_TYPES = ['租赁类', '损耗类', '工具类', '配件类', '维修类', '费用类']
+
+/**
  * 支持的订单类型
  */
 export const RECORD_TYPES = ['购销', '调拨', '暂存', '盘点']
