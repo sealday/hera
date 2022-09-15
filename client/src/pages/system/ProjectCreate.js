@@ -1,40 +1,41 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 import ProjectForm from './ProjectForm'
 import { postProject } from '../../actions'
 import { DEFAULT_STORE_TYPE } from '../../utils'
+import { PageHeader } from '../../components'
+import { submit } from 'redux-form'
 
-class ProjectCreate extends Component {
-  handleSubmit = (project) => {
-    this.props.dispatch(postProject(project))
+export default () => {
+  const dispatch = useDispatch()
+  const handleSubmit = (project) => {
+    dispatch(postProject(project))
   }
 
-  render() {
-    const { router } = this.props
-    const initialValues = {
-      contacts: [{
-        key: Date.now(),
-        name: '',
-        phone: '',
-        number: '',
-      }],
-      banks: [{
-        key: Date.now(),
-        name: '',
-        account: '',
-        bank: '',
-      }],
-      type: DEFAULT_STORE_TYPE}
-    return (
+  const initialValues = {
+    contacts: [{
+      key: Date.now(),
+      name: '',
+      phone: '',
+      number: '',
+    }],
+    banks: [{
+      key: Date.now(),
+      name: '',
+      account: '',
+      bank: '',
+    }],
+    type: DEFAULT_STORE_TYPE
+  }
+  return (
+    <PageHeader
+      title='项目信息录入'
+      onSave={() => { dispatch(submit('ProjectEditForm')) }}
+    >
       <ProjectForm
         initialValues={initialValues}
-        onSubmit={this.handleSubmit}
-        router={router}
-        title="录入项目信息"
+        onSubmit={handleSubmit}
       />
-    )
-  }
+    </PageHeader>
+  )
 }
-
-export default connect()(ProjectCreate)

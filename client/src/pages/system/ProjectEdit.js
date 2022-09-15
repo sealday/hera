@@ -1,15 +1,17 @@
 import React from 'react'
-import { connect } from 'react-redux'
+import { connect, useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import shortid from 'shortid'
-
+import { submit } from 'redux-form'
 import { alterProject } from '../../actions'
-import { withRouter } from '../../components'
+import { PageHeader } from '../../components'
 import ProjectForm from './ProjectForm'
 
-const ProjectEdit = ({ project, dispatch, handleSubmit }) => {
+export default () => {
+  const dispatch = useDispatch()
   const params = useParams()
-  handleSubmit = project => {
+  const project = useSelector(state => state.system.projects.get(params.id))
+  const handleSubmit = project => {
     project._id = params.id
     dispatch(alterProject(project))
   }
@@ -24,18 +26,14 @@ const ProjectEdit = ({ project, dispatch, handleSubmit }) => {
     }
   })
   return (
-    <ProjectForm
-      onSubmit={handleSubmit}
-      initialValues={project}
-      title={"项目信息修改"}
-    />
+    <PageHeader
+      title='项目信息录入'
+      onSave={() => { dispatch(submit('ProjectEditForm')) }}
+    >
+      <ProjectForm
+        onSubmit={handleSubmit}
+        initialValues={project}
+      />
+    </PageHeader>
   )
 }
-
-const mapStateToProps = (state, props) => {
-  return ({
-    project: state.system.projects.get(props.params.id)
-  })
-}
-
-export default withRouter(connect(mapStateToProps)(ProjectEdit))
