@@ -86,10 +86,6 @@ const allMenu = [
         name: '租金方案',
         path: '/price',
       },
-      { // 临时
-        name: '计重方案',
-        path: '/weight',
-      },
       {
         name: '员工档案',
         path: '/employee',

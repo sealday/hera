@@ -3,10 +3,6 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
 import { Map } from 'immutable'
-import {
-  Card,
-  CardContent,
-} from '@material-ui/core'
 
 import { total_, toFixedWithoutTrailingZero } from '../../utils'
 import { ResultTable } from '../../components'

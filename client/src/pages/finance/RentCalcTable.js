@@ -1,14 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import shortId from 'shortid'
-import Table from '@material-ui/core/Table'
-import TableRow from '@material-ui/core/TableRow'
-import TableCell from '@material-ui/core/TableCell'
-import TableHead from '@material-ui/core/TableHead'
-import TableBody from '@material-ui/core/TableBody'
-
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
 
 import { currencyFormat, numberFormat, dateFormat } from '../../utils'
 
@@ -19,59 +11,59 @@ class SimpleSearchTable extends React.Component {
 
     return (
       [
-        <Table ref={onLoad} padding="dense" key={0}>
-          <TableHead>
-            <TableRow>
-              <TableCell>日期</TableCell>
-              <TableCell>出入库</TableCell>
-              <TableCell>名称</TableCell>
-              <TableCell>规格</TableCell>
-              <TableCell>单位</TableCell>
-              <TableCell>数量</TableCell>
-              <TableCell>单价</TableCell>
-              <TableCell>天数</TableCell>
-              <TableCell>金额</TableCell>
-              <TableCell>运费</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
+        <table ref={onLoad} padding="dense" key={0}>
+          <thead>
+            <tr>
+              <td>日期</td>
+              <td>出入库</td>
+              <td>名称</td>
+              <td>规格</td>
+              <td>单位</td>
+              <td>数量</td>
+              <td>单价</td>
+              <td>天数</td>
+              <td>金额</td>
+              <td>运费</td>
+            </tr>
+          </thead>
+          <tbody>
             {rent.history.map((item) => (
-              <TableRow key={shortId.generate()}>
-                <TableCell>上期结存</TableCell>
-                <TableCell/>
-                <TableCell>{item.name}</TableCell>
-                <TableCell/>
-                <TableCell>{item.unit}</TableCell>
-                <TableCell className="text-right">{numberFormat(item.count)}</TableCell>
-                <TableCell className="text-right">{currencyFormat(item.unitPrice, 4)}</TableCell>
-                <TableCell>{item.days}</TableCell>
-                <TableCell className="text-right">{currencyFormat(item.price)}</TableCell>
-                <TableCell/>
-              </TableRow>
+              <tr key={shortId.generate()}>
+                <td>上期结存</td>
+                <td />
+                <td>{item.name}</td>
+                <td />
+                <td>{item.unit}</td>
+                <td className="text-right">{numberFormat(item.count)}</td>
+                <td className="text-right">{currencyFormat(item.unitPrice, 4)}</td>
+                <td>{item.days}</td>
+                <td className="text-right">{currencyFormat(item.price)}</td>
+                <td />
+              </tr>
             ))}
             {rent.list.map((item) => (
-              <TableRow key={shortId.generate()}>
-                <TableCell>{dateFormat(item.outDate)}</TableCell>
-                <TableCell>{item.inOut}</TableCell>
-                <TableCell>{item.name}</TableCell>
-                <TableCell>{item.size}</TableCell>
-                <TableCell>{item.unit}</TableCell>
-                <TableCell className="text-right">{numberFormat(item.count)}</TableCell>
-                <TableCell className="text-right">{currencyFormat(item.unitPrice, 4)}</TableCell>
-                <TableCell>{item.days}</TableCell>
-                <TableCell className="text-right">{currencyFormat(item.price)}</TableCell>
-                <TableCell className="text-right">{currencyFormat(item.freight)}</TableCell>
-              </TableRow>
+              <tr key={shortId.generate()}>
+                <td>{dateFormat(item.outDate)}</td>
+                <td>{item.inOut}</td>
+                <td>{item.name}</td>
+                <td>{item.size}</td>
+                <td>{item.unit}</td>
+                <td className="text-right">{numberFormat(item.count)}</td>
+                <td className="text-right">{currencyFormat(item.unitPrice, 4)}</td>
+                <td>{item.days}</td>
+                <td className="text-right">{currencyFormat(item.price)}</td>
+                <td className="text-right">{currencyFormat(item.freight)}</td>
+              </tr>
             ))}
-          </TableBody>
-        </Table>,
-        (rent.list.length > 0 || rent.history.length > 0) && <List key={1}>
+          </tbody>
+        </table>,
+        (rent.list.length > 0 || rent.history.length > 0) && <ul key={1}>
           {rent.nameGroup.map(item => (
-            <ListItem key={shortId.generate()}>{item.name}： {numberFormat(item.count)} {item.unit}</ListItem>
+            <li key={shortId.generate()}>{item.name}： {numberFormat(item.count)} {item.unit}</li>
           ))}
-          <ListItem key="price">金额：{numberFormat(rent.group.price)} 元</ListItem>
-          <ListItem key="freight">运费：{numberFormat(rent.group.freight)} 元</ListItem>
-        </List>,
+          <li key="price">金额：{numberFormat(rent.group.price)} 元</li>
+          <li key="freight">运费：{numberFormat(rent.group.freight)} 元</li>
+        </ul>,
       ]
     )
   }

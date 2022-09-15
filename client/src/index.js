@@ -1,7 +1,6 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
-import { ThemeProvider } from '@material-ui/core'
 import moment from 'moment'
 import 'moment/locale/zh-cn'
 import zh_CN from 'antd/lib/locale-provider/zh_CN'
@@ -12,7 +11,6 @@ import axios from 'axios'
 import { store, history, BASENAME } from './globals'
 import { systemLoaded, selectStore } from './actions'
 import { updateOnlineUsers } from './features/coreSlice'
-import { theme } from './utils'
 import { ajax } from './utils'
 import Routes from './routes'
 
@@ -71,15 +69,13 @@ const emptyRenderer = () => (
 )
 const MyApp = () => (
   <Provider store={store}>
-    <ThemeProvider theme={theme}>
-      <ConfigProvider locale={zh_CN} renderEmpty={emptyRenderer}>
-        <Alert.ErrorBoundary>
-          <HistoryRouter history={history} basename={BASENAME}>
-            <Routes onLogin={onLogined} onLogout={onLogouted} />
-          </HistoryRouter>
-        </Alert.ErrorBoundary>
-      </ConfigProvider>
-    </ThemeProvider>
+    <ConfigProvider locale={zh_CN} renderEmpty={emptyRenderer}>
+      <Alert.ErrorBoundary>
+        <HistoryRouter history={history} basename={BASENAME}>
+          <Routes onLogin={onLogined} onLogout={onLogouted} />
+        </HistoryRouter>
+      </Alert.ErrorBoundary>
+    </ConfigProvider>
   </Provider>
 )
 // react 18 之后用法

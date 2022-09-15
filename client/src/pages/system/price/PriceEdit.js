@@ -2,17 +2,12 @@ import React from 'react'
 import { reduxForm } from 'redux-form'
 import moment from 'moment'
 import { connect } from 'react-redux'
-import {
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-} from '@material-ui/core'
+import { Card } from 'antd'
 
 import Form from './PriceForm'
 import { ajax } from '../../../utils'
 import { PRICE_PLAN, queryPricePlan, newSuccessNotify, newInfoNotify, newErrorNotify, queryWeightPlan } from '../../../actions'
-import { withRouter } from '../../../components'
+import { PageHeader, withRouter } from '../../../components'
 
 const PriceForm = reduxForm({ form: 'PRICE_EDIT', action: 'edit' })(Form)
 
@@ -27,7 +22,7 @@ class PriceEdit extends React.Component {
   handleSubmit = (data) => {
     const { params: { id } } = this.props
     this.props.dispatch(newInfoNotify('提示', '正在保存', 1000))
-    ajax(`/api/plan/price/${ id }`, {
+    ajax(`/api/plan/price/${id}`, {
       data: JSON.stringify(data),
       method: 'POST',
       contentType: 'application/json'
@@ -47,15 +42,11 @@ class PriceEdit extends React.Component {
     }
 
     return (
-      <Card>
-        <CardHeader
-          title="租金方案编辑"
-          action={<>
-            <Button onClick={e => this.props.router.goBack()}>取消</Button>
-            <Button color="primary" onClick={() => this.form.submit()}>保存</Button>
-          </>}
-        />
-        <CardContent>
+      <PageHeader
+        title='租金方案编辑'
+        onSave={() => { this.form.submit() }}
+      >
+        <Card bordered={false}>
           <PriceForm
             ref={form => this.form = form}
             onSubmit={this.handleSubmit}
@@ -64,8 +55,8 @@ class PriceEdit extends React.Component {
               date: moment(this.props.date),
             }}
           />
-        </CardContent>
-      </Card>
+        </Card>
+      </PageHeader>
     )
   }
 }

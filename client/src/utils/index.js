@@ -315,8 +315,6 @@ export const canInsert = (store, user) => {
   return false;
 }
 
-export { default as theme } from './theme'
-
 const PROJECT_TYPE_SET = new Set(['基地仓库', '同行客户', '项目仓库', '租赁客户'])
 /**
  * 筛选仓库列表

@@ -97,7 +97,6 @@ const Price = ({ dispatch, plans }) => {
           >
             <Button type='text' danger>删除</Button>
           </Popconfirm>
-          <Link to={`/price/create/${plan._id}`}>克隆</Link>
         </Space>
       }
     },
@@ -106,7 +105,6 @@ const Price = ({ dispatch, plans }) => {
     <PageHeader
       title="租金方案"
       subTitle="在这里可以设定租金方案，通过在合同中关联实现租金计算"
-      onCreate={() => navigate('/price/create')}
     >
       <Card bordered={false}>
         <Form

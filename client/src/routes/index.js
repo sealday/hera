@@ -12,11 +12,7 @@ import {
   Product,
   Price,
   PriceEdit,
-  PriceCreate,
   Settings,
-  Weight,
-  WeightEdit,
-  WeightCreate,
   Company,
 } from '../pages/system'
 import * as store from '../pages/store'
@@ -54,13 +50,7 @@ export default ({ onLogin, onLogout }) => <Routes>
     {/* system */}
     <Route path="product" element={<Product />} />
     <Route path="price" element={<Price />} />
-    <Route path="price/create" element={<PriceCreate />} />
     <Route path="price/:id" element={<PriceEdit />} />
-    <Route path="price/create/:id" element={<PriceCreate />} />
-    <Route path="weight" element={<Weight />} />
-    <Route path="weight/create" element={<WeightCreate />} />
-    <Route path="weight/:id" element={<WeightEdit />} />
-    <Route path="weight/create/:id" element={<WeightCreate />} />
     {/* 仓库 start */}
     <Route path="record/create" element={<store.RecordCreate />} />
     <Route path="record/:id" element={<store.Record />} />
@@ -71,7 +61,6 @@ export default ({ onLogin, onLogout }) => <Routes>
     {/* 仓库 end */}
     <Route path="company_record/:id" element={<company.Record />} />
     <Route path="rent_calc" element={<company.RentCalc />} />
-    <Route path="rent_calc_preview" element={<company.RentCalcPreview />} />
     <Route path="contract" element={<company.Contract />} />
     <Route path="contract/create" element={<company.ContractCreate />} />
     <Route path="contract/:id" element={<company.ContractDetails />} />
