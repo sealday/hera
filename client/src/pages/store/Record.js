@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useGetRecordQuery } from '../../api'
 import { Error, Loading, PageHeader } from '../../components'
-import record from '../../schema/record'
 import recordSchema from '../../schema/record'
 import { genTableColumn } from '../../utils/antd'
 

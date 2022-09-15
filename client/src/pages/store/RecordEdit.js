@@ -79,6 +79,7 @@ export default () => {
     project: true,
     originalOrder: true,
     carNumber: true,
+    weight: true,
   }
   const direction = record.inStock === store._id ? 'in' : record.outStock === store._id ? 'out' : ''
   if (!direction) {
@@ -101,6 +102,7 @@ export default () => {
       settings.project = false
       settings.originalOrder = false
       settings.carNumber = false
+      settings.weight = false
       break;
     default:
       return <Error message='暂时不支持这种形式' />

@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import { each } from "lodash"
 import moment from "moment"
 import { useEffect, useState } from "react"
@@ -7,6 +8,7 @@ import {
   toFixedWithoutTrailingZero as fixed,
   total_,
   getUnit,
+  makeKeyFromNameSize,
 } from '../../utils'
 
 // 表格内容
@@ -27,6 +29,7 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
     inLabel: '入库方',
     signer: '入库方',
     project: '', // 用于
+    explain: '',
   }
   if (record.outStock) {
     content.partA = projects.get(record.outStock).company + projects.get(record.outStock).name
@@ -34,6 +37,21 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
   if (record.inStock) {
     content.partB = projects.get(record.inStock).company + projects.get(record.inStock).name
   }
+
+  const unconnectedContent = _
+    .chain(record.complements)
+    .filter(item => item.level === 'unconnected')
+    .map(item => item.product.name + item.product.size + item.count)
+    .value()
+    .join('；')
+  
+  const associatedContentKV = {}
+  _.filter(record.complements, item => item.level === 'associated')
+    .forEach(item => {
+      associatedContentKV[makeKeyFromNameSize(item.associate.name, item.associate.size)]
+        = item.product.name + item.product.size + item.count + '；'
+        + _.toString(associatedContentKV[makeKeyFromNameSize(item.associate.name, item.associate.size)])
+    })
 
   // 出入库判断
   // TODO 对于采购单，如果出现直接采购送往对应项目，那么单据的内容标签是否不合适
@@ -65,7 +83,20 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
       content.partA = projects.get(record.inStock).company + projects.get(record.inStock).name
       content.partB = projects.get(record.outStock).company + projects.get(record.outStock).name
     }
+  } else {
+    content.partBLabel = '盘点仓库'
+    content.inLabel = '盘点负责人'
+    content.signer = '盘点负责人'
   }
+
+  content.explain = `说明：如供需双方未签正式合同，本${content.orderName}经供需双方代表签字确认后，
+  将作为合同及发生业务往来的有效凭证，如已签合同，则成为该合同的组成部分。${content.signer}须核对
+  以上产品规格、数量确认后可签字认可。`
+
+  if (record.type === '盘点') {
+    content.explain = '说明：盘点单用于清算仓库盈亏盈余。'
+  }
+
 
   // 关联公司来确认标题名称
   useEffect(() => {
@@ -104,7 +135,7 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
       fixed(total_(entry, products)) + getUnit(productTypeMap[name]),
       entry.price ? '￥' + entry.price : '',
       entry.price ? '￥' + fixed(total_(entry, products) * entry.price) : '',
-      entry.comments,
+      associatedContentKV[makeKeyFromNameSize(entry.name, entry.size)] ? associatedContentKV[makeKeyFromNameSize(entry.name, entry.size)] + _.toString(entry.comments) : entry.comments,
     ]))
     amount += sum[name] // 计算总金额
     printEntries.push(
@@ -119,9 +150,19 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
       ]
     )
   })
-  printEntries.push(['', '', '', '', '总金额', '￥' + fixed(amount), ''])
+  let slice = 5
+  let leftSlice = 3
+  let ignoreIndexes = [4, 5, 11, 12]
+  if (record.type === '购销') {
+    printEntries.push(['', '', '', '', '总金额', '￥' + fixed(amount), ''])
+    slice += 2
+    leftSlice += 1
+    ignoreIndexes = []
+  }
   const rows = []
   if (columnStyle === 'double') {
+    leftSlice = slice
+    slice *= 2
     if (printEntries.length % 2 !== 0) {
       printEntries.push(['', '', '', '', '', '', ''])
     }
@@ -176,27 +217,29 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
       }}>
         <thead>
           <tr>
-            {columnNames.map((name, index) => (
-              <th key={index}>{name}</th>
-            ))}
+            {columnNames
+              .filter((_name, index) => !ignoreIndexes.includes(index))
+              .map((name, index) => (
+                <th key={index}>{name}</th>
+              ))}
           </tr>
         </thead>
         <tbody>
           {rows.map((row, index) => (
             <tr className="text-right" key={index}>
-              {row.map((col, index) => (
-                <td key={index}>{col}</td>
-              ))}
+              {row
+                .filter((_name, index) => !ignoreIndexes.includes(index))
+                .map((col, index) => (
+                  <td key={index}>{col}</td>
+                ))}
             </tr>
           ))}
           <tr>
-            <td colSpan={columnStyle === 'single' ? 4 : 7} >
-              <span>说明：如供需双方未签正式合同，本{content.orderName}经供需双方代表签字确认后，将作为合同</span>
-              <span>及发生业务往来的有效凭证，如已签合同，则成为该合同的组成部分。{content.signer}须核对</span>
-              <span>以上产品规格、数量确认后可签字认可。</span>
+            <td colSpan={leftSlice} >
+              {content.explain}
             </td>
-            <td colSpan={columnStyle === 'single' ? 3 : 7}>
-              备注 {record.comments}
+            <td colSpan={slice - leftSlice}>
+              备注： {unconnectedContent}；{record.comments} 
             </td>
           </tr>
         </tbody>

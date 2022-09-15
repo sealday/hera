@@ -11,7 +11,7 @@ const RecordPreview = () => {
   const params = useParams()
   const config = useSelector(state => state.system.config)
   const recordResult = useGetRecordQuery(params.id)
-  const [columnStyle, setColumnStyle] = useState('single')
+  const [columnStyle, setColumnStyle] = useState('double')
   const [selectedTitle, setSelectedTitle] = useState('')
   const printFrame = React.createRef()
   if (recordResult.isError) {
@@ -27,10 +27,8 @@ const RecordPreview = () => {
   ]
 
   const content = <div style={{ width: '240px' }}>
-    <Row gutter={24}>
+    <Row gutter={[24, 8]}>
       <Col span={8}>样式选择</Col><Col span={16}><Radio.Group key='columnStyle' options={options} onChange={e => setColumnStyle(e.target.value)} value={columnStyle} optionType="button" /></Col>
-    </Row>
-    <Row gutter={24} style={{ marginTop: '8px' }}>
       <Col span={8}>公司选择</Col><Col span={16}><Select dropdownMatchSelectWidth={false} placeholder='选择公司' style={{ width: '160px' }} value={selectedTitle} onChange={setSelectedTitle}>{config.externalNames.map(name => <Select.Option key={name}>{name}</Select.Option>)}</Select></Col>
     </Row>
   </div>

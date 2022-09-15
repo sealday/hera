@@ -55,6 +55,11 @@ export default ({ form, initialValues, onSubmit }) => {
               <Input />
             </Form.Item>
           </Col> : null}
+          {settings.weight ? <Col span={8}>
+            <Form.Item label="重量" name='weight'>
+              <Input />
+            </Form.Item>
+          </Col> : null}
           <Col span={24}>
             <Form.Item label="备注" name='comments'>
               <Input.TextArea rows={2} />

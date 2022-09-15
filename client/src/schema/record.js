@@ -60,6 +60,11 @@ export default [
                 type: 'number',
             },
             {
+                name: 'comments',
+                label: '备注',
+                type: 'text',
+            },
+            {
                 name: 'total',
                 label: '小计',
                 type: 'formula',
@@ -117,6 +122,11 @@ export default [
             {
                 name: 'count',
                 label: '数量',
+                type: 'text',
+            },
+            {
+                name: 'comments',
+                label: '备注',
                 type: 'text',
             },
         ]

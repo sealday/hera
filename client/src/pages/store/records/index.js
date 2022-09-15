@@ -5,4 +5,5 @@ export const SettingContext = createContext({
   project: true,
   originalOrder: true,
   carNumber: true,
+  weight: true,
 })

@@ -73,6 +73,7 @@ export default () => {
     project: true,
     originalOrder: true,
     carNumber: true,
+    weight: true,
   }
   switch (type) {
     case 'transfer':
@@ -90,9 +91,10 @@ export default () => {
       settings.project = false
       settings.originalOrder = false
       settings.carNumber = false
+      settings.weight = false
       break;
     default:
-      <Error>不支持的类型</Error>
+      return <Error message='暂时不支持这种形式' />
   }
   // 名称后缀
   titleParts.push(direction === 'in' ? '入库' : direction === 'out' ? '出库' : '')
@@ -107,7 +109,7 @@ export default () => {
     onSave={() => form.submit()}
   >
     <SettingContext.Provider value={settings}>
-      <RecordForm form={form} onSubmit={handleSubmit} initialValues={initialValues} type={type} />
+      <RecordForm form={form} onSubmit={handleSubmit} initialValues={initialValues} />
     </SettingContext.Provider>
   </PageHeader>
 }
