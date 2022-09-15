@@ -1,16 +1,13 @@
+import _ from 'lodash'
 import React from 'react'
 import { useSelector } from 'react-redux'
 import moment from 'moment'
-import _ from 'lodash'
-import {
-  Typography,
-} from '@material-ui/core'
-
 import { toFixedWithoutTrailingZero as fixed, transformArticle, total_, getUnit } from '../../utils'
 import PrintFrame from '../../components/print-frame.component'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useGetRecordQuery } from '../../api'
 import { Error, Loading, PageHeader } from '../../components'
+import { Card, Result } from 'antd'
 
 
 export default () => {
@@ -43,7 +40,9 @@ export default () => {
   if (!record.hasTransport) {
     return (
       <PageHeader title="运输单" onEdit={handleEdit}>
-        <Typography variant="h2">还未填写运输单！</Typography>
+        <Card>
+          <Result title='还未填写运输单' status='info' />
+        </Card>
       </PageHeader>
     )
   }
@@ -178,9 +177,11 @@ export default () => {
 
   return (
     <PageHeader title="运输单" onEdit={handleEdit} onPrint={() => printFrame.current.print()}>
-      <PrintFrame ref={printFrame}>
-        <PrintContent />
-      </PrintFrame>
+      <Card bordered={false}>
+        <PrintFrame ref={printFrame}>
+          <PrintContent />
+        </PrintFrame>
+      </Card>
     </PageHeader>
   )
 }

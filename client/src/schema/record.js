@@ -164,7 +164,7 @@ export default [
             },
             {
                 name: 'arrival-date',
-                label: '到大日期',
+                label: '到达日期',
                 type: 'date',
             },
             {
