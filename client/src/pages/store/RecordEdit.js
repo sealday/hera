@@ -1,14 +1,16 @@
+import _ from 'lodash'
+import { Form } from "antd"
 import moment from "moment"
 import { useEffect } from "react"
 import { useSelector } from "react-redux"
 import { useNavigate, useParams } from "react-router-dom"
 import { useGetRecordQuery, useUpdateRecordMutation } from "../../api"
 import { Error, Loading, PageHeader } from "../../components"
-import PurchaseForm from "./PurchaseForm"
-import StocktakingForm from './StocktakingForm'
-import TransferForm from "./TransferForm"
+import RecordForm from "./RecordForm"
+import { SettingContext } from "./records"
 
 export default () => {
+  const [form] = Form.useForm()
   const { id } = useParams()
   const { data: record, error, isLoading } = useGetRecordQuery(id)
   const [updateRecord, updateResult] = useUpdateRecordMutation()
@@ -27,126 +29,119 @@ export default () => {
   if (isLoading) {
     return <Loading />
   }
-
-  let direction = ''
-  let stock
-  let pageTitleSuffix = ''
-  if (store._id === record.inStock) {
-    direction = 'in'
-    stock = 'outStock'
-    pageTitleSuffix = '入库'
-  } else if (store._id === record.outStock) {
-    direction = 'out'
-    stock = 'inStock'
-    pageTitleSuffix = '出库'
-  } else {
-    return <Error message='暂时不支持跨仓库编辑' />
-  }
+  const type = record.type
   const handleSubmit = (record) => {
-    if (record.type !== '盘点') {
-      if (direction === 'in') {
-        updateRecord({
-          id, record: {
-            ...record,
-            inStock: store._id,
-            outStock: record.project,
-          }
-        })
-      } else if (direction === 'out') {
-        updateRecord({
-          id, record: {
-            ...record,
-            outStock: store._id,
-            inStock: record.project,
-          }
-        })
+    record.entries = _.map(record.entries, item => ({
+      ...item,
+      ..._.zipObject(['type', 'name', 'size'], item.product),
+    }))
+    record.complements = _.map(record.complements, item => {
+      const complement = {
+        ...item,
+        product: _.zipObject(['type', 'name', 'size'], item.product),
       }
-    } else {
-      if (direction === 'in') {
-        updateRecord({
-          id, record: {
-            ...record,
-            inStock: store._id,
-          }
-        })
-      } else if (direction === 'out') {
-        updateRecord({
-          id, record: {
-            ...record,
-            outStock: store._id,
-          }
-        })
+      if (item.level === 'associated') {
+        const associateArray = JSON.parse(item.associate)
+        complement.associate = _.zipObject(['type', 'name', 'size'], associateArray)
       }
+      return complement
+    })
+    record.type = type
+    if (type === '盘点') {
+      updateRecord({
+        id, record: {
+          ...record,
+          inStock: store._id,
+        }
+      })
+      return
+    }
+    if (direction === 'in') {
+      updateRecord({
+        id, record: {
+          ...record,
+          inStock: store._id,
+          outStock: record.projectId,
+        }
+      })
+    } else if (direction === 'out') {
+      updateRecord({
+        id, record: {
+          ...record,
+          outStock: store._id,
+          inStock: record.projectId,
+        }
+      })
     }
   }
-
-  let pageTitlePrefix = ''
-  let isFree = false
-  switch (record.type) {
+  const settings = {
+    price: false,
+    project: true,
+    originalOrder: true,
+    carNumber: true,
+  }
+  const direction = record.inStock === store._id ? 'in' : record.outStock === store._id ? 'out' : ''
+  if (!direction) {
+    return <Error message='不支持' />
+  }
+  const titleParts = []
+  switch (type) {
     case '暂存':
-      pageTitlePrefix = '暂存'
+      titleParts.push('暂存')
       break;
     case '购销':
-      if (direction === 'in') {
-        pageTitlePrefix = '采购'
-      } else {
-        pageTitlePrefix = '销售'
-      }
+      titleParts.push(direction === 'in' ? '采购' : '销售')
+      settings.price = true
       break;
     case '调拨':
-      pageTitlePrefix = '租赁'
+      titleParts.push('租赁')
       break;
     case '盘点':
-      pageTitlePrefix = '盘点'
+      titleParts.push('盘点录入')
+      settings.project = false
+      settings.originalOrder = false
+      settings.carNumber = false
       break;
     default:
-      <Error message='暂时不支持这种形式' />
+      return <Error message='暂时不支持这种形式' />
   }
-
-  const pageTitle = pageTitlePrefix + pageTitleSuffix
-
   const initialValues = {
     ...record,
-    projectType: projects.get(record[stock]).type,
-    project: record[stock],
     outDate: moment(record.outDate),
-    isFree,
   }
-
-  let form = ''
-  switch (record.type) {
-    case '暂存':
-      form = <PurchaseForm
-        initialValues={initialValues}
-        onSubmit={handleSubmit}
-      />
-      break;
-    case '购销':
-      form = <PurchaseForm
-        initialValues={initialValues}
-        onSubmit={handleSubmit}
-      />
-      break;
-    case '调拨':
-      form = <TransferForm
-        onSubmit={handleSubmit}
-        initialValues={initialValues}
-      />
-      break;
-    case '盘点':
-      form = <StocktakingForm
-        initialValues={initialValues}
-        onSubmit={handleSubmit}
-      />
-      break;
-    default:
-      <Error message='暂时不支持这种形式' />
+  initialValues.entries = _.map(record.entries, item => ({
+    ...item,
+    product: [item.type, item.name, item.size],
+  }))
+  initialValues.complements = _.map(record.complements, item => {
+    const complement = {
+      ...item,
+      product: [item.product.type, item.product.name, item.product.size]
+    }
+    if (item.level === 'associated') {
+      complement.associate = JSON.stringify([item.associate.type, item.associate.name, item.associate.size])
+    }
+    return complement
+  })
+  if (type === '盘点') {
+    // nothing
+  } else if (direction === 'in') {
+    initialValues.projectId = record.outStock
+    initialValues.type = projects.get(record.outStock).type
+    titleParts.push('入库')
+  } else {
+    initialValues.projectId = record.inStock
+    initialValues.type = projects.get(record.inStock).type
+    titleParts.push('出库')
   }
-
+  const pageTitle = titleParts.join('')
   return <PageHeader
     title={pageTitle}
-    subTitle='编辑'
+    subTitle='正在编辑'
+    onSave={() => form.submit()}
   >
-    {form}
+    <SettingContext.Provider value={settings}>
+      <RecordForm form={form} onSubmit={handleSubmit} initialValues={initialValues} />
+    </SettingContext.Provider>
   </PageHeader>
 }

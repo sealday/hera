@@ -1,3 +1,12 @@
-import { IfShow } from ".";
+import { Card, Result } from "antd";
+import { PageHeader } from ".";
 
-export default ({ message }) => <div><IfShow cond={message} ifNot='出错了'>{message}</IfShow></div>
+export default ({ message }) => <PageHeader title='错误页面'>
+  <Card bordered={false}>
+    <Result
+      status='error'
+      title={message ? message : '出错了'}
+    >
+    </Result>
+  </Card>
+</PageHeader>

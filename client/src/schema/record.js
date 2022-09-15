@@ -70,6 +70,58 @@ export default [
         ]
     },
     {
+        name: 'complements',
+        label: '补充信息',
+        type: 'list',
+        schema: [
+            {
+                name: 'level',
+                label: '层级',
+                type: 'text',
+                option: {
+                    type: 'static',
+                    labels: ['关联', '补充'],
+                    values: ['associated', 'unconnected'],
+                },
+            },
+            {
+                name: ['associate', 'type'],
+                label: '关联类别',
+                type: 'text',
+            },
+            {
+                name: ['associate', 'name'],
+                label: '关联名称',
+                type: 'text',
+            },
+            {
+                name: ['associate', 'size'],
+                label: '关联规格',
+                type: 'text',
+            },
+            {
+                name: ['product', 'type'],
+                label: '产品类别',
+                type: 'text',
+            },
+            {
+                name: ['product', 'name'],
+                label: '产品名称',
+                type: 'text',
+            },
+            {
+                name: ['product', 'size'],
+                label: '产品规格',
+                type: 'text',
+            },
+            {
+                name: 'count',
+                label: '数量',
+                type: 'text',
+            },
+        ]
+    },
+    {
         name: 'outDate',
         label: '出库时间',
         type: 'date',

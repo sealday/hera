@@ -130,6 +130,9 @@ const genTableColumn = schema => {
       if (item.option) {
         if (item.option.type === 'ref') {
           column.render = v => <RefLabel item={item} value={v} />
+        } else if (item.option.type === 'static') {
+          const kv = _.zipObject(item.option.values, item.option.labels)
+          column.render = k => kv[k]
         }
       }
       columns.push(column)
