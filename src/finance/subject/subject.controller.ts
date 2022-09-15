@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseInterceptors, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, UseGuards, UseInterceptors, Put } from '@nestjs/common';
 import { WrapperInterceptor } from 'src/app/wrapper.interceptor';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Subject } from 'src/schemas/subject.schema';

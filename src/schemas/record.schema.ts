@@ -78,4 +78,19 @@ export const RecordSchema = new mongoose.Schema({
   valid: { type: Boolean, default: true }, // 是否有效，用来删除时标记为无效
   flowStatus: { type: String, default: 'finished' }, // 流程状态 cancelled reviewing finished rejected
   type: String,  // 购销、调拨、盘点、暂存
+  complements: [{
+    level: String,
+    associate: {
+      type: { type: String },
+      name: String,
+      size: String,
+    },
+    product: {
+      type: { type: String },
+      name: String,
+      size: String
+    },
+    count: Number,
+    comments: String, // 备注
+  }],
 }, { timestamps: true });

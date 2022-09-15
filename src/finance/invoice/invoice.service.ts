@@ -20,7 +20,6 @@ export class InvoiceService {
   }
 
   async update(id: string, invoice: Invoice) {
-    console.log(invoice)
     return await this.invoiceModel.findByIdAndUpdate(id, { $set: invoice })
   }
 
