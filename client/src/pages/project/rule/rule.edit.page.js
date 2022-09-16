@@ -1,14 +1,23 @@
 import { Form } from "antd"
 import moment from "moment"
-import { useParams } from "react-router-dom"
+import { useEffect } from "react"
+import { useNavigate, useParams } from "react-router-dom"
 import heraApi from "../../../api"
 import { Error, Loading, PageHeader } from "../../../components"
+import { array2product, product2array } from "../../../utils"
 import RuleForm from "./rule.form"
 
 export default () => {
   const { id } = useParams()
   const getRule = heraApi.useGetRuleQuery(id)
+  const [updateRule, updateResult] = heraApi.useUpdateRuleMutation()
   const [form] = Form.useForm()
+  const navigate = useNavigate()
+  useEffect(() => {
+    if (updateResult.isSuccess) {
+      navigate(-1)
+    }
+  }, [navigate, updateResult.isSuccess])
   if (getRule.isError) {
     return <Error />
   }
@@ -16,18 +25,52 @@ export default () => {
     return <Loading />
   }
 
-  const handleSubmit = () => {
-
+  const category = getRule.data.category
+  const handleSubmit = (v) => {
+    if (category === '租金') {
+      const rule = {
+        category,
+        ...v,
+        items: v.items.map(item => ({
+          ...item,
+          product: array2product(item.product, item.level === '规格')
+        }))
+      }
+      updateRule({ id, rule })
+    } else if (category === '计重') {
+      const rule = {
+        category,
+        ...v,
+        items: v.items.map(item => ({
+          ...item,
+          product: array2product(item.product)
+        }))
+      }
+      updateRule({ id, rule })
+    } else if (category === '非租') {
+      const rule = {
+        category,
+        ...v,
+        items: v.items.map(item => ({
+          ...item,
+          associate: item.level === '按单' ? undefined : array2product(item.associate, item.level === '规格'),
+          product: array2product(item.product),
+        }))
+      }
+      updateRule({ id, rule })
+    }
   }
 
+  const rule = getRule.data
   const initialValues = {
-    ...getRule.data,
-    date: moment(getRule.data.date),
-    items: getRule.data.items.map(item => ({
+    ...rule,
+    date: moment(rule.date),
+    items: rule.items.map(item => ({
       ...item,
-      product: item.level === '规格' || getRule.data.category === '计重' || getRule.data.category === '非租'
-        ? [item.product.type, item.product.name, item.product.size]
-        : [item.product.type, item.product.name],
+      product: product2array(item.product, item.level === '规格' || rule.category === '计重' || rule.category === '非租'),
+      associate: rule.category !== '非租' || item.level === '按单'
+        ? undefined
+        : product2array(item.associate, item.level === '规格')
     }))
   }
 
@@ -37,7 +80,7 @@ export default () => {
       subTitle='正在编辑'
       onSave={() => form.submit()}
     >
-      <RuleForm onSubmit={handleSubmit} form={form} initialValues={initialValues} />
+      <RuleForm onSubmit={handleSubmit} form={form} initialValues={initialValues} category={rule.category} />
     </PageHeader>
   )
 }
