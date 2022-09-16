@@ -14,6 +14,7 @@ import { CompanyController } from './company/company.controller';
 import { SubjectModule } from './subject/subject.module';
 import { InvoiceModule } from './invoice/invoice.module';
 import { LoanModule } from './loan/loan.module';
+import { RuleModule } from './rule/rule.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { LoanModule } from './loan/loan.module';
     SubjectModule,
     InvoiceModule,
     LoanModule,
+    RuleModule,
   ],
   controllers: [ContractController, CompanyController],
   providers: [ContractService, CompanyService,StoreService]
