@@ -22,6 +22,11 @@ export class Rule {
       type: String,
       enum: ['产品', '规格', '按单'],
     },
+    associate: {
+      type: { type: String },
+      name: String,
+      size: String,
+    },
     product: {
       type: { type: String },
       name: String,
