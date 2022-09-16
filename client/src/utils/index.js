@@ -635,3 +635,23 @@ export const buildTree = (flatItems) => {
   })
   return treeLikeItems
 }
+
+/**
+ * 
+ * @param {*} product 
+ * @param {*} condition 是否需要规格
+ * @returns 
+ */
+export const product2array = (product, condition = true) => condition
+  ? [product.type, product.name, product.size]
+  : [product.type, product.name]
+
+/**
+ * 
+ * @param {[]} array 
+ * @param {*} condition 
+ * @returns 
+ */
+export const array2product = (array, condition = true) => condition
+  ? ({ type: array[0], name: array[1], size: array[2] })
+  : ({ type: array[0], name: array[1] })

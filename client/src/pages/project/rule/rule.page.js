@@ -2,8 +2,6 @@ import _ from 'lodash'
 import moment from 'moment'
 import {
   Space,
-  Table,
-  Tag,
   Card,
   Tabs,
   Button,
@@ -13,8 +11,7 @@ import {
   useNavigate,
 } from 'react-router-dom'
 
-import { PLAN_CATEGORY_MAP, RULE_CATEGORIES } from '../../../constants'
-import { useDispatch, useSelector } from 'react-redux'
+import { RULE_CATEGORIES } from '../../../constants'
 import { Error, LinkButton, Loading, PageHeader, PopconfirmButton, ResultTable } from '../../../components'
 import heraApi from '../../../api'
 
@@ -45,13 +42,18 @@ export default () => {
   ]
   tabs.forEach(tab => {
     tab.children = (
-      <ResultTable columns={columns} dataSource={getRuleList.data.filter(item => item.category === tab.label)} />
+      <ResultTable rowKey='_id' columns={columns} dataSource={getRuleList.data.filter(item => item.category === tab.label)} />
     )
   })
+  const items = [
+    { key: 'rent', label: <LinkButton to='/rule/create?category=租金' >租金规则</LinkButton> },
+    { key: 'weight', label: <LinkButton to='/rule/create?category=计重' >计重规则</LinkButton> },
+    { key: 'other', label: <LinkButton to='/rule/create?category=非租' >非租规则</LinkButton> },
+  ]
   return (
     <PageHeader
-      title="计算方案"
-      onCreate={() => navigate('/rule/create')}
+      title="合同规则管理"
+      onCreateMenu={items}
     >
       <ConfigProvider componentSize='small'>
         <Card bordered={false}>

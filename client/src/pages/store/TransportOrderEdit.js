@@ -113,7 +113,6 @@ export default () => {
         title='运输单编辑'
       >
         <TransportForm
-          title="运输单编辑"
           onSubmit={handleSubmit}
           initialValues={initialValues}
           record={record}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Card, Col, Form, PageHeader, Row, Space, Input, Descriptions } from 'antd'
+import { Button, Card, Col, Form, PageHeader, Row, Space, Input, Descriptions, Dropdown, Menu } from 'antd'
 import { PlusCircleOutlined, EditOutlined, PrinterOutlined, ArrowLeftOutlined, SearchOutlined, ClearOutlined, SaveOutlined, ExportOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
 import { isUpdatable } from '../utils'
@@ -11,6 +11,7 @@ export default ({
   title,
   subTitle,
   onCreate,
+  onCreateMenu,
   onEdit,
   children,
   onPrintPreview,
@@ -71,6 +72,13 @@ export default ({
       actions.push(<Button key='onCreate' type='primary' onClick={onCreate} icon={<PlusCircleOutlined />}>新增</Button>)
     }
   }
+  if (onCreateMenu) {
+    actions.push(
+      <Dropdown key='onCreateMenu' overlay={<Menu items={onCreateMenu} />} placement='bottomLeft' trigger={['click']}>
+        <Button type='primary' onClick={onCreate} icon={<PlusCircleOutlined />}>新增</Button>
+      </Dropdown>
+    )
+  }
   if (onSave) {
     actions.push(<Button key='onSave' type='primary' onClick={onSave} icon={<SaveOutlined />}>保存</Button>)
   }
@@ -78,7 +86,7 @@ export default ({
     actions.push(<Button key='onEdit' type='primary' onClick={onEdit} icon={<EditOutlined />}>编辑</Button>)
   }
   if (onPrint) {
-    actions.push(<Button key='onCreate' type='primary' onClick={onPrint} icon={<PrinterOutlined />}>打印</Button>)
+    actions.push(<Button key='onPrint' type='primary' onClick={onPrint} icon={<PrinterOutlined />}>打印</Button>)
   }
   const mSearchForm = React.createRef()
   const forms = []
