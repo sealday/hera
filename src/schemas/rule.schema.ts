@@ -31,7 +31,7 @@ export class Rule {
     weight: Number, // 计重
     countType: {
       type: String,
-      enum: ['数量', '换算数量', '理论重量', '实际重量'],
+      enum: ['数量', '换算数量', '重量', '实际重量'],
     },
     comments: String,
   })])

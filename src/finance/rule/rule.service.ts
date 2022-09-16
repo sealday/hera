@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import _ = require('lodash');
 import { Model } from 'mongoose';
 import { Rule, RuleDocument} from 'src/schemas/rule.schema';
 
@@ -8,7 +9,7 @@ export class RuleService {
   constructor(@InjectModel(Rule.name) private ruleModel: Model<RuleDocument>) { }
 
   async create(rule: Rule) {
-    return await (await this.ruleModel.create(rule)).save()
+    return await (await this.ruleModel.create(_.omit(rule, ['_id']))).save()
   }
 
   async findAll() {
