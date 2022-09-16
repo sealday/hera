@@ -422,6 +422,45 @@ export const heraApi = createApi({
             transformResponse: res => res.data,
             invalidatesTags: (_result, _error, id) => [{ type: 'Attendance', id }],
         }),
+        // 规则
+        getRuleList: builder.query({
+            query: () => 'rule',
+            transformResponse: res => res.data,
+            providesTags: result => result
+                ? [...result.map(({ _id: id }) => ({ type: 'Rule', id }) ), { type: 'Rule', id: 'LIST'}]
+                : [{ type: 'Rule', id: 'LIST'}]
+        }),
+        createRule: builder.mutation({
+            query: (rule) => ({
+                url: 'rule',
+                method: 'POST',
+                body: rule,
+            }),
+            transformResponse: res => res.data,
+            invalidatesTags: [{ type: 'Rule', id: 'LIST' }],
+        }),
+        getRule: builder.query({
+            query: (id) => `rule/${id}`,
+            transformResponse: res => res.data,
+            providesTags: (_result, _error, id) => [{ type: 'Rule', id }],
+        }),
+        updateRule: builder.mutation({
+            query: ({ id, rule }) => ({
+                url: `rule/${id}`,
+                method: 'PUT',
+                body: rule,
+            }),
+            transformResponse: res => res.data,
+            invalidatesTags: (_result, _error, { id }) => [{ type: 'Rule', id }],
+        }),
+        deleteRule: builder.mutation({
+            query: (id) => ({
+                url: `rule/${id}`,
+                method: 'DELETE',
+            }),
+            transformResponse: res => res.data,
+            invalidatesTags: (_result, _error, id) => [{ type: 'Rule', id }],
+        }),
     })
 })
 

@@ -79,12 +79,8 @@ const allMenu = [
         path: '/contract',
       },
       {
-        name: '计算方案',
-        path: '/plan',
-      },
-      { // 临时
-        name: '租金方案',
-        path: '/price',
+        name: '合同规则管理',
+        path: '/rule',
       },
       {
         name: '员工档案',
@@ -101,10 +97,6 @@ const allMenu = [
     icon: <FundOutlined />,
     roles: ['系统管理员', '财务管理员', '基地仓库管理员'],
     children: [
-      {
-        name: '租金计算',
-        path: '/rent_calc',
-      },
       {
         name: '出入库查询',
         path: '/simple_search_company',

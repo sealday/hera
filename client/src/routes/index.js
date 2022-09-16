@@ -32,6 +32,9 @@ import SubjectPage from '../pages/finance/subject/subject.page'
 import InvoicePage from '../pages/finance/invoice/invoice.page'
 import LoanPage from '../pages/finance/loan/loan.page'
 import VoucherPage from '../pages/finance/voucher/voucher.page'
+import RulePage from '../pages/project/rule/rule.page'
+import RuleCreatePage from '../pages/project/rule/rule.create.page'
+import RuleEditPage from '../pages/project/rule/rule.edit.page'
 
 export default ({ onLogin, onLogout }) => <Routes>
   <Route path="/login" element={<Login />} />
@@ -68,6 +71,9 @@ export default ({ onLogin, onLogout }) => <Routes>
     <Route path="plan" element={<company.Plan />} />
     <Route path="plan/create" element={<company.PlanCreate />} />
     <Route path="plan/:id/edit" element={<company.PlanEdit />} />
+    <Route path="rule" element={<RulePage />} />
+    <Route path="rule/create" element={<RuleCreatePage />} />
+    <Route path="rule/:id" element={<RuleEditPage />} />
     <Route path="store" element={<Store />} />
     <Route path="transport_table" element={<TransportSearch />} />
     <Route path="transport_table_company" element={<company.TransportSearch />} />

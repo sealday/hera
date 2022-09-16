@@ -22,7 +22,7 @@ export const RECORD_TYPE_MAP = {
 const rtkQueryErrorLogger = (api) => (next) => (action) => {
   // 跳过登入、登出行为
   const endpointName = _.get(action, 'meta.arg.endpointName')
-  if (endpointName === 'login' || 'logout') {
+  if (endpointName === 'login' || endpointName === 'logout') {
     return next(action)
   }
   // RTK Query uses `createAsyncThunk` from redux-toolkit under the hood, so we're able to utilize these matchers!

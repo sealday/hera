@@ -5,3 +5,5 @@ export const PLAN_CATEGORY_MAP = {
   service: '维修方案',
   freight: '运费方案',
 }
+
+export const RULE_CATEGORIES = ['租金', '计重', '非租']

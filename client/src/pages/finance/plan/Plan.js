@@ -1,5 +1,5 @@
-import moment from 'moment'
 import _ from 'lodash'
+import moment from 'moment'
 import {
   Space,
   Table,
@@ -19,7 +19,7 @@ import { ALL_PLAN_FLAT, queryAllPlansFlat } from '../../../actions'
 import { useEffect } from 'react'
 import { PageHeader } from '../../../components'
 
-const Plan = () => {
+export default () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const plans = useSelector(state => state.results.get(ALL_PLAN_FLAT, []))
@@ -82,4 +82,3 @@ const Plan = () => {
     </PageHeader>
   )
 }
-export default Plan
