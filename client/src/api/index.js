@@ -389,7 +389,7 @@ export const heraApi = createApi({
             invalidatesTags: (_result, _error, id) => [{ type: 'Invoice', id }],
         }),
         // 仓库/项目列表
-        getProjectList: builder.query({
+        getProjectListAll: builder.query({
             query: () => 'project',
             transformResponse: res => res.data.projects,
             providesTags: result => result
@@ -555,6 +555,17 @@ export const heraApi = createApi({
         }),
     })
 })
+
+const useGetProjectListQuery = () => {
+    const getProjectList = heraApi.useGetProjectListAllQuery()
+    const result = {
+        ...getProjectList,
+        data: getProjectList.data ? getProjectList.data.filter(item => item.status === 'UNDERWAY') : getProjectList.data,
+    }
+    return result 
+}
+heraApi.useGetProjectListQuery = useGetProjectListQuery
+
 
 export const {
     useGetProductQuery,

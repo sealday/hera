@@ -25,7 +25,7 @@ const btnStatusName = project => {
 export default () => {
 
   const navigate = useNavigate()
-  const getProjectList = heraApi.useGetProjectListQuery()
+  const getProjectList = heraApi.useGetProjectListAllQuery()
   const [deleteProject] = heraApi.useDeleteProjectMutation()
   const [changeProjectStatus] = heraApi.useChangeProjectStatusMutation()
   if (getProjectList.isError) {
