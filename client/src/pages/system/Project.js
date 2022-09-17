@@ -1,5 +1,4 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   Button,
@@ -7,17 +6,12 @@ import {
   Space,
 } from 'antd'
 import {
+  Error,
+  Loading,
   PageHeader, ResultTable,
 } from '../../components'
 
-import {
-  updateProject,
-  removeProject,
-} from '../../actions'
-import {
-  wrapper,
-  ajax,
-} from '../../utils'
+import heraApi from '../../api'
 
 const btnStatusName = project => {
   if (project.status === 'FINISHED') {
@@ -27,10 +21,18 @@ const btnStatusName = project => {
   }
 }
 
-const Project = ({ projects, onDeleteClick, onStatusChange }) => {
+export default () => {
 
   const navigate = useNavigate()
-
+  const getProjectList = heraApi.useGetProjectListQuery()
+  const [deleteProject] = heraApi.useDeleteProjectMutation()
+  const [changeProjectStatus] = heraApi.useChangeProjectStatusMutation()
+  if (getProjectList.isError) {
+    return <Error />
+  }
+  if (getProjectList.isLoading) {
+    return <Loading />
+  }
   const columns = [
     { title: '类型', dataIndex: 'type', key: 'type', width: '100px', },
     { title: '公司名称', dataIndex: 'company', key: 'company', ellipsis: true },
@@ -46,13 +48,18 @@ const Project = ({ projects, onDeleteClick, onStatusChange }) => {
           <Link to={`/project/${project._id}/edit`}><Button type='text'>编辑</Button></Link>
           <Popconfirm
             title={`确定要删除？`}
-            onConfirm={() => onDeleteClick(project)}
+            onConfirm={() => deleteProject(project._id)}
           >
             <Button type='text' danger>删除</Button>
           </Popconfirm>
           <Popconfirm
             title={`确定要暂时${btnStatusName(project)}？`}
-            onConfirm={() => onStatusChange(project)}
+            onConfirm={() => {
+              changeProjectStatus({
+                id: project._id,
+                patch: { status: project.status === 'FINISHED' ? 'UNDERWAY' : 'FINISHED' },
+              })
+            }}
           >
             <Button type="text">{btnStatusName(project)}</Button>
           </Popconfirm>
@@ -67,34 +74,7 @@ const Project = ({ projects, onDeleteClick, onStatusChange }) => {
       searchInfo={true}
       onCreate={() => { navigate('/project/create') }}
     >
-      <ResultTable columns={columns} rowKey='_id' dataSource={projects.valueSeq().toArray()} />
+      <ResultTable columns={columns} rowKey='_id' dataSource={getProjectList.data} pagination={{ pageSize: 30 }} />
     </PageHeader>
   )
 }
-
-const mapStateToProps = state => {
-  return {
-    projects: state.system.rawProjects,
-  }
-}
-
-const mapDispatchToProps = dispatch => ({
-  onDeleteClick(project) {
-    ajax(`/api/project/${project._id}/delete`, { method: 'POST' })
-      .then(res => dispatch(removeProject(res.data.project._id)))
-  },
-  onStatusChange(project) {
-    ajax(`/api/project/${project._id}/status`, {
-      method: 'POST',
-      data: JSON.stringify({ status: project.status === 'FINISHED' ? 'UNDERWAY' : 'FINISHED' }),
-    })
-      .then(res => {
-        dispatch(updateProject(res.data.project))
-      })
-  }
-})
-
-export default wrapper([
-  connect(mapStateToProps, mapDispatchToProps),
-  Project,
-])

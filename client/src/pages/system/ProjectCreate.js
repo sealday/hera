@@ -1,16 +1,25 @@
 import { useDispatch } from 'react-redux'
 
 import ProjectForm from './ProjectForm'
-import { postProject } from '../../actions'
 import { DEFAULT_STORE_TYPE } from '../../utils'
 import { PageHeader } from '../../components'
 import { submit } from 'redux-form'
+import heraApi from '../../api'
+import { useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
 
 export default () => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const [createProject, createResult] = heraApi.useCreateProjectMutation()
   const handleSubmit = (project) => {
-    dispatch(postProject(project))
+    createProject(project)
   }
+  useEffect(() => {
+    if (createResult.isSuccess) {
+      navigate(-1)
+    }
+  }, [navigate, createResult.isSuccess])
 
   const initialValues = {
     contacts: [{

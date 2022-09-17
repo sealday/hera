@@ -396,6 +396,46 @@ export const heraApi = createApi({
                 ? [...result.map(({ _id: id }) => ({ type: 'Project', id }) ), { type: 'Project', id: 'LIST'}]
                 : [{ type: 'Project', id: 'LIST'}]
         }),
+        getProject: builder.query({
+            query: (id) => `project/${id}`,
+            transformResponse: res => res.data.project,
+            providesTags: (_result, _error, id) => [{ type: 'Project', id }],
+        }),
+        createProject: builder.mutation({
+            query: (project) => ({
+                url: 'project',
+                method: 'POST',
+                body: project,
+            }),
+            transformResponse: res => res.data.project,
+            invalidatesTags: [{ type: 'Project', id: 'LIST' }],
+        }),
+        updateProject: builder.mutation({
+            query: ({ id, project }) => ({
+                url: `project/${id}`,
+                method: 'POST',
+                body: project,
+            }),
+            transformResponse: res => res.data.project,
+            invalidatesTags: (_result, _error, { id }) => [{ type: 'Project', id }],
+        }),
+        deleteProject: builder.mutation({
+            query: (id) => ({
+                url: `project/${id}/delete`,
+                method: 'POST',
+            }),
+            transformResponse: res => res.data.project,
+            invalidatesTags: (_result, _error, id) => [{ type: 'Project', id }],
+        }),
+        changeProjectStatus: builder.mutation({
+            query: ({ id, patch }) => ({
+                url: `project/${id}/status`,
+                method: 'POST',
+                body: patch,
+            }),
+            transformResponse: res => res.data.project,
+            invalidatesTags: (_result, _error, { id }) => [{ type: 'Project', id }],
+        }),
         // 贷款管理
         getLoanList: builder.query({
             query: () => 'loan',
