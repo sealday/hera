@@ -30,6 +30,7 @@ export const ContractSchema = new Schema(
       group: Schema.Types.Mixed,
       nameGroup: Schema.Types.Mixed,
       freightGroup: Schema.Types.Mixed,
+      debug: Schema.Types.Mixed,
     }]
   }, {
   timestamps: true

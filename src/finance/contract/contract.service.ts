@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import _ = require('lodash');
 import * as moment from 'moment';
 import { Model } from 'mongoose';
 import { Contract } from 'src/app/app.service';
@@ -39,29 +40,22 @@ export class ContractService {
 
   async addCalc(id: String, calc: any, user: User) {
     const contract = await this.findById(id)
-    // 查找最新的租金方案
-    let pricePlanId = null
-    for (let i = contract.items.length - 1; i >= 0; i--) {
-      if (contract.items[i].category === 'price') {
-        pricePlanId = contract.items[i].plan
-      }
-    }
-    // TODO
-    if (!pricePlanId) {
-      throw '没有找到合适的租金方案'
-    }
-    // 查找最新的重量方案
-    let weightPlanId = null
-    for (let i = contract.items.length - 1; i >= 0; i--) {
-      if (contract.items[i].category === 'weight') {
-        weightPlanId = contract.items[i].plan
-      }
+    // 按添加时间 TODO
+    const rentRuleId = _.get(_.find(_.reverse([...contract.items]), item => item.category === '租金'), 'plan')
+    const otherRuleId = _.get(_.find(_.reverse([...contract.items]), item => item.category === '非租'), 'plan')
+    const weightRuleId = _.get(_.find(_.reverse([...contract.items]), item => item.category === '计重'), 'plan')
+    if (!(rentRuleId || otherRuleId)) {
+      // 至少一个
+      throw new Error('至少需要有一个计算价格的规则')
     }
     const rent = await this.storeService.calculate({
       startDate: new Date(calc.start),
       endDate: moment(calc.end).add(1, 'day').toDate(),
-      pricePlanId: pricePlanId,
-      weightPlanId,
+      rules: {
+        rent: rentRuleId,
+        other: otherRuleId,
+        weight: weightRuleId,
+      },
       user: user,
       project: contract.project,
     }) 
@@ -69,7 +63,7 @@ export class ContractService {
     calc.list = rent.list
     calc.group = rent.group
     calc.nameGroup = rent.nameGroup
-    calc.freightGroup = rent.freightGroup
+    calc.debug = rent.debug
     return this.contractModel.updateOne({ _id: id }, { $push: { calcs: calc }})
   }
 

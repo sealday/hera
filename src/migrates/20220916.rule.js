@@ -5,7 +5,7 @@ prices.forEach(price => {
   const rule = {
     _id: price._id,
     name: price.name,
-    date: price.data,
+    date: price.date,
     category: '租金',
     comments: price.comments,
     items: price.userPlans.map(plan => ({
@@ -27,7 +27,7 @@ weights.forEach(weight => {
   const rule = {
     _id: weight._id,
     name: weight.name,
-    date: weight.data,
+    date: weight.date,
     category: '计重',
     comments: weight.comments,
     items: weight.entries.map(entry => ({

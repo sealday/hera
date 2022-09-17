@@ -6,6 +6,7 @@ import { PriceSchema } from 'src/schemas/price.schema';
 import { ProductSchema } from 'src/schemas/product.schema';
 import { ProjectSchema } from 'src/schemas/project.schema';
 import { RecordSchema } from 'src/schemas/record.schema';
+import { Rule, RuleSchema } from 'src/schemas/rule.schema';
 
 import { PlanController } from './plan/plan.controller';
 import { PlanService } from './plan/plan.service';
