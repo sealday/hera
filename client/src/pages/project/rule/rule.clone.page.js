@@ -77,7 +77,7 @@ export default () => {
   return (
     <PageHeader
       title='合同计算规则'
-      subTitle='正在编辑'
+      subTitle={`正在录入${category}规则`}
       onSave={() => form.submit()}
     >
       <RuleForm onSubmit={handleSubmit} form={form} initialValues={initialValues} category={rule.category} />

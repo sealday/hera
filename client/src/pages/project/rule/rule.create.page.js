@@ -56,14 +56,13 @@ export default () => {
           product: array2product(item.product),
         }))
       }
-      console.log(rule)
       createRule(rule)
     }
   }
   return (
     <PageHeader
       title='合同计算规则'
-      subTitle='正在录入'
+      subTitle={`正在录入${category}规则`}
       onSave={() => { form.submit() }}
     >
       <RuleForm initialValues={initialValues} form={form} category={category} onSubmit={handleSubmit} />

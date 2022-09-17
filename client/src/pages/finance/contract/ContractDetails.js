@@ -7,7 +7,7 @@ import { ALL_PLAN, CONTRACT_DETAILS, newErrorNotify, newSuccessNotify, queryCont
 import { ajax } from '../../../utils'
 import { edit, addItem, addCalc } from './index'
 import { PLAN_CATEGORY_MAP } from '../../../constants'
-import { pick } from 'lodash'
+import _, { pick } from 'lodash'
 import { Error, Loading, PageHeader } from '../../../components'
 import heraApi from '../../../api'
 
@@ -213,7 +213,7 @@ const ContractDetails = connect(mapStateToProps)(({ projects, dispatch, plans })
                 <Link to={`/contract/${contract._id}/calc/${record._id}`}>查看</Link>
                 <a onClick={() => {
                   ajax(`/api/contract/${contract._id}/calc/${record._id}/restart`, {
-                    data: JSON.stringify(record),
+                    data: JSON.stringify(_.omit(record, ['list', 'history', 'group', 'nameGroup'])),
                     method: 'POST',
                     contentType: 'application/json'
                   }).then(() => {
