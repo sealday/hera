@@ -4,6 +4,7 @@ import {
   Button,
   Popconfirm,
   Space,
+  Tag,
 } from 'antd'
 import {
   Error,
@@ -34,6 +35,12 @@ export default () => {
     return <Loading />
   }
   const columns = [
+    {
+      title: '状态', dataIndex: 'status', key: 'status', width: '100px', 
+      render: status => status === 'UNDERWAY' ? <Tag color='green'>进行中</Tag> : <Tag color='gray'>已完结</Tag>,
+      filters: [{ text: '已完结', value: 'FINISHED' }, {text: '进行中', value: 'UNDERWAY'}],
+      onFilter: (value, record) => record.status === value,
+    },
     { title: '类型', dataIndex: 'type', key: 'type', width: '100px', },
     { title: '公司名称', dataIndex: 'company', key: 'company', ellipsis: true },
     { title: '公司电话', dataIndex: 'companyTel', key: 'companyTel' },
