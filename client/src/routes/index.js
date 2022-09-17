@@ -35,6 +35,7 @@ import VoucherPage from '../pages/finance/voucher/voucher.page'
 import RulePage from '../pages/project/rule/rule.page'
 import RuleCreatePage from '../pages/project/rule/rule.create.page'
 import RuleEditPage from '../pages/project/rule/rule.edit.page'
+import RuleClonePage from '../pages/project/rule/rule.clone.page'
 
 export default ({ onLogin, onLogout }) => <Routes>
   <Route path="/login" element={<Login />} />
@@ -74,6 +75,7 @@ export default ({ onLogin, onLogout }) => <Routes>
     <Route path="rule" element={<RulePage />} />
     <Route path="rule/create" element={<RuleCreatePage />} />
     <Route path="rule/:id" element={<RuleEditPage />} />
+    <Route path="rule/:id/clone" element={<RuleClonePage />} />
     <Route path="store" element={<Store />} />
     <Route path="transport_table" element={<TransportSearch />} />
     <Route path="transport_table_company" element={<company.TransportSearch />} />

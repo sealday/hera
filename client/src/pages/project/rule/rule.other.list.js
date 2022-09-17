@@ -40,13 +40,13 @@ export default ({ form }) => (
                 </Form.Item>
               </Col>
               <Col flex='300px'>
-                <Form.Item noStyle dependencies={[['items', field.key, 'level']]}>
+                <Form.Item noStyle dependencies={[['items', field.name, 'level']]}>
                   {() => {
-                    const level = form.getFieldValue(['items', field.key, 'level'])
-                    const product = form.getFieldValue(['items', field.key, 'associate'])
+                    const level = form.getFieldValue(['items', field.name, 'level'])
+                    const product = form.getFieldValue(['items', field.name, 'associate'])
                     if (level === '产品') {
                       if (product && product.length === 3) {
-                        form.setFieldValue(['items', field.key, 'associate'], product.slice(0, 2))
+                        form.setFieldValue(['items', field.name, 'associate'], product.slice(0, 2))
                       }
                       return <RefCascader
                         item={{ required: true, name: [field.name, 'associate'], option: { ref: 'product' } }}

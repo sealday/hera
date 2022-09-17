@@ -6,9 +6,11 @@ import {
 } from 'antd'
 import { useForm } from 'antd/lib/form/Form'
 import moment from 'moment'
-import { DateModifier } from '../../../components'
+import heraApi from '../../../api'
+import { DateModifier, Error, Loading } from '../../../components'
+import { RULE_CATEGORIES } from '../../../constants'
 
-const ContractAddItemModal = ({ initialValues, onFinish, plans, visible, onClose }) => {
+const ContractAddItemModal = ({ initialValues, onFinish, rules, visible, onClose }) => {
   const [form] = useForm()
   return <Modal
     title="合同规则明细"
@@ -31,12 +33,9 @@ const ContractAddItemModal = ({ initialValues, onFinish, plans, visible, onClose
         name="category"
         rules={[{ required: true, message: '此处为必填项！' }]}
       >
-        <Select onChange={() => form.resetFields(['plan'])}>
-          <Select.Option key={1} value="price">租金方案</Select.Option>
-          <Select.Option key={2} value="weight">计重方案</Select.Option>
-          <Select.Option key={3} value="loss">赔偿方案</Select.Option>
-          <Select.Option key={4} value="service">维修方案</Select.Option>
-        </Select>
+        <Select onChange={() => form.resetFields(['plan'])}
+          options={RULE_CATEGORIES.map(v => ({ label: v, value: v }))}
+        />
       </Form.Item>
       <Form.Item
         noStyle
@@ -47,12 +46,13 @@ const ContractAddItemModal = ({ initialValues, onFinish, plans, visible, onClose
             name="plan"
             rules={[{ required: true, message: '此处为必填项！' }]}
           >
-            <Select>
-              {
-                plans[form.getFieldValue('category')] && plans[form.getFieldValue('category')]
-                  .map(plan => <Select.Option key={plan._id} value={plan._id}>{plan.name}</Select.Option>)
-              }
-            </Select>
+            <Select showSearch optionFilterProp="label"
+            options={
+                rules
+                  .filter(rule => rule.category === form.getFieldValue('category'))
+                  .map(rule => ({ label: rule.name, value: rule._id }))
+            }
+            />
           </Form.Item>;
         }}
       </Form.Item>

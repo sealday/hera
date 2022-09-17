@@ -11,7 +11,7 @@ import { pick } from 'lodash'
 import { Error, Loading, PageHeader } from '../../../components'
 import heraApi from '../../../api'
 
-const INITIAL_CATEGORY = 'price'
+const INITIAL_CATEGORY = '租金'
 
 const PlanDeleteButton = connect()(({ contractId, itemId, dispatch }) => <Popconfirm
   title={`确认取消关联该方案吗？`}
@@ -80,17 +80,19 @@ const ProjectLabel = connect(state => ({
 })
 
 const ContractDetails = connect(mapStateToProps)(({ projects, dispatch, plans }) => {
+  const getRuleList = heraApi.useGetRuleListQuery()
   const { id } = useParams()
   const getContract = heraApi.useGetContractQuery(id)
   useEffect(() => {
     dispatch(queryAllPlans())
   }, [id])
-  if (getContract.isError) {
+  if (getContract.isError || getRuleList.isError) {
     return <Error />
   }
-  if (getContract.isLoading) {
+  if (getContract.isLoading || getRuleList.isLoading) {
     return <Loading />
   }
+  const rules = getRuleList.data
   const contract = getContract.data
   const descriptions = [
     { label: "项目部", children: <ProjectLabel projectId={contract.project} /> },
@@ -137,6 +139,7 @@ const ContractDetails = connect(mapStateToProps)(({ projects, dispatch, plans })
                 category: INITIAL_CATEGORY,
               },
               plans,
+              rules,
               onFinish: v => {
                 const requestBody = {
                   category: v.category,
@@ -159,14 +162,13 @@ const ContractDetails = connect(mapStateToProps)(({ projects, dispatch, plans })
         ]}
       >
         <Table dataSource={contract.items}>
-          <Table.Column key="category" title="分类" dataIndex="category"
-            render={category => PLAN_CATEGORY_MAP[category]} />
+          <Table.Column key="category" title="分类" dataIndex="category" />
           <Table.Column key="plan" title="名称" dataIndex="plan"
-            render={plan => <PlanLabel planId={plan} />} />
+            render={plan => rules.filter(rule => rule._id === plan)[0].name } />
           <Table.Column key="start" title="开始日期" dataIndex="start"
             render={start => moment(start).format('YYYY-MM-DD')} />
           <Table.Column key="end" title="结束日期" dataIndex="end"
-            render={start => moment(start).format('YYYY-MM-DD')} />
+            render={end => moment(end).format('YYYY-MM-DD')} />
           <Table.Column key="action" title="操作"
             render={(text, record) => (
               <Space size="middle">

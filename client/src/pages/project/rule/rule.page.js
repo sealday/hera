@@ -35,7 +35,7 @@ export default () => {
     { title: '操作', key: 'action', render: (_text, rule) => {
       return <Space>
         <LinkButton to={`/rule/${rule._id}`} >编辑</LinkButton>
-        <Button type='link' onClick={() => createRule({...rule, name: rule.name + '（克隆）'}) }>克隆</Button>
+        <LinkButton to={`/rule/${rule._id}/clone`} >克隆</LinkButton>
         <PopconfirmButton title='确认删除？' onConfirm={() => deleteRule(rule._id)} danger>删除</PopconfirmButton>
       </Space>
     }}
