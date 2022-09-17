@@ -7,47 +7,39 @@ import { ALL_PLAN, CONTRACT_DETAILS, newErrorNotify, newSuccessNotify, queryCont
 import { ajax } from '../../../utils'
 import { edit, addItem, addCalc } from './index'
 import { PLAN_CATEGORY_MAP } from '../../../constants'
-import _, { pick } from 'lodash'
+import _, { add, pick } from 'lodash'
 import { Error, Loading, PageHeader } from '../../../components'
 import heraApi from '../../../api'
 
 const INITIAL_CATEGORY = '租金'
 
-const PlanDeleteButton = connect()(({ contractId, itemId, dispatch }) => <Popconfirm
-  title={`确认取消关联该方案吗？`}
-  onConfirm={() => {
-    ajax(`/api/contract/${contractId}/item/${itemId}/delete`, {
-      method: 'POST',
-      contentType: 'application/json'
-    }).then(() => {
-      dispatch(queryContractDetails(contractId))
-    }).catch(() => {
-      dispatch(newErrorNotify('警告', '删除失败', 1000))
-    })
-  }}
-  okText="确认"
-  cancelText="取消"
->
-  <a style={{ color: 'red' }}>取消关联</a>
-</Popconfirm>)
+const PlanDeleteButton = ({ contractId, itemId }) => {
+  const [deletePlan] = heraApi.useDeletePlanContractMutation()
+  return <Popconfirm
+    title={`确认取消关联该方案吗？`}
+    onConfirm={() => {
+      deletePlan({ id: contractId, itemId })
+    }}
+    okText="确认"
+    cancelText="取消"
+  >
+    <a style={{ color: 'red' }}>取消关联</a>
+  </Popconfirm>
+}
 
-const CalcDeleteButton = connect()(({ contractId, calcId, dispatch }) => <Popconfirm
-  title={`确认删除该对账单？`}
-  onConfirm={() => {
-    ajax(`/api/contract/${contractId}/calc/${calcId}/delete`, {
-      method: 'POST',
-      contentType: 'application/json'
-    }).then(() => {
-      dispatch(queryContractDetails(contractId))
-    }).catch(() => {
-      dispatch(newErrorNotify('警告', '删除失败', 1000))
-    })
-  }}
-  okText="确认"
-  cancelText="取消"
->
-  <a style={{ color: 'red' }}>删除</a>
-</Popconfirm>)
+const CalcDeleteButton = ({ contractId, calcId, dispatch }) => {
+  const [deleteCalc] = heraApi.useDeleteCalcContractMutation()
+  return <Popconfirm
+    title={`确认删除该对账单？`}
+    onConfirm={() => {
+      deleteCalc({ id: contractId, calcId })
+    } }
+    okText="确认"
+    cancelText="取消"
+  >
+    <a style={{ color: 'red' }}>删除</a>
+  </Popconfirm>
+}
 
 const mapStateToProps = (state) => {
   const plans = state.results.get(ALL_PLAN, {})
@@ -56,19 +48,6 @@ const mapStateToProps = (state) => {
     plans: plans,
   }
 }
-
-const PlanLabel = connect(mapStateToProps)(({ plans, planId }) => {
-  const planMap = {}
-  for (let k in plans) {
-    for (let plan of plans[k]) {
-      planMap[plan._id] = plan
-    }
-  }
-  if (planId in planMap) {
-    return <>{planMap[planId].name}</>
-  }
-  return <></>
-})
 
 const ProjectLabel = connect(state => ({
   projects: state.system.projects,
@@ -83,6 +62,10 @@ const ContractDetails = connect(mapStateToProps)(({ projects, dispatch, plans })
   const getRuleList = heraApi.useGetRuleListQuery()
   const { id } = useParams()
   const getContract = heraApi.useGetContractQuery(id)
+  const [updateContract] = heraApi.useUpdateContractMutation()
+  const [addPlan] = heraApi.useAddPlanContractMutation()
+  const [addContractCalc] = heraApi.useAddCalcContractMutation()
+  const [restartCalc] = heraApi.useRestartCalcContractMutation()
   useEffect(() => {
     dispatch(queryAllPlans())
   }, [id])
@@ -115,16 +98,7 @@ const ContractDetails = connect(mapStateToProps)(({ projects, dispatch, plans })
         edit({
           initialValues,
           onFinish: v => {
-            ajax(`/api/contract/${contract._id}`, {
-              data: JSON.stringify(v),
-              method: 'POST',
-              contentType: 'application/json'
-            }).then(() => {
-              dispatch(newSuccessNotify('提示', '更新成功', 1000))
-              dispatch(queryContractDetails(id))
-            }).catch(() => {
-              dispatch(newErrorNotify('警告', '更新失败', 1000))
-            })
+            updateContract({ id: contract._id, contract: v })
           },
           projects,
         })
@@ -147,15 +121,7 @@ const ContractDetails = connect(mapStateToProps)(({ projects, dispatch, plans })
                   start: v.date[0].startOf('day'),
                   end: v.date[1].startOf('day'),
                 }
-                ajax(`/api/contract/${contract._id}/add_item`, {
-                  data: JSON.stringify(requestBody),
-                  method: 'POST',
-                  contentType: 'application/json'
-                }).then(() => {
-                  dispatch(queryContractDetails(id))
-                }).catch(() => {
-                  dispatch(newErrorNotify('警告', '添加失败', 1000))
-                })
+                addPlan({ id: contract._id, item: requestBody })
               },
             })
           }} type="primary">新增</Button>
@@ -188,15 +154,7 @@ const ContractDetails = connect(mapStateToProps)(({ projects, dispatch, plans })
                 start: v.date[0].startOf('day'),
                 end: v.date[1].startOf('day'),
               }
-              ajax(`/api/contract/${contract._id}/add_calc`, {
-                data: JSON.stringify(requestBody),
-                method: 'POST',
-                contentType: 'application/json'
-              }).then(() => {
-                dispatch(queryContractDetails(id))
-              }).catch(() => {
-                dispatch(newErrorNotify('警告', '添加失败', 1000))
-              })
+              addContractCalc({ id: contract._id, calc: requestBody })
             },
           })} type="primary">新增</Button>
         ]}
@@ -212,16 +170,11 @@ const ContractDetails = connect(mapStateToProps)(({ projects, dispatch, plans })
               <Space size="middle">
                 <Link to={`/contract/${contract._id}/calc/${record._id}`}>查看</Link>
                 <a onClick={() => {
-                  ajax(`/api/contract/${contract._id}/calc/${record._id}/restart`, {
-                    data: JSON.stringify(_.omit(record, ['list', 'history', 'group', 'nameGroup'])),
-                    method: 'POST',
-                    contentType: 'application/json'
-                  }).then(() => {
-                    dispatch(queryContractDetails(id))
-                  }).catch(() => {
-                    dispatch(newErrorNotify('警告', '重新计算失败', 1000))
+                  restartCalc({
+                    id: contract._id,
+                    calcId: record._id,
+                    calc: _.omit(record, ['list', 'history', 'group', 'nameGroup']),
                   })
-
                 }}>重新计算</a>
                 <CalcDeleteButton contractId={contract._id} calcId={record._id} />
               </Space>

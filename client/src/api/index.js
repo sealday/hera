@@ -225,6 +225,15 @@ export const heraApi = createApi({
                 ? [...result.map(({ _id: id }) => ({ type: 'Contract', id }) ), { type: 'Contract', id: 'LIST'}]
                 : [{ type: 'Contract', id: 'LIST'}]
         }),
+        updateContract: builder.mutation({
+            query: ({ id, contract }) => ({
+                url: `contract/${id}`,
+                method: 'POST',
+                body: contract,
+            }),
+            transformResponse: res => res.data.contract,
+            invalidatesTags: (_result, _error, { id }) => [{ type: 'Contract', id }],
+        }),
         getContract: builder.query({
             query: (id) => `contract/${id}`,
             transformResponse: res => res.data.contract,
@@ -262,6 +271,49 @@ export const heraApi = createApi({
             }),
             transformResponse: res => res.data,
             invalidatesTags: (_result, _error, id) => [{ type: 'Contract', id }],
+        }),
+        addPlanContract: builder.mutation({
+            query: ({ id, item }) => ({
+                url: `contract/${id}/add_item`,
+                method: 'POST',
+                body: item,
+            }),
+            transformResponse: res => res.data,
+            invalidatesTags: (_result, _error, { id }) => [{ type: 'Contract', id }],
+        }),
+        deletePlanContract: builder.mutation({
+            query: ({ id, itemId }) => ({
+                url: `contract/${id}/item/${itemId}/delete`,
+                method: 'POST',
+            }),
+            transformResponse: res => res.data,
+            invalidatesTags: (_result, _error, { id }) => [{ type: 'Contract', id }],
+        }),
+        addCalcContract: builder.mutation({
+            query: ({ id, calc }) => ({
+                url: `contract/${id}/add_calc`,
+                method: 'POST',
+                body: calc,
+            }),
+            transformResponse: res => res.data,
+            invalidatesTags: (_result, _error, { id }) => [{ type: 'Contract', id }],
+        }),
+        deleteCalcContract: builder.mutation({
+            query: ({ id, calcId }) => ({
+                url: `contract/${id}/calc/${calcId}/delete`,
+                method: 'POST',
+            }),
+            transformResponse: res => res.data,
+            invalidatesTags: (_result, _error, { id }) => [{ type: 'Contract', id }],
+        }),
+        restartCalcContract: builder.mutation({
+            query: ({ id, calcId, calc }) => ({
+                url: `contract/${id}/calc/${calcId}/restart`,
+                method: 'POST',
+                body: calc,
+            }),
+            transformResponse: res => res.data,
+            invalidatesTags: (_result, _error, { id }) => [{ type: 'Contract', id }],
         }),
         // 产品
         getProductList: builder.query({

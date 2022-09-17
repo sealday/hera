@@ -6,8 +6,7 @@ import {
 } from 'antd'
 import { useForm } from 'antd/lib/form/Form'
 import moment from 'moment'
-import heraApi from '../../../api'
-import { DateModifier, Error, Loading } from '../../../components'
+import { DateModifier } from '../../../components'
 import { RULE_CATEGORIES } from '../../../constants'
 
 const ContractAddItemModal = ({ initialValues, onFinish, rules, visible, onClose }) => {
