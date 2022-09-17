@@ -1,5 +1,9 @@
 print('migrate products start')
 const products = [
+  , { type: '费用类', number: 10001, name: '维修人工', size: '改制费' }
+  , { type: '费用类', number: 10002, name: '维修人工', size: '调直费' }
+  , { type: '费用类', number: 10003, name: '维修人工', size: '上油费' }
+  , { type: '费用类', number: 10004, name: '维修人工', size: '清理费' }
   , { type: '费用类', number: 10101, name: '有物赔偿类', size: '有物赔偿' }
   , { type: '费用类', number: 10102, name: '有物赔偿类', size: '扣件螺丝' }
   , { type: '费用类', number: 10103, name: '有物赔偿类', size: '缺盖板' }
