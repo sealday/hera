@@ -7,3 +7,5 @@ export const PLAN_CATEGORY_MAP = {
 }
 
 export const RULE_CATEGORIES = ['租金', '计重', '非租']
+
+export const CAR_NUMBERS = ['自备车', '直送', '自提', '转账', '转单', '合车']

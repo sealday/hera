@@ -1,4 +1,4 @@
-import { Card, Checkbox, Col, DatePicker, Form, Input, Row, Select, Switch } from "antd"
+import { AutoComplete, Card, Checkbox, Col, DatePicker, Form, Input, Row, Select, Switch } from "antd"
 import _ from "lodash"
 import moment from "moment"
 import { RefSelect } from "../../components"
@@ -7,6 +7,7 @@ import React, { useContext } from 'react';
 import EntryForm from "./records/entry.form"
 import ComplementForm from "./records/complement.form"
 import { SettingContext } from "./records"
+import { CAR_NUMBERS } from "../../constants"
 
 const styles = {
   block: { width: '100%' },
@@ -52,7 +53,7 @@ export default ({ form, initialValues, onSubmit }) => {
           </Col> : null}
           {settings.carNumber ? <Col span={8}>
             <Form.Item label="车号" name='carNumber'>
-              <Input />
+              <AutoComplete options={CAR_NUMBERS.map(item => ({ label: item, value: item }))} />
             </Form.Item>
           </Col> : null}
           {settings.weight ? <Col span={8}>
