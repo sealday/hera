@@ -1,6 +1,5 @@
-import 'react-app-polyfill/ie11';
-import 'react-app-polyfill/stable';
 import React from 'react'
+import { init } from '@sentry/browser'
 import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
 import moment from 'moment'
@@ -19,10 +18,10 @@ import Routes from './routes'
 // css 除非是模块自己的，否则直接在这里进行全局 import
 import './index.less'
 // 初始化 sentry
-// Sentry.init({
-//   release: 'hera@3.0.0',
-//   dsn: "https://213cb45f8df943e0b77f89a23ee5a4e8@o374147.ingest.sentry.io/5191691"}
-// )
+init({
+  release: 'hera@3.0.0',
+  dsn: "https://213cb45f8df943e0b77f89a23ee5a4e8@o374147.ingest.sentry.io/5191691"}
+)
 // 初始化 moment 时间属性
 moment.locale('zh-CN')
 // 初始化 socket
