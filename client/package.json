@@ -57,7 +57,7 @@
   "proxy": "http://localhost:3000/",
   "browserslist": {
     "production": [
-      "since 2018"
+      "since 2013"
     ],
     "development": [
       "last 1 chrome version",
