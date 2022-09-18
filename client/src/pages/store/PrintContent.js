@@ -157,7 +157,7 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
       fixed(total_(entry, products)) + getUnit(productTypeMap[name]),
       entry.price ? '￥' + entry.price : '',
       entry.price ? '￥' + fixed(total_(entry, products) * entry.price) : '',
-      associatedContentKV[makeKeyFromNameSize(entry.name, entry.size)] ? associatedContentKV[makeKeyFromNameSize(entry.name, entry.size)] + _.toString(entry.comments) : entry.comments,
+      entry.comments,
     ]))
     amount += sum[name] // 计算总金额
     printEntries.push(
@@ -261,7 +261,7 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
               {content.explain}
             </td>
             <td colSpan={slice - leftSlice}>
-              备注： {unconnectedContent}；{record.comments} 
+              备注：{record.comments} 
             </td>
           </tr>
         </tbody>

@@ -20,7 +20,7 @@ export default () => {
   const getRuleList = heraApi.useGetRuleListQuery()
   const [deleteRule] = heraApi.useDeleteRuleMutation()
   const [createRule] = heraApi.useCreateRuleMutation()
-  const tabs = _.map(RULE_CATEGORIES, v => ({ key: v, label: v, children: null }))
+  const tabs = _.map(RULE_CATEGORIES, ({ label, value }) => ({ key: value, value, label, children: null }))
   if (getRuleList.isError) {
     return <Error />
   }
@@ -42,7 +42,7 @@ export default () => {
   ]
   tabs.forEach(tab => {
     tab.children = (
-      <ResultTable rowKey='_id' columns={columns} dataSource={getRuleList.data.filter(item => item.category === tab.label)} />
+      <ResultTable rowKey='_id' columns={columns} dataSource={getRuleList.data.filter(item => item.category === tab.value)} />
     )
   })
   const items = [

@@ -34,7 +34,6 @@ export default () => {
     record.complements = _.map(record.complements, item => {
       const complement = {
         ...item,
-        product: _.zipObject(['type', 'name', 'size'], item.product),
       }
       if (item.level === 'associated') {
         const associateArray = JSON.parse(item.associate)
@@ -92,7 +91,6 @@ export default () => {
       titleParts.push('租赁')
       settings.freight = true
       initialValues.freight = true
-      initialValues.carNumber = 'dcd'
       break;
     case 'check':
       titleParts.push('盘点录入')

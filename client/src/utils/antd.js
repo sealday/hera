@@ -2,7 +2,7 @@ import { MinusCircleOutlined, PlusCircleOutlined } from "@ant-design/icons"
 import { Button, Col, DatePicker, Form, Input, Radio, Row, Select, Table } from "antd"
 import _ from "lodash"
 import moment from "moment"
-import { DepLabel, RefCascader, RefLabel, RefSelect } from "../components"
+import { DepLabel, RefCascader, RefCascaderLabel, RefLabel, RefSelect } from "../components"
 
 const ListTable = ({ fields, operation, meta, item, form}) => {
   const columns = genTableFormColumn(item, form).concat([
@@ -129,7 +129,11 @@ const genTableColumn = schema => {
       const column = { title: item.label, dataIndex: item.name, key: item.name }
       if (item.option) {
         if (item.option.type === 'ref') {
-          column.render = v => <RefLabel item={item} value={v} />
+          if (item.option.select === 'cascader') {
+            column.render = v => <RefCascaderLabel item={item} value={v} />
+          } else {
+            column.render = v => <RefLabel item={item} value={v} />
+          }
         } else if (item.option.type === 'static') {
           const kv = _.zipObject(item.option.values, item.option.labels)
           column.render = k => kv[k]

@@ -23,7 +23,7 @@ const baseQueryAuth = async (args, api, extraOptions) => {
 export const heraApi = createApi({
     reducerPath: 'heraApi',
     baseQuery: baseQueryAuth,
-    tagTypes: ['Company', 'Record', 'Plan', 'Employee', 'Subject', 'Product', 'Invoice', 'Project'],
+    tagTypes: ['Company', 'Record', 'Plan', 'Employee', 'Subject', 'Product', 'Invoice', 'Project', 'Other'],
     endpoints: (builder) => ({
         logout: builder.mutation({
             query: () => ({
@@ -552,6 +552,45 @@ export const heraApi = createApi({
             }),
             transformResponse: res => res.data,
             invalidatesTags: (_result, _error, id) => [{ type: 'Rule', id }],
+        }),
+        // 其他产品
+        getOtherList: builder.query({
+            query: () => 'other',
+            transformResponse: res => res.data,
+            providesTags: result => result
+                ? [...result.map(({ _id: id }) => ({ type: 'Other', id }) ), { type: 'Other', id: 'LIST'}]
+                : [{ type: 'Other', id: 'LIST'}]
+        }),
+        createOther: builder.mutation({
+            query: (other) => ({
+                url: 'other',
+                method: 'POST',
+                body: other,
+            }),
+            transformResponse: res => res.data,
+            invalidatesTags: [{ type: 'Other', id: 'LIST' }],
+        }),
+        getOther: builder.query({
+            query: (id) => `other/${id}`,
+            transformResponse: res => res.data,
+            providesTags: (_result, _error, id) => [{ type: 'Other', id }],
+        }),
+        updateOther: builder.mutation({
+            query: ({ id, other }) => ({
+                url: `other/${id}`,
+                method: 'PUT',
+                body: other,
+            }),
+            transformResponse: res => res.data,
+            invalidatesTags: (_result, _error, { id }) => [{ type: 'Other', id }],
+        }),
+        deleteOther: builder.mutation({
+            query: (id) => ({
+                url: `other/${id}`,
+                method: 'DELETE',
+            }),
+            transformResponse: res => res.data,
+            invalidatesTags: (_result, _error, id) => [{ type: 'Other', id }],
         }),
     })
 })

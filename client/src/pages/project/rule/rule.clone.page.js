@@ -54,7 +54,6 @@ export default () => {
         items: v.items.map(item => ({
           ...item,
           associate: item.level === '按单' ? undefined : array2product(item.associate, item.level === '规格'),
-          product: array2product(item.product),
         }))
       }
       createRule(rule)

@@ -58,7 +58,7 @@ export default ({ form, initialValues, onSubmit }) => {
           </Col> : null}
           {settings.weight ? <Col span={8}>
             <Form.Item label="重量" name='weight'>
-              <Input />
+              <Input suffix='吨' />
             </Form.Item>
           </Col> : null}
           {settings.freight ? <Col span={8}>

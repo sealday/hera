@@ -61,8 +61,7 @@ export default ({ form }) => (
               </Col>
               <Col flex='300px'>
                 <RefCascader
-                  item={{ required: true, name: [field.name, 'product'], option: { ref: 'product' } }}
-                  customBuild={data => buildProductTree(data).children} />
+                  item={{ required: true, name: [field.name, 'other'], option: { ref: 'other', label: 'name', value: 'id' } }}/>
               </Col>
               <Col flex='100px'>
                 <Form.Item {...field} name={[field.name, 'unitPrice']}>

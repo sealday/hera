@@ -105,19 +105,16 @@ export default [
                 type: 'text',
             },
             {
-                name: ['product', 'type'],
-                label: '产品类别',
+                name: 'product',
+                label: '项目',
                 type: 'text',
-            },
-            {
-                name: ['product', 'name'],
-                label: '产品名称',
-                type: 'text',
-            },
-            {
-                name: ['product', 'size'],
-                label: '产品规格',
-                type: 'text',
+                option: {
+                    type: 'ref',
+                    ref: 'other',
+                    label: 'name',
+                    value: 'id',
+                    select: 'cascader',
+                },
             },
             {
                 name: 'count',

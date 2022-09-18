@@ -1,12 +1,11 @@
 import { Card, Table } from "antd"
 
-export default ({ columns, dataSource, rowKey = 'key' }) => {
+export default ({ actions, expandRowByClick = true, columns, dataSource, rowKey = 'key' }) => {
   return (
-    <Card bordered={false} size='small'>
+    <Card bordered={false} extra={actions}>
       <Table
-        size='small'
         rowKey={rowKey}
-        expandable={{ expandRowByClick: true }}
+        expandable={{ expandRowByClick }}
         columns={columns}
         dataSource={dataSource}
         pagination={false}

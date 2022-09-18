@@ -2,7 +2,6 @@ import { MinusCircleOutlined, PlusCircleOutlined } from "@ant-design/icons"
 import { Button, Form, Input, Select, Space, Table } from "antd"
 import _ from "lodash"
 import { RefCascader } from "../../../components"
-import { buildProductTree } from "../../../utils"
 import React from 'react';
 
 const styles = {
@@ -55,9 +54,8 @@ export default ({ fields, operation, meta, form }) => {
       width: 300,
       render: (_, field) => (
         <RefCascader
-          item={{ name: [field.name, 'product'], option: { ref: 'product' } }}
+          item={{ name: [field.name, 'product'], option: { ref: 'other', label: 'name', value: 'id' } }}
           rules={rules}
-          customBuild={data => buildProductTree(data).children}
         />
       )
     },

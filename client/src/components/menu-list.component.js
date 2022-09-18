@@ -141,6 +141,10 @@ const allMenu = [
         path: '/product',
       },
       {
+        name: '费用信息',
+        path: '/other',
+      },
+      {
         name: '操作员管理',
         path: '/operator',
         roles: ['系统管理员'],

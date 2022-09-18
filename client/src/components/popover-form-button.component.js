@@ -2,7 +2,7 @@ import { Button, Col, Form, Popover, Row, Space } from "antd"
 import { useState } from "react"
 import { genFormContent } from "../utils/antd"
 
-export default ({ block = false, type = 'link', children, schema, onSubmit, initialValues, size = 'middle' }) => {
+export default ({ icon, block = false, type = 'link', children, schema, onSubmit, initialValues, size = 'middle' }) => {
   const [open, setOpen] = useState(false)
   const [form] = Form.useForm()
 
@@ -36,7 +36,7 @@ export default ({ block = false, type = 'link', children, schema, onSubmit, init
       open={open}
       handleOpenChange={handleOpenChange}
       content={content}>
-      <Button size={size} type={type} onClick={() => setOpen(true)} block={block}>{children}</Button>
+      <Button icon={icon} size={size} type={type} onClick={() => setOpen(true)} block={block}>{children}</Button>
     </Popover>
   )
 }

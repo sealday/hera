@@ -54,7 +54,6 @@ export default () => {
         items: v.items.map(item => ({
           ...item,
           associate: item.level === '按单' ? undefined : array2product(item.associate, item.level === '规格'),
-          product: array2product(item.product),
         }))
       }
       updateRule({ id, rule })
@@ -67,7 +66,7 @@ export default () => {
     date: moment(rule.date),
     items: rule.items.map(item => ({
       ...item,
-      product: product2array(item.product, item.level === '规格' || rule.category === '计重' || rule.category === '非租'),
+      product: rule.category !== '非租' ? product2array(item.product, item.level === '规格' || rule.category === '计重' || rule.category === '非租') : undefined,
       associate: rule.category !== '非租' || item.level === '按单'
         ? undefined
         : product2array(item.associate, item.level === '规格')

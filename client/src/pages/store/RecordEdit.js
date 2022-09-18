@@ -38,7 +38,7 @@ export default () => {
     record.complements = _.map(record.complements, item => {
       const complement = {
         ...item,
-        product: _.zipObject(['type', 'name', 'size'], item.product),
+        product: _.last(item.product),
       }
       if (item.level === 'associated') {
         const associateArray = JSON.parse(item.associate)
@@ -120,7 +120,6 @@ export default () => {
   initialValues.complements = _.map(record.complements, item => {
     const complement = {
       ...item,
-      product: [item.product.type, item.product.name, item.product.size]
     }
     if (item.level === 'associated') {
       complement.associate = JSON.stringify([item.associate.type, item.associate.name, item.associate.size])
