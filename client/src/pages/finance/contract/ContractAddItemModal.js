@@ -33,7 +33,7 @@ const ContractAddItemModal = ({ initialValues, onFinish, rules, visible, onClose
         rules={[{ required: true, message: '此处为必填项！' }]}
       >
         <Select onChange={() => form.resetFields(['plan'])}
-          options={RULE_CATEGORIES.map(v => ({ label: v, value: v }))}
+          options={RULE_CATEGORIES}
         />
       </Form.Item>
       <Form.Item
