@@ -80,6 +80,7 @@ export default () => {
     originalOrder: true,
     carNumber: true,
     weight: true,
+    freight: false,
   }
   const direction = record.inStock === store._id ? 'in' : record.outStock === store._id ? 'out' : ''
   if (!direction) {
@@ -96,6 +97,7 @@ export default () => {
       break;
     case '调拨':
       titleParts.push('租赁')
+      settings.freight = true
       break;
     case '盘点':
       titleParts.push('盘点录入')

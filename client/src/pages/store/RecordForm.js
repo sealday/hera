@@ -1,4 +1,4 @@
-import { Card, Col, DatePicker, Form, Input, Row, Select } from "antd"
+import { Card, Checkbox, Col, DatePicker, Form, Input, Row, Select, Switch } from "antd"
 import _ from "lodash"
 import moment from "moment"
 import { RefSelect } from "../../components"
@@ -58,6 +58,11 @@ export default ({ form, initialValues, onSubmit }) => {
           {settings.weight ? <Col span={8}>
             <Form.Item label="重量" name='weight'>
               <Input />
+            </Form.Item>
+          </Col> : null}
+          {settings.freight ? <Col span={8}>
+            <Form.Item label="合同运费" name='freight' valuePropName="checked">
+              <Switch />
             </Form.Item>
           </Col> : null}
           <Col span={24}>

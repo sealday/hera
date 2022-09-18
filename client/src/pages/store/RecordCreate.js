@@ -74,6 +74,11 @@ export default () => {
     originalOrder: true,
     carNumber: true,
     weight: true,
+    freight: false,
+  }
+  const initialValues = {
+    outDate: moment(),
+    type: DEFAULT_STORE_TYPE,
   }
   switch (type) {
     case 'transfer':
@@ -85,6 +90,9 @@ export default () => {
       break;
     case 'rent':
       titleParts.push('租赁')
+      settings.freight = true
+      initialValues.freight = true
+      initialValues.carNumber = 'dcd'
       break;
     case 'check':
       titleParts.push('盘点录入')
@@ -99,10 +107,6 @@ export default () => {
   // 名称后缀
   titleParts.push(direction === 'in' ? '入库' : direction === 'out' ? '出库' : '')
   const pageTitle = titleParts.join('')
-  const initialValues = {
-    outDate: moment(),
-    type: DEFAULT_STORE_TYPE,
-  }
   return <PageHeader
     title={pageTitle}
     subTitle='正在录入'
