@@ -1,3 +1,4 @@
+import 'scroll-polyfill/auto'
 import React from 'react'
 import { init } from '@sentry/browser'
 import { createRoot } from 'react-dom/client'
