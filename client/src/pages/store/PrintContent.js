@@ -89,6 +89,28 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
     content.signer = '盘点负责人'
   }
 
+  // 租赁单
+  if (record.type === '调拨') {
+    content.partALabel = '承租单位'
+    content.partBLabel = '工程项目'
+    if (record.inStock === store._id) {
+      const project = projects.get(record.outStock)
+      content.partALabel = project.company
+      content.partBLabel = project.name
+    } else if (record.outStock === store._id) {
+      const project = projects.get(record.inStock)
+      content.partA = project.company
+      content.partB = project.name
+    } else {
+      // FIXME 两个都不是关联公司的话，暂定为入库
+      const project = projects.get(record.inStock)
+      content.partA = project.company
+      content.partB = project.name
+    }
+    content.outLabel = '出租单位'
+    content.inLabel = '租借单位'
+  }
+
   content.explain = `说明：如供需双方未签正式合同，本${content.orderName}经供需双方代表签字确认后，
   将作为合同及发生业务往来的有效凭证，如已签合同，则成为该合同的组成部分。${content.signer}须核对
   以上产品规格、数量确认后可签字认可。`
