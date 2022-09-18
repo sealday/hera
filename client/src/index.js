@@ -72,11 +72,9 @@ const emptyRenderer = () => (
 const MyApp = () => (
   <Provider store={store}>
     <ConfigProvider locale={zh_CN} renderEmpty={emptyRenderer}>
-      <Alert.ErrorBoundary>
-        <HistoryRouter history={history} basename={BASENAME}>
-          <Routes onLogin={onLogined} onLogout={onLogouted} />
-        </HistoryRouter>
-      </Alert.ErrorBoundary>
+      <HistoryRouter history={history} basename={BASENAME}>
+        <Routes onLogin={onLogined} onLogout={onLogouted} />
+      </HistoryRouter>
     </ConfigProvider>
   </Provider>
 )
