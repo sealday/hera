@@ -95,8 +95,8 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
     content.partBLabel = '工程项目'
     if (record.inStock === store._id) {
       const project = projects.get(record.outStock)
-      content.partALabel = project.company
-      content.partBLabel = project.name
+      content.partA = project.company
+      content.partB = project.name
     } else if (record.outStock === store._id) {
       const project = projects.get(record.inStock)
       content.partA = project.company
