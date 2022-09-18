@@ -723,7 +723,7 @@ export class StoreService {
           from: 'rules',
           let: {
             associateType: '$complements.associate.type', associateName: '$complements.associate.name', associateSize: '$complements.associate.size',
-            productType: '$complements.product.type', productName: '$complements.product.name', productSize: '$complements.product.size'
+            other: '$complements.product',
           },
           pipeline: [
             {
@@ -744,9 +744,7 @@ export class StoreService {
                         { $eq: ['$items.associate.type', '$$associateType'] },
                         { $eq: ['$items.associate.name', '$$associateName'] },
                         { $eq: ['$items.level', '产品'] },
-                        { $eq: ['$items.product.type', '$$productType'] },
-                        { $eq: ['$items.product.name', '$$productName'] },
-                        { $eq: ['$items.product.size', '$$productSize'] },
+                        { $eq: ['$items.other', '$$other'] },
                       ]
                     },
                     else: {
@@ -754,10 +752,8 @@ export class StoreService {
                         { $eq: ['$items.associate.type', '$$associateType'] },
                         { $eq: ['$items.associate.name', '$$associateName'] },
                         { $eq: ['$items.associate.size', '$$associateSize'] },
-                        { $eq: ['$items.product.type', '$$productType'] },
-                        { $eq: ['$items.product.name', '$$productName'] },
-                        { $eq: ['$items.product.size', '$$productSize'] },
                         { $eq: ['$items.level', '规格'] },
+                        { $eq: ['$items.other', '$$other'] },
                       ]
                     }
                   },
@@ -859,16 +855,26 @@ export class StoreService {
             year: { $year: { date: '$outDate', timezone: 'Asia/Shanghai' } },
             month: { $month: { date: '$outDate', timezone: 'Asia/Shanghai' } },
             day: { $dayOfMonth: { date: '$outDate', timezone: 'Asia/Shanghai' } },
-            name: '$complements.product.name',
+            name: {
+              $reduce: {
+                input: '$complements.product',
+                initialValue: '',
+                in: { $concat: ["$$value", " / ", "$$this"] }
+              }
+            }
           },
           outDate: { $first: '$outDate' },
           number: { $first: '$number' },
-          name: { $first: '$complements.product.name' },
           count: { $sum: '$count' },
           unitPrice: { $first: '$otherRule.items.unitPrice' },
           price: { $sum: '$price' },
           unit: { $first: '$unit' },
           category: { $first: '$otherRule.category' }
+        }
+      },
+      {
+        $addFields: {
+          name: '$_id.name'
         }
       },
       {
@@ -1023,9 +1029,7 @@ export class StoreService {
           _id: {
             number: '$number',
             outDate: '$outDate',
-            type: '$otherRule.items.product.type',
-            name: '$otherRule.items.product.name',
-            size: '$otherRule.items.product.size',
+            other: '$otherRule.items.other',
             unitPrice: '$otherRule.items.unitPrice',
             category: '$otherRule.category',
           },
@@ -1045,8 +1049,7 @@ export class StoreService {
       {
         $group: {
           _id: {
-            name: '$_id.name',
-            size: '$_id.size',
+            other: '$_id.other',
           },
           count: { $sum: '$weight' },
           unitPrice: { $first: '$_id.unitPrice' },
@@ -1056,16 +1059,16 @@ export class StoreService {
       },
       {
         $addFields: {
-          name: { $concat: ['$_id.name', ' / ', '$_id.size'] },
+          name: { 
+            $reduce: {
+              input: '$_id.other',
+              initialValue: '',
+              in: { $concat: ["$$value", " / ", "$$this"] }
+            }
+           },
           outDate: '本期发生'
         }
       },
-      {
-        $sort: {
-          '_id.name': 1,
-          '_id.size': 1,
-        }
-      }
     ])
     const price = _.sumBy([
       ...rentResult[0].history,
