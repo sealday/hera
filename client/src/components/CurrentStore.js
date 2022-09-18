@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Select, Button, Card } from 'antd'
+import { Select, Button, Card, Row, Col } from 'antd'
 
 import { selectStore } from '../actions'
 import { filterOption, STORE2TYPE } from '../utils'
@@ -65,38 +65,44 @@ class CurrentStore extends React.Component {
       filteredProjects = projects.filter((project) => userProjects.indexOf(project._id) !== -1);
     }
     return (
-      <Card bordered={false} title='仓库选择' style={{maxWidth: '500px', margin: '0 auto'}}>
-        <div>
-          <Select
-            style={{ width: '25%' }}
-            value={this.state.type}
-            onChange={this.onStoreTypeChange}
-          >
-            {STORE2TYPE.map(type => <Select.Option
-              key={type}
-              value={type}
-            >{type}</Select.Option>)}
-          </Select>
-          <Select
-            style={{ width: '72%', float: 'right' }}
-            value={this.state.base}
-            placeholder='仓库选择'
-            showSearch
-            onChange={this.onBaseChange}
-            filterOption={filterOption}
-            clearable={false}
-          >
-            {filteredProjects.filter(project => project.type === this.state.type).valueSeq().toArray().map(project =>
-              <Select.Option
-                pinyin={project.pinyin}
-                label={project.company + project.name}
-                key={project._id}
-                value={project._id}
-              >{project.company + project.name}</Select.Option>
-            )}
-          </Select>
-          <Button style={{marginTop: '24px'}} type='primary' block onClick={this.onBaseSelect}>进入管理</Button>
-        </div>
+      <Card bordered={false} title='仓库选择' style={{ width: '600px', margin: '12px auto' }}>
+        <Row gutter={24}>
+          <Col flex='125px'>
+            <Select
+              style={{ width: '100%' }}
+              value={this.state.type}
+              onChange={this.onStoreTypeChange}
+            >
+              {STORE2TYPE.map(type => <Select.Option
+                key={type}
+                value={type}
+              >{type}</Select.Option>)}
+            </Select>
+          </Col>
+          <Col flex='auto'>
+            <Select
+              style={{ width: '100%' }}
+              value={this.state.base}
+              placeholder='仓库选择'
+              showSearch
+              onChange={this.onBaseChange}
+              filterOption={filterOption}
+              clearable={false}
+            >
+              {filteredProjects.filter(project => project.type === this.state.type).valueSeq().toArray().map(project =>
+                <Select.Option
+                  pinyin={project.pinyin}
+                  label={project.company + project.name}
+                  key={project._id}
+                  value={project._id}
+                >{project.company + project.name}</Select.Option>
+              )}
+            </Select>
+          </Col>
+          <Col span={24}>
+            <Button style={{ marginTop: '24px' }} type='primary' block onClick={this.onBaseSelect}>进入管理</Button>
+          </Col>
+        </Row>
       </Card>
     )
   }
