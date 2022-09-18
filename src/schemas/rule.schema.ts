@@ -32,6 +32,7 @@ export class Rule {
       name: String,
       size: String,
     },
+    other: [String],
     unitPrice: Number, // 价格
     weight: Number, // 计重
     countType: {

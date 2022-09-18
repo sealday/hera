@@ -87,11 +87,7 @@ export const RecordSchema = new mongoose.Schema({
       name: String,
       size: String,
     },
-    product: {
-      type: { type: String },
-      name: String,
-      size: String
-    },
+    product: [String],
     count: Number,
     comments: String, // 备注
   }],

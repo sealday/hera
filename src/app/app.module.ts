@@ -10,6 +10,7 @@ import { CounterSchema } from 'src/schemas/counter.schema';
 import { RecycleSchema } from 'src/schemas/recycle.schema';
 import { StoreSchema } from 'src/schemas/store.schema';
 import { StoreModule } from 'src/store/store.module';
+import { SystemModule } from 'src/system/system.module';
 import { AuthModule } from '../auth/auth.module';
 import { MongoConfigModule } from '../configs/mongo.module';
 import { EventsModule } from '../events/events.module';
@@ -46,6 +47,7 @@ import { StoreService } from './store.service';
     StoreModule,
     FinanceModule,
     ProjectModule,
+    SystemModule,
     MongooseModule.forFeature([
       { name: 'Users', schema: UsersSchema },
       { name: 'Record', schema: RecordSchema },
