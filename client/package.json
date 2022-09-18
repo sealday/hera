@@ -10,11 +10,11 @@
     "@ant-design/icons": "^4.7.0",
     "@craco/craco": "^7.0.0-alpha.7",
     "@reduxjs/toolkit": "^1.8.5",
-    "@sentry/browser": "^7.12.1",
+    "@sentry/browser": "^7.13.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^14.4.3",
-    "antd": "^4.23.1",
+    "antd": "^4.23.2",
     "axios": "^0.27.2",
     "craco-less": "^2.0.0",
     "file-saver": "^2.0.5",
@@ -57,9 +57,7 @@
   "proxy": "http://localhost:3000/",
   "browserslist": {
     "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
+      "since 2018"
     ],
     "development": [
       "last 1 chrome version",
