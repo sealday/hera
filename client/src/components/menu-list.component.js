@@ -67,6 +67,10 @@ const allMenu = [
         name: '运输单查询',
         path: '/transport_table',
       },
+      {
+        name: '明细查询',
+        path: '/detail_search',
+      }
     ]
   },
   {

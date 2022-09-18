@@ -37,6 +37,7 @@ import RuleCreatePage from '../pages/project/rule/rule.create.page'
 import RuleEditPage from '../pages/project/rule/rule.edit.page'
 import RuleClonePage from '../pages/project/rule/rule.clone.page'
 import OtherPage from '../pages/system/other/other.page'
+import DetailSearchPage from '../pages/report/detail-search.page'
 
 export default ({ onLogin, onLogout }) => <Routes>
   <Route path="/login" element={<Login />} />
@@ -79,6 +80,7 @@ export default ({ onLogin, onLogout }) => <Routes>
     <Route path="rule/:id/clone" element={<RuleClonePage />} />
     <Route path="store" element={<Store />} />
     <Route path="transport_table" element={<TransportSearch />} />
+    <Route path="detail_search" element={<DetailSearchPage />} />
     <Route path="transport_table_company" element={<company.TransportSearch />} />
     <Route path="profile" element={<Profile />} />
     <Route path="settings" element={<Settings />} />

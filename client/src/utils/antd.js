@@ -24,9 +24,12 @@ const ListTable = ({ fields, operation, meta, item, form}) => {
   )
 }
           
-const genFormContent = (schema, cols = 0, form = null) => {
+const genFormContent = (schema, cols = 0, form = null, initialValues = {}) => {
   const formItems = []
   schema.forEach(item => {
+    if (item.default) {
+      initialValues[item.name] = item.default
+    }
     if (item.option) {
       if (item.option.type === 'static_value_only') {
         if (item.option.values.length < 5) {
@@ -55,7 +58,7 @@ const genFormContent = (schema, cols = 0, form = null) => {
           ))
         } else {
           formItems.push((
-            <RefSelect item={item} key={item.name} />
+            <RefSelect item={item} key={item.name} form={form} />
           ))
         }
       }
@@ -72,6 +75,12 @@ const genFormContent = (schema, cols = 0, form = null) => {
       formItems.push((
         <Form.Item key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
           <DatePicker style={{ width: '100%' }} disabled={item.disabled}/>
+        </Form.Item>
+      ))
+    } else if (item.type === 'dateRange') {
+      formItems.push((
+        <Form.Item key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
+          <DatePicker.RangePicker style={{ width: '100%' }} disabled={item.disabled}/>
         </Form.Item>
       ))
     } else if (item.type === 'list') {
