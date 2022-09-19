@@ -24,6 +24,9 @@ export class Other {
   unit: string;
 
   @Prop()
+  display: string;
+
+  @Prop()
   prefix: string;
 
   @Prop()
