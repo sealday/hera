@@ -18,6 +18,9 @@ export class Other {
   comments: string;
 
   @Prop()
+  isAssociated: boolean;
+
+  @Prop()
   unit: string;
 
   @Prop()
