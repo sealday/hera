@@ -76,7 +76,7 @@ export default ({ form, initialValues, onSubmit }) => {
       <Card bordered={false} title='明细信息' style={styles.keepSpace}>
         <Row>
           <Col span={24}>
-            <Form.List name="entries" >
+            <Form.List name="entries">
               {(fields, operation, meta) => <EntryForm fields={fields} operation={operation} meta={meta} />}
             </Form.List>
           </Col>

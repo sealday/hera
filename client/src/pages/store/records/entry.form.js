@@ -1,5 +1,5 @@
 import { MinusCircleOutlined, PaperClipOutlined, PlusCircleOutlined } from "@ant-design/icons"
-import { Button, Form, Input, Space, Table, Tooltip } from "antd"
+import { Button, Descriptions, Form, Input, Space, Table, Tooltip } from "antd"
 import _ from "lodash"
 import { RefCascader } from "../../../components"
 import { buildProductTree, toFixedWithoutTrailingZero as fixed } from "../../../utils"
@@ -58,6 +58,55 @@ const WeightLabel = ({ field }) => {
   } else {
     return ''
   }
+}
+
+const Summary = () => {
+  const form = Form.useFormInstance()
+  const entries = Form.useWatch('entries', form)
+  const result = heraApi.useGetProductListQuery()
+  if (_.isUndefined(entries)) {
+    return ''
+  }
+  // 排除空值
+  const validEntries = _.filter(entries, entry => !_.isUndefined(entry) && !_.isEmpty(entry.product) && !_.isUndefined(entry.count) && !_.isEmpty(entry.count))
+  if (result.isError || result.isLoading || validEntries.length === 0) {
+    return ''
+  }
+  // 关联数据
+  const equippedEntries = validEntries.map(entry => ({
+    ...result.data.find(item =>
+      item.type === entry.product[0] &&
+      item.name === entry.product[1] &&
+      item.size === entry.product[2]
+    ),
+    ...entry
+  })).filter(item => !_.isUndefined(item.weight))
+  // 计算结果
+  const calculatedEntries = equippedEntries.map(item => ({
+    ...item,
+    total: item.isScaled ? item.count * item.scale : item.count,
+    weight: item.count * item.weight / 1000,
+  }))
+  // reduce
+  const resultEntries = _.reduce(calculatedEntries, (result, item) => {
+    if (_.isUndefined(result[`${item.type}|${item.name}`])) {
+      result[`${item.type}|${item.name}`] = {
+        count: 0,
+        unit: item.isScaled ? item.unit : item.countUnit,
+      }
+    }
+    result[`${item.type}|${item.name}`].count += item.total
+    result['理论重量'].count += item.weight
+    return result
+  }, { 理论重量: { count: 0, unit: '吨' } })
+  const items = _.map(resultEntries, (v, k)=> (
+    <Descriptions.Item key={k} label={k}>{fixed(v.count)}{v.unit}</Descriptions.Item>
+  ))
+  return (
+    <Descriptions title='小结'>
+      {items}
+    </Descriptions>
+  )
 }
 
 export default ({ fields, operation, meta }) => {
@@ -153,7 +202,7 @@ export default ({ fields, operation, meta }) => {
     </Space>
   })
   return <>
-    <Table columns={columns} dataSource={fields} pagination={false} size='small' />
+    <Table columns={columns} dataSource={fields} pagination={false} size='small' footer={Summary} />
     <Button type="dashed" block onClick={() => operation.add()} icon={<PlusCircleOutlined />}>增加</Button>
   </>
 }
