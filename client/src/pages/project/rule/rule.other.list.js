@@ -19,9 +19,9 @@ export default ({ form }) => (
     <Row gutter={8}>
       <Col style={styles.titleContainer} flex='70px'>层级</Col>
       <Col style={styles.titleContainer} flex='300px'>关联产品</Col>
-      <Col style={styles.titleContainer} flex='300px'>计费项目</Col>
+      <Col style={styles.titleContainer} flex='200px'>计费项目</Col>
       <Col style={styles.titleContainer} flex='100px'>单价</Col>
-      <Col style={styles.titleContainer} flex='100px'>计算类型</Col>
+      <Col style={styles.titleContainer} flex='110px'>计算类型</Col>
       <Col style={styles.titleContainer} flex='auto'>备注</Col>
       <Col style={styles.titleContainer} flex='20px'></Col>
     </Row>
@@ -59,7 +59,7 @@ export default ({ form }) => (
                   }}
                 </Form.Item>
               </Col>
-              <Col flex='300px'>
+              <Col flex='200px'>
                 <RefCascader
                   item={{ required: true, name: [field.name, 'other'], option: { ref: 'other', label: 'name', value: 'id' } }}/>
               </Col>
@@ -68,7 +68,7 @@ export default ({ form }) => (
                   <Input />
                 </Form.Item>
               </Col>
-              <Col flex='100px'>
+              <Col flex='110px'>
                 <Form.Item {...field} name={[field.name, 'countType']}>
                   <Select options={[
                     { label: '数量', value: '数量' },
