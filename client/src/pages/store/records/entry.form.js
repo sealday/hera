@@ -191,7 +191,7 @@ export default ({ fields, operation, meta }) => {
       <Tooltip title='新增关联'><Button icon={<PaperClipOutlined />} type='text' onClick={() => {
         const product = form.getFieldValue('entries')[i].product
         if (_.isEmpty(product)) return;
-        const complement = { level: 'associated', associate: JSON.stringify(product), direction: '出' }
+        const complement = { level: 'associated', associate: JSON.stringify(product), direction: '无' }
         if (typeof form.getFieldValue('complements') === 'undefined') {
           form.setFieldValue('complements', [complement])
         } else {

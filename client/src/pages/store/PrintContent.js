@@ -3,7 +3,9 @@ import { each } from "lodash"
 import moment from "moment"
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
-import { IfShow } from "../../components"
+import heraApi from '../../api'
+import { Error, IfShow, Loading, RefCascaderLabel } from "../../components"
+import { PROJECT_STATUS_MAP } from '../../constants'
 import {
   toFixedWithoutTrailingZero as fixed,
   total_,
@@ -13,6 +15,8 @@ import {
 
 // 表格内容
 const PrintContent = ({ record, columnStyle, selectedTitle }) => {
+  const contracts = heraApi.useGetContractListQuery()
+  const getOtherList = heraApi.useGetOtherListQuery()
   const store = useSelector(state => state.system.store)
   const projects = useSelector(state => state.system.projects)
   const config = useSelector(state => state.system.config)
@@ -37,21 +41,6 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
   if (record.inStock) {
     content.partB = projects.get(record.inStock).company + projects.get(record.inStock).name
   }
-
-  const unconnectedContent = _
-    .chain(record.complements)
-    .filter(item => item.level === 'unconnected')
-    .map(item => item.product.name + item.product.size + item.count)
-    .value()
-    .join('；')
-  
-  const associatedContentKV = {}
-  _.filter(record.complements, item => item.level === 'associated')
-    .forEach(item => {
-      associatedContentKV[makeKeyFromNameSize(item.associate.name, item.associate.size)]
-        = item.product.name + item.product.size + item.count + '；'
-        + _.toString(associatedContentKV[makeKeyFromNameSize(item.associate.name, item.associate.size)])
-    })
 
   // 出入库判断
   // TODO 对于采购单，如果出现直接采购送往对应项目，那么单据的内容标签是否不合适
@@ -111,6 +100,16 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
     content.inLabel = '租借单位'
   }
 
+  const isRent = () => record.type === '调拨'
+  const getProject = () => record.inStock === store._id
+    ? projects.get(record.outStock)
+    : projects.get(record.inStock)
+  const getContract = () => {
+    const project = getProject()
+    return contracts.data.find(item => item.project === project._id)
+  }
+  
+
   content.explain = `说明：如供需双方未签正式合同，本${content.orderName}经供需双方代表签字确认后，
   将作为合同及发生业务往来的有效凭证，如已签合同，则成为该合同的组成部分。${content.signer}须核对
   以上产品规格、数量确认后可签字认可。`
@@ -126,6 +125,29 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
       setOrderTitle(content.project.associatedCompany)
     }
   }, [content.project.associatedCompany])
+
+  if (contracts.isError || getOtherList.isError) {
+    return <Error />
+  }
+  if (contracts.isLoading || getOtherList.isLoading) {
+    return <Loading />
+  }
+  
+  // 补充信息处理
+  const associatedMap = {}
+  const unconnected = []
+  record.complements.forEach(item => {
+    if (item.level === 'associated') {
+      const associate = item.associate
+      const key = `${associate.type}|${associate.name}|${associate.size}`
+      if (_.isUndefined(associatedMap[key])) {
+        associatedMap[key] = []
+      }
+      associatedMap[key].push(item)
+    } else {
+      unconnected.push(item)
+    }
+  })
 
   // 计算打印内容
   const entries = {}
@@ -148,17 +170,68 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
   articles.forEach(article => {
     productTypeMap[article.name] = article
   })
+  const productItem = {
+    name: 'product',
+    label: '项目',
+    type: 'text',
+    option: {
+      type: 'ref',
+      ref: 'other',
+      label: 'name',
+      value: 'id',
+      select: 'cascader',
+    },
+    name: 'count',
+    label: '数量',
+    type: 'text',
+  }
   const printEntries = []
   each(entries, (v, name) => {
-    printEntries.push(...entries[name].map(entry => [
-      entry.name,
-      entry.size,
-      entry.count + ' ' + productTypeMap[name].countUnit,
-      fixed(total_(entry, products)) + getUnit(productTypeMap[name]),
-      entry.price ? '￥' + entry.price : '',
-      entry.price ? '￥' + fixed(total_(entry, products) * entry.price) : '',
-      entry.comments,
-    ]))
+    entries[name].forEach(entry => {
+      printEntries.push([
+        entry.name,
+        entry.size,
+        entry.count + ' ' + productTypeMap[name].countUnit,
+        fixed(total_(entry, products)) + getUnit(productTypeMap[name]),
+        entry.price ? '￥' + entry.price : '',
+        entry.price ? '￥' + fixed(total_(entry, products) * entry.price) : '',
+        entry.comments,
+      ])
+      if (associatedMap[`${entry.type}|${entry.name}|${entry.size}`]) {
+        associatedMap[`${entry.type}|${entry.name}|${entry.size}`].forEach(item => {
+          const associatedLabel = {
+            colSpan: 2,
+            children: <RefCascaderLabel item={productItem} value={item.product} />
+          }
+          const product = _.find(getOtherList.data, other => other.id === _.last(item.product))
+          if (product.isAssociated) {
+            const associatedEntry =
+              [
+                associatedLabel,
+                item.count + ' ' + productTypeMap[entry.name].countUnit,
+                fixed(total_({ ...entry, count: item.count }, products)) + getUnit(productTypeMap[name]),
+                { hidden: true, children: '' },
+                '',
+                '',
+                item.comments,
+              ]
+            printEntries.push(associatedEntry)
+          } else {
+            const associatedEntry =
+              [
+                associatedLabel,
+                item.count + ' ' + product.unit,
+                '',
+                { hidden: true, children: '' },
+                '',
+                '',
+                item.comments,
+              ]
+            printEntries.push(associatedEntry)
+          }
+        })
+      }
+    })
     amount += sum[name] // 计算总金额
     printEntries.push(
       [
@@ -172,6 +245,26 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
       ]
     )
   })
+  // 补充
+  unconnected.forEach(item => {
+    const associatedLabel = {
+      colSpan: 2,
+      children: <RefCascaderLabel item={productItem} value={item.product} />
+    }
+    const product = _.find(getOtherList.data, other => other.id === _.last(item.product))
+    const associatedEntry =
+      [
+        associatedLabel,
+        item.count + ' ' + product.unit,
+        '',
+        { hidden: true, children: '' },
+        '',
+        '',
+        item.comments,
+      ]
+    printEntries.push(associatedEntry)
+  })
+
   let slice = 5
   let leftSlice = 3
   let ignoreIndexes = [4, 5, 11, 12]
@@ -215,20 +308,60 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
       <h4 className="text-center">{selectedTitle ? selectedTitle: orderTitle}</h4>
       <h4 className="text-center">{content.orderName}</h4>
       <table style={{ tableLayout: 'fixed', fontSize: '11px', width: '100%' }}>
-        <colgroup>
-          <col style={{ width: '50%' }} />
-        </colgroup>
+        {
+          isRent()
+            ?
+            <colgroup>
+              <col style={{ width: '25%' }} />
+              <col style={{ width: '55%' }} />
+              <col style={{ width: '20%' }} />
+            </colgroup>
+            :
+            <colgroup>
+              <col style={{ width: '50%' }} />
+            </colgroup>
+        }
         <tbody>
-          <tr>
-            <td><IfShow cond={content.partA}>{content.partALabel}：{content.partA}</IfShow></td>
-            <td>日期：{moment(record.outDate).format('YYYY-MM-DD')}</td>
-            <td>流水号：{record.number}</td>
-          </tr>
-          <tr>
-            <td><IfShow cond={content.partB}>{content.partBLabel}：{content.partB}</IfShow></td>
-            <td>车号：{record.carNumber}</td>
-            <td>原始单号：{record.originalOrder}</td>
-          </tr>
+          {isRent() 
+          ? (
+              <>
+                <tr>
+                  <td>客户号：</td>
+                  <td><IfShow cond={content.partA}>承租单位：{content.partA}</IfShow></td>
+                  <td>日期：{moment(record.outDate).format('YYYY-MM-DD')}</td>
+                </tr>
+                <tr>
+                  <td>合同编号：{_.get(getContract(), 'code', '')}</td>
+                  <td><IfShow cond={content.partB}>项目名称：{content.partB}</IfShow></td>
+                  <td>流水号：{record.number}</td>
+                </tr>
+                <tr>
+                  <td>状态：{_.get(getContract(), 'status', PROJECT_STATUS_MAP[getProject().status])}</td>
+                  <td>项目地址：{getProject().address}</td>
+                  <td>原始单号：{record.originalOrder}</td>
+                </tr>
+                <tr>
+                  <td>经办人及电话：</td>
+                  <td>项目联系人电话：{getProject().contacts.map(user => user.name + ' ' + user.phone).join(' ')}</td>
+                  <td>车号：{record.carNumber}</td>
+                </tr>
+              </>
+          )
+            : (
+              <>
+                <tr>
+                  <td><IfShow cond={content.partA}>{content.partALabel}：{content.partA}</IfShow></td>
+                  <td>日期：{moment(record.outDate).format('YYYY-MM-DD')}</td>
+                  <td>流水号：{record.number}</td>
+                </tr>
+                <tr>
+                  <td><IfShow cond={content.partB}>{content.partBLabel}：{content.partB}</IfShow></td>
+                  <td>车号：{record.carNumber}</td>
+                  <td>原始单号：{record.originalOrder}</td>
+                </tr>
+              </>
+            )
+          }
         </tbody>
       </table>
       <table className="table table-bordered table--tight" style={{
@@ -252,7 +385,12 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
               {row
                 .filter((_name, index) => !ignoreIndexes.includes(index))
                 .map((col, index) => (
-                  <td key={index}>{col}</td>
+                  <td
+                    key={index}
+                    style={_.get(col, 'hidden', false) ? { display: 'none' } : {}}
+                    colSpan={_.get(col, 'colSpan', 1)}>
+                    {_.get(col, 'children', col)}
+                  </td>
                 ))}
             </tr>
           ))}

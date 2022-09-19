@@ -22,3 +22,8 @@ export const RULE_CATEGORIES = [
 ]
 
 export const CAR_NUMBERS = ['自备车', '直送', '自提', '转账', '转单', '合车']
+
+export const PROJECT_STATUS_MAP = {
+  'UNDERWAY': '进行',
+  'FINISHED': '完结',
+}
