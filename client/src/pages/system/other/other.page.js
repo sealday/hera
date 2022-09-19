@@ -7,13 +7,14 @@ import { useEffect } from 'react'
 import _ from 'lodash'
 import { buildTree } from '../../../utils'
 import { PlusCircleOutlined } from '@ant-design/icons'
+import { genTableColumn } from '../../../utils/antd'
 
 
 export default () => {
   const [deleteOther, deleteResult] = heraApi.useDeleteOtherMutation()
   const [createOther, createResult] = heraApi.useCreateOtherMutation()
   const [updateOther, updateResult] = heraApi.useUpdateOtherMutation()
-  const columns = otherSchema.map(item => ({ key: item.name, title: item.label, dataIndex: item.name }))
+  const columns = genTableColumn(otherSchema)
   const onCreate = (v) => {
     createOther({ ...v, parentId: '-1' })
   }

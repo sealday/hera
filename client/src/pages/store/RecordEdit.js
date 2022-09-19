@@ -38,7 +38,6 @@ export default () => {
     record.complements = _.map(record.complements, item => {
       const complement = {
         ...item,
-        product: _.last(item.product),
       }
       if (item.level === 'associated') {
         const associateArray = JSON.parse(item.associate)

@@ -35,7 +35,6 @@ const TotalLabel = ({ field }) => {
   if (result.isError || result.isLoading || _.isEmpty(product) || _.isNaN(count) || _.isUndefined(count)) {
     return ''
   }
-  console.log(count)
   const fetchResult = _.filter(result.data, item => item.type === product[0] && item.name === product[1] && item.size === product[2])
   if (fetchResult.length > 0) {
     return fixed(fetchResult[0].isScaled ? fetchResult[0].scale * count : count)
@@ -192,7 +191,7 @@ export default ({ fields, operation, meta }) => {
       <Tooltip title='新增关联'><Button icon={<PaperClipOutlined />} type='text' onClick={() => {
         const product = form.getFieldValue('entries')[i].product
         if (_.isEmpty(product)) return;
-        const complement = { level: 'associated', associate: JSON.stringify(product) }
+        const complement = { level: 'associated', associate: JSON.stringify(product), direction: '出' }
         if (typeof form.getFieldValue('complements') === 'undefined') {
           form.setFieldValue('complements', [complement])
         } else {

@@ -28,7 +28,7 @@ export default ({ form, initialValues, onSubmit }) => {
     },
   }
   return (
-    <Form onFinish={onSubmit} form={form} colon={false} labelCol={{ flex: '5em' }} labelWrap initialValues={initialValues}>
+    <Form preserve={false} onFinish={onSubmit} form={form} colon={false} labelCol={{ flex: '5em' }} labelWrap initialValues={initialValues}>
       <Card bordered={false} title='基础信息'>
         <Row gutter={24}>
           {settings.project ? <Col span={8}>

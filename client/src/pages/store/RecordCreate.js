@@ -19,6 +19,10 @@ export default () => {
   const type = searchParams.get('type')
   const direction = searchParams.get('direction')
   const store = useSelector(state => state.system.store)
+  // 切换页面不保存表单记录
+  useEffect(() => {
+    form.resetFields()
+  }, [type, direction])
   // 创建结果
   useEffect(() => {
     if (createResult.isSuccess) {

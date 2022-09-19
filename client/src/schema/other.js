@@ -15,6 +15,11 @@ export default [
         "type": "text"
     },
     {
+        "label": "是否使用关联产品单位",
+        "name": "isAssociated",
+        "type": "boolean",
+    },
+    {
         "label": "打印前缀",
         "name": "prefix",
         "type": "text"

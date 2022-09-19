@@ -12,7 +12,6 @@ export default ({ item, value }) => {
     return <Loading />
   }
   const labels = _.map(value, v => _.find(result.data, item => item[valueKey] === v)[labelKey])
-  debugger
   return (
     <span>{labels.join(' / ')}</span>
   ) 
