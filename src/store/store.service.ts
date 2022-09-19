@@ -1141,4 +1141,188 @@ export class StoreService {
     const result = await this.recordModel.aggregate(expr)
     return result
   }
+
+
+  async detailSearch(condition: any, user: User) {
+    this.loggerService.logInfo(user, '查询', { message: '查询库存信息', payload: condition })
+    const pipeline = []
+    // 关联仓库/项目
+    if (condition.projectId) {
+      pipeline.push({
+        $match: {
+          $or: [
+            {
+              outStock: new Types.ObjectId(condition.storeId),
+              inStock: new Types.ObjectId(condition.projectId),
+            },
+            {
+              inStock: new Types.ObjectId(condition.storeId),
+              outStock: new Types.ObjectId(condition.projectId),
+            }
+          ]
+        }
+      })
+    } else {
+      pipeline.push({
+        $match: {
+          $or: [
+            {
+              outStock: new Types.ObjectId(condition.storeId),
+            },
+            {
+              inStock: new Types.ObjectId(condition.storeId),
+            }
+          ]
+        }
+      })
+    }
+    // 关联日期范围
+    if (condition.startDate && condition.endDate) {
+      pipeline.push({
+        $match: {
+          outDate: {
+            $gte: new Date(condition.startDate),
+            $lt: new Date(condition.endDate),
+          }
+        }
+      })
+    }
+    // 前置映射
+    pipeline.push({
+      $addFields: {
+        projectId: {
+          $cond: {
+            if: { $eq: ['$inStock', new Types.ObjectId(condition.storeId)] },
+            then: '$outStock',
+            else: '$inStock'
+          }
+        },
+
+      }
+    })
+
+    // 关联
+    pipeline.push({
+      $unwind: '$entries'
+    })
+    pipeline.push({
+      $match: {
+        'entries.type': condition.type,
+      }
+    })
+    if (condition.name) {
+      pipeline.push({
+        $match: {
+          'entries.name': condition.name,
+        }
+      })
+    }
+    if (condition.size) {
+      pipeline.push({
+        $match: {
+          'entries.size': condition.size,
+        }
+      })
+    }
+    // 后置映射
+    pipeline.push({
+      $project: {
+        type: '$entries.type',
+        name: '$entries.name',
+        size: '$entries.size',
+        number: '$number',
+        projectId: '$projectId',
+        count: '$entries.count',
+        in: {
+          $cond: {
+            if: { $eq: ['$inStock', new Types.ObjectId(condition.storeId)] },
+            then: '$entries.count',
+            else: 0
+          }
+        },
+        out: {
+          $cond: {
+            if: { $eq: ['$outStock', new Types.ObjectId(condition.storeId)] },
+            then: '$entries.count',
+            else: 0
+          }
+        },
+      }
+    })
+    // 关联产品表
+    pipeline.push({
+      $lookup: {
+        from: 'products',
+        let: { productType: '$type', productName: '$name', productSize: '$size' },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $and: [
+                  { $eq: ['$type', '$$productType'] },
+                  { $eq: ['$name', '$$productName'] },
+                  { $eq: ['$size', '$$productSize'] },
+                ]
+              }
+            }
+          }
+        ],
+        as: 'products',
+      }
+    })
+    pipeline.push({
+      $unwind: '$products'
+    })
+    // 计算结果
+    pipeline.push({
+      $addFields: {
+        unit: {
+          $cond: {
+            if: '$products.isScaled',
+            then: '$products.unit',
+            else: '$products.countUnit',
+          }
+        },
+        total: {
+          $cond: {
+            if: '$products.isScaled',
+            then: { $add: [{ $multiply: ['$in', '$products.scale'] }, { $multiply: ['$out', '$products.scale', -1] }] },
+            else: { $add: ['$in', { $multiply: ['$out', -1] }] },
+          }
+        }
+      }
+    })
+    // 汇总结果
+    pipeline.push({
+      $group: {
+        _id: {
+          projectId: '$projectId',
+          type: '$type',
+          name: '$name',
+          size: '$size',
+        },
+        in: { $sum: '$in' },
+        out: { $sum: '$out' },
+        total: { $sum: '$total' },
+        unit: { $first: '$unit' },
+        numbers: { $push: '$number' },
+      }
+    })
+    // 字段映射
+    pipeline.push({
+      $project: {
+        projectId: '$_id.projectId',
+        type: '$_id.type',
+        name: '$_id.name',
+        size: '$_id.size',
+        in: '$in',
+        out: '$out',
+        total: '$total',
+        unit: '$unit',
+        numbers: '$number',
+      }
+    })
+    const result = await this.recordModel.aggregate(pipeline)
+    return result
+  }
 }

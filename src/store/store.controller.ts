@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, UseGuards, UseInterceptors } from '@nestjs/common';
 import { Types } from 'mongoose';
 import { Auth } from 'src/app/user.decorator';
 import { WrapperInterceptor } from 'src/app/wrapper.interceptor';
@@ -6,6 +6,8 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { User } from 'src/users/users.service';
 
 import { StoreService } from './store.service';
+
+
 
 @Controller('store')
 @UseInterceptors(WrapperInterceptor)
@@ -20,6 +22,13 @@ export class StoreController {
     const params = JSON.parse(condition)
     const search = await this.storeService.search(params, user)
     return { search }
+  }
+
+  @Post('detail_search')
+  async detailSearch(@Body() condition: any, @Auth() user: User) {
+    // TODO 检查参数
+    const search = await this.storeService.detailSearch(condition, user)
+    return search
   }
 
   @Get(':id')
