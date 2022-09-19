@@ -217,7 +217,7 @@ const genTableFormColumn = (parent, form = null) => {
     } else {
       if (item.formula) {
         column.render = (_text, field) => (
-          <DepLabel form={form} field={field} item={item} parent={parent} />
+          <DepLabel field={field} item={item} parent={parent} />
         )
       } else {
         column.render = (_text, field) => (
