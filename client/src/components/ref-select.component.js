@@ -18,8 +18,6 @@ const RefSelectComponent = ({ item, noStyle }) => {
     return (
       <Form.Item noStyle dependencies={namePath}>
         {() => {
-          // form.resetFields([item.name])
-          console.log('--- updating ----')
           const filters = _.map(item.option.filters, item => ({ name: item.name, value: form.getFieldValue(item.value) }))
           let data = _.chain(result.data)
           data = data.filter(record => _.every(filters, filter => record[filter.name] === filter.value))

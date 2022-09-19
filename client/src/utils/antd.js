@@ -2,7 +2,8 @@ import { MinusCircleOutlined, PlusCircleOutlined } from "@ant-design/icons"
 import { Button, Col, DatePicker, Form, Input, Radio, Row, Select, Table } from "antd"
 import _ from "lodash"
 import moment from "moment"
-import { DepLabel, RefCascader, RefCascaderLabel, RefLabel, RefSelect } from "../components"
+import { toFixedWithoutTrailingZero } from "."
+import { DateRangeFooter, DepLabel, RefCascader, RefCascaderLabel, RefLabel, RefSelect } from "../components"
 
 const ListTable = ({ fields, operation, meta, item, form}) => {
   const columns = genTableFormColumn(item, form).concat([
@@ -80,7 +81,9 @@ const genFormContent = (schema, cols = 0, form = null, initialValues = {}) => {
     } else if (item.type === 'dateRange') {
       formItems.push((
         <Form.Item key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
-          <DatePicker.RangePicker style={{ width: '100%' }} disabled={item.disabled}/>
+          <DatePicker.RangePicker style={{ width: '100%' }} disabled={item.disabled}
+            renderExtraFooter={() => <DateRangeFooter namepath={item.name} />}
+          />
         </Form.Item>
       ))
     } else if (item.type === 'list') {
@@ -156,7 +159,11 @@ const genTableColumn = schema => {
     } else if (item.type === 'boolean') {
       columns.push({ title: item.label, dataIndex: item.name, key: item.name, render(v) { return v ? '是' : '否' } })
     } else if (item.type === 'number') {
-      columns.push({ title: item.label, dataIndex: item.name, key: item.name })
+      if (item.format === 'fixed') {
+        columns.push({ title: item.label, dataIndex: item.name, key: item.name, render: v => toFixedWithoutTrailingZero(v) })
+      } else {
+        columns.push({ title: item.label, dataIndex: item.name, key: item.name })
+      }
     }
   })
   return columns

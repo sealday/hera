@@ -232,6 +232,7 @@ export { default as RefCascader } from './ref-cascader.component'
 export { default as RefLabel } from './ref-label.component'
 export { default as RefCascaderLabel } from './ref-cascader-label.component'
 export { default as DepLabel } from './dep-label.component'
+export { default as DateRangeFooter } from './date-range-footer.component'
 
 export const withRouter = (Component) => {
   const Wrapper = (props) => {

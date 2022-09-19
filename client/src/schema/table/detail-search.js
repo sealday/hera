@@ -12,7 +12,7 @@ export default [
   },
   {
     name: "projectId",
-    label: "规格",
+    label: "仓库/项目",
     type: "text",
     option: {
       type: 'ref',
@@ -35,6 +35,7 @@ export default [
     name: 'total',
     label: '小计',
     type: 'number',
+    format: 'fixed',
   },
   {
     name: 'unit',
