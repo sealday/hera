@@ -1276,6 +1276,7 @@ export class StoreService {
     // 计算结果
     pipeline.push({
       $addFields: {
+        productNumber: '$products.number',
         unit: {
           $cond: {
             if: '$products.isScaled',
@@ -1300,12 +1301,18 @@ export class StoreService {
           type: '$type',
           name: '$name',
           size: '$size',
+          productNumber: '$productNumber',
         },
         in: { $sum: '$in' },
         out: { $sum: '$out' },
         total: { $sum: '$total' },
         unit: { $first: '$unit' },
         numbers: { $push: '$number' },
+      }
+    })
+    pipeline.push({
+      $sort: {
+        '_id.productNumber': 1
       }
     })
     // 字段映射
