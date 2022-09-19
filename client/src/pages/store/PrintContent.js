@@ -199,11 +199,11 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
       ])
       if (associatedMap[`${entry.type}|${entry.name}|${entry.size}`]) {
         associatedMap[`${entry.type}|${entry.name}|${entry.size}`].forEach(item => {
+          const product = _.find(getOtherList.data, other => other.id === _.last(item.product))
           const associatedLabel = {
             colSpan: 2,
-            children: <RefCascaderLabel item={productItem} value={item.product} />
+            children: _.get(product, 'display', <RefCascaderLabel item={productItem} value={item.product} />)
           }
-          const product = _.find(getOtherList.data, other => other.id === _.last(item.product))
           if (product.isAssociated) {
             const associatedEntry =
               [
@@ -247,14 +247,14 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
   })
   // 补充
   unconnected.forEach(item => {
+    const product = _.find(getOtherList.data, other => other.id === _.last(item.product))
     const associatedLabel = {
       colSpan: 2,
-      children: <RefCascaderLabel item={productItem} value={item.product} />
+      children: _.get(product, 'display', <RefCascaderLabel item={productItem} value={item.product} />) 
     }
-    const product = _.find(getOtherList.data, other => other.id === _.last(item.product))
     const associatedEntry =
       [
-        associatedLabel,
+         associatedLabel,
         item.count + ' ' + product.unit,
         '',
         { hidden: true, children: '' },

@@ -20,13 +20,8 @@ export default [
         "type": "boolean",
     },
     {
-        "label": "打印前缀",
-        "name": "prefix",
-        "type": "text"
-    },
-    {
-        "label": "打印后缀",
-        "name": "suffix",
+        "label": "显示名称",
+        "name": "display",
         "type": "text"
     },
     {
