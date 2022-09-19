@@ -23,6 +23,13 @@ export default () => {
   const onItemUpdate = (item, values) => {
     updateOther({ id: item._id, other: { ...item, ...values } })
   }
+  const onItemDelete = item => {
+    if (_.size(item.children) > 0) {
+      message.error(`【${item.name}】下面有子节点，请勿删除。`)
+    } else {
+      deleteOther(item._id)
+    }
+  }
   columns.push({
     key: 'action',
     title: '操作',
@@ -31,7 +38,7 @@ export default () => {
         <Space>
           <PopoverFormButton onSubmit={v => onItemCreate(v, item.id)} schema={otherSchema}>新增</PopoverFormButton>
           <PopoverFormButton initialValues={item} onSubmit={v => onItemUpdate(item, v)} schema={otherSchema}>编辑</PopoverFormButton>
-          <Popconfirm onConfirm={() => deleteOther(item._id)} title='确认删除？'>
+          <Popconfirm onConfirm={() => onItemDelete(item)} title='确认删除？'>
             <Button type='text' danger >删除</Button>
           </Popconfirm>
         </Space>
@@ -46,13 +53,17 @@ export default () => {
     return <Loading />
   }
   // 排序
-  const others = _.cloneDeep(getOtherListQuery.data).sort((a, b) => Number(a.id) - Number(b.id))
+  const others = _.cloneDeep(getOtherListQuery.data).sort((a, b) => {
+    const aValue  = _.reduce(a.id.split('.'), (result, v) => result * 1000 + v, 0)
+    const bValue  = _.reduce(b.id.split('.'), (result, v) => result * 1000 + v, 0)
+    return aValue - bValue
+  })
   const dataSource = buildTree(others)
   return (
     <PageHeader
       title='费用信息'
     >
-      <ConfigProvider componentSize='small'>
+      <ConfigProvider>
         <TreeTable
           actions={
             <PopoverFormButton
