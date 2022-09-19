@@ -655,3 +655,19 @@ export const product2array = (product, condition = true) => condition
 export const array2product = (array, condition = true) => condition
   ? ({ type: array[0], name: array[1], size: array[2] })
   : ({ type: array[0], name: array[1] })
+
+/**
+ * 
+ * @param {*} projects 
+ * @param {*} user 
+ * @returns
+ */
+export const filterProjects = (projects, user) => {
+  if (user.role === '项目部管理员' || user.role === '基地仓库管理员') {
+    const perms = user.perms || [];
+    const userProjects = perms.filter((p) => p.query).map((p) => p.projectId);
+    return projects.filter((project) => userProjects.indexOf(project._id) !== -1);
+  } else {
+    return projects
+  }
+}

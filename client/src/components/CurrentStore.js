@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Select, Button, Card, Row, Col } from 'antd'
 
 import { selectStore } from '../actions'
-import { filterOption, STORE2TYPE } from '../utils'
+import { filterOption, filterProjects, STORE2TYPE } from '../utils'
 
 class CurrentStore extends React.Component {
   constructor(props) {
@@ -58,12 +58,7 @@ class CurrentStore extends React.Component {
 
   render() {
     const { projects, user } = this.props.system;
-    let filteredProjects = projects;
-    if (user.role === '项目部管理员' || user.role === '基地仓库管理员') {
-      const perms = user.perms || [];
-      const userProjects = perms.filter((p) => p.query).map((p) => p.projectId);
-      filteredProjects = projects.filter((project) => userProjects.indexOf(project._id) !== -1);
-    }
+    const filteredProjects = filterProjects(projects, user)
     return (
       <Card bordered={false} title='仓库选择' style={{ width: '600px', margin: '12px auto' }}>
         <Row gutter={24}>

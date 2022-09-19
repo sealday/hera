@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { useSelector } from 'react-redux'
 import { history, BASENAME } from '../globals'
 
 const baseQuery = fetchBaseQuery({
@@ -606,9 +607,12 @@ export const heraApi = createApi({
 
 const useGetProjectListQuery = () => {
     const getProjectList = heraApi.useGetProjectListAllQuery()
+    const store = useSelector(state => state.system.store)
     const result = {
         ...getProjectList,
-        data: getProjectList.data ? getProjectList.data.filter(item => item.status === 'UNDERWAY') : getProjectList.data,
+        data: getProjectList.data
+            ? getProjectList.data.filter(item => item.status === 'UNDERWAY' && item._id !== store._id)
+            : getProjectList.data,
     }
     return result 
 }
