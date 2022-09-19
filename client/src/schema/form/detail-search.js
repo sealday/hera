@@ -39,7 +39,7 @@ export default [
   },
   {
     name: "projectType",
-    label: "类别",
+    label: "仓库类型",
     type: "text",
     default: '项目仓库',
     option: {

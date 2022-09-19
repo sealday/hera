@@ -77,7 +77,7 @@ export default ({ form, initialValues, onSubmit }) => {
         <Row>
           <Col span={24}>
             <Form.List name="entries" >
-              {(fields, operation, meta) => <EntryForm fields={fields} operation={operation} meta={meta} form={form} />}
+              {(fields, operation, meta) => <EntryForm fields={fields} operation={operation} meta={meta} />}
             </Form.List>
           </Col>
         </Row>
@@ -86,7 +86,7 @@ export default ({ form, initialValues, onSubmit }) => {
         <Row>
           <Col span={24}>
             <Form.List name="complements" >
-              {(fields, operation, meta) => <ComplementForm fields={fields} operation={operation} meta={meta} form={form} />}
+              {(fields, operation, meta) => <ComplementForm fields={fields} operation={operation} meta={meta} />}
             </Form.List>
           </Col>
         </Row>

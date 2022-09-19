@@ -233,7 +233,7 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
       </table>
       <table className="table table-bordered table--tight" style={{
         tableLayout: 'fixed',
-        fontSize: '10px',
+        fontSize: '11px',
         marginBottom: '0',
         width: '100%',
       }}>

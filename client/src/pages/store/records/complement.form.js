@@ -9,7 +9,8 @@ const styles = {
 }
 const rules = [{ required: true }]
 
-export default ({ fields, operation, meta, form }) => {
+export default ({ fields, operation, meta }) => {
+  const form = Form.useFormInstance()
   const entries = Form.useWatch(['entries'])
   const levelOptions = [
     { label: '关联', value: 'associated' },

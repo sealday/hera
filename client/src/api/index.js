@@ -592,6 +592,15 @@ export const heraApi = createApi({
             transformResponse: res => res.data,
             invalidatesTags: (_result, _error, id) => [{ type: 'Other', id }],
         }),
+        // 搜索
+        detailSearch: builder.mutation({
+            query: (condition) => ({
+                url: `store/detail_search`,
+                method: 'POST',
+                body: condition,
+            }),
+            transformResponse: res => res.data,
+        }),
     })
 })
 

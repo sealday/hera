@@ -6,6 +6,7 @@ import { isUpdatable } from '../utils'
 import { useSelector } from 'react-redux'
 import ModalFormButton from './button/modal-form.button'
 import ModalPrintPreviewButton from './button/modal-print-preview.button'
+import { genFormContent } from '../utils/antd'
 
 export default ({
   title,
@@ -18,6 +19,7 @@ export default ({
   onPrint,
   searchInfo,
   onSearch,
+  search,
   onSave,
   searchForm,
   description,
@@ -101,6 +103,14 @@ export default ({
       <searchForm.Form key='searchForm' initialValues={searchForm.initialValues} ref={mSearchForm} onSubmit={searchForm.onSubmit} {...otherSearchFormProps} />
     )
   }
+  if (search) {
+    actions.push(<Button key='onReset' onClick={() => form.resetFields()} icon={<ClearOutlined />}>重置</Button>)
+    actions.push(<Button key='onSearch' type='primary' onClick={() => form.submit()} icon={<SearchOutlined />}>查询</Button>)
+    const initialValues = {}
+    const formItems = genFormContent(search.schema, 3, form, initialValues)
+    search.initialValues = initialValues
+    search.formItems = formItems
+  }
   return <>
     <PageHeader
       title={title}
@@ -108,6 +118,12 @@ export default ({
       ghost={false}
       extra={<Space>{actions}</Space>}
     >
+      {search
+        ? (
+          <Form colon={false} form={form} onFinish={search.onSubmit} initialValues={search.initialValues}>{search.formItems}</Form>
+        )
+        : <></>
+      }
       {description ?
         <Descriptions>
           <Descriptions.Item label='出库项目'>abc</Descriptions.Item>

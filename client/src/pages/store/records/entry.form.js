@@ -11,7 +11,8 @@ const styles = {
 }
 const rules = [{ required: true }]
 
-export default ({ fields, operation, meta, form }) => {
+export default ({ fields, operation, meta }) => {
+  const form = Form.useFormInstance()
   const settings = useContext(SettingContext)
   const columns = []
   columns.push({

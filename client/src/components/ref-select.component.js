@@ -18,6 +18,8 @@ const RefSelectComponent = ({ item, noStyle }) => {
     return (
       <Form.Item noStyle dependencies={namePath}>
         {() => {
+          // form.resetFields([item.name])
+          console.log('--- updating ----')
           const filters = _.map(item.option.filters, item => ({ name: item.name, value: form.getFieldValue(item.value) }))
           let data = _.chain(result.data)
           data = data.filter(record => _.every(filters, filter => record[filter.name] === filter.value))
@@ -25,7 +27,6 @@ const RefSelectComponent = ({ item, noStyle }) => {
           // 转换
           data = data.map(item => ({ label: item[label], value: item[value], pinyin: item.pinyin }))
           const options = data.value()
-
           return (
             <Form.Item initialValue={item.default} noStyle={noStyle} key={item.name} name={item.name} label={item.label} hidden={item.hidden} rules={[{ required: item.required }]}>
               <Select
@@ -41,7 +42,6 @@ const RefSelectComponent = ({ item, noStyle }) => {
         }}
       </Form.Item>
     )
-
   } else {
     // FIXME 处理过滤去重逻辑
     let data = _.chain(result.data)

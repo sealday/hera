@@ -17,7 +17,7 @@ export default ({ item, noStyle, customBuild, style, rules }) => {
     const options = customBuild(result.data)
     return (
       <Form.Item initialValue={item.default} noStyle={noStyle} key={item.name} name={item.name} label={item.label} hidden={item.hidden} rules={[{ required: item.required }]}>
-        <Cascader style={noStyle ? { width: '100%' } : null} showSearch options={options} />
+        <Cascader expandTrigger="hover" style={noStyle ? { width: '100%' } : null} showSearch options={options} />
       </Form.Item>
     )
   } else {
@@ -25,7 +25,7 @@ export default ({ item, noStyle, customBuild, style, rules }) => {
     const options = buildTree(items)
     return (
       <Form.Item initialValue={item.default} noStyle={noStyle} key={item.name} name={item.name} label={item.label} hidden={item.hidden} rules={[{ required: item.required }]}>
-        <Cascader showSearch options={options} />
+        <Cascader expandTrigger="hover" showSearch options={options} />
       </Form.Item>
     )
   }
