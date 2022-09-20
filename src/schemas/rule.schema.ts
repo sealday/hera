@@ -35,6 +35,7 @@ export class Rule {
     other: [String],
     unitPrice: Number, // 价格
     weight: Number, // 计重
+    condition: String, // 按单算的条件
     countType: {
       type: String,
       enum: ['数量', '换算数量', '重量', '实际重量'],

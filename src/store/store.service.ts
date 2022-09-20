@@ -907,13 +907,13 @@ export class StoreService {
       },
       {
         $addFields: {
-          inOut: {
+          direction: {
             $cond: {
               if: {
                 $eq: ['$inStock', project]
               },
-              then: 1,
-              else: -1
+              then: 'out',
+              else: 'in',
             }
           }
         }
@@ -982,16 +982,20 @@ export class StoreService {
       // 天数、重量
       {
         $addFields: {
-          days: {
-            $ceil: {
-              $divide: [{
-                $subtract: [endDate, '$outDate']
-              }, 24 * 60 * 60 * 1000]
-            }
-          },
           theoryWeight: {
-            $multiply: ['$entries.count', { $ifNull: ['$weightRule.items.weight', '$products.weight'] }]
+            $multiply: ['$entries.count', 0.001, { $ifNull: ['$weightRule.items.weight', '$products.weight'] }]
           },
+        }
+      },
+      {
+        $group: {
+          _id: {
+            number: "$number"
+          },
+          weight: { $first: "$weight" },
+          theoryWeight: { $sum: "$theoryWeight" },
+          freight: { $first: '$freight' },
+          direction: { $first: '$direction' },
         }
       },
       // 关联按单
@@ -1024,11 +1028,78 @@ export class StoreService {
           path: '$otherRule',
         }
       },
+      // 根据条件过滤
+      {
+        $match: {
+          $expr: {
+            $or: [
+              {
+                $and: [
+                  {
+                    $eq: ['$otherRule.items.condition', '出入库']
+                  },
+                  {
+                    $or: [
+                      {
+                        $eq: ['$direction', 'in']
+                      },
+                      {
+                        $eq: ['$direction', 'out']
+                      },
+                    ]
+                  }
+                ]
+              },
+              {
+                $and: [
+                  {
+                    $eq: ['$otherRule.items.condition', '出库']
+                  },
+                  {
+                    $or: [
+                      {
+                        $eq: ['$direction', 'out']
+                      },
+                    ]
+                  }
+                ]
+              },
+              {
+                $and: [
+                  {
+                    $eq: ['$otherRule.items.condition', '入库']
+                  },
+                  {
+                    $or: [
+                      {
+                        $eq: ['$direction', 'in']
+                      },
+                    ]
+                  }
+                ]
+              },
+              {
+                $and: [
+                  {
+                    $eq: ['$otherRule.items.condition', '合同运费']
+                  },
+                  {
+                    $or: [
+                      {
+                        $eq: ['$freight', true]
+                      },
+                    ]
+                  }
+                ]
+              },
+            ]
+          }
+        }
+      },
       {
         $group: {
           _id: {
-            number: '$number',
-            outDate: '$outDate',
+            number: '$_id.number',
             other: '$otherRule.items.other',
             unitPrice: '$otherRule.items.unitPrice',
             category: '$otherRule.category',
@@ -1049,24 +1120,41 @@ export class StoreService {
       {
         $group: {
           _id: {
-            other: '$_id.other',
+            other: { $last: '$_id.other' },
           },
           count: { $sum: '$weight' },
           unitPrice: { $first: '$_id.unitPrice' },
           price: { $sum: { $multiply: ['$_id.unitPrice', '$weight'] } },
-          category: { $first: '$_id.category' }
+        }
+      },
+      // 关联费用表
+      {
+        $lookup: {
+          from: 'others',
+          let: { otherId: '$_id.other' },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ['$id', '$$otherId'] },
+                  ]
+                }
+              }
+            }
+          ],
+          as: 'other',
         }
       },
       {
+        $unwind: '$other'
+      },
+      {
         $addFields: {
-          name: { 
-            $reduce: {
-              input: '$_id.other',
-              initialValue: '',
-              in: { $concat: ["$$value", " / ", "$$this"] }
-            }
-           },
-          outDate: '本期发生'
+          category: '$other.name',
+          unit: '吨',
+          name: '',
+          outDate: '无',
         }
       },
     ])
