@@ -55,6 +55,18 @@ export default ({ form }) => (
                       return <RefCascader
                         item={{ required: true, name: [field.name, 'associate'], option: { ref: 'product' } }}
                         customBuild={data => buildProductTree(data).children} />
+                    } else if (level === '按单') {
+                      return (
+                        <Form.Item name={[field.name, 'condition']}>
+                          <Select options={[
+                            { label: '出入库', value: '出入库' },
+                            { label: '出库', value: '出库' },
+                            { label: '入库', value: '入库' },
+                            { label: '合同运费', value: '合同运费' },
+                          ]} />
+                        </Form.Item>
+                      )
+
                     }
                   }}
                 </Form.Item>

@@ -6,10 +6,10 @@ import { currencyFormat, numberFormat, dateFormat } from '../../utils'
 
 export default ({ rent }) => {
   const columns = [
-    { key: 'category', dataIndex: 'category', title: '类别' },
     { key: 'outDate', dataIndex: 'outDate', title: '日期' },
     { key: 'inOut', dataIndex: 'inOut', title: '出入库' },
     { key: 'name', dataIndex: 'name', title: '名称' },
+    { key: 'category', dataIndex: 'category', title: '类别' },
     { key: 'unit', dataIndex: 'unit', title: '单位' },
     { key: 'count', dataIndex: 'count', title: '数量' },
     { key: 'unitPrice', dataIndex: 'unitPrice', title: '单价' },
