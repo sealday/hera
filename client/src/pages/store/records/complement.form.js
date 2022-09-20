@@ -64,6 +64,28 @@ export default ({ fields, operation, meta }) => {
       )
     },
     {
+      key: 'direction',
+      title: '出入库',
+      width: 120,
+      align: 'center',
+      render: (_, field) => (
+        <Form.Item dependencies={[['complements', field.name, 'level']]} >
+          {() => {
+            const isEnabled = form.getFieldValue(['complements', field.name, 'level']) === 'associated'
+            return (
+              <Form.Item name={[field.name, 'direction']}>
+                <Radio.Group disabled={!isEnabled} buttonStyle='solid' optionType='button' size='small' options={[
+                  { label: '出', value: '出' },
+                  { label: '无', value: '无' },
+                  { label: '入', value: '入' },
+                ]} />
+              </Form.Item>
+            )
+          }}
+        </Form.Item>
+      )
+    },
+    {
       key: 'associate',
       title: '关联',
       width: 300,
@@ -109,21 +131,6 @@ export default ({ fields, operation, meta }) => {
       align: 'center',
       render: (_, field) => (
         <UnitLabel field={field} />
-      )
-    },
-    {
-      key: 'direction',
-      title: '出入库',
-      width: 120,
-      align: 'center',
-      render: (_, field) => (
-        <Form.Item name={[field.name, 'direction']}>
-          <Radio.Group buttonStyle='solid' optionType='button' size='small' options={[
-            { label: '出', value: '出' },
-            { label: '无', value: '无' },
-            { label: '入', value: '入' },
-          ]} />
-        </Form.Item>
       )
     },
     {
