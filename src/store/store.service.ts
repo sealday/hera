@@ -5,6 +5,7 @@ import { Model, Types } from 'mongoose';
 import { Record } from 'src/app/app.service';
 import { LoggerService } from 'src/app/logger/logger.service';
 import { User } from 'src/users/users.service';
+import moment = require('moment');
 
 @Injectable()
 export class StoreService {
@@ -849,19 +850,36 @@ export class StoreService {
           },
         },
       },
+      // 关联费用表
+      {
+        $lookup: {
+          from: 'others',
+          let: { otherId: { $first: '$complements.product' } },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ['$id', '$$otherId'] },
+                  ]
+                }
+              }
+            }
+          ],
+          as: 'other',
+        }
+      },
+      {
+        $unwind: '$other'
+      },
       {
         $group: {
           _id: {
             year: { $year: { date: '$outDate', timezone: 'Asia/Shanghai' } },
             month: { $month: { date: '$outDate', timezone: 'Asia/Shanghai' } },
             day: { $dayOfMonth: { date: '$outDate', timezone: 'Asia/Shanghai' } },
-            name: {
-              $reduce: {
-                input: '$complements.product',
-                initialValue: '',
-                in: { $concat: ["$$value", " / ", "$$this"] }
-              }
-            }
+            name: '$complements.associate.name',
+            category: '$other.name'
           },
           outDate: { $first: '$outDate' },
           number: { $first: '$number' },
@@ -869,12 +887,12 @@ export class StoreService {
           unitPrice: { $first: '$otherRule.items.unitPrice' },
           price: { $sum: '$price' },
           unit: { $first: '$unit' },
-          category: { $first: '$otherRule.category' }
         }
       },
       {
         $addFields: {
-          name: '$_id.name'
+          name: '$_id.name',
+          category: '$_id.category',
         }
       },
       {
@@ -882,10 +900,12 @@ export class StoreService {
           '_id.year': 1,
           '_id.month': 1,
           '_id.day': 1,
-          number: 1,
+          name: 1,
+          category: 1,
         }
       }
     ])
+    // 按单计算
     const otherUnconnectedResult = await this.recordModel.aggregate([
       {
         // 关联调拨单
@@ -1154,7 +1174,7 @@ export class StoreService {
           category: '$other.name',
           unit: '吨',
           name: '',
-          outDate: '无',
+          outDate: moment(endDate).add(-1, 'day').toDate(),
         }
       },
     ])
@@ -1164,10 +1184,11 @@ export class StoreService {
       ...otherAssociatedResult,
       ...otherUnconnectedResult
     ], item => item.price)
+    
     return {
-      history: rentResult[0].history.concat(otherUnconnectedResult),
-      list: rentResult[0].list.concat(otherAssociatedResult),
-      debug: otherUnconnectedResult,
+      history: rentResult[0].history,
+      list: _.sortBy(rentResult[0].list.concat(otherAssociatedResult), ['outDate', 'name']).concat(otherUnconnectedResult),
+      debug: [],
       group: {
         price,
       },
