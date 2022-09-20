@@ -2,6 +2,7 @@ import * as mongoose from 'mongoose'
 
 export const ProjectSchema = new mongoose.Schema({
   name: String, // 项目名称
+  code: String, // 项目编号
   company: String, // 公司名称
   abbr: String,  // 项目简称
   completeName: String, // 全称
