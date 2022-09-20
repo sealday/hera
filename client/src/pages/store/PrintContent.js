@@ -326,7 +326,7 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
           ? (
               <>
                 <tr>
-                  <td>客户号：</td>
+                  <td>客户号：{getProject().code}</td>
                   <td><IfShow cond={content.partA}>承租单位：{content.partA}</IfShow></td>
                   <td>日期：{moment(record.outDate).format('YYYY-MM-DD')}</td>
                 </tr>

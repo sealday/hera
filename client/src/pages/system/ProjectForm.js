@@ -17,6 +17,12 @@ let ProjectForm = ({ handleSubmit }) => {
     <Card bordered={false}>
       <form className="form-horizontal project-modify-form" method="post" onSubmit={handleSubmit}>
         <div className="form-group">
+          <label className="control-label col-md-2">编号</label>
+          <div className="col-md-3">
+            <Field name="code" component={Input} />
+          </div>
+        </div>
+        <div className="form-group">
           <label className="control-label col-md-2">类型</label>
           <div className="col-md-3">
             <Field name="type" component={Select}>
