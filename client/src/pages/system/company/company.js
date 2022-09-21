@@ -10,8 +10,6 @@ export default () => {
   const [updateCompany] = useUpdateCompanyMutation()
   const [deleteCompany] = useDeleteCompanyMutation()
   const columns = genTableColumn(companySchema)
-  console.log(companySchema)
-  console.log(columns)
   columns.push({
     title: '操作',
     key: 'action',

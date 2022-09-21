@@ -111,20 +111,20 @@ export default () => {
   const initialValues = {
     ...record,
     outDate: moment(record.outDate),
-  }
-  initialValues.entries = _.map(record.entries, item => ({
-    ...item,
-    product: [item.type, item.name, item.size],
-  }))
-  initialValues.complements = _.map(record.complements, item => {
-    const complement = {
+    entries: _.map(record.entries, item => ({
       ...item,
-    }
-    if (item.level === 'associated') {
-      complement.associate = JSON.stringify([item.associate.type, item.associate.name, item.associate.size])
-    }
-    return complement
-  })
+      product: [item.type, item.name, item.size],
+    })),
+    complements: _.map(record.complements, item => {
+      const complement = {
+        ...item,
+      }
+      if (item.level === 'associated') {
+        complement.associate = JSON.stringify([item.associate.type, item.associate.name, item.associate.size])
+      }
+      return complement
+    })
+  }
   if (type === '盘点') {
     // nothing
   } else if (direction === 'in') {

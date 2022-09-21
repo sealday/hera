@@ -67,7 +67,7 @@ const Summary = () => {
     return ''
   }
   // 排除空值
-  const validEntries = _.filter(entries, entry => !_.isUndefined(entry) && !_.isEmpty(entry.product) && !_.isUndefined(entry.count) && !_.isEmpty(entry.count))
+  const validEntries = _.filter(entries, entry => !_.isUndefined(entry) && !_.isEmpty(entry.product) && !_.isUndefined(entry.count))
   if (result.isError || result.isLoading || validEntries.length === 0) {
     return ''
   }
