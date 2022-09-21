@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import _ = require('lodash');
 import * as moment from 'moment';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Contract } from 'src/app/app.service';
 import { StoreService } from 'src/store/store.service';
 import { User } from 'src/users/users.service';
@@ -38,7 +38,7 @@ export class ContractService {
     return this.contractModel.updateOne({ _id: id }, { $pull: { items: { _id: itemId }}})
   }
 
-  async addCalc(id: String, calc: any, user: User) {
+  async calc(id: String, calc: any, user: User) {
     const contract = await this.findById(id)
     // 按添加时间 TODO
     const rentRuleId = _.get(_.find(_.reverse([...contract.items]), item => item.category === '租金'), 'plan')
@@ -64,13 +64,27 @@ export class ContractService {
     calc.group = rent.group
     calc.nameGroup = rent.nameGroup
     calc.debug = rent.debug
-    return this.contractModel.updateOne({ _id: id }, { $push: { calcs: calc }})
+    return calc;
+  }
+
+  async addCalc(id: String, calc: any, user: User) {
+    const calcResult = await this.calc(id, calc, user)
+    return this.contractModel.updateOne({ _id: id }, { $push: { calcs: calcResult } })
   }
 
   async restartCalc(id: String, calc: any, user: User) {
-    // TODO 事务实现
-    await this.deleteCalc(id, calc._id)
-    return this.addCalc(id, calc, user)
+
+    return await this.contractModel.updateOne({ _id: id }, {
+        $set: {
+          "calcs.$[e]": await this.calc(id, calc, user),
+        }
+      }, {
+        arrayFilters: [
+          {
+            'e._id': new Types.ObjectId(calc._id),
+          },
+        ]
+      })
   }
 
   async deleteCalc(id: String, calcId: String) {
