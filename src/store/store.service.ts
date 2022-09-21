@@ -854,7 +854,7 @@ export class StoreService {
       {
         $lookup: {
           from: 'others',
-          let: { otherId: { $first: '$complements.product' } },
+          let: { otherId: { $last: '$complements.product' } },
           pipeline: [
             {
               $match: {
@@ -879,20 +879,33 @@ export class StoreService {
             month: { $month: { date: '$outDate', timezone: 'Asia/Shanghai' } },
             day: { $dayOfMonth: { date: '$outDate', timezone: 'Asia/Shanghai' } },
             name: '$complements.associate.name',
-            category: '$other.name'
+            category: '$other.name',
+            unit: {
+              $cond: {
+                if: '$other.isAssociated',
+                then:  {
+                  $cond: {
+                    if: { $eq: ['$otherRule.items.countType', '换算数量'] },
+                    then: '$products.unit',
+                    else: '$products.countUnit'
+                  }
+                },
+                else: '$other.unit'
+              }
+            }
           },
           outDate: { $first: '$outDate' },
           number: { $first: '$number' },
           count: { $sum: '$count' },
           unitPrice: { $first: '$otherRule.items.unitPrice' },
           price: { $sum: '$price' },
-          unit: { $first: '$unit' },
         }
       },
       {
         $addFields: {
           name: '$_id.name',
           category: '$_id.category',
+          unit: '$_id.unit',
         }
       },
       {
