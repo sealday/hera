@@ -101,7 +101,7 @@ const Record = () => {
   descriptions.push({ label: '制单人', children: record.username })
   descriptions.push({ label: '原始单号', children: record.originalOrder })
   descriptions.push({ label: '车号', children: record.carNumber })
-  descriptions.push({ label: '实际重量', children: record.weight })
+  descriptions.push({ label: '实际重量', children: record.weight ? record.weight + '吨' : '' })
   descriptions.push({ label: '合同运费', children: record.freight ? '计入合同' : '不计入合同' })
   descriptions.push({ label: '备注', children: record.comments })
 
