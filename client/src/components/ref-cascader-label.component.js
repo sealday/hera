@@ -11,7 +11,7 @@ export default ({ item, value }) => {
   if (result.isLoading) {
     return <Loading />
   }
-  const labels = _.map(value, v => _.find(result.data, item => item[valueKey] === v)[labelKey])
+  const labels = _.map(value, v => _.get(_.find(result.data, item => _.get(item, valueKey) === v), labelKey, v))
   return (
     <span>{labels.join(' / ')}</span>
   ) 
