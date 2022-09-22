@@ -20,7 +20,7 @@ export default [
         "type": "boolean",
     },
     {
-        "label": "显示名称",
+        "label": "出入库显示名称",
         "name": "display",
         "type": "text"
     },
