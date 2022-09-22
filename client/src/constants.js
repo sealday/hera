@@ -16,7 +16,7 @@ export const RULE_CATEGORIES = [
     value: '计重'
   },
   {
-    label: '其他费用',
+    label: '其它费用',
     value: '非租',
   }
 ]
