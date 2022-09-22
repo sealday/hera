@@ -235,10 +235,10 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
     amount += sum[name] // 计算总金额
     printEntries.push(
       [
-        name,
-        '',
-        '',
-        fixed(total[name]) + ' ' + getUnit(productTypeMap[name]),
+        name + '|小计',
+        { hidden: true, children: '' },
+        { hidden: true, children: '' },
+        { colSpan: 3, children: fixed(total[name]) + ' ' + getUnit(productTypeMap[name]) },
         '',
         '￥' + fixed(sum[name]),
         '',
