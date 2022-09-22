@@ -130,7 +130,7 @@ const ContractDetails = connect(mapStateToProps)(({ projects, dispatch, plans })
         <Table dataSource={contract.items}>
           <Table.Column key="category" title="分类" dataIndex="category" />
           <Table.Column key="plan" title="名称" dataIndex="plan"
-            render={plan => rules.filter(rule => rule._id === plan)[0].name } />
+            render={plan => _.get(rules.find(rule => rule._id === plan), 'name', '没找到对应规则') } />
           <Table.Column key="start" title="开始日期" dataIndex="start"
             render={start => moment(start).format('YYYY-MM-DD')} />
           <Table.Column key="end" title="结束日期" dataIndex="end"
