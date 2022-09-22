@@ -63,6 +63,7 @@ export default () => {
   const rule = getRule.data
   const initialValues = {
     ...rule,
+    name: rule.name + '（克隆）',
     date: moment(rule.date),
     items: rule.items.map(item => ({
       ...item,
