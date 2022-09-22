@@ -872,14 +872,36 @@ export class StoreService {
       {
         $unwind: '$other'
       },
+      // 关联费用类别
+      {
+        $lookup: {
+          from: 'others',
+          let: { otherId: { $first: '$complements.product' } },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ['$id', '$$otherId'] },
+                  ]
+                }
+              }
+            }
+          ],
+          as: 'categories',
+        }
+      },
+      {
+        $unwind: '$categories'
+      },
       {
         $group: {
           _id: {
             year: { $year: { date: '$outDate', timezone: 'Asia/Shanghai' } },
             month: { $month: { date: '$outDate', timezone: 'Asia/Shanghai' } },
             day: { $dayOfMonth: { date: '$outDate', timezone: 'Asia/Shanghai' } },
-            name: '$complements.associate.name',
-            category: '$other.name',
+            name: { $concat: ['$complements.associate.name', '-', '$other.name'] },
+            category: '$categories.name',
             unit: {
               $cond: {
                 if: '$other.isAssociated',
