@@ -14,6 +14,9 @@ import { TabContext } from '../globalConfigs'
 import { changeTab, removeItem } from '../features/coreSlice'
 import { config as routeConfigs } from 'routes'
 
+const styles = {
+  navButton: { color: '#fff' }
+}
 export default ({ onEnter, onLeave, type }) => {
   const { onlineUsers, store, user, config, loading, items, active } = useSelector(state => ({
     onlineUsers: state.core.onlineUsers,
@@ -91,6 +94,13 @@ export default ({ onEnter, onLeave, type }) => {
       dispatch(removeItem(targetKey))
     }
   }
+  const changeType = () => {
+    if (type === 'tab') {
+      navigate('/')
+    } else {
+      navigate('/tab')
+    }
+  }
   return (
     <Layout className='App'>
       <Layout.Header className='header'>
@@ -98,6 +108,13 @@ export default ({ onEnter, onLeave, type }) => {
         <p style={{ marginLeft: '2em', float: 'left', color: '#fff' }}>{store && store.company + store.name}</p>
         <Button style={{ color: '#fff' }} onClick={() => { dispatch(selectStore(false)) }} type='text'>选择仓库</Button>
         <div style={{ float: 'right' }}>
+          <Button
+            onClick={() => changeType()}
+            style={styles.navButton}
+            type='text'
+          >
+            {type === 'base' ? '切换到多标签版' : '切换到原版'}
+          </Button>
           <Dropdown overlay={menu}>
             <Button style={{ color: '#fff' }} type='text'>当前在线 {onlineUsers.length} 人</Button>
           </Dropdown>
