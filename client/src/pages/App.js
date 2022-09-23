@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { matchPath } from 'react-router-dom'
+import { matchPath, Outlet } from 'react-router-dom'
 import { useNavigate } from 'utils/hooks'
 import { Layout, Button, Dropdown, Menu, message, Tabs } from 'antd'
 import short_id from 'shortid'
@@ -14,7 +14,7 @@ import { TabContext } from '../globalConfigs'
 import { changeTab, removeItem } from '../features/coreSlice'
 import { config as routeConfigs } from 'routes'
 
-export default ({ onEnter, onLeave }) => {
+export default ({ onEnter, onLeave, type }) => {
   const { onlineUsers, store, user, config, loading, items, active } = useSelector(state => ({
     onlineUsers: state.core.onlineUsers,
     items: state.core.items,
@@ -72,7 +72,7 @@ export default ({ onEnter, onLeave }) => {
     }))}
     />
   )
-  const tabItems = items.map(item => {
+  const tabItems = type === 'tab' ? items.map(item => {
     const routeConfig = routeConfigs.find(config => {
       return matchPath(config.path, item.key)
     })
@@ -83,7 +83,7 @@ export default ({ onEnter, onLeave }) => {
       </TabContext.Provider>
     )
     return ({ label: item.label, key: item.key, children })
-  })
+  }) : []
   const onTabEdit = (targetKey, action) => {
     if (action === 'add') {
 
@@ -109,12 +109,12 @@ export default ({ onEnter, onLeave }) => {
       </Layout.Header>
       <Layout>
         <Layout.Sider width={240} className='sider'>
-          <TabContext.Provider value={{ has: true }}>
+          <TabContext.Provider value={{ has: type === 'tab' }}>
             <MenuList user={user} store={store} />
           </TabContext.Provider>
         </Layout.Sider>
         <Layout className='content'>
-          {isStoreSelected() && <Tabs
+          {isStoreSelected() && type === 'tab' && <Tabs
             onEdit={onTabEdit}
             tabBarStyle={{
               top: 0,
@@ -129,6 +129,7 @@ export default ({ onEnter, onLeave }) => {
             items={tabItems}
             type='editable-card'
           />}
+          {isStoreSelected() && type === 'base' && <Outlet />}
           {!isStoreSelected() && <CurrentStore />}
         </Layout>
       </Layout>

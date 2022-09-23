@@ -1,40 +1,34 @@
 import { Navigate, useRoutes } from 'react-router-dom'
 import App from '../pages/App'
 import Home from '../pages/common/Home'
-import {
-  Operator,
-  OperatorCreate,
-  OperatorEdit,
-  Project,
-  ProjectCreate,
-  ProjectEdit,
-  Product,
-  Settings,
-  Company,
-} from '../pages/system'
-import * as store from '../pages/store'
-import {
-  Store,
-  SimpleSearch,
-  TransportSearch,
-} from '../pages/report'
-import * as company from '../pages/finance'
-import Profile from '../pages/common/Profile'
 import Login from '../pages/common/Login'
-import Employee from '../pages/project/employee.page'
+import Profile from '../pages/common/Profile'
+import * as company from '../pages/finance'
+import InvoicePage from '../pages/finance/invoice/invoice.page'
+import LoanPage from '../pages/finance/loan/loan.page'
+import SubjectPage from '../pages/finance/subject/subject.page'
+import VoucherPage from '../pages/finance/voucher/voucher.page'
 import Attendance from '../pages/project/attendance.page'
 import EmployeeCreatePage from '../pages/project/employee-create.page'
 import EmployeeEditPage from '../pages/project/employee-edit.page'
-import SubjectPage from '../pages/finance/subject/subject.page'
-import InvoicePage from '../pages/finance/invoice/invoice.page'
-import LoanPage from '../pages/finance/loan/loan.page'
-import VoucherPage from '../pages/finance/voucher/voucher.page'
-import RulePage from '../pages/project/rule/rule.page'
+import Employee from '../pages/project/employee.page'
+import RuleClonePage from '../pages/project/rule/rule.clone.page'
 import RuleCreatePage from '../pages/project/rule/rule.create.page'
 import RuleEditPage from '../pages/project/rule/rule.edit.page'
-import RuleClonePage from '../pages/project/rule/rule.clone.page'
-import OtherPage from '../pages/system/other/other.page'
+import RulePage from '../pages/project/rule/rule.page'
+import {
+  SimpleSearch, Store, TransportSearch
+} from '../pages/report'
 import DetailSearchPage from '../pages/report/detail-search.page'
+import * as store from '../pages/store'
+import {
+  Company, Operator,
+  OperatorCreate,
+  OperatorEdit, Product, Project,
+  ProjectCreate,
+  ProjectEdit, Settings
+} from '../pages/system'
+import OtherPage from '../pages/system/other/other.page'
 
 export const config = [
   { path: "dashboard", element: <Home /> },
@@ -87,8 +81,12 @@ export const config = [
 export default ({ onLogin, onLogout }) => useRoutes([
   { path: '/login', element: <Login /> },
   {
+    path: '/tab',
+    element: <App onEnter={onLogin} onLeave={onLogout} type='tab' />,
+  },
+  {
     path: '/',
-    element: <App onEnter={onLogin} onLeave={onLogout} />,
+    element: <App onEnter={onLogin} onLeave={onLogout} type='base' />,
     children: config.concat([
       { path: "", element: <Navigate to='/dashboard' replace /> },
       { path: "*", element: <Navigate to='/dashboard' replace /> },
