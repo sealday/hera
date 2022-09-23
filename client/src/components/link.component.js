@@ -1,6 +1,5 @@
 import { Button } from "antd"
 import { TabContext } from "globalConfigs"
-import { uniqueId } from "lodash"
 import { useContext } from "react"
 import { useDispatch } from "react-redux"
 import { Link } from "react-router-dom"
@@ -11,11 +10,9 @@ export default ({ to, children }) => {
   const tabContext = useContext(TabContext)
   if (tabContext.has) {
     return <Button type='link' onClick={() => {
-      const key = uniqueId()
       dispatch(addItem({
-        key: key,
+        key: to,
         label: '加载中...',
-        name: to,
       }))
     }}>{children}</Button>
   }

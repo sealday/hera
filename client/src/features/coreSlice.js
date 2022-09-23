@@ -4,8 +4,8 @@ import _ from 'lodash'
 const initialState = {
     onlineUsers: [],
     items: [],
-    active: 'default',
-    history: ['default'],
+    active: null,
+    history: [],
 }
 
 const coreSlice = createSlice({
@@ -16,9 +16,15 @@ const coreSlice = createSlice({
             state.onlineUsers = action.payload
         },
         addItem(state, action) {
-            state.items.push(action.payload)
-            state.active = action.payload.key
-            state.history.push(action.payload.key)
+            const item = state.items.find(item => item.key === action.payload.key)
+            if (item) {
+                state.active = action.payload.key
+                state.history.push(action.payload)
+            } else {
+                state.items.push(action.payload)
+                state.active = action.payload.key
+                state.history.push(action.payload.key)
+            }
         },
         removeItem(state, action) {
             _.remove(state.items, item => action.payload === item.key)

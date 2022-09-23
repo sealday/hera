@@ -74,9 +74,9 @@ export default ({ onEnter, onLeave }) => {
   )
   const tabItems = items.map(item => {
     const routeConfig = routeConfigs.find(config => {
-      return matchPath(config.path, item.name)
+      return matchPath(config.path, item.key)
     })
-    const pathmatch = matchPath(routeConfig.path, item.name)
+    const pathmatch = matchPath(routeConfig.path, item.key)
     const children = (
       <TabContext.Provider value={{ params: _.get(pathmatch, 'params', {}), key: item.key, has: true }}>
         {_.get(routeConfig, 'element', <Error message='找不到页面' />)}
@@ -114,7 +114,21 @@ export default ({ onEnter, onLeave }) => {
           </TabContext.Provider>
         </Layout.Sider>
         <Layout className='content'>
-          {isStoreSelected() && <Tabs onEdit={onTabEdit} hideAdd activeKey={active} onChange={(k) => dispatch(changeTab(k))} items={tabItems} type='editable-card' />}
+          {isStoreSelected() && <Tabs
+            onEdit={onTabEdit}
+            tabBarStyle={{
+              top: 0,
+              zIndex: 1,
+              position: 'sticky',
+              backgroundColor: '#f0f2f5',
+              marginBottom: '0',
+            }}
+            hideAdd
+            activeKey={active}
+            onChange={(k) => dispatch(changeTab(k))}
+            items={tabItems}
+            type='editable-card'
+          />}
           {!isStoreSelected() && <CurrentStore />}
         </Layout>
       </Layout>

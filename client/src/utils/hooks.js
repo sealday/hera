@@ -2,7 +2,7 @@ import { ArrowLeftOutlined, CloseOutlined } from "@ant-design/icons"
 import { Button } from "antd"
 import { addItem, removeItem, updateTitle } from "features/coreSlice"
 import { TabContext } from "globalConfigs"
-import _, { uniqueId } from "lodash"
+import _ from "lodash"
 import { useEffect } from "react"
 import { useContext } from "react"
 import { useDispatch } from "react-redux"
@@ -62,11 +62,9 @@ export const useNavigate = () => {
         // 返回映射到关闭 tab
         dispatch(removeItem(tabContext.key))
       } else {
-        const key = uniqueId()
         dispatch(addItem({
-          key: key,
+          key: to,
           label: '加载中...',
-          name: to,
         }))
       }
     }
