@@ -4,6 +4,7 @@ import { addItem, removeItem, updateTitle } from "features/coreSlice"
 import { TabContext } from "globalConfigs"
 import _ from "lodash"
 import { useEffect } from "react"
+import { useCallback } from "react"
 import { useContext } from "react"
 import { useDispatch } from "react-redux"
 import { useNavigate as useRouteNavigate, useParams as useRouteParams, useSearchParams } from "react-router-dom"
@@ -56,18 +57,19 @@ export const useNavigate = () => {
   const navigate = useRouteNavigate()
   const tabContext = useContext(TabContext)
   const dispatch = useDispatch()
-  if (tabContext.has) {
-    return (to) => {
-      if (to === -1) {
-        // 返回映射到关闭 tab
-        dispatch(removeItem(tabContext.key))
-      } else {
-        dispatch(addItem({
-          key: to,
-          label: '加载中...',
-        }))
-      }
+  const tabNavigate = useCallback((to) => {
+    if (to === -1) {
+      // 返回映射到关闭 tab
+      dispatch(removeItem(tabContext.key))
+    } else {
+      dispatch(addItem({
+        key: to,
+        label: '加载中...',
+      }))
     }
+  }, [])
+  if (tabContext.has) {
+    return tabNavigate
   } 
   return navigate
 }
