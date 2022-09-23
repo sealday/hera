@@ -1,12 +1,12 @@
 import { ArrowLeftOutlined, CloseOutlined } from "@ant-design/icons"
 import { Button } from "antd"
-import { removeItem, updateTitle } from "features/coreSlice"
+import { addItem, removeItem, updateTitle } from "features/coreSlice"
 import { TabContext } from "globalConfigs"
-import _ from "lodash"
+import _, { uniqueId } from "lodash"
 import { useEffect } from "react"
 import { useContext } from "react"
 import { useDispatch } from "react-redux"
-import { useNavigate, useParams as useRouteParams, useSearchParams } from "react-router-dom"
+import { useNavigate as useRouteNavigate, useParams as useRouteParams, useSearchParams } from "react-router-dom"
 
 export const useParams = () => {
   const routeParams = useRouteParams()
@@ -25,13 +25,14 @@ export const useParams = () => {
 }
 
 const canGoBack = () => {
+  // FIXME 这个方式几乎总是为 true，没有任何限制
   return window.history.length > 1
 }
 
 export const useTab = ({ title }) => {
   const tabContext = useContext(TabContext)
   const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const navigate = useRouteNavigate()
   // 更新标题
   useEffect(() => {
     if (tabContext.has && tabContext.key) {
@@ -49,4 +50,26 @@ export const useTab = ({ title }) => {
   } else {
     return null
   }
+}
+
+export const useNavigate = () => {
+  const navigate = useRouteNavigate()
+  const tabContext = useContext(TabContext)
+  const dispatch = useDispatch()
+  if (tabContext.has) {
+    return (to) => {
+      if (to === -1) {
+        // 返回映射到关闭 tab
+        dispatch(removeItem(tabContext.key))
+      } else {
+        const key = uniqueId()
+        dispatch(addItem({
+          key: key,
+          label: '加载中...',
+          name: to,
+        }))
+      }
+    }
+  } 
+  return navigate
 }

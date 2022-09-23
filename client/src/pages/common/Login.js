@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'utils/hooks'
 import { Avatar, Button, Card, Form, Input, message, Select } from 'antd'
 import { LockOutlined } from '@ant-design/icons'
 import heraApi from '../../api'

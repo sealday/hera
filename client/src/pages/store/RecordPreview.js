@@ -2,7 +2,7 @@ import { SettingOutlined } from "@ant-design/icons"
 import { Button, Card, Col, Popover, Radio, Row, Select } from "antd"
 import React, { useState } from "react"
 import { useSelector } from "react-redux"
-import { useParams } from "react-router-dom"
+import { useParams } from "utils/hooks"
 import { useGetRecordQuery } from "../../api"
 import { Error, Loading, PageHeader, PrintFrame } from "../../components"
 import PrintContent from './PrintContent'

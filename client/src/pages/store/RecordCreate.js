@@ -3,21 +3,20 @@ import { Form } from "antd"
 import moment from "moment"
 import { useEffect } from "react"
 import { useSelector } from "react-redux"
-import { useNavigate, useSearchParams } from "react-router-dom"
+import { useNavigate } from "utils/hooks"
 import { useCreateRecordMutation } from "../../api"
 import { Error, PageHeader } from "../../components"
 import { RECORD_TYPE_MAP } from "../../globalConfigs"
 import { DEFAULT_STORE_TYPE } from "../../utils"
 import RecordForm from "./RecordForm"
 import { SettingContext } from "./records"
+import { useParams } from 'utils/hooks'
 
 export default () => {
   const [form] = Form.useForm()
-  const [searchParams] = useSearchParams()
+  const { type, direction } = useParams()
   const [createRecord, createResult] = useCreateRecordMutation()
   const navigate = useNavigate()
-  const type = searchParams.get('type')
-  const direction = searchParams.get('direction')
   const store = useSelector(state => state.system.store)
   // 切换页面不保存表单记录
   useEffect(() => {

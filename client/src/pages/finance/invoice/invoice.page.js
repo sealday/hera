@@ -1,7 +1,7 @@
 import { Space } from "antd"
 import moment from "moment"
 import { useState } from "react"
-import { useParams } from "react-router-dom"
+import { useParams } from "utils/hooks"
 import heraApi from "../../../api"
 import { Error, Loading, ModalFormButton, PageHeader, PopconfirmButton, ResultTable } from "../../../components"
 import { invoiceSchema } from "../../../schema"

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import moment from 'moment'
 import { pick } from 'lodash'
 import { Button, Space, Tag, message, ConfigProvider } from 'antd'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'utils/hooks'
 import { Error, Link, Loading, PageHeader, PopconfirmButton, ResultTable } from '../../../components'
 import heraApi from '../../../api'
 

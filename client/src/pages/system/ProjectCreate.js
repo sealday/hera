@@ -5,7 +5,7 @@ import { DEFAULT_STORE_TYPE } from '../../utils'
 import { PageHeader } from '../../components'
 import { submit } from 'redux-form'
 import heraApi from '../../api'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'utils/hooks'
 import { useEffect } from 'react'
 
 export default () => {

@@ -1,26 +1,23 @@
 import { Button } from "antd"
+import { TabContext } from "globalConfigs"
 import { uniqueId } from "lodash"
+import { useContext } from "react"
 import { useDispatch } from "react-redux"
 import { Link } from "react-router-dom"
 import { addItem } from "../features/coreSlice"
 
 export default ({ to, children }) => {
-
-
   const dispatch = useDispatch()
-  if (true) {
-    const recordId = to.split('/')[2]
+  const tabContext = useContext(TabContext)
+  if (tabContext.has) {
     return <Button type='link' onClick={() => {
       const key = uniqueId()
       dispatch(addItem({
         key: key,
         label: '加载中...',
-        name: 'contract',
-        params: {
-          id: recordId,
-        }
+        name: to,
       }))
-    }}>新Link{children}</Button>
+    }}>{children}</Button>
   }
   return <Link to={to}>{children}</Link>
 }

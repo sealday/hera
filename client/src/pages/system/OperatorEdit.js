@@ -4,7 +4,7 @@ import { getFormValues } from 'redux-form'
 
 import OperatorForm from './OperatorForm'
 import { updateOperator } from '../../actions'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'utils/hooks'
 import { PageHeader } from '../../components'
 
 export default () => {

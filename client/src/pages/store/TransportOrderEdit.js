@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import moment from 'moment'
 import TransportForm from './TransportForm'
 import { useGetRecordQuery, useUpdateTransportMutation } from '../../api'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'utils/hooks'
 import { Error, Loading, PageHeader } from '../../components'
 
 export default () => {

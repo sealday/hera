@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'utils/hooks'
 import { Button } from 'antd'
 
 export default ({ children, to, ...otherProps }) => {

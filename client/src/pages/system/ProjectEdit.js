@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { useNavigate, useParams } from 'react-router-dom'
-import shortid from 'shortid'
+import { useNavigate } from 'utils/hooks'
 import { submit } from 'redux-form'
 import { Error, Loading, PageHeader } from '../../components'
 import ProjectForm from './ProjectForm'
 import heraApi from '../../api'
+import { useParams } from 'utils/hooks'
 
 export default () => {
   const dispatch = useDispatch()

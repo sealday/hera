@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import { useEffect, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'utils/hooks'
 
 import { PageHeader } from '../../../components'
 import { useCreatePlanMutation } from '../../../api'

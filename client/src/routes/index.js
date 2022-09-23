@@ -1,5 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom'
-
+import { Navigate, useRoutes } from 'react-router-dom'
 import App from '../pages/App'
 import Home from '../pages/common/Home'
 import {
@@ -10,8 +9,6 @@ import {
   ProjectCreate,
   ProjectEdit,
   Product,
-  Price,
-  PriceEdit,
   Settings,
   Company,
 } from '../pages/system'
@@ -39,60 +36,62 @@ import RuleClonePage from '../pages/project/rule/rule.clone.page'
 import OtherPage from '../pages/system/other/other.page'
 import DetailSearchPage from '../pages/report/detail-search.page'
 
-export default ({ onLogin, onLogout }) => <Routes>
-  <Route path="/login" element={<Login />} />
-  <Route path="/" element={<App onEnter={onLogin} onLeave={onLogout} />}>
-    <Route path="" element={<Navigate to='/dashboard' replace />} />
-    <Route path="*" element={<Navigate to='/dashboard' replace />} />
-    <Route path="dashboard" element={<Home />} />
-    <Route path="operator" element={<Operator />} />
-    <Route path="operator/create" element={<OperatorCreate />} />
-    <Route path="operator/:id/edit" element={<OperatorEdit />} />
-    <Route path="project" element={<Project />} />
-    <Route path="project/create" element={<ProjectCreate />} />
-    <Route path="project/:id/edit" element={<ProjectEdit />} />
-    <Route path="simple_search" element={<SimpleSearch />} />
-    <Route path="simple_search_company" element={<company.SimpleSearch />} />
-    {/* system */}
-    <Route path="product" element={<Product />} />
-    <Route path="price" element={<Price />} />
-    <Route path="price/:id" element={<PriceEdit />} />
-    {/* 仓库 start */}
-    <Route path="record/create" element={<store.RecordCreate />} />
-    <Route path="record/:id" element={<store.Record />} />
-    <Route path="record/:id/preview" element={<store.RecordPreview />} />
-    <Route path='record/:id/edit' element={<store.RecordEdit />} />
-    <Route path="transport/:id" element={<store.TransportOrder />} />
-    <Route path="transport/:id/edit" element={<store.TransportOrderEdit />} />
-    {/* 仓库 end */}
-    <Route path="company_record/:id" element={<company.Record />} />
-    <Route path="rent_calc" element={<company.RentCalc />} />
-    <Route path="contract" element={<company.Contract />} />
-    <Route path="contract/create" element={<company.ContractCreate />} />
-    <Route path="contract/:id" element={<company.ContractDetails />} />
-    <Route path="contract/:id/calc/:calcId" element={<company.ContractDetailsCalc />} />
-    <Route path="plan" element={<company.Plan />} />
-    <Route path="plan/create" element={<company.PlanCreate />} />
-    <Route path="plan/:id/edit" element={<company.PlanEdit />} />
-    <Route path="rule" element={<RulePage />} />
-    <Route path="rule/create" element={<RuleCreatePage />} />
-    <Route path="rule/:id" element={<RuleEditPage />} />
-    <Route path="rule/:id/clone" element={<RuleClonePage />} />
-    <Route path="store" element={<Store />} />
-    <Route path="transport_table" element={<TransportSearch />} />
-    <Route path="detail_search" element={<DetailSearchPage />} />
-    <Route path="transport_table_company" element={<company.TransportSearch />} />
-    <Route path="profile" element={<Profile />} />
-    <Route path="settings" element={<Settings />} />
-    <Route path="other" element={<OtherPage />} />
-    <Route path='company' element={<Company />} />
-    <Route path='employee' element={<Employee />} />
-    <Route path='employee/create' element={<EmployeeCreatePage />} />
-    <Route path='employee/:id/edit' element={<EmployeeEditPage />} />
-    <Route path='invoice/:direction' element={<InvoicePage />} />
-    <Route path='loan' element={<LoanPage />} />
-    <Route path='voucher' element={<VoucherPage />} />
-    <Route path='subject' element={<SubjectPage />} />
-    <Route path='attendance' element={<Attendance />} />
-  </Route>
-</Routes>
+export const config = [
+  { path: "dashboard", element: <Home /> },
+  { path: "operator", element: <Operator /> },
+  { path: "operator/create", element: <OperatorCreate /> },
+  { path: "operator/:id/edit", element: <OperatorEdit /> },
+  { path: "project", element: <Project /> },
+  { path: "project/create", element: <ProjectCreate /> },
+  { path: "project/:id/edit", element: <ProjectEdit /> },
+  { path: "simple_search", element: <SimpleSearch /> },
+  { path: "simple_search_company", element: <company.SimpleSearch /> },
+  { path: "product", element: <Product /> },
+  { path: "record/create/:type/:direction", element: <store.RecordCreate /> },
+  { path: "record/:id", element: <store.Record /> },
+  { path: "record/:id/preview", element: <store.RecordPreview /> },
+  { path: 'record/:id/edit', element: <store.RecordEdit /> },
+  { path: "transport/:id", element: <store.TransportOrder /> },
+  { path: "transport/:id/edit", element: <store.TransportOrderEdit /> },
+  { path: "company_record/:id", element: <company.Record /> },
+  { path: "rent_calc", element: <company.RentCalc /> },
+  { path: "contract", element: <company.Contract /> },
+  { path: "contract/create", element: <company.ContractCreate /> },
+  { path: "contract/:id", element: <company.ContractDetails /> },
+  { path: "contract/:id/calc/:calcId", element: <company.ContractDetailsCalc /> },
+  { path: "plan", element: <company.Plan /> },
+  { path: "plan/create", element: <company.PlanCreate /> },
+  { path: "plan/:id/edit", element: <company.PlanEdit /> },
+  { path: "rule", element: <RulePage /> },
+  { path: "rule/create/:category", element: <RuleCreatePage /> },
+  { path: "rule/:id", element: <RuleEditPage /> },
+  { path: "rule/:id/clone", element: <RuleClonePage /> },
+  { path: "store", element: <Store /> },
+  { path: "transport_table", element: <TransportSearch /> },
+  { path: "detail_search", element: <DetailSearchPage /> },
+  { path: "transport_table_company", element: <company.TransportSearch /> },
+  { path: "profile", element: <Profile /> },
+  { path: "settings", element: <Settings /> },
+  { path: "other", element: <OtherPage /> },
+  { path: 'company', element: <Company /> },
+  { path: 'employee', element: <Employee /> },
+  { path: 'employee/create', element: <EmployeeCreatePage /> },
+  { path: 'employee/:id/edit', element: <EmployeeEditPage /> },
+  { path: 'invoice/:direction', element: <InvoicePage /> },
+  { path: 'loan', element: <LoanPage /> },
+  { path: 'voucher', element: <VoucherPage /> },
+  { path: 'subject', element: <SubjectPage /> },
+  { path: 'attendance', element: <Attendance /> },
+]
+
+export default ({ onLogin, onLogout }) => useRoutes([
+  { path: '/login', element: <Login /> },
+  {
+    path: '/',
+    element: <App onEnter={onLogin} onLeave={onLogout} />,
+    children: config.concat([
+      { path: "", element: <Navigate to='/dashboard' replace /> },
+      { path: "*", element: <Navigate to='/dashboard' replace /> },
+    ]),
+  }
+])

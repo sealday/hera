@@ -1,7 +1,6 @@
 import _ from 'lodash'
 import { useEffect, useRef } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-
+import { useNavigate, useParams } from 'utils/hooks'
 import { Error, Loading, PageHeader } from '../../../components'
 import { useCreatePlanMutation, useGetPlanQuery } from '../../../api'
 import PlanForm from './PlanForm'

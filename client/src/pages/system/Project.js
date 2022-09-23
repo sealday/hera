@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'utils/hooks'
 import {
   Button,
   Popconfirm,
@@ -8,6 +8,7 @@ import {
 } from 'antd'
 import {
   Error,
+  Link,
   Loading,
   PageHeader, ResultTable,
 } from '../../components'
@@ -52,7 +53,7 @@ export default () => {
       title: '操作', key: 'action', width: '200px',
       render: (_, project) => {
         return <Space size='small'>
-          <Link to={`/project/${project._id}/edit`}><Button type='text'>编辑</Button></Link>
+          <Link to={`/project/${project._id}/edit`}>编辑</Link>
           <Popconfirm
             title={`确定要删除？`}
             onConfirm={() => deleteProject(project._id)}

@@ -1,12 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'utils/hooks'
 import {
   Button,
   Popconfirm,
   Space,
 } from 'antd'
-import { PageHeader, ResultTable } from '../../components'
+import { Link, PageHeader, ResultTable } from 'components'
 import { deleteOperator } from '../../actions'
 
 const Operator = ({ users, dispatch }) => {

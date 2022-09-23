@@ -11,7 +11,7 @@ import {
 } from 'antd'
 import {
   useNavigate,
-} from 'react-router-dom'
+} from 'utils/hooks'
 
 import { PLAN_CATEGORY_MAP } from '../../../constants'
 import { useDispatch, useSelector } from 'react-redux'

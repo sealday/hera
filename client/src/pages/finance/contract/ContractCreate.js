@@ -8,7 +8,7 @@ import {
   Select,
 } from 'antd'
 import { antFilterOption, PageHeader } from '../../../components'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'utils/hooks'
 import heraApi from '../../../api'
 
 export default ({ dispatch }) => {

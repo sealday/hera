@@ -1,11 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
-import { Link } from 'react-router-dom'
 import { Map } from 'immutable'
 
 import { total_, toFixedWithoutTrailingZero } from '../../utils'
-import { ResultTable } from '../../components'
+import { Link, ResultTable } from 'components'
 
 /**
  * 提供排序功能的搜索结果表

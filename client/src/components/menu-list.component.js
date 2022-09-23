@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { canInsert } from '../utils'
 import { Menu } from 'antd'
 import { DashboardOutlined, FundOutlined, ProjectOutlined, SearchOutlined, SettingOutlined, ShopOutlined } from '@ant-design/icons'
 import _ from 'lodash'
+import { useNavigate } from 'utils/hooks'
 
 const allMenu = [
   {
@@ -20,33 +21,33 @@ const allMenu = [
     children: [
       {
         name: '采购入库',
-        path: '/record/create?type=purchase&direction=in',
+        path: '/record/create/purchase/in',
         roles: ['系统管理员', '基地仓库管理员'],
       },
       {
         name: '销售出库',
-        path: '/record/create?type=purchase&direction=out',
+        path: '/record/create/purchase/out',
         roles: ['系统管理员', '基地仓库管理员'],
       },
       {
         name: '租赁入库',
-        path: '/record/create?type=rent&direction=in',
+        path: '/record/create/rent/in',
       },
       {
         name: '租赁出库',
-        path: '/record/create?type=rent&direction=out',
+        path: '/record/create/rent/out',
       },
       {
         name: '暂存入库',
-        path: '/record/create?type=transfer&direction=in',
+        path: '/record/create/transfer/in',
       },
       {
         name: '暂存出库',
-        path: '/record/create?type=transfer&direction=out',
+        path: '/record/create/transfer/out',
       },
       {
         name: '盘点录入',
-        path: '/record/create?type=check',
+        path: '/record/create/check',
         roles: ['系统管理员', '基地仓库管理员'],
       },
     ]
@@ -211,7 +212,14 @@ const MenuList = ({ user, store}) => {
     setOpenKeys([childMap[location.pathname + location.search]])
   }, [location.pathname, location.search])
 
-  return <Menu items={items} mode='inline' defaultSelectedKeys={[location.pathname + location.search]} onOpenChange={onOpenChange} openKeys={openKeys} onSelect={v => navigate(v.key)} />
+  return <Menu
+    items={items}
+    mode='inline'
+    defaultSelectedKeys={[location.pathname + location.search]}
+    onOpenChange={onOpenChange}
+    openKeys={openKeys}
+    onSelect={v => navigate(v.key)}
+  />
 }
 
 export default MenuList

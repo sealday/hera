@@ -1,7 +1,7 @@
 import { Error, Loading, PageHeader, PopoverFormButton, ResultTable, TabTreeTable, TreeTable } from '../../../components'
 import { otherSchema } from '../../../schema'
 import heraApi from '../../../api'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'utils/hooks'
 import { Button, ConfigProvider, message, Popconfirm, Space } from 'antd'
 import { useEffect } from 'react'
 import _ from 'lodash'

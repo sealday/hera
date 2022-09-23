@@ -1,7 +1,7 @@
 import { Form } from "antd"
 import moment from "moment"
 import { useEffect } from "react"
-import { useNavigate, useParams } from "react-router-dom"
+import { useNavigate, useParams } from "utils/hooks"
 import heraApi from "../../../api"
 import { Error, Loading, PageHeader } from "../../../components"
 import { array2product, product2array } from "../../../utils"

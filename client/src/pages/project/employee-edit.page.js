@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react"
-import { useNavigate, useParams } from "react-router-dom"
+import { useNavigate, useParams } from "utils/hooks"
 import heraApi from "../../api"
 import { Error, Loading, PageHeader } from "../../components"
 import EmployeeForm from "./employee.form"

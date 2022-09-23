@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import { CONTRACT_DETAILS, queryContractDetails } from '../../../actions'
 import { rentExcelExport } from '../../../utils'
 import RentCalcTable from '../RentCalcTable'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'utils/hooks'
 import { PageHeader } from '../../../components'
 
 const mapStateToProps = (state) => {

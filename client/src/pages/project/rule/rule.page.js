@@ -7,9 +7,7 @@ import {
   Button,
   ConfigProvider,
 } from 'antd'
-import {
-  useNavigate,
-} from 'react-router-dom'
+import { useNavigate } from 'utils/hooks'
 
 import { RULE_CATEGORIES } from '../../../constants'
 import { Error, LinkButton, Loading, PageHeader, PopconfirmButton, ResultTable } from '../../../components'
@@ -46,9 +44,9 @@ export default () => {
     )
   })
   const items = [
-    { key: 'rent', label: <LinkButton to='/rule/create?category=租金' >租金规则</LinkButton> },
-    { key: 'weight', label: <LinkButton to='/rule/create?category=计重' >计重规则</LinkButton> },
-    { key: 'other', label: <LinkButton to='/rule/create?category=非租' >非租规则</LinkButton> },
+    { key: 'rent', label: <LinkButton to='/rule/create/租金' >租金规则</LinkButton> },
+    { key: 'weight', label: <LinkButton to='/rule/create/计重' >计重规则</LinkButton> },
+    { key: 'other', label: <LinkButton to='/rule/create/非租' >非租规则</LinkButton> },
   ]
   return (
     <PageHeader

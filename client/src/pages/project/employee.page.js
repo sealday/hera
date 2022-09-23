@@ -1,7 +1,7 @@
 import { Error, Loading, PageHeader, ResultTable } from '../../components'
 import { employeeSchema } from '../../schema'
 import heraApi from '../../api'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'utils/hooks'
 import { Button, Popconfirm, Space } from 'antd'
 
 

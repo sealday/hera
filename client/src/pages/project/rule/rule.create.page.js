@@ -1,20 +1,15 @@
 import { Form } from "antd"
 import moment from "moment"
 import { useEffect } from "react"
-import { useNavigate, useSearchParams } from "react-router-dom"
 import heraApi from "../../../api"
 import { PageHeader } from "../../../components"
 import { array2product } from "../../../utils"
 import RuleForm from "./rule.form"
+import { useParams, useNavigate } from "utils/hooks"
 
-const styles = {
-  keepSpace: { marginTop: '8px' },
-  block: { width: '100%' },
-}
 export default () => {
   const [form] = Form.useForm()
-  const [searchParams] = useSearchParams()
-  const category = searchParams.get('category')
+  const { category } = useParams()
   const [createRule, createResult] = heraApi.useCreateRuleMutation()
   const navigate = useNavigate()
   useEffect(() => {

@@ -2,15 +2,13 @@ import { Button, Card, Descriptions, Table } from 'antd'
 import _ from 'lodash'
 import moment from 'moment'
 import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'utils/hooks'
+import { useParams } from 'utils/hooks'
 import heraApi, { useGetRecordQuery } from '../../api'
 import { Error, Loading, PageHeader } from '../../components'
 import recordSchema from '../../schema/record'
-import { genTableColumn } from '../../utils/antd'
 import { toFixedWithoutTrailingZero as fixed } from '../../utils'
-import { useContext } from 'react'
-import { TabContext } from '../../globalConfigs'
-import { useParams } from 'utils/hooks'
+import { genTableColumn } from '../../utils/antd'
 
 const styles = {
   keepSpace: { marginTop: '8px' }

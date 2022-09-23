@@ -1,16 +1,12 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { Button, Card, Col, Form, PageHeader, Row, Space, Input, Descriptions, Dropdown, Menu } from 'antd'
-import { PlusCircleOutlined, EditOutlined, PrinterOutlined, ArrowLeftOutlined, SearchOutlined, ClearOutlined, SaveOutlined, ExportOutlined } from '@ant-design/icons'
-import { useNavigate } from 'react-router-dom'
+import { ClearOutlined, EditOutlined, ExportOutlined, PlusCircleOutlined, PrinterOutlined, SaveOutlined, SearchOutlined } from '@ant-design/icons'
+import { Button, Card, Col, Descriptions, Dropdown, Form, Input, Menu, PageHeader, Row, Space } from 'antd'
+import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
+import { useTab } from 'utils/hooks'
 import { isUpdatable } from '../utils'
-import { useDispatch, useSelector } from 'react-redux'
+import { genFormContent } from '../utils/antd'
 import ModalFormButton from './button/modal-form.button'
 import ModalPrintPreviewButton from './button/modal-print-preview.button'
-import { genFormContent } from '../utils/antd'
-import { addItem, updateTitle } from '../features/coreSlice'
-import _, { uniq, uniqueId } from 'lodash'
-import { TabContext } from '../globalConfigs'
-import { useTab } from 'utils/hooks'
 
 export default ({
   title,
@@ -22,7 +18,6 @@ export default ({
   onPrintPreview,
   onPrint,
   searchInfo,
-  onSearch,
   search,
   onSave,
   searchForm,

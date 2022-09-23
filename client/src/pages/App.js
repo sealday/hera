@@ -1,27 +1,18 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Outlet, useNavigate } from 'react-router-dom'
-import { Layout, Button, Dropdown, Menu, message, Tabs, Table } from 'antd'
-
+import { matchPath } from 'react-router-dom'
+import { useNavigate } from 'utils/hooks'
+import { Layout, Button, Dropdown, Menu, message, Tabs } from 'antd'
 import short_id from 'shortid'
-import { get } from 'lodash'
-
-import { CurrentStore, Loading, MenuList } from '../components'
+import _, { get } from 'lodash'
+import { CurrentStore, Error, Loading, MenuList } from '../components'
 import { selectStore } from '../actions'
 import './App.css'
 import { UserOutlined } from '@ant-design/icons'
 import heraApi from '../api'
-import { SimpleSearch } from './report'
 import { TabContext } from '../globalConfigs'
-import { Record } from './store'
 import { changeTab, removeItem } from '../features/coreSlice'
-import { ContractDetails } from './finance'
-
-const routes = {
-  simple_search: <SimpleSearch />,
-  record: <Record />,
-  contract: <ContractDetails />,
-}
+import { config as routeConfigs } from 'routes'
 
 export default ({ onEnter, onLeave }) => {
   const { onlineUsers, store, user, config, loading, items, active } = useSelector(state => ({
@@ -81,14 +72,18 @@ export default ({ onEnter, onLeave }) => {
     }))}
     />
   )
-  const tabItems = [
-    { label: '合同管理', key: 'default', children: <Outlet /> },
-  ].concat(items.map(item => {
+  const tabItems = items.map(item => {
+    const routeConfig = routeConfigs.find(config => {
+      return matchPath(config.path, item.name)
+    })
+    const pathmatch = matchPath(routeConfig.path, item.name)
     const children = (
-      <TabContext.Provider value={{ params: item.params, key: item.key, has: true }}>{routes[item.name]}</TabContext.Provider>
+      <TabContext.Provider value={{ params: _.get(pathmatch, 'params', {}), key: item.key, has: true }}>
+        {_.get(routeConfig, 'element', <Error message='找不到页面' />)}
+      </TabContext.Provider>
     )
     return ({ label: item.label, key: item.key, children })
-  }))
+  })
   const onTabEdit = (targetKey, action) => {
     if (action === 'add') {
 
@@ -114,7 +109,9 @@ export default ({ onEnter, onLeave }) => {
       </Layout.Header>
       <Layout>
         <Layout.Sider width={240} className='sider'>
-          <MenuList user={user} store={store} />
+          <TabContext.Provider value={{ has: true }}>
+            <MenuList user={user} store={store} />
+          </TabContext.Provider>
         </Layout.Sider>
         <Layout className='content'>
           {isStoreSelected() && <Tabs onEdit={onTabEdit} hideAdd activeKey={active} onChange={(k) => dispatch(changeTab(k))} items={tabItems} type='editable-card' />}
