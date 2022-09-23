@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Outlet, useNavigate } from 'react-router-dom'
-import { Layout, Button, Dropdown, Menu, message } from 'antd'
+import { Layout, Button, Dropdown, Menu, message, Tabs, Table } from 'antd'
 
 import short_id from 'shortid'
 import { get } from 'lodash'
@@ -11,10 +11,23 @@ import { selectStore } from '../actions'
 import './App.css'
 import { UserOutlined } from '@ant-design/icons'
 import heraApi from '../api'
+import { SimpleSearch } from './report'
+import { TabContext } from '../globalConfigs'
+import { Record } from './store'
+import { changeTab, removeItem } from '../features/coreSlice'
+import { ContractDetails } from './finance'
+
+const routes = {
+  simple_search: <SimpleSearch />,
+  record: <Record />,
+  contract: <ContractDetails />,
+}
 
 export default ({ onEnter, onLeave }) => {
-  const { onlineUsers, store, user, config, loading } = useSelector(state => ({
+  const { onlineUsers, store, user, config, loading, items, active } = useSelector(state => ({
     onlineUsers: state.core.onlineUsers,
+    items: state.core.items,
+    active: state.core.active,
     store: state.system.store,
     user: state.system.user,
     config: state.system.config,
@@ -68,6 +81,21 @@ export default ({ onEnter, onLeave }) => {
     }))}
     />
   )
+  const tabItems = [
+    { label: '合同管理', key: 'default', children: <Outlet /> },
+  ].concat(items.map(item => {
+    const children = (
+      <TabContext.Provider value={{ params: item.params, key: item.key, has: true }}>{routes[item.name]}</TabContext.Provider>
+    )
+    return ({ label: item.label, key: item.key, children })
+  }))
+  const onTabEdit = (targetKey, action) => {
+    if (action === 'add') {
+
+    } else {
+      dispatch(removeItem(targetKey))
+    }
+  }
   return (
     <Layout className='App'>
       <Layout.Header className='header'>
@@ -89,7 +117,7 @@ export default ({ onEnter, onLeave }) => {
           <MenuList user={user} store={store} />
         </Layout.Sider>
         <Layout className='content'>
-          {isStoreSelected() && <Outlet />}
+          {isStoreSelected() && <Tabs onEdit={onTabEdit} hideAdd activeKey={active} onChange={(k) => dispatch(changeTab(k))} items={tabItems} type='editable-card' />}
           {!isStoreSelected() && <CurrentStore />}
         </Layout>
       </Layout>

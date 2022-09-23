@@ -5,7 +5,7 @@ import { flowRight, last, dropRight, forEach } from 'lodash'
 import { saveAs } from 'file-saver'
 
 import * as validator from './validator'
-import { history, BASENAME } from '../globals'
+import { history, BASENAME } from '../globalConfigs'
 
 /**
  * 计算规格的数值表达

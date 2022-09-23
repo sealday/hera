@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { useSelector } from 'react-redux'
-import { history, BASENAME } from '../globals'
+import { history, BASENAME } from '../globalConfigs'
 
 const baseQuery = fetchBaseQuery({
     baseUrl: '/api/',

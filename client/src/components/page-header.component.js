@@ -1,12 +1,16 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Button, Card, Col, Form, PageHeader, Row, Space, Input, Descriptions, Dropdown, Menu } from 'antd'
 import { PlusCircleOutlined, EditOutlined, PrinterOutlined, ArrowLeftOutlined, SearchOutlined, ClearOutlined, SaveOutlined, ExportOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
 import { isUpdatable } from '../utils'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import ModalFormButton from './button/modal-form.button'
 import ModalPrintPreviewButton from './button/modal-print-preview.button'
 import { genFormContent } from '../utils/antd'
+import { addItem, updateTitle } from '../features/coreSlice'
+import _, { uniq, uniqueId } from 'lodash'
+import { TabContext } from '../globalConfigs'
+import { useTab } from 'utils/hooks'
 
 export default ({
   title,
@@ -27,19 +31,16 @@ export default ({
   extra
 }) => {
   const [filterValues, setFilterValues] = useState({})
-  const navigate = useNavigate()
   const { user, store } = useSelector(state => ({
     user: state.system.user,
     store: state.system.store,
   }))
   const [form] = Form.useForm()
+  const tabButton = useTab({ title })
   const recentItems = []
   const actions = []
-  const canGoBack = () => {
-    return window.history.length > 1
-  }
-  if (canGoBack()) {
-    actions.push(<Button key='goBack' type='default' onClick={() => navigate(-1)} icon={<ArrowLeftOutlined />}>返回</Button>)
+  if (tabButton) {
+    actions.push(tabButton)
   }
   if (extra) {
     actions.push(...extra)

@@ -1,5 +1,5 @@
 import { ajax } from './utils'
-import { history, BASENAME } from './globals'
+import { history, BASENAME } from './globalConfigs'
 import { message } from 'antd'
 
 export const SYSTEM_LOADED = 'SYSTEM_LOADED'

@@ -10,7 +10,7 @@ import { Alert, ConfigProvider } from 'antd'
 import { unstable_HistoryRouter as HistoryRouter } from 'react-router-dom'
 import io from 'socket.io-client'
 import axios from 'axios'
-import { store, history, BASENAME } from './globals'
+import { store, history, BASENAME } from './globalConfigs'
 import { systemLoaded, selectStore } from './actions'
 import { updateOnlineUsers } from './features/coreSlice'
 import { ajax } from './utils'
@@ -19,10 +19,10 @@ import Routes from './routes'
 // css 除非是模块自己的，否则直接在这里进行全局 import
 import './index.less'
 // 初始化 sentry
-init({
-  release: 'hera@3.0.0',
-  dsn: "https://213cb45f8df943e0b77f89a23ee5a4e8@o374147.ingest.sentry.io/5191691"}
-)
+// init({
+//   release: 'hera@3.0.0',
+//   dsn: "https://213cb45f8df943e0b77f89a23ee5a4e8@o374147.ingest.sentry.io/5191691"}
+// )
 // 初始化 moment 时间属性
 moment.locale('zh-CN')
 // 初始化 socket

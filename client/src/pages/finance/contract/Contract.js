@@ -3,7 +3,7 @@ import moment from 'moment'
 import { pick } from 'lodash'
 import { Button, Space, Tag, message, ConfigProvider } from 'antd'
 import { useNavigate } from 'react-router-dom'
-import { Error, LinkButton, Loading, PageHeader, PopconfirmButton, ResultTable } from '../../../components'
+import { Error, Link, Loading, PageHeader, PopconfirmButton, ResultTable } from '../../../components'
 import heraApi from '../../../api'
 
 const ContractDeleteButton = ({ record }) => {
@@ -66,7 +66,7 @@ export default () => {
       title: '操作', key: 'action', render(_, record) {
         return (
           <Space>
-            <LinkButton to={`/contract/${record._id}`}>查看</LinkButton>
+            <Link to={`/contract/${record._id}`}>查看</Link>
             <Button type='link' onClick={() => onClone(record)}>克隆</Button>
             {record.status === '完结' ? <ContractUnfinishButton record={record} /> : <ContractFinishButton record={record} />}
             <ContractDeleteButton record={record} />

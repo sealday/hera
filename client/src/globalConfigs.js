@@ -7,6 +7,7 @@ import { setupListeners } from '@reduxjs/toolkit/query'
 import { heraApi } from './api'
 import _ from 'lodash'
 import { message } from 'antd'
+import { createContext } from 'react'
 
 export const BASENAME = '/system'
 
@@ -18,6 +19,12 @@ export const RECORD_TYPE_MAP = {
   'check': '盘点',
   'transfer': '暂存',
 }
+
+export const TabContext = createContext({
+  params: {},
+  key: '',
+  has: false,
+})
 
 const rtkQueryErrorLogger = (api) => (next) => (action) => {
   // 跳过登入、登出行为

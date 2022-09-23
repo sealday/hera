@@ -1,15 +1,15 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import moment from 'moment'
 import { Popconfirm, Button, Card, Table, Space, Tag } from 'antd'
-import { Link, useParams } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { ALL_PLAN, CONTRACT_DETAILS, newErrorNotify, newSuccessNotify, queryContractDetails, queryAllPlans } from '../../../actions'
-import { ajax } from '../../../utils'
+import { ALL_PLAN, queryAllPlans } from '../../../actions'
 import { edit, addItem, addCalc } from './index'
-import { PLAN_CATEGORY_MAP } from '../../../constants'
-import _, { add, pick } from 'lodash'
+import _, { pick } from 'lodash'
 import { Error, Loading, PageHeader } from '../../../components'
 import heraApi from '../../../api'
+import { TabContext } from '../../../globalConfigs'
+import { useParams } from 'utils/hooks'
 
 const INITIAL_CATEGORY = '租金'
 
@@ -49,14 +49,14 @@ const mapStateToProps = (state) => {
   }
 }
 
-const ProjectLabel = connect(state => ({
-  projects: state.system.projects,
-}))(({ projects, projectId }) => {
-  if (projects && projects.get(projectId)) {
-    return <>{projects.get(projectId).completeName}</>
+const ProjectLabel = ({ id }) => {
+  const getProjectListAll = heraApi.useGetProjectListAllQuery()
+  if (getProjectListAll.isError || getProjectListAll.isLoading) {
+    return <Loading />
   }
-  return <>projectId</>
-})
+  const project = _.find(getProjectListAll.data, item => item._id === id)
+  return _.get(project, 'completeName')
+}
 
 const ContractDetails = connect(mapStateToProps)(({ projects, dispatch, plans }) => {
   const getRuleList = heraApi.useGetRuleListQuery()
@@ -78,7 +78,7 @@ const ContractDetails = connect(mapStateToProps)(({ projects, dispatch, plans })
   const rules = getRuleList.data
   const contract = getContract.data
   const descriptions = [
-    { label: "项目部", children: <ProjectLabel projectId={contract.project} /> },
+    { label: "项目部", children: <ProjectLabel id={contract.project} /> },
     { label: "状态", children: <Tag color="green">{contract.status}</Tag> },
     { label: "签约时间", children: moment(contract.date).format('YYYY-MM-DD') },
     { label: "备注", children: contract.comments },
