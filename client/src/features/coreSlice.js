@@ -19,7 +19,7 @@ const coreSlice = createSlice({
             const item = state.items.find(item => item.key === action.payload.key)
             if (item) {
                 state.active = action.payload.key
-                state.history.push(action.payload)
+                state.history.push(action.payload.key)
             } else {
                 state.items.push(action.payload)
                 state.active = action.payload.key
@@ -27,7 +27,7 @@ const coreSlice = createSlice({
             }
         },
         removeItem(state, action) {
-            _.remove(state.items, item => action.payload === item.key)
+            _.remove(state.items, item => item.key === action.payload)
             _.remove(state.history, item => item === action.payload)
             state.active = _.last(state.history)
         },

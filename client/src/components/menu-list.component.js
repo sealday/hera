@@ -47,7 +47,7 @@ const allMenu = [
       },
       {
         name: '盘点录入',
-        path: '/record/create/check',
+        path: '/record/create/check/in',
         roles: ['系统管理员', '基地仓库管理员'],
       },
     ]
