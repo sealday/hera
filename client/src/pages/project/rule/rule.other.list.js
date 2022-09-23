@@ -112,7 +112,7 @@ export default () => {
                   </Form.Item>
                 </Col>
                 <Col flex='20px'>
-                  <Button type='text' onClick={() => remove(field.key)} icon={<MinusCircleOutlined />} />
+                  <Button type='text' onClick={() => remove(field.name)} icon={<MinusCircleOutlined />} />
                 </Col>
               </Row>
             ))}
