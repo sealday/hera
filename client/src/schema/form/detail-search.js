@@ -41,10 +41,11 @@ export default [
     name: "projectType",
     label: "仓库类型",
     type: "text",
-    default: '项目仓库',
+    default: '__ANY__',
     option: {
-      type: 'static_value_only',
-      values: RECORD_CLIENT_TYPES,
+      type: 'static',
+      labels: ['任意类型'].concat(RECORD_CLIENT_TYPES),
+      values: ['__ANY__'].concat(RECORD_CLIENT_TYPES),
     },
   },
   {

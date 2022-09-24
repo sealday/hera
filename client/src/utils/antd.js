@@ -52,6 +52,27 @@ const genFormContent = (schema, cols = 0, form = null, initialValues = {}) => {
             </Form.Item>
           ))
         }
+      } else if (item.option.type === 'static') {
+        const options = _.zip(item.option.labels, item.option.values)
+        if (options.length < 5) {
+          // 少于 5 个直接显示
+          formItems.push((
+            <Form.Item key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
+              <Radio.Group disabled={item.disabled}>
+                {options.map(([label, value]) => <Radio key={value} value={value}>{label}</Radio>)}
+              </Radio.Group>
+            </Form.Item>
+          ))
+        } else {
+          // 多于 5 个下拉框显示
+          formItems.push((
+            <Form.Item key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
+              <Select disabled={item.disabled}>
+                {options.map(([label, value]) => <Select.Option key={value} value={value}>{label}</Select.Option>)}
+              </Select>
+            </Form.Item>
+          ))
+        }
       } else if (item.option.type === 'ref') {
         if (item.option.select === 'cascader') {
           formItems.push((

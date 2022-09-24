@@ -20,7 +20,8 @@ const RefSelectComponent = ({ item, noStyle }) => {
         {() => {
           const filters = _.map(item.option.filters, item => ({ name: item.name, value: form.getFieldValue(item.value) }))
           let data = _.chain(result.data)
-          data = data.filter(record => _.every(filters, filter => record[filter.name] === filter.value))
+          // TODO 对 any 逻辑特殊处理
+          data = data.filter(record => _.every(filters, filter => filter.value === '__ANY__' ? true : record[filter.name] === filter.value))
           data = data.uniqBy(value)
           // 转换
           data = data.map(item => ({ label: item[label], value: item[value], pinyin: item.pinyin }))

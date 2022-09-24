@@ -1,7 +1,4 @@
-import { Form } from "antd"
 import _ from "lodash"
-import moment from "moment"
-import { useState } from "react"
 import { useSelector } from "react-redux"
 import heraApi from "../../api"
 import { PageHeader, ResultTable } from "../../components"
@@ -16,6 +13,7 @@ export default () => {
     detailSearch({
       ...v,
       storeId: store._id,
+      projectType: v.projectType === '__ANY__' ? undefined : v.projectType,
       dateRange: undefined,
       startDate: _.size(v.dateRange) === 2 ? v.dateRange[0].startOf('day') : undefined,
       endDate: _.size(v.dateRange) === 2 ? v.dateRange[1].add(1, 'day').startOf('day') : undefined,
