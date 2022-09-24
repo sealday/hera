@@ -1320,6 +1320,65 @@ export class StoreService {
         }
       })
     }
+    // 关联项目类型
+    if (condition.projectType && !condition.projectId) {
+      pipeline.push({
+        $lookup: {
+          from: 'projects',
+          let: { inStock: '$inStock' },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ['$_id', '$$inStock'] },
+                  ]
+                }
+              }
+            }
+          ],
+          as: 'inProject',
+        }
+      })
+      pipeline.push({
+        $unwind: '$inProject',
+      })
+      pipeline.push({
+        $lookup: {
+          from: 'projects',
+          let: { outStock: '$outStock' },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ['$_id', '$$outStock'] },
+                  ]
+                }
+              }
+            }
+          ],
+          as: 'outProject',
+        }
+      })
+      pipeline.push({
+        $unwind: '$outProject',
+      })
+      pipeline.push({
+        $match: {
+          $or: [
+            {
+              outStock: new Types.ObjectId(condition.storeId),
+              'inProject.type': condition.projectType, 
+            },
+            {
+              inStock: new Types.ObjectId(condition.storeId),
+              'outProject.type': condition.projectType, 
+            }
+          ]
+        }
+      })
+    }
     // 关联日期范围
     if (condition.startDate && condition.endDate) {
       pipeline.push({
