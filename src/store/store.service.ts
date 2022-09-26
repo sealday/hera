@@ -1288,7 +1288,7 @@ export class StoreService {
 
 
   async detailSearch(condition: any, user: User) {
-    this.loggerService.logInfo(user, '查询', { message: '查询库存信息', payload: condition })
+    this.loggerService.logInfo(user, '查询', { message: '查询明细信息', payload: condition })
     const pipeline = []
     // 关联仓库/项目
     if (condition.projectId) {
