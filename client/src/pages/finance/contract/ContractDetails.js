@@ -8,6 +8,7 @@ import _, { pick } from 'lodash'
 import { Error, Link, Loading, PageHeader } from 'components'
 import heraApi from '../../../api'
 import { useParams } from 'utils/hooks'
+import { RULE_CATEGORIES } from 'constants'
 
 const INITIAL_CATEGORY = '租金'
 
@@ -126,7 +127,7 @@ const ContractDetails = connect(mapStateToProps)(({ projects, dispatch, plans })
         ]}
       >
         <Table dataSource={contract.items}>
-          <Table.Column key="category" title="分类" dataIndex="category" />
+          <Table.Column key="category" title="分类" dataIndex="category" render={text =>_.get(RULE_CATEGORIES.find(category => category.value === text), 'label')} />
           <Table.Column key="plan" title="名称" dataIndex="plan"
             render={plan => _.get(rules.find(rule => rule._id === plan), 'name', '没找到对应规则') } />
           <Table.Column key="start" title="开始日期" dataIndex="start"

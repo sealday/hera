@@ -46,7 +46,7 @@ export default () => {
   const items = [
     { key: 'rent', label: <LinkButton to='/rule/create/租金' >租金规则</LinkButton> },
     { key: 'weight', label: <LinkButton to='/rule/create/计重' >计重规则</LinkButton> },
-    { key: 'other', label: <LinkButton to='/rule/create/非租' >非租规则</LinkButton> },
+    { key: 'other', label: <LinkButton to='/rule/create/非租' >其它费用</LinkButton> },
   ]
   return (
     <PageHeader
