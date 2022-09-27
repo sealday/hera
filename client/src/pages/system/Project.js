@@ -42,6 +42,7 @@ export default () => {
       filters: [{ text: '已完结', value: 'FINISHED' }, {text: '进行中', value: 'UNDERWAY'}],
       onFilter: (value, record) => record.status === value,
     },
+    { title: '编号', dataIndex: 'code', key: 'code', width: '100px', },
     { title: '类型', dataIndex: 'type', key: 'type', width: '100px', },
     { title: '公司名称', dataIndex: 'company', key: 'company', ellipsis: true },
     { title: '公司电话', dataIndex: 'companyTel', key: 'companyTel' },
