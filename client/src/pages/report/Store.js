@@ -166,11 +166,6 @@ const Store = () => {
       dataIndex: 'size',
     },
     {
-      key: 'size',
-      title: '规格',
-      dataIndex: 'size',
-    },
-    {
       key: 'in',
       title: '入库数量',
       dataIndex: 'in',
