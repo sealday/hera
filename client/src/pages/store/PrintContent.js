@@ -189,8 +189,8 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
   each(entries, (v, name) => {
     entries[name].forEach(entry => {
       printEntries.push([
-        entry.name,
-        entry.size,
+        { colSpan: 2, children: entry.name + '[' + entry.size + ']'},
+        { hidden: true, children: '' },
         entry.count + ' ' + productTypeMap[name].countUnit,
         fixed(total_(entry, products)) + getUnit(productTypeMap[name]),
         entry.price ? '￥' + entry.price : '',
@@ -235,10 +235,10 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
     amount += sum[name] // 计算总金额
     printEntries.push(
       [
-        name + '|小计',
+        { colSpan: 2, children: name + '[小计]' },
         { hidden: true, children: '' },
         { hidden: true, children: '' },
-        { colSpan: 3, children: fixed(total[name]) + ' ' + getUnit(productTypeMap[name]) },
+        { colSpan: 2, children: fixed(total[name]) + ' ' + getUnit(productTypeMap[name]) },
         '',
         '￥' + fixed(sum[name]),
         '',
@@ -292,7 +292,7 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
     }
   }
   // 标题数量，单栏一倍，双栏两倍
-  const columnNames = ['名称', '规格', '数量', '小计', '单价', '金额', '备注']
+  const columnNames = [{ children: '产品', colSpan: 2 }, { children: '', hidden: true }, '数量', '小计', '单价', '金额', '备注']
   if (columnStyle === 'double') {
     columnNames.push(...columnNames)
   }
@@ -374,8 +374,10 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
           <tr>
             {columnNames
               .filter((_name, index) => !ignoreIndexes.includes(index))
-              .map((name, index) => (
-                <th key={index}>{name}</th>
+              .map((col, index) => (
+                <th key={index}
+                  style={_.get(col, 'hidden', false) ? { display: 'none' } : {}}
+                  colSpan={_.get(col, 'colSpan', 1)}>{_.get(col, 'children', col)}</th>
               ))}
           </tr>
         </thead>
