@@ -1,6 +1,8 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppModule } from 'src/app/app.module';
+import { EventsGateway } from 'src/events/events.gateway';
+import { EventsModule } from 'src/events/events.module';
 import { PlanSchema } from 'src/schemas/plan.schema';
 import { PriceSchema } from 'src/schemas/price.schema';
 import { ProductSchema } from 'src/schemas/product.schema';
@@ -21,6 +23,7 @@ import { StoreService } from './store.service';
 
 @Module({
   imports: [
+    EventsModule,
     MongooseModule.forFeature([
       { name: 'Record', schema: RecordSchema },
       { name: 'Project', schema: ProjectSchema },

@@ -5,12 +5,14 @@ import { Project, AppService } from 'src/app/app.service';
 import { User } from 'src/users/users.service';
 import { convert } from 'src/utils/pinyin';
 import { LoggerService } from 'src/app/logger/logger.service';
+import { EventsGateway } from 'src/events/events.gateway';
 
 @Injectable()
 export class ProjectService {
 
   constructor(
     @InjectModel('Project') private projectModel: Model<Project>,
+    private eventsGateway: EventsGateway,
     private appService: AppService,
     private loggerService: LoggerService,
   ) { }
@@ -29,6 +31,11 @@ export class ProjectService {
 
   async create(body: Project, user: User) {
     const project = await (new this.projectModel(this.preSave(body))).save()
+    this.eventsGateway.broadcast({
+      name: 'project',
+      type: 'create',
+      id: project._id,
+    })
     // TODO 落下日志
     return project
   }
@@ -39,6 +46,11 @@ export class ProjectService {
       this.preSave(body), 
       { new: true },
     )
+    this.eventsGateway.broadcast({
+      name: 'project',
+      type: 'update',
+      id: projectId,
+    })
     return updatedProject
   }
 
@@ -51,6 +63,11 @@ export class ProjectService {
     this.loggerService.logDanger(user, '删除', { message: `删除项目 ${removedProject.completeName}` })
     // 进入回收站
     await this.appService.onDeleted('Project', removedProject, user)
+    this.eventsGateway.broadcast({
+      name: 'project',
+      type: 'delete',
+      id: projectId,
+    })
     return removedProject
   }
 
@@ -62,6 +79,11 @@ export class ProjectService {
     } else if (status === 'UNDERWAY') {
       this.loggerService.logDanger(user, '启用', { message: `启用项目 ${updatedProject.completeName}` })
     }
+    this.eventsGateway.broadcast({
+      name: 'project',
+      type: 'update',
+      id: projectId,
+    })
     return updatedProject
   }
 }

@@ -25,6 +25,10 @@ export class EventsGateway implements OnGatewayInit, OnGatewayConnection, OnGate
     this.server.emit('server:users', this.userService.onlineUsers)
   }
 
+  broadcast(body: any) {
+    this.server.emit('server:update', body)
+  }
+
   @SubscribeMessage('client:user')
   userLogined(client: any, payload: any) {
     this.logger.log(`用户登入 ${JSON.stringify(payload)}`)
