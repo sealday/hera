@@ -17,12 +17,22 @@ import Routes from './routes'
 
 // css 除非是模块自己的，否则直接在这里进行全局 import
 import './index.less'
+import heraApi from 'api'
+import _ from 'lodash'
 // 初始化 moment 时间属性
 moment.locale('zh-CN')
 // 初始化 socket
 const socket = io()
 socket.on('server:users', (users) => {
   store.dispatch(updateOnlineUsers(users))
+})
+socket.on('server:update', (body) => {
+  // TODO 排除本身
+  if (body.type === 'create') {
+    store.dispatch(heraApi.util.invalidateTags([{ type: _.capitalize(body.name), id: 'LIST' }]))
+  } else {
+    store.dispatch(heraApi.util.invalidateTags([{ type: _.capitalize(body.name), id: body.id }]))
+  }
 })
 const onLogined = () => {
   const token = localStorage.getItem('X-Hera-Token')
