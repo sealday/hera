@@ -15,7 +15,7 @@ export class ContractService {
   ) { }
 
   async find() {
-    return this.contractModel.find({ status: { '$ne': '已删除' } }).sort({ _id: -1 })
+    return this.contractModel.find({ status: { '$ne': '已删除' } }, { calcs: 0 }).sort({ _id: -1 })
   }
 
   async findById(id: String) {
