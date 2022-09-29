@@ -43,6 +43,27 @@ const TotalLabel = ({ field }) => {
   }
 }
 
+const SumLabel = ({ field }) => {
+  const form = Form.useFormInstance()
+  const product = Form.useWatch(['entries', field.name, 'product'], form)
+  const count = Form.useWatch(['entries', field.name, 'count'], form)
+  const price = Form.useWatch(['entries', field.name, 'price'], form)
+  const result = heraApi.useGetProductListQuery()
+  if (result.isError || result.isLoading
+    || _.isEmpty(product)
+    || _.isNaN(count) || _.isUndefined(count)
+    || _.isNaN(price) || _.isUndefined(price)
+  ) {
+    return ''
+  }
+  const fetchResult = _.filter(result.data, item => item.type === product[0] && item.name === product[1] && item.size === product[2])
+  if (fetchResult.length > 0) {
+    return '￥' + fixed((fetchResult[0].isScaled ? fetchResult[0].scale * count : count) * price)
+  } else {
+    return ''
+  }
+}
+
 const WeightLabel = ({ field }) => {
   const form = Form.useFormInstance()
   const product = Form.useWatch(['entries', field.name, 'product'], form)
@@ -61,13 +82,18 @@ const WeightLabel = ({ field }) => {
 
 const Summary = () => {
   const form = Form.useFormInstance()
+  const settings = useContext(SettingContext)
   const entries = Form.useWatch('entries', form)
   const result = heraApi.useGetProductListQuery()
   if (_.isUndefined(entries)) {
     return ''
   }
   // 排除空值
-  const validEntries = _.filter(entries, entry => !_.isUndefined(entry) && !_.isEmpty(entry.product) && !_.isUndefined(entry.count))
+  const validEntries = _.filter(entries, entry => !_.isUndefined(entry)
+    && !_.isEmpty(entry.product)
+    && !_.isUndefined(entry.count)
+    && (!settings.price || !_.isUndefined(entry.price))
+  )
   if (result.isError || result.isLoading || validEntries.length === 0) {
     return ''
   }
@@ -84,9 +110,14 @@ const Summary = () => {
   const calculatedEntries = equippedEntries.map(item => ({
     ...item,
     total: item.isScaled ? item.count * item.scale : item.count,
+    sum: (item.isScaled ? item.count * item.scale : item.count) * item.price,
     weight: item.count * item.weight / 1000,
   }))
   // reduce
+  const initialValues = { 理论重量: { count: 0, unit: '吨' } }
+  if (settings.price) {
+    initialValues['总金额'] = { count: 0, unit: '元' }
+  }
   const resultEntries = _.reduce(calculatedEntries, (result, item) => {
     if (_.isUndefined(result[`${item.type}|${item.name}`])) {
       result[`${item.type}|${item.name}`] = {
@@ -95,9 +126,12 @@ const Summary = () => {
       }
     }
     result[`${item.type}|${item.name}`].count += item.total
+    if (settings.price) {
+      result['总金额'].count += item.sum
+    }
     result['理论重量'].count += item.weight
     return result
-  }, { 理论重量: { count: 0, unit: '吨' } })
+  }, initialValues)
   const items = _.map(resultEntries, (v, k)=> (
     <Descriptions.Item key={k} label={k}>{fixed(v.count)}{v.unit}</Descriptions.Item>
   ))
@@ -170,6 +204,15 @@ export default ({ fields, operation, meta }) => {
         <Form.Item name={[field.name, 'price']} rules={rules}>
           <Input style={styles.block} />
         </Form.Item>
+      )
+    })
+    columns.push({
+      key: 'sum',
+      title: '金额',
+      width: 100,
+      align: 'center',
+      render: (_, field) => (
+        <SumLabel field={field} />
       )
     })
   }
