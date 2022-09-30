@@ -1,4 +1,4 @@
-import { Button, Card, Header, Text } from '@rneui/themed';
+import { Button, Card, Header, Text, Input, Icon } from '@rneui/themed';
 import {
   ScrollView,
   StyleSheet, View,
@@ -8,6 +8,7 @@ import { NavigationContainer, useNavigation, useFocusEffect } from '@react-navig
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Provider, useSelector, useDispatch } from 'react-redux'
 import { store } from './store';
+import { LoginScreen } from './screens/login';
 
 const Stack = createNativeStackNavigator();
 
@@ -83,11 +84,6 @@ const HomeScreen = () => {
   )
 }
 
-const LoginScreen = () => {
-  <View>
-    <Text>登录</Text>
-  </View>
-}
 
 
 const App = () => {
@@ -119,6 +115,17 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: '600',
     color: 'white',
+  },
+
+  icon: {
+    width: 84,
+    alignSelf: 'center',
+  },
+  iconContainer: {
+    height: 150,
+    alignContent: 'center',
+    justifyContent: 'center',
+    paddingTop: 48,
   },
   sectionContainer: {
     marginTop: 32,
