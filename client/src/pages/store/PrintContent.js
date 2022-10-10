@@ -18,7 +18,7 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
   const contracts = heraApi.useGetContractListQuery()
   const getOtherList = heraApi.useGetOtherListQuery()
   const store = useSelector(state => state.system.store)
-  const projects = useSelector(state => state.system.projects)
+  const projects = useSelector(state => state.system.rawProjects)
   const config = useSelector(state => state.system.config)
   const products = useSelector(state => state.system.products)
   const articles = useSelector(state => state.system.articles.valueSeq().toArray())
@@ -204,7 +204,7 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
             colSpan: 2,
             children: _.get(product, 'display', <RefCascaderLabel item={productItem} value={item.product} />)
           }
-          if (product.isAssociated) {
+          if (_.get(product, 'isAssociated')) {
             const associatedEntry =
               [
                 associatedLabel,

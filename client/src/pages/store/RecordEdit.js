@@ -4,7 +4,7 @@ import moment from "moment"
 import { useEffect } from "react"
 import { useSelector } from "react-redux"
 import { useNavigate, useParams } from "utils/hooks"
-import { useGetRecordQuery, useUpdateRecordMutation } from "../../api"
+import heraApi, { useGetRecordQuery, useUpdateRecordMutation } from "../../api"
 import { Error, Loading, PageHeader } from "../../components"
 import RecordForm from "./RecordForm"
 import { SettingContext } from "./records"
@@ -16,19 +16,20 @@ export default () => {
   const [updateRecord, updateResult] = useUpdateRecordMutation()
   const navigate = useNavigate()
   const store = useSelector(state => state.system.store)
-  const projects = useSelector(state => state.system.projects)
+  const getProjectListAll = heraApi.useGetProjectListAllQuery()
   useEffect(() => {
     if (updateResult.isSuccess) {
       navigate(-1)
     }
   }, [navigate, updateResult.isSuccess])
 
-  if (error) {
+  if (error || getProjectListAll.isError) {
     return <Error />
   }
-  if (isLoading) {
+  if (isLoading || getProjectListAll.isLoading) {
     return <Loading />
   }
+  const projects = getProjectListAll.data
   const type = record.type
   const handleSubmit = (record) => {
     record.entries = _.map(record.entries, item => ({
@@ -129,11 +130,11 @@ export default () => {
     // nothing
   } else if (direction === 'in') {
     initialValues.projectId = record.outStock
-    initialValues.type = projects.get(record.outStock).type
+    initialValues.type = _.get(projects.find(p => p._id === record.outStock), 'type')
     titleParts.push('入库')
   } else {
     initialValues.projectId = record.inStock
-    initialValues.type = projects.get(record.inStock).type
+    initialValues.type = _.get(projects.find(p => p._id === record.inStock), 'type')
     titleParts.push('出库')
   }
   const pageTitle = titleParts.join('')

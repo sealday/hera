@@ -9,7 +9,7 @@ import { ResultTable, Link } from '../../components'
 export default ({ search, isCompany }) => {
 
   const { projects, products, store } = useSelector(state => ({
-    projects: state.system.projects,
+    projects: state.system.rawProjects,
     products: state.system.products,
     store: state.system.store,
   }))
