@@ -65,13 +65,15 @@ const Record = () => {
   const params = useParams()
   const navigate = useNavigate()
   const { data: record, error, isLoading } = useGetRecordQuery(params.id)
-  const projects = useSelector(state => state.system.projects)
-  if (error) {
+
+  const getProjectListAll = heraApi.useGetProjectListAllQuery()
+  if (error || getProjectListAll.error) {
     return <Error />
   }
-  if (isLoading) {
+  if (isLoading || getProjectListAll.isLoading) {
     return <Loading />
   }
+  const projects = getProjectListAll.data
   const onEdit = () => {
     navigate(`/record/${params.id}/edit`)
   }
@@ -93,10 +95,10 @@ const Record = () => {
 
   const descriptions = []
   if (record.type !== '盘点') {
-    descriptions.push({ label: '出库项目/仓库', children: projects.get(record.outStock).name })
-    descriptions.push({ label: '入库项目/仓库', children: projects.get(record.inStock).name })
+    descriptions.push({ label: '出库项目/仓库', children: _.get(projects.find(p => p._id === record.outStock), 'name') })
+    descriptions.push({ label: '入库项目/仓库', children: _.get(projects.find(p => p._id === record.inStock), 'name') })
   } else {
-    descriptions.push({ label: '仓库盘点', children: projects.get(record.inStock).name })
+    descriptions.push({ label: '仓库盘点', children: _.get(projects.find(p => p._id === record.inStock), 'name') })
   }
   descriptions.push({ label: '出库时间', children: moment(record.outDate).format('YYYY-MM-DD') })
   descriptions.push({ label: '制单人', children: record.username })
