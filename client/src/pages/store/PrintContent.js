@@ -204,7 +204,7 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
             colSpan: 2,
             children: _.get(product, 'display', <RefCascaderLabel item={productItem} value={item.product} />)
           }
-          if (_.get(product, 'isAssociated')) {
+          if (product.isAssociated) {
             const associatedEntry =
               [
                 associatedLabel,
@@ -292,7 +292,7 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
     }
   }
   // 标题数量，单栏一倍，双栏两倍
-  const columnNames = [{ children: '产品', colSpan: 2 }, { children: '', hidden: true }, '数量', '小计', '单价', '金额', '备注']
+  const columnNames = [{ children: '物料名称及规格', colSpan: 2 }, { children: '', hidden: true }, '数量', '小计', '单价', '金额', '备注']
   if (columnStyle === 'double') {
     columnNames.push(...columnNames)
   }
