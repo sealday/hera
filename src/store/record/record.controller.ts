@@ -1,9 +1,14 @@
-import { Controller, UseGuards, Request, Body, Post, Param, Get, UseInterceptors } from '@nestjs/common';
+import { Controller, UseGuards, Request, Body, Post, Param, Get, UseInterceptors, Res, StreamableFile } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { RecordService } from './record.service';
 import { WrapperInterceptor } from 'src/app/wrapper.interceptor';
 import { Auth } from 'src/app/user.decorator';
 import { User } from 'src/users/users.service';
+import { renderToStream } from '@react-pdf/renderer';
+import { createReadStream } from 'fs';
+import { renderIt } from './record.document';
+import type { Response } from 'express';
+
 
 @Controller('record')
 @UseGuards(JwtAuthGuard)
@@ -27,6 +32,12 @@ export class RecordController {
   async updateTransport(@Param('id') recordId: string, @Body() body: any, @Auth() user: User) {
     const record = await this.recordService.updateTransport(body, recordId, user)
     return { record }
+  }
+
+  @Get(':id/preview')
+  async preview(@Param('id') recordId: string, @Auth() user: User, @Res() res: Response) {
+    const file = await renderIt()
+    file.pipe(res)
   }
 
   @Post(':id/transport_paid')

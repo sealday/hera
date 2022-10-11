@@ -2,9 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import * as moment from 'moment';
 import { Model, Types } from 'mongoose';
+import { Express } from 'express';
 import * as _ from 'lodash'
+import * as mime from 'mime-types';
 
 import { User } from '../users/users.service';
+import { Upload } from 'src/schemas/upload.schema';
 
 export type Record = any;
 export type Product = any;
@@ -30,6 +33,7 @@ export class AppService {
     @InjectModel('Product') private productModel: Model<Product>,
     @InjectModel('Operation') private operationModel: Model<Operation>,
     @InjectModel('Counter') private counterModel: Model<Counter>,
+    @InjectModel(Upload.name) private uploadModel: Model<Upload>,
     @InjectModel('Recycle') private recycleModel: Model<Recycle>,
   ) { }
 
@@ -104,5 +108,16 @@ export class AppService {
   async onDeleted(src: string, obj: object, user: User) {
     const recycle = new this.recycleModel({ src, obj, user: _.pick(user, ['username', 'profile.name'])})
     await recycle.save()
+  }
+
+  async upload(file: Express.Multer.File) {
+    const uploadObject = new this.uploadModel({
+      filename: file.filename,
+      mimetype: file.mimetype,
+      size: file.size,
+      extension: mime.extension(file.mimetype),
+    })
+    await uploadObject.save()
+    return uploadObject.toObject()
   }
 }

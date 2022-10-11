@@ -1,7 +1,10 @@
-import { BadRequestException, Controller, Get, Param, Query, Request, UseGuards } from '@nestjs/common';
+import { BadRequestException, Controller, Get, Param, Post, Query, Request, StreamableFile, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { AppService } from './app.service';
-
+import { Express } from 'express';
+import { createReadStream } from 'fs';
+import { join } from 'path';
 
 @Controller()
 @UseGuards(JwtAuthGuard)
@@ -24,6 +27,18 @@ export class AppController {
         user: req.user,
       }
     }
+  }
+
+  @Post('upload')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadFile(@UploadedFile() file: Express.Multer.File) {
+    return await this.appService.upload(file)
+  }
+
+  @Get('upload/:filename')
+  async upload(@Param('filename') filename: string) {
+    const file = createReadStream(join(process.cwd(), 'uploads', filename))
+    return new StreamableFile(file)
   }
 
   /**
