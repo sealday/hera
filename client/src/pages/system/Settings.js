@@ -22,6 +22,7 @@ class Home extends Component {
             systemName: config.systemName,
             externalNames: config.externalNames,
             printSideComment: config.printSideComment,
+            posts: config.posts || [],
           }}
           onSubmit={this.handleSubmit.bind(this)}
         />
