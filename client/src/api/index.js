@@ -1,12 +1,12 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { useSelector } from 'react-redux'
+import { getAuthToken } from 'utils'
 import { history, BASENAME } from '../globalConfigs'
 
 const baseQuery = fetchBaseQuery({
     baseUrl: '/api/',
     prepareHeaders: (headers, _api) => {
-        // FIXME 每一次都从 localStorage 中取是否不太合适
-        const token = localStorage.getItem('X-Hera-Token')
+        const token = getAuthToken()
         headers.set('Authorization', `Bearer ${token}`)
         return headers
     },

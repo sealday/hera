@@ -671,3 +671,8 @@ export const filterProjects = (projects, user) => {
     return projects
   }
 }
+
+export const getAuthToken = () => {
+  const token = localStorage.getItem('X-Hera-Token')
+  return token
+}

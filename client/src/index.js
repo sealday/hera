@@ -12,7 +12,7 @@ import axios from 'axios'
 import { store, history, BASENAME } from './globalConfigs'
 import { systemLoaded, selectStore } from './actions'
 import { updateOnlineUsers } from './features/coreSlice'
-import { ajax } from './utils'
+import { ajax, getAuthToken } from './utils'
 import Routes from './routes'
 
 // css 除非是模块自己的，否则直接在这里进行全局 import
@@ -35,7 +35,7 @@ socket.on('server:update', (body) => {
   }
 })
 const onLogined = () => {
-  const token = localStorage.getItem('X-Hera-Token')
+  const token = getAuthToken()
   axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
   ajax('/api/load').then(res => {
     store.dispatch(systemLoaded(res.data))

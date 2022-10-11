@@ -8,6 +8,8 @@ import { useCallback } from "react"
 import { useContext } from "react"
 import { useDispatch } from "react-redux"
 import { useNavigate as useRouteNavigate, useParams as useRouteParams, useSearchParams } from "react-router-dom"
+import QRCode from 'qrcode'
+import { useState } from "react"
 
 export const useParams = () => {
   const routeParams = useRouteParams()
@@ -72,4 +74,25 @@ export const useNavigate = () => {
     return tabNavigate
   } 
   return navigate
+}
+
+export const useQrCode = (value) => {
+  const [result, setResult] = useState(null)
+  useEffect(() => {
+    QRCode.toDataURL(value).then(url => {
+      setResult(url)
+    })
+  }, [value])
+
+  if (result) {
+    return {
+      isLoading: false,
+      data: result,
+    }
+  } else {
+    return {
+      isLoading: true,
+      data: null,
+    }
+  }
 }
