@@ -12,8 +12,10 @@ import { login } from '../features/coreSlices';
 
 const LoginScreen = () => {
   const dispatch = useDispatch()
+  const navigation = useNavigation()
   const onLogin = () => {
     dispatch(login())
+    navigation.goBack()
   }
   return (
     <View>

@@ -9,6 +9,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Provider, useSelector, useDispatch } from 'react-redux'
 import { store } from './store';
 import { LoginScreen } from './screens/login';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { ScanScreen } from './screens/scan';
 
 const Stack = createNativeStackNavigator();
 
@@ -31,6 +33,18 @@ const HomeScreen = () => {
           text: '赫拉管理系统',
           style: styles.title,
         }}
+
+        rightComponent={
+          <View>
+            <TouchableOpacity onPress={() => navigation.navigate('Scan')} >
+              <Icon
+                name='scan1'
+                type='antdesign'
+                color='#FFF'
+              />
+            </TouchableOpacity>
+          </View>
+        }
       />
       <ScrollView>
         <Card>
@@ -38,46 +52,6 @@ const HomeScreen = () => {
           <Card.Divider />
           <Text>15 单</Text>
           <Button raised onPress={() => navigation.push('Login')} title='登录' />
-        </Card>
-        <Card>
-          <Card.Title>出库单</Card.Title>
-          <Card.Divider />
-          <Text>14 单</Text>
-        </Card>
-        <Card>
-          <Card.Title>出库单</Card.Title>
-          <Card.Divider />
-          <Text>14 单</Text>
-        </Card>
-        <Card>
-          <Card.Title>入库单</Card.Title>
-          <Card.Divider />
-          <Text>14 单</Text>
-        </Card>
-        <Card>
-          <Card.Title>出库单</Card.Title>
-          <Card.Divider />
-          <Text>14 单</Text>
-        </Card>
-        <Card>
-          <Card.Title>出库单</Card.Title>
-          <Card.Divider />
-          <Text>14 单</Text>
-        </Card>
-        <Card>
-          <Card.Title>入库单</Card.Title>
-          <Card.Divider />
-          <Text>14 单</Text>
-        </Card>
-        <Card>
-          <Card.Title>出库单</Card.Title>
-          <Card.Divider />
-          <Text>14 单</Text>
-        </Card>
-        <Card>
-          <Card.Title>出库单</Card.Title>
-          <Card.Divider />
-          <Text>14 单</Text>
         </Card>
       </ScrollView>
     </View>
@@ -101,6 +75,13 @@ const App = () => {
               component={LoginScreen}
               options={{
                 title: '登录',
+              }}
+            />
+            <Stack.Screen
+              name='Scan'
+              component={ScanScreen}
+              options={{
+                title: '扫一扫',
               }}
             />
           </Stack.Navigator>
