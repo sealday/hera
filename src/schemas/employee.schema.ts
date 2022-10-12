@@ -6,10 +6,13 @@ export type EmployeeDocument = Employee & Document;
 @Schema()
 export class Employee {
   @Prop({ unique: true })
-  employeeID: string;
+  employeeID: number;
 
   @Prop()
   name: string;
+
+  @Prop()
+  post: string;
 
   @Prop({ enum: ['男', '女'] })
   gendor: string;

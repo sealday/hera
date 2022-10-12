@@ -102,7 +102,14 @@ export class AppService {
 
   async genNextNumber(type: string) {
     const counter = await this.counterModel.findByIdAndUpdate(type, {$inc: {seq: 1}}, {new: true})
-    return counter.seq
+    if (counter) {
+      return counter.seq
+    } else {
+      // 不存在此序列先创建
+      const result = await this.counterModel.create({ _id: type })
+      await result.save()
+      return await this.genNextNumber(type)
+    }
   }
 
   async onDeleted(src: string, obj: object, user: User) {
