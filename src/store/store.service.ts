@@ -136,6 +136,10 @@ export class StoreService {
     if (condition.payer) {
       match['transport.payer'] = condition.payer
     }
+    // 查询承运方
+    if (condition.carrierParty) {
+      match['transport.carrier-party'] = condition.carrierParty
+    }
     // 查询原始单号
     if (condition.originalOrder) {
       match['originalOrder'] = condition.originalOrder
