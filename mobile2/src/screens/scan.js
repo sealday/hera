@@ -42,10 +42,10 @@ const ScanScreen = () => {
   if (device === null || cameraPermission === null || cameraPermission !== 'authorized' ) {
     return null
   }
-
+  console.log(barcodes)
 
   return (
-    <View>
+    <>
       <Camera
         style={StyleSheet.absoluteFill}
         device={device}
@@ -58,7 +58,7 @@ const ScanScreen = () => {
             {barcode.displayValue}
           </Text>
         ))}
-    </View>
+    </>
 
   )
 }
