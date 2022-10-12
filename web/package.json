@@ -1,9 +1,8 @@
 {
-  "name": "hera-frontend",
+  "name": "web",
   "version": "3.0.0",
   "private": true,
   "devDependencies": {
-    "concurrently": "^7.4.0",
     "eslint": "8.23"
   },
   "dependencies": {
@@ -45,7 +44,6 @@
     "xlsx": "^0.18.5"
   },
   "scripts": {
-    "dev": "concurrently --handle-input \"cd ../server && nodemon\" \"yarn start\"",
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",

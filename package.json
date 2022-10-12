@@ -1,0 +1,32 @@
+{
+  "name": "hera",
+  "private": true,
+  "version": "1.0.0",
+  "description": "以仓库管理为核心，衍生出一套财务、人员、仓管、企业规划与建设的现代企业管理软件，贴近基层企业实际内容，以模块化方式实现企业定制化需求。",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "hera:/home/seal/git/hera"
+  },
+  "author": "",
+  "license": "ISC",
+  "workspaces": [
+    "web",
+    "mobile",
+    "common"
+  ],
+  "dependencies": {
+    "eslint-config-react-app": "^7.0.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.8.4"
+  },
+  "devDependencies": {
+    "react-native-codegen": "^0.71.0"
+  }
+}
