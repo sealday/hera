@@ -1,7 +1,9 @@
 import { MinusCircleOutlined, PlusCircleOutlined } from "@ant-design/icons"
 import { Button, Col, DatePicker, Form, Input, Radio, Row, Select, Space, Table, Tag } from "antd"
+import ReduxSelect from "components/input/redux-select.component"
 import _ from "lodash"
 import moment from "moment"
+import { useSelector } from "react-redux"
 import { toFixedWithoutTrailingZero } from "."
 import { DateRangeFooter, DepLabel, Link, RefCascader, RefCascaderLabel, RefLabel, RefSelect } from "../components"
 
@@ -33,25 +35,11 @@ const genFormContent = (schema, cols = 0, form = null, initialValues = {}) => {
     }
     if (item.option) {
       if (item.option.type === 'static_value_only') {
-        if (item.option.values.length < 5) {
-          // 少于 5 个直接显示
-          formItems.push((
-            <Form.Item key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
-              <Radio.Group disabled={item.disabled}>
-                {item.option.values.map(v => <Radio key={v} value={v}>{v}</Radio>)}
-              </Radio.Group>
-            </Form.Item>
-          ))
-        } else {
-          // 多于 5 个下拉框显示
-          formItems.push((
-            <Form.Item key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
-              <Select disabled={item.disabled}>
-                {item.option.values.map(v => <Select.Option key={v} value={v}>{v}</Select.Option>)}
-              </Select>
-            </Form.Item>
-          ))
-        }
+        formItems.push((
+          <Form.Item key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
+            <ReduxSelect values={item.option.values} disabled={item.disabled} />
+          </Form.Item>
+        ))
       } else if (item.option.type === 'static') {
         const options = _.zip(item.option.labels, item.option.values)
         if (options.length < 5) {

@@ -14,10 +14,15 @@ class Home extends Component {
   }
 
   render() {
+    const form = React.createRef()
     const { config } = this.props
     return (
-      <PageHeader title='基础配置'>
+      <PageHeader
+        title='基础配置'
+        onSave={() => form.current.submit()}
+      >
         <SettingsForm
+          ref={form}
           initialValues={{
             systemName: config.systemName,
             externalNames: config.externalNames,

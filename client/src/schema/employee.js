@@ -1,13 +1,23 @@
 export default [
     {
-        "label": "工号",
-        "name": "employeeID",
-        "type": "text"
+        label: "工号",
+        name: "employeeID",
+        type: "text",
+        disabled: true,
     },
     {
         "label": "姓名",
         "name": "name",
         "type": "text"
+    },
+    {
+        label: '职务',
+        name: 'post',
+        type: 'text',
+        option: {
+            type: 'static_value_only',
+            values: 'system.config.posts',
+        }
     },
     {
         "label": "性别",

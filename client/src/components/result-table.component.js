@@ -18,10 +18,13 @@ export default ({ rowSelection, columns, dataSource, summaryColumns, summaryData
           if (value === '__未填写__') {
             return !_.toString(record[column.dataIndex])
           }
+          if (column.render) {
+            return column.render(record[column.dataIndex], record) === value
+          }
           return record[column.dataIndex] === value
         } 
         if (column.render) {
-          column.filters = _.uniq(dataSource.map(record => [record[column.dataIndex], record])).map(([v, record]) => ({ text: _.toString(v) ? column.render(v, record) : '未填写', value: _.toString(v) ? v : '__未填写__' }))
+          column.filters = _.uniq(dataSource.map(record => column.render(record[column.dataIndex], record))).map(v => ({ text: _.toString(v) ? v : '未填写', value: _.toString(v) ? v : '__未填写__' }))
         } else {
           column.filters = _.uniq(dataSource.map(record => record[column.dataIndex])).map(v => ({ text: _.toString(v) ? v : '未填写', value: _.toString(v) ? v : '__未填写__' }))
         }

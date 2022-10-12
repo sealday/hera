@@ -1,6 +1,6 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
-import { Card, Button } from 'antd'
+import { Card } from 'antd'
 
 import { Input, EditableTagGroup } from '../../components'
 
@@ -31,7 +31,6 @@ const SettingsForm = props => (
           <Field name="posts" component={EditableTagGroup} />
         </div>
       </div>
-      <Button htmlType='submit' type="primary" block>保存</Button>
     </form>
   </Card>
 )
