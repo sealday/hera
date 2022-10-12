@@ -186,7 +186,10 @@ const genTableColumn = schema => {
         columns.push({ title: item.label, dataIndex: item.name, key: item.name })
       }
     } else if (item.type === 'list') {
-      
+      // 暂时不处理 schema 
+      if (item.schema) {
+        return
+      }
       const column = {
         title: item.label, dataIndex: item.name, key: item.name, render(list) {
           if (_.get(item, ['column', 'link'])) {
