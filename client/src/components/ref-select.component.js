@@ -27,7 +27,7 @@ const RefSelectComponent = ({ item, noStyle }) => {
           data = data.map(item => ({ label: item[label], value: item[value], pinyin: item.pinyin }))
           const options = data.value()
           return (
-            <Form.Item initialValue={item.default} noStyle={noStyle} key={item.name} name={item.name} label={item.label} hidden={item.hidden} rules={[{ required: item.required }]}>
+            <Form.Item noStyle={noStyle} key={item.name} name={item.name} label={item.label} hidden={item.hidden} rules={[{ required: item.required }]}>
               <Select
                 disabled={item.disabled}
                 showSearch
@@ -52,7 +52,7 @@ const RefSelectComponent = ({ item, noStyle }) => {
     data = data.map(item => ({ label: item[label], value: item[value], pinyin: item.pinyin }))
     const options = data.value()
     return (
-      <Form.Item initialValue={item.default} noStyle={noStyle} key={item.name} name={item.name} label={item.label} hidden={item.hidden} rules={[{ required: item.required }]}>
+      <Form.Item noStyle={noStyle} key={item.name} name={item.name} label={item.label} hidden={item.hidden} rules={[{ required: item.required }]}>
         <Select
           disabled={item.disabled}
           showSearch

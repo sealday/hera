@@ -191,9 +191,9 @@ const genTableColumn = schema => {
         title: item.label, dataIndex: item.name, key: item.name, render(list) {
           if (_.get(item, ['column', 'link'])) {
             const toLink = item.column.link
-            return <Space direction="vertical">{_.map(list, item => <Tag key={item}><Link to={toLink(item)}>{item}</Link></Tag>)}</Space>
+            return <Space direction="vertical">{_.map(_.uniq(list), item => <Tag key={item}><Link to={toLink(item)}>{item}</Link></Tag>)}</Space>
           }
-          return <Space direction="vertical">{_.map(list, item => <Tag key={item}>{item}</Tag>)}</Space>
+          return <Space direction="vertical">{_.map(_.uniq(list), item => <Tag key={item}>{item}</Tag>)}</Space>
         }
       }
       if (_.get(item, ['column', 'width'])) {

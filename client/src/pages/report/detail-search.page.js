@@ -6,7 +6,7 @@ import { detailSearchFormSchema, detailSearchTableSchema } from "../../schema"
 import { genTableColumn } from "../../utils/antd"
 
 export default () => {
-  const [detailSearch, searchResult] = heraApi.useDetailSearchMutation()
+  const [detailSearch, searchResult] = heraApi.useDetailSearchMutation({ fixedCacheKey: 'detail-search' })
   const store = useSelector(state => state.system.store)
 
   const handleSubmit = (v) => {
@@ -29,7 +29,7 @@ export default () => {
         onSubmit: handleSubmit,
       }}
     >
-      <ResultTable columns={columns} dataSource={dataSource} pagination={{ pageSize: 100 }} />
+      <ResultTable rowKey={(row) => row.name + '|' + row.size + '|' + row.projectId} columns={columns} dataSource={dataSource} pagination={{ pageSize: 100 }} />
     </PageHeader>
   )
 }

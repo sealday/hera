@@ -1,6 +1,7 @@
 import { ClearOutlined, EditOutlined, ExportOutlined, PlusCircleOutlined, PrinterOutlined, SaveOutlined, SearchOutlined } from '@ant-design/icons'
 import { Button, Card, Col, Descriptions, Dropdown, Form, Input, Menu, PageHeader, Row, Space } from 'antd'
 import React, { useState } from 'react'
+import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { useTab } from 'utils/hooks'
 import { isUpdatable } from '../utils'
@@ -34,6 +35,14 @@ export default ({
   const tabButton = useTab({ title })
   const recentItems = []
   const actions = []
+
+  const searchMeta = useMemo(() => {
+    if (search && search.schema) {
+      const initialValues = {}
+      const formItems = genFormContent(search.schema, 3, form, initialValues)
+      return { formItems, initialValues }
+    }
+  }, [search && search.schema])
   if (tabButton) {
     actions.push(tabButton)
   }
@@ -99,13 +108,9 @@ export default ({
       <searchForm.Form key='searchForm' initialValues={searchForm.initialValues} ref={mSearchForm} onSubmit={searchForm.onSubmit} {...otherSearchFormProps} />
     )
   }
-  if (search) {
-    actions.push(<Button key='onReset' onClick={() => form.resetFields()} icon={<ClearOutlined />}>重置</Button>)
-    actions.push(<Button key='onSearch' type='primary' onClick={() => form.submit()} icon={<SearchOutlined />}>查询</Button>)
-    const initialValues = {}
-    const formItems = genFormContent(search.schema, 3, form, initialValues)
-    search.initialValues = initialValues
-    search.formItems = formItems
+  if (searchMeta) {
+      actions.push(<Button key='onReset' onClick={() => form.resetFields()} icon={<ClearOutlined />}>重置</Button>)
+      actions.push(<Button key='onSearch' type='primary' onClick={() => form.submit()} icon={<SearchOutlined />}>查询</Button>)
   }
   return <>
     <PageHeader
@@ -114,9 +119,9 @@ export default ({
       ghost={false}
       extra={<Space>{actions}</Space>}
     >
-      {search
+      {search && searchMeta
         ? (
-          <Form colon={false} form={form} onFinish={search.onSubmit} initialValues={search.initialValues}>{search.formItems}</Form>
+          <Form colon={false} form={form} onFinish={search.onSubmit} initialValues={searchMeta.initialValues}>{searchMeta.formItems}</Form>
         )
         : <></>
       }
