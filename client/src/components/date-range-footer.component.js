@@ -8,7 +8,7 @@ import {
 
 export default ({ namepath }) => {
     const form = Form.useFormInstance()
-    const date = _.size(form.getFieldValue(namepath)) === 2 ? form.getFieldValue(namepath) : moment()
+    const [startDate, endDate] = _.size(form.getFieldValue(namepath)) === 2 ? form.getFieldValue(namepath) : [moment(), moment()]
     const setDate = (v) => form.setFieldValue(namepath, v)
     return <Space direction="horizontal" size={0}>
         <Button type="link" onClick={() => {
@@ -19,14 +19,14 @@ export default ({ namepath }) => {
         } }>今年</Button>
         <Button type="link" onClick={() => {
             setDate([
-                moment(date).add(-1, 'year').startOf('year'),
-                moment(date).add(-1, 'year').endOf('year').startOf('day'),
+                moment(startDate).add(-1, 'year').startOf('year'),
+                moment(endDate).add(-1, 'year').endOf('year').startOf('day'),
             ])
         } }>上一年</Button>
         <Button type="link" onClick={() => {
             setDate([
-                moment(date).add(1, 'year').startOf('year'),
-                moment(date).add(1, 'year').endOf('year').startOf('day'),
+                moment(startDate).add(1, 'year').startOf('year'),
+                moment(endDate).add(1, 'year').endOf('year').startOf('day'),
             ])
         } }>下一年</Button>
         <Button type="link" onClick={() => {
