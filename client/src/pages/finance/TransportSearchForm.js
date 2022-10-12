@@ -74,6 +74,12 @@ class SimpleSearchForm extends React.Component {
           </div>
         </div>
         <div className="form-group">
+          <label className="control-label col-md-1">承运单位</label>
+          <div className="col-md-5">
+            <Field name="carrierParty" className="form-control" component={Input} />
+          </div>
+        </div>
+        <div className="form-group">
           <label className="control-label col-md-1">开始日期</label>
           <div className="col-md-2">
             <Field name="startDate"
