@@ -1,5 +1,5 @@
 import { MinusCircleOutlined, PlusCircleOutlined } from "@ant-design/icons"
-import { Button, Col, DatePicker, Form, Input, Radio, Row, Select, Table } from "antd"
+import { Button, Col, DatePicker, Form, Input, Radio, Row, Select, Table, Tag } from "antd"
 import _ from "lodash"
 import moment from "moment"
 import { toFixedWithoutTrailingZero } from "."
@@ -185,6 +185,16 @@ const genTableColumn = schema => {
       } else {
         columns.push({ title: item.label, dataIndex: item.name, key: item.name })
       }
+    } else if (item.type === 'list') {
+      const column = {
+        title: item.label, dataIndex: item.name, key: item.name, render(list) {
+          return <>{_.map(list, item => <Tag key={item}>{item}</Tag>)}</>
+        }
+      }
+      if (_.get(item, ['column', 'width'])) {
+        column.width = item.column.width
+      }
+      columns.push(column)
     }
   })
   return columns

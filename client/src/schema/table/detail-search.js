@@ -41,5 +41,13 @@ export default [
     name: 'unit',
     label: '单位',
     type: 'text',
+  },
+  {
+    name: 'numbers',
+    label: '单号',
+    type: 'list',
+    column: {
+      width: '100px',
+    }
   }
 ]
