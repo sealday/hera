@@ -1529,7 +1529,7 @@ export class StoreService {
         out: '$out',
         total: '$total',
         unit: '$unit',
-        numbers: '$number',
+        numbers: '$numbers',
       }
     })
     const result = await this.recordModel.aggregate(pipeline)
