@@ -47,6 +47,7 @@ export default [
     label: '单号',
     type: 'list',
     column: {
+      link: v => `/record/${v}`,
       width: '100px',
     }
   }

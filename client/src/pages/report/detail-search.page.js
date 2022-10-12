@@ -19,12 +19,8 @@ export default () => {
       endDate: _.size(v.dateRange) === 2 ? v.dateRange[1].add(1, 'day').startOf('day') : undefined,
     })
   }
-
-  const columns = genTableColumn(detailSearchTableSchema).concat({
-    key: 'action', title: '操作'
-  })
+  const columns = genTableColumn(detailSearchTableSchema)
   const dataSource = searchResult.data
-
   return (
     <PageHeader
       title='明细查询'

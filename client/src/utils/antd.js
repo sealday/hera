@@ -1,9 +1,9 @@
 import { MinusCircleOutlined, PlusCircleOutlined } from "@ant-design/icons"
-import { Button, Col, DatePicker, Form, Input, Radio, Row, Select, Table, Tag } from "antd"
+import { Button, Col, DatePicker, Form, Input, Radio, Row, Select, Space, Table, Tag } from "antd"
 import _ from "lodash"
 import moment from "moment"
 import { toFixedWithoutTrailingZero } from "."
-import { DateRangeFooter, DepLabel, RefCascader, RefCascaderLabel, RefLabel, RefSelect } from "../components"
+import { DateRangeFooter, DepLabel, Link, RefCascader, RefCascaderLabel, RefLabel, RefSelect } from "../components"
 
 const ListTable = ({ fields, operation, meta, item, form}) => {
   const columns = genTableFormColumn(item, form).concat([
@@ -186,9 +186,14 @@ const genTableColumn = schema => {
         columns.push({ title: item.label, dataIndex: item.name, key: item.name })
       }
     } else if (item.type === 'list') {
+      
       const column = {
         title: item.label, dataIndex: item.name, key: item.name, render(list) {
-          return <>{_.map(list, item => <Tag key={item}>{item}</Tag>)}</>
+          if (_.get(item, ['column', 'link'])) {
+            const toLink = item.column.link
+            return <Space direction="vertical">{_.map(list, item => <Tag key={item}><Link to={toLink(item)}>{item}</Link></Tag>)}</Space>
+          }
+          return <Space direction="vertical">{_.map(list, item => <Tag key={item}>{item}</Tag>)}</Space>
         }
       }
       if (_.get(item, ['column', 'width'])) {
