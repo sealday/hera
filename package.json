@@ -19,7 +19,7 @@
   "workspaces": [
     "web",
     "mobile",
-    "common"
+    "packages/hera-common"
   ],
   "dependencies": {
     "eslint-config-react-app": "^7.0.1",
