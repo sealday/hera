@@ -11,6 +11,7 @@ import { store } from './store';
 import { LoginScreen } from './screens/login';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { ScanScreen } from './screens/scan';
+import { hello } from 'common'
 
 const Stack = createNativeStackNavigator();
 
@@ -61,6 +62,7 @@ const HomeScreen = () => {
 
 
 const App = () => {
+  hello()
   return (
     <Provider store={store}>
       <SafeAreaProvider>

@@ -39,7 +39,7 @@ const ScanScreen = () => {
   const [frameProcessor, barcodes] = useScanBarcodes([BarcodeFormat.QR_CODE], {
     checkInverted: true,
   });
-  if (device === null || cameraPermission === null || cameraPermission !== 'authorized' ) {
+  if (typeof device === 'undefined' || device === null || cameraPermission === null || cameraPermission !== 'authorized' ) {
     return null
   }
   console.log(barcodes)

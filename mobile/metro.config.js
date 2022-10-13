@@ -5,14 +5,16 @@
  * @format
  */
 const path = require('path');
+const { getMetroTools } = require("react-native-monorepo-tools");
+const monorepoMetroTools = getMetroTools();
 
 module.exports = {
-  watchFolders: [path.resolve(__dirname, '../node_modules')],
+  watchFolders: monorepoMetroTools.watchFolders,
   transformer: {
     getTransformOptions: async () => ({
       transform: {
         experimentalImportSupport: false,
-        inlineRequires: true,
+        inlineRequires: false,
       },
     }),
   },
