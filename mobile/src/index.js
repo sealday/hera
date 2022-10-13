@@ -11,7 +11,7 @@ import { store } from './store';
 import { LoginScreen } from './screens/login';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { ScanScreen } from './screens/scan';
-import { hello } from 'common'
+import { hello } from '@hera/common'
 
 const Stack = createNativeStackNavigator();
 
