@@ -1,13 +1,9 @@
-import { Button, Card, Header, Text, Input, Icon } from '@rneui/themed';
+import { Button, Card, Input, Icon } from '@rneui/themed';
 import {
-  ScrollView,
   StyleSheet, View,
 } from 'react-native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { NavigationContainer, useNavigation, useFocusEffect } from '@react-navigation/native'
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Provider, useSelector, useDispatch } from 'react-redux'
-import { heraApi, store } from './../store';
+import { useDispatch } from 'react-redux'
+import { heraApi } from './../store';
 import { login } from '../features/coreSlices';
 import { useEffect, useState } from 'react';
 import Toast from 'react-native-root-toast';
@@ -16,7 +12,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = () => {
   const dispatch = useDispatch()
-  const navigation = useNavigation()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 

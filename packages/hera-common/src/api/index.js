@@ -21,7 +21,7 @@ const genApi = ({ baseUrl = '/api/', onLogin, getAuthToken }) => {
   const heraApi = createApi({
     reducerPath: 'heraApi',
     baseQuery: baseQueryAuth,
-    tagTypes: ['Company', 'Record', 'Plan', 'Employee', 'Subject', 'Product', 'Invoice', 'Project', 'Other'],
+    tagTypes: ['Company', 'Record', 'Plan', 'Employee', 'Subject', 'Product', 'Invoice', 'Project', 'Other', 'Operation'],
     endpoints: (builder) => ({
       logout: builder.mutation({
         query: () => ({
@@ -598,6 +598,14 @@ const genApi = ({ baseUrl = '/api/', onLogin, getAuthToken }) => {
           body: condition,
         }),
         transformResponse: res => res.data,
+      }),
+      // 查询日志
+      getLatestOperationList: builder.query({
+        query: () => 'operation/top_k',
+        transformResponse: res => res.data.operations,
+        providesTags: result => result
+          ? [...result.map(({ _id: id }) => ({ type: 'Operation', id })), { type: 'Operation', id: 'LIST' }]
+          : [{ type: 'Operation', id: 'LIST' }]
       }),
     })
   })
