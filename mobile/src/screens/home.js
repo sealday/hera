@@ -5,23 +5,15 @@ import {
 } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { logout } from '../features/coreSlices';
 
 const Stack = createNativeStackNavigator();
 
 const HomeScreen = () => {
   const navigation = useNavigation()
-  const isLogined = useSelector(state => state.core.isLogined)
-
-  useFocusEffect(() => {
-    if (!isLogined) {
-      navigation.navigate('Login')
-    }
-  })
-  if (!isLogined) {
-    return <Text>未登录</Text>
-  }
+  const dispatch = useDispatch()
   return (
     <View>
       <Header
@@ -47,7 +39,7 @@ const HomeScreen = () => {
           <Card.Title>入库单</Card.Title>
           <Card.Divider />
           <Text>15 单</Text>
-          <Button raised onPress={() => navigation.push('Login')} title='登录' />
+          <Button raised onPress={() => dispatch(logout())} title='注销' />
         </Card>
       </ScrollView>
     </View>

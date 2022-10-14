@@ -11,6 +11,7 @@ import { heraApi, store } from './../store';
 import { login } from '../features/coreSlices';
 import { useEffect, useState } from 'react';
 import Toast from 'react-native-root-toast';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const LoginScreen = () => {
@@ -28,6 +29,9 @@ const LoginScreen = () => {
   useEffect(() => {
     if (loginResult.isSuccess) {
       Toast.show('登录成功！', { duration: Toast.durations.SHORT, position: Toast.positions.CENTER })
+      AsyncStorage.setItem('token', loginResult.data, () => {
+        dispatch(login())
+      })
     }
   }, [loginResult.isSuccess])
   const onLogin = () => {
