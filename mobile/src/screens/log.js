@@ -23,7 +23,10 @@ const LogScreen = () => {
               <ListItem.Content>
                 <ListItem.Title>{item.type ? item.type : '修改'} - {item.user.username} - {item.report.message ? item.report.message : item.report.content}</ListItem.Title>
               </ListItem.Content>
-              <ListItem.Chevron />
+              <ListItem.Chevron 
+                name='right'
+                type='antdesign'
+              />
             </ListItem>
           ))}
         </Card>

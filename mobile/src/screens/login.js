@@ -25,7 +25,7 @@ const LoginScreen = () => {
     if (loginResult.isSuccess) {
       Toast.show('登录成功！', { duration: Toast.durations.SHORT, position: Toast.positions.CENTER })
       AsyncStorage.setItem('token', loginResult.data, () => {
-        dispatch(login())
+        dispatch(login(loginResult.data))
       })
     }
   }, [loginResult.isSuccess])

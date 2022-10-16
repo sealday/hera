@@ -1,16 +1,9 @@
 import 'react-native-reanimated'
-import { Button, Card, Header, Text, Input, Icon } from '@rneui/themed';
+import { Text } from '@rneui/themed';
 import {
-  ScrollView,
-  StyleSheet, View,
+  StyleSheet,
 } from 'react-native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { NavigationContainer, useNavigation, useFocusEffect } from '@react-navigation/native'
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Provider, useSelector, useDispatch } from 'react-redux'
-import { store } from '../store';
-import { login } from '../features/coreSlices';
-import { Camera, useCameraDevices, useFrameProcessor } from 'react-native-vision-camera';
+import { Camera, useCameraDevices } from 'react-native-vision-camera';
 import { useScanBarcodes, BarcodeFormat } from 'vision-camera-code-scanner';
 import { useEffect, useState } from 'react';
 
@@ -31,10 +24,8 @@ const useCameraPermission = () => {
 }
 
 const ScanScreen = () => {
-  const dispatch = useDispatch()
   const devices = useCameraDevices('wide-angle-camera')
   const device = devices.back
-  const navigation = useNavigation()
   const cameraPermission = useCameraPermission()
   const [frameProcessor, barcodes] = useScanBarcodes([BarcodeFormat.QR_CODE], {
     checkInverted: true,

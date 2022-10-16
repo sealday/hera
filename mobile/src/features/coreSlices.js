@@ -10,8 +10,9 @@ export const coreSlice = createSlice({
   name: 'core',
   initialState,
   reducers: {
-    login: (state) => {
+    login: (state, action) => {
       state.isLogined = true
+      state.token = action.payload
     },
     logout: (state) => {
       state.isLogined = false
@@ -19,8 +20,8 @@ export const coreSlice = createSlice({
     select: (state) => {
       state.isSelected = true
     },
-    updateToken: (state, data) => {
-      state.token = data.payload
+    updateToken: (state, action) => {
+      state.token = action.payload
     }
   },
 })
