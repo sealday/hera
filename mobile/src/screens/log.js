@@ -1,7 +1,6 @@
-import { Button, Card, ListItem, Text } from '@rneui/themed';
+import { Card, ListItem } from '@rneui/themed';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { useDispatch } from 'react-redux'
-import { logout } from '../features/coreSlices';
 import { heraApi } from '../store';
 
 const LogScreen = () => {

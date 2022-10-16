@@ -1,6 +1,7 @@
 import 'react-native-reanimated'
 import { Text } from '@rneui/themed';
 import {
+  Platform,
   StyleSheet,
 } from 'react-native';
 import { Camera, useCameraDevices } from 'react-native-vision-camera';
@@ -15,6 +16,10 @@ const useCameraPermission = () => {
         Camera.requestCameraPermission().then((cameraPermission) => {
           setResult(cameraPermission)
         })
+      } else if (cameraPermission === 'denied' && Platform.OS === 'android') {
+        Camera.requestCameraPermission().then((cameraPermission) => {
+          setResult(cameraPermission)
+        })
       } else {
         setResult(cameraPermission)
       }
@@ -24,7 +29,7 @@ const useCameraPermission = () => {
 }
 
 const ScanScreen = () => {
-  const devices = useCameraDevices('wide-angle-camera')
+  const devices = useCameraDevices()
   const device = devices.back
   const cameraPermission = useCameraPermission()
   const [frameProcessor, barcodes] = useScanBarcodes([BarcodeFormat.QR_CODE], {

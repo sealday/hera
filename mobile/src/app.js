@@ -7,10 +7,9 @@ import { useEffect, useState } from 'react';
 import { updateToken } from './features/coreSlices';
 import { HomeScreen } from './screens/home';
 import { useDispatch, useSelector } from 'react-redux';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Header, Icon } from '@rneui/themed';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { MyScreen } from './screens/my';
 import { LogScreen } from './screens/log';
 
@@ -36,7 +35,9 @@ const TabContainer = () => {
               style: styles.title,
             }}
             rightComponent={
-              <TouchableOpacity onPress={() => navigation.navigate('Scan')} >
+              <TouchableOpacity onPress={() => {
+                return navigation.navigate('Scan');
+              }} >
                 <Icon
                   name='scan1'
                   type='antdesign'

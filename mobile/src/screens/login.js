@@ -1,6 +1,6 @@
 import { Button, Card, Input, Icon } from '@rneui/themed';
 import {
-  StyleSheet, View,
+  StyleSheet, ScrollView, View,
 } from 'react-native';
 import { useDispatch } from 'react-redux'
 import { heraApi } from './../store';
@@ -33,7 +33,7 @@ const LoginScreen = () => {
     doLogin({ username, password })
   }
   return (
-    <View>
+    <ScrollView>
       <Card>
         <View style={styles.iconContainer}>
           <View style={styles.icon}>
@@ -52,7 +52,7 @@ const LoginScreen = () => {
         <Input label='密码' value={password} onChangeText={setPassword} textContentType='password' secureTextEntry />
         <Button title='登录' onPress={onLogin} />
       </Card>
-    </View>
+    </ScrollView>
   )
 }
 
