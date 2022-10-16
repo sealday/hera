@@ -1,10 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { NavigationContainer, useNavigation } from '@react-navigation/native'
+import { NavigationContainer, useFocusEffect, useNavigation } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { LoginScreen } from './screens/login';
 import { ScanScreen } from './screens/scan';
 import { useEffect, useState } from 'react';
-import { updateToken } from './features/coreSlices';
+import { login, updateToken } from './features/coreSlices';
 import { HomeScreen } from './screens/home';
 import { useDispatch, useSelector } from 'react-redux';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -12,6 +12,7 @@ import { Header, Icon } from '@rneui/themed';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { MyScreen } from './screens/my';
 import { LogScreen } from './screens/log';
+import { Loading } from './components/loading';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator()
@@ -89,16 +90,19 @@ const TabContainer = () => {
 const App = () => {
   const [isLoading, setLoading] = useState(true)
   const isLogined = useSelector(state => state.core.isLogined)
+  const token = useSelector(state => state.core.token)
   const dispatch = useDispatch()
   useEffect(() => {
     (async () => {
       const token = await AsyncStorage.getItem('token')
-      dispatch(updateToken(token))
+      if (token) {
+        dispatch(login(token))
+      }
       setLoading(false)
     })()
-  }, [])
+  }, [token])
   if (isLoading) {
-    return null;
+    return <Loading />;
   }
   return (
     <NavigationContainer>
