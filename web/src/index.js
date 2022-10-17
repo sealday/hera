@@ -14,13 +14,11 @@ import { systemLoaded, selectStore } from './actions'
 import { updateOnlineUsers } from './features/coreSlice'
 import { ajax, getAuthToken } from './utils'
 import Routes from './routes'
-import { hello } from 'hera-common'
 
 // css 除非是模块自己的，否则直接在这里进行全局 import
 import './index.less'
 import heraApi from 'api'
 import _ from 'lodash'
-hello()
 // 初始化 moment 时间属性
 moment.locale('zh-CN')
 // 初始化 socket

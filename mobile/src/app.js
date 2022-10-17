@@ -13,6 +13,7 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 import { MyScreen } from './screens/my';
 import { LogScreen } from './screens/log';
 import { Loading } from './components/loading';
+import { RecordScreen } from './screens/record';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator()
@@ -116,6 +117,11 @@ const App = () => {
             <Stack.Screen name='Scan' component={ScanScreen}
               options={{
                 title: '扫一扫',
+              }}
+            />
+            <Stack.Screen name='Record' component={RecordScreen}
+              options={{
+                title: '出入库记录',
               }}
             />
           </>

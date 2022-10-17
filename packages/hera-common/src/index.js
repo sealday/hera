@@ -1,5 +1,4 @@
-export function hello() {
-    console.log('hello world from common module written in typescript.')
-}
+import * as utils from './utils'
 
 export { genApi } from './api'
+export { utils }

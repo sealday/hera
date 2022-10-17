@@ -1,17 +1,21 @@
-import { Button, Card, Text } from '@rneui/themed';
-import { ScrollView, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { Button, Card, Input, Text } from '@rneui/themed';
+import { useState } from 'react';
+import { ScrollView, TouchableOpacity, View } from 'react-native';
 import { useDispatch } from 'react-redux'
 import { logout } from '../features/coreSlices';
 
 const HomeScreen = () => {
-  const dispatch = useDispatch()
+  const navigation = useNavigation()
+  const [recordId, setRecordId] = useState()
   return (
     <View>
       <ScrollView>
         <Card>
-          <Card.Title>入库单</Card.Title>
+          <Card.Title>出入库查询</Card.Title>
           <Card.Divider />
-          <Text>15 单</Text>
+          <Input value={recordId} onChangeText={setRecordId} />
+          <Button onPress={() => navigation.navigate('Record', { id: recordId })} title="查询" />
         </Card>
       </ScrollView>
     </View>
