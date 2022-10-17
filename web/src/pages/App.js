@@ -2,17 +2,18 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { matchPath, Outlet } from 'react-router-dom'
 import { useNavigate } from 'utils/hooks'
-import { Layout, Button, Dropdown, Menu, message, Tabs } from 'antd'
+import { Layout, Button, Dropdown, Menu, message, Tabs, Popover } from 'antd'
 import short_id from 'shortid'
 import _, { get } from 'lodash'
 import { CurrentStore, Error, Loading, MenuList } from '../components'
 import { selectStore } from '../actions'
 import './App.css'
-import { UserOutlined } from '@ant-design/icons'
+import { MobileOutlined, UserOutlined } from '@ant-design/icons'
 import heraApi from '../api'
 import { TabContext } from '../globalConfigs'
 import { changeTab, removeItem } from '../features/coreSlice'
 import { config as routeConfigs } from 'routes'
+import { QRCodeCanvas } from 'qrcode.react'
 
 const styles = {
   navButton: { color: '#fff' }
@@ -108,6 +109,9 @@ export default ({ onEnter, onLeave, type }) => {
         <p style={{ marginLeft: '2em', float: 'left', color: '#fff' }}>{store && store.company + store.name}</p>
         <Button style={{ color: '#fff' }} onClick={() => { dispatch(selectStore(false)) }} type='text'>选择仓库</Button>
         <div style={{ float: 'right' }}>
+          <Popover content={<QRCodeCanvas value='https://shcx.shchuangxing.com/downloads/hera.latest.apk' />} placement='bottom'>
+            <Button icon={<MobileOutlined />} title='手机端下载' type='text' style={{ color: '#fff' }}></Button>
+          </Popover>
           <Button
             onClick={() => changeType()}
             style={styles.navButton}
