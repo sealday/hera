@@ -55,6 +55,10 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
         content.partALabel = '销售单位'
         content.partBLabel = '采购单位'
         content.signer = '销售方'
+        content.orderName = '采购入库单'
+      }
+      if (record.type === '暂存') {
+        content.orderName = '暂存入库单'
       }
       content.partA = projects.get(record.outStock).company + projects.get(record.outStock).name
       content.partB = projects.get(record.inStock).company + projects.get(record.inStock).name
@@ -68,6 +72,10 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
         content.partALabel = '采购单位'
         content.partBLabel = '销售单位'
         content.signer = '采购方'
+        content.orderName = '销售出库单'
+      }
+      if (record.type === '暂存') {
+        content.orderName = '暂存出库单'
       }
       content.partA = projects.get(record.inStock).company + projects.get(record.inStock).name
       content.partB = projects.get(record.outStock).company + projects.get(record.outStock).name
