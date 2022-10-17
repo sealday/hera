@@ -3,7 +3,6 @@ import coreReducer, { logout } from './features/coreSlices'
 import api from './features/apiSlices'
 import { genApi } from 'hera-common'
 import { setupListeners } from '@reduxjs/toolkit/query'
-import { Platform } from 'react-native'
 import { baseUrl } from './constants'
 
 export const heraApi = genApi({

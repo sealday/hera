@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { LoginScreen } from './screens/login';
 import { ScanScreen } from './screens/scan';
 import { useEffect, useState } from 'react';
-import { login, updateToken } from './features/coreSlices';
+import { login } from './features/coreSlices';
 import { HomeScreen } from './screens/home';
 import { useDispatch, useSelector } from 'react-redux';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -96,6 +96,8 @@ const App = () => {
   useEffect(() => {
     (async () => {
       const token = await AsyncStorage.getItem('token')
+      console.log('token', token)
+      console.log('isLogined', isLogined)
       if (token) {
         dispatch(login(token))
       }

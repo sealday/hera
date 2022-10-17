@@ -58,7 +58,7 @@ class Bank extends Component {
                   /\d/, /\d/, /\d/, /\d/, ' ',
                   /\d/, /\d/, /\d/, /\d/, ' ',
                   /\d/, /\d/, /\d/, /\d/, ' ',
-                  /\d/, /\d/, /\d/,
+                  /\d/, /\d/, /\d/, /\d/
                 ]}
                 className="ant-input"
                 name="account"

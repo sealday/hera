@@ -10,7 +10,7 @@
 		<string>Ionicons.ttf</string>
 	</array>
 	<key>CFBundleDisplayName</key>
-	<string>mobile2</string>
+	<string>赫拉管理</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>

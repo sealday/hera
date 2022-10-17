@@ -3,6 +3,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { useDispatch, useSelector } from 'react-redux'
 import { baseUrl } from '../constants'
 import { useEffect } from 'react'
+import { logout } from './coreSlices'
 
 const reducerPath = 'api'
 
@@ -15,6 +16,9 @@ const fetchLatestOperations = createAsyncThunk(
             }
         })
         const res = await response.json()
+        if (res.statusCode === 401) {
+            return thunkAPI.dispatch(logout())
+        }
         return res.data.operations
     }
 )
@@ -28,6 +32,9 @@ const fetchMoreOperations = createAsyncThunk(
             }
         })
         const res = await response.json()
+        if (res.statusCode === 401) {
+            return thunkAPI.dispatch(logout())
+        }
         return res.data.operations
     }
 )
