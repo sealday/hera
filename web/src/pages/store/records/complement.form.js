@@ -30,7 +30,7 @@ const UnitLabel = ({ field }) => {
     if (isAssociated) {
       const associate = JSON.parse(associateStr)
       const associatedProduct = _.find(getProductList.data, item => item.type === associate[0] && item.name === associate[1] && item.size === associate[2])
-      return _.get(associatedProduct, 'countUnit', '')
+      return _.get(associatedProduct, 'isScaled') ? _.get(associatedProduct, 'unit', '') :_.get(associatedProduct, 'countUnit', '')
     } else {
       return _.get(other, 'unit', '')
     }

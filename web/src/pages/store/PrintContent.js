@@ -216,8 +216,8 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
             const associatedEntry =
               [
                 associatedLabel,
-                item.count + ' ' + productTypeMap[entry.name].countUnit,
-                fixed(total_({ ...entry, count: item.count }, products)) + getUnit(productTypeMap[name]),
+                item.count + ' ' + getUnit(productTypeMap[name]),
+                '',
                 { hidden: true, children: '' },
                 '',
                 '',
