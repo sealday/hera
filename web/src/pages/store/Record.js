@@ -62,6 +62,7 @@ const Summary = ({ entries }) => {
 }
 
 const Record = ({ isFinance = false }) => {
+  console.log(isFinance)
   const params = useParams()
   const navigate = useNavigate()
   const { data: record, error, isLoading } = useGetRecordQuery(params.id)
@@ -109,9 +110,9 @@ const Record = ({ isFinance = false }) => {
   descriptions.push({ label: '备注', children: record.comments })
 
   return <PageHeader
-    onEdit={isFinance ? onEdit : false}
+    onEdit={!isFinance ? onEdit : false}
     onPrintPreview={onPrintPreview}
-    extra={isFinance ? extra : false}
+    extra={!isFinance ? extra : false}
     title="出入库记录"
     subTitle={`${record.type}单 No.${record.number}`}
     descriptions={descriptions}

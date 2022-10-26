@@ -47,7 +47,7 @@ export const config = [
   { path: 'record/:id/edit', element: <store.RecordEdit /> },
   { path: "transport/:id", element: <store.TransportOrder /> },
   { path: "transport/:id/edit", element: <store.TransportOrderEdit /> },
-  { path: "company_record/:id", element: <store.Record isFinace={true} /> },
+  { path: "company_record/:id", element: <store.Record isFinance /> },
   { path: "rent_calc", element: <company.RentCalc /> },
   { path: "contract", element: <company.Contract /> },
   { path: "contract/create", element: <company.ContractCreate /> },
