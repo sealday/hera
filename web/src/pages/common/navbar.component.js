@@ -83,7 +83,7 @@ const Navbar = ({ type }) => {
             </List.Item>
           )}
         />} placement='bottom'>
-          <Badge count={1} size='small'>
+          <Badge count={1} size='small' offset={[-8, 8]}>
             <Button icon={<BellOutlined />} title='消息通知' type='text' style={styles.navButton}></Button>
           </Badge>
         </Popover>
