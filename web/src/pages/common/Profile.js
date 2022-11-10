@@ -15,7 +15,7 @@ export default () => {
     }))
   }
   return (
-    <PageHeader title='个人信息修改'>
+    <PageHeader title='个人设置'>
       <ProfileForm
         initialValues={{ ...user, password: undefined }}
         onSubmit={handleSubmit}

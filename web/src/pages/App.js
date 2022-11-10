@@ -2,25 +2,19 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { matchPath, Outlet } from 'react-router-dom'
 import { useNavigate } from 'utils/hooks'
-import { Layout, Button, Dropdown, Menu, message, Tabs, Popover } from 'antd'
-import short_id from 'shortid'
-import _, { get } from 'lodash'
+import { Layout, Tabs } from 'antd'
+import _ from 'lodash'
 import { CurrentStore, Error, Loading, MenuList } from '../components'
 import { selectStore } from '../actions'
 import './App.css'
-import { MobileOutlined, UserOutlined } from '@ant-design/icons'
 import heraApi from '../api'
 import { TabContext } from '../globalConfigs'
 import { changeTab, removeItem } from '../features/coreSlice'
 import { config as routeConfigs } from 'routes'
-import { QRCodeCanvas } from 'qrcode.react'
+import Navbar from './common/navbar.component'
 
-const styles = {
-  navButton: { color: '#fff' }
-}
 export default ({ onEnter, onLeave, type }) => {
-  const { onlineUsers, store, user, config, loading, items, active } = useSelector(state => ({
-    onlineUsers: state.core.onlineUsers,
+  const { store, user, config, loading, items, active } = useSelector(state => ({
     items: state.core.items,
     active: state.core.active,
     store: state.system.store,
@@ -31,7 +25,7 @@ export default ({ onEnter, onLeave, type }) => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const isStoreSelected = () => !!store
-  const [logout, logoutResult] = heraApi.useLogoutMutation()
+  const [_logout, logoutResult] = heraApi.useLogoutMutation()
   useEffect(() => {
     onEnter()
     if (!isCurrentStorePermit()) {
@@ -41,19 +35,6 @@ export default ({ onEnter, onLeave, type }) => {
       onLeave()
     }
   }, [])
-  useEffect(() => {
-    if (logoutResult.isSuccess) {
-      message.success('登出成功！')
-      localStorage.removeItem('X-Hera-Token')
-      navigate('/login')
-    }
-  }, [navigate, logoutResult.isSuccess])
-  useEffect(() => {
-    if (logoutResult.isError) {
-      message.error('登出失败，请检查网络！')
-    }
-  }, [logoutResult.isError])
-
   const isCurrentStorePermit = () => {
     if (user.role === '项目部管理员' || user.role === '基地仓库管理员') {
       const perms = user.perms || [];
@@ -69,13 +50,6 @@ export default ({ onEnter, onLeave, type }) => {
     )
   }
 
-  const menu = (
-    <Menu items={onlineUsers.map(user => ({
-      key: short_id.generate(),
-      label: get(user, ['profile', 'name'], '异常用户'),
-    }))}
-    />
-  )
   const tabItems = type === 'tab' ? items.map(item => {
     const routeConfig = routeConfigs.find(config => {
       return matchPath(config.path, item.key)
@@ -95,38 +69,12 @@ export default ({ onEnter, onLeave, type }) => {
       dispatch(removeItem(targetKey))
     }
   }
-  const changeType = () => {
-    if (type === 'tab') {
-      navigate('/')
-    } else {
-      navigate('/tab')
-    }
-  }
   return (
     <Layout className='App'>
       <Layout.Header className='header'>
-        <h5 className='title'>{config.systemName}</h5>
-        <p style={{ marginLeft: '2em', float: 'left', color: '#fff' }}>{store && store.company + store.name}</p>
-        <Button style={{ color: '#fff' }} onClick={() => { dispatch(selectStore(false)) }} type='text'>选择仓库</Button>
-        <div style={{ float: 'right' }}>
-          <Popover content={<QRCodeCanvas value='https://shcx.shchuangxing.com/downloads/hera.latest.apk' />} placement='bottom'>
-            <Button icon={<MobileOutlined />} title='手机端下载' type='text' style={{ color: '#fff' }}></Button>
-          </Popover>
-          <Button
-            onClick={() => changeType()}
-            style={styles.navButton}
-            type='text'
-          >
-            {type === 'base' ? '切换到多标签版' : '切换到原版'}
-          </Button>
-          <Dropdown overlay={menu}>
-            <Button style={{ color: '#fff' }} type='text'>当前在线 {onlineUsers.length} 人</Button>
-          </Dropdown>
-          <Button style={{ color: '#fff' }} type='text' onClick={logout}>退出</Button>
-          <Button
-            onClick={() => navigate('/profile')}
-            icon={<UserOutlined />} style={{ color: '#fff' }} type='text'>{user.username}</Button>
-        </div>
+        <TabContext.Provider value={{ has: type === 'tab' }}>
+          <Navbar type={type} />
+        </TabContext.Provider>
       </Layout.Header>
       <Layout>
         <Layout.Sider width={240} className='sider'>
