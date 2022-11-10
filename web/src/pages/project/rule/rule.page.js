@@ -44,9 +44,9 @@ export default () => {
     )
   })
   const items = [
-    { key: 'rent', label: <LinkButton to='/rule/create/租金' >租金规则</LinkButton> },
-    { key: 'weight', label: <LinkButton to='/rule/create/计重' >计重规则</LinkButton> },
-    { key: 'other', label: <LinkButton to='/rule/create/非租' >其它费用</LinkButton> },
+    { key: 'rent', label: '租金规则', onClick: () => navigate('/rule/create/租金') },
+    { key: 'weight', label: '计重规则', onClick: () => navigate('/rule/create/计重') },
+    { key: 'other', label: '其它费用', onClick: () => navigate('/rule/create/非租') },
   ]
   return (
     <PageHeader

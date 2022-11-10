@@ -1,5 +1,6 @@
 import { ClearOutlined, EditOutlined, ExportOutlined, PlusCircleOutlined, PrinterOutlined, SaveOutlined, SearchOutlined } from '@ant-design/icons'
 import { Button, Card, Col, Descriptions, Dropdown, Form, Input, Menu, PageHeader, Row, Space } from 'antd'
+import _ from 'lodash'
 import React, { useState } from 'react'
 import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
@@ -81,7 +82,15 @@ export default ({
   }
   if (onCreateMenu) {
     actions.push(
-      <Dropdown key='onCreateMenu' overlay={<Menu items={onCreateMenu} />} placement='bottomLeft' trigger={['click']}>
+      <Dropdown key='onCreateMenu' overlay={<Menu
+        onClick={({ key }) => {
+          _.each(onCreateMenu, ({ key: menuKey, onClick }) => {
+            if (key === menuKey) {
+              onClick()
+            }
+          })
+        }}
+        items={onCreateMenu} />} placement='bottomLeft' trigger={['click']}>
         <Button type='primary' onClick={onCreate} icon={<PlusCircleOutlined />}>新增</Button>
       </Dropdown>
     )
