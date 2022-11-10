@@ -308,11 +308,24 @@ export class StoreService {
             {
               $match: {
                 $expr: {
-                  $and: [
-                    { $eq: ['$items.product.type', '$$productType'] },
-                    { $eq: ['$items.product.name', '$$productName'] },
-                    { $eq: ['$items.product.size', '$$productSize'] },
-                  ]
+                  $cond: {
+                    if: {
+                      $eq: ['$items.level', '产品']
+                    },
+                    then: {
+                      $and: [
+                        { $eq: ['$items.product.type', '$$productType'] },
+                        { $eq: ['$items.product.name', '$$productName'] },
+                      ]
+                    },
+                    else: {
+                      $and: [
+                        { $eq: ['$items.product.type', '$$productType'] },
+                        { $eq: ['$items.product.name', '$$productName'] },
+                        { $eq: ['$items.product.size', '$$productSize'] },
+                      ]
+                    }
+                  },
                 }
               }
             }
@@ -337,7 +350,19 @@ export class StoreService {
             }
           },
           weight: {
-            $multiply: ['$entries.count', { $ifNull: ['$weightRule.items.weight', '$products.weight'] }]
+            $multiply: [
+              '$entries.count',
+              { $ifNull: ['$weightRule.items.weight', '$products.weight'] },
+              {
+                $cond: {
+                  if: {
+                    $eq: ['$weightRule.items.countType', '换算数量'],
+                  },
+                  then: '$products.scale',
+                  else: 1,
+                }
+              }
+            ]
           },
         }
       },
@@ -696,11 +721,24 @@ export class StoreService {
             {
               $match: {
                 $expr: {
-                  $and: [
-                    { $eq: ['$items.product.type', '$$productType'] },
-                    { $eq: ['$items.product.name', '$$productName'] },
-                    { $eq: ['$items.product.size', '$$productSize'] },
-                  ]
+                  $cond: {
+                    if: {
+                      $eq: ['$items.level', '产品']
+                    },
+                    then: {
+                      $and: [
+                        { $eq: ['$items.product.type', '$$productType'] },
+                        { $eq: ['$items.product.name', '$$productName'] },
+                      ]
+                    },
+                    else: {
+                      $and: [
+                        { $eq: ['$items.product.type', '$$productType'] },
+                        { $eq: ['$items.product.name', '$$productName'] },
+                        { $eq: ['$items.product.size', '$$productSize'] },
+                      ]
+                    }
+                  },
                 }
               }
             }
@@ -718,7 +756,19 @@ export class StoreService {
       {
         $addFields: {
           weight: {
-            $multiply: ['$complements.count', { $ifNull: ['$weightRule.items.weight', '$products.weight'] }]
+            $multiply: [
+              '$complements.count',
+              { $ifNull: ['$weightRule.items.weight', '$products.weight'] },
+              {
+                $cond: {
+                  if: {
+                    $eq: ['$weightRule.items.countType', '换算数量'],
+                  },
+                  then: '$products.scale',
+                  else: 1,
+                }
+              }
+            ]
           },
         }
       },
@@ -1020,11 +1070,24 @@ export class StoreService {
             {
               $match: {
                 $expr: {
-                  $and: [
-                    { $eq: ['$items.product.type', '$$productType'] },
-                    { $eq: ['$items.product.name', '$$productName'] },
-                    { $eq: ['$items.product.size', '$$productSize'] },
-                  ]
+                  $cond: {
+                    if: {
+                      $eq: ['$items.level', '产品']
+                    },
+                    then: {
+                      $and: [
+                        { $eq: ['$items.product.type', '$$productType'] },
+                        { $eq: ['$items.product.name', '$$productName'] },
+                      ]
+                    },
+                    else: {
+                      $and: [
+                        { $eq: ['$items.product.type', '$$productType'] },
+                        { $eq: ['$items.product.name', '$$productName'] },
+                        { $eq: ['$items.product.size', '$$productSize'] },
+                      ]
+                    }
+                  },
                 }
               }
             }
@@ -1042,7 +1105,20 @@ export class StoreService {
       {
         $addFields: {
           theoryWeight: {
-            $multiply: ['$entries.count', 0.001, { $ifNull: ['$weightRule.items.weight', '$products.weight'] }]
+            $multiply: [
+              '$entries.count',
+              0.001,
+              { $ifNull: ['$weightRule.items.weight', '$products.weight'] },
+              {
+                $cond: {
+                  if: {
+                    $eq: ['$weightRule.items.countType', '换算数量'],
+                  },
+                  then: '$products.scale',
+                  else: 1,
+                }
+              }
+            ]
           },
         }
       },
