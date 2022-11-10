@@ -11,6 +11,10 @@ async function bootstrap() {
   app.use(compression());
   logger.token('log-time', () => moment().format('MM-DD HH:mm:ss'));
   app.use(logger('[:method] (:log-time) :url :status :remote-addr :response-time ms'));
-  await app.listen(3000);
+  if (process.env.IS_DEV === 'true') {
+    await app.listen(3000, '0.0.0.0');
+  } else {
+    await app.listen(3000);
+  }
 }
 bootstrap();
