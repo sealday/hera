@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import _ = require('lodash');
 import { Model, Types } from 'mongoose';
 import { AppService, Record } from 'src/app/app.service';
 import { LoggerService } from 'src/app/logger/logger.service';
@@ -37,8 +38,12 @@ export class RecordService {
     return savedRecord
   }
 
-  async findById(recordId: string) {
-    return this.recordModel.findById(recordId)
+  async findById(recordId: string | number) {
+    if (_.toNumber(recordId)) {
+      return await this.recordModel.findOne({ number: recordId })
+    } else {
+      return await this.recordModel.findOne({ _id: recordId })
+    }
   }
 
   async update(body: Record, recordId: string, user: User) {

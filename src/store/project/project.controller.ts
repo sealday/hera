@@ -27,8 +27,7 @@ export class ProjectController {
   @Get(':id')
   async detail(@Param('id') projectId: string) {
     const project = await this.projectService.findById(projectId);
-    return { project }
-  }
+    return { project } }
 
   @Post(':id')
   async update(@Body() body: Project, @Param('id') projectId: string, @Auth() user: User) {

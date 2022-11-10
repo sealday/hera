@@ -1,13 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import _ = require('lodash');
 import { Model } from 'mongoose';
-import { Employee, EmployeeDocument } from 'src/schemas/employee.schema';
+import { AppService } from 'src/app/app.service';
+import { Employee, EmployeeDocument, EmployeeSchema } from 'src/schemas/employee.schema';
 
 @Injectable()
 export class EmployeesService {
-  constructor(@InjectModel(Employee.name) private employeeModel: Model<EmployeeDocument>) { }
+  constructor(
+    @InjectModel(Employee.name) private employeeModel: Model<EmployeeDocument>,
+    private appService: AppService,
+  ) { }
 
   async create(employee: Employee) {
+    console.log(Employee.name)
+    employee.employeeID = await this.appService.genNextNumber(Employee.name)
     return await (await this.employeeModel.create(employee)).save()
   }
 
@@ -20,7 +27,7 @@ export class EmployeesService {
   }
 
   async update(id: string, employee: Employee) {
-    return await this.employeeModel.findByIdAndUpdate(id, { $set: employee })
+    return await this.employeeModel.findByIdAndUpdate(id, { $set: _.omit(employee, ['.employeeID']) })
   }
 
   async remove(id: string) {
