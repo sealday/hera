@@ -14,9 +14,10 @@ import { config as routeConfigs } from 'routes'
 import Navbar from './common/navbar.component'
 
 export default ({ onEnter, onLeave, type }) => {
-  const { store, user, config, loading, items, active } = useSelector(state => ({
+  const { store, user, config, loading, items, active, history } = useSelector(state => ({
     items: state.core.items,
     active: state.core.active,
+    history: state.core.history,
     store: state.system.store,
     user: state.system.user,
     config: state.system.config,

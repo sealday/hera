@@ -11,7 +11,7 @@ import io from 'socket.io-client'
 import axios from 'axios'
 import { store, history, BASENAME } from './globalConfigs'
 import { systemLoaded, selectStore } from './actions'
-import { updateOnlineUsers } from './features/coreSlice'
+import { loadTab, updateOnlineUsers } from './features/coreSlice'
 import { ajax, getAuthToken } from './utils'
 import Routes from './routes'
 
@@ -39,6 +39,12 @@ const onLogined = () => {
   axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
   ajax('/api/load').then(res => {
     store.dispatch(systemLoaded(res.data))
+    
+    const tabContent = localStorage.getItem('TAB')
+    if (process.env.NODE_ENV === 'development' && tabContent) {
+      const tabInfo = JSON.parse(tabContent)
+      store.dispatch(loadTab({ ...tabInfo }))
+    }
 
     socket.on('connect', () => {
       socket.emit('client:user', {
