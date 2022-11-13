@@ -18,6 +18,7 @@ export const ContractSchema = new Schema(
     items: [{
       category: String, // price、weight、repair、loss
       plan: Schema.Types.ObjectId,
+      weight: Schema.Types.ObjectId,
       start: Date,
       end: Date,
     }],
