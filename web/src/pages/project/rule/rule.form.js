@@ -1,6 +1,6 @@
-import { Card, Col, DatePicker, Form, Input, Row, Select } from "antd"
-import { RULE_CATEGORIES } from "../../../constants"
+import { Card, Col, DatePicker, Form, Input, Row } from "antd"
 import RuleOtherList from "./rule.other.list"
+import RulePerOrderList from "./rule.per_order.list"
 import RuleRentList from "./rule.rent.list"
 import RuleWeightList from "./rule.weight.list"
 
@@ -35,15 +35,10 @@ export default ({ form, initialValues, onSubmit, category }) => {
           </Col>
         </Row>
       </Card>
-      {
-        category === '租金'
-          ? <RuleRentList form={form} />
-          : category === '计重'
-            ? <RuleWeightList form={form} />
-            : category === '非租'
-              ? <RuleOtherList form={form} />
-              : null
-      }
+      {category === '租金' ? <RuleRentList /> : null}
+      {category === '计重' ? <RuleWeightList /> : null}
+      {category === '装卸运费' ? <RulePerOrderList /> : null}
+      {category === '非租' ? <RuleOtherList /> : null}
     </Form>
   )
 }

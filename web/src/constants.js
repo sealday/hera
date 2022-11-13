@@ -16,9 +16,13 @@ export const RULE_CATEGORIES = [
     value: '计重'
   },
   {
+    label: '装卸运费',
+    value: '装卸运费',
+  },
+  {
     label: '其它费用',
     value: '非租',
-  }
+  },
 ]
 
 export const CAR_NUMBERS = ['自备车', '直送', '自提', '转账', '转单', '合车']

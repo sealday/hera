@@ -46,6 +46,7 @@ export default () => {
   const items = [
     { key: 'rent', label: '租金规则', onClick: () => navigate('/rule/create/租金') },
     { key: 'weight', label: '计重规则', onClick: () => navigate('/rule/create/计重') },
+    { key: 'perOrder', label: '装卸运费', onClick: () => navigate('/rule/create/装卸运费') },
     { key: 'other', label: '其它费用', onClick: () => navigate('/rule/create/非租') },
   ]
   return (

@@ -9,11 +9,11 @@ import moment from 'moment'
 import { DateModifier } from '../../../components'
 import { RULE_CATEGORIES } from '../../../constants'
 
-const ContractAddItemModal = ({ initialValues, onFinish, rules, visible, onClose }) => {
+const ContractAddItemModal = ({ initialValues, onFinish, rules, open, onClose }) => {
   const [form] = useForm()
   return <Modal
     title="合同规则明细"
-    visible={visible}
+    open={open}
     onOk={() => form.submit()}
     onCancel={() => onClose()}>
     <Form
@@ -28,12 +28,12 @@ const ContractAddItemModal = ({ initialValues, onFinish, rules, visible, onClose
       }}
     >
       <Form.Item
-        label="方案分类"
+        label="计费分类"
         name="category"
         rules={[{ required: true, message: '此处为必填项！' }]}
       >
         <Select onChange={() => form.resetFields(['plan'])}
-          options={RULE_CATEGORIES}
+          options={RULE_CATEGORIES.filter(category => category.value !== '计重')}
         />
       </Form.Item>
       <Form.Item
@@ -41,7 +41,7 @@ const ContractAddItemModal = ({ initialValues, onFinish, rules, visible, onClose
         dependencies={['category']}>
         {() => {
           return <Form.Item
-            label="方案"
+            label="计费规则"
             name="plan"
             rules={[{ required: true, message: '此处为必填项！' }]}
           >
@@ -54,6 +54,19 @@ const ContractAddItemModal = ({ initialValues, onFinish, rules, visible, onClose
             />
           </Form.Item>;
         }}
+      </Form.Item>
+      <Form.Item
+        label="计重规则"
+        name="weight"
+        rules={[{ required: true, message: '此处为必填项！' }]}
+      >
+        <Select showSearch optionFilterProp="label"
+          options={
+            rules
+              .filter(rule => rule.category === '计重')
+              .map(rule => ({ label: rule.name, value: rule._id }))
+          }
+        />
       </Form.Item>
       <Form.Item
         label="时间区间"

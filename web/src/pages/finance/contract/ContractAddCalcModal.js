@@ -3,11 +3,11 @@ import { DateModifier } from '../../../components'
 import moment from 'moment'
 import { Form, Modal, DatePicker, Input } from 'antd'
 
-const ContractAddCalcModal = ({ initialValues, onFinish, visible, onClose }) => {
+const ContractAddCalcModal = ({ initialValues, onFinish, open, onClose }) => {
     const [form] = useForm()
     return <Modal
       title="结算单"
-      visible={visible}
+      open={open}
       onOk={() => form.submit()}
       onCancel={() => onClose()}>
       <Form

@@ -6,26 +6,29 @@ import ContractAddItemModal from './ContractAddItemModal'
 import ContractAddCalcModal from './ContractAddCalcModal'
 import zh_CN from 'antd/lib/locale-provider/zh_CN'
 import Contract from './Contract'
+import { createRoot } from 'react-dom/client'
 
 const createModal = component => {
   return props => {
-    let visible = true
+    let open = true
     const div = document.createElement('div')
+    const root = createRoot(div)
     document.body.appendChild(div)
     // after close
     function onClose() {
-      visible = false
+      open = false
       render()
-      if (ReactDOM.unmountComponentAtNode(div) && div.parentNode) {
+      root.unmount()
+      if (div.parentNode) {
         div.parentNode.removeChild(div)
       }
     }
     // per render
     function render() {
       setTimeout(() => {
-        ReactDOM.render(<ConfigProvider locale={zh_CN}>
-          {React.createElement(component, { ...props, visible, onClose })}
-        </ConfigProvider >, div)
+        root.render(<ConfigProvider locale={zh_CN}>
+          {React.createElement(component, { ...props, open, onClose })}
+        </ConfigProvider >)
       })
     }
     render()

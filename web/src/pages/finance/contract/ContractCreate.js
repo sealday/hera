@@ -11,7 +11,7 @@ import { antFilterOption, PageHeader } from '../../../components'
 import { useNavigate } from 'utils/hooks'
 import heraApi from '../../../api'
 
-export default ({ dispatch }) => {
+export default () => {
   const projects = useSelector(state => state.system.projects)
   const [form] = Form.useForm()
   const [createContract, createResult] = heraApi.useCreateContractMutation()

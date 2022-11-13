@@ -5,9 +5,9 @@ import { connect } from 'react-redux'
 import { ALL_PLAN, queryAllPlans } from '../../../actions'
 import { edit, addItem, addCalc } from './index'
 import _, { pick } from 'lodash'
-import { Error, Link, Loading, PageHeader } from 'components'
+import { Error, Link, LinkButton, Loading, PageHeader } from 'components'
 import heraApi from '../../../api'
-import { useParams } from 'utils/hooks'
+import { useNavigate, useParams } from 'utils/hooks'
 import { RULE_CATEGORIES } from 'constants'
 
 const INITIAL_CATEGORY = '租金'
@@ -58,6 +58,7 @@ const ProjectLabel = ({ id }) => {
 }
 
 const ContractDetails = connect(mapStateToProps)(({ projects, dispatch, plans }) => {
+  const navigate = useNavigate()
   const getRuleList = heraApi.useGetRuleListQuery()
   const { id } = useParams()
   const getContract = heraApi.useGetContractQuery(id)
@@ -116,6 +117,7 @@ const ContractDetails = connect(mapStateToProps)(({ projects, dispatch, plans })
               onFinish: v => {
                 const requestBody = {
                   category: v.category,
+                  weight: v.weight,
                   plan: v.plan,
                   start: v.date[0].startOf('day'),
                   end: v.date[1].startOf('day'),
@@ -126,10 +128,27 @@ const ContractDetails = connect(mapStateToProps)(({ projects, dispatch, plans })
           }} type="primary">新增</Button>
         ]}
       >
-        <Table dataSource={contract.items}>
-          <Table.Column key="category" title="分类" dataIndex="category" render={text =>_.get(RULE_CATEGORIES.find(category => category.value === text), 'label')} />
-          <Table.Column key="plan" title="名称" dataIndex="plan"
-            render={plan => _.get(rules.find(rule => rule._id === plan), 'name', '没找到对应规则') } />
+        <Table dataSource={contract.items} rowKey='_id'>
+          <Table.Column key="category" title="规则分类" dataIndex="category" render={text =>_.get(RULE_CATEGORIES.find(category => category.value === text), 'label')} />
+          <Table.Column key="plan" title="计费规则" dataIndex="plan"
+            render={plan => {
+              const rule = _.find(rules, rule => rule._id === plan)
+              if (rule && rule.name) {
+                return <LinkButton to={`/rule/${rule._id}`}>{rule.name}</LinkButton> 
+              } else {
+                return '找不到对应计费规则'
+              }
+          } } />
+          <Table.Column key='weight' title='计重规则' dataIndex='weight'
+            render={plan => {
+              const rule = _.find(rules, rule => rule._id === plan)
+              if (rule && rule.name) {
+                return <LinkButton to={`/rule/${rule._id}`}>{rule.name}</LinkButton> 
+              } else {
+                return '默认计重规则'
+              }
+            }}
+          />
           <Table.Column key="start" title="开始日期" dataIndex="start"
             render={start => moment(start).format('YYYY-MM-DD')} />
           <Table.Column key="end" title="结束日期" dataIndex="end"

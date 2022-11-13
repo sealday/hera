@@ -12,7 +12,7 @@ const styles = {
     fontWeight: '500',
   },
 }
-export default () => {
+const RulePerOrderList = () => {
   const form = Form.useFormInstance()
   return (
     <Card style={styles.keepSpace} title='规则明细'>
@@ -95,3 +95,5 @@ export default () => {
     </Card>
   )
 }
+
+export default RulePerOrderList
