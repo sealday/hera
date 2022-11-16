@@ -71,7 +71,7 @@ const Navbar = ({ type }) => {
           style={{ width: '300px' }}
           itemLayout='horizontal'
           dataSource={[
-            { title: '系统更新', description: '1. 增加系统版本信息' },
+            { title: '系统更新', description: '1. 增加系统版本信息\n2.增加装卸运费\n3.更新计重逻辑\n' },
           ]}
           footer={<Button.Group style={{ width: '100%' }}><Button block>全部已读</Button><Button block>查看更多</Button></Button.Group>}
           renderItem={(item) => (
@@ -91,7 +91,7 @@ const Navbar = ({ type }) => {
           autoAdjustOverflow={false}
           placement='bottomRight'
           content={<div>
-            版本：<Tag color='blue'>3.1.0</Tag>更新于：<Tag color='blue'>2022-11-10 20:00:00</Tag>
+            版本：<Tag color='blue'>3.1.0</Tag>更新于：<Tag color='blue'>2022-11-17 01:00:00</Tag>
           </div>}>
           <Button icon={<InfoCircleOutlined />} title='系统信息' type='text' style={styles.navButton}></Button>
         </Popover>
