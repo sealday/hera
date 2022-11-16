@@ -2,14 +2,14 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { matchPath, Outlet } from 'react-router-dom'
 import { useNavigate } from 'utils/hooks'
-import { Layout, Tabs } from 'antd'
+import { Button, Card, Layout, message, Result, Tabs } from 'antd'
 import _ from 'lodash'
 import { CurrentStore, Error, Loading, MenuList } from '../components'
 import { selectStore } from '../actions'
 import './App.css'
 import heraApi from '../api'
 import { TabContext } from '../globalConfigs'
-import { changeTab, removeItem } from '../features/coreSlice'
+import { changeTab, removeItem, loadTab } from '../features/coreSlice'
 import { config as routeConfigs } from 'routes'
 import Navbar from './common/navbar.component'
 
@@ -84,7 +84,7 @@ export default ({ onEnter, onLeave, type }) => {
           </TabContext.Provider>
         </Layout.Sider>
         <Layout className='content'>
-          {isStoreSelected() && type === 'tab' && <Tabs
+          {isStoreSelected() && type === 'tab' && tabItems.length !== 0 && <Tabs
             onEdit={onTabEdit}
             tabBarStyle={{
               top: 0,
@@ -99,6 +99,29 @@ export default ({ onEnter, onLeave, type }) => {
             items={tabItems}
             type='editable-card'
           />}
+
+          {isStoreSelected() && type === 'tab' && tabItems.length === 0 && <>
+            <Card bordered={false} style={{ height: '100%', margin: '8px' }}>
+              <Result
+                title="没有打开任何的标签页"
+                extra={
+                  <Button type="primary" key="console" onClick={() => {
+                    const tabContent = localStorage.getItem('TAB')
+                    if (tabContent) {
+                      const tabInfo = JSON.parse(tabContent)
+                      if (tabInfo.items.length !== 0) {
+                        dispatch(loadTab({ ...tabInfo }))
+                        return
+                      }
+                    }
+                    message.info('没有找到上一次保存的标签页信息')
+                  }}>
+                    尝试加载上一次的标签页
+                  </Button>
+                }
+              />
+            </Card>
+          </>}
           {isStoreSelected() && type === 'base' && <Outlet />}
           {!isStoreSelected() && <CurrentStore />}
         </Layout>
