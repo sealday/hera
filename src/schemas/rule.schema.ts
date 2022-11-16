@@ -11,7 +11,7 @@ export class Rule {
   @Prop()
   date: Date;
 
-  @Prop({ enum: ['租金', '计重', '非租'] })
+  @Prop({ enum: ['租金', '计重', '非租', '装卸运费'] })
   category: string;
   
   @Prop()
