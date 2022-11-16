@@ -27,13 +27,11 @@ const Navbar = ({ type }) => {
   const dispatch = useDispatch()
   const [logout, logoutResult] = heraApi.useLogoutMutation()
 
-  const menu = (
-    <Menu items={onlineUsers.map(user => ({
+
+  const onlineUserItems = onlineUsers.map(user => ({
       key: short_id.generate(),
       label: get(user, ['profile', 'name'], '异常用户'),
-    }))}
-    />
-  )
+    }))
   useEffect(() => {
     if (logoutResult.isSuccess) {
       message.success('登出成功！')
@@ -61,7 +59,7 @@ const Navbar = ({ type }) => {
         >
           {type === 'base' ? '经典版' : '多标签版'}
         </Button>
-        <Dropdown overlay={menu}>
+        <Dropdown menu={{ items: onlineUserItems }}>
           <Button style={styles.navButton} type='text'>在线 {onlineUsers.length} 人</Button>
         </Dropdown>
         <Popover content={<QRCodeCanvas value='https://shcx.shchuangxing.com/downloads/hera.latest.apk' />} placement='bottom'>
@@ -96,21 +94,14 @@ const Navbar = ({ type }) => {
           <Button icon={<InfoCircleOutlined />} title='系统信息' type='text' style={styles.navButton}></Button>
         </Popover>
 
-        <Dropdown overlay={
-          <Menu
-            onClick={({ key }) => {
-              if (key === 'setting') {
-                navigate('/profile')
-              } else if (key === 'logout') {
-                logout()
-              }
-            }}
-            items={[
-              { key: 'setting', label: '个人设置', icon: <SettingOutlined /> },
-              { key: 'logout', label: '退出系统', icon: <LogoutOutlined /> },
-            ]}
-          />
-        }>
+        <Dropdown
+          menu={{
+            items: [
+              { key: 'setting', label: '个人设置', icon: <SettingOutlined />, onClick: () => { navigate('/profile') } },
+              { key: 'logout', label: '退出系统', icon: <LogoutOutlined />, onClick: () => { logout() } },
+            ]
+          }}
+        >
           <Button icon={<UserOutlined />} style={styles.navButton} type='text'>{user.username}</Button>
         </Dropdown>
       </div>

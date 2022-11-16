@@ -10,6 +10,7 @@ import { genFormContent } from '../utils/antd'
 import ModalFormButton from './button/modal-form.button'
 import ModalPrintPreviewButton from './button/modal-print-preview.button'
 import { Helmet } from 'react-helmet'
+import { useNavigate } from '../utils/hooks'
 
 export default ({
   title,
@@ -33,6 +34,7 @@ export default ({
     user: state.system.user,
     store: state.system.store,
   }))
+  const navigate = useNavigate()
   const [form] = Form.useForm()
   const tabButton = useTab({ title })
   const recentItems = []
@@ -83,15 +85,11 @@ export default ({
   }
   if (onCreateMenu) {
     actions.push(
-      <Dropdown key='onCreateMenu' overlay={<Menu
-        onClick={({ key }) => {
-          _.each(onCreateMenu, ({ key: menuKey, onClick }) => {
-            if (key === menuKey) {
-              onClick()
-            }
-          })
-        }}
-        items={onCreateMenu} />} placement='bottomLeft' trigger={['click']}>
+      <Dropdown
+        key='onCreateMenu' 
+        menu={{ items: onCreateMenu }}
+        placement='bottomLeft' 
+        trigger={['click']}>
         <Button type='primary' onClick={onCreate} icon={<PlusCircleOutlined />}>新增</Button>
       </Dropdown>
     )
