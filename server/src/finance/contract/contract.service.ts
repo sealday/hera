@@ -53,7 +53,7 @@ export class ContractService {
     const rules = {}
     categories.forEach(category => {
       const rule = _.find(_.reverse([...contract.items]),
-        item => item.category === '租金' && this.inRange(item.start, item.end, calc.start, calc.end))
+        item => item.category === category && this.inRange(item.start, item.end, calc.start, calc.end))
       rules[category] = {
         fee: _.get(rule, 'plan'),
         weight: _.get(rule, 'weight'),

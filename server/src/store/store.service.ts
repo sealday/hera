@@ -1284,25 +1284,362 @@ export class StoreService {
       {
         $unwind: '$other'
       },
+      // 关联 category
+      {
+        $lookup: {
+          from: 'others',
+          let: { categoryId: '$_id.category' },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ['$id', '$$categoryId'] },
+                  ]
+                }
+              }
+            }
+          ],
+          as: 'category',
+        }
+      },
+      {
+        $unwind: '$category'
+      },
       {
         $addFields: {
-          category: '$other.name',
+          category: '$category.name',
           unit: '吨',
-          name: '',
+          name: '$other.name',
           outDate: moment(endDate).add(-1, 'day').toDate(),
         }
       },
     ])
+    // 按单计算
+    const perOrderResult = await this.recordModel.aggregate([
+      {
+        // 关联调拨单
+        $match: {
+          $or: [
+            {
+              inStock: project
+            },
+            {
+              outStock: project
+            }
+          ],
+          type: '调拨',
+          outDate: {
+            $lt: endDate,
+            $gte: startDate,
+          }
+        }
+      },
+      {
+        $addFields: {
+          direction: {
+            $cond: {
+              if: {
+                $eq: ['$inStock', project]
+              },
+              then: 'out',
+              else: 'in',
+            }
+          }
+        }
+      },
+      // 展开明细
+      {
+        $unwind: '$entries'
+      },
+      // 关联单位数量
+      {
+        $lookup: {
+          from: 'products',
+          let: { productType: '$entries.type', productName: '$entries.name', productSize: '$entries.size' },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ['$type', '$$productType'] },
+                    { $eq: ['$name', '$$productName'] },
+                    { $eq: ['$size', '$$productSize'] },
+                  ]
+                }
+              }
+            }
+          ],
+          as: 'products',
+        }
+      },
+      {
+        $unwind: '$products'
+      },
+      // 关联重量
+      {
+        $lookup: {
+          from: 'rules',
+          let: { productType: '$entries.type', productName: '$entries.name', productSize: '$entries.size' },
+          pipeline: [
+            {
+              $match: { _id: rules['装卸运费'].weight },
+            },
+            {
+              $unwind: '$items',
+            },
+            {
+              $match: {
+                $expr: {
+                  $cond: {
+                    if: {
+                      $eq: ['$items.level', '产品']
+                    },
+                    then: {
+                      $and: [
+                        { $eq: ['$items.product.type', '$$productType'] },
+                        { $eq: ['$items.product.name', '$$productName'] },
+                      ]
+                    },
+                    else: {
+                      $and: [
+                        { $eq: ['$items.product.type', '$$productType'] },
+                        { $eq: ['$items.product.name', '$$productName'] },
+                        { $eq: ['$items.product.size', '$$productSize'] },
+                      ]
+                    }
+                  },
+                }
+              }
+            }
+          ],
+          as: 'weightRule',
+        }
+      },
+      {
+        $unwind: {
+          path: '$weightRule',
+          preserveNullAndEmptyArrays: true,
+        }
+      },
+      // 天数、重量
+      {
+        $addFields: {
+          theoryWeight: {
+            $multiply: [
+              '$entries.count',
+              0.001,
+              { $ifNull: ['$weightRule.items.weight', '$products.weight'] },
+              {
+                $cond: {
+                  if: {
+                    $eq: ['$weightRule.items.countType', '换算数量'],
+                  },
+                  then: '$products.scale',
+                  else: 1,
+                }
+              }
+            ]
+          },
+        }
+      },
+      {
+        $group: {
+          _id: {
+            number: "$number"
+          },
+          weight: { $first: "$weight" },
+          theoryWeight: { $sum: "$theoryWeight" },
+          freight: { $first: '$freight' },
+          direction: { $first: '$direction' },
+        }
+      },
+      // 关联按单
+      {
+        $lookup: {
+          from: 'rules',
+          let: { },
+          pipeline: [
+            {
+              $match: { _id: rules['装卸运费'].fee },
+            },
+            {
+              $unwind: '$items',
+            },
+          ],
+          as: 'otherRule',
+        }
+      },
+      {
+        $unwind: {
+          path: '$otherRule',
+        }
+      },
+      // 根据条件过滤
+      {
+        $match: {
+          $expr: {
+            $or: [
+              {
+                $and: [
+                  {
+                    $eq: ['$otherRule.items.condition', '出入库']
+                  },
+                  {
+                    $or: [
+                      {
+                        $eq: ['$direction', 'in']
+                      },
+                      {
+                        $eq: ['$direction', 'out']
+                      },
+                    ]
+                  }
+                ]
+              },
+              {
+                $and: [
+                  {
+                    $eq: ['$otherRule.items.condition', '出库']
+                  },
+                  {
+                    $or: [
+                      {
+                        $eq: ['$direction', 'out']
+                      },
+                    ]
+                  }
+                ]
+              },
+              {
+                $and: [
+                  {
+                    $eq: ['$otherRule.items.condition', '入库']
+                  },
+                  {
+                    $or: [
+                      {
+                        $eq: ['$direction', 'in']
+                      },
+                    ]
+                  }
+                ]
+              },
+              {
+                $and: [
+                  {
+                    $eq: ['$otherRule.items.condition', '合同运费']
+                  },
+                  {
+                    $or: [
+                      {
+                        $eq: ['$freight', true]
+                      },
+                    ]
+                  }
+                ]
+              },
+            ]
+          }
+        }
+      },
+      {
+        $group: {
+          _id: {
+            number: '$_id.number',
+            other: '$otherRule.items.other',
+            unitPrice: '$otherRule.items.unitPrice',
+            category: '$otherRule.category',
+          },
+          weight: {
+            $sum: {
+              $cond: {
+                if: {
+                  $eq: ['$otherRule.items.countType', '重量']
+                },
+                then: '$theoryWeight',
+                else: '$weight'
+              }
+            }
+          }
+        }
+      },
+      {
+        $group: {
+          _id: {
+            other: { $last: '$_id.other' },
+            category: { $first: '$_id.other' },
+          },
+          count: { $sum: '$weight' },
+          unitPrice: { $first: '$_id.unitPrice' },
+          price: { $sum: { $multiply: ['$_id.unitPrice', '$weight'] } },
+        }
+      },
+      // 关联费用表
+      {
+        $lookup: {
+          from: 'others',
+          let: { otherId: '$_id.other' },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ['$id', '$$otherId'] },
+                  ]
+                }
+              }
+            }
+          ],
+          as: 'other',
+        }
+      },
+      {
+        $unwind: '$other'
+      },
+      // 关联 category
+      {
+        $lookup: {
+          from: 'others',
+          let: { categoryId: '$_id.category' },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ['$id', '$$categoryId'] },
+                  ]
+                }
+              }
+            }
+          ],
+          as: 'category',
+        }
+      },
+      {
+        $unwind: '$category'
+      },
+      {
+        $addFields: {
+          category: '$category.name',
+          unit: '吨',
+          name: '$other.name',
+          outDate: moment(endDate).add(-1, 'day').toDate(),
+        }
+      },
+    ])
+    console.log(perOrderResult)
     const price = _.sumBy([
       ...rentResult[0].history,
       ...rentResult[0].list,
       ...otherAssociatedResult,
-      ...otherUnconnectedResult
+      ...otherUnconnectedResult,
+      ...perOrderResult,
     ], item => item.price)
     
     return {
       history: rentResult[0].history,
-      list: _.sortBy(rentResult[0].list.concat(otherAssociatedResult), ['outDate', 'name']).concat(otherUnconnectedResult),
+      list: _.sortBy(rentResult[0].list.concat(otherAssociatedResult), ['outDate', 'name']).concat(otherUnconnectedResult).concat(perOrderResult),
       debug: [],
       group: {
         price,

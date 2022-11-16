@@ -16,6 +16,7 @@ const RulePerOrderList = () => {
   return (
     <Card style={styles.keepSpace} title='规则明细'>
       <Row gutter={8}>
+        <Col style={styles.titleContainer} flex='100px'>条件</Col>
         <Col style={styles.titleContainer} flex='200px'>计费项目</Col>
         <Col style={styles.titleContainer} flex='200px'>单价</Col>
         <Col style={styles.titleContainer} flex='120px'>计算类型</Col>
@@ -27,6 +28,16 @@ const RulePerOrderList = () => {
           return (
             <>{fields.map(field => (
               <Row gutter={8} key={field.key}>
+                <Col flex='100px'>
+                  <Form.Item name={[field.name, 'condition']}>
+                    <Select options={[
+                      { label: '出入库', value: '出入库' },
+                      { label: '出库', value: '出库' },
+                      { label: '入库', value: '入库' },
+                      { label: '合同运费', value: '合同运费' },
+                    ]} />
+                  </Form.Item>
+                </Col>
                 <Col flex='200px'>
                   <RefCascader
                     item={{ required: true, name: [field.name, 'other'], option: { ref: 'other', label: 'name', value: 'id' } }} />
