@@ -38,24 +38,34 @@ export class ContractService {
     return this.contractModel.updateOne({ _id: id }, { $pull: { items: { _id: itemId }}})
   }
 
+  inRange(planStart: Date, planEnd: Date, calcStart: string, calcEnd: string) {
+    const calcStartDay = moment(calcStart).startOf('day')
+    const calcEndDay = moment(calcEnd).add(1, 'day').startOf('day')
+    const planStartDay = moment(planStart).startOf('day')
+    const planEndDay = moment(planEnd).add(1, 'day').startOf('day')
+    return calcStartDay >= planStartDay && calcEndDay <= planEndDay
+  }
+
   async calc(id: String, calc: any, user: User) {
     const contract = await this.findById(id)
     // 按添加时间 TODO
-    const rentRuleId = _.get(_.find(_.reverse([...contract.items]), item => item.category === '租金'), 'plan')
-    const otherRuleId = _.get(_.find(_.reverse([...contract.items]), item => item.category === '非租'), 'plan')
-    const weightRuleId = _.get(_.find(_.reverse([...contract.items]), item => item.category === '计重'), 'plan')
-    if (!(rentRuleId || otherRuleId)) {
-      // 至少一个
-      throw new Error('至少需要有一个计算价格的规则')
+    const categories = ['租金', '非租', '装卸运费']
+    const rules = {}
+    categories.forEach(category => {
+      const rule = _.find(_.reverse([...contract.items]),
+        item => item.category === '租金' && this.inRange(item.start, item.end, calc.start, calc.end))
+      rules[category] = {
+        fee: _.get(rule, 'plan'),
+        weight: _.get(rule, 'weight'),
+      }
+    })
+    if (!rules['租金']) {
+      throw new Error('必须包含租金规则')
     }
     const rent = await this.storeService.calculate({
       startDate: new Date(calc.start),
       endDate: moment(calc.end).add(1, 'day').toDate(),
-      rules: {
-        rent: rentRuleId,
-        other: otherRuleId,
-        weight: weightRuleId,
-      },
+      rules: rules,
       user: user,
       project: contract.project,
     }) 

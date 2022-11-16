@@ -300,7 +300,7 @@ export class StoreService {
           let: { productType: '$entries.type', productName: '$entries.name', productSize: '$entries.size' },
           pipeline: [
             {
-              $match: { _id: rules.weight },
+              $match: { _id: rules['租金'].weight },
             },
             {
               $unwind: '$items',
@@ -376,7 +376,7 @@ export class StoreService {
           let: { productType: '$entries.type', productName: '$entries.name', productSize: '$entries.size' },
           pipeline: [
             {
-              $match: { _id: rules.rent }
+              $match: { _id: rules['租金'].fee }
             },
             {
               $unwind: '$items'
@@ -713,7 +713,7 @@ export class StoreService {
           let: { productType: '$complements.associate.type', productName: '$complements.associate.name', productSize: '$complements.associate.size' },
           pipeline: [
             {
-              $match: { _id: rules.weight },
+              $match: { _id: rules['非租'].weight },
             },
             {
               $unwind: '$items',
@@ -782,7 +782,7 @@ export class StoreService {
           },
           pipeline: [
             {
-              $match: { _id: rules.other }
+              $match: { _id: rules['非租'].fee }
             },
             {
               $unwind: '$items'
@@ -1062,7 +1062,7 @@ export class StoreService {
           let: { productType: '$entries.type', productName: '$entries.name', productSize: '$entries.size' },
           pipeline: [
             {
-              $match: { _id: rules.weight },
+              $match: { _id: rules['非租'].weight },
             },
             {
               $unwind: '$items',
@@ -1140,7 +1140,7 @@ export class StoreService {
           let: { },
           pipeline: [
             {
-              $match: { _id: rules.other },
+              $match: { _id: rules['非租'].fee },
             },
             {
               $unwind: '$items',
