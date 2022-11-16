@@ -51,6 +51,15 @@ export default () => {
         }))
       }
       createRule(rule)
+    } else if (category === '装卸运费') {
+      const rule = {
+        category,
+        ...v,
+        items: v.items.map(item => ({
+          ...item,
+        }))
+      }
+      createRule(rule)
     }
   }
   return (
