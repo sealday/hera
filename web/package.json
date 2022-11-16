@@ -35,7 +35,7 @@
     "react-frame-component": "^4.1.1",
     "react-helmet": "^6.1.0",
     "react-redux": "^8.0.4",
-    "react-router-dom": "6",
+    "react-router-dom": "^6.4.3",
     "react-scripts": "^5.0.1",
     "react-text-mask": "^5.5.0",
     "redux-form": "^8.3.8",

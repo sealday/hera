@@ -9,6 +9,7 @@ import { isUpdatable } from '../utils'
 import { genFormContent } from '../utils/antd'
 import ModalFormButton from './button/modal-form.button'
 import ModalPrintPreviewButton from './button/modal-print-preview.button'
+import { Helmet } from 'react-helmet'
 
 export default ({
   title,
@@ -128,6 +129,9 @@ export default ({
       ghost={false}
       extra={<Space>{actions}</Space>}
     >
+      <Helmet>
+        <title>{subTitle ? `${subTitle} - ${title} - 赫拉管理系统` : `${title} - 赫拉管理系统`}</title>
+      </Helmet>
       {search && searchMeta
         ? (
           <Form colon={false} form={form} onFinish={search.onSubmit} initialValues={searchMeta.initialValues}>{searchMeta.formItems}</Form>
