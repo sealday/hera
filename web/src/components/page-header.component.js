@@ -9,7 +9,7 @@ import { isUpdatable } from '../utils'
 import { genFormContent } from '../utils/antd'
 import ModalFormButton from './button/modal-form.button'
 import ModalPrintPreviewButton from './button/modal-print-preview.button'
-import { Helmet } from 'react-helmet'
+import { Helmet } from 'react-helmet-async'
 import { useNavigate } from '../utils/hooks'
 
 export default ({

@@ -14,6 +14,7 @@ import { systemLoaded, selectStore } from './actions'
 import { loadTab, updateOnlineUsers } from './features/coreSlice'
 import { ajax, getAuthToken } from './utils'
 import Routes from './routes'
+import { HelmetProvider } from 'react-helmet-async'
 
 // css 除非是模块自己的，否则直接在这里进行全局 import
 import './index.less'
@@ -81,13 +82,15 @@ const emptyRenderer = () => (
 )
 const MyApp = () => (
   <Provider store={store}>
-    <ConfigProvider locale={zh_CN} renderEmpty={emptyRenderer}>
-      <Alert.ErrorBoundary>
-        <HistoryRouter history={history} basename={BASENAME}>
-          <Routes onLogin={onLogined} onLogout={onLogouted} />
-        </HistoryRouter>
-      </Alert.ErrorBoundary>
-    </ConfigProvider>
+    <HelmetProvider context={{}}>
+      <ConfigProvider locale={zh_CN} renderEmpty={emptyRenderer}>
+        <Alert.ErrorBoundary>
+          <HistoryRouter history={history} basename={BASENAME}>
+            <Routes onLogin={onLogined} onLogout={onLogouted} />
+          </HistoryRouter>
+        </Alert.ErrorBoundary>
+      </ConfigProvider>
+    </HelmetProvider>
   </Provider>
 )
 // react 18 之后用法
