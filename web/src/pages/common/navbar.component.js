@@ -89,7 +89,7 @@ const Navbar = ({ type }) => {
           autoAdjustOverflow={false}
           placement='bottomRight'
           content={<div>
-            版本：<Tag color='blue'>3.1.1</Tag>更新于：<Tag color='blue'>2022-11-17 13:50:00</Tag>
+            版本：<Tag color='blue'>3.1.2</Tag>更新于：<Tag color='blue'>2022-11-17 16:40:00</Tag>
           </div>}>
           <Button icon={<InfoCircleOutlined />} title='系统信息' type='text' style={styles.navButton}></Button>
         </Popover>
