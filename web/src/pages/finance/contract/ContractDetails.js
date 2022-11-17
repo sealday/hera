@@ -111,6 +111,7 @@ const ContractDetails = connect(mapStateToProps)(({ projects, dispatch, plans })
             addItem({
               initialValues: {
                 category: INITIAL_CATEGORY,
+                weight: null,
               },
               plans,
               rules,

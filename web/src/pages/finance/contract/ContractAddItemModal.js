@@ -58,13 +58,13 @@ const ContractAddItemModal = ({ initialValues, onFinish, rules, open, onClose })
       <Form.Item
         label="计重规则"
         name="weight"
-        rules={[{ required: true, message: '此处为必填项！' }]}
       >
         <Select showSearch optionFilterProp="label"
           options={
             rules
               .filter(rule => rule.category === '计重')
               .map(rule => ({ label: rule.name, value: rule._id }))
+              .concat({ label: '默认计重规则', value: null })
           }
         />
       </Form.Item>
