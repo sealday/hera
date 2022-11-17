@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ShutdownSignal } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import _ = require('lodash');
 import { Model, Types } from 'mongoose';
 import { AppService, Record } from 'src/app/app.service';
 import { LoggerService } from 'src/app/logger/logger.service';
+import { ContractService } from 'src/finance/contract/contract.service';
 import { User } from 'src/users/users.service';
 import { convert } from 'src/utils/pinyin';
 
@@ -13,6 +14,7 @@ export class RecordService {
     @InjectModel('Record') private recordModel: Model<Record>,
     private loggerService: LoggerService,
     private appService: AppService,
+    private contractService: ContractService,
   ) { }
 
   async delete(recordId: string) {
@@ -33,8 +35,10 @@ export class RecordService {
     record.username = user.username
     // 4) 保存历史订单
     const savedRecord = await record.save()
-    // 5) 落下日志
+    // 5) 异步落下日志
     this.loggerService.logNewRecord(savedRecord, user)
+    // 6) 异步更新合同
+    this.contractService.updateCalcStatus(savedRecord)
     return savedRecord
   }
 
@@ -54,7 +58,10 @@ export class RecordService {
     // record.username = user.username
     const updatedRecord = await record.save()
     const rhs = updatedRecord.toObject()
+    // 异步落下日志
     this.loggerService.logRecordDiff(lhs, rhs, user)
+    // 异步更新合同
+    this.contractService.updateCalcStatus(updatedRecord)
     return updatedRecord
   }
 

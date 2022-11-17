@@ -18,13 +18,13 @@ import { RuleModule } from './rule/rule.module';
 
 @Module({
   imports: [
-    StoreModule,
     MongooseModule.forFeature([
       { name: 'Contract', schema: ContractSchema },
       { name: 'Price', schema: PriceSchema },
       { name: 'Record', schema: RecordSchema },
       { name: 'Company', schema: CompanySchema },
     ]),
+    forwardRef(() => StoreModule),
     forwardRef(() => AppModule),
     SubjectModule,
     InvoiceModule,
@@ -32,6 +32,7 @@ import { RuleModule } from './rule/rule.module';
     RuleModule,
   ],
   controllers: [ContractController, CompanyController],
-  providers: [ContractService, CompanyService,StoreService]
+  providers: [ContractService, CompanyService, StoreService],
+  exports: [ContractService],
 })
 export class FinanceModule {}

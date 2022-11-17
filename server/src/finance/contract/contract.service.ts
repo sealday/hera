@@ -46,6 +46,32 @@ export class ContractService {
     return calcStartDay >= planStartDay && calcEndDay <= planEndDay
   }
 
+  async updateCalcStatus(record: any) {
+    const contracts = _.concat([],
+      await this.contractModel.find({ project: record.inStock }),
+      await this.contractModel.find({ project: record.outStock })
+    )
+    const outDate = moment(record.outDate)
+    contracts.forEach(contract => {
+      contract.calcs.forEach(async calc => {
+        if (outDate < moment(calc.end)) {
+          console.log(JSON.stringify(calc))
+          await this.contractModel.updateOne({ _id: contract._id }, {
+            $set: {
+              "calcs.$[e].status": 'modified',
+            }
+          }, {
+            arrayFilters: [
+              {
+                'e._id': calc._id,
+              },
+            ]
+          })
+        }
+      })
+    })
+  }
+
   async calc(id: String, calc: any, user: User) {
     const contract = await this.findById(id)
     // 按添加时间 TODO

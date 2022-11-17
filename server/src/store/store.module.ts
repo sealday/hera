@@ -3,6 +3,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AppModule } from 'src/app/app.module';
 import { EventsGateway } from 'src/events/events.gateway';
 import { EventsModule } from 'src/events/events.module';
+import { ContractService } from 'src/finance/contract/contract.service';
+import { FinanceModule } from 'src/finance/finance.module';
 import { PlanSchema } from 'src/schemas/plan.schema';
 import { PriceSchema } from 'src/schemas/price.schema';
 import { ProductSchema } from 'src/schemas/product.schema';
@@ -31,6 +33,7 @@ import { StoreService } from './store.service';
       { name: 'Product', schema: ProductSchema },
       { name: 'Plan', schema: PlanSchema },
     ]),
+    forwardRef(() => FinanceModule),
     forwardRef(() => AppModule),
   ],
   controllers: [RecordController, ProjectController, StoreController, ProductController, PlanController],
