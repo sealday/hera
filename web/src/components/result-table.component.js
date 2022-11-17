@@ -19,14 +19,19 @@ export default ({ rowSelection, columns, dataSource, summaryColumns, summaryData
             return !_.toString(record[column.dataIndex])
           }
           if (column.render) {
-            return column.render(record[column.dataIndex], record) === value
+            const result = column.render(record[column.dataIndex], record)
+            const v = _.get(result, 'props.children', result)
+            return v === value
           }
           return record[column.dataIndex] === value
         } 
         if (column.render) {
-          column.filters = _.uniq(dataSource.map(record => column.render(record[column.dataIndex], record))).map(v => ({ text: _.toString(v) ? v : '未填写', value: _.toString(v) ? v : '__未填写__' }))
+          column.filters = _.uniq(dataSource.map(record => column.render(record[column.dataIndex], record))
+            .map(v => _.get(v, 'props.children', v)))
+            .map(v => ({ text: _.toString(v) ? v : '未填写', value: _.toString(v) ? v : '__未填写__' }))
         } else {
-          column.filters = _.uniq(dataSource.map(record => record[column.dataIndex])).map(v => ({ text: _.toString(v) ? v : '未填写', value: _.toString(v) ? v : '__未填写__' }))
+          column.filters = _.uniq(dataSource.map(record => record[column.dataIndex]))
+            .map(v => ({ text: _.toString(v) ? v : '未填写', value: _.toString(v) ? v : '__未填写__' }))
         }
       }
       if (column.dataIndex
