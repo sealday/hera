@@ -57,7 +57,7 @@ const StoreForm = ({ projects, user, store, handleSubmit, change, startDate, end
           <Field
             component={Select}
             name="type"
-            clearable={false}
+            clearable="false"
           >
             {['全部', ...RECORD_TYPES].map((name, i) => (
               <option key={i} value={name === '全部' ? '' : name}>{name}</option>
@@ -69,7 +69,7 @@ const StoreForm = ({ projects, user, store, handleSubmit, change, startDate, end
           <Field
             component={FilterSelect}
             name="project"
-            clearable={false}
+            clearable="false"
             placeholder="选择要查询的仓库"
             options={options}
             filterOption={filterOption} />

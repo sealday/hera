@@ -77,7 +77,7 @@ export default () => {
     items: rule.items.map(item => ({
       ...item,
       product: (rule.category !== '非租' && rule.category !== '装卸运费') ? product2array(item.product, item.level === '规格' || rule.category === '计重' || rule.category === '非租') : undefined,
-      associate: rule.category !== '非租' || rule.category !== '装卸运费' || item.level === '按单'
+      associate: (rule.category !== '非租' || item.level === '按单') || (rule.category === '装卸运费')
         ? undefined
         : product2array(item.associate, item.level === '规格')
     }))
