@@ -26,6 +26,7 @@ export const ContractSchema = new Schema(
       name: String,
       start: Date,
       end: Date,
+      status: String,
       history: Schema.Types.Mixed,
       list: Schema.Types.Mixed,
       group: Schema.Types.Mixed,

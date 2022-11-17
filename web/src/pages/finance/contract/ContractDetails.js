@@ -184,6 +184,8 @@ const ContractDetails = connect(mapStateToProps)(({ projects, dispatch, plans })
             render={start => moment(start).format('YYYY-MM-DD')} />
           <Table.Column key="end" title="结束日期" dataIndex="end"
             render={start => moment(start).format('YYYY-MM-DD')} />
+          <Table.Column key="status" title="状态" dataIndex="status"
+            render={t => t ? (t === 'latest' ? <Tag color='green'>最新</Tag> : <Tag color='red'>需要更新</Tag>) : <Tag color='gray'>未知</Tag>} />
           <Table.Column key="action" title="操作"
             render={(text, record) => (
               <Space size="middle">

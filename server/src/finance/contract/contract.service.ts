@@ -74,6 +74,7 @@ export class ContractService {
     calc.group = rent.group
     calc.nameGroup = rent.nameGroup
     calc.debug = rent.debug
+    calc.status = 'latest'
     return calc;
   }
 

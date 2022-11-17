@@ -7,11 +7,11 @@ import {
 } from 'antd'
 import { antFilterOption } from '../../../components'
 
-const ContractEditModal = ({ initialValues, onFinish, projects, visible, onClose}) => {
+const ContractEditModal = ({ initialValues, onFinish, projects, open, onClose}) => {
   const [form] = Form.useForm()
   return <Modal
     title="合同基础信息编辑"
-    visible={visible}
+    open={open}
     onOk={() => form.submit()}
     onCancel={() => onClose()}>
       <Form
