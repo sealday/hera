@@ -1,3 +1,4 @@
+//  获取版本号和版本更新时间
 import { formatDate } from './date'
 const packageConfig = require("../../package.json")
 

@@ -1,3 +1,4 @@
+// 日期格式化处理
 export const formatDate = (fmt, timeStamp) => {
     let dateRaw = ""
 
