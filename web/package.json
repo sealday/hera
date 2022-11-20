@@ -58,7 +58,7 @@
     }
   },
   "homepage": "/system/",
-  "proxy": "http://58.34.1.199:3000/",
+  "proxy": "http://localhost:3000/",
   "browserslist": {
     "production": [
       "since 2018"
