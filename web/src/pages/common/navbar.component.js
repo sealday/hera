@@ -10,6 +10,7 @@ import { QRCodeCanvas } from 'qrcode.react'
 import heraApi from 'api'
 import { selectStore } from 'actions'
 import { useEffect } from 'react'
+import { versionNumber, versionTime } from "../../utils/version"
 
 const styles = {
   navButton: { color: '#fff' }
@@ -89,7 +90,7 @@ const Navbar = ({ type }) => {
           autoAdjustOverflow={false}
           placement='bottomRight'
           content={<div>
-            版本：<Tag color='blue'>3.1.2</Tag>更新于：<Tag color='blue'>2022-11-17 16:40:00</Tag>
+            版本：<Tag color='blue'>{versionNumber}</Tag>更新于：<Tag color='blue'>{versionTime}</Tag>
           </div>}>
           <Button icon={<InfoCircleOutlined />} title='系统信息' type='text' style={styles.navButton}></Button>
         </Popover>
