@@ -46,6 +46,14 @@ export class ContractService {
     return calcStartDay >= planStartDay && calcEndDay <= planEndDay
   }
 
+  async findProbablyContract(record: any) {
+    const contracts = _.concat([],
+      await this.contractModel.find({ project: record.inStock }),
+      await this.contractModel.find({ project: record.outStock })
+    )
+    return contracts.find(contract => contract.items.length > 0)
+  }
+
   async updateCalcStatus(record: any) {
     const contracts = _.concat([],
       await this.contractModel.find({ project: record.inStock }),
