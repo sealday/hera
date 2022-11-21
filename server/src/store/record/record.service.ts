@@ -66,7 +66,7 @@ export class RecordService {
     const categories = ['租金', '非租', '装卸运费']
     const rules = {}
     categories.forEach(category => {
-      const rule = _.find(_.reverse([..._.get(contract, 'items')]),
+      const rule = _.find(_.reverse([..._.get(contract, 'items', [])]),
         item => item.category === category && this.inRange(item.start, item.end, record.outDate))
       rules[category] = {
         fee: _.get(rule, 'plan'),
