@@ -9,8 +9,8 @@ import { DatePicker, Input, Select, MaskedInput } from '../../components'
 class TransportForm extends React.Component {
   render() {
     const { record, title, action, handleSubmit, projects: imProjects, change } = this.props
-    const inProject = imProjects.get(record.inStock)
-    const outProject = imProjects.get(record.outStock)
+    const inProject = record.inStock
+    const outProject = record.outStock
     const projects = imProjects.valueSeq().toArray()
 
     return (
