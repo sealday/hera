@@ -54,7 +54,7 @@ export default () => {
     record.entries.forEach(entry => {
       const { countUnit } = nameArticleMap[entry.name]
       result.push(`${entry.name}${entry.size} × ${entry.count}${countUnit} = 
-        ${fixed(total_(entry, products))}${getUnit(nameArticleMap[entry.name])}`)
+        ${fixed(entry.subtotal)}${entry.unit}`)
     })
     return result
   }
