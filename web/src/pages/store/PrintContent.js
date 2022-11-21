@@ -200,7 +200,7 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
         { colSpan: 2, children: entry.name + '[' + entry.size + ']'},
         { hidden: true, children: '' },
         entry.count + ' ' + productTypeMap[name].countUnit,
-        fixed(entry.subtotal) + entry.unit,
+        fixed(entry.subtotal) + ' ' + entry.unit,
         entry.price ? '￥' + entry.price : '',
         entry.price ? '￥' + fixed(entry.subtotal * entry.price) : '',
         entry.comments,
