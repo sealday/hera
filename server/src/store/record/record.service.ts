@@ -136,6 +136,7 @@ export class RecordService {
           size: '$entries.size',
           count: '$entries.count',
           comments: '$entries.comments',
+          price: '$entries.price',
         }
       },
       // 2) 关联产品表
@@ -261,6 +262,7 @@ export class RecordService {
       {
         $project: {
           _id: '$id',
+          price: '$price',
           subtotal: {
             $switch: {
               branches: [

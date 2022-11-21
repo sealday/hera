@@ -158,18 +158,20 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
   // 计算打印内容
   const entries = {}
   const total = {} // 数量和
+  const totalUnit = {} // 单位
   const sum = {} // 金额
   let amount = 0 // 总金额
   record.entries.forEach(entry => {
-    const result = total_(entry, products)
     if (entry.name in entries) {
       entries[entry.name].push(entry)
-      total[entry.name] += result
-      sum[entry.name] += entry.price ? result * entry.price : 0
+      total[entry.name] += entry.subtotal
+      totalUnit[entry.name] = entry.unit
+      sum[entry.name] += entry.price ? entry.subtotal * entry.price : 0
     } else {
       entries[entry.name] = [entry]
-      total[entry.name] = result
-      sum[entry.name] = entry.price ? result * entry.price : 0
+      total[entry.name] = entry.subtotal
+      totalUnit[entry.name] = entry.unit
+      sum[entry.name] = entry.price ? entry.subtotal * entry.price : 0
     }
   })
   const productTypeMap = {}
@@ -198,9 +200,9 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
         { colSpan: 2, children: entry.name + '[' + entry.size + ']'},
         { hidden: true, children: '' },
         entry.count + ' ' + productTypeMap[name].countUnit,
-        fixed(total_(entry, products)) + getUnit(productTypeMap[name]),
+        fixed(entry.subtotal) + entry.unit,
         entry.price ? '￥' + entry.price : '',
-        entry.price ? '￥' + fixed(total_(entry, products) * entry.price) : '',
+        entry.price ? '￥' + fixed(entry.subtotal * entry.price) : '',
         entry.comments,
       ])
       if (associatedMap[`${entry.type}|${entry.name}|${entry.size}`]) {
@@ -244,7 +246,7 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
         { colSpan: 2, children: name + '[小计]' },
         { hidden: true, children: '' },
         { hidden: true, children: '' },
-        { colSpan: 2, children: fixed(total[name]) + ' ' + getUnit(productTypeMap[name]) },
+        { colSpan: 2, children: fixed(total[name]) + ' ' + totalUnit[name] },
         '',
         '￥' + fixed(sum[name]),
         '',
