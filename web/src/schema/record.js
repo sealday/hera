@@ -60,6 +60,22 @@ export default [
                 type: 'number',
             },
             {
+                name: 'countUnit',
+                label: '计量单位',
+                type: 'text',
+            },
+            {
+                name: 'subtotal',
+                label: '小计',
+                type: 'number',
+                format: 'fixed',
+            },
+            {
+                name: 'unit',
+                label: '单位',
+                type: 'text',
+            },
+            {
                 name: 'comments',
                 label: '备注',
                 type: 'text',

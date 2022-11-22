@@ -59,10 +59,7 @@ const Record = ({ isFinance = false }) => {
     navigate(`/record/${params.id}/preview`)
   }
   const entriesSchema = recordSchema.find(item => item.name === 'entries')
-  const columns = entriesSchema.form
-    .filter(item => item.type !== 'formula')
-    .map(item => ({ key: item.name, title: item.label, dataIndex: item.name }))
-    .concat([{ key: 'action', title: '操作' }])
+  const columns = genTableColumn(entriesSchema.form)
   const complementSchema = recordSchema.find(item => item.name === 'complements').schema
   const complementColumns = genTableColumn(complementSchema)
     .concat([{ key: 'action', title: '操作' }])
