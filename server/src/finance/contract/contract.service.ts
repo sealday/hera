@@ -48,8 +48,8 @@ export class ContractService {
 
   async findProbablyContract(record: any) {
     const contracts = _.concat([],
-      await this.contractModel.find({ project: record.inStock }),
-      await this.contractModel.find({ project: record.outStock })
+      await this.contractModel.find({ project: record.inStock, status: { $ne: '已删除' } }),
+      await this.contractModel.find({ project: record.outStock, status: { $ne: '已删除' } }),
     )
     return contracts.find(contract => contract.items.length > 0)
   }
