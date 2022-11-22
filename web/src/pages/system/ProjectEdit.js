@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'utils/hooks'
-import { submit } from 'redux-form'
 import { Error, Loading, PageHeader } from '../../components'
 import ProjectForm from './ProjectForm'
 import heraApi from '../../api'
 import { useParams } from 'utils/hooks'
+import { Form } from 'antd'
 
 export default () => {
+  const [form] = Form.useForm()
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const { id } = useParams()
@@ -30,10 +31,12 @@ export default () => {
   }
   return (
     <PageHeader
-      title='项目信息录入'
-      onSave={() => { dispatch(submit('ProjectEditForm')) }}
+      title='项目信息编辑'
+      subTitle={project.name}
+      onSave={() => { form.submit() }}
     >
       <ProjectForm
+        form={form}
         onSubmit={handleSubmit}
         initialValues={project}
       />

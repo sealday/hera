@@ -3,11 +3,11 @@ import { Button, Col, DatePicker, Form, Input, Radio, Row, Select, Space, Table,
 import ReduxSelect from "components/input/redux-select.component"
 import _ from "lodash"
 import moment from "moment"
-import { useSelector } from "react-redux"
+import ReactMaskedInput from 'react-text-mask'
 import { toFixedWithoutTrailingZero } from "."
 import { DateRangeFooter, DepLabel, Link, RefCascader, RefCascaderLabel, RefLabel, RefSelect } from "../components"
 
-const ListTable = ({ fields, operation, meta, item, form}) => {
+const ListTable = ({ fields, operation, meta, item, form }) => {
   const columns = genTableFormColumn(item, form).concat([
     {
       key: 'action',
@@ -26,7 +26,7 @@ const ListTable = ({ fields, operation, meta, item, form}) => {
     </>
   )
 }
-          
+
 const genFormContent = (schema, cols = 0, form = null, initialValues = {}) => {
   const formItems = []
   schema.forEach(item => {
@@ -84,7 +84,7 @@ const genFormContent = (schema, cols = 0, form = null, initialValues = {}) => {
     } else if (item.type === 'date') {
       formItems.push((
         <Form.Item key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
-          <DatePicker style={{ width: '100%' }} disabled={item.disabled}/>
+          <DatePicker style={{ width: '100%' }} disabled={item.disabled} />
         </Form.Item>
       ))
     } else if (item.type === 'dateRange') {
@@ -108,6 +108,16 @@ const genFormContent = (schema, cols = 0, form = null, initialValues = {}) => {
             <Input.TextArea disabled={item.disabled} rows={item.rows} />
           </Form.Item>
         ))
+      } else if (item.mask) {
+        formItems.push(<Form.Item key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
+          <ReactMaskedInput
+            guide={false}
+            mask={item.mask}
+            render={(ref, props) => (
+              <Input addonAfter={item.suffix ? item.suffix : null} disabled={item.disabled} {...props} ref={ref} />
+            )}
+          />
+        </Form.Item>)
       } else {
         formItems.push((
           <Form.Item key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
@@ -211,7 +221,7 @@ const genTableFormColumn = (parent, form = null) => {
           </Form.Item>
         )
       } else if (item.option.type === 'static') {
-        
+
         column.render = (_text, field) => (
           <Form.Item initialValue={item.default} noStyle name={[field.name, item.name]} label={item.label} hidden={item.hidden} rules={[{ required: item.required }]}>
             <Select disabled={item.disabled}>
@@ -234,7 +244,7 @@ const genTableFormColumn = (parent, form = null) => {
       }
     } else if (item.type === 'boolean') {
       column.render = (_text, field) => (
-        <Form.Item initialValue={item.default} noStyle name={[field.name, item.name]} label={item.label} hidden={item.hidden} rules={[{ required: item.required }]}>
+        <Form.Item initialValue={item.default} name={[field.name, item.name]} hidden={item.hidden} rules={[{ required: item.required }]}>
           <Select disabled={item.disabled}>
             {item.option.values.map(v => <Select.Option key={v} value={v}>{v}</Select.Option>)}
             <Select.Option key='是' value={true}>是</Select.Option>
@@ -244,7 +254,7 @@ const genTableFormColumn = (parent, form = null) => {
       )
     } else if (item.type === 'date') {
       column.render = (_text, field) => (
-        <Form.Item initialValue={item.default} noStyle name={[field.name, item.name]} label={item.label} hidden={item.hidden} rules={[{ required: item.required }]}>
+        <Form.Item initialValue={item.default} name={[field.name, item.name]}  hidden={item.hidden} rules={[{ required: item.required }]}>
           <DatePicker disabled={item.disabled} />
         </Form.Item>
       )
@@ -253,9 +263,20 @@ const genTableFormColumn = (parent, form = null) => {
         column.render = (_text, field) => (
           <DepLabel field={field} item={item} parent={parent} />
         )
+      } else if (item.mask) {
+        column.render = (_text, field) => (
+          <Form.Item initialValue={item.default} name={[field.name, item.name]} hidden={item.hidden} rules={[{ required: item.required }]}>
+            <ReactMaskedInput
+              guide={false}
+              mask={item.mask}
+              className="ant-input"
+              type="text"
+            />
+          </Form.Item>
+        )
       } else {
         column.render = (_text, field) => (
-          <Form.Item initialValue={item.default} noStyle name={[field.name, item.name]} label={item.label} hidden={item.hidden} rules={[{ required: item.required }]}>
+          <Form.Item initialValue={item.default} labelCol={{ flex: 0 }} name={[field.name, item.name]} hidden={item.hidden} rules={[{ required: item.required }]}>
             <Input addonAfter={item.suffix ? item.suffix : null} disabled={item.disabled} />
           </Form.Item>
         )

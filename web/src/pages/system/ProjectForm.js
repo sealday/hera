@@ -1,86 +1,19 @@
 import React from 'react'
-import { reduxForm, Field } from 'redux-form'
-import { useSelector } from 'react-redux'
 
-import ContactList from './ContactList'
-import BankList from './BankList'
-import { Input, Select } from '../../components'
+import { Card, Form } from 'antd'
+import { genFormContent } from '../../utils/antd'
+import projectSchema from '../../schema/project.schema'
 
-import {
-  TAB2TYPE,
-} from '../../utils'
-import { Card } from 'antd'
+const ProjectForm = ({ form, initialValues, onSubmit }) => {
+  const formContent = genFormContent(projectSchema, 2)
 
-let ProjectForm = ({ handleSubmit }) => {
-  const config = useSelector(state => state.system.config)
   return (
-    <Card bordered={false}>
-      <form className="form-horizontal project-modify-form" method="post" onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label className="control-label col-md-2">编号</label>
-          <div className="col-md-3">
-            <Field name="code" component={Input} />
-          </div>
-        </div>
-        <div className="form-group">
-          <label className="control-label col-md-2">类型</label>
-          <div className="col-md-3">
-            <Field name="type" component={Select}>
-              {TAB2TYPE.map((name, i) => (
-                <option key={i}>{name}</option>
-              ))}
-            </Field>
-          </div>
-          <label className="control-label col-md-2">打印用公司名</label>
-          <div className="col-md-5">
-            <Field name="associatedCompany" component={Select}>
-              {config.externalNames.map((name, i) => (
-                <option key={i}>{name}</option>
-              ))}
-            </Field>
-          </div>
-        </div>
-        <div className="form-group">
-          <label className="control-label col-md-2">单位名称<span className="important-star">(*)</span></label>
-          <div className="col-md-3">
-            <Field name="company" component={Input} />
-          </div>
-          <label className="control-label col-md-2">项目名称<span className="important-star">(*)</span></label>
-          <div className="col-md-5">
-            <Field name="name" component={Input} />
-          </div>
-        </div>
-        <div className="form-group">
-          <label className="control-label col-md-2">单位电话</label>
-          <div className="col-md-3">
-            <Field name="companyTel" component={Input} />
-          </div>
-          <label className="control-label col-md-2">项目电话</label>
-          <div className="col-md-5">
-            <Field name="tel" component={Input} />
-          </div>
-        </div>
-        <div className="form-group">
-          <label className="control-label col-md-2">地址</label>
-          <div className="col-md-10">
-            <Field name="address" component={Input} />
-          </div>
-        </div>
-        <Field name="contacts" component={ContactList} />
-        <Field name="banks" component={BankList} />
-        <div className="form-group">
-          <label className="control-label col-md-2">备注</label>
-          <div className="col-md-10">
-            <Field name="comments" component={Input} />
-          </div>
-        </div>
-      </form>
+    <Card>
+      <Form labelCol={{ flex: '100px' }} form={form} initialValues={initialValues} onFinish={onSubmit}>
+        {formContent}
+      </Form>
     </Card>
   )
 }
-
-ProjectForm = reduxForm({
-  form: 'ProjectEditForm',
-})(ProjectForm)
 
 export default ProjectForm
