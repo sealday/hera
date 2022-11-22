@@ -1,7 +1,6 @@
 import { Button, Card, Descriptions, Table } from 'antd'
 import _ from 'lodash'
 import moment from 'moment'
-import { useSelector } from 'react-redux'
 import { useNavigate } from 'utils/hooks'
 import { useParams } from 'utils/hooks'
 import heraApi, { useGetRecordQuery } from '../../api'
@@ -15,39 +14,18 @@ const styles = {
 }
 
 const Summary = ({ entries }) => {
-  const result = heraApi.useGetProductListQuery()
-  if (_.isUndefined(entries)) {
+  if (_.isUndefined(entries) || entries.length === 0) {
     return ''
   }
-  // 排除空值
-  const validEntries = entries
-  if (result.isError || result.isLoading || validEntries.length === 0) {
-    return ''
-  }
-  // 关联数据
-  const equippedEntries = validEntries.map(entry => ({
-    ...result.data.find(item =>
-      item.type === entry.type &&
-      item.name === entry.name &&
-      item.size === entry.size
-    ),
-    ...entry
-  })).filter(item => !_.isUndefined(item.weight))
-  // 计算结果
-  const calculatedEntries = equippedEntries.map(item => ({
-    ...item,
-    total: item.isScaled ? item.count * item.scale : item.count,
-    weight: item.count * item.weight / 1000,
-  }))
   // reduce
-  const resultEntries = _.reduce(calculatedEntries, (result, item) => {
+  const resultEntries = _.reduce(entries, (result, item) => {
     if (_.isUndefined(result[`${item.type}|${item.name}`])) {
       result[`${item.type}|${item.name}`] = {
         count: 0,
-        unit: item.isScaled ? item.unit : item.countUnit,
+        unit: item.unit,
       }
     }
-    result[`${item.type}|${item.name}`].count += item.total
+    result[`${item.type}|${item.name}`].count += item.subtotal
     result['理论重量'].count += item.weight
     return result
   }, { 理论重量: { count: 0, unit: '吨' } })
@@ -62,7 +40,6 @@ const Summary = ({ entries }) => {
 }
 
 const Record = ({ isFinance = false }) => {
-  console.log(isFinance)
   const params = useParams()
   const navigate = useNavigate()
   const { data: record, error, isLoading } = useGetRecordQuery(params.id)
@@ -96,10 +73,10 @@ const Record = ({ isFinance = false }) => {
 
   const descriptions = []
   if (record.type !== '盘点') {
-    descriptions.push({ label: '出库项目/仓库', children: _.get(projects.find(p => p._id === record.outStock), 'name') })
-    descriptions.push({ label: '入库项目/仓库', children: _.get(projects.find(p => p._id === record.inStock), 'name') })
+    descriptions.push({ label: '出库项目/仓库', children: record.outStock.name })
+    descriptions.push({ label: '入库项目/仓库', children: record.inStock.name })
   } else {
-    descriptions.push({ label: '仓库盘点', children: _.get(projects.find(p => p._id === record.inStock), 'name') })
+    descriptions.push({ label: '仓库盘点', children: record.inStock.name })
   }
   descriptions.push({ label: '出库时间', children: moment(record.outDate).format('YYYY-MM-DD') })
   descriptions.push({ label: '制单人', children: record.username })

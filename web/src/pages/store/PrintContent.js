@@ -10,7 +10,6 @@ import {
   toFixedWithoutTrailingZero as fixed,
   total_,
   getUnit,
-  makeKeyFromNameSize,
 } from '../../utils'
 
 // 表格内容
@@ -18,7 +17,6 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
   const contracts = heraApi.useGetContractListQuery()
   const getOtherList = heraApi.useGetOtherListQuery()
   const store = useSelector(state => state.system.store)
-  const projects = useSelector(state => state.system.rawProjects)
   const config = useSelector(state => state.system.config)
   const products = useSelector(state => state.system.products)
   const articles = useSelector(state => state.system.articles.valueSeq().toArray())
@@ -36,17 +34,19 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
     explain: '',
   }
   if (record.outStock) {
-    content.partA = projects.get(record.outStock).company + projects.get(record.outStock).name
+    content.partA = record.outStock.company + record.outStock.name
   }
   if (record.inStock) {
-    content.partB = projects.get(record.inStock).company + projects.get(record.inStock).name
+    content.partB = record.inStock.company + record.inStock.name
   }
+
+  const isStore = (stock) => store._id === _.get(stock, '_id')
 
   // 出入库判断
   // TODO 对于采购单，如果出现直接采购送往对应项目，那么单据的内容标签是否不合适
   if (record.type !== '盘点') {
-    if (record.inStock === store._id) {
-      content.project = projects.get(record.outStock)
+    if (isStore(record.inStock)) {
+      content.project = record.outStock
       content.orderName = '入库单'
       content.signer = '出库方'
       content.partALabel = '出库方'
@@ -60,10 +60,10 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
       if (record.type === '暂存') {
         content.orderName = '暂存入库单'
       }
-      content.partA = projects.get(record.outStock).company + projects.get(record.outStock).name
-      content.partB = projects.get(record.inStock).company + projects.get(record.inStock).name
-    } else if (record.outStock === store._id) {
-      content.project = projects.get(record.inStock)
+      content.partA = record.outStock.company + record.outStock.name
+      content.partB = record.inStock.company + record.inStock.name
+    } else if (isStore(record.outStock)) {
+      content.project = record.inStock
       content.orderName = '出库单'
       content.signer = '入库方'
       content.partALabel = '入库方'
@@ -77,8 +77,8 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
       if (record.type === '暂存') {
         content.orderName = '暂存出库单'
       }
-      content.partA = projects.get(record.inStock).company + projects.get(record.inStock).name
-      content.partB = projects.get(record.outStock).company + projects.get(record.outStock).name
+      content.partA = record.inStock.company + record.inStock.name
+      content.partB = record.outStock.company + record.outStock.name
     }
   } else {
     content.partBLabel = '盘点仓库'
@@ -90,17 +90,17 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
   if (record.type === '调拨') {
     content.partALabel = '承租单位'
     content.partBLabel = '工程项目'
-    if (record.inStock === store._id) {
-      const project = projects.get(record.outStock)
+    if (isStore(record.inStock)) {
+      const project = record.outStock
       content.partA = project.company
       content.partB = project.name
-    } else if (record.outStock === store._id) {
-      const project = projects.get(record.inStock)
+    } else if (isStore(record.outStock)) {
+      const project = record.inStock
       content.partA = project.company
       content.partB = project.name
     } else {
       // FIXME 两个都不是关联公司的话，暂定为入库
-      const project = projects.get(record.inStock)
+      const project = record.inStock
       content.partA = project.company
       content.partB = project.name
     }
@@ -109,9 +109,9 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
   }
 
   const isRent = () => record.type === '调拨'
-  const getProject = () => record.inStock === store._id
-    ? projects.get(record.outStock)
-    : projects.get(record.inStock)
+  const getProject = () => isStore(record.inStock)
+    ? record.outStock
+    : record.inStock
   const getContract = () => {
     const project = getProject()
     return contracts.data.find(item => item.project === project._id)
@@ -160,18 +160,20 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
   // 计算打印内容
   const entries = {}
   const total = {} // 数量和
+  const totalUnit = {} // 单位
   const sum = {} // 金额
   let amount = 0 // 总金额
   record.entries.forEach(entry => {
-    const result = total_(entry, products)
     if (entry.name in entries) {
       entries[entry.name].push(entry)
-      total[entry.name] += result
-      sum[entry.name] += entry.price ? result * entry.price : 0
+      total[entry.name] += entry.subtotal
+      totalUnit[entry.name] = entry.unit
+      sum[entry.name] += entry.price ? entry.subtotal * entry.price : 0
     } else {
       entries[entry.name] = [entry]
-      total[entry.name] = result
-      sum[entry.name] = entry.price ? result * entry.price : 0
+      total[entry.name] = entry.subtotal
+      totalUnit[entry.name] = entry.unit
+      sum[entry.name] = entry.price ? entry.subtotal * entry.price : 0
     }
   })
   const productTypeMap = {}
@@ -200,9 +202,9 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
         { colSpan: 2, children: entry.name + '[' + entry.size + ']'},
         { hidden: true, children: '' },
         entry.count + ' ' + productTypeMap[name].countUnit,
-        fixed(total_(entry, products)) + getUnit(productTypeMap[name]),
+        fixed(entry.subtotal) + ' ' + entry.unit,
         entry.price ? '￥' + entry.price : '',
-        entry.price ? '￥' + fixed(total_(entry, products) * entry.price) : '',
+        entry.price ? '￥' + fixed(entry.subtotal * entry.price) : '',
         entry.comments,
       ])
       if (associatedMap[`${entry.type}|${entry.name}|${entry.size}`]) {
@@ -246,7 +248,7 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
         { colSpan: 2, children: name + '[小计]' },
         { hidden: true, children: '' },
         { hidden: true, children: '' },
-        { colSpan: 2, children: fixed(total[name]) + ' ' + getUnit(productTypeMap[name]) },
+        { colSpan: 2, children: fixed(total[name]) + ' ' + totalUnit[name] },
         '',
         '￥' + fixed(sum[name]),
         '',

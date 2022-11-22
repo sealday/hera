@@ -16,8 +16,7 @@ export default () => {
   const navigate = useNavigate()
   const recordResult = useGetRecordQuery(id)
   const record = recordResult.data
-  const { articles, config, products, projects } = useSelector(state => ({
-    projects: state.system.projects,
+  const { articles, config, products } = useSelector(state => ({
     products: state.system.products,
     articles: state.system.articles,
     config: state.system.config,
@@ -55,7 +54,7 @@ export default () => {
     record.entries.forEach(entry => {
       const { countUnit } = nameArticleMap[entry.name]
       result.push(`${entry.name}${entry.size} × ${entry.count}${countUnit} = 
-        ${fixed(total_(entry, products))}${getUnit(nameArticleMap[entry.name])}`)
+        ${fixed(entry.subtotal)}${entry.unit}`)
     })
     return result
   }
@@ -73,8 +72,8 @@ export default () => {
     return result
   }
 
-  const inStock = projects.get(record.inStock)
-  const outStock = projects.get(record.outStock)
+  const inStock = record.inStock
+  const outStock = record.outStock
 
   const PrintContent = () => <>
     <h2 className="text-center">货运运输协议</h2>

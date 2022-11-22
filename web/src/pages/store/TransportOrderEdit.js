@@ -7,8 +7,6 @@ import { useNavigate, useParams } from 'utils/hooks'
 import { Error, Loading, PageHeader } from '../../components'
 
 export default () => {
-
-  const projects = useSelector(state => state.system.projects)
   const { id } = useParams()
   const recordResult = useGetRecordQuery(id)
   const [updateTransport, updateResult] = useUpdateTransportMutation()
@@ -52,8 +50,8 @@ export default () => {
     return <Loading />
   }
   const record = recordResult.data
-  const inStock = projects.get(record.inStock)
-  const outStock = projects.get(record.outStock)
+  const inStock = record.inStock
+  const outStock = record.outStock
   let deliveryParty
   let deliveryPhone
   let deliveryContact
