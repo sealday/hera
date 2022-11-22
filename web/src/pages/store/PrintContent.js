@@ -40,10 +40,12 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
     content.partB = record.inStock.company + record.inStock.name
   }
 
+  const isStore = (stock) => store._id === _.get(stock, '_id')
+
   // 出入库判断
   // TODO 对于采购单，如果出现直接采购送往对应项目，那么单据的内容标签是否不合适
   if (record.type !== '盘点') {
-    if (record.inStock === store._id) {
+    if (isStore(record.inStock)) {
       content.project = record.outStock
       content.orderName = '入库单'
       content.signer = '出库方'
@@ -60,7 +62,7 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
       }
       content.partA = record.outStock.company + record.outStock.name
       content.partB = record.inStock.company + record.inStock.name
-    } else if (record.outStock === store._id) {
+    } else if (isStore(record.outStock)) {
       content.project = record.inStock
       content.orderName = '出库单'
       content.signer = '入库方'
@@ -88,11 +90,11 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
   if (record.type === '调拨') {
     content.partALabel = '承租单位'
     content.partBLabel = '工程项目'
-    if (record.inStock === store._id) {
+    if (isStore(record.inStock)) {
       const project = record.outStock
       content.partA = project.company
       content.partB = project.name
-    } else if (record.outStock === store._id) {
+    } else if (isStore(record.outStock)) {
       const project = record.inStock
       content.partA = project.company
       content.partB = project.name
@@ -107,7 +109,7 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
   }
 
   const isRent = () => record.type === '调拨'
-  const getProject = () => record.inStock === store._id
+  const getProject = () => isStore(record.inStock)
     ? record.outStock
     : record.inStock
   const getContract = () => {
