@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'utils/hooks'
 import { useNavigate as useRouteNavigate } from 'react-router-dom'
@@ -25,15 +25,21 @@ const Navbar = ({ type }) => {
     config: state.system.config,
   }))
   const navigate = useNavigate()
+  const [versionDiff, setVersionDiff] = useState(false)
   const routeNavigate = useRouteNavigate()
   const dispatch = useDispatch()
   const [logout, logoutResult] = heraApi.useLogoutMutation()
-
 
   const onlineUserItems = onlineUsers.map(user => ({
       key: short_id.generate(),
       label: get(user, ['profile', 'name'], '异常用户'),
     }))
+  useEffect(() => {
+    const version = localStorage.getItem('version')
+    if (version !== versionNumber) {
+      setVersionDiff(true)
+    }
+  }, [])
   useEffect(() => {
     if (logoutResult.isSuccess) {
       message.success('登出成功！')
@@ -67,7 +73,7 @@ const Navbar = ({ type }) => {
         <Popover content={<QRCodeCanvas value='https://shcx.shchuangxing.com/downloads/hera.latest.apk' />} placement='bottom'>
           <Button icon={<MobileOutlined />} title='手机端下载' type='text' style={styles.navButton}></Button>
         </Popover>
-        <Popover autoAdjustOverflow={false} content={<List
+        {/* <Popover autoAdjustOverflow={false} content={<List
           style={{ width: '300px' }}
           itemLayout='horizontal'
           dataSource={[
@@ -86,14 +92,21 @@ const Navbar = ({ type }) => {
           <Badge count={1} size='small' offset={[-8, 8]}>
             <Button icon={<BellOutlined />} title='消息通知' type='text' style={styles.navButton}></Button>
           </Badge>
-        </Popover>
+        </Popover> */}
         <Popover
           autoAdjustOverflow={false}
           placement='bottomRight'
           content={<div>
             版本：<Tag color='blue'>{versionNumber}</Tag>更新于：<Tag color='blue'>{versionTime}</Tag>
           </div>}>
-          <Button icon={<InfoCircleOutlined />} title='系统信息' type='text' style={styles.navButton}></Button>
+          <Badge dot={versionDiff} offset={[-10, 10]}>
+            <Button icon={<InfoCircleOutlined />} title='系统信息' type='text' style={styles.navButton}
+              onClick={() => {
+                localStorage.setItem('version', versionNumber)
+                setVersionDiff(false)
+              }}
+            ></Button>
+          </Badge>
         </Popover>
 
         <Dropdown
