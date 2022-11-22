@@ -10,7 +10,8 @@ import { QRCodeCanvas } from 'qrcode.react'
 import heraApi from 'api'
 import { selectStore } from 'actions'
 import { useEffect } from 'react'
-import { versionNumber, versionTime } from "../../utils/version"
+const versionInfo = require("../../version.json")
+const { versionNumber, versionTime } = versionInfo || {}
 
 const styles = {
   navButton: { color: '#fff' }
