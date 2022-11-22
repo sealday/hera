@@ -1,6 +1,6 @@
 //  获取版本号和版本更新时间, 并更新到临时版本文件中
 const fs = require('fs');
-const packageConfig = require("./package.json")
+const packageConfig = require("../package.json")
 
 const formatDate = (fmt, timeStamp) => {
     let dateRaw = ""
