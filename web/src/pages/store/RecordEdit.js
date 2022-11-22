@@ -82,7 +82,7 @@ export default () => {
     weight: true,
     freight: false,
   }
-  const direction = record.inStock === store._id ? 'in' : record.outStock === store._id ? 'out' : ''
+  const direction = record.inStock._id === store._id ? 'in' : record.outStock._id === store._id ? 'out' : ''
   if (!direction) {
     return <Error message='不支持' />
   }
@@ -129,12 +129,12 @@ export default () => {
   if (type === '盘点') {
     // nothing
   } else if (direction === 'in') {
-    initialValues.projectId = record.outStock
-    initialValues.type = _.get(projects.find(p => p._id === record.outStock), 'type')
+    initialValues.projectId = record.outStock._id
+    initialValues.type = record.outStock.type
     titleParts.push('入库')
   } else {
-    initialValues.projectId = record.inStock
-    initialValues.type = _.get(projects.find(p => p._id === record.inStock), 'type')
+    initialValues.projectId = record.inStock._id
+    initialValues.type = record.inStock.type
     titleParts.push('出库')
   }
   const pageTitle = titleParts.join('')
