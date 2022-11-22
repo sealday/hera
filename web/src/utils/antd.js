@@ -5,7 +5,7 @@ import _ from "lodash"
 import moment from "moment"
 import ReactMaskedInput from 'react-text-mask'
 import { toFixedWithoutTrailingZero } from "."
-import { DateRangeFooter, DepLabel, Link, RefCascader, RefCascaderLabel, RefLabel, RefSelect } from "../components"
+import { DateRangeFooter, DepLabel, EditableTagGroup, Link, RefCascader, RefCascaderLabel, RefLabel, RefSelect } from "../components"
 
 const ListTable = ({ fields, operation, meta, item, form }) => {
   const columns = genTableFormColumn(item, form).concat([
@@ -101,6 +101,13 @@ const genFormContent = (schema, cols = 0, form = null, initialValues = {}) => {
           {(fields, operation, meta) => <ListTable fields={fields} operation={operation} meta={meta} item={item} form={form} />}
         </Form.List>
       ))
+    } else if (item.type === 'tags') {
+        formItems.push((
+          <Form.Item key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
+            <EditableTagGroup />
+          </Form.Item>
+        ))
+
     } else {
       if (item.rows) {
         formItems.push((

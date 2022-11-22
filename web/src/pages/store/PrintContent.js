@@ -314,7 +314,7 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
         fontSize: '9px',
         right: 0,
         width: '1.2em'
-      }}>①发货方存根②收货方存根③承运方存根</div>
+      }}>{config.orderPrintSideComment}</div>
       <h4 className="text-center">{selectedTitle ? selectedTitle: orderTitle}</h4>
       <h4 className="text-center">{content.orderName}</h4>
       <table style={{ tableLayout: 'fixed', fontSize: '11px', width: '100%' }}>

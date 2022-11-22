@@ -202,8 +202,8 @@ export const FilterSelect = ({ input, options, style, meta: { touched, error, wa
   </AntSelect>
 }
 
-export const EditableTagGroup = ({ input: { value, onChange }, style, meta: { touched, error }, ...custom }) => {
-  return <RawEditableTagGroup tags={value} onChange={onChange}>
+export const EditableTagGroup = ({  value, onChange, ...otherProps }) => {
+  return <RawEditableTagGroup tags={value} onChange={onChange} {...otherProps}>
   </RawEditableTagGroup>
 }
 

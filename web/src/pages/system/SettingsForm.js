@@ -1,40 +1,18 @@
 import React from 'react'
-import { Field, reduxForm } from 'redux-form'
-import { Card } from 'antd'
+import { Card, Form } from 'antd'
 
-import { Input, EditableTagGroup } from '../../components'
+import { genFormContent } from '../../utils/antd'
+import settingSchema from '../../schema/setting.schema'
 
-const SettingsForm = props => (
-  <Card>
-    <form onSubmit={props.handleSubmit}>
-      <div className="form-group">
-        <label className="col-md-2 control-label">系统名称</label>
-        <div className="col-md-10">
-          <Field name="systemName" component={Input} validate={value => value ? undefined : '不能为空'} />
-        </div>
-      </div>
-      <div className="form-group">
-        <label className="col-md-2 control-label">对外公司名称</label>
-        <div className="col-md-10">
-          <Field name="externalNames" component={EditableTagGroup} />
-        </div>
-      </div>
-      <div className="form-group">
-        <label className="col-md-2 control-label">打印侧边说明</label>
-        <div className="col-md-10">
-          <Field name="printSideComment" component={Input} validate={value => value ? undefined : '不能为空'} />
-        </div>
-      </div>
-      <div className="form-group">
-        <label className="col-md-2 control-label">职务列表</label>
-        <div className="col-md-10">
-          <Field name="posts" component={EditableTagGroup} />
-        </div>
-      </div>
-    </form>
-  </Card>
-)
+const SettingsForm = ({ form, onSubmit, initialValues }) => {
+  const formContent = genFormContent(settingSchema)
+  return (
+    <Card>
+      <Form labelCol={{ flex: '160px' }} form={form} onFinish={onSubmit} initialValues={initialValues}>
+        {formContent}
+      </Form>
+    </Card>
+  )
+}
 
-export default reduxForm({
-  form: 'SettingsForm'
-})(SettingsForm)
+export default SettingsForm

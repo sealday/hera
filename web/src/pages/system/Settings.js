@@ -1,46 +1,38 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-
 import SettingsForm from './SettingsForm.js'
 import { saveSettings } from '../../actions'
-import { wrapper } from '../../utils'
 import { PageHeader } from '../../components'
+import { useSelector } from 'react-redux'
+import { Form } from 'antd'
+import { useDispatch } from 'react-redux'
 
 
-class Home extends Component {
+const Settings = () => {
 
-  handleSubmit(settings) {
-    this.props.dispatch(saveSettings(settings))
+  const dispatch = useDispatch()
+  const handleSubmit = (settings) => {
+    dispatch(saveSettings(settings))
   }
+  const [form] = Form.useForm()
+  const config = useSelector(state => state.system.config)
 
-  render() {
-    const form = React.createRef()
-    const { config } = this.props
-    return (
-      <PageHeader
-        title='基础配置'
-        onSave={() => form.current.submit()}
-      >
-        <SettingsForm
-          ref={form}
-          initialValues={{
-            systemName: config.systemName,
-            externalNames: config.externalNames,
-            printSideComment: config.printSideComment,
-            posts: config.posts || [],
-          }}
-          onSubmit={this.handleSubmit.bind(this)}
-        />
-      </PageHeader>
-    )
-  }
+  return (
+    <PageHeader
+      title='基础配置'
+      onSave={() => form.submit()}
+    >
+      <SettingsForm
+        form={form}
+        initialValues={{
+          systemName: config.systemName,
+          externalNames: config.externalNames,
+          printSideComment: config.printSideComment,
+          orderPrintSideComment: config.orderPrintSideComment,
+          posts: config.posts || [],
+        }}
+        onSubmit={handleSubmit}
+      />
+    </PageHeader>
+  )
 }
 
-const mapStateToProps = state => ({
-  config: state.system.config,
-})
-
-export default wrapper([
-  connect(mapStateToProps),
-  Home,
-])
+export default Settings
