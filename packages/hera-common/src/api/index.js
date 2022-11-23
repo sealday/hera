@@ -607,6 +607,24 @@ const genApi = ({ baseUrl = '/api/', onLogin, getAuthToken }) => {
           ? [...result.map(({ _id: id }) => ({ type: 'Operation', id })), { type: 'Operation', id: 'LIST' }]
           : [{ type: 'Operation', id: 'LIST' }]
       }),
+      // 回单
+      doReceivedReceipt: builder.mutation({
+        query: (recordId) => ({
+          url: `record/${recordId}/receipt`,
+          method: 'POST',
+          body: { receipt: true },
+        }),
+        transformResponse: res => res.data,
+      }),
+      // 存根
+      doReceivedCounterfoil: builder.mutation({
+        query: (recordId) => ({
+          url: `record/${recordId}/counterfoil`,
+          method: 'POST',
+          body: { counterfoil: true },
+        }),
+        transformResponse: res => res.data,
+      })
     })
   })
 

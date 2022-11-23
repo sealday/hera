@@ -363,6 +363,8 @@ export class RecordService {
     return payers
   }
 
+
+
   async updateTransportPaidStatus(paid: boolean, recordId: string) {
     await this.recordModel.findOneAndUpdate({ _id: recordId }, { $set: { transportPaid: paid } })
     // TODO 落下日志
@@ -373,5 +375,17 @@ export class RecordService {
      await this.recordModel.findOneAndUpdate({ _id: recordId}, { $set: { transportChecked: checked } })
     // TODO 落下日志
      return checked
+  }
+
+  async updateReceipt(receipt: boolean, recordId: string) {
+    await this.recordModel.findOneAndUpdate({ _id: recordId }, { $set: { receipt } })
+    // TODO 落下日志
+    return receipt
+  }
+
+  async updateCounterfoil(counterfoil: boolean, recordId: string) {
+     await this.recordModel.findOneAndUpdate({ _id: recordId}, { $set: { counterfoil } })
+    // TODO 落下日志
+     return counterfoil
   }
 }

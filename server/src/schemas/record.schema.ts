@@ -49,6 +49,8 @@ export const RecordSchema = new mongoose.Schema({
     other2: Number, // 其他2
   },
   hasTransport: { type: Boolean, default: false }, // 是否有对应运输单
+  receipt: { type: Boolean, default: false }, // 回单
+  counterfoil: { type: Boolean, default: false }, // 存根
   transportPaid: { type: Boolean, default: false }, // 是否付过款
   transportChecked: { type: Boolean, default: false }, // 是否核对过
   transport: {

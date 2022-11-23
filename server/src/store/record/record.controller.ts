@@ -52,6 +52,18 @@ export class RecordController {
     return { checked }
   }
 
+  @Post(':id/receipt')
+  async updateReceipt(@Body('receipt') doReceipt: boolean, @Param('id') recordId: string) {
+    const receipt = await this.recordService.updateReceipt(doReceipt, recordId)
+    return { receipt }
+  }
+
+  @Post(':id/counterfoil')
+  async updateCounterfoil(@Body('counterfoil') doCounterfoil: boolean, @Param('id') recordId: string) {
+    const counterfoil = await this.recordService.updateCounterfoil(doCounterfoil, recordId)
+    return { counterfoil }
+  }
+
   @Post(':id/delete')
   async delete(@Param('id') recordId: string) {
     await this.recordService.delete(recordId)
