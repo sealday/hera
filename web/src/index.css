@@ -203,15 +203,13 @@ body {
   display: none;
 }
 
-// 隐藏表格中 Form.Item 的样式
-.ant-table {
-  .ant-form-item-explain {
-    display: none;
-  }
+/*  隐藏表格中 Form.Item 的样式 */
+.ant-table .ant-form-item-explain {
+  display: none;
+}
 
-  .ant-form-item {
-    margin-bottom: 0;
-  }
+.ant-table .ant-form-item {
+  margin-bottom: 0;
 }
 
 .ant-layout-header {

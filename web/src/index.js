@@ -17,7 +17,7 @@ import Routes from './routes'
 import { HelmetProvider } from 'react-helmet-async'
 
 import 'antd/dist/reset.css'
-import './index.less'
+import './index.css'
 import heraApi from 'api'
 import _ from 'lodash'
 // 初始化 dayjs 时间属性
