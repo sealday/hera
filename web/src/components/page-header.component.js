@@ -124,7 +124,8 @@ export default ({
   return <>
     <PageHeader
       style={{
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        padding: '16px 24px',
       }}
       title={title}
       subTitle={subTitle}
@@ -153,47 +154,6 @@ export default ({
         : null}
       {forms}
     </PageHeader>
-    {searchInfo ?
-      <Card bordered={false}>
-        <Form
-          onFinish={values => setFilterValues(values)}
-          onReset={() => setFilterValues({})}
-          form={form}
-        >
-          <Row gutter={24}>
-            <Col span={8}>
-              <Form.Item
-                label="名称"
-                name="name"
-              >
-                <Input autoComplete='off' />
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Space size="middle">
-                <Button type='primary' htmlType='submit'>查询</Button>
-                <Button htmlType='reset'>重置</Button>
-              </Space>
-            </Col>
-          </Row>
-          <Row gutter={24}>
-            <Col span={24}>
-              <Space>
-                <span>最近搜索过：</span>
-                {recentItems.map(item => (
-                  <Button type='dashed' key={item}
-                    onClick={() => {
-                      form.setFieldsValue({ name: item })
-                      form.submit()
-                    }}
-                  >{item}</Button>
-                ))}
-              </Space>
-            </Col>
-          </Row>
-        </Form>
-      </Card>
-      : <></>}
     {children ?
       <div style={{ padding: '8px' }}>
         {children}
