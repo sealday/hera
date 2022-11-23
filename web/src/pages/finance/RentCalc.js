@@ -2,7 +2,7 @@ import React from 'react'
 import RentCalcForm from './RentCalcForm'
 import RentCalcTable from './RentCalcTable'
 import { connect } from 'react-redux'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { saveAs } from 'file-saver'
 
 import { dateFormat } from '../../utils'
@@ -14,14 +14,14 @@ class RentCalc extends React.Component {
   handleSubmit = (condition) => {
     this.props.dispatch(queryRent({
       ...condition,
-      endDate: moment(condition.endDate).add(1, 'day')
+      endDate: dayjs(condition.endDate).add(1, 'day')
     }))
   }
 
   handleAddItem = (condition) => {
     this.props.dispatch(projectAddItem({
       ...condition,
-      endDate: moment(condition.endDate).add(1, 'day')
+      endDate: dayjs(condition.endDate).add(1, 'day')
     }))
   }
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import { reduxForm, Field, formValueSelector } from 'redux-form'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { connect } from 'react-redux'
 
 import {
@@ -166,8 +166,8 @@ export default wrapper([
   reduxForm({
     form: 'SimpleSearchForm',
     initialValues: {
-      startDate: moment().startOf('day'),
-      endDate: moment().startOf('day'),
+      startDate: dayjs().startOf('day'),
+      endDate: dayjs().startOf('day'),
       type: DEFAULT_QUERY_TYPE,
     }
   }),

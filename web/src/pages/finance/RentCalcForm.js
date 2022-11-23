@@ -1,6 +1,6 @@
 import React from 'react'
 import { reduxForm, Field, formValueSelector } from 'redux-form'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { connect } from 'react-redux'
 
 import { FilterSelect, DatePicker, DateRangeModifier } from '../../components'
@@ -117,8 +117,8 @@ export default wrapper([
   reduxForm({
     form: 'rentCalcForm',
     initialValues: {
-      startDate: moment().startOf('day'),
-      endDate: moment().startOf('day')
+      startDate: dayjs().startOf('day'),
+      endDate: dayjs().startOf('day')
     }
   }),
   connect(mapStateToProps),

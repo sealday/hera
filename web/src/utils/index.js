@@ -1,6 +1,6 @@
 import axios from 'axios'
 import fuzzysearch from 'fuzzysearch'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { flowRight, last, dropRight, forEach } from 'lodash'
 import { saveAs } from 'file-saver'
 
@@ -271,7 +271,7 @@ export const formatNumber = formatNumber_
 export const currencyFormat = currencyFormat_
 export const numberFormat = numberFormat_
 export const percentFormat = percentFormat_
-export const dateFormat = date => moment(date).format('YYYY-MM-DD')
+export const dateFormat = date => dayjs(date).format('YYYY-MM-DD')
 
 export const total = (count, product) => toFixedWithoutTrailingZero(count * getScale(product))
 

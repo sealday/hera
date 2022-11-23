@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Link } from 'components'
 import { Card } from 'antd'
@@ -107,7 +107,7 @@ class SimpleSearchTable extends React.Component {
                     onChange={(e) => { dispatch(updateTransportCheckedStatus(entry._id, e.target.checked)) }} />
                   <label className="hidden" htmlFor={`${entry._id}-checked`}>{entry.transportChecked ? '已核对' : '未核对'}</label>
                 </td>
-                <td>{moment(entry.outDate).format('YYYY-MM-DD')}</td>
+                <td>{dayjs(entry.outDate).format('YYYY-MM-DD')}</td>
                 <td>{entry.carNumber}</td>
                 <td>{entry.number}</td>
                 <td>{entry.originalOrder}</td>

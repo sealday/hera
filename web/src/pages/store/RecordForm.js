@@ -1,6 +1,6 @@
 import { AutoComplete, Card, Checkbox, Col, DatePicker, Form, Input, Row, Select, Switch } from "antd"
 import _ from "lodash"
-import moment from "moment"
+import dayjs from 'dayjs'
 import { RefSelect } from "../../components"
 import { RECORD_CLIENT_TYPES } from "../../utils"
 import React, { useContext } from 'react';

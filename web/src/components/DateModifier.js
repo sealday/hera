@@ -1,6 +1,6 @@
 import React from 'react'
 
-import moment from 'moment'
+import dayjs from 'dayjs'
 import {
     Button,
     Space,
@@ -9,32 +9,32 @@ import {
 const DateModifier = ({ setDate, date }) => <Space direction="horizontal" size={0}>
     <Button type="link" onClick={() => {
         setDate([
-            moment().startOf('year'),
-            moment().endOf('year').startOf('day'),
+            dayjs().startOf('year'),
+            dayjs().endOf('year').startOf('day'),
         ])
     }}>今年</Button>
     <Button type="link" onClick={() => {
         setDate([
-            moment(date).add(-1, 'year').startOf('year'),
-            moment(date).add(-1, 'year').endOf('year').startOf('day'),
+            dayjs(date).add(-1, 'year').startOf('year'),
+            dayjs(date).add(-1, 'year').endOf('year').startOf('day'),
         ])
     }}>上一年</Button>
     <Button type="link" onClick={() => {
         setDate([
-            moment(date).add(1, 'year').startOf('year'),
-            moment(date).add(1, 'year').endOf('year').startOf('day'),
+            dayjs(date).add(1, 'year').startOf('year'),
+            dayjs(date).add(1, 'year').endOf('year').startOf('day'),
         ])
     }}>下一年</Button>
     <Button type="link" onClick={() => {
         setDate([
-            moment().startOf('day').add(-1, 'month'),
-            moment().startOf('day'),
+            dayjs().startOf('day').add(-1, 'month'),
+            dayjs().startOf('day'),
         ])
     }}>近一个月</Button>
     <Button type="link" onClick={() => {
         setDate([
-            moment().startOf('day').add(-2, 'month'),
-            moment().startOf('day'),
+            dayjs().startOf('day').add(-2, 'month'),
+            dayjs().startOf('day'),
         ])
     }}>近两个月</Button>
 </Space>

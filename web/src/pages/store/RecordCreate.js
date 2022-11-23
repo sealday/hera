@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import { Form } from "antd"
-import moment from "moment"
+import dayjs from 'dayjs'
 import { useEffect } from "react"
 import { useSelector } from "react-redux"
 import { useNavigate } from "utils/hooks"
@@ -79,7 +79,7 @@ export default () => {
     freight: false,
   }
   const initialValues = {
-    outDate: moment(),
+    outDate: dayjs(),
     type: DEFAULT_STORE_TYPE,
   }
   switch (type) {

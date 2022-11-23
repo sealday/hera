@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import {
   Space,
   Card,
@@ -28,7 +28,7 @@ export default () => {
   // 设置 tab 内容
   const columns = [
     { title: '名称', dataIndex: 'name', key: 'name' },
-    { title: '日期', dataIndex: 'date', key: 'name', render: date => moment(date).format('YYYY-MM-DD') },
+    { title: '日期', dataIndex: 'date', key: 'name', render: date => dayjs(date).format('YYYY-MM-DD') },
     { title: '备注', dataIndex: 'comments', key: 'comments' },
     { title: '操作', key: 'action', render: (_text, rule) => {
       return <Space>

@@ -5,7 +5,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { requestRecord } from '../../actions'
-import moment from 'moment'
+import dayjs from 'dayjs'
 
 class Record extends React.Component {
 
@@ -43,7 +43,7 @@ class Record extends React.Component {
           <div className="panel-body">
             <div>出库： {this.getProjectName(record.outStock) || record.vendor}</div>
             <div>入库： {this.getProjectName(record.inStock) || record.vendor}</div>
-            <div>时间：{moment(record.outDate).format('YYYY-MM-DD')}</div>
+            <div>时间：{dayjs(record.outDate).format('YYYY-MM-DD')}</div>
             <div>车号：{record.carNumber}</div>
             <div>单号：{record.number}</div>
             <div>原始单号：{record.originalOrder}</div>

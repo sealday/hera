@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { Popconfirm, Button, Card, Table, Space, Tag } from 'antd'
 import { connect } from 'react-redux'
 import { ALL_PLAN, queryAllPlans } from '../../../actions'
@@ -80,7 +80,7 @@ const ContractDetails = connect(mapStateToProps)(({ projects, dispatch, plans })
   const descriptions = [
     { label: "项目部", children: <ProjectLabel id={contract.project} /> },
     { label: "状态", children: <Tag color="green">{contract.status}</Tag> },
-    { label: "签约时间", children: moment(contract.date).format('YYYY-MM-DD') },
+    { label: "签约时间", children: dayjs(contract.date).format('YYYY-MM-DD') },
     { label: "备注", children: contract.comments },
   ]
   return (
@@ -91,9 +91,9 @@ const ContractDetails = connect(mapStateToProps)(({ projects, dispatch, plans })
 
       onEdit={() => {
         const initialValues = pick(contract, ['name', 'code', 'project', 'address', 'comments'])
-        // TODO 统一日期处理在接口层，转换成 moment 对象
+        // TODO 统一日期处理在接口层，转换成 dayjs 对象
         if (contract.date) {
-          initialValues.date = moment(contract.date)
+          initialValues.date = dayjs(contract.date)
         }
         edit({
           initialValues,
@@ -151,9 +151,9 @@ const ContractDetails = connect(mapStateToProps)(({ projects, dispatch, plans })
             }}
           />
           <Table.Column key="start" title="开始日期" dataIndex="start"
-            render={start => moment(start).format('YYYY-MM-DD')} />
+            render={start => dayjs(start).format('YYYY-MM-DD')} />
           <Table.Column key="end" title="结束日期" dataIndex="end"
-            render={end => moment(end).format('YYYY-MM-DD')} />
+            render={end => dayjs(end).format('YYYY-MM-DD')} />
           <Table.Column key="action" title="操作"
             render={(text, record) => (
               <Space size="middle">
@@ -166,7 +166,7 @@ const ContractDetails = connect(mapStateToProps)(({ projects, dispatch, plans })
         title="结算单"
         extra={[
           <Button key={1} onClick={() => addCalc({
-            initialValues: { name: moment().format('MM') + ' 月结算表' },
+            initialValues: { name: dayjs().format('MM') + ' 月结算表' },
             onFinish: v => {
               const requestBody = {
                 name: v.name,
@@ -181,9 +181,9 @@ const ContractDetails = connect(mapStateToProps)(({ projects, dispatch, plans })
         <Table dataSource={contract.calcs}>
           <Table.Column key="name" title="名称" dataIndex="name" />
           <Table.Column key="start" title="开始日期" dataIndex="start"
-            render={start => moment(start).format('YYYY-MM-DD')} />
+            render={start => dayjs(start).format('YYYY-MM-DD')} />
           <Table.Column key="end" title="结束日期" dataIndex="end"
-            render={start => moment(start).format('YYYY-MM-DD')} />
+            render={start => dayjs(start).format('YYYY-MM-DD')} />
           <Table.Column key="status" title="状态" dataIndex="status"
             render={t => t ? (t === 'latest' ? <Tag color='green'>最新</Tag> : <Tag color='red'>需要更新</Tag>) : <Tag color='gray'>未知</Tag>} />
           <Table.Column key="action" title="操作"

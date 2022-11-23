@@ -1,5 +1,5 @@
 import { Space } from "antd"
-import moment from "moment"
+import dayjs from 'dayjs'
 import heraApi from "../../../api"
 import { Error, Loading, ModalFormButton, PageHeader, PopconfirmButton, ResultTable } from "../../../components"
 import { loanSchema } from "../../../schema"
@@ -32,7 +32,7 @@ export default () => {
   }])
   const data = getLoanList.data
     // TODO 处理日期
-    .map(record => ({ ...record, date: moment(record.date) }))
+    .map(record => ({ ...record, date: dayjs(record.date) }))
   return (
     <PageHeader
       title='贷款管理'

@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { Map } from 'immutable'
 
 import { total_, toFixedWithoutTrailingZero } from '../../utils'
@@ -54,7 +54,7 @@ class SimpleSearchTable extends React.Component {
     }
 
   const columns = [
-    { key: 'outDate', title: '日期', dataIndex: 'outDate', render: (date) => moment(date).format('YYYY-MM-DD'), width: '114px' },
+    { key: 'outDate', title: '日期', dataIndex: 'outDate', render: (date) => dayjs(date).format('YYYY-MM-DD'), width: '114px' },
     { key: 'carNumber', title: '车号', dataIndex: 'carNumber', width: '100px' },
     { key: 'number', title: '单号', dataIndex: 'number', width: '58px' },
     { key: 'originalOrder', title: '原始单号', dataIndex: 'originalOrder', width: '100px' },

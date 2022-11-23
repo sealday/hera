@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import { Form } from "antd"
-import moment from "moment"
+import dayjs from 'dayjs'
 import { useEffect } from "react"
 import { useSelector } from "react-redux"
 import { useNavigate, useParams } from "utils/hooks"
@@ -111,7 +111,7 @@ export default () => {
   }
   const initialValues = {
     ...record,
-    outDate: moment(record.outDate),
+    outDate: dayjs(record.outDate),
     entries: _.map(record.entries, item => ({
       ...item,
       product: [item.type, item.name, item.size],

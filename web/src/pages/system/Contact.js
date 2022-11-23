@@ -66,7 +66,7 @@ class Contact extends Component {
                 /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, ' ',
                 /\d/, /\d/, /\d/, /\d|x|X/,
               ]}
-              className="ant-input"
+              className="text-mask-input"
               name="number"
               type="text"
               value={this.props.number}

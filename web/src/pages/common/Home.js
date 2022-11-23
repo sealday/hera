@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import axios from 'axios'
 
 import { queryLatestOperations, queryMoreOperations } from '../../actions'
@@ -101,7 +101,7 @@ export default () => {
 
   const columns = [
     { key: 'level', title: '日志等级', dataIndex: 'level', render: getLevelName },
-    { key: 'timestamp', title: '操作时间', dataIndex: 'timestamp', render: t => moment(t).format('MMMM Do YYYY, h:mm:ss a') },
+    { key: 'timestamp', title: '操作时间', dataIndex: 'timestamp', render: t => dayjs(t).format('MMMM Do YYYY, h:mm:ss a') },
     { key: 'type', title: '操作类型', dataIndex: 'type', render: t => t ? t : '修改' },
     { key: 'user.username', title: '操作人', dataIndex: ['user', 'username'] },
     { key: 'content', title: '修改内容', render: (_t, op) => op.report.message ? op.report.message : renderReport(op.report) },

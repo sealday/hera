@@ -1,7 +1,7 @@
 import React from 'react'
 import { reduxForm, Field, formValueSelector } from 'redux-form'
 import { connect } from 'react-redux'
-import moment from 'moment'
+import dayjs from 'dayjs'
 
 import {
   FilterSelect,
@@ -144,8 +144,8 @@ export default wrapper([
   reduxForm({
     form: 'CompanyTransportSearchForm',
     initialValues: {
-      startDate: moment().startOf('day'),
-      endDate: moment().startOf('day')
+      startDate: dayjs().startOf('day'),
+      endDate: dayjs().startOf('day')
     }
   }),
   connect(mapStateToProps),

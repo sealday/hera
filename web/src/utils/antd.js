@@ -2,7 +2,7 @@ import { MinusCircleOutlined, PlusCircleOutlined } from "@ant-design/icons"
 import { Button, Col, DatePicker, Form, Input, Radio, Row, Select, Space, Table, Tag } from "antd"
 import ReduxSelect from "components/input/redux-select.component"
 import _ from "lodash"
-import moment from "moment"
+import dayjs from 'dayjs'
 import ReactMaskedInput from 'react-text-mask'
 import { toFixedWithoutTrailingZero } from "."
 import { DateRangeFooter, DepLabel, EditableTagGroup, Link, RefCascader, RefCascaderLabel, RefLabel, RefSelect } from "../components"
@@ -120,9 +120,8 @@ const genFormContent = (schema, cols = 0, form = null, initialValues = {}) => {
           <ReactMaskedInput
             guide={false}
             mask={item.mask}
-            render={(ref, props) => (
-              <Input addonAfter={item.suffix ? item.suffix : null} disabled={item.disabled} {...props} ref={ref} />
-            )}
+            className="text-mask-input"
+            type="text"
           />
         </Form.Item>)
       } else {
@@ -180,7 +179,7 @@ const genTableColumn = schema => {
       columns.push(column)
     } else if (item.type === 'date') {
       const column = { title: item.label, dataIndex: item.name, key: item.name, render: null }
-      column.render = date => moment(date).format('YYYY-MM-DD')
+      column.render = date => dayjs(date).format('YYYY-MM-DD')
       columns.push(column)
     } else if (item.type === 'boolean') {
       columns.push({ title: item.label, dataIndex: item.name, key: item.name, render(v) { return v ? '是' : '否' } })
@@ -276,7 +275,7 @@ const genTableFormColumn = (parent, form = null) => {
             <ReactMaskedInput
               guide={false}
               mask={item.mask}
-              className="ant-input"
+              className="text-mask-input"
               type="text"
             />
           </Form.Item>

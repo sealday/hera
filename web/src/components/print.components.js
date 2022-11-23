@@ -1,5 +1,5 @@
 import React from 'react'
-import moment from 'moment'
+import dayjs from 'dayjs'
 
 /**
  * 购销打印头部
@@ -17,7 +17,7 @@ export const PurchasePrintHeader = ({
         <tbody>
           <tr>
             <td>销售单位：{seller}</td>
-            <td>日期：{moment(outDate).format('YYYY-MM-DD')}</td>
+            <td>日期：{dayjs(outDate).format('YYYY-MM-DD')}</td>
             <td>流水号：{number}</td>
           </tr>
           <tr>
@@ -71,7 +71,7 @@ export const StocktakingPrintHeader = ({
         </colgroup>
         <tbody>
           <tr>
-            <td>日期：{moment(outDate).format('YYYY-MM-DD')}</td>
+            <td>日期：{dayjs(outDate).format('YYYY-MM-DD')}</td>
             <td>流水号：{number}</td>
           </tr>
         </tbody>
@@ -114,7 +114,7 @@ export const RepairPrintHeader = ({
         <tbody>
           <tr>
             <td>销售单位：{seller}</td>
-            <td>日期：{moment(outDate).format('YYYY-MM-DD')}</td>
+            <td>日期：{dayjs(outDate).format('YYYY-MM-DD')}</td>
             <td>流水号：{number}</td>
           </tr>
           <tr>
@@ -167,7 +167,7 @@ export const RedressPrintHeader = ({
         <tbody>
           <tr>
             <td>销售单位：{seller}</td>
-            <td>日期：{moment(outDate).format('YYYY-MM-DD')}</td>
+            <td>日期：{dayjs(outDate).format('YYYY-MM-DD')}</td>
             <td>流水号：{number}</td>
           </tr>
           <tr>
@@ -220,7 +220,7 @@ export const FreeTransferPrintHeader = ({
         <tbody>
           <tr>
             <td>出库单位：{seller}</td>
-            <td>日期：{moment(outDate).format('YYYY-MM-DD')}</td>
+            <td>日期：{dayjs(outDate).format('YYYY-MM-DD')}</td>
             <td>流水号：{number}</td>
           </tr>
           <tr>
@@ -273,7 +273,7 @@ export const TransferPrintHeader = ({
         <tbody>
           <tr>
             <td>销售单位：{seller}</td>
-            <td>日期：{moment(outDate).format('YYYY-MM-DD')}</td>
+            <td>日期：{dayjs(outDate).format('YYYY-MM-DD')}</td>
             <td>流水号：{number}</td>
           </tr>
           <tr>

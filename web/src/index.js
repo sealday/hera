@@ -2,8 +2,8 @@ import 'scroll-polyfill/auto'
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
-import moment from 'moment'
-import 'moment/locale/zh-cn'
+import dayjs from 'dayjs'
+import 'dayjs/locale/zh-cn'
 import zh_CN from 'antd/lib/locale-provider/zh_CN'
 import { Alert, ConfigProvider } from 'antd'
 import { unstable_HistoryRouter as HistoryRouter } from 'react-router-dom'
@@ -16,12 +16,12 @@ import { ajax, getAuthToken } from './utils'
 import Routes from './routes'
 import { HelmetProvider } from 'react-helmet-async'
 
-// css 除非是模块自己的，否则直接在这里进行全局 import
+import 'antd/dist/reset.css'
 import './index.less'
 import heraApi from 'api'
 import _ from 'lodash'
-// 初始化 moment 时间属性
-moment.locale('zh-CN')
+// 初始化 dayjs 时间属性
+dayjs.locale('zh-cn')
 // 初始化 socket
 const socket = io()
 socket.on('server:users', (users) => {

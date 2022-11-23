@@ -1,5 +1,5 @@
 import { Form } from "antd"
-import moment from "moment"
+import dayjs from 'dayjs'
 import { useEffect } from "react"
 import { useNavigate, useParams } from "utils/hooks"
 import heraApi from "../../../api"
@@ -73,7 +73,7 @@ export default () => {
   const initialValues = {
     ...rule,
     name: rule.name + '（克隆）',
-    date: moment(rule.date),
+    date: dayjs(rule.date),
     items: rule.items.map(item => ({
       ...item,
       product: (rule.category !== '非租' && rule.category !== '装卸运费') ? product2array(item.product, item.level === '规格' || rule.category === '计重' || rule.category === '非租') : undefined,

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { pick } from 'lodash'
 import { Button, Space, Tag, message, ConfigProvider } from 'antd'
 import { useNavigate } from 'utils/hooks'
@@ -53,7 +53,7 @@ export default () => {
   const columns = [
     { title: "名称", key: "name", dataIndex: "name" },
     { title: "编号", key: "code", dataIndex: "code" },
-    { title: "日期", key: "date", dataIndex: "date", render(date) { return moment(date).format('YYYY-MM-DD') } },
+    { title: "日期", key: "date", dataIndex: "date", render(date) { return dayjs(date).format('YYYY-MM-DD') } },
     { title: "地址", key: "address", dataIndex: "address" },
     { title: "备注", key: "comments", dataIndex: "comments" },
     {

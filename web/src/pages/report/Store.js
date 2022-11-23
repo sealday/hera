@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { Map } from 'immutable'
 import {
   toFixedWithoutTrailingZero,
@@ -33,7 +33,7 @@ const Store = () => {
         type: data.type,
         project: data.project,
         startDate: data.startDate,
-        endDate: moment(data.endDate).add(1, 'day'),
+        endDate: dayjs(data.endDate).add(1, 'day'),
       }))
       setState({
         project: store._id,
@@ -219,8 +219,8 @@ const Store = () => {
       searchForm={{
         Form: StoreForm,
         initialValues: {
-          startDate: moment().startOf('day'),
-          endDate: moment().startOf('day'),
+          startDate: dayjs().startOf('day'),
+          endDate: dayjs().startOf('day'),
           type: '调拨',
           project: store._id,
         },

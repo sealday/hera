@@ -1,6 +1,6 @@
 import { Button, Card, Descriptions, Table } from 'antd'
 import _ from 'lodash'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { useNavigate } from 'utils/hooks'
 import { useParams } from 'utils/hooks'
 import heraApi, { useGetRecordQuery } from '../../api'
@@ -75,7 +75,7 @@ const Record = ({ isFinance = false }) => {
   } else {
     descriptions.push({ label: '仓库盘点', children: record.inStock.name })
   }
-  descriptions.push({ label: '出库时间', children: moment(record.outDate).format('YYYY-MM-DD') })
+  descriptions.push({ label: '出库时间', children: dayjs(record.outDate).format('YYYY-MM-DD') })
   descriptions.push({ label: '制单人', children: record.username })
   descriptions.push({ label: '原始单号', children: record.originalOrder })
   descriptions.push({ label: '车号', children: record.carNumber })

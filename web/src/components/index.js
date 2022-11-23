@@ -8,7 +8,7 @@ import {
   Select as AntSelect,
   DatePicker as AntDatePicker,
 } from 'antd'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { isUndefined } from 'lodash'
 
 import RawEditableTagGroup from './EditableTagGroup.js'
@@ -43,7 +43,7 @@ export const MaskedInput = ({ input, meta: { touched, error, warning }, style, .
       {...input}
       {...custom}
       style={style}
-      className="ant-input"
+      className="text-mask-input"
     />
   )}
 
@@ -110,14 +110,14 @@ export const DatePicker = ({ input: { value, onChange }, style, meta: { touched,
   return (
     <AntDatePicker
       style={style}
-      value={value ? moment(value) : null}
+      value={value ? dayjs(value) : null}
       onChange={date => onChange(date)}
       allowClear={false}
       disabledDate={current => {
         if (custom.selectsStart) {
-          return current.valueOf() > moment(custom.endDate).valueOf()
+          return current.valueOf() > dayjs(custom.endDate).valueOf()
         } else if (custom.selectsEnd) {
-          return current.valueOf() < moment(custom.startDate).valueOf()
+          return current.valueOf() < dayjs(custom.startDate).valueOf()
         } else {
           return false
         }
@@ -144,7 +144,7 @@ export const RangePicker = ({ input, style, meta: { touched, error }, ...custom 
     <AntDatePicker.RangePicker
       style={style}
       {...input}
-      value={moment(input.value)}
+      value={dayjs(input.value)}
       onChange={date => input.onChange(date)}
       {...custom} />
   )

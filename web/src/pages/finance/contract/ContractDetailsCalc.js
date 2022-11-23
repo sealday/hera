@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { Button, Card, Tag, Descriptions } from 'antd'
 import { connect } from 'react-redux'
 import { CONTRACT_DETAILS, queryContractDetails } from '../../../actions'
@@ -47,10 +47,10 @@ export default connect(mapStateToProps)(({ dispatch, contract }) => {
   const descriptions = [
     { label: '项目部', children: <ProjectLabel projectId={contract.project} /> },
     { label: '状态', children: <Tag color="green">{contract.status}</Tag> },
-    { label: "签约时间", children: moment(contract.date).format('YYYY-MM-DD') },
+    { label: "签约时间", children: dayjs(contract.date).format('YYYY-MM-DD') },
     { label: "结算名称", children: currentCalc.name },
-    { label: "结算开始日期", children: moment(currentCalc.start).format('YYYY-MM-DD') },
-    { label: "结算结束日期", children: moment(currentCalc.end).format('YYYY-MM-DD') },
+    { label: "结算开始日期", children: dayjs(currentCalc.start).format('YYYY-MM-DD') },
+    { label: "结算结束日期", children: dayjs(currentCalc.end).format('YYYY-MM-DD') },
     { label: "备注", children: contract.comments },
   ]
 

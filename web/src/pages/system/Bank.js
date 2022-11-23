@@ -60,7 +60,7 @@ class Bank extends Component {
                   /\d/, /\d/, /\d/, /\d/, ' ',
                   /\d/, /\d/, /\d/, /\d/
                 ]}
-                className="ant-input"
+                className="text-mask-input"
                 name="account"
                 type="text"
                 value={account}

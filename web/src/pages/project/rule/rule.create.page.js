@@ -1,5 +1,5 @@
 import { Form } from "antd"
-import moment from "moment"
+import dayjs from 'dayjs'
 import { useEffect } from "react"
 import heraApi from "../../../api"
 import { PageHeader } from "../../../components"
@@ -18,7 +18,7 @@ export default () => {
     }
   }, [navigate, createResult.isSuccess])
   const initialValues = {
-    date: moment(),
+    date: dayjs(),
   }
   const handleSubmit = (v) => {
     if (category === '租金') {

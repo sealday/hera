@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { saveAs } from 'file-saver'
-import moment from 'moment'
+import dayjs from 'dayjs'
 
 import SearchForm from './TransportSearchForm'
 import SearchTable from './TransportSearchTable'
@@ -24,7 +24,7 @@ export default () => {
       company: true,
       hasTransport: true, // 这个里面最重要的参数
       self: store._id,
-      endDate: moment(condition.endDate).add(1, 'day')
+      endDate: dayjs(condition.endDate).add(1, 'day')
     }))
   }
 

@@ -1,5 +1,6 @@
 import { ClearOutlined, EditOutlined, ExportOutlined, PlusCircleOutlined, PrinterOutlined, SaveOutlined, SearchOutlined } from '@ant-design/icons'
-import { Button, Card, Col, Descriptions, Dropdown, Form, Input, Menu, PageHeader, Row, Space } from 'antd'
+import { Button, Card, Col, Descriptions, Dropdown, Form, Input, Menu, Row, Space } from 'antd'
+import { PageHeader } from '@ant-design/pro-layout'
 import _ from 'lodash'
 import React, { useState } from 'react'
 import { useMemo } from 'react'
@@ -122,6 +123,9 @@ export default ({
   }
   return <>
     <PageHeader
+      style={{
+        backgroundColor: 'white'
+      }}
       title={title}
       subTitle={subTitle}
       ghost={false}

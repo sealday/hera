@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import {
   Space,
   Table,
@@ -34,7 +34,7 @@ export default () => {
         <Table.Column title="名称" key="name" dataIndex="name" />
         <Table.Column title="关联项目" key="project" dataIndex="project" />
         <Table.Column title="日期" key="date" dataIndex="date"
-          render={date => moment(date).format('YYYY-MM-DD')}
+          render={date => dayjs(date).format('YYYY-MM-DD')}
         />
         <Table.Column title="备注" key="comments" dataIndex="comments" />
         <Table.Column title="状态" key="status" dataIndex="status"

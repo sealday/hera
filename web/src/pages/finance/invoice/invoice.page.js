@@ -1,5 +1,5 @@
 import { Space } from "antd"
-import moment from "moment"
+import dayjs from 'dayjs'
 import { useState } from "react"
 import { useParams } from "utils/hooks"
 import heraApi from "../../../api"
@@ -43,7 +43,7 @@ export default () => {
   const data = getInvoiceList.data
     .filter(record => record.direction === title)
     // TODO 处理日期
-    .map(record => ({ ...record, date: moment(record.date) }))
+    .map(record => ({ ...record, date: dayjs(record.date) }))
   const initialValues = {
     direction: title,
   }

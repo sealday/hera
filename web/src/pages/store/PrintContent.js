@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import { each } from "lodash"
-import moment from "moment"
+import dayjs from 'dayjs'
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import heraApi from '../../api'
@@ -338,7 +338,7 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
                 <tr>
                   <td>客户号：{getProject().code}</td>
                   <td><IfShow cond={content.partA}>承租单位：{content.partA}</IfShow></td>
-                  <td>日期：{moment(record.outDate).format('YYYY-MM-DD')}</td>
+                  <td>日期：{dayjs(record.outDate).format('YYYY-MM-DD')}</td>
                 </tr>
                 <tr>
                   <td>合同编号：{_.get(getContract(), 'code', '')}</td>
@@ -361,7 +361,7 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
               <>
                 <tr>
                   <td><IfShow cond={content.partA}>{content.partALabel}：{content.partA}</IfShow></td>
-                  <td>日期：{moment(record.outDate).format('YYYY-MM-DD')}</td>
+                  <td>日期：{dayjs(record.outDate).format('YYYY-MM-DD')}</td>
                   <td>流水号：{record.number}</td>
                 </tr>
                 <tr>

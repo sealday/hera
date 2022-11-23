@@ -1,6 +1,6 @@
 import { useForm } from 'antd/lib/form/Form'
 import { DateModifier } from '../../../components'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { Form, Modal, DatePicker, Input } from 'antd'
 
 const ContractAddCalcModal = ({ initialValues, onFinish, open, onClose }) => {
@@ -39,7 +39,7 @@ const ContractAddCalcModal = ({ initialValues, onFinish, open, onClose }) => {
                 setDate={date => {
                   form.setFieldsValue({ date })
                 }}
-                date={form.getFieldValue('date') ? form.getFieldValue('date')[0] : moment()}
+                date={form.getFieldValue('date') ? form.getFieldValue('date')[0] : dayjs()}
               />
             }
           />

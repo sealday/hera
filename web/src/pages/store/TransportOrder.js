@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import React from 'react'
 import { useSelector } from 'react-redux'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { toFixedWithoutTrailingZero as fixed, transformArticle, total_, getUnit } from '../../utils'
 import PrintFrame from '../../components/print-frame.component'
 import { useNavigate, useParams } from 'utils/hooks'
@@ -82,9 +82,9 @@ export default () => {
         <tr>
           <th>日期</th>
           <th>承运日期</th>
-          <td>{moment(transport['off-date']).format('YYYY-MM-DD')}</td>
+          <td>{dayjs(transport['off-date']).format('YYYY-MM-DD')}</td>
           <th>到货日期</th>
-          <td>{moment(transport['arrival-date']).format('YYYY-MM-DD')}</td>
+          <td>{dayjs(transport['arrival-date']).format('YYYY-MM-DD')}</td>
           <th>单号</th>
           <td>{record.number}</td>
           <td rowSpan="12"
@@ -119,7 +119,7 @@ export default () => {
           <th colSpan="2">收款人账号</th>
         </tr>
         <tr>
-          <td>{transport.payDate && moment(transport.payDate).format('YYYY-MM-DD')}</td>
+          <td>{transport.payDate && dayjs(transport.payDate).format('YYYY-MM-DD')}</td>
           <td colSpan="2">{transport.payer}</td>
           <td>{transport.payee}</td>
           <td colSpan="2">{transport.bank} {transport.account}</td>

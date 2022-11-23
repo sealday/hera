@@ -1,5 +1,4 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 import { ConfigProvider } from 'antd'
 import ContractEditModal from './ContractEditModal'
 import ContractAddItemModal from './ContractAddItemModal'

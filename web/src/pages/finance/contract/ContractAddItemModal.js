@@ -5,7 +5,7 @@ import {
   DatePicker,
 } from 'antd'
 import { useForm } from 'antd/lib/form/Form'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { DateModifier } from '../../../components'
 import { RULE_CATEGORIES } from '../../../constants'
 
@@ -77,7 +77,7 @@ const ContractAddItemModal = ({ initialValues, onFinish, rules, open, onClose })
           renderExtraFooter={
             () => <DateModifier
               setDate={date => form.setFieldsValue({ date })}
-              date={form.getFieldValue('date') ? form.getFieldValue('date')[0] : moment()}
+              date={form.getFieldValue('date') ? form.getFieldValue('date')[0] : dayjs()}
             />
           }
         />

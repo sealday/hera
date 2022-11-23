@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import TransportForm from './TransportForm'
 import { useGetRecordQuery, useUpdateTransportMutation } from '../../api'
 import { useNavigate, useParams } from 'utils/hooks'
@@ -17,8 +17,8 @@ export default () => {
     }
   }, [navigate, updateResult.isSuccess])
   let initialValues = {
-    'off-date': moment().startOf('day'),
-    'arrival-date': moment().startOf('day').add(1, 'day'), // 到达日期
+    'off-date': dayjs().startOf('day'),
+    'arrival-date': dayjs().startOf('day').add(1, 'day'), // 到达日期
     weight: '', // 重量
     price: '', // 价格
     extraPrice: '', // 附加价格
@@ -75,16 +75,16 @@ export default () => {
   if (record.hasTransport) {
     initialValues = {
       ...record.transport,
-      'off-date': moment(record.transport['off-date']),
-      'arrival-date': moment(record.transport['arrival-date']),
-      payDate: record.transport.payDate && moment(record.transport.payDate),
+      'off-date': dayjs(record.transport['off-date']),
+      'arrival-date': dayjs(record.transport['arrival-date']),
+      payDate: record.transport.payDate && dayjs(record.transport.payDate),
       'delivery-party': deliveryParty, // 发货单位
       'receiving-party': receivingParty, // 收货单位
     }
   } else {
     initialValues = {
-      'off-date': moment(record.outDate).startOf('day'),
-      'arrival-date': moment(record.outDate).startOf('day').add(1, 'day'), // 到达日期
+      'off-date': dayjs(record.outDate).startOf('day'),
+      'arrival-date': dayjs(record.outDate).startOf('day').add(1, 'day'), // 到达日期
       'delivery-party': deliveryParty, // 发货单位
       'delivery-contact': deliveryContact, // 发货人
       'delivery-phone': deliveryPhone, // 发货人电话
@@ -95,7 +95,7 @@ export default () => {
       'receiving-address': receivingAddress, // 收货地址
       'carrier-car': record.carNumber,
       'payer': deliveryParty,
-      'payDate': moment().startOf('day'),
+      'payDate': dayjs().startOf('day'),
     }
   }
 

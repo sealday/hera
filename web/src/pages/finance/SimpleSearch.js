@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import moment from 'moment'
+import dayjs from 'dayjs'
 
 import { queryStore } from '../../actions'
 import SearchForm from '../report/SimpleSearchForm'
@@ -15,7 +15,7 @@ class Search extends React.Component {
       ...condition,
       company: true,
       self: this.props.store._id,
-      endDate: moment(condition.endDate).add(1, 'day')
+      endDate: dayjs(condition.endDate).add(1, 'day')
     }))
   }
 
