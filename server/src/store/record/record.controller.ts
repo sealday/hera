@@ -1,4 +1,4 @@
-import { Controller, UseGuards, Request, Body, Post, Param, Get, UseInterceptors, Res, StreamableFile } from '@nestjs/common';
+import { Controller, UseGuards, Request, Body, Post, Param, Get, UseInterceptors, Res, StreamableFile, Query } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { RecordService } from './record.service';
 import { WrapperInterceptor } from 'src/app/wrapper.interceptor';

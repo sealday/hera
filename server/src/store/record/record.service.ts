@@ -326,7 +326,104 @@ export class RecordService {
       },
     ])
 
-    const result = _.assign({}, record.toObject(), header[0], { entries }, { complements: record.complements })
+    const complements = await this.recordModel.aggregate([
+      // 1) 展开
+      {
+        $match: {
+          _id: record._id,
+        },
+      },
+      {
+        $unwind: {
+          path: '$complements',
+          preserveNullAndEmptyArrays: true,
+        }
+      },
+      {
+        $project: {
+          _id: '$complements._id',
+          level: '$complements.level',
+          associate: '$complements.associate',
+          direction: '$complements.direction',
+          product: '$complements.product',
+          count: '$complements.count',
+          comments: '$complements.comments',
+        }
+      },
+      // 2) 关联
+      {
+        $lookup: {
+          from: 'products',
+          let: { productType: '$associate.type', productName: '$associate.name', productSize: '$associate.size' },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ['$type', '$$productType'] },
+                    { $eq: ['$name', '$$productName'] },
+                    { $eq: ['$size', '$$productSize'] },
+                  ]
+                }
+              }
+            }
+          ],
+          as: 'associateProduct',
+        }
+      },
+      {
+        $unwind: {
+          path: '$associateProduct',
+          preserveNullAndEmptyArrays: true,
+        }
+      },
+      {
+        $lookup: {
+          from: 'others',
+          localField: 'product',
+          foreignField: 'id',
+          as: 'others'
+        }
+      },
+      // 3) 组装映射
+      {
+        $set: {
+          other: {
+            $last: '$others'
+          }
+        }
+      },
+      {
+        $project: {
+          _id: '$_id',
+          level: '$level',
+          associate: '$associate',
+          direction: '$direction',
+          count: '$count',
+          product: '$product',
+          comments: '$comments',
+          unit: {
+            $switch: {
+              branches: [
+                { case: { $and: ['$other.isAssociated', '$associateProduct.isScaled'] }, then: '$associateProduct.unit' },
+                { case: { $and: ['$other.isAssociated'] }, then: '$associateProduct.countUnit' },
+              ],
+              default: '$other.unit'
+            }
+          },
+          display: '$other.display',
+          other: {
+            $map: {
+              input: '$others',
+              as: 'other',
+              in: '$$other.name'
+            }
+          }
+        }
+      },
+    ])
+
+    const result = _.assign({}, record.toObject(), header[0], { entries, complements })
     return result
   }
 

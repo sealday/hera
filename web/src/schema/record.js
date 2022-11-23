@@ -138,6 +138,11 @@ export default [
                 type: 'text',
             },
             {
+                name: 'unit',
+                label: '单位',
+                type: 'text',
+            },
+            {
                 name: 'comments',
                 label: '备注',
                 type: 'text',

@@ -62,7 +62,6 @@ const Record = ({ isFinance = false }) => {
   const columns = genTableColumn(entriesSchema.form)
   const complementSchema = recordSchema.find(item => item.name === 'complements').schema
   const complementColumns = genTableColumn(complementSchema)
-    .concat([{ key: 'action', title: '操作' }])
   const extra = []
   if (record.type !== '盘点') {
     extra.push(<Button key='transport' onClick={() => navigate(`/transport/${params.id}`)}>运输单</Button>)
