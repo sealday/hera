@@ -65,6 +65,12 @@ export default [
                 type: 'text',
             },
             {
+                name: 'weight',
+                label: '重量（吨）',
+                type: 'number',
+                format: 'fixed',
+            },
+            {
                 name: 'subtotal',
                 label: '小计',
                 type: 'number',
