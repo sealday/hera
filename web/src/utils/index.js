@@ -6,6 +6,7 @@ import { saveAs } from 'file-saver'
 
 import * as validator from './validator'
 import { history, BASENAME } from '../globalConfigs'
+import createModal from './createModal'
 
 /**
  * 计算规格的数值表达
@@ -287,7 +288,7 @@ export const total_ = ({count, size, name}, products) => {
   }
 }
 
-export { validator }
+export { validator, createModal }
 
 export const isUpdatable = (store, user) => {
   if (user.role === '系统管理员') {
