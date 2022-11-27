@@ -31,6 +31,7 @@ import { LoggerService } from './logger/logger.service';
 import { SettingsController } from './settings/settings.controller';
 import { SettingsService } from './settings/settings.service';
 import { StoreService } from './store.service';
+import { ScheduleModule } from '@nestjs/schedule';
 
 
 @Module({
@@ -42,6 +43,7 @@ import { StoreService } from './store.service';
       exclude: ['/api*'],
     }),
     ConfigModule.forRoot(),
+    ScheduleModule.forRoot(),
     AuthModule, 
     UsersModule,
     MongoConfigModule,

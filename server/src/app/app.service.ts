@@ -5,6 +5,7 @@ import { Model, Types } from 'mongoose';
 import { Express } from 'express';
 import * as _ from 'lodash'
 import * as mime from 'mime-types';
+import { Cron } from '@nestjs/schedule';
 
 import { User } from '../users/users.service';
 import { Upload } from 'src/schemas/upload.schema';
@@ -126,5 +127,10 @@ export class AppService {
     })
     await uploadObject.save()
     return uploadObject.toObject()
+  }
+
+  @Cron('15 * * * * *')
+  async alive() {
+    console.log('cron work')
   }
 }

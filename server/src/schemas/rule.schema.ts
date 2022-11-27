@@ -40,6 +40,10 @@ export class Rule {
       type: String,
       enum: ['数量', '换算数量', '重量', '实际重量'],
     },
+    countSource: {
+      type: String,
+      enum: ['手动输入', '出库数量', '入库数量', '出入库数量', '合同运费'],
+    },
     comments: String,
   })])
   items: Record<string, any>[]

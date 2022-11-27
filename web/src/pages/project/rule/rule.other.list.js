@@ -23,6 +23,7 @@ export default () => {
         <Col style={styles.titleContainer} flex='200px'>计费项目</Col>
         <Col style={styles.titleContainer} flex='100px'>单价</Col>
         <Col style={styles.titleContainer} flex='110px'>计算类型</Col>
+        <Col style={styles.titleContainer} flex='110px'>数量</Col>
         <Col style={styles.titleContainer} flex='auto'>备注</Col>
         <Col style={styles.titleContainer} flex='20px'></Col>
       </Row>
@@ -56,18 +57,6 @@ export default () => {
                         return <RefCascader
                           item={{ required: true, name: [field.name, 'associate'], option: { ref: 'product' } }}
                           customBuild={data => buildProductTree(data).children} />
-                      } else if (level === '按单') {
-                        return (
-                          <Form.Item name={[field.name, 'condition']}>
-                            <Select options={[
-                              { label: '出入库', value: '出入库' },
-                              { label: '出库', value: '出库' },
-                              { label: '入库', value: '入库' },
-                              { label: '合同运费', value: '合同运费' },
-                            ]} />
-                          </Form.Item>
-                        )
-
                       }
                     }}
                   </Form.Item>
@@ -106,6 +95,17 @@ export default () => {
                     }}
                   </Form.Item>
                 </Col>
+                <Col flex='110px'>
+                  <Form.Item {...field} name={[field.name, 'countSource']}>
+                    <Select options={[
+                      { label: '手动输入', value: '手动输入' },
+                      { label: '出库数量', value: '出库数量' },
+                      { label: '入库数量', value: '入库数量' },
+                      { label: '出入库数量', value: '出入库数量' },
+                      { label: '合同运费', value: '合同运费' },
+                    ]} />
+                  </Form.Item>
+                </Col>
                 <Col flex='auto'>
                   <Form.Item {...field} name={[field.name, 'comments']}>
                     <Input />
@@ -118,7 +118,7 @@ export default () => {
             ))}
               <Row>
                 <Col span={24}>
-                  <Button block type='dashed' onClick={() => add()} icon={<PlusCircleOutlined />}>新增</Button>
+                  <Button block type='dashed' onClick={() => add({ countSource: '手动输入' })} icon={<PlusCircleOutlined />}>新增</Button>
                 </Col>
               </Row>
 
