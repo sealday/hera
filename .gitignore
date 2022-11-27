@@ -40,3 +40,5 @@ server/public/uploads
 
 /config.js
 /client/src/config.js
+
+/data
