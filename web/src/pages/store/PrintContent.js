@@ -274,6 +274,29 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
       ]
     printEntries.push(associatedEntry)
   })
+  // 关联购销单
+  if (record.associatedRecord) {
+    printEntries.push([
+      '物料买卖',
+      '数量',
+      '小计',
+      '金额',
+      '',
+      '',
+      '备注',
+    ])
+    record.associatedRecord.entries.forEach(item => {
+      printEntries.push([
+        `${item.name}[${item.size}]`,
+        item.count + ' ' + item.countUnit,
+        item.subtotal + ' ' + item.unit,
+        fixed(item.price * item.subtotal) + ' 元',
+        '',
+        '',
+        item.comments,
+      ])
+    })
+  }
 
   let slice = 5
   let leftSlice = 3

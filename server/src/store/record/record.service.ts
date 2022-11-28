@@ -50,7 +50,7 @@ export class RecordService {
     return l <= cur && cur < r
   }
 
-  async findById(recordId: string | number) {
+  async findById(recordId: string | number, shouldReadAssociated = true) {
     // 在当前的机制下，单据出入库可能关联多个合同，实际情况应该只有一个合同
     let record = null
     if (_.toNumber(recordId)) {
@@ -421,6 +421,13 @@ export class RecordService {
         }
       },
     ])
+
+    if (shouldReadAssociated) {
+      const associated = await this.recordModel.findOne({ associated: header[0]._id })
+      if (associated) {
+        header[0].associatedRecord = await this.findById(associated._id, false)
+      }
+    }
 
     const result = _.assign({}, record.toObject(), header[0], { entries, complements })
     return result

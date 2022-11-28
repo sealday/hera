@@ -1,7 +1,7 @@
 import { ArrowLeftOutlined, CloseOutlined } from "@ant-design/icons"
 import { Button } from "antd"
 import { addItem, removeItem, updateTitle } from "features/coreSlice"
-import { TabContext } from "globalConfigs"
+import { ModalContext, TabContext } from "globalConfigs"
 import _ from "lodash"
 import { useEffect } from "react"
 import { useCallback } from "react"
@@ -15,7 +15,10 @@ export const useParams = () => {
   const routeParams = useRouteParams()
   const [searchParams] = useSearchParams()
   const tabContext = useContext(TabContext)
-  if (tabContext.has) {
+  const modalContext = useContext(ModalContext)
+  if (modalContext.has) {
+    return modalContext.params
+  } else if (tabContext.has) {
     return tabContext.params
   } else {
     const params = _.merge({}, routeParams)
@@ -34,6 +37,7 @@ const canGoBack = () => {
 
 export const useTab = ({ title }) => {
   const tabContext = useContext(TabContext)
+  const modalContext = useContext(ModalContext)
   const dispatch = useDispatch()
   const navigate = useRouteNavigate()
   // 更新标题
@@ -46,7 +50,9 @@ export const useTab = ({ title }) => {
     }
   }, [tabContext.key, title])
   // 关闭或者返回键
-  if (tabContext.has) {
+  if (modalContext.has) {
+    return 'modal'
+  } else if (tabContext.has) {
     return <Button key='close' type='default' onClick={() => dispatch(removeItem(tabContext.key))} icon={<CloseOutlined />}>关闭</Button>
   } else if (canGoBack()) {
     return <Button key='goBack' type='default' onClick={() => navigate(-1)} icon={<ArrowLeftOutlined />}>返回</Button>
@@ -58,6 +64,7 @@ export const useTab = ({ title }) => {
 export const useNavigate = () => {
   const navigate = useRouteNavigate()
   const tabContext = useContext(TabContext)
+  const modalContext = useContext(ModalContext)
   const dispatch = useDispatch()
   const tabNavigate = useCallback((to) => {
     if (to === -1) {
@@ -70,7 +77,12 @@ export const useNavigate = () => {
       }))
     }
   }, [])
-  if (tabContext.has) {
+  const modalNavigate = useCallback(() => {
+    // 所有 navigate 都设置为关闭
+  })
+  if (modalContext.has) {
+    return modalNavigate
+  } else if (tabContext.has) {
     return tabNavigate
   } 
   return navigate

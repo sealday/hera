@@ -3,6 +3,7 @@ import * as mongoose from 'mongoose';
 export const RecordSchema = new mongoose.Schema({
   outStock: mongoose.Schema.Types.ObjectId, // 出库仓库
   inStock: mongoose.Schema.Types.ObjectId, // 入库仓库
+  associated: mongoose.Schema.Types.ObjectId, // 关联单据
   username: String, // 填单子的人
   vendor: String, // 对方单位，采购单和销售单专用
   comments: String, // 备注

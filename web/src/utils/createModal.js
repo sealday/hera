@@ -1,7 +1,11 @@
 import { createElement } from 'react'
-import { ConfigProvider } from 'antd'
+import { Alert, ConfigProvider } from 'antd'
 import zh_CN from 'antd/lib/locale-provider/zh_CN'
 import { createRoot } from 'react-dom/client'
+import { store, history, BASENAME } from '../globalConfigs'
+import { Provider } from 'react-redux'
+import { unstable_HistoryRouter as HistoryRouter } from 'react-router-dom'
+import { HelmetProvider } from 'react-helmet-async'
 
 const createModal = component => {
   return props => {
@@ -24,9 +28,19 @@ const createModal = component => {
     // per render
     function render() {
       setTimeout(() => {
-        root.render(<ConfigProvider locale={zh_CN}>
-          {createElement(component, { ...props, open, onClose })}
-        </ConfigProvider >)
+        root.render(
+          <Provider store={store}>
+            <HelmetProvider context={{}}>
+              <ConfigProvider locale={zh_CN}>
+                <Alert.ErrorBoundary>
+                  <HistoryRouter history={history} basename={BASENAME}>
+                    {createElement(component, { ...props, open, onClose })}
+                  </HistoryRouter>
+                </Alert.ErrorBoundary>
+              </ConfigProvider>
+            </HelmetProvider>
+          </Provider>
+        )
       })
     }
     render()

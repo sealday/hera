@@ -8,6 +8,7 @@ import heraApi, { useGetRecordQuery, useUpdateRecordMutation } from "../../api"
 import { Error, Loading, PageHeader } from "../../components"
 import RecordForm from "./RecordForm"
 import { SettingContext } from "./records"
+import { useDirection } from './Record'
 
 export default () => {
   const [form] = Form.useForm()
@@ -17,6 +18,7 @@ export default () => {
   const navigate = useNavigate()
   const store = useSelector(state => state.system.store)
   const getProjectListAll = heraApi.useGetProjectListAllQuery()
+  const direction = useDirection(record)
   useEffect(() => {
     if (updateResult.isSuccess) {
       navigate(-1)
@@ -29,7 +31,6 @@ export default () => {
   if (isLoading || getProjectListAll.isLoading) {
     return <Loading />
   }
-  const projects = getProjectListAll.data
   const type = record.type
   const handleSubmit = (record) => {
     record.entries = _.map(record.entries, item => ({
@@ -82,7 +83,6 @@ export default () => {
     weight: true,
     freight: false,
   }
-  const direction = record.inStock._id === store._id ? 'in' : record.outStock._id === store._id ? 'out' : ''
   if (!direction) {
     return <Error message='不支持' />
   }

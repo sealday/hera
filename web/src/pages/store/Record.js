@@ -1,13 +1,15 @@
 import { Button, Card, Descriptions, Table } from 'antd'
 import _ from 'lodash'
 import moment from 'moment'
+import { useSelector } from 'react-redux'
 import { useNavigate } from 'utils/hooks'
 import { useParams } from 'utils/hooks'
 import heraApi, { useGetRecordQuery } from '../../api'
-import { Error, Loading, PageHeader } from '../../components'
+import { Error, LinkButton, Loading, PageHeader } from '../../components'
 import recordSchema from '../../schema/record'
 import { toFixedWithoutTrailingZero as fixed } from '../../utils'
 import { genTableColumn } from '../../utils/antd'
+import { createRecord } from './RecordCreate'
 
 const styles = {
   keepSpace: { marginTop: '8px' }
@@ -42,7 +44,8 @@ const Summary = ({ entries }) => {
 const Record = ({ isFinance = false }) => {
   const params = useParams()
   const navigate = useNavigate()
-  const { data: record, error, isLoading } = useGetRecordQuery(params.id)
+  const { data: record, error, isLoading, refetch } = useGetRecordQuery(params.id)
+  const direction = useDirection(record)
 
   const getProjectListAll = heraApi.useGetProjectListAllQuery()
   if (error || getProjectListAll.error) {
@@ -65,6 +68,17 @@ const Record = ({ isFinance = false }) => {
   const extra = []
   if (record.type !== '盘点') {
     extra.push(<Button key='transport' onClick={() => navigate(`/transport/${params.id}`)}>运输单</Button>)
+  }
+  if (record.type === '调拨') {
+    if (!record.associatedRecord) {
+      extra.push(<Button key='purchase' onClick={() => createRecord({
+        record, refetch: () => {
+          refetch()
+        }
+      })}>关联{direction === 'in' ? '采购入库' : '销售出库'}单</Button>)
+    } else {
+      extra.push(<LinkButton type='default' to={`/record/${record.associatedRecord._id}`}>查看{direction === 'in' ? '采购入库' : '销售出库'}单</LinkButton>)
+    }
   }
 
   const descriptions = []
@@ -97,6 +111,15 @@ const Record = ({ isFinance = false }) => {
       <Table columns={complementColumns} dataSource={record.complements} rowKey='_id' />
     </Card>
   </PageHeader>
+}
+
+export const useDirection = (record) => {
+  const store = useSelector(state => state.system.store)
+  if (!record) {
+    return ''
+  }
+  const direction = record.inStock._id === store._id ? 'in' : record.outStock._id === store._id ? 'out' : ''
+  return direction
 }
 
 export default Record

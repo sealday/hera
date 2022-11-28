@@ -26,6 +26,10 @@ export const TabContext = createContext({
   has: false,
 })
 
+export const ModalContext = createContext({
+  has: false,
+})
+
 const rtkQueryErrorLogger = (api) => (next) => (action) => {
   // 跳过登入、登出行为
   const endpointName = _.get(action, 'meta.arg.endpointName')

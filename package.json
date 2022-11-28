@@ -1,7 +1,7 @@
 {
   "name": "hera",
   "private": true,
-  "version": "3.3.3",
+  "version": "3.4.0",
   "description": "以仓库管理为核心，衍生出一套财务、人员、仓管、企业规划与建设的现代企业管理软件，贴近基层企业实际内容，以模块化方式实现企业定制化需求。",
   "main": "index.js",
   "directories": {

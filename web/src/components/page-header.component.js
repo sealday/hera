@@ -47,7 +47,7 @@ export default ({
       return { formItems, initialValues }
     }
   }, [search && search.schema])
-  if (tabButton) {
+  if (tabButton && tabButton !== 'modal') {
     actions.push(tabButton)
   }
   if (extra) {
@@ -121,6 +121,29 @@ export default ({
       actions.push(<Button key='onSearch' type='primary' onClick={() => form.submit()} icon={<SearchOutlined />}>查询</Button>)
   }
   return <>
+  {tabButton === 'modal' 
+  ? 
+  <>
+      {search && searchMeta
+        ? (
+          <Form colon={false} form={form} onFinish={search.onSubmit} initialValues={searchMeta.initialValues}>{searchMeta.formItems}</Form>
+        )
+        : <></>
+      }
+      {description ?
+        <Descriptions>
+          <Descriptions.Item label='出库项目'>abc</Descriptions.Item>
+          <Descriptions.Item label='入库项目'>abc</Descriptions.Item>
+        </Descriptions>
+        : <></>}
+      {descriptions ?
+        <Descriptions size="small" column={3}>
+          {descriptions.map(item => <Descriptions.Item key={item.label} label={item.label}>{item.children}</Descriptions.Item>)}
+        </Descriptions>
+        : null}
+      {forms}
+    </>
+  :
     <PageHeader
       title={title}
       subTitle={subTitle}
@@ -149,6 +172,7 @@ export default ({
         : null}
       {forms}
     </PageHeader>
+  }
     {searchInfo ?
       <Card bordered={false}>
         <Form
@@ -191,7 +215,7 @@ export default ({
       </Card>
       : <></>}
     {children ?
-      <div style={{ padding: '8px' }}>
+      <div style={{ padding: tabButton === 'modal' ? 0 : '8px' }}>
         {children}
       </div>
       : <></>}
