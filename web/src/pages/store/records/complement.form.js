@@ -1,5 +1,5 @@
-import { MinusCircleOutlined, PlusCircleOutlined } from "@ant-design/icons"
-import { Button, Form, Input, Radio, Select, Space, Table } from "antd"
+import { MinusCircleOutlined, PlusCircleOutlined, QuestionCircleOutlined } from "@ant-design/icons"
+import { Button, Form, Input, Radio, Select, Space, Table, Tooltip } from "antd"
 import _ from "lodash"
 import { RefCascader } from "../../../components"
 import React from 'react';
@@ -42,44 +42,26 @@ const UnitLabel = ({ field }) => {
 export default ({ fields, operation, meta }) => {
   const form = Form.useFormInstance()
   const entries = Form.useWatch(['entries'])
-  const levelOptions = [
-    { label: '关联', value: 'associated' },
-    { label: '补充', value: 'unconnected' },
-  ]
   const associateOptions = _.chain(entries)
     .filter(entry => !_.isEmpty(entry) && !_.isEmpty(entry.product))
     .map(entry => ({ label: entry.product.join(' / '), value: JSON.stringify(entry.product) }))
     .value()
   const columns = [
     {
-      key: 'level',
-      title: '关联或补充',
-      width: 86,
-      render: (_, field) => (
-        <Form.Item name={[field.name, 'level']} rules={rules}>
-          <Select options={levelOptions} style={styles.block} />
-        </Form.Item>
-      )
-    },
-    {
       key: 'direction',
-      title: '出入库',
+      title: <>出入库&nbsp;
+        <Tooltip title='同表示随当前出入库单，无表示无关出入库，反表示与当前出入库相反'><QuestionCircleOutlined /></Tooltip>
+      </>
+      ,
       width: 120,
       align: 'center',
       render: (_, field) => (
-        <Form.Item dependencies={[['complements', field.name, 'level']]} >
-          {() => {
-            const isEnabled = form.getFieldValue(['complements', field.name, 'level']) === 'associated'
-            return (
-              <Form.Item name={[field.name, 'direction']}>
-                <Radio.Group disabled={!isEnabled} buttonStyle='solid' optionType='button' size='small' options={[
-                  { label: '出', value: '出' },
-                  { label: '无', value: '无' },
-                  { label: '入', value: '入' },
-                ]} />
-              </Form.Item>
-            )
-          }}
+        <Form.Item name={[field.name, 'direction']}>
+          <Radio.Group buttonStyle='solid' optionType='button' size='small' options={[
+            { label: '同', value: '同' },
+            { label: '无', value: '无' },
+            { label: '反', value: '反' },
+          ]} />
         </Form.Item>
       )
     },
@@ -88,15 +70,8 @@ export default ({ fields, operation, meta }) => {
       title: '关联',
       width: 300,
       render: (_, field) => (
-        <Form.Item dependencies={[['complements', field.name, 'level']]} >
-          {() => {
-            const isEnabled = form.getFieldValue(['complements', field.name, 'level']) === 'associated'
-            return (
-              <Form.Item name={[field.name, 'associate']} rules={isEnabled ? rules : []}>
-                <Select options={associateOptions} style={styles.block} disabled={!isEnabled} />
-              </Form.Item>
-            )
-          }}
+        <Form.Item name={[field.name, 'associate']} rules={rules}>
+          <Select options={associateOptions} style={styles.block} />
         </Form.Item>
       )
     },
@@ -152,6 +127,6 @@ export default ({ fields, operation, meta }) => {
 
   return <>
     <Table columns={columns} dataSource={fields} size='small' pagination={false} />
-    <Button type="dashed" block onClick={() => operation.add({ level: 'unconnected', direction: '无' })} icon={<PlusCircleOutlined />}>增加</Button>
+    <Button type="dashed" block onClick={() => operation.add({ level: 'associated', direction: '无' })} icon={<PlusCircleOutlined />}>增加</Button>
   </>
 }

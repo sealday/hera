@@ -93,4 +93,10 @@ export const RecordSchema = new mongoose.Schema({
     count: Number,
     comments: String, // 备注
   }],
+  additionals: [{
+    content: String,
+    product: [String],
+    amount: Number,
+    comments: String, // 备注
+  }],
 }, { timestamps: true });

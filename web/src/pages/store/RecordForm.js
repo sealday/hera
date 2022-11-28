@@ -8,6 +8,7 @@ import EntryForm from "./records/entry.form"
 import ComplementForm from "./records/complement.form"
 import { SettingContext } from "./records"
 import { CAR_NUMBERS } from "../../constants"
+import AdditionalForm from "./records/additional.form"
 
 const styles = {
   block: { width: '100%' },
@@ -82,11 +83,20 @@ export default ({ form, initialValues, onSubmit }) => {
           </Col>
         </Row>
       </Card>
-      <Card bordered={false} title='补充信息' style={styles.keepSpace}>
+      <Card bordered={false} title='赔偿维修信息' style={styles.keepSpace}>
         <Row>
           <Col span={24}>
             <Form.List name="complements" >
               {(fields, operation, meta) => <ComplementForm fields={fields} operation={operation} meta={meta} />}
+            </Form.List>
+          </Col>
+        </Row>
+      </Card>
+      <Card bordered={false} title='额外信息' style={styles.keepSpace}>
+        <Row>
+          <Col span={24}>
+            <Form.List name="additionals" >
+              {(fields, operation, meta) => <AdditionalForm fields={fields} operation={operation} meta={meta} />}
             </Form.List>
           </Col>
         </Row>
