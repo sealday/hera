@@ -336,7 +336,6 @@ export class RecordService {
       {
         $unwind: {
           path: '$complements',
-          preserveNullAndEmptyArrays: true,
         }
       },
       {
