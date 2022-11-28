@@ -156,6 +156,40 @@ export default [
         ]
     },
     {
+        name: 'additionals',
+        label: '额外信息',
+        type: 'list',
+        schema: [
+            {
+                name: 'content',
+                label: '摘要',
+                type: 'text',
+            },
+            {
+                name: 'product',
+                label: '计费项目',
+                type: 'text',
+                option: {
+                    type: 'ref',
+                    ref: 'other',
+                    label: 'name',
+                    value: 'id',
+                    select: 'cascader',
+                },
+            },
+            {
+                name: 'amount',
+                label: '金额（元）',
+                type: 'text',
+            },
+            {
+                name: 'comments',
+                label: '备注',
+                type: 'text',
+            },
+        ]
+    },
+    {
         name: 'outDate',
         label: '出库时间',
         type: 'date',

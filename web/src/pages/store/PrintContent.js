@@ -255,27 +255,37 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
       ]
     )
   })
-  // 补充
-  unconnected.forEach(item => {
-    const product = _.find(getOtherList.data, other => other.id === _.last(item.product))
-    const associatedLabel = {
-      colSpan: 2,
-      children: _.get(product, 'display', <RefCascaderLabel item={productItem} value={item.product} />) 
-    }
+  // 额外信息
+  if (_.size(record.additionals) > 0) {
+    printEntries.push([{ colSpan: 5, children: '补充信息', align: 'center' }])
     const associatedEntry =
       [
-         associatedLabel,
-        item.count + ' ' + product.unit,
+        { colSpan: 2, children: '摘要' },
+        '计费项目',
+        '金额（元）',
+        '备注',
         '',
-        { hidden: true, children: '' },
         '',
-        '',
-        item.comments,
       ]
     printEntries.push(associatedEntry)
-  })
+    _.forEach(record.additionals, item => {
+      const product = _.find(getOtherList.data, other => other.id === _.last(item.product))
+      // alert(JSON.stringify(product))
+      const associatedEntry =
+        [
+        { colSpan: 2, children: item.content },
+          product.name,
+          item.amount + ' 元',
+          '',
+          '',
+          item.comments,
+        ]
+      printEntries.push(associatedEntry)
+    })
+  }
   // 关联购销单
   if (record.associatedRecord) {
+    printEntries.push([{ colSpan: 5, children: '物料买卖信息', align: 'center' }])
     printEntries.push([
       '物料买卖',
       '数量',
@@ -422,6 +432,7 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
                 .map((col, index) => (
                   <td
                     key={index}
+                    align={_.get(col, 'align', 'right')}
                     style={_.get(col, 'hidden', false) ? { display: 'none' } : {}}
                     colSpan={_.get(col, 'colSpan', 1)}>
                     {_.get(col, 'children', col)}

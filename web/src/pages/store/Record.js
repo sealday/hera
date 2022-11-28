@@ -65,6 +65,8 @@ const Record = ({ isFinance = false }) => {
   const columns = genTableColumn(entriesSchema.form)
   const complementSchema = recordSchema.find(item => item.name === 'complements').schema
   const complementColumns = genTableColumn(complementSchema)
+  const additionalSchema = recordSchema.find(item => item.name === 'additionals').schema
+  const additionalColumns = genTableColumn(additionalSchema)
   const extra = []
   if (record.type !== '盘点') {
     extra.push(<Button key='transport' onClick={() => navigate(`/transport/${params.id}`)}>运输单</Button>)
@@ -107,8 +109,11 @@ const Record = ({ isFinance = false }) => {
     <Card bordered={false} title='明细信息'>
       <Table columns={columns} dataSource={record.entries} footer={() => <Summary entries={record.entries} />} rowKey='_id' />
     </Card>
-    <Card bordered={false} title='补充信息' style={styles.keepSpace}>
+    <Card bordered={false} title='维修赔偿信息' style={styles.keepSpace}>
       <Table columns={complementColumns} dataSource={record.complements} rowKey='_id' />
+    </Card>
+    <Card bordered={false} title='额外信息' style={styles.keepSpace}>
+      <Table columns={additionalColumns} dataSource={record.additionals} rowKey='_id' />
     </Card>
   </PageHeader>
 }
