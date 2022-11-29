@@ -285,9 +285,9 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
   }
   // 关联购销单
   if (record.associatedRecord) {
-    printEntries.push([{ colSpan: 5, children: '物料买卖信息', align: 'center' }])
+    printEntries.push([{ colSpan: 5, children: '其他物料信息', align: 'center' }])
     printEntries.push([
-      '物料买卖',
+      '物料名称及规格',
       '数量',
       '小计',
       '金额',
@@ -295,7 +295,9 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
       '',
       '备注',
     ])
+    let sum = 0
     record.associatedRecord.entries.forEach(item => {
+      sum += item.price * item.subtotal
       printEntries.push([
         `${item.name}[${item.size}]`,
         item.count + ' ' + item.countUnit,
@@ -306,6 +308,15 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
         item.comments,
       ])
     })
+    printEntries.push([
+      '合计',
+      '',
+      '',
+      fixed(sum) + ' 元',
+      '',
+      '',
+      '',
+    ])
   }
 
   let slice = 5
