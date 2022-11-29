@@ -2,7 +2,7 @@ import _ from 'lodash'
 import { Form } from "antd"
 import moment from "moment"
 import { useEffect } from "react"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { useNavigate, useParams } from "utils/hooks"
 import heraApi, { useGetRecordQuery, useUpdateRecordMutation } from "../../api"
 import { Error, Loading, PageHeader } from "../../components"
@@ -16,11 +16,15 @@ export default () => {
   const { data: record, error, isLoading } = useGetRecordQuery(id)
   const [updateRecord, updateResult] = useUpdateRecordMutation()
   const navigate = useNavigate()
+  const dispatch = useDispatch()
   const store = useSelector(state => state.system.store)
   const getProjectListAll = heraApi.useGetProjectListAllQuery()
   const direction = useDirection(record)
   useEffect(() => {
     if (updateResult.isSuccess) {
+      if (updateResult.data.associated) {
+         dispatch(heraApi.invalidateRecord(updateResult.data.associated))
+      }
       navigate(-1)
     }
   }, [navigate, updateResult.isSuccess])

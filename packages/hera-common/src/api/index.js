@@ -621,7 +621,12 @@ const genApi = ({ baseUrl = '/api/', onLogin, getAuthToken }) => {
     }
     return result
   }
-  const newApi = _.assign(heraApi, { useGetProjectListQuery })
+
+  const invalidateRecord = (id) => {
+    return heraApi.util.invalidateTags([{ type: 'Record', id }])
+  }
+
+  const newApi = _.assign(heraApi, { useGetProjectListQuery, invalidateRecord })
   return newApi
 }
 
