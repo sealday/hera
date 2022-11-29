@@ -2,19 +2,14 @@ import React, { useEffect } from 'react'
 
 import moment from 'moment'
 import { Button, Card, Tag, Descriptions } from 'antd'
-import { connect } from 'react-redux'
+import { connect, useDispatch, useSelector } from 'react-redux'
 import { CONTRACT_DETAILS, queryContractDetails } from '../../../actions'
 import { rentExcelExport } from '../../../utils'
 import RentCalcTable from '../RentCalcTable'
 import { useParams } from 'utils/hooks'
 import { PageHeader } from '../../../components'
-
-const mapStateToProps = (state) => {
-  const contract = state.results.get(CONTRACT_DETAILS, {})
-  return {
-    contract: contract,
-  }
-}
+import _ from 'lodash'
+import heraApi from 'api'
 
 const ProjectLabel = connect(state => ({
   projects: state.system.projects,
@@ -25,11 +20,20 @@ const ProjectLabel = connect(state => ({
   return <>projectId</>
 })
 
-export default connect(mapStateToProps)(({ dispatch, contract }) => {
+const ContractDetailsCalc = () => {
+  const dispatch = useDispatch()
+  const contract = useSelector(state => state.results.get(CONTRACT_DETAILS, {}))
   const { id, calcId } = useParams()
+  const [restartCal, restartResult] = heraApi.useRestartCalcContractMutation()
   useEffect(() => {
     dispatch(queryContractDetails(id))
-  }, [dispatch, id])
+  }, [id])
+
+  useEffect(() => {
+    if (restartResult.isSuccess) {
+      dispatch(queryContractDetails(id))
+    }
+  }, [restartResult.isSuccess])
 
   let currentCalc = null
   if (contract && contract.calcs) {
@@ -60,6 +64,13 @@ export default connect(mapStateToProps)(({ dispatch, contract }) => {
       subTitle={contract.code}
       descriptions={descriptions}
       extra={[
+        <Button onClick={() => {
+          restartCal({
+            id,
+            calcId,
+            calc: _.omit(currentCalc, ['list', 'history', 'group', 'nameGroup']),
+          })
+        }}>重新计算</Button>,
         <Button type='primary' key={2} onClick={() => {
           import('xlsx').then(XLSX => {
             rentExcelExport(XLSX, currentCalc)
@@ -74,4 +85,6 @@ export default connect(mapStateToProps)(({ dispatch, contract }) => {
       </Card>
     </PageHeader>
   )
-})
+}
+
+export default ContractDetailsCalc

@@ -1,4 +1,4 @@
-import { Button, Card, Descriptions, Dropdown, Space, Table } from 'antd'
+import { Button, Card, Col, Descriptions, Dropdown, Row, Space, Table, Tabs } from 'antd'
 import _ from 'lodash'
 import moment from 'moment'
 import { useSelector } from 'react-redux'
@@ -11,9 +11,6 @@ import { toFixedWithoutTrailingZero as fixed } from '../../utils'
 import { genTableColumn } from '../../utils/antd'
 import { createRecord } from './RecordCreate'
 
-const styles = {
-  keepSpace: { marginTop: '8px' }
-}
 
 const Summary = ({ entries }) => {
   if (_.isUndefined(entries) || entries.length === 0) {
@@ -53,6 +50,7 @@ const Record = ({ isFinance = false }) => {
   const navigate = useNavigate()
   const { data: record, error, isLoading, refetch } = useGetRecordQuery(params.id)
   const project = useProject(record)
+  const store = useSelector(state => state.system.store)
 
   if (error) {
     return <Error />
@@ -104,30 +102,45 @@ const Record = ({ isFinance = false }) => {
     subTitle={`${record.type}单 No.${record.number}`}
     descriptions={descriptions}
   >
-    <Card bordered={false} title='明细信息'>
-      <Table columns={columns} dataSource={record.entries} footer={() => <Summary entries={record.entries} />} rowKey='_id' />
-    </Card>
-    {_.map(record.associatedRecords, (record) => <DetailCard record={record} />)}
-    <Card bordered={false} title='维修赔偿信息' style={styles.keepSpace} hidden={!!record.complements}>
-      <Table columns={complementColumns} dataSource={record.complements} rowKey='_id' />
-    </Card>
-    <Card bordered={false} title='额外信息' style={styles.keepSpace} hidden={!!record.additionals}>
-      <Table columns={additionalColumns} dataSource={record.additionals} rowKey='_id' />
+    <Card>
+    <Tabs 
+    items={[
+        {
+          label: '明细', key: '明细', children:
+              <Table columns={columns} dataSource={record.entries} footer={() => <Summary entries={record.entries} />} rowKey='_id' />
+        },
+        ..._.map(record.associatedRecords, (record) => {
+          const direction = getDirection(record, store)
+          const title = direction === 'in' ? '采购入库 No.' + record.number : '销售出库 No.' + record.number
+          return { label: title, key: title, children: <DetailCard record={record} /> }
+        }),
+        {
+          label: '维修赔偿', key: '维修赔偿', children:
+            <Table columns={complementColumns} dataSource={record.complements} rowKey='_id' />
+        },
+        {
+          label: '额外内容', key: '额外内容', children:
+              <Table columns={additionalColumns} dataSource={record.additionals} rowKey='_id' />
+        }
+    ]}
+    />
     </Card>
   </PageHeader>
 }
 
 const DetailCard = ({ record }) => {
-  const direction = useDirection(record)
-  const title = direction === 'in' ? '采购入库' : '销售出库'
-  return <Card bordered={false} title={title + '明细信息'} extra={[
-    <Space>
-      <LinkButton key='query' type='default' to={`/record/${record._id}`}>查询</LinkButton>
-      <LinkButton key='edit' type='primary' to={`/record/${record._id}/edit`}>编辑</LinkButton>
-    </Space>
-  ]}>
-    <Table columns={columns} dataSource={record.entries} footer={() => <Summary entries={record.entries} />} rowKey='_id' />
-  </Card>
+  return <Row gutter={[16, 16]}>
+    <Col flex='auto' ></Col>
+    <Col>
+      <Space>
+        <LinkButton key='query' type='default' to={`/record/${record._id}`}>查询</LinkButton>
+        <LinkButton key='edit' type='primary' to={`/record/${record._id}/edit`}>编辑</LinkButton>
+      </Space>
+    </Col>
+    <Col span={24}>
+      <Table columns={columns} dataSource={record.entries} footer={() => <Summary entries={record.entries} />} rowKey='_id' />
+    </Col>
+  </Row>
 }
 
 export const getDirection = (record, store) => {
