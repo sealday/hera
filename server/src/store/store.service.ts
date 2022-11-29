@@ -2178,11 +2178,7 @@ export class StoreService {
         $unwind: '$products'
       },
       {
-        $project: {
-          outDate: '$outDate',
-          inOut: '$inOut',
-          name: '$entries.name',
-          category: '$category',
+        $addFields: {
           unit: {
             $cond: {
               if: '$products.isScaled',
@@ -2198,7 +2194,35 @@ export class StoreService {
             }
           },
           unitPrice: '$entries.price',
-          minus: '$minus',
+        }
+      },
+      {
+        $group: {
+          _id: {
+            outDate: '$outDate',
+            inOut: '$inOut',
+            name: '$entries.name',
+            category: '$category',
+            minus: '$minus',
+          },
+          count: {
+            $sum: '$count',
+          },
+          // 单价这里假设都一样
+          unitPrice: {
+            $first: '$unitPrice',
+          },
+        }
+      },
+      {
+        $project: {
+          outDate: '$_id.outDate',
+          inOut: '$_id.inOut',
+          name: '$_id.name',
+          category: '$_id.category',
+          minus: '$_id.minus',
+          count: '$count',
+          unitPrice: '$unitPrice',
         },
       },
       {

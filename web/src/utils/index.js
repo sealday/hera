@@ -533,21 +533,21 @@ table {
 	border: 1px solid black;
 }
 `
-export const rentExcelExport = (XLSX, rent) => {
+export const rentExcelExport = (XLSX, rent, name) => {
   const wb = XLSX.utils.book_new()
 
   const json = [[
-    '日期', '出入库', '名称', '规格', '单位', '数量', '单价', '天数', '金额', '运费'
+    '日期', '出入库', '名称', '类别', '单位', '数量', '单价', '天数', '金额', '运费'
   ]]
   for (const item of rent.history) {
     json.push([
-      '上期结存', null, item.name, '', item.unit,
+      '上期结存', null, item.name, item.category, item.unit,
       item.count, item.unitPrice || 0, item.days, item.price, 0
     ])
   }
   for (const item of rent.list) {
     json.push([
-      dateFormat(item.outDate), item.inOut, item.name, item.size, item.unit,
+      dateFormat(item.outDate), item.inOut, item.name, item.category, item.unit,
       item.count, item.unitPrice || 0, item.days, item.price, item.freight || 0
     ])
   }
@@ -585,7 +585,7 @@ export const rentExcelExport = (XLSX, rent) => {
       }
     }
   }
-  XLSX.utils.book_append_sheet(wb, sheet, '租金计算表')
+  XLSX.utils.book_append_sheet(wb, sheet, '结算表')
   const out = XLSX.write(wb, { bookType: 'xlsx', bookSST: false, type: 'binary', compression: true })
   const s2ab = (s) => {
     const buf = new ArrayBuffer(s.length)
@@ -595,7 +595,7 @@ export const rentExcelExport = (XLSX, rent) => {
     }
     return buf
   }
-  saveAs(new Blob([s2ab(out)], { type: "application/octet-stream" }), "租金计算表.xlsx")
+  saveAs(new Blob([s2ab(out)], { type: "application/octet-stream" }), name + ".xlsx")
 }
 
 export const enableFilters = [

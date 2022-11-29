@@ -23,6 +23,8 @@ const ProjectLabel = connect(state => ({
 const ContractDetailsCalc = () => {
   const dispatch = useDispatch()
   const contract = useSelector(state => state.results.get(CONTRACT_DETAILS, {}))
+  const projects = useSelector(state => state.system.projects)
+  const projectName = projects ? _.get(projects.get(contract.project), 'completeName', '') : ''
   const { id, calcId } = useParams()
   const [restartCal, restartResult] = heraApi.useRestartCalcContractMutation()
   useEffect(() => {
@@ -73,7 +75,7 @@ const ContractDetailsCalc = () => {
         }}>重新计算</Button>,
         <Button type='primary' key={2} onClick={() => {
           import('xlsx').then(XLSX => {
-            rentExcelExport(XLSX, currentCalc)
+            rentExcelExport(XLSX, currentCalc, currentCalc.name + '-' + projectName)
           }).catch(() => {
             alert('加载 Excel 控件失败，请重试')
           })
