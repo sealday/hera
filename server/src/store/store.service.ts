@@ -2099,10 +2099,197 @@ export class StoreService {
         }
       },
     ])
+    const purchaseResult = await this.recordModel.aggregate([
+      {
+        // 关联购销单
+        $match: {
+          $or: [
+            {
+              inStock: project
+            },
+            {
+              outStock: project
+            }
+          ],
+          type: '购销',
+          outDate: {
+            $lt: endDate,
+            $gte: startDate,
+          }
+        }
+      },
+      {
+        $addFields: {
+          minus: {
+            $cond: {
+              if: {
+                $eq: ['$inStock', project]
+              },
+              then: 1,
+              else: -1,
+            }
+          },
+          inOut: {
+            $cond: {
+              if: {
+                $eq: ['$inStock', project]
+              },
+              then: '出库',
+              else: '入库',
+            }
+          },
+          category: {
+            $cond: {
+              if: {
+                $eq: ['$inStock', project]
+              },
+              then: '销售',
+              else: '采购',
+            }
+          }
+        }
+      },
+      // 展开明细
+      {
+        $unwind: '$entries'
+      },
+      // 关联单位数量
+      {
+        $lookup: {
+          from: 'products',
+          let: { productType: '$entries.type', productName: '$entries.name', productSize: '$entries.size' },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ['$type', '$$productType'] },
+                    { $eq: ['$name', '$$productName'] },
+                    { $eq: ['$size', '$$productSize'] },
+                  ]
+                }
+              }
+            }
+          ],
+          as: 'products',
+        }
+      },
+      {
+        $unwind: '$products'
+      },
+      {
+        $project: {
+          outDate: '$outDate',
+          inOut: '$inOut',
+          name: '$entries.name',
+          category: '$category',
+          unit: {
+            $cond: {
+              if: '$products.isScaled',
+              then: '$products.unit',
+              else: '$products.countUnit',
+            }
+          },
+          count: {
+            $cond: {
+              if: '$products.isScaled',
+              then: { $multiply: ['$products.scale', '$entries.count'] },
+              else: '$entries.count',
+            }
+          },
+          unitPrice: '$entries.price',
+          minus: '$minus',
+        },
+      },
+      {
+        $addFields: {
+          price: {
+            $multiply: ['$count', '$unitPrice', '$minus']
+          }
+        }
+      },
+    ])
+    const extraResult = await this.recordModel.aggregate([
+      {
+        // 关联调拨单
+        $match: {
+          $or: [
+            {
+              inStock: project
+            },
+            {
+              outStock: project
+            }
+          ],
+          type: '调拨',
+          outDate: {
+            $lt: endDate,
+            $gte: startDate,
+          }
+        }
+      },
+      {
+        $unwind: '$additionals'
+      },
+      // 关联费用表
+      {
+        $lookup: {
+          from: 'others',
+          let: { otherId: { $last: '$additionals.product' } },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ['$id', '$$otherId'] },
+                  ]
+                }
+              }
+            }
+          ],
+          as: 'name',
+        }
+      },
+      {
+        $unwind: '$name'
+      },
+      // 关联费用表
+      {
+        $lookup: {
+          from: 'others',
+          let: { otherId: { $first: '$additionals.product' } },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ['$id', '$$otherId'] },
+                  ]
+                }
+              }
+            }
+          ],
+          as: 'category',
+        }
+      },
+      {
+        $unwind: '$category'
+      },
+      {
+        $project: {
+          outDate: '$outDate',
+          name: '$name.name',
+          category: '$category.name',
+          price: '$additionals.amount',
+        },
+      },
+    ])
     const price = _.sumBy([
       ...rentResult[0].history,
       ...rentResult[0].list,
+      ...purchaseResult,
       ...otherAssociatedResult,
+      ...extraResult,
       ...otherAssociatedResultPerOrder,
       ...otherUnconnectedResult,
       ...perOrderResult,
@@ -2111,7 +2298,7 @@ export class StoreService {
     return {
       history: rentResult[0].history,
       list: _
-        .sortBy(rentResult[0].list.concat(otherAssociatedResult, otherAssociatedResultPerOrder), ['outDate', 'name'])
+        .sortBy(rentResult[0].list.concat(otherAssociatedResult, otherAssociatedResultPerOrder, purchaseResult, extraResult), ['outDate', 'name'])
         .concat(otherUnconnectedResult, perOrderResult),
       debug: [],
       group: {

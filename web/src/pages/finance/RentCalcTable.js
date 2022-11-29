@@ -23,16 +23,16 @@ export default ({ rent }) => {
     inOut: '',
     name: item.name,
     unit: item.unit,
-    count: numberFormat(item.count),
-    unitPrice: currencyFormat(item.unitPrice, 4),
+    count: item.count ? numberFormat(item.count) : '',
+    unitPrice: item.unitPrice ? currencyFormat(item.unitPrice, 4) : '',
     days: item.days,
     price: currencyFormat(item.price),
   })).concat(rent.list.map((item) => ({
     ...item,
     key: shortId.generate(),
     outDate: dateFormat(item.outDate),
-    count: numberFormat(item.count),
-    unitPrice: currencyFormat(item.unitPrice, 4),
+    count: item.count ? numberFormat(item.count) : '',
+    unitPrice: item.unitPrice ? currencyFormat(item.unitPrice, 4) : '',
     price: currencyFormat(item.price),
   })))
 
