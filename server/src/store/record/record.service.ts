@@ -441,7 +441,7 @@ export class RecordService {
       {
         $unwind: {
           path: '$otherRule',
-          // preserveNullAndEmptyArrays: true,
+          preserveNullAndEmptyArrays: true,
         }
       },
       // 3) 组装映射
