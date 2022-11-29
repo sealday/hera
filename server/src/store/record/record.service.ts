@@ -384,6 +384,66 @@ export class RecordService {
           as: 'others'
         }
       },
+      // 关联
+      {
+        $lookup: {
+          from: 'rules',
+          let: {
+            associateType: '$associate.type',
+            associateName: '$associate.name',
+            associateSize: '$associate.size',
+            other: '$product',
+          },
+          pipeline: [
+            {
+              $match: { _id: rules['非租'].fee }
+            },
+            {
+              $unwind: '$items'
+            },
+            {
+              $match: {
+                'items.countSource': '手动输入'
+              }
+            },
+            {
+              $match: {
+                $expr: {
+                  $cond: {
+                    if: {
+                      $eq: ['$items.level', '产品']
+                    },
+                    then: {
+                      $and: [
+                        { $eq: ['$items.associate.type', '$$associateType'] },
+                        { $eq: ['$items.associate.name', '$$associateName'] },
+                        { $eq: ['$items.level', '产品'] },
+                        { $eq: ['$items.other', '$$other'] },
+                      ]
+                    },
+                    else: {
+                      $and: [
+                        { $eq: ['$items.associate.type', '$$associateType'] },
+                        { $eq: ['$items.associate.name', '$$associateName'] },
+                        { $eq: ['$items.associate.size', '$$associateSize'] },
+                        { $eq: ['$items.level', '规格'] },
+                        { $eq: ['$items.other', '$$other'] },
+                      ]
+                    }
+                  },
+                }
+              }
+            }
+          ],
+          as: 'otherRule'
+        }
+      },
+      {
+        $unwind: {
+          path: '$otherRule',
+          // preserveNullAndEmptyArrays: true,
+        }
+      },
       // 3) 组装映射
       {
         $set: {
@@ -404,6 +464,13 @@ export class RecordService {
           unit: {
             $switch: {
               branches: [
+                {
+                  case: {
+                    $and: ['$other.isAssociated', {
+                      $eq: ['$otherRule.items.countType', '重量']
+                    }]
+                  }, then: '$associateProduct.countUnit'
+                },
                 { case: { $and: ['$other.isAssociated', '$associateProduct.isScaled'] }, then: '$associateProduct.unit' },
                 { case: { $and: ['$other.isAssociated'] }, then: '$associateProduct.countUnit' },
               ],

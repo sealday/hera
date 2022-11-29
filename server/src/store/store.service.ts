@@ -966,9 +966,17 @@ export class StoreService {
                 if: '$other.isAssociated',
                 then:  {
                   $cond: {
-                    if: '$products.isScaled',
-                    then: '$products.unit',
-                    else: '$products.countUnit'
+                    if: {
+                      $eq: ['$otherRule.items.countType', '重量']
+                    },
+                    then: '吨',
+                    else: {
+                      $cond: {
+                        if: '$products.isScaled',
+                        then: '$products.unit',
+                        else: '$products.countUnit'
+                      }
+                    }
                   }
                 },
                 else: '$other.unit'
@@ -1416,9 +1424,17 @@ export class StoreService {
                 if: '$other.isAssociated',
                 then:  {
                   $cond: {
-                    if: '$products.isScaled',
-                    then: '$products.unit',
-                    else: '$products.countUnit'
+                    if: {
+                      $eq: ['$otherRule.items.countType', '重量']
+                    },
+                    then: '吨',
+                    else: {
+                      $cond: {
+                        if: '$products.isScaled',
+                        then: '$products.unit',
+                        else: '$products.countUnit'
+                      }
+                    }
                   }
                 },
                 else: '$other.unit'
