@@ -969,7 +969,7 @@ export class StoreService {
                     if: {
                       $eq: ['$otherRule.items.countType', '重量']
                     },
-                    then: '吨',
+                    then: '千克',
                     else: {
                       $cond: {
                         if: '$products.isScaled',
@@ -1427,7 +1427,7 @@ export class StoreService {
                     if: {
                       $eq: ['$otherRule.items.countType', '重量']
                     },
-                    then: '吨',
+                    then: '千克',
                     else: {
                       $cond: {
                         if: '$products.isScaled',
