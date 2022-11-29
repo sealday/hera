@@ -11,6 +11,7 @@ import {
   total_,
   getUnit,
 } from '../../utils'
+import { getDirection } from './Record'
 
 // 表格内容
 const PrintContent = ({ record, columnStyle, selectedTitle }) => {
@@ -270,7 +271,6 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
     printEntries.push(associatedEntry)
     _.forEach(record.additionals, item => {
       const product = _.find(getOtherList.data, other => other.id === _.last(item.product))
-      // alert(JSON.stringify(product))
       const associatedEntry =
         [
         { colSpan: 2, children: item.content },
@@ -284,39 +284,42 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
     })
   }
   // 关联购销单
-  if (record.associatedRecord) {
-    printEntries.push([{ colSpan: 5, children: '其他物料信息', align: 'center' }])
-    printEntries.push([
-      '物料名称及规格',
-      '数量',
-      '小计',
-      '金额',
-      '',
-      '',
-      '备注',
-    ])
-    let sum = 0
-    record.associatedRecord.entries.forEach(item => {
-      sum += item.price * item.subtotal
+  if (record.associatedRecords) {
+    record.associatedRecords.forEach((record) => {
+      const title = getDirection(store, record) === 'in' ? '采购入库物料明细' : '销售出库物料明细'
+      printEntries.push([{ colSpan: 5, children: title, align: 'center' }])
       printEntries.push([
-        `${item.name}[${item.size}]`,
-        item.count + ' ' + item.countUnit,
-        item.subtotal + ' ' + item.unit,
-        fixed(item.price * item.subtotal) + ' 元',
+        { style: { fontWeight: 500 }, align: 'center', children: '物料名称及规格' },
+        { style: { fontWeight: 500 }, align: 'center', children: '数量' },
+        { style: { fontWeight: 500 }, align: 'center', children: '小计' },
+        { style: { fontWeight: 500 }, align: 'center', children: '金额' },
+        { style: { fontWeight: 500 }, align: 'center', children: '' },
+        { style: { fontWeight: 500 }, align: 'center', children: '' },
+        { style: { fontWeight: 500 }, align: 'center', children: '备注' },
+      ])
+      let sum = 0
+      record.entries.forEach(item => {
+        sum += item.price * item.subtotal
+        printEntries.push([
+          `${item.name}[${item.size}]`,
+          item.count + ' ' + item.countUnit,
+          item.subtotal + ' ' + item.unit,
+          fixed(item.price * item.subtotal) + ' 元',
+          '',
+          '',
+          item.comments,
+        ])
+      })
+      printEntries.push([
+        '合计',
         '',
         '',
-        item.comments,
+        fixed(sum) + ' 元',
+        '',
+        '',
+        '',
       ])
     })
-    printEntries.push([
-      '合计',
-      '',
-      '',
-      fixed(sum) + ' 元',
-      '',
-      '',
-      '',
-    ])
   }
 
   let slice = 5
@@ -444,7 +447,7 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
                   <td
                     key={index}
                     align={_.get(col, 'align', 'right')}
-                    style={_.get(col, 'hidden', false) ? { display: 'none' } : {}}
+                    style={_.get(col, 'hidden', false) ? { display: 'none', ..._.get(col, 'style', {}) } : _.get(col, 'style', {})}
                     colSpan={_.get(col, 'colSpan', 1)}>
                     {_.get(col, 'children', col)}
                   </td>

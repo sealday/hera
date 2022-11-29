@@ -14,7 +14,7 @@ import { useParams } from 'utils/hooks'
 import { useForm } from 'antd/lib/form/Form'
 import { useDirection } from './Record'
 
-const RecordCreate = ({ record, form: passedForm, onClose }) => {
+const RecordCreate = ({ record, project, form: passedForm, onClose }) => {
   const [myForm] = Form.useForm()
   const form = passedForm ? passedForm : myForm
   const { type, direction } = useParams()
@@ -84,13 +84,8 @@ const RecordCreate = ({ record, form: passedForm, onClose }) => {
   }
   if (record) {
     initialValues.outDate = moment(record.outDate)
-    if (direction === 'in') {
-      initialValues.projectId = record.outStock._id
-      initialValues.type = record.outStock.type
-    } else {
-      initialValues.projectId = record.inStock._id
-      initialValues.type = record.inStock.type
-    }
+    initialValues.projectId = project._id
+    initialValues.type = project.type
   }
   switch (type) {
     case 'transfer':
@@ -129,8 +124,7 @@ const RecordCreate = ({ record, form: passedForm, onClose }) => {
   </PageHeader>
 }
 
-const RecordCreateModal = ({ record, open, onClose, refetch }) => {
-  const direction = useDirection(record)
+const RecordCreateModal = ({ record, project, open, onClose, refetch, direction }) => {
   const modalContext = {
     has: true,
     params: {
@@ -152,7 +146,7 @@ const RecordCreateModal = ({ record, open, onClose, refetch }) => {
     onClose={onClose}
     onCancel={() => onClose()}>
     <ModalContext.Provider value={modalContext}>
-      <RecordCreate record={record} form={form} onClose={() => { refetch(); onClose() }} />
+      <RecordCreate record={record} project={project} form={form} onClose={() => { refetch(); onClose() }} />
     </ModalContext.Provider>
   </Drawer>
 }

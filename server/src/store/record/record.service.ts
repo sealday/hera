@@ -490,9 +490,9 @@ export class RecordService {
     ])
 
     if (shouldReadAssociated) {
-      const associated = await this.recordModel.findOne({ associated: header[0]._id })
-      if (associated) {
-        header[0].associatedRecord = await this.findById(associated._id, false)
+      const associateds = await this.recordModel.find({ associated: header[0]._id })
+      if (associateds) {
+        header[0].associatedRecords = await Promise.all(associateds.map(associated => this.findById(associated._id, false)))
       }
     }
 

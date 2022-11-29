@@ -1,4 +1,4 @@
-import { Button, Card, Descriptions, Table } from 'antd'
+import { Button, Card, Descriptions, Dropdown, Space, Table } from 'antd'
 import _ from 'lodash'
 import moment from 'moment'
 import { useSelector } from 'react-redux'
@@ -41,46 +41,44 @@ const Summary = ({ entries }) => {
   )
 }
 
+const entriesSchema = recordSchema.find(item => item.name === 'entries')
+const columns = genTableColumn(entriesSchema.form)
+const complementSchema = recordSchema.find(item => item.name === 'complements').schema
+const complementColumns = genTableColumn(complementSchema)
+const additionalSchema = recordSchema.find(item => item.name === 'additionals').schema
+const additionalColumns = genTableColumn(additionalSchema)
+
 const Record = ({ isFinance = false }) => {
   const params = useParams()
   const navigate = useNavigate()
   const { data: record, error, isLoading, refetch } = useGetRecordQuery(params.id)
-  const direction = useDirection(record)
+  const project = useProject(record)
 
-  const getProjectListAll = heraApi.useGetProjectListAllQuery()
-  if (error || getProjectListAll.error) {
+  if (error) {
     return <Error />
   }
-  if (isLoading || getProjectListAll.isLoading) {
+  if (isLoading) {
     return <Loading />
   }
-  const projects = getProjectListAll.data
   const onEdit = () => {
     navigate(`/record/${params.id}/edit`)
   }
   const onPrintPreview = () => {
     navigate(`/record/${params.id}/preview`)
   }
-  const entriesSchema = recordSchema.find(item => item.name === 'entries')
-  const columns = genTableColumn(entriesSchema.form)
-  const complementSchema = recordSchema.find(item => item.name === 'complements').schema
-  const complementColumns = genTableColumn(complementSchema)
-  const additionalSchema = recordSchema.find(item => item.name === 'additionals').schema
-  const additionalColumns = genTableColumn(additionalSchema)
   const extra = []
   if (record.type !== '盘点') {
     extra.push(<Button key='transport' onClick={() => navigate(`/transport/${params.id}`)}>运输单</Button>)
   }
   if (record.type === '调拨') {
-    if (!record.associatedRecord) {
-      extra.push(<Button key='purchase' onClick={() => createRecord({
-        record, refetch: () => {
-          refetch()
-        }
-      })}>关联{direction === 'in' ? '采购入库' : '销售出库'}单</Button>)
-    } else {
-      extra.push(<LinkButton type='default' to={`/record/${record.associatedRecord._id}`}>查看{direction === 'in' ? '采购入库' : '销售出库'}单</LinkButton>)
-    }
+    extra.push(<Dropdown key='purchase' menu={{
+      items: [
+        { label: '采购入库', key: '采购入库', onClick: () => createRecord({ record, project, refetch, direction: 'in' }) },
+        { label: '销售出库', key: '销售出库', onClick: () => createRecord({ record, project, refetch, direction: 'out' }) },
+      ]
+    }}>
+      <Button>关联购销单</Button>
+    </Dropdown>)
   }
 
   const descriptions = []
@@ -109,13 +107,31 @@ const Record = ({ isFinance = false }) => {
     <Card bordered={false} title='明细信息'>
       <Table columns={columns} dataSource={record.entries} footer={() => <Summary entries={record.entries} />} rowKey='_id' />
     </Card>
-    <Card bordered={false} title='维修赔偿信息' style={styles.keepSpace}>
+    {_.map(record.associatedRecords, (record) => <DetailCard record={record} />)}
+    <Card bordered={false} title='维修赔偿信息' style={styles.keepSpace} hidden={!!record.complements}>
       <Table columns={complementColumns} dataSource={record.complements} rowKey='_id' />
     </Card>
-    <Card bordered={false} title='额外信息' style={styles.keepSpace}>
+    <Card bordered={false} title='额外信息' style={styles.keepSpace} hidden={!!record.additionals}>
       <Table columns={additionalColumns} dataSource={record.additionals} rowKey='_id' />
     </Card>
   </PageHeader>
+}
+
+const DetailCard = ({ record }) => {
+  const direction = useDirection(record)
+  const title = direction === 'in' ? '采购入库' : '销售出库'
+  return <Card bordered={false} title={title + '明细信息'} extra={[
+    <Space>
+      <LinkButton key='query' type='default' to={`/record/${record._id}`}>查询</LinkButton>
+      <LinkButton key='edit' type='primary' to={`/record/${record._id}/edit`}>编辑</LinkButton>
+    </Space>
+  ]}>
+    <Table columns={columns} dataSource={record.entries} footer={() => <Summary entries={record.entries} />} rowKey='_id' />
+  </Card>
+}
+
+export const getDirection = (record, store) => {
+  return _.get(record, 'inStock._id') === _.get(store, '_id') ? 'in' : _.get(record, 'outStock._id') === _.get(store, '_id') ? 'out' : ''
 }
 
 export const useDirection = (record) => {
@@ -123,8 +139,21 @@ export const useDirection = (record) => {
   if (!record) {
     return ''
   }
-  const direction = record.inStock._id === store._id ? 'in' : record.outStock._id === store._id ? 'out' : ''
-  return direction
+  return getDirection(record, store)
+}
+
+export const useProject = (record) => {
+  const store = useSelector(state => state.system.store)
+  if (!record) {
+    return null
+  }
+  if (record.inStock._id === store._id) {
+    return record.outStock
+  }
+  if (record.outStock._id === store._id) {
+    return record.inStock
+  }
+  return null
 }
 
 export default Record
