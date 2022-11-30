@@ -125,7 +125,6 @@ export class RecordService {
       {
         $unwind: {
           path: '$entries',
-          preserveNullAndEmptyArrays: true,
         }
       },
       {
