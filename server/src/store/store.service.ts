@@ -265,6 +265,30 @@ export class StoreService {
           }
         }
       },
+      {
+        $addFields: {
+          entriesLength: {
+            $size: '$entries'
+          }
+        },
+      },
+      {
+        $addFields: {
+          actualWeight:
+          {
+            $cond: {
+              if: {
+                $gt: ['$entriesLength', 0]
+              },
+              then: {
+                $divide: ['$weight', '$entriesLength']
+              },
+              // 这里取 0 或者取 weight 都可以，既然没有东西也不应该有重量？
+              else: 0
+            }
+          }
+        }
+      },
       // 展开明细
       {
         $unwind: '$entries'
@@ -432,6 +456,10 @@ export class StoreService {
                   case: { $eq: ['$rentRule.items.countType', '重量'] },
                   then: { $multiply: ['$weight', '$inOut'] },
                 },
+                {
+                  case: { $eq: ['$rentRule.items.countType', '实际重量'] },
+                  then: { $multiply: ['$actualWeight', '$inOut', 1000] },
+                },
               ],
               default: {
                 $cond: {
@@ -457,6 +485,10 @@ export class StoreService {
                 },
                 {
                   case: { $eq: ['$rentRule.items.countType', '重量'] },
+                  then: '千克',
+                },
+                {
+                  case: { $eq: ['$rentRule.items.countType', '实际重量'] },
                   then: '千克',
                 },
               ],
@@ -487,6 +519,10 @@ export class StoreService {
                 {
                   case: { $eq: ['$rentRule.items.countType', '重量'] },
                   then: { $multiply: ['$weight', '$rentRule.items.unitPrice', '$days', '$inOut'] },
+                },
+                {
+                  case: { $eq: ['$rentRule.items.countType', '实际重量'] },
+                  then: { $multiply: ['$actualWeight', '$rentRule.items.unitPrice', '$days', '$inOut'] },
                 },
               ],
               default: 0
