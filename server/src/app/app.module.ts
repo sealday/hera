@@ -32,6 +32,7 @@ import { SettingsController } from './settings/settings.controller';
 import { SettingsService } from './settings/settings.service';
 import { StoreService } from './store.service';
 import { ScheduleModule } from '@nestjs/schedule';
+import { Notification, NotificationSchema } from 'src/schemas/notification.schema';
 
 
 @Module({
@@ -67,6 +68,7 @@ import { ScheduleModule } from '@nestjs/schedule';
       { name: 'Store', schema: StoreSchema },
       { name: 'Contract', schema: ContractSchema },
       { name: Upload.name, schema: UploadSchema },
+      { name: Notification.name, schema: NotificationSchema },
     ]),
   ],
   controllers: [AppController, UsersController, SettingsController, HookController],

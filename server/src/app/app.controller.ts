@@ -69,6 +69,8 @@ export class AppController {
     }
   }
 
+
+
   /**
    * 查询仓库状态
    * @param type 状态类型
@@ -97,6 +99,16 @@ export class AppController {
         };
       default:
         throw new BadRequestException()
+    }
+  }
+
+  @Get('notifications')
+  async notifications(@Request() req: any, @Query('id') id: string) {
+    const notifications = await this.appService.getNotifications(req.user)
+    return {
+      data: {
+        notifications,
+      }
     }
   }
 }

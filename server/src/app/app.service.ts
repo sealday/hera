@@ -9,6 +9,7 @@ import { Cron } from '@nestjs/schedule';
 
 import { User } from '../users/users.service';
 import { Upload } from 'src/schemas/upload.schema';
+import { Notification } from 'src/schemas/notification.schema';
 
 export type Record = any;
 export type Product = any;
@@ -35,6 +36,7 @@ export class AppService {
     @InjectModel('Operation') private operationModel: Model<Operation>,
     @InjectModel('Counter') private counterModel: Model<Counter>,
     @InjectModel(Upload.name) private uploadModel: Model<Upload>,
+    @InjectModel(Notification.name) private notificationModel: Model<Notification>,
     @InjectModel('Recycle') private recycleModel: Model<Recycle>,
   ) { }
 
@@ -129,8 +131,13 @@ export class AppService {
     return uploadObject.toObject()
   }
 
-  @Cron('15 * * * * *')
-  async alive() {
-    console.log('cron work')
+  @Cron('0 6 5 * * *')
+  async receipt() {
+    // 超过五天的出入库提醒
+    this.notificationModel.create({ username: '廖琴仓库	', title: '回单联签收提醒', content: '测试回单签收提醒', read: false, extra: {} })
+  }
+
+  async getNotifications(user: User) {
+    return await this.notificationModel.find({ username: user.username }).sort({ _id: -1 }).limit(5)
   }
 }

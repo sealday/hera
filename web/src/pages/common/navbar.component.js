@@ -29,6 +29,7 @@ const Navbar = ({ type }) => {
   const routeNavigate = useRouteNavigate()
   const dispatch = useDispatch()
   const [logout, logoutResult] = heraApi.useLogoutMutation()
+  const getNotificationList = heraApi.useGetNotificationListQuery()
 
   const onlineUserItems = onlineUsers.map(user => ({
       key: short_id.generate(),
@@ -47,6 +48,11 @@ const Navbar = ({ type }) => {
       routeNavigate('/login')
     }
   }, [routeNavigate, logoutResult.isSuccess])
+
+  if (getNotificationList.isError || getNotificationList.isLoading) {
+    return <></>
+  }
+
   const changeType = () => {
     if (type === 'tab') {
       routeNavigate('/')
@@ -73,26 +79,27 @@ const Navbar = ({ type }) => {
         <Popover content={<QRCodeCanvas value='https://shcx.shchuangxing.com/downloads/hera.latest.apk' />} placement='bottom'>
           <Button icon={<MobileOutlined />} title='手机端下载' type='text' style={styles.navButton}></Button>
         </Popover>
-        {/* <Popover autoAdjustOverflow={false} content={<List
-          style={{ width: '300px' }}
-          itemLayout='horizontal'
-          dataSource={[
-            { title: '系统更新', description: '1. 增加系统版本信息\n2.增加装卸运费\n3.更新计重逻辑\n' },
-          ]}
-          footer={<Button.Group style={{ width: '100%' }}><Button block>全部已读</Button><Button block>查看更多</Button></Button.Group>}
-          renderItem={(item) => (
-            <List.Item>
-              <List.Item.Meta
-                title={item.title}
-                description={item.description}
-              />
-            </List.Item>
-          )}
-        />} placement='bottom'>
-          <Badge count={1} size='small' offset={[-8, 8]}>
+        <Popover 
+          autoAdjustOverflow={false}
+          placement='bottomRight'
+          content={<List
+            style={{ width: '300px' }}
+            itemLayout='horizontal'
+            dataSource={getNotificationList.data}
+            footer={<Button.Group style={{ width: '100%' }}><Button block>全部已读</Button><Button block>查看更多</Button></Button.Group>}
+            renderItem={(item) => (
+              <List.Item>
+                <List.Item.Meta
+                  title={item.title}
+                  description={item.content}
+                />
+              </List.Item>
+            )}
+          />} >
+          <Badge count={getNotificationList.data.length} size='small' offset={[-8, 8]}>
             <Button icon={<BellOutlined />} title='消息通知' type='text' style={styles.navButton}></Button>
           </Badge>
-        </Popover> */}
+        </Popover>
         <Popover
           autoAdjustOverflow={false}
           placement='bottomRight'

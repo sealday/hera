@@ -21,7 +21,7 @@ const genApi = ({ baseUrl = '/api/', onLogin, getAuthToken }) => {
   const heraApi = createApi({
     reducerPath: 'heraApi',
     baseQuery: baseQueryAuth,
-    tagTypes: ['Company', 'Record', 'Plan', 'Employee', 'Subject', 'Product', 'Invoice', 'Project', 'Other', 'Operation'],
+    tagTypes: ['Company', 'Record', 'Plan', 'Employee', 'Subject', 'Product', 'Invoice', 'Project', 'Other', 'Operation', 'Notification'],
     endpoints: (builder) => ({
       logout: builder.mutation({
         query: () => ({
@@ -36,6 +36,14 @@ const genApi = ({ baseUrl = '/api/', onLogin, getAuthToken }) => {
           body: user,
         }),
         transformResponse: res => res.access_token,
+      }),
+      // 获取通知列表
+      getNotificationList: builder.query({
+        query: () => 'notifications',
+        transformResponse: res => res.data.notifications,
+        providesTags: result => result
+          ? [...result.map(({ _id: id }) => ({ type: 'Notification', id })), { type: 'Notification', id: 'LIST' }]
+          : [{ type: 'Notification', id: 'LIST' }]
       }),
       // 获取产品表数据
       getProduct: builder.query({
