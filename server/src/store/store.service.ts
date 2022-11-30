@@ -2237,6 +2237,7 @@ export class StoreService {
           _id: {
             outDate: '$outDate',
             inOut: '$inOut',
+            unit: '$unit',
             name: '$entries.name',
             category: '$category',
             minus: '$minus',
@@ -2255,6 +2256,7 @@ export class StoreService {
           outDate: '$_id.outDate',
           inOut: '$_id.inOut',
           name: '$_id.name',
+          unit: '$_id.unit',
           category: '$_id.category',
           minus: '$_id.minus',
           count: '$count',
