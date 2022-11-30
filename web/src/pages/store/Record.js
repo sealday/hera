@@ -1,4 +1,6 @@
-import { Button, Card, Col, Descriptions, Dropdown, Row, Space, Table, Tabs } from 'antd'
+import { ExclamationCircleOutlined } from '@ant-design/icons'
+import { Button, Card, Col, Descriptions, Dropdown, Row, Space, Table, Tabs, Tag } from 'antd'
+import { confirm } from 'components/utils'
 import _ from 'lodash'
 import moment from 'moment'
 import { useSelector } from 'react-redux'
@@ -51,6 +53,8 @@ const Record = ({ isFinance = false }) => {
   const { data: record, error, isLoading, refetch } = useGetRecordQuery(params.id)
   const project = useProject(record)
   const store = useSelector(state => state.system.store)
+  const [updateReceipt] = heraApi.useUpdateRecordReceiptMutation()
+  const [updateCounterfoil] = heraApi.useUpdateRecordCounterfoilMutation()
 
   if (error) {
     return <Error />
@@ -58,9 +62,27 @@ const Record = ({ isFinance = false }) => {
   if (isLoading) {
     return <Loading />
   }
-  const onEdit = () => {
-    navigate(`/record/${params.id}/edit`)
-  }
+  const onEdit = [
+    { key: 'onEdit', label: '编辑', onClick: () => { navigate(`/record/${params.id}/edit`) } },
+    {
+      key: 'receipt', label: '签收回单联', onClick: () => {
+        confirm({
+          title: '确认签收回单联？', content: '请注意，确认签收后不可撤销。', icon: <ExclamationCircleOutlined />, onOk: () => {
+            updateReceipt(record._id)
+          }
+        })
+      }
+    },
+    {
+      key: 'counterfoil', label: '签收存根联', onClick: () => {
+        confirm({
+          title: '确认签收回单联？', content: '请注意，确认签收后不可撤销。', icon: <ExclamationCircleOutlined />, onOk: () => {
+            updateCounterfoil(record._id)
+          }
+        })
+      }
+    },
+  ]   
   const onPrintPreview = () => {
     navigate(`/record/${params.id}/preview`)
   }
@@ -92,6 +114,8 @@ const Record = ({ isFinance = false }) => {
   descriptions.push({ label: '车号', children: record.carNumber })
   descriptions.push({ label: '实际重量', children: record.weight ? record.weight + '吨' : '' })
   descriptions.push({ label: '合同运费', children: record.freight ? '计入合同' : '不计入合同' })
+  descriptions.push({ label: '回单联', children: record.receipt ? <Tag color='green'>已签收</Tag> : <Tag color='red'>未签收</Tag> })
+  descriptions.push({ label: '存根联', children: record.counterfoil ? <Tag color='green'>已签收</Tag> : <Tag color='red'>未签收</Tag> })
   descriptions.push({ label: '备注', children: record.comments })
 
   return <PageHeader

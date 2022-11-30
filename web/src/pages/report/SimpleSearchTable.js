@@ -74,10 +74,10 @@ export default ({ search, isCompany }) => {
   }
 
   const columns = [
-    { key: 'type', title: '类别', dataIndex: 'type', width: '44px' },
+    { key: 'type', title: '类别', dataIndex: 'type', width: '80px' },
     { key: 'outDate', title: '日期', dataIndex: 'outDate', render: (date) => moment(date).format('YYYY-MM-DD'), width: '114px' },
     { key: 'carNumber', title: '车号', dataIndex: 'carNumber', width: '100px' },
-    { key: 'number', title: '单号', dataIndex: 'number', width: '58px' },
+    { key: 'number', title: '单号', dataIndex: 'number', width: '80px' },
     { key: 'originalOrder', title: '原始单号', dataIndex: 'originalOrder', width: '100px' },
     isCompany
       ? { key: 'outStock', title: '出库', dataIndex: 'outStock', render: projectId => getProjectName(projectId) }
@@ -86,9 +86,11 @@ export default ({ search, isCompany }) => {
       ? { key: 'inStock', title: '入库', dataIndex: 'inStock', render: projectId => getProjectName(projectId) }
       : { key: 'direction', title: '出入库', render: (_, entry) => getDirection(entry), width: '58px' },
     { key: 'totalString', title: '内容', dataIndex: 'totalString'},
-    isCompany
-      ? { key: 'action', title: '操作', render: (_, entry) => <Link to={`/company_record/${entry._id}`}>详情</Link>, width: '44px' }
-      : { key: 'action', title: '操作', render: (_, entry) => <Link to={`/record/${entry._id}`}>详情</Link>, width: '44px' },
+      { key: 'action', title: '操作', render: (_, entry) => {
+        return isCompany
+          ? <Link to={`/company_record/${entry._id}`}>详情</Link>
+          : <Link to={`/record/${entry._id}`}>详情</Link>
+      }, width: '44px' },
   ]
 
   const summaryColumns = [

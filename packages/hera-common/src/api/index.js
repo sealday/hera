@@ -107,6 +107,24 @@ const genApi = ({ baseUrl = '/api/', onLogin, getAuthToken }) => {
         transformResponse: res => res.data.record,
         invalidatesTags: (_result, _error, { id }) => [{ type: 'Record', id }],
       }),
+      // 收到回单 
+      updateRecordReceipt: builder.mutation({
+        query: (id) => ({
+          url: `record/${id}/receipt`,
+          method: 'POST',
+        }),
+        transformResponse: res => res.data.record,
+        invalidatesTags: (_result, _error, id) => [{ type: 'Record', id }],
+      }),
+      // 收到存根
+      updateRecordCounterfoil: builder.mutation({
+        query: (id) => ({
+          url: `record/${id}/counterfoil`,
+          method: 'POST',
+        }),
+        transformResponse: res => res.data.record,
+        invalidatesTags: (_result, _error, id) => [{ type: 'Record', id }],
+      }),
       // 更新运输单
       updateTransport: builder.mutation({
         query: ({ id, transport }) => ({

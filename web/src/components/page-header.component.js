@@ -98,7 +98,13 @@ export default ({
     actions.push(<Button key='onSave' type='primary' onClick={onSave} icon={<SaveOutlined />}>保存</Button>)
   }
   if (isUpdatable(store, user) && onEdit) {
-    actions.push(<Button key='onEdit' type='primary' onClick={onEdit} icon={<EditOutlined />}>编辑</Button>)
+    if (Array.isArray(onEdit) && onEdit.length > 1) {
+      actions.push(<Dropdown.Button key='onEdit' type='primary' onClick={onEdit[0].onClick} menu={{ items: onEdit.slice(1) }} >
+        <EditOutlined />编辑
+      </Dropdown.Button>)
+    } else {
+      actions.push(<Button key='onEdit' type='primary' onClick={onEdit} icon={<EditOutlined />}>编辑</Button>)
+    }
   }
   if (onPrint) {
     actions.push(<Button key='onPrint' type='primary' onClick={onPrint} icon={<PrinterOutlined />}>打印</Button>)
