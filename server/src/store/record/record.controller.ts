@@ -64,6 +64,18 @@ export class RecordController {
     return {}
   }
 
+  @Post(':id/counterfoil')
+  async counterfoil(@Param('id') recordId: string) {
+    const record = await this.recordService.counterfoil(recordId)
+    return { record }
+  }
+
+  @Post(':id/receipt')
+  async receipt(@Param('id') recordId: string) {
+    const record = await this.recordService.receipt(recordId)
+    return { record }
+  }
+
   @Get(':id')
   async detail(@Param('id') recordId: string) {
     const record = await this.recordService.findById(recordId)

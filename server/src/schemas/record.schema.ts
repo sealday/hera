@@ -12,6 +12,8 @@ export const RecordSchema = new mongoose.Schema({
   carNumber: String, // 车号
   weight: Number, // 实际重量
   freight: Boolean,
+  receipt: Boolean, // 回单
+  counterfoil: Boolean, // 存根
   entries: [{
     type: { type: String }, // 类型
     number: Number, // 编号

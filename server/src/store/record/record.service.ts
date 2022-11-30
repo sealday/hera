@@ -26,6 +26,12 @@ export class RecordService {
     const res = await this.recordModel.updateOne({ _id: new Types.ObjectId(recordId) }, { valid: true })
     return res.modifiedCount
   }
+  async counterfoil(recordId: string) {
+    return await this.recordModel.findOneAndUpdate({ _id: new Types.ObjectId(recordId) }, { counterfoil: true })
+  }
+  async receipt(recordId: string) {
+    return await this.recordModel.findOneAndUpdate({ _id: new Types.ObjectId(recordId) }, { receipt: true })
+  }
 
   async create(body: Record, user: User) {
     let record = new this.recordModel(body)
