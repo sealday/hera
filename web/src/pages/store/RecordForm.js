@@ -1,4 +1,4 @@
-import { AutoComplete, Card, Checkbox, Col, DatePicker, Form, Input, Row, Select, Switch, Tabs } from "antd"
+import { AutoComplete, Card, Checkbox, Col, DatePicker, Form, Input, Row, Select, Switch } from "antd"
 import _ from "lodash"
 import moment from "moment"
 import { RefSelect } from "../../components"
@@ -74,25 +74,32 @@ export default ({ form, initialValues, onSubmit }) => {
           </Col>
         </Row>
       </Card>
-
-      <Card bordered={false} style={styles.keepSpace}>
-        <Tabs items={[
-          {
-            key: '明细', label: '明细', children: <Form.List name="entries">
+      <Card bordered={false} title='明细信息' style={styles.keepSpace}>
+        <Row>
+          <Col span={24}>
+            <Form.List name="entries">
               {(fields, operation, meta) => <EntryForm fields={fields} operation={operation} meta={meta} />}
             </Form.List>
-          },
-          {
-            key: '赔偿维修', label: '赔偿维修', children: <Form.List name="complements" >
+          </Col>
+        </Row>
+      </Card>
+      <Card bordered={false} title='赔偿维修信息' style={styles.keepSpace}>
+        <Row>
+          <Col span={24}>
+            <Form.List name="complements" >
               {(fields, operation, meta) => <ComplementForm fields={fields} operation={operation} meta={meta} />}
             </Form.List>
-          },
-          {
-            key: '补充', label: '补充', children: <Form.List name="additionals" >
+          </Col>
+        </Row>
+      </Card>
+      <Card bordered={false} title='额外信息' style={styles.keepSpace}>
+        <Row>
+          <Col span={24}>
+            <Form.List name="additionals" >
               {(fields, operation, meta) => <AdditionalForm fields={fields} operation={operation} meta={meta} />}
             </Form.List>
-          }
-        ]} />
+          </Col>
+        </Row>
       </Card>
     </Form>
   )
