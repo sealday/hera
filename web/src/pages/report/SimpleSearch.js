@@ -6,14 +6,16 @@ import SearchForm from './SimpleSearchForm'
 import SearchTable from './SimpleSearchTable'
 import { simpleSearch } from '../../actions'
 import { PageHeader } from '../../components'
+import _ from 'lodash'
 
 class Search extends React.Component {
   search = condition => {
-    this.props.dispatch(simpleSearch({
+    const params = {
       ...condition,
       self: this.props.store._id,
       endDate: moment(condition.endDate).add(1, 'day')
-    }))
+    }
+    this.props.dispatch(simpleSearch(params))
   }
 
   render() {

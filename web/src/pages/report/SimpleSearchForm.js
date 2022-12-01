@@ -7,6 +7,7 @@ import {
   FilterSelect,
   DatePicker,
   Input,
+  Select,
   DateRangeModifier,
 } from '../../components'
 import { filterOption, transformArticle, wrapper, RECORD_TYPES, DEFAULT_QUERY_TYPE } from '../../utils'
@@ -142,6 +143,29 @@ class SimpleSearchForm extends React.Component {
             <Field name="originalOrder" className="form-control" component={Input} />
           </div>
         </div>
+        <div className="form-group">
+          <label className="control-label col-md-1">回单联</label>
+          <div className="col-md-2">
+            <Field name="receipt"
+              component={Select}
+            >
+              <option>全部</option>
+              <option>已签收</option>
+              <option>未签收</option>
+            </Field>
+          </div>
+          <label className="control-label col-md-1">存根联</label>
+          <div className="col-md-2">
+            <Field name="counterfoil"
+              defaultValue='全部'
+              component={Select}
+            >
+              <option>全部</option>
+              <option>已签收</option>
+              <option>未签收</option>
+            </Field>
+          </div>
+        </div>
       </form>
     )
   }
@@ -169,6 +193,8 @@ export default wrapper([
       startDate: moment().startOf('day'),
       endDate: moment().startOf('day'),
       type: DEFAULT_QUERY_TYPE,
+      counterfoil: '全部',
+      receipt: '全部',
     }
   }),
   connect(mapStateToProps),

@@ -5,6 +5,7 @@ import { Map } from 'immutable'
 
 import { total_, toFixedWithoutTrailingZero } from '../../utils'
 import { ResultTable, Link } from '../../components'
+import { Tag } from 'antd'
 
 export default ({ search, isCompany }) => {
 
@@ -75,6 +76,8 @@ export default ({ search, isCompany }) => {
 
   const columns = [
     { key: 'type', title: '类别', dataIndex: 'type', width: '80px' },
+    { key: 'receipt', title: '回单联', dataIndex: 'receipt', width: '80px', render: (text) => text ? <Tag color='green'>已签收</Tag> : <Tag color='red'>未签收</Tag> },
+    { key: 'counterfoil', title: '存根联', dataIndex: 'counterfoil', width: '80px', render: (text) => text ? <Tag color='green'>已签收</Tag> : <Tag color='red'>未签收</Tag> },
     { key: 'outDate', title: '日期', dataIndex: 'outDate', render: (date) => moment(date).format('YYYY-MM-DD'), width: '114px' },
     { key: 'carNumber', title: '车号', dataIndex: 'carNumber', width: '100px' },
     { key: 'number', title: '单号', dataIndex: 'number', width: '80px' },

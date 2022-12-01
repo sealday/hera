@@ -124,6 +124,18 @@ export class StoreService {
     if (condition.hasTransport) {
       match['hasTransport'] = true
     }
+    // 查询回单、存根联
+    _.forEach(['receipt', 'counterfoil'], key => {
+      if (key in condition) {
+        if (condition[key]=== '已签收') {
+          match[key] = true
+        } else if (condition[key]=== '未签收') {
+          match[key] = {
+            $in: [false, undefined]
+          }
+        }
+      }
+    })
     // 查询车号
     if (condition.carNumber) {
       match['carNumber'] = condition.carNumber
