@@ -53,8 +53,12 @@ const Record = ({ isFinance = false }) => {
   const { data: record, error, isLoading, refetch } = useGetRecordQuery(params.id)
   const project = useProject(record)
   const store = useSelector(state => state.system.store)
+  const user = useSelector(state => state.system.user)
   const [updateReceipt] = heraApi.useUpdateRecordReceiptMutation()
   const [updateCounterfoil] = heraApi.useUpdateRecordCounterfoilMutation()
+  const config = useSelector(state => state.system.config)
+  const counterfoilUsers = config.counterfoilUsers || []
+  const receiptUsers = config.receiptUsers || []
 
   if (error) {
     return <Error />
@@ -64,7 +68,10 @@ const Record = ({ isFinance = false }) => {
   }
   const onEdit = [
     { key: 'onEdit', label: '编辑', onClick: () => { navigate(`/record/${params.id}/edit`) } },
-    {
+  ]   
+
+  if (receiptUsers.find(username => user.username === username)) {
+    onEdit.push({
       key: 'receipt', label: '签收回单联', onClick: () => {
         confirm({
           title: '确认签收回单联？', content: '请注意，确认签收后不可撤销。', icon: <ExclamationCircleOutlined />, onOk: () => {
@@ -72,8 +79,10 @@ const Record = ({ isFinance = false }) => {
           }
         })
       }
-    },
-    {
+    })
+  }
+  if (counterfoilUsers.find(username => user.username === username)) {
+    onEdit.push({
       key: 'counterfoil', label: '签收存根联', onClick: () => {
         confirm({
           title: '确认签收回单联？', content: '请注意，确认签收后不可撤销。', icon: <ExclamationCircleOutlined />, onOk: () => {
@@ -81,8 +90,8 @@ const Record = ({ isFinance = false }) => {
           }
         })
       }
-    },
-  ]   
+    })
+  }
   const onPrintPreview = () => {
     navigate(`/record/${params.id}/preview`)
   }

@@ -3,7 +3,7 @@ import { Document, Mixed } from 'mongoose'
 
 export type NotificationDocument = Notification & Document;
 
-@Schema()
+@Schema({ timestamps: true })
 export class Notification {
   @Prop()
   username: string;

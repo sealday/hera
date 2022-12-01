@@ -3,7 +3,7 @@ import _ from "lodash"
 import { Error, Loading, smartFilterOption } from "."
 import heraApi from "../api"
 
-const RefSelectComponent = ({ item, noStyle }) => {
+const RefSelectComponent = ({ item, noStyle, mode }) => {
   const { ref, label, value } = item.option
   const form = Form.useFormInstance()
   const result = heraApi[`useGet${_.capitalize(ref)}ListQuery`]()
@@ -30,6 +30,7 @@ const RefSelectComponent = ({ item, noStyle }) => {
             <Form.Item noStyle={noStyle} key={item.name} name={item.name} label={item.label} hidden={item.hidden} rules={[{ required: item.required }]}>
               <Select
                 disabled={item.disabled}
+                mode={mode}
                 showSearch
                 style={{
                   width: item.width,
@@ -54,6 +55,7 @@ const RefSelectComponent = ({ item, noStyle }) => {
     return (
       <Form.Item noStyle={noStyle} key={item.name} name={item.name} label={item.label} hidden={item.hidden} rules={[{ required: item.required }]}>
         <Select
+          mode={mode}
           disabled={item.disabled}
           showSearch
           style={{

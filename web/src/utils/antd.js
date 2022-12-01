@@ -67,9 +67,15 @@ const genFormContent = (schema, cols = 0, form = null, initialValues = {}) => {
             <RefCascader item={item} key={item.name} />
           ))
         } else {
-          formItems.push((
-            <RefSelect item={item} key={item.name} form={form} />
-          ))
+          if (item.type === 'tags') {
+            formItems.push((
+              <RefSelect item={item} key={item.name} form={form} mode='tags' />
+            ))
+          } else {
+            formItems.push((
+              <RefSelect item={item} key={item.name} form={form} />
+            ))
+          }
         }
       }
     } else if (item.type === 'boolean') {
@@ -102,12 +108,17 @@ const genFormContent = (schema, cols = 0, form = null, initialValues = {}) => {
         </Form.List>
       ))
     } else if (item.type === 'tags') {
+      if (_.get(item, 'option.type') === 'ref') {
+        formItems.push((
+          <RefSelect item={item} key={item.name} form={form} mode='tags' />
+        ))
+      } else {
         formItems.push((
           <Form.Item key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
             <EditableTagGroup />
           </Form.Item>
         ))
-
+      }
     } else {
       if (item.rows) {
         formItems.push((

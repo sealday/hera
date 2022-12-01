@@ -28,6 +28,8 @@ const Settings = () => {
           printSideComment: config.printSideComment,
           orderPrintSideComment: config.orderPrintSideComment,
           posts: config.posts || [],
+          counterfoilUsers: config.counterfoilUsers || [],
+          receiptUsers: config.receiptUsers || [],
         }}
         onSubmit={handleSubmit}
       />

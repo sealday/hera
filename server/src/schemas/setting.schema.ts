@@ -6,4 +6,6 @@ export const SettingSchema = new mongoose.Schema({
   printSideComment: String, // 运输单打印侧边说明
   orderPrintSideComment: String, // 出入库打印侧边说明
   posts: [String], // 职务列表
+  receiptUsers: [String], // 用户列表
+  counterfoilUsers: [String], // 用户列表
 }, { timestamps: true });
