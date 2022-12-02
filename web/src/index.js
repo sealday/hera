@@ -17,13 +17,13 @@ import { loadTab, updateOnlineUsers } from './features/coreSlice'
 import { ajax, getAuthToken } from './utils'
 import Routes from './routes'
 import { HelmetProvider } from 'react-helmet-async'
-const versionInfo = require("./version.json")
-const { versionNumber } = versionInfo || {}
-
 // css 除非是模块自己的，否则直接在这里进行全局 import
 import './index.less'
 import heraApi from 'api'
 import _ from 'lodash'
+const versionInfo = require("./version.json")
+const { versionNumber } = versionInfo || {}
+
 Sentry.init({
   dsn: "http://8c252be29e9049a19515c4d76ec398e0@xp.sealday.com:9000/2",
   integrations: [new BrowserTracing()],
