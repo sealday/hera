@@ -1,12 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-
-import { Setting } from '../app.service';
+import { Setting } from 'src/schemas/setting.schema';
 
 @Injectable()
 export class SettingsService {
-  constructor(@InjectModel('Setting') private settingModel: Model<Setting>) { }
+  constructor(@InjectModel(Setting.name) private settingModel: Model<Setting>) { }
 
   async getLatestSettings() {
     const settings = await this.settingModel.findOne({}).sort({_id: -1})
