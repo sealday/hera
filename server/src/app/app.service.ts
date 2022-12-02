@@ -134,7 +134,7 @@ export class AppService {
   @Cron('0 6 5 * * *')
   async receipt() {
     // 超过五天的出入库提醒
-    this.notificationModel.create({ username: '廖琴仓库	', title: '回单联签收提醒', content: '测试回单签收提醒', read: false, extra: {} })
+    this.notificationModel.create({ username: '廖琴仓库', title: '回单联签收提醒', content: '测试回单签收提醒', read: false, extra: {} })
   }
 
   async getNotifications(user: User) {
