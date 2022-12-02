@@ -17,7 +17,7 @@ import { loadTab, updateOnlineUsers } from './features/coreSlice'
 import { ajax, getAuthToken } from './utils'
 import Routes from './routes'
 import { HelmetProvider } from 'react-helmet-async'
-const versionInfo = require("../../version.json")
+const versionInfo = require("./version.json")
 const { versionNumber } = versionInfo || {}
 
 // css 除非是模块自己的，否则直接在这里进行全局 import
