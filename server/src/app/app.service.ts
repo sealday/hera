@@ -136,6 +136,7 @@ export class AppService {
   async checkReceiptAndCounterfoil() {
     // 超过五天的出入库提醒
     const setting = await this.settingModel.findOne({}).sort({ _id: -1 })
+    const kv = { receipt: '回单联', counterfoil: '存根联' }
     // 回单联、存根联提醒
     _.forEach(['receipt', 'counterfoil'], key => {
       setting[key + 'Users'].forEach(async (username: string) => {
@@ -144,8 +145,8 @@ export class AppService {
         const records = await this.recordModel.find({ outDate: { $gte: start, $lte: end } })
         this.notificationModel.create({
           username,
-          title: '回单联签收提醒（测试）',
-          content: `今日共有 ${records.length} 张回单联超过设定期限未签收`,
+          title: `${kv[key]}签收提醒（测试）`,
+          content: `今日共有 ${records.length} 张${kv[key]}超过设定期限未签收`,
           extra: {
             records: records.map(record => ({ number: record.number, _id: record._id })),
           }
