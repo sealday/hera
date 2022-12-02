@@ -1,5 +1,7 @@
 import 'scroll-polyfill/auto'
 import React from 'react'
+import * as Sentry from "@sentry/react"
+import { BrowserTracing } from "@sentry/tracing"
 import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
 import moment from 'moment'
@@ -15,11 +17,19 @@ import { loadTab, updateOnlineUsers } from './features/coreSlice'
 import { ajax, getAuthToken } from './utils'
 import Routes from './routes'
 import { HelmetProvider } from 'react-helmet-async'
+const versionInfo = require("../../version.json")
+const { versionNumber } = versionInfo || {}
 
 // css 除非是模块自己的，否则直接在这里进行全局 import
 import './index.less'
 import heraApi from 'api'
 import _ from 'lodash'
+Sentry.init({
+  dsn: "http://8c252be29e9049a19515c4d76ec398e0@xp.sealday.com:9000/2",
+  integrations: [new BrowserTracing()],
+  tracesSampleRate: 0.1,
+  release: versionNumber,
+});
 // 初始化 moment 时间属性
 moment.locale('zh-CN')
 // 初始化 socket
