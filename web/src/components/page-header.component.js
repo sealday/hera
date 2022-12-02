@@ -102,6 +102,8 @@ export default ({
       actions.push(<Dropdown.Button key='onEdit' type='primary' onClick={onEdit[0].onClick} menu={{ items: onEdit.slice(1) }} >
         <EditOutlined />编辑
       </Dropdown.Button>)
+    } else if (Array.isArray(onEdit)) {
+      actions.push(<Button key='onEdit' type='primary' onClick={onEdit[0].onClick} icon={<EditOutlined />}>编辑</Button>)
     } else {
       actions.push(<Button key='onEdit' type='primary' onClick={onEdit} icon={<EditOutlined />}>编辑</Button>)
     }
