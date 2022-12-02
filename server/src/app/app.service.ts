@@ -10,11 +10,11 @@ import { Cron } from '@nestjs/schedule';
 import { User } from '../users/users.service';
 import { Upload } from 'src/schemas/upload.schema';
 import { Notification } from 'src/schemas/notification.schema';
+import { Setting } from 'src/schemas/setting.schema';
 
 export type Record = any;
 export type Product = any;
 export type Project = any;
-export type Setting = any;
 export type Operation = any;
 export type Counter = any;
 export type Recycle = any;
@@ -30,7 +30,7 @@ export class AppService {
   constructor(
     @InjectModel('Users') private userModel: Model<User>,
     @InjectModel('Record') private recordModel: Model<Record>,
-    @InjectModel('Setting') private settingModel: Model<Setting>,
+    @InjectModel(Setting.name) private settingModel: Model<Setting>,
     @InjectModel('Project') private projectModel: Model<Project>,
     @InjectModel('Product') private productModel: Model<Product>,
     @InjectModel('Operation') private operationModel: Model<Operation>,
@@ -131,10 +131,27 @@ export class AppService {
     return uploadObject.toObject()
   }
 
-  @Cron('0 6 5 * * *')
-  async receipt() {
+  // 每天凌晨五点刷新
+  @Cron('0 0 5 * * *')
+  async checkReceiptAndCounterfoil() {
     // 超过五天的出入库提醒
-    this.notificationModel.create({ username: '廖琴仓库', title: '回单联签收提醒', content: '测试回单签收提醒', read: false, extra: {} })
+    const setting = await this.settingModel.findOne({}).sort({ _id: -1 })
+    // 回单联、存根联提醒
+    _.forEach(['receipt', 'counterfoil'], key => {
+      setting[key + 'Users'].forEach(async (username: string) => {
+        const start = moment().add(-setting[key + 'Timeout'], 'day').startOf('day')
+        const end = moment().add(-setting[key + 'Timeout'], 'day').endOf('day')
+        const records = await this.recordModel.find({ outDate: { $gte: start, $lte: end } })
+        this.notificationModel.create({
+          username,
+          title: '回单联签收提醒（测试）',
+          content: `今日共有 ${records.length} 张回单联超过设定期限未签收`,
+          extra: {
+            records: records.map(record => ({ number: record.number, _id: record._id })),
+          }
+        })
+      })
+    })
   }
 
   async getNotifications(user: User) {

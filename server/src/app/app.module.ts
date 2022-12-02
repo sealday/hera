@@ -20,7 +20,7 @@ import { OperationSchema } from '../schemas/operation.schema';
 import { ProductSchema } from '../schemas/product.schema';
 import { ProjectSchema } from '../schemas/project.schema';
 import { RecordSchema } from '../schemas/record.schema';
-import { SettingSchema } from '../schemas/setting.schema';
+import { Setting, SettingSchema } from '../schemas/setting.schema';
 import { UsersSchema } from '../schemas/users.schema';
 import { UsersController } from '../users/users.controller';
 import { UsersModule } from '../users/users.module';
@@ -61,7 +61,7 @@ import { Notification, NotificationSchema } from 'src/schemas/notification.schem
       { name: 'Record', schema: RecordSchema },
       { name: 'Product', schema: ProductSchema },
       { name: 'Project', schema: ProjectSchema },
-      { name: 'Setting', schema: SettingSchema },
+      { name: Setting.name, schema: SettingSchema },
       { name: 'Operation', schema: OperationSchema },
       { name: 'Counter', schema: CounterSchema },
       { name: 'Recycle', schema: RecycleSchema },

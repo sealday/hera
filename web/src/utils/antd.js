@@ -1,5 +1,5 @@
 import { MinusCircleOutlined, PlusCircleOutlined } from "@ant-design/icons"
-import { Button, Col, DatePicker, Form, Input, Radio, Row, Select, Space, Table, Tag } from "antd"
+import { Button, Col, DatePicker, Form, Input, InputNumber, Radio, Row, Select, Space, Table, Tag } from "antd"
 import ReduxSelect from "components/input/redux-select.component"
 import _ from "lodash"
 import moment from "moment"
@@ -106,6 +106,16 @@ const genFormContent = (schema, cols = 0, form = null, initialValues = {}) => {
         <Form.List key={item.name} name={item.name} rules={[{ required: item.required }]} noStyle>
           {(fields, operation, meta) => <ListTable fields={fields} operation={operation} meta={meta} item={item} form={form} />}
         </Form.List>
+      ))
+    } else if (item.type === 'number') {
+      console.log(item)
+      formItems.push((
+        <Form.Item key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
+          <InputNumber addonAfter={item.suffix ? item.suffix : null} disabled={item.disabled}
+            min={item.min}
+            max={item.max}
+          />
+        </Form.Item>
       ))
     } else if (item.type === 'tags') {
       if (_.get(item, 'option.type') === 'ref') {

@@ -36,6 +36,12 @@ const settingSchema = [
     },
   },
   {
+    name: 'receiptTimeout',
+    label: '第几天未签收提醒',
+    type: 'number',
+    min: 0,
+  },
+  {
     name: 'counterfoilUsers',
     label: '存根联指定操作员',
     type: 'tags',
@@ -45,6 +51,12 @@ const settingSchema = [
       label: 'username',
       value: 'username',
     },
+  },
+  {
+    name: 'counterfoilTimeout',
+    label: '第几天未签收提醒',
+    type: 'number',
+    min: 0,
   },
 ]
 
