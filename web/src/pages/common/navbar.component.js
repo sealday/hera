@@ -53,6 +53,7 @@ const Navbar = ({ type }) => {
     return <></>
   }
 
+  // 切换网站内路由方式：多标签，或者经典单页模式
   const changeType = () => {
     if (type === 'tab') {
       routeNavigate('/')
@@ -60,6 +61,7 @@ const Navbar = ({ type }) => {
       routeNavigate('/tab')
     }
   }
+
   return (
     <>
       <h5 className='title'>{config.systemName}</h5>
