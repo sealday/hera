@@ -106,7 +106,7 @@ const Navbar = ({ type }) => {
                   title={item.title}
                   description={moment(item.createdAt).calendar()}
                 />
-                {item.content} <Button type='link'>点击查看</Button>
+                {item.content}
               </List.Item>
             )}
           />} >
