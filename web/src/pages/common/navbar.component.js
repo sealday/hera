@@ -10,6 +10,7 @@ import { QRCodeCanvas } from 'qrcode.react'
 import heraApi from 'api'
 import { selectStore } from 'actions'
 import { useEffect } from 'react'
+import moment from 'moment'
 const versionInfo = require("../../version.json")
 const { versionNumber, versionTime } = versionInfo || {}
 
@@ -24,12 +25,14 @@ const Navbar = ({ type }) => {
     user: state.system.user,
     config: state.system.config,
   }))
+  const [noticePopoverOpen, setNoticePopoverOpen] = useState(false)
   const navigate = useNavigate()
   const [versionDiff, setVersionDiff] = useState(false)
   const routeNavigate = useRouteNavigate()
   const dispatch = useDispatch()
   const [logout, logoutResult] = heraApi.useLogoutMutation()
   const getNotificationList = heraApi.useGetNotificationListQuery()
+  const [readAll] = heraApi.useReadAllNotificationMutation()
 
   const onlineUserItems = onlineUsers.map(user => ({
       key: short_id.generate(),
@@ -82,17 +85,28 @@ const Navbar = ({ type }) => {
         <Popover 
           autoAdjustOverflow={false}
           placement='bottomRight'
+          open={noticePopoverOpen}
+          onOpenChange={setNoticePopoverOpen}
           content={<List
-            style={{ width: '300px' }}
+            style={{ width: '400px' }}
             itemLayout='horizontal'
             dataSource={getNotificationList.data}
-            footer={<Button.Group style={{ width: '100%' }}><Button block>全部已读</Button><Button block>查看更多</Button></Button.Group>}
+            footer={
+              <Button.Group style={{ width: '100%' }}>
+                <Button block onClick={() => readAll()}>全部已读</Button>
+                <Button block onClick={() => {
+                  navigate('/notifications')
+                  setNoticePopoverOpen(false)
+                }}>查看更多</Button>
+              </Button.Group>
+            }
             renderItem={(item) => (
               <List.Item>
                 <List.Item.Meta
                   title={item.title}
-                  description={item.content}
+                  description={moment(item.createdAt).calendar()}
                 />
+                {item.content} <Button type='link'>点击查看</Button>
               </List.Item>
             )}
           />} >

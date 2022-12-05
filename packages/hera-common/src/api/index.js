@@ -42,8 +42,32 @@ const genApi = ({ baseUrl = '/api/', onLogin, getAuthToken }) => {
         query: () => 'notifications',
         transformResponse: res => res.data.notifications,
         providesTags: result => result
+          ? [...result.map(({ _id: id }) => ({ type: 'Notification', id })), { type: 'Notification', id: 'PARTIAL-LIST' }]
+          : [{ type: 'Notification', id: 'PARTIAL-LIST' }]
+      }),
+      // 获取全部通知列表
+      getNotificationListAll: builder.query({
+        query: () => 'notifications/all',
+        transformResponse: res => res.data.notifications,
+        providesTags: result => result
           ? [...result.map(({ _id: id }) => ({ type: 'Notification', id })), { type: 'Notification', id: 'LIST' }]
           : [{ type: 'Notification', id: 'LIST' }]
+      }),
+      // 通知已读
+      readNotification: builder.mutation({
+        query: (id) => ({
+          url: `notifications/${id}`,
+          method: 'POST',
+        }),
+        invalidatesTags: (_result, _error, id) => [{ type: 'Notification', id }],
+      }),
+      // 全部已读
+      readAllNotification: builder.mutation({
+        query: () => ({
+          url: `notifications/read_all`,
+          method: 'POST',
+        }),
+        invalidatesTags: (_result, _error) => [{ type: 'Notification', id: 'LIST' }, { type: 'Notification', id: 'PARTIAL-LIST' }],
       }),
       // 获取产品表数据
       getProduct: builder.query({

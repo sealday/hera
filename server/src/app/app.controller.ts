@@ -103,11 +103,41 @@ export class AppController {
   }
 
   @Get('notifications')
-  async notifications(@Request() req: any, @Query('id') id: string) {
+  async notifications(@Request() req: any) {
     const notifications = await this.appService.getNotifications(req.user)
     return {
       data: {
         notifications,
+      }
+    }
+  }
+  
+  @Get('notifications/all')
+  async notificationsAll(@Request() req: any) {
+    const notifications = await this.appService.getNotificationsAll(req.user)
+    return {
+      data: {
+        notifications,
+      }
+    }
+  }
+
+  @Post('notifications/read_all')
+  async readAllNotifications(@Request() req: Express.Request) {
+    await this.appService.readAllNotifications(req.user)
+    return {
+      data: {
+        result: 'done'
+      }
+    }
+  }
+
+  @Post('notifications/:id')
+  async readNotification(@Request() req: Express.Request, @Param('id') id: string) {
+    await this.appService.readNotification(req.user, id)
+    return {
+      data: {
+        result: 'done'
       }
     }
   }

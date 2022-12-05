@@ -203,6 +203,10 @@ const genTableColumn = schema => {
       const column = { title: item.label, dataIndex: item.name, key: item.name, render: null }
       column.render = date => moment(date).format('YYYY-MM-DD')
       columns.push(column)
+    } else if (item.type === 'datetime') {
+      const column = { title: item.label, dataIndex: item.name, key: item.name, render: null }
+      column.render = date => moment(date).calendar()
+      columns.push(column)
     } else if (item.type === 'boolean') {
       columns.push({ title: item.label, dataIndex: item.name, key: item.name, render(v) { return v ? '是' : '否' } })
     } else if (item.type === 'number') {

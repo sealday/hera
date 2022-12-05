@@ -1,3 +1,4 @@
+import NotificationPage from 'pages/common/notification.page'
 import { Navigate, useRoutes } from 'react-router-dom'
 import App from '../pages/App'
 import Home from '../pages/common/Home'
@@ -76,6 +77,7 @@ export const config = [
   { path: 'voucher', element: <VoucherPage /> },
   { path: 'subject', element: <SubjectPage /> },
   { path: 'attendance', element: <Attendance /> },
+  { path: 'notifications', element: <NotificationPage />},
 ]
 
 export default ({ onLogin, onLogout }) => useRoutes([

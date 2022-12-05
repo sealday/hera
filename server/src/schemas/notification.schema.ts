@@ -14,6 +14,9 @@ export class Notification {
   @Prop()
   content: string;
 
+  @Prop([String])
+  tags: string[];
+
   @Prop()
   read: boolean;
 

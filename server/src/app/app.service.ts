@@ -147,6 +147,8 @@ export class AppService {
           username,
           title: `${kv[key]}签收提醒（测试）`,
           content: `今日共有 ${records.length} 张${kv[key]}超过设定期限未签收`,
+          tags: [key, 'orders'],
+          read: false,
           extra: {
             records: records.map(record => ({ number: record.number, _id: record._id })),
           }
@@ -156,6 +158,18 @@ export class AppService {
   }
 
   async getNotifications(user: User) {
-    return await this.notificationModel.find({ username: user.username }).sort({ _id: -1 }).limit(5)
+    return await this.notificationModel.find({ username: user.username, read: false }).sort({ _id: -1 }).limit(5)
+  }
+
+  async getNotificationsAll(user: User) {
+    return await this.notificationModel.find({ username: user.username }).sort({ _id: -1 })
+  }
+
+  async readAllNotifications(user: User) {
+    await this.notificationModel.updateMany({ username: user.username }, { $set: { read: true } })
+  }
+
+  async readNotification(user: User, id: string) {
+    await this.notificationModel.updateOne({ username: user.username, _id: id }, { $set: { read: true } })
   }
 }
