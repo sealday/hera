@@ -19,6 +19,7 @@
   "workspaces": [
     "web",
     "mobile",
+    "server",
     "packages/hera-common"
   ],
   "dependencies": {
