@@ -577,10 +577,18 @@ export class StoreService {
             },
             {
               $match: {
-                count: {
-                  $gt: 0.000001,
-                  $lt: -0.000001
-                }
+                $or: [
+                  {
+                    count: {
+                      $gt: 0.000001,
+                    }
+                  },
+                  {
+                    count: {
+                      $lt: -0.000001
+                    }
+                  }
+                ]
               }
             },
           ],
