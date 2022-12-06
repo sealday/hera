@@ -568,7 +568,7 @@ export class StoreService {
                     $multiply: ['$rentRule.items.unitPrice', '$days', '$count'],
                   }
                 },
-                unitPrice: { $first: '$unitPrice' },
+                unitPrice: { $first: '$rentRule.items.unitPrice' },
                 unit: {
                   $first: '$unit'
                 },
