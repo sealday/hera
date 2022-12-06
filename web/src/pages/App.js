@@ -51,77 +51,92 @@ export default ({ onEnter, onLeave, type }) => {
     )
   }
 
-  const tabItems = type === 'tab' ? items.map(item => {
-    const routeConfig = routeConfigs.find(config => {
-      return matchPath(config.path, item.key)
-    })
-    const pathmatch = matchPath(routeConfig.path, item.key)
-    const children = (
-      <TabContext.Provider value={{ params: _.get(pathmatch, 'params', {}), key: item.key, has: true }}>
-        {_.get(routeConfig, 'element', <Error message='找不到页面' />)}
-      </TabContext.Provider>
-    )
-    return ({ label: item.label, key: item.key, children })
-  }) : []
+  const tabItems =
+    type === 'tab'
+      ? items.map(item => {
+          const routeConfig = routeConfigs.find(config => {
+            return matchPath(config.path, item.key)
+          })
+          const pathmatch = matchPath(routeConfig.path, item.key)
+          const children = (
+            <TabContext.Provider
+              value={{ params: _.get(pathmatch, 'params', {}), key: item.key, has: true }}
+            >
+              {_.get(routeConfig, 'element', <Error message="找不到页面" />)}
+            </TabContext.Provider>
+          )
+
+          // 更好的方式是改写基础组件，从样式上控制显示字数，这里没提供接口，以及没法改写基础组件，所以提供变通方法
+          const label = item.label.length > 15 ? `${item.label.slice(0, 15)}...` : item.label
+          return { label, key: item.key, children }
+        })
+      : []
   const onTabEdit = (targetKey, action) => {
     if (action === 'add') {
-
     } else {
       dispatch(removeItem(targetKey))
     }
   }
   return (
-    <Layout className='App'>
-      <Layout.Header className='header'>
+    <Layout className="App">
+      <Layout.Header className="header">
         <TabContext.Provider value={{ has: type === 'tab' }}>
           <Navbar type={type} />
         </TabContext.Provider>
       </Layout.Header>
       <Layout>
-        <Layout.Sider width={240} className='sider'>
+        <Layout.Sider width={240} className="sider">
           <TabContext.Provider value={{ has: type === 'tab' }}>
             <MenuList user={user} store={store} />
           </TabContext.Provider>
         </Layout.Sider>
-        <Layout className='content'>
-          {isStoreSelected() && type === 'tab' && tabItems.length !== 0 && <Tabs
-            onEdit={onTabEdit}
-            tabBarStyle={{
-              top: 0,
-              zIndex: 1,
-              position: 'sticky',
-              backgroundColor: '#f0f2f5',
-              marginBottom: '0',
-            }}
-            hideAdd
-            activeKey={active}
-            onChange={(k) => dispatch(changeTab(k))}
-            items={tabItems}
-            type='editable-card'
-          />}
+        <Layout className="content">
+          {isStoreSelected() && type === 'tab' && tabItems.length !== 0 && (
+            <Tabs
+              onEdit={onTabEdit}
+              tabBarStyle={{
+                top: 0,
+                zIndex: 1,
+                position: 'sticky',
+                backgroundColor: '#f0f2f5',
+                marginBottom: '0',
+              }}
+              hideAdd
+              activeKey={active}
+              onChange={k => dispatch(changeTab(k))}
+              items={tabItems}
+              type="editable-card"
+            />
+          )}
 
-          {isStoreSelected() && type === 'tab' && tabItems.length === 0 && <>
-            <Card bordered={false} style={{ height: '100%', margin: '8px' }}>
-              <Result
-                title="没有打开任何的标签页"
-                extra={
-                  <Button type="primary" key="console" onClick={() => {
-                    const tabContent = localStorage.getItem('TAB')
-                    if (tabContent) {
-                      const tabInfo = JSON.parse(tabContent)
-                      if (tabInfo.items.length !== 0) {
-                        dispatch(loadTab({ ...tabInfo }))
-                        return
-                      }
-                    }
-                    message.info('没有找到上一次保存的标签页信息')
-                  }}>
-                    尝试加载上一次的标签页
-                  </Button>
-                }
-              />
-            </Card>
-          </>}
+          {isStoreSelected() && type === 'tab' && tabItems.length === 0 && (
+            <>
+              <Card bordered={false} style={{ height: '100%', margin: '8px' }}>
+                <Result
+                  title="没有打开任何的标签页"
+                  extra={
+                    <Button
+                      type="primary"
+                      key="console"
+                      onClick={() => {
+                        const tabContent = localStorage.getItem('TAB')
+                        if (tabContent) {
+                          const tabInfo = JSON.parse(tabContent)
+                          if (tabInfo.items.length !== 0) {
+                            dispatch(loadTab({ ...tabInfo }))
+                            return
+                          }
+                        }
+                        message.info('没有找到上一次保存的标签页信息')
+                      }}
+                    >
+                      尝试加载上一次的标签页
+                    </Button>
+                  }
+                />
+              </Card>
+            </>
+          )}
           {isStoreSelected() && type === 'base' && <Outlet />}
           {!isStoreSelected() && <CurrentStore />}
         </Layout>
