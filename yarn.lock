@@ -3825,6 +3825,11 @@
   dependencies:
     "@react-pdf-viewer/core" "3.9.0"
 
+"@react-pdf-viewer/locales@^1.0.0":
+  version "1.0.0"
+  resolved "https://mirrors.cloud.tencent.com/npm/@react-pdf-viewer%2flocales/-/locales-1.0.0.tgz#7ff75c3abe516ac8cd2927df1c0f15389465b727"
+  integrity sha512-Q4ZGs4gQKFUk85hiDdPIEb4jHPTUdkPj9KZCZWpQZdKC37mkh/4EBZqMEUaYtm9lGuIEK3dE7oLAz/vxEMgvzg==
+
 "@react-pdf-viewer/open@3.9.0":
   version "3.9.0"
   resolved "https://mirrors.cloud.tencent.com/npm/@react-pdf-viewer%2fopen/-/open-3.9.0.tgz#e90350bbdf6509fa3d3c39e747df9ef0abc6b473"

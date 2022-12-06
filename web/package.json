@@ -10,6 +10,7 @@
     "@craco/craco": "^7.0.0",
     "@react-pdf-viewer/core": "3.9.0",
     "@react-pdf-viewer/default-layout": "^3.9.0",
+    "@react-pdf-viewer/locales": "^1.0.0",
     "@react-pdf/renderer": "^3.0.1",
     "@reduxjs/toolkit": "^1.8.6",
     "@sentry/react": "^7.23.0",
