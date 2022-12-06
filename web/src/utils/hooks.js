@@ -38,7 +38,7 @@ const canGoBack = () => {
 // 处理标签页标题显示效果
 const getShowTitle = ({ title, subTitle }) => {
   const firstTitle = subTitle ? `${subTitle} - ${title}` : title
-  const finalTitle = firstTitle.length > 5 ? `${firstTitle.slice(0, 5)}...` : firstTitle
+  const finalTitle = firstTitle.length > 15 ? `${firstTitle.slice(0, 15)}...` : firstTitle
   return finalTitle
 }
 
