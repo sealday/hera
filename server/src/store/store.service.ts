@@ -568,7 +568,6 @@ export class StoreService {
                     $multiply: ['$rentRule.items.unitPrice', '$days', '$count'],
                   }
                 },
-                unitPrice: { $first: '$rentRule.items.unitPrice' },
                 unit: {
                   $first: '$unit'
                 },
@@ -591,6 +590,20 @@ export class StoreService {
                 ]
               }
             },
+            {
+              $addFields: {
+                unitPrice: {
+                  $divide: [
+                    {
+                      $divide: [
+                        '$price', '$count',
+                      ],
+                    },
+                    '$days',
+                  ],
+                }
+              }
+            }
           ],
           list: [
             {
