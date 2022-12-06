@@ -7,7 +7,7 @@ import { CONTRACT_DETAILS, queryContractDetails } from '../../../actions'
 import { rentExcelExport } from '../../../utils'
 import RentCalcTable from '../RentCalcTable'
 import { useParams } from 'utils/hooks'
-import { PageHeader } from '../../../components'
+import { ModalPrintPreviewButton, PageHeader } from '../../../components'
 import _ from 'lodash'
 import heraApi from 'api'
 
@@ -73,6 +73,7 @@ const ContractDetailsCalc = () => {
             calc: _.omit(currentCalc, ['list', 'history', 'group', 'nameGroup']),
           })
         }}>重新计算</Button>,
+        <ModalPrintPreviewButton pdf={`/api/contract/${id}/calc/${calcId}/preview`}>打印预览</ModalPrintPreviewButton>,
         <Button type='primary' key={2} onClick={() => {
           import('xlsx').then(XLSX => {
             rentExcelExport(XLSX, currentCalc, currentCalc.name + '-' + projectName)

@@ -1,10 +1,12 @@
-import { Body, Controller, Get, Param, Post, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Res, UseGuards, UseInterceptors } from '@nestjs/common';
 import { WrapperInterceptor } from 'src/app/wrapper.interceptor';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ContractService } from './contract.service';
 import { Auth } from 'src/app/user.decorator';
 import { User } from 'src/users/users.service';
 import { Types } from 'mongoose';
+import type { Response } from 'express';
+import { renderIt } from 'src/store/record/record.document';
 
 @Controller('contract')
 @UseGuards(JwtAuthGuard)
@@ -58,6 +60,12 @@ export class ContractController {
   async restartCalc(@Param('id') id: string, @Body() body: any,  @Auth() user: User) {
     const contract = await this.contractService.restartCalc(id, body, user)
     return { contract }
+  }
+
+  @Get(':id/calc/:calcId/preview')
+  async previewCalc(@Param('id') id: string, @Param('calcId') calcId: string, @Auth() user: User, @Res() res: Response) {
+    const file = await renderIt()
+    file.pipe(res)
   }
 
   @Post(':id/item/:itemId/delete')

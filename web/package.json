@@ -8,6 +8,8 @@
   "dependencies": {
     "@ant-design/icons": "^4.8.0",
     "@craco/craco": "^7.0.0",
+    "@react-pdf-viewer/core": "3.9.0",
+    "@react-pdf-viewer/default-layout": "^3.9.0",
     "@react-pdf/renderer": "^3.0.1",
     "@reduxjs/toolkit": "^1.8.6",
     "@sentry/react": "^7.23.0",
@@ -25,6 +27,7 @@
     "immutable": "^4.1.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
+    "pdfjs-dist": "3.1.81",
     "print-js": "^1.6.0",
     "prop-types": "^15.8.1",
     "qrcode": "^1.5.1",
