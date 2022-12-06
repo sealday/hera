@@ -66,15 +66,15 @@ const ContractDetailsCalc = () => {
       subTitle={contract.code}
       descriptions={descriptions}
       extra={[
-        <Button onClick={() => {
+        <Button key='reCalc' onClick={() => {
           restartCal({
             id,
             calcId,
             calc: _.omit(currentCalc, ['list', 'history', 'group', 'nameGroup']),
           })
         }}>重新计算</Button>,
-        <ModalPrintPreviewButton pdf={`/api/contract/${id}/calc/${calcId}/preview`}>打印预览</ModalPrintPreviewButton>,
-        <Button type='primary' key={2} onClick={() => {
+        <ModalPrintPreviewButton key='printPreview' pdf={`/api/contract/${id}/calc/${calcId}/preview`}>打印预览</ModalPrintPreviewButton>,
+        <Button type='primary' key='excel' onClick={() => {
           import('xlsx').then(XLSX => {
             rentExcelExport(XLSX, currentCalc, currentCalc.name + '-' + projectName)
           }).catch(() => {
