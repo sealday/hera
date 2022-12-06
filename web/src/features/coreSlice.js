@@ -44,7 +44,7 @@ const coreSlice = createSlice({
         removeAll(state) {
             _.remove(state.items, item => item)
             _.remove(state.history, item => item)
-            state.active = _.last(state.history)
+            state.active = null
             saveTab(state)
         },
         changeTab(state, action) {
