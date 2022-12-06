@@ -36,7 +36,7 @@ export default ({
   }))
   const navigate = useNavigate()
   const [form] = Form.useForm()
-  const tabButton = useTab({ title })
+  const tabButton = useTab({ title, subTitle });
   const recentItems = []
   const actions = []
 

@@ -35,7 +35,7 @@ const canGoBack = () => {
   return window.history.length > 1
 }
 
-export const useTab = ({ title }) => {
+export const useTab = ({ title, subTitle }) => {
   const tabContext = useContext(TabContext)
   const modalContext = useContext(ModalContext)
   const dispatch = useDispatch()
@@ -47,7 +47,7 @@ export const useTab = ({ title }) => {
       dispatch(
         updateTitle({
           key: tabContext.key,
-          title: title,
+          title: subTitle ? `${subTitle} - ${title}` : title,
         })
       );
     }
