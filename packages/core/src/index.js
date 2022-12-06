@@ -1,21 +1,11 @@
-import moment from 'moment'
-/**
- * 最多保留两位，但是移除小数点后面的零
- * @param num
- * @param last 保留几位
- * @returns {string}
- */
-export function toFixed(num, last) {
-  const lead = last || 2
-  return Number(Number(num).toFixed(lead)).toString();
-}
+const moment = require('moment')
 
 let formatNumber_
 let currencyFormat_
 let numberFormat_
 let percentFormat_
 
-if (window.Intl) {
+if (typeof window !== 'undefined' && window.Intl || typeof global !== 'undefined' && global.Intl) {
   formatNumber_ = (number) => {
     return isNaN(number) ? '' : new Intl.NumberFormat().format(number)
   }
@@ -42,8 +32,9 @@ if (window.Intl) {
   percentFormat_ = number => number
 }
 
-export const formatNumber = formatNumber_
-export const currencyFormat = currencyFormat_
-export const numberFormat = numberFormat_
-export const percentFormat = percentFormat_
-export const dateFormat = date => moment(date).format('YYYY-MM-DD')
+exports.formatNumber = formatNumber_
+exports.currencyFormat = currencyFormat_
+exports.numberFormat = numberFormat_
+exports.percentFormat = percentFormat_
+exports.dateFormat = date => moment(date).format('YYYY-MM-DD')
+

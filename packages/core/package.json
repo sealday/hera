@@ -1,5 +1,5 @@
 {
-  "name": "hera-common",
+  "name": "hera-core",
   "version": "1.0.0",
   "description": "",
   "main": "src/index.js",
@@ -9,9 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@reduxjs/toolkit": "^1.8.6",
     "lodash": "^4.17.21",
-    "moment": "^2.29.4",
-    "react-redux": "^8.0.4"
+    "moment": "^2.29.4"
   }
 }

@@ -6,7 +6,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { FinanceModule } from 'src/finance/finance.module';
 import { ProjectModule } from 'src/project/project.module';
-import { ContractSchema } from 'src/schemas/contract.schema';
+import { Contract, ContractSchema } from 'src/schemas/contract.schema';
 import { CounterSchema } from 'src/schemas/counter.schema';
 import { RecycleSchema } from 'src/schemas/recycle.schema';
 import { StoreSchema } from 'src/schemas/store.schema';
@@ -66,7 +66,7 @@ import { Notification, NotificationSchema } from 'src/schemas/notification.schem
       { name: 'Counter', schema: CounterSchema },
       { name: 'Recycle', schema: RecycleSchema },
       { name: 'Store', schema: StoreSchema },
-      { name: 'Contract', schema: ContractSchema },
+      { name: Contract.name, schema: ContractSchema },
       { name: Upload.name, schema: UploadSchema },
       { name: Notification.name, schema: NotificationSchema },
     ]),

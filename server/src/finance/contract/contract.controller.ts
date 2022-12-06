@@ -64,7 +64,7 @@ export class ContractController {
 
   @Get(':id/calc/:calcId/preview')
   async previewCalc(@Param('id') id: string, @Param('calcId') calcId: string, @Auth() user: User, @Res() res: Response) {
-    const file = await renderIt()
+    const file = await this.contractService.calcPreview(id, calcId)
     file.pipe(res)
   }
 
