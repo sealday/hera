@@ -1,6 +1,6 @@
 import { ArrowLeftOutlined, CloseOutlined } from "@ant-design/icons"
 import { Button } from "antd"
-import { addItem, removeItem, removeAll, updateTitle } from 'features/coreSlice';
+import { addItem, removeItem, updateTitle } from 'features/coreSlice'
 import { ModalContext, TabContext } from "globalConfigs"
 import _ from "lodash"
 import { useEffect } from "react"
