@@ -663,6 +663,22 @@ export class StoreService {
                 unit: { $first: '$unit' },
               }
             },
+            {
+              $match: {
+                $or: [
+                  {
+                    count: {
+                      $gt: 0.000001,
+                    }
+                  },
+                  {
+                    count: {
+                      $lt: -0.000001
+                    }
+                  }
+                ]
+              }
+            },
           ],
         }
       }
