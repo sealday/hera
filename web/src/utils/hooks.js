@@ -35,6 +35,13 @@ const canGoBack = () => {
   return window.history.length > 1
 }
 
+// 处理标签页标题显示效果
+const getShowTitle = ({ title, subTitle }) => {
+  const firstTitle = subTitle ? `${subTitle} - ${title}` : title
+  const finalTitle = firstTitle.length > 5 ? `${firstTitle.slice(0, 5)}...` : firstTitle
+  return finalTitle
+}
+
 export const useTab = ({ title, subTitle }) => {
   const tabContext = useContext(TabContext)
   const modalContext = useContext(ModalContext)
@@ -47,16 +54,16 @@ export const useTab = ({ title, subTitle }) => {
       dispatch(
         updateTitle({
           key: tabContext.key,
-          title: subTitle ? `${subTitle} - ${title}` : title,
+          title: getShowTitle({ title, subTitle }),
         })
-      );
+      )
     }
-  }, [dispatch, tabContext.has, tabContext.key, title]);
+  }, [tabContext.key, title, subTitle])
 
   // 关闭或者返回键
   switch (true) {
     case modalContext.has:
-      return 'modal';
+      return 'modal'
     case tabContext.has:
       return (
         <>
@@ -78,7 +85,7 @@ export const useTab = ({ title, subTitle }) => {
             关闭全部
           </Button>
         </>
-      );
+      )
     case canGoBack():
       return (
         <Button
@@ -89,9 +96,9 @@ export const useTab = ({ title, subTitle }) => {
         >
           返回
         </Button>
-      );
+      )
     default:
-      return null;
+      return null
   }
 };
 
