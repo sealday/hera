@@ -75,15 +75,6 @@ export const useTab = ({ title, subTitle }) => {
           >
             关闭
           </Button>
-          <Button
-            key="closeAll"
-            type="primary"
-            danger
-            onClick={() => dispatch(removeAll())}
-            icon={<CloseOutlined />}
-          >
-            关闭全部
-          </Button>
         </>
       )
     case canGoBack():

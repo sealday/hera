@@ -41,7 +41,7 @@ const coreSlice = createSlice({
             state.active = _.last(state.history)
             saveTab(state)
         },
-        removeAll(state) {
+        removeAllItem(state) {
             _.remove(state.items, item => item)
             _.remove(state.history, item => item)
             state.active = null
@@ -65,6 +65,6 @@ const coreSlice = createSlice({
     },
 })
 
-export const { updateOnlineUsers, addItem, changeTab, removeItem, removeAll, updateTitle, loadTab } = coreSlice.actions
+export const { updateOnlineUsers, addItem, changeTab, removeItem, removeAllItem, updateTitle, loadTab } = coreSlice.actions
 
 export default coreSlice.reducer
