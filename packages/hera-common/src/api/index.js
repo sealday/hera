@@ -290,6 +290,15 @@ const genApi = ({ baseUrl = '/api/', onLogin, getAuthToken }) => {
         transformResponse: res => res.data.contract,
         invalidatesTags: (_result, _error, { id }) => [{ type: 'Contract', id }],
       }),
+      updateContractTags: builder.mutation({
+        query: ({ id, tags }) => ({
+          url: `contract/${id}/tags`,
+          method: 'POST',
+          body: { tags },
+        }),
+        transformResponse: res => res.data.contract,
+        invalidatesTags: (_result, _error, { id }) => [{ type: 'Contract', id }],
+      }),
       getContract: builder.query({
         query: (id) => `contract/${id}`,
         transformResponse: res => res.data.contract,

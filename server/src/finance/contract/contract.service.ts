@@ -27,6 +27,10 @@ export class ContractService {
     return this.contractModel.updateOne({ _id: id }, { $set: body})
   }
 
+  async updateTags(id: string, tags: string[]) {
+    return await this.contractModel.findOneAndUpdate({ _id: id }, { $set: { tags } });
+  }
+
   async updateStatus(id: String, status: String) {
     return this.contractModel.updateOne({ _id: id }, { $set: { status: status }})
   }

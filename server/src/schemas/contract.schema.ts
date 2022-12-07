@@ -98,6 +98,9 @@ export class Contract {
 
   @Prop([Calc])
   calcs: Calc[];
+
+  @Prop([String])
+  tags: string[];
 }
 
 export const ContractSchema = SchemaFactory.createForClass(Contract)
