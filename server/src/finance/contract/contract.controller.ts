@@ -38,6 +38,12 @@ export class ContractController {
     return { contract }
   }
 
+  @Post(':id/tags')
+  async updateTags(@Param('id') id: string, @Body() body: { tags: string[] }) {
+    const contract = await this.contractService.updateTags(id, body.tags);
+    return { contract };
+  }
+
   @Post(':id/finish')
   async finish(@Param('id') id: string) {
     const contract = await this.contractService.updateStatus(id, '完结')
