@@ -5,7 +5,6 @@ export type ContractDocument = Contract & Document;
 
 @Schema()
 export class Item {
-  @Prop()
   _id: Types.ObjectId;
   @Prop()
   category: string;
@@ -33,7 +32,6 @@ class CalcItem {
 
 @Schema()
 export class Calc {
-  @Prop()
   _id: Types.ObjectId;
   @Prop()
   name: string;
