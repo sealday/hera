@@ -53,6 +53,12 @@ export class Calc {
   freightGroup: mongoose.Schema.Types.Mixed;
   @Prop()
   debug: mongoose.Schema.Types.Mixed;
+  // 1%、3%、6%、9%、13%
+  @Prop()
+  taxRate: number;
+  // 是否含税
+  @Prop()
+  includesTax: boolean;
 }
 
 @Schema({ timestamps: true })
@@ -74,6 +80,14 @@ export class Contract {
 
   @Prop()
   comments: string;
+
+  // 1%、3%、6%、9%、13%
+  @Prop()
+  taxRate: number;
+
+  // 是否含税
+  @Prop()
+  includesTax: boolean;
 
   // 合同状态：完结、进行、已删除
   @Prop()

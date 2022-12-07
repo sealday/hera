@@ -104,6 +104,7 @@ const styles = StyleSheet.create({
     marginLeft: '-1px',
     borderTop: '1px solid black',
     marginTop: '-1px',
+    borderBottom: '1px solid black',
   },
   tableCellLast: {
     flex: 1,
@@ -114,6 +115,7 @@ const styles = StyleSheet.create({
     marginTop: '-1px',
     borderRight: '1px solid black',
     marginRight: '-1px',
+    borderBottom: '1px solid black',
   },
   tableFooter: {
     flexDirection: 'row',
@@ -239,7 +241,7 @@ const PreviewDocument = ({ imageUrl, calc }: { imageUrl: string, calc: Calc }) =
               </View>
             ))}
             {calc.list.map(item => (
-              <View style={styles.tableContent}>
+              <View style={styles.tableContent} wrap={false}>
                 <Text style={styles.tableCell}>{moment(item.outDate).format('YYYY-MM-DD')}</Text>
                 <Text style={styles.tableCell}>{item.inOut}</Text>
                 <Text style={styles.tableCell}>{item.name}</Text>
