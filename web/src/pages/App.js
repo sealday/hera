@@ -12,6 +12,7 @@ import { TabContext } from '../globalConfigs'
 import { changeTab, removeItem, loadTab } from '../features/coreSlice'
 import { config as routeConfigs } from 'routes'
 import Navbar from './common/navbar.component'
+import CloseAllButton from 'components/button/close-all.button'
 
 export default ({ onEnter, onLeave, type }) => {
   const { store, user, config, loading, items, active, history } = useSelector(state => ({
@@ -93,7 +94,7 @@ export default ({ onEnter, onLeave, type }) => {
               backgroundColor: '#f0f2f5',
               marginBottom: '0',
             }}
-            hideAdd
+            addIcon={ <CloseAllButton/> }// 改写添加按钮为关闭全部按钮
             activeKey={active}
             onChange={(k) => dispatch(changeTab(k))}
             items={tabItems}

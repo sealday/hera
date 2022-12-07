@@ -1,6 +1,6 @@
 import { ArrowLeftOutlined, CloseOutlined } from "@ant-design/icons"
 import { Button } from "antd"
-import { addItem, removeItem, updateTitle } from "features/coreSlice"
+import { addItem, removeItem, updateTitle } from 'features/coreSlice'
 import { ModalContext, TabContext } from "globalConfigs"
 import _ from "lodash"
 import { useEffect } from "react"
@@ -35,31 +35,63 @@ const canGoBack = () => {
   return window.history.length > 1
 }
 
-export const useTab = ({ title }) => {
+// 处理标签页标题显示效果
+const getShowTitle = ({ title, subTitle }) => {
+  const firstTitle = subTitle ? `${subTitle} - ${title}` : title
+  const finalTitle = firstTitle.length > 15 ? `${firstTitle.slice(0, 15)}...` : firstTitle
+  return finalTitle
+}
+
+export const useTab = ({ title, subTitle }) => {
   const tabContext = useContext(TabContext)
   const modalContext = useContext(ModalContext)
   const dispatch = useDispatch()
   const navigate = useRouteNavigate()
+
   // 更新标题
   useEffect(() => {
     if (tabContext.has && tabContext.key) {
-      dispatch(updateTitle({
-        key: tabContext.key,
-        title: title,
-      }))
+      dispatch(
+        updateTitle({
+          key: tabContext.key,
+          title: getShowTitle({ title, subTitle }),
+        })
+      )
     }
-  }, [tabContext.key, title])
+  }, [tabContext.key, title, subTitle])
+
   // 关闭或者返回键
-  if (modalContext.has) {
-    return 'modal'
-  } else if (tabContext.has) {
-    return <Button key='close' type='default' onClick={() => dispatch(removeItem(tabContext.key))} icon={<CloseOutlined />}>关闭</Button>
-  } else if (canGoBack()) {
-    return <Button key='goBack' type='default' onClick={() => navigate(-1)} icon={<ArrowLeftOutlined />}>返回</Button>
-  } else {
-    return null
+  switch (true) {
+    case modalContext.has:
+      return 'modal'
+    case tabContext.has:
+      return (
+        <>
+          <Button
+            key="close"
+            type="default"
+            onClick={() => dispatch(removeItem(tabContext.key))}
+            icon={<CloseOutlined />}
+          >
+            关闭
+          </Button>
+        </>
+      )
+    case canGoBack():
+      return (
+        <Button
+          key="goBack"
+          type="default"
+          onClick={() => navigate(-1)}
+          icon={<ArrowLeftOutlined />}
+        >
+          返回
+        </Button>
+      )
+    default:
+      return null
   }
-}
+};
 
 export const useNavigate = () => {
   const navigate = useRouteNavigate()
