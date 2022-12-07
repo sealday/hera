@@ -1,4 +1,4 @@
-import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import mongoose, { Document, Types } from 'mongoose'
 
 export type ContractDocument = Contract & Document;
@@ -19,15 +19,15 @@ export class Item {
 }
 
 class CalcItem {
-    name: string;
-    count: number; 
-    days: number; 
-    price: number;
-    unit: string;
-    category: string;
-    unitPrice: number;
-    outDate?: Date;
-    inOut: string;
+  name: string;
+  count: number;
+  days: number;
+  price: number;
+  unit: string;
+  category: string;
+  unitPrice: number;
+  outDate?: Date;
+  inOut: string;
 }
 
 @Schema()
