@@ -5898,6 +5898,16 @@ array-unique@^0.3.2:
   resolved "https://mirrors.cloud.tencent.com/npm/array-unique/-/array-unique-0.3.2.tgz#a894b75d4bc4f6cd679ef3244a9fd8f46ae2d428"
   integrity sha1-qJS3XUvE9s1nnvMkSp/Y9Gri1Cg=
 
+array.prototype.at@^1.1.1:
+  version "1.1.1"
+  resolved "https://mirrors.cloud.tencent.com/npm/array.prototype.at/-/array.prototype.at-1.1.1.tgz#6deda3cd3c704afa16361387ea344e0b8d8831b5"
+  integrity sha512-n/wYNLJy/fVEU9EGPt2ww920hy1XX3XB2yTREFy1QsxctBgQV/tZIwg1G8jVxELna4pLCzg/xvvS/DDXtI4NNg==
+  dependencies:
+    call-bind "^1.0.2"
+    define-properties "^1.1.4"
+    es-abstract "^1.20.4"
+    es-shim-unscopables "^1.0.0"
+
 array.prototype.flat@^1.2.5:
   version "1.3.0"
   resolved "https://mirrors.cloud.tencent.com/npm/array.prototype.flat/-/array.prototype.flat-1.3.0.tgz#0b0c1567bf57b38b56b4c97b8aa72ab45e4adc7b"

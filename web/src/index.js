@@ -1,4 +1,4 @@
-import 'scroll-polyfill/auto'
+import './polifill'
 import React from 'react'
 import * as Sentry from "@sentry/react"
 import { BrowserTracing } from "@sentry/tracing"
@@ -24,12 +24,6 @@ import _ from 'lodash'
 const versionInfo = require("./version.json")
 const { versionNumber } = versionInfo || {}
 
-Sentry.init({
-  dsn: "http://8c252be29e9049a19515c4d76ec398e0@xp.sealday.com:9000/2",
-  integrations: [new BrowserTracing()],
-  tracesSampleRate: 0.1,
-  release: versionNumber,
-});
 // 初始化 moment 时间属性
 moment.locale('zh-CN')
 // 初始化 socket
