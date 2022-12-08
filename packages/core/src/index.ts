@@ -5,6 +5,7 @@ export {
   numberFormat,
   percentFormat
 } from './utils'
+export { genApi } from './api'
 const sayHello = () => {
   console.log('hello.')
 }

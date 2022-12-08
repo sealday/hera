@@ -30,7 +30,10 @@
   "dependencies": {
     "@babel/runtime": "^7.19.0",
     "dayjs": "^1.11.7",
-    "moment": "^2.29.4"
+    "moment": "^2.29.4",
+    "@reduxjs/toolkit": "^1.8.6",
+    "lodash": "^4.17.21",
+    "react-redux": "^8.0.4"
   },
   "devDependencies": {
     "@babel/cli": "^7.18.10",

@@ -2,7 +2,6 @@ import { Button, Card, ListItem, Text } from '@rneui/themed';
 import { RefreshControl, ScrollView, View } from 'react-native';
 import { useDispatch } from 'react-redux'
 import { logout } from '../features/coreSlices';
-import { utils } from 'hera-common'
 import { heraApi } from '../store';
 import { useRoute } from '@react-navigation/native';
 import { Error } from '../components/error';

@@ -20,8 +20,7 @@
     "web",
     "mobile",
     "server",
-    "packages/core",
-    "packages/hera-common"
+    "packages/core"
   ],
   "dependencies": {
     "eslint-config-react-app": "^7.0.1",

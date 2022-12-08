@@ -1,7 +1,7 @@
 import { configureStore, } from '@reduxjs/toolkit'
 import coreReducer, { logout } from './features/coreSlices'
 import api from './features/apiSlices'
-import { genApi } from 'hera-common'
+import { genApi } from 'hera-core'
 import { setupListeners } from '@reduxjs/toolkit/query'
 import { baseUrl } from './constants'
 

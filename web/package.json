@@ -23,7 +23,6 @@
     "craco-less": "^2.0.0",
     "file-saver": "^2.0.5",
     "fuzzysearch": "^1.0.3",
-    "hera-common": "*",
     "hera-core": "*",
     "history": "^5.3.0",
     "immutable": "^4.1.0",

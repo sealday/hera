@@ -1,7 +1,7 @@
 import { getAuthToken } from 'utils'
 import { history, BASENAME } from '../globalConfigs'
 
-import { genApi } from 'hera-common'
+import { genApi } from 'hera-core'
 
 const heraApi = genApi({
     onLogin() {
