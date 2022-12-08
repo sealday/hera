@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import mongoose, { Document, Types } from 'mongoose'
+import mongoose, { Document, Types, SchemaTypes } from 'mongoose'
 
 export type ContractDocument = Contract & Document;
 
@@ -8,10 +8,10 @@ export class Item {
   _id: Types.ObjectId;
   @Prop()
   category: string;
-  @Prop()
-  plan: Types.ObjectId;
-  @Prop()
-  weight: Types.ObjectId;
+  @Prop({ type: SchemaTypes.ObjectId })
+  plan: Types.ObjectId | string;
+  @Prop({ type: SchemaTypes.ObjectId })
+  weight: Types.ObjectId | string;
   @Prop()
   start: Date;
   @Prop()
@@ -72,8 +72,8 @@ export class Contract {
   @Prop()
   date: Date;
 
-  @Prop()
-  project: Types.ObjectId;
+  @Prop({ type: SchemaTypes.ObjectId })
+  project: Types.ObjectId | string;
 
   @Prop()
   address: string;
