@@ -1,12 +1,19 @@
 import axios from 'axios'
 import fuzzysearch from 'fuzzysearch'
-import moment from 'moment'
 import { flowRight, last, dropRight, forEach } from 'lodash'
 import { saveAs } from 'file-saver'
 
 import * as validator from './validator'
 import { history, BASENAME } from '../globalConfigs'
 import createModal from './createModal'
+import { dateFormat } from 'hera-core'
+export {
+  percentFormat,
+  currencyFormat,
+  dateFormat,
+  formatNumber,
+  numberFormat
+} from 'hera-core'
 
 /**
  * 计算规格的数值表达
@@ -235,44 +242,6 @@ export const parseMode = mode => {
 export const filterOption = (filter, option) => {
   return fuzzysearch(filter, option.props.pinyin) || fuzzysearch(filter, option.props.label)
 }
-
-let formatNumber_
-let currencyFormat_
-let numberFormat_
-let percentFormat_
-
-if (window.Intl) {
-  formatNumber_ = (number) => {
-    return isNaN(number) ? '' : new Intl.NumberFormat().format(number)
-  }
-  currencyFormat_ = (number, fractionDigits = 2) => {
-    const options = { style: 'currency', currency: 'CNY', minimumFractionDigits: fractionDigits, maximumFractionDigits: fractionDigits }
-    const numberFormat = new Intl.NumberFormat('zh-CN', options)
-    return number ? numberFormat.format(number) : numberFormat.format(0)
-  }
-  percentFormat_ = (number, fractionDigits = 2) => {
-    const options = { style: 'percent', minimumFractionDigits: fractionDigits, maximumFractionDigits: fractionDigits }
-    const numberFormat = new Intl.NumberFormat('zh-CN', options)
-    return number ? numberFormat.format(number) : numberFormat.format(0)
-  }
-  numberFormat_ = (number, fractionDigits = 2) => {
-    const numberFormat = new Intl.NumberFormat('zh-CN', { minimumFractionDigits: fractionDigits, maximumFractionDigits: fractionDigits })
-    return numberFormat.format(number)
-  }
-} else {
-  formatNumber_ = number => number
-  currencyFormat_ = (number) => {
-    return isNaN(number) ? '' : number
-  }
-  numberFormat_ = number => number
-  percentFormat_ = number => number
-}
-
-export const formatNumber = formatNumber_
-export const currencyFormat = currencyFormat_
-export const numberFormat = numberFormat_
-export const percentFormat = percentFormat_
-export const dateFormat = date => moment(date).format('YYYY-MM-DD')
 
 export const total = (count, product) => toFixedWithoutTrailingZero(count * getScale(product))
 
