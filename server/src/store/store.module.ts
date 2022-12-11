@@ -37,6 +37,7 @@ import { StoreService } from './store.service';
     forwardRef(() => AppModule),
   ],
   controllers: [RecordController, ProjectController, StoreController, ProductController, PlanController],
-  providers: [RecordService, ProjectService, StoreService, ProductService, PlanService]
+  providers: [RecordService, ProjectService, StoreService, ProductService, PlanService],
+  exports: [ProjectService],
 })
 export class StoreModule {}

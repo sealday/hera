@@ -4,6 +4,7 @@ import _ = require('lodash');
 import * as moment from 'moment';
 import { Model, Types } from 'mongoose';
 import { Contract } from 'src/schemas/contract.schema';
+import { ProjectService } from 'src/store/project/project.service';
 import { renderIt } from 'src/store/rent.document';
 import { StoreService } from 'src/store/store.service';
 import { User } from 'src/users/users.service';
@@ -12,6 +13,7 @@ import { User } from 'src/users/users.service';
 export class ContractService {
   constructor(
     private storeService: StoreService,
+    private projectService: ProjectService,
     @InjectModel(Contract.name) private contractModel: Model<Contract>,
   ) { }
 
@@ -107,6 +109,8 @@ export class ContractService {
       user: user,
       project: contract.project,
     }) 
+    calc.taxRate = contract.taxRate
+    calc.includesTax = contract.includesTax
     calc.history = rent.history
     calc.list = rent.list
     calc.group = rent.group
@@ -123,8 +127,9 @@ export class ContractService {
 
   async calcPreview(id: String, calcId: string) {
     const contract = await this.contractModel.findById(id)
+    const project = await this.projectService.findById(contract.project.toString())
     const calc = contract.calcs.find(calc => calc._id.equals(calcId))
-    return renderIt({ calc })
+    return renderIt({ contract, project, calc })
   }
 
   async restartCalc(id: String, calc: any, user: User) {

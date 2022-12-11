@@ -4,7 +4,7 @@ import moment from 'moment'
 import { Button, Card, Tag, Descriptions } from 'antd'
 import { connect, useDispatch, useSelector } from 'react-redux'
 import { CONTRACT_DETAILS, queryContractDetails } from '../../../actions'
-import { rentExcelExport } from '../../../utils'
+import { percentFormat, rentExcelExport } from '../../../utils'
 import RentCalcTable from '../RentCalcTable'
 import { useParams } from 'utils/hooks'
 import { ModalPrintPreviewButton, PageHeader } from '../../../components'
@@ -57,6 +57,11 @@ const ContractDetailsCalc = () => {
     { label: "结算名称", children: currentCalc.name },
     { label: "结算开始日期", children: moment(currentCalc.start).format('YYYY-MM-DD') },
     { label: "结算结束日期", children: moment(currentCalc.end).format('YYYY-MM-DD') },
+    { label: '税率', children: percentFormat(currentCalc.taxRate, 0) },
+    {
+      label: '合同费用规则是否已含税',
+      children: <Tag>{currentCalc.includesTax ? '已含' : '不含'}</Tag>,
+    },
     { label: "备注", children: contract.comments },
   ]
 
