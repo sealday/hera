@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: '#FFF',
     fontFamily: '苹方简细体',
-    paddingTop: '12px',
+    padding: '12px',
   },
   title: {
     textAlign: 'center',
