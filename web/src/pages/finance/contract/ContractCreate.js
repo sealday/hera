@@ -83,8 +83,22 @@ export default () => {
               formatter={v => v * 100}
             />
           </Form.Item>
-          <Form.Item label="合同费用规则是否已含税" name="includesTax">
+          <Form.Item
+            label="合同费用规则是否已含税"
+            name="includesTax"
+            valuePropName="checked"
+          >
             <Switch />
+          </Form.Item>
+          <Form.Item
+            label="是否启用自动结算"
+            name="isScheduled"
+            valuePropName="checked"
+          >
+            <Switch />
+          </Form.Item>
+          <Form.Item label="每月" name="scheduledAt">
+            <InputNumber max={28} min={0} step={1} addonAfter="日" />
           </Form.Item>
           <Form.Item label="备注" name="comments">
             <Input.TextArea />

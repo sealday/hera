@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { Cron } from '@nestjs/schedule';
 import _ = require('lodash');
 import * as moment from 'moment';
 import { Model, Types } from 'mongoose';
@@ -158,5 +159,32 @@ export class ContractService {
     return contract
   }
 
+  // 每天凌晨六点刷新
+  @Cron('0 0 6 * * *')
+  async checkContracts() {
+    const today = Number(moment().format('D'))
+    const contracts = await this.contractModel.find({
+      isScheduled: true,
+      scheduledAt: today,
+    })
+    await Promise.all(
+      contracts.map(async contract => {
+        await this.addCalc(
+          contract._id.toString(),
+          {
+            name: moment().add(-1, 'month').format('YYYY 年 MM') + ' 月结算表',
+            start: moment().add(-1, 'month').startOf('month').startOf('day'),
+            end: moment().add(-1, 'month').endOf('month').startOf('day'),
+          },
+          {
+            username: '系统',
+            profile: {
+              name: '系统',
+            },
+          }
+        )
+      })
+    )
+  }
 }
 
