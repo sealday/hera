@@ -280,7 +280,7 @@ const PreviewDocument = ({
                 {currencyFormat(
                   calc.includesTax
                     ? _.sum(_.values(group))
-                    : _.sum(_.values(group)) * (1 + calc.taxRate)
+                    : _.sum(_.values(group)) * (1 + calc.taxRate ?? 0)
                 )}
               </Text>
               <Text style={styles.tableCell}></Text>
