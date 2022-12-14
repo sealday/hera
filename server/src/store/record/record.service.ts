@@ -549,4 +549,15 @@ export class RecordService {
     // TODO 落下日志
      return checked
   }
+
+  async uploadAppendix(recordId: string, appendix: any) {
+    return this.recordModel.findOneAndUpdate({ _id: recordId }, { $push: { appendix } })
+  }
+
+  async deleteAppendix(recordId: String, appendix: any) {
+    return this.recordModel.findOneAndUpdate(
+      { _id: recordId },
+      { $pull: { appendix: { filename: appendix.filename } } }
+    )
+  }
 }
