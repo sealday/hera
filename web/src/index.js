@@ -24,6 +24,15 @@ import _ from 'lodash'
 const versionInfo = require("./version.json")
 const { versionNumber } = versionInfo || {}
 
+if (process.env.NODE_ENV === 'production') {
+  Sentry.init({
+    dsn: 'https://8c252be29e9049a19515c4d76ec398e0@sentry.shchuangxing.com/2',
+    integrations: [new BrowserTracing()],
+    tracesSampleRate: 0.1,
+    release: versionNumber,
+  })
+}
+
 // 初始化 moment 时间属性
 moment.locale('zh-CN')
 // 初始化 socket
