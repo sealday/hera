@@ -54,7 +54,22 @@ const UploadGallery = ({ onAdd, onRemove, files }) => {
         headers={{ Authorization: `Bearer ${token}` }}
         action="/api/upload"
         onPreview={handlePreview}
-        onRemove={onRemove}
+        onRemove={async file => {
+          return new Promise((resolve, reject) => {
+            Modal.confirm({ 
+              content: '确定删除？',
+              onOk: async () => {
+                try {
+                  await onRemove(file)
+                  resolve()
+                } catch {
+                  reject()
+                }
+              },
+              onCancel: () => reject()
+            })
+          })
+        }}
         onChange={({ file, fileList }) => {
           if (file.status === 'done') {
             file.uid = file.response.filename

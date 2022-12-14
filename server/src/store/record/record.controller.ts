@@ -95,6 +95,9 @@ export class RecordController {
   @Delete(':id/appendix')
   async deleteAppendix(@Param('id') recordId: string, @Body() body: any) {
     const record = await this.recordService.deleteAppendix(recordId, body)
+    if (record === null) {
+      throw new Error('没有找到记录')
+    }
     return { record }
   }
 }

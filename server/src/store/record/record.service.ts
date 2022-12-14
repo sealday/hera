@@ -556,7 +556,7 @@ export class RecordService {
 
   async deleteAppendix(recordId: String, appendix: any) {
     return this.recordModel.findOneAndUpdate(
-      { _id: recordId },
+      { _id: recordId, 'appendix.filename': appendix.filename },
       { $pull: { appendix: { filename: appendix.filename } } }
     )
   }
