@@ -5,6 +5,7 @@ import { Menu } from 'antd'
 import { DashboardOutlined, FundOutlined, ProjectOutlined, SearchOutlined, SettingOutlined, ShopOutlined } from '@ant-design/icons'
 import _ from 'lodash'
 import { useNavigate } from 'utils/hooks'
+import { finance } from '../hera.config'
 
 const allMenu = [
   {
@@ -99,6 +100,7 @@ const allMenu = [
   },
   {
     name: '财务',
+    disabled: !finance.enable,
     icon: <FundOutlined />,
     roles: ['系统管理员', '财务管理员', '基地仓库管理员'],
     children: [
@@ -192,7 +194,7 @@ const MenuList = ({ user, store}) => {
   const items = menu.map(item => {
     const children = item.children ? item.children.map(subItem => ({ label: subItem.name, key: subItem.path })) : null
     const key = item.children ? item.name : item.path
-    return ({ label: item.name, key, icon: item.icon, children })
+    return ({ ...item, label: item.name, key, icon: item.icon, children })
   })
   const rootSubmenuKeys = menu.filter(item => item.children).map(item => item.name)
   const childMap = _.extend({}, ...menu
