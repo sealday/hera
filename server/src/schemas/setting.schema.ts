@@ -13,6 +13,9 @@ export class Setting {
   @Prop([String])
   externalNames: string[];
 
+  @Prop()
+  address: string;
+
   // 运输单打印侧边说明
   @Prop()
   printSideComment: string;

@@ -23,6 +23,7 @@ const Settings = () => {
       <SettingsForm
         form={form}
         initialValues={{
+          ...config,
           systemName: config.systemName,
           externalNames: config.externalNames,
           printSideComment: config.printSideComment,

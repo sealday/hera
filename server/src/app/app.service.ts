@@ -66,7 +66,7 @@ export class AppService {
       this.productModel.find().sort({ number: 1 }),
       this.projectModel.find(),
       this.userModel.find(),
-      this.settingModel.findOne({}).sort({ _id: -1 }),
+      this.getSetting(),
     ])
 
     // FIXME 这里暂定为第一个找到第一个找到的为基地
@@ -93,6 +93,10 @@ export class AppService {
   async queryTopKLog(user) {
     const operations = await this.operationModel.find(this.genQeuryCond(user)).sort({ _id: -1 }).limit(10)
     return operations;
+  }
+
+  async getSetting() {
+      return this.settingModel.findOne({}).sort({ _id: -1 })
   }
 
   async queryNextKLog(user, lastId) {
@@ -135,7 +139,7 @@ export class AppService {
   @Cron('0 0 5 * * *')
   async checkReceiptAndCounterfoil() {
     // 超过五天的出入库提醒
-    const setting = await this.settingModel.findOne({}).sort({ _id: -1 })
+    const setting = await this.getSetting()
     const kv = { receipt: '回单联', counterfoil: '存根联' }
     // 回单联、存根联提醒
     _.forEach(['receipt', 'counterfoil'], key => {
