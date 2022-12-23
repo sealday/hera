@@ -12,7 +12,7 @@ import { unstable_HistoryRouter as HistoryRouter } from 'react-router-dom'
 import io from 'socket.io-client'
 import axios from 'axios'
 import { store, history, BASENAME } from './globalConfigs'
-import { systemLoaded, selectStore } from './actions'
+import { systemLoaded, selectStore, selectPrintCompany } from './actions'
 import { loadTab, updateOnlineUsers } from './features/coreSlice'
 import { ajax, getAuthToken } from './utils'
 import Routes from './routes'
@@ -53,6 +53,7 @@ const onLogined = () => {
   axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
   ajax('/api/load').then(res => {
     store.dispatch(systemLoaded(res.data))
+    store.dispatch(selectPrintCompany(res.config.externalNames[0]))
     
     const tabContent = localStorage.getItem('TAB')
     if (process.env.NODE_ENV === 'development' && tabContent) {
