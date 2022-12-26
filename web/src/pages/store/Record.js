@@ -13,6 +13,7 @@ import {
 } from 'antd'
 import UploadGallery from 'components/upload-gallery.component'
 import { confirm } from 'components/utils'
+import { strings } from 'hera-core'
 import _ from 'lodash'
 import moment from 'moment'
 import { useSelector } from 'react-redux'
@@ -147,7 +148,7 @@ const Record = ({ isFinance = false }) => {
       </Button>
     )
   }
-  if (record.type === '调拨') {
+  if (record.type === strings.quickMapping.TRANSFER) {
     extra.push(
       <Dropdown
         key="purchase"

@@ -6,7 +6,7 @@ import { saveAs } from 'file-saver'
 import * as validator from './validator'
 import { history, BASENAME } from '../globalConfigs'
 import createModal from './createModal'
-import { dateFormat } from 'hera-core'
+import { dateFormat, strings } from 'hera-core'
 export {
   percentFormat,
   currencyFormat,
@@ -387,14 +387,14 @@ export const PRODUCT_TYPES = ['租赁类', '损耗类', '工具类', '配件类'
 /**
  * 支持的订单类型
  */
-export const RECORD_TYPES = ['购销', '调拨', '暂存', '盘点']
+export const RECORD_TYPES = ['购销', strings.quickMapping.TRANSFER, '暂存', '盘点']
 
 /**
  * 订单类型的路径映射
  */
-export const RECORD_TYPE2URL_PART = { '调拨': 'transfer', '购销': 'purchase', '暂存': 'transfer_free' }
+export const RECORD_TYPE2URL_PART = { [strings.quickMapping.TRANSFER]: 'transfer', '购销': 'purchase', '暂存': 'transfer_free' }
 
-export const DEFAULT_QUERY_TYPE = '调拨'
+export const DEFAULT_QUERY_TYPE = strings.quickMapping.TRANSFER
 
 export const PRINT_STYLE = `
 body {
