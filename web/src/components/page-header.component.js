@@ -27,7 +27,8 @@ export default ({
   searchForm,
   description,
   descriptions,
-  extra
+  extra,
+  isLoading
 }) => {
   const [filterValues, setFilterValues] = useState({})
   const { user, store } = useSelector(state => ({
@@ -95,7 +96,7 @@ export default ({
     )
   }
   if (onSave) {
-    actions.push(<Button key='onSave' loading={onSave.isLoading} type='primary' onClick={onSave} icon={<SaveOutlined />}>保存</Button>)
+    actions.push(<Button key='onSave' loading={isLoading} type='primary' onClick={onSave} icon={<SaveOutlined />}>保存</Button>)
   }
   if (isUpdatable(store, user) && onEdit) {
     if (Array.isArray(onEdit) && onEdit.length > 1) {
