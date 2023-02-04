@@ -1,11 +1,9 @@
-import { Controller, UseGuards, Request, Body, Post, Param, Get, UseInterceptors, Res, StreamableFile, Query } from '@nestjs/common';
+import { Controller, UseGuards, Body, Post, Param, Get, UseInterceptors, Res, Delete } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { RecordService } from './record.service';
 import { WrapperInterceptor } from 'src/app/wrapper.interceptor';
 import { Auth } from 'src/app/user.decorator';
 import { User } from 'src/users/users.service';
-import { renderToStream } from '@react-pdf/renderer';
-import { createReadStream } from 'fs';
 import { renderIt } from './record.document';
 import type { Response } from 'express';
 
@@ -85,6 +83,21 @@ export class RecordController {
   @Post(':id')
   async update(@Param('id') recordId: string, @Body() body: any, @Auth() user: User) {
     const record = await this.recordService.update(body, recordId, user)
+    return { record }
+  }
+
+  @Post(':id/appendix')
+  async uploadAppendix(@Param('id') recordId: string, @Body() body: any) {
+    const record = await this.recordService.uploadAppendix(recordId, body)
+    return { record }
+  }
+
+  @Delete(':id/appendix')
+  async deleteAppendix(@Param('id') recordId: string, @Body() body: any) {
+    const record = await this.recordService.deleteAppendix(recordId, body)
+    if (record === null) {
+      throw new Error('没有找到记录')
+    }
     return { record }
   }
 }

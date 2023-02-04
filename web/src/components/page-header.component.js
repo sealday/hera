@@ -95,7 +95,7 @@ export default ({
     )
   }
   if (onSave) {
-    actions.push(<Button key='onSave' type='primary' onClick={onSave} icon={<SaveOutlined />}>保存</Button>)
+    actions.push(<Button key='onSave' loading={onSave.isLoading} type='primary' onClick={onSave} icon={<SaveOutlined />}>保存</Button>)
   }
   if (isUpdatable(store, user) && onEdit) {
     if (Array.isArray(onEdit) && onEdit.length > 1) {

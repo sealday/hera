@@ -6,6 +6,7 @@ import { Record } from 'src/app/app.service';
 import { LoggerService } from 'src/app/logger/logger.service';
 import { User } from 'src/users/users.service';
 import moment = require('moment');
+import { strings } from 'hera-core'
 
 @Injectable()
 export class StoreService {
@@ -242,7 +243,7 @@ export class StoreService {
               outStock: project
             }
           ],
-          type: '调拨',
+          type: strings.quickMapping.TRANSFER,
           outDate: {
             $lt: endDate,
           }
@@ -709,7 +710,7 @@ export class StoreService {
               outStock: project
             }
           ],
-          type: '调拨',
+          type: strings.quickMapping.TRANSFER,
           outDate: {
             $lt: endDate,
             $gte: startDate,
@@ -1093,7 +1094,7 @@ export class StoreService {
               outStock: project
             }
           ],
-          type: '调拨',
+          type: strings.quickMapping.TRANSFER,
           outDate: {
             $lt: endDate,
             $gte: startDate,
@@ -1551,7 +1552,7 @@ export class StoreService {
               outStock: project
             }
           ],
-          type: '调拨',
+          type: strings.quickMapping.TRANSFER,
           outDate: {
             $lt: endDate,
             $gte: startDate,
@@ -1872,7 +1873,7 @@ export class StoreService {
               outStock: project
             }
           ],
-          type: '调拨',
+          type: strings.quickMapping.TRANSFER,
           outDate: {
             $lt: endDate,
             $gte: startDate,
@@ -2320,7 +2321,7 @@ export class StoreService {
               outStock: project
             }
           ],
-          type: '调拨',
+          type: strings.quickMapping.TRANSFER,
           outDate: {
             $lt: endDate,
             $gte: startDate,

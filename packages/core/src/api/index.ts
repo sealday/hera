@@ -200,6 +200,26 @@ const genApi = ({ baseUrl = '/api/', onLogin, getAuthToken }: ApiParam) => {
         transformResponse: (res: Response) => res.data.record,
         invalidatesTags: (_result, _error, { id }) => [{ type: 'Record', id }]
       }),
+      // 上传附录
+      uploadRecordAppendix: builder.mutation({
+        query: ({ id, appendix }) => ({
+          url: `record/${id}/appendix`,
+          method: 'POST',
+          body: appendix 
+        }),
+        transformResponse: (res: Response) => res.data.record,
+        invalidatesTags: (_result, _error, { id }) => [{ type: 'Record', id }]
+      }),
+      // 删除附录
+      deleteRecordAppendix: builder.mutation({
+        query: ({ id, appendix }) => ({
+          url: `record/${id}/appendix`,
+          method: 'DELETE',
+          body: appendix 
+        }),
+        transformResponse: (res: Response) => res.data.record,
+        invalidatesTags: (_result, _error, { id }) => [{ type: 'Record', id }]
+      }),
       // 收到回单
       updateRecordReceipt: builder.mutation({
         query: id => ({

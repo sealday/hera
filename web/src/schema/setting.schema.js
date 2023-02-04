@@ -10,6 +10,11 @@ const settingSchema = [
     type: 'tags',
   },
   {
+    label: '财务签收地址',
+    name: 'address',
+    type: 'text',
+  },
+  {
     label: '运输单打印侧边说明',
     name: 'printSideComment',
     type: 'text',

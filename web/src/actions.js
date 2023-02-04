@@ -300,35 +300,6 @@ export const postTransfer = (record) => (dispatch, getState) => {
   }
 }
 
-export const UPDATE_TRANSFER = 'UPDATE_TRANSFER'
-
-/**
- * 更新出入库记录
- * @param record
- */
-export const updateTransfer = (record) => (dispatch, getState) => {
-  const networking = network(UPDATE_TRANSFER)
-  if (networking.shouldProceed(getState())) {
-    dispatch(networking.begin)
-    dispatch(newInfoNotify('提示', '正在更新调拨单', 2000))
-    ajax(`/api/record/${record._id}`, {
-      data: JSON.stringify(record),
-      method: 'POST',
-      contentType: 'application/json'
-    }).then(res => {
-      dispatch(networking.endSuccess)
-      dispatch(updateRecord(res.data.record)) // 更新出入库记录缓存
-      dispatch(newSuccessNotify('提示', '更新调拨单成功！', 2000))
-      // FIXME 为了保证用户可以直接通过返回回到查询界面，这里没有使用 push
-      history.back()
-    }).catch(err => {
-      dispatch(networking.endFailure)
-      dispatch(newErrorNotify('错误', '更新调拨单失败！', 2000))
-      throw err
-    });
-  }
-}
-
 export const REQUEST_RECORD = 'REQUEST_RECORD'
 
 /**

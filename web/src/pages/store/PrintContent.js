@@ -1,3 +1,4 @@
+import { strings } from 'hera-core'
 import _ from 'lodash'
 import { each } from "lodash"
 import moment from "moment"
@@ -88,7 +89,7 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
   }
 
   // 租赁单
-  if (record.type === '调拨') {
+  if (record.type === strings.quickMapping.TRANSFER) {
     content.partALabel = '承租单位'
     content.partBLabel = '工程项目'
     if (isStore(record.inStock)) {
@@ -109,7 +110,7 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
     content.inLabel = '租借单位'
   }
 
-  const isRent = () => record.type === '调拨'
+  const isRent = () => record.type === strings.quickMapping.TRANSFER
   const getProject = () => isStore(record.inStock)
     ? record.outStock
     : record.inStock

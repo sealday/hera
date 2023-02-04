@@ -8,6 +8,7 @@ import heraApi from './api'
 import _ from 'lodash'
 import { message } from 'antd'
 import { createContext } from 'react'
+import { strings } from 'hera-core'
 
 export const BASENAME = '/system'
 
@@ -15,7 +16,7 @@ export const history = createBrowserHistory()
 
 export const RECORD_TYPE_MAP = {
   'purchase': '购销',
-  'rent': '调拨',
+  'rent': strings.quickMapping.TRANSFER,
   'check': '盘点',
   'transfer': '暂存',
 }

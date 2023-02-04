@@ -1,3 +1,5 @@
+import * as strings from './strings'
+
 export {
   currencyFormat,
   dateFormat,
@@ -9,4 +11,4 @@ export { genApi } from './api'
 const sayHello = () => {
   console.log('hello.')
 }
-export { sayHello }
+export { sayHello, strings }

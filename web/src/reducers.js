@@ -32,6 +32,7 @@ export function system(state = new SystemRecord(), action) {
         .set('user', user)
         .set('config', config)
         .set('loading', false)
+        .set('printCompany', config.externalNames[0])
     case actionTypes.UPDATE_ARTICLE_SIZES:
       return state.updateIn(['articles', action.data.id], article => ({ ...article, sizes: action.data.sizes }) )
     case actionTypes.UPDATE_PROJECT:

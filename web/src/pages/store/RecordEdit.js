@@ -9,6 +9,7 @@ import { Error, Loading, PageHeader } from "../../components"
 import RecordForm from "./RecordForm"
 import { SettingContext } from "./records"
 import { useDirection } from './Record'
+import { strings } from 'hera-core'
 
 export default () => {
   const [form] = Form.useForm()
@@ -99,7 +100,7 @@ export default () => {
       titleParts.push(direction === 'in' ? '采购' : '销售')
       settings.price = true
       break;
-    case '调拨':
+    case strings.quickMapping.TRANSFER:
       titleParts.push('租赁')
       settings.freight = true
       break;

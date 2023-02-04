@@ -4,6 +4,7 @@ import { Cron } from '@nestjs/schedule';
 import _ = require('lodash');
 import * as moment from 'moment';
 import { Model, Types } from 'mongoose';
+import { AppService } from 'src/app/app.service';
 import { Contract } from 'src/schemas/contract.schema';
 import { ProjectService } from 'src/store/project/project.service';
 import { renderIt } from 'src/store/rent.document';
@@ -15,6 +16,7 @@ export class ContractService {
   constructor(
     private storeService: StoreService,
     private projectService: ProjectService,
+    private appService: AppService,
     @InjectModel(Contract.name) private contractModel: Model<Contract>,
   ) { }
 
@@ -130,7 +132,8 @@ export class ContractService {
     const contract = await this.contractModel.findById(id)
     const project = await this.projectService.findById(contract.project.toString())
     const calc = contract.calcs.find(calc => calc._id.equals(calcId))
-    return renderIt({ contract, project, calc })
+    const setting = await this.appService.getSetting()
+    return renderIt({ contract, project, calc, setting })
   }
 
   async restartCalc(id: String, calc: any, user: User) {

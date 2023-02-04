@@ -24,11 +24,11 @@ export default () => {
         title={<><Avatar size='large' style={{ backgroundColor: '#f50057' }} icon={<LockOutlined />} /><br /><h3 style={{ fontWeight: '400', fontSize: '1.5rem' }}>赫拉管理系统</h3></>}
         headStyle={{ textAlign: 'center' }}>
         <Form layout='vertical' onFinish={login} initialValues={{ company: '上海创兴建筑设备租赁有限公司' }}>
-          <Form.Item name='company' label='公司' required>
+          {/* <Form.Item name='company' label='公司' required>
             <Select>
               <Select.Option key='上海创兴建筑设备租赁有限公司'>上海创兴建筑设备租赁有限公司</Select.Option>
             </Select>
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item name='username' label='操作员' required>
             <Input />
           </Form.Item>

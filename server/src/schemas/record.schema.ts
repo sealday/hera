@@ -101,4 +101,7 @@ export const RecordSchema = new mongoose.Schema({
     amount: Number,
     comments: String, // 备注
   }],
+  appendix: [{
+    filename: String,
+  }]
 }, { timestamps: true });

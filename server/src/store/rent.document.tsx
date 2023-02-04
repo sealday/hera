@@ -19,6 +19,7 @@ import {
 import moment = require('moment')
 import { Project } from 'src/app/app.service'
 import _ = require('lodash')
+import { Setting } from 'src/schemas/setting.schema'
 
 const fontSizes = {
   title: '12px',
@@ -180,11 +181,13 @@ const PreviewDocument = ({
   calc,
   project,
   contract,
+  setting,
 }: {
   imageUrl: string
   calc: Calc
   project: Project
   contract: Contract
+  setting: Setting
 }) => {
   // 汇总
   const group = {
@@ -382,7 +385,8 @@ const PreviewDocument = ({
               </View>
               <View style={styles.tableFooterLeft}>
                 <Text>
-                  备注：承租单位收到租费单结算明细15日内未提异议即视为确认。请签字盖章后邮寄一份至上海市松江区方塔北路571号3楼财务室
+                  备注：承租单位收到租费单结算明细15日内未提异议即视为确认。请签字盖章后邮寄一份至
+                  {setting.address ?? ' 请在系统配置中配置地址！！'}
                 </Text>
               </View>
               <Text style={styles.tableFooterRight}>
@@ -410,6 +414,7 @@ const PreviewDocument = ({
 
 export const renderIt = async (rent: {
   calc: Calc
+  setting: Setting,
   contract: Contract
   project: Project
 }) => {

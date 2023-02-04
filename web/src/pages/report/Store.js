@@ -12,6 +12,7 @@ import {
 import { requestStore } from '../../actions'
 import StoreForm from './StoreForm'
 import { PageHeader, TreeTable } from '../../components'
+import { strings } from 'hera-core'
 
 const Store = () => {
   const form = React.useRef()
@@ -221,7 +222,7 @@ const Store = () => {
         initialValues: {
           startDate: moment().startOf('day'),
           endDate: moment().startOf('day'),
-          type: '调拨',
+          type: strings.quickMapping.TRANSFER,
           project: store._id,
         },
         onSubmit: query,
