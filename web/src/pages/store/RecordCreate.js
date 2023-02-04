@@ -113,10 +113,13 @@ const RecordCreate = ({ record, project, form: passedForm, onClose }) => {
   // 名称后缀
   titleParts.push(direction === 'in' ? '入库' : direction === 'out' ? '出库' : '')
   const pageTitle = titleParts.join('')
+  // TODO 这个 onSave 结构改一下，这个写法不好
+  const onSave = () => form.submit()
+  onSave.isLoading = createResult.isLoading
   return <PageHeader
     title={pageTitle}
     subTitle='正在录入'
-    onSave={() => form.submit()}
+    onSave={onSave}
   >
     <SettingContext.Provider value={settings}>
       <RecordForm form={form} onSubmit={handleSubmit} initialValues={initialValues} />
