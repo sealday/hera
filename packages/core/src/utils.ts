@@ -20,6 +20,9 @@ if (typeof window !== 'undefined' && window.Intl || typeof global !== 'undefined
     return number ? numberFormat.format(number) : numberFormat.format(0)
   }
   numberFormat_ = (number: any, fractionDigits = 2) => {
+    if (typeof number === 'undefined' || Number.isNaN(number)) {
+      return ''
+    }
     const numberFormat = new Intl.NumberFormat('zh-CN', { minimumFractionDigits: fractionDigits, maximumFractionDigits: fractionDigits })
     return numberFormat.format(number)
   }

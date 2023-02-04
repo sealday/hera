@@ -108,7 +108,6 @@ const genFormContent = (schema, cols = 0, form = null, initialValues = {}) => {
         </Form.List>
       ))
     } else if (item.type === 'number') {
-      console.log(item)
       formItems.push((
         <Form.Item key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
           <InputNumber addonAfter={item.suffix ? item.suffix : null} disabled={item.disabled}

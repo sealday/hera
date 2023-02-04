@@ -101,6 +101,12 @@ export class Contract {
 
   @Prop([String])
   tags: string[];
+
+  @Prop()
+  isScheduled: boolean;
+
+  @Prop()
+  scheduledAt: number;
 }
 
 export const ContractSchema = SchemaFactory.createForClass(Contract)

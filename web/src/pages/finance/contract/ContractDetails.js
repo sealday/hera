@@ -9,6 +9,7 @@ import { Error, Link, LinkButton, Loading, PageHeader } from 'components'
 import heraApi from '../../../api'
 import { useNavigate, useParams } from 'utils/hooks'
 import { RULE_CATEGORIES } from 'constants'
+import { numberFormat, percentFormat } from 'hera-core'
 
 const INITIAL_CATEGORY = '租金'
 
@@ -78,10 +79,23 @@ const ContractDetails = connect(mapStateToProps)(({ projects, dispatch, plans })
   const rules = getRuleList.data
   const contract = getContract.data
   const descriptions = [
-    { label: "项目部", children: <ProjectLabel id={contract.project} /> },
-    { label: "状态", children: <Tag color="green">{contract.status}</Tag> },
-    { label: "签约时间", children: moment(contract.date).format('YYYY-MM-DD') },
-    { label: "备注", children: contract.comments },
+    { label: '项目部', children: <ProjectLabel id={contract.project} /> },
+    { label: '状态', children: <Tag color="green">{contract.status}</Tag> },
+    { label: '签约时间', children: moment(contract.date).format('YYYY-MM-DD') },
+    { label: '税率', children: percentFormat(contract.taxRate, 0) },
+    {
+      label: '合同费用规则是否已含税',
+      children: <Tag>{contract.includesTax ? '已含' : '不含'}</Tag>,
+    },
+    {
+      label: '是否启用自动结算',
+      children: <Tag>{contract.isScheduled ? '已启用' : '未启用'}</Tag>,
+    },
+    {
+      label: '每月',
+      children: numberFormat(contract.scheduledAt, 0) + ' 日',
+    },
+    { label: '备注', children: contract.comments },
   ]
   return (
     <PageHeader
@@ -90,7 +104,7 @@ const ContractDetails = connect(mapStateToProps)(({ projects, dispatch, plans })
       descriptions={descriptions}
 
       onEdit={() => {
-        const initialValues = pick(contract, ['name', 'code', 'project', 'address', 'comments'])
+        const initialValues = pick(contract, ['name', 'code', 'project', 'address', 'comments', 'taxRate', 'includesTax', 'isScheduled', 'scheduledAt'])
         // TODO 统一日期处理在接口层，转换成 moment 对象
         if (contract.date) {
           initialValues.date = moment(contract.date)
