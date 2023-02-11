@@ -62,12 +62,13 @@ export const PageHeaderComponent = ({
   const actions = []
 
   const searchMeta = useMemo(() => {
-    if (search && search.schema) {
+    if (search?.schema) {
       const initialValues = {}
-      const formItems = genFormContent(search.schema, 3, form, initialValues)
+      const formItems = genFormContent(search?.schema, 3, form, initialValues)
       return { formItems, initialValues }
     }
-  }, [search && search.schema])
+  }, [search, search?.schema])
+
   if (tabButton && tabButton !== 'modal') {
     actions.push(tabButton)
   }
