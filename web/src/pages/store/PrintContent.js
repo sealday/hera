@@ -355,87 +355,134 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
     columnNames.push(...columnNames)
   }
   return (
-    <div style={{ position: 'relative', paddingRight: '1.2em', minHeight: '30em' }}>
-      <div style={{
-        position: 'absolute',
-        top: '6.5em',
-        fontSize: '9px',
-        right: 0,
-        width: '1.2em'
-      }}>{config.orderPrintSideComment}</div>
-      <h4 className="text-center">{selectedTitle ? selectedTitle: orderTitle}</h4>
+    <div
+      style={{ position: 'relative', paddingRight: '1.2em', minHeight: '30em' }}
+    >
+      <div
+        style={{
+          position: 'absolute',
+          top: '6.5em',
+          fontSize: '9px',
+          right: 0,
+          width: '1.2em',
+        }}
+      >
+        {config.orderPrintSideComment}
+      </div>
+      <h4 className="text-center">
+        {selectedTitle ? selectedTitle : orderTitle}
+      </h4>
       <h4 className="text-center">{content.orderName}</h4>
       <table style={{ tableLayout: 'fixed', fontSize: '11px', width: '100%' }}>
-        {
-          isRent()
-            ?
-            <colgroup>
-              <col style={{ width: '25%' }} />
-              <col style={{ width: '55%' }} />
-              <col style={{ width: '20%' }} />
-            </colgroup>
-            :
-            <colgroup>
-              <col style={{ width: '50%' }} />
-            </colgroup>
-        }
+        {isRent() ? (
+          <colgroup>
+            <col style={{ width: '25%' }} />
+            <col style={{ width: '55%' }} />
+            <col style={{ width: '20%' }} />
+          </colgroup>
+        ) : (
+          <colgroup>
+            <col style={{ width: '50%' }} />
+          </colgroup>
+        )}
         <tbody>
-          {isRent() 
-          ? (
-              <>
-                <tr>
-                  <td>客户号：{getProject().code}</td>
-                  <td><IfShow cond={content.partA}>承租单位：{content.partA}</IfShow></td>
-                  <td>日期：{moment(record.outDate).format('YYYY-MM-DD')}</td>
-                </tr>
-                <tr>
-                  <td>合同编号：{_.get(getContract(), 'code', '')}</td>
-                  <td><IfShow cond={content.partB}>项目名称：{content.partB}</IfShow></td>
-                  <td>流水号：{record.number}</td>
-                </tr>
-                <tr>
-                  <td>状态：{_.get(getContract(), 'status', PROJECT_STATUS_MAP[getProject().status])}</td>
-                  <td>项目地址：{getProject().address}</td>
-                  <td>原始单号：{record.originalOrder}</td>
-                </tr>
-                <tr>
-                  <td>经办人及电话：</td>
-                  <td>项目联系人电话：{getProject().contacts.map(user => user.name + ' ' + user.phone).join(' ')}</td>
-                  <td>车号：{record.carNumber}</td>
-                </tr>
-              </>
-          )
-            : (
-              <>
-                <tr>
-                  <td><IfShow cond={content.partA}>{content.partALabel}：{content.partA}</IfShow></td>
-                  <td>日期：{moment(record.outDate).format('YYYY-MM-DD')}</td>
-                  <td>流水号：{record.number}</td>
-                </tr>
-                <tr>
-                  <td><IfShow cond={content.partB}>{content.partBLabel}：{content.partB}</IfShow></td>
-                  <td>车号：{record.carNumber}</td>
-                  <td>原始单号：{record.originalOrder}</td>
-                </tr>
-              </>
-            )
-          }
+          {isRent() ? (
+            <>
+              <tr>
+                <td>客户号：{getProject().code}</td>
+                <td>
+                  <IfShow cond={content.partA}>
+                    承租单位：{content.partA}
+                  </IfShow>
+                </td>
+                <td>日期：{moment(record.outDate).format('YYYY-MM-DD')}</td>
+              </tr>
+              <tr>
+                <td>合同编号：{_.get(getContract(), 'code', '')}</td>
+                <td>
+                  <IfShow cond={content.partB}>
+                    项目名称：{content.partB}
+                  </IfShow>
+                </td>
+                <td>流水号：{record.number}</td>
+              </tr>
+              <tr>
+                <td>
+                  状态：
+                  {_.get(
+                    getContract(),
+                    'status',
+                    PROJECT_STATUS_MAP[getProject().status]
+                  )}
+                </td>
+                <td>项目地址：{getProject().address}</td>
+                <td>原始单号：{record.originalOrder}</td>
+              </tr>
+              <tr>
+                {record.weight && <td>实际重量：{fixed(record.weight)}吨</td>}
+              </tr>
+              <tr>
+                <td>经办人及电话：</td>
+                <td>
+                  项目联系人电话：
+                  {getProject()
+                    .contacts.map(user => user.name + ' ' + user.phone)
+                    .join(' ')}
+                </td>
+                <td>车号：{record.carNumber}</td>
+              </tr>
+            </>
+          ) : (
+            <>
+              <tr>
+                <td>
+                  <IfShow cond={content.partA}>
+                    {content.partALabel}：{content.partA}
+                  </IfShow>
+                </td>
+                <td>日期：{moment(record.outDate).format('YYYY-MM-DD')}</td>
+                <td>流水号：{record.number}</td>
+              </tr>
+              <tr>
+                <td>
+                  <IfShow cond={content.partB}>
+                    {content.partBLabel}：{content.partB}
+                  </IfShow>
+                </td>
+                <td>车号：{record.carNumber}</td>
+                <td>原始单号：{record.originalOrder}</td>
+              </tr>
+              <tr>
+                {record?.entries?.[0]?.weight && (
+                  <td>理论重量：{fixed(record?.entries?.[0]?.weight)}吨</td>
+                )}
+                {record.weight && <td>实际重量：{fixed(record.weight)}吨</td>}
+              </tr>
+            </>
+          )}
         </tbody>
       </table>
-      <table className="table table-bordered table--tight" style={{
-        tableLayout: 'fixed',
-        fontSize: '11px',
-        marginBottom: '0',
-        width: '100%',
-      }}>
+      <table
+        className="table table-bordered table--tight"
+        style={{
+          tableLayout: 'fixed',
+          fontSize: '11px',
+          marginBottom: '0',
+          width: '100%',
+        }}
+      >
         <thead>
           <tr>
             {columnNames
               .filter((_name, index) => !ignoreIndexes.includes(index))
               .map((col, index) => (
-                <th key={index}
+                <th
+                  key={index}
                   style={_.get(col, 'hidden', false) ? { display: 'none' } : {}}
-                  colSpan={_.get(col, 'colSpan', 1)}>{_.get(col, 'children', col)}</th>
+                  colSpan={_.get(col, 'colSpan', 1)}
+                >
+                  {_.get(col, 'children', col)}
+                </th>
               ))}
           </tr>
         </thead>
@@ -448,20 +495,21 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
                   <td
                     key={index}
                     align={_.get(col, 'align', 'right')}
-                    style={_.get(col, 'hidden', false) ? { display: 'none', ..._.get(col, 'style', {}) } : _.get(col, 'style', {})}
-                    colSpan={_.get(col, 'colSpan', 1)}>
+                    style={
+                      _.get(col, 'hidden', false)
+                        ? { display: 'none', ..._.get(col, 'style', {}) }
+                        : _.get(col, 'style', {})
+                    }
+                    colSpan={_.get(col, 'colSpan', 1)}
+                  >
                     {_.get(col, 'children', col)}
                   </td>
                 ))}
             </tr>
           ))}
           <tr>
-            <td colSpan={leftSlice} >
-              {content.explain}
-            </td>
-            <td colSpan={slice - leftSlice}>
-              备注：{record.comments} 
-            </td>
+            <td colSpan={leftSlice}>{content.explain}</td>
+            <td colSpan={slice - leftSlice}>备注：{record.comments}</td>
           </tr>
         </tbody>
       </table>
@@ -469,8 +517,16 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
         <tbody>
           <tr>
             <td>制单人：{record.username}</td>
-            <td><IfShow cond={record.type !== '盘点' || !!record.outStock}>{content.outLabel}（签名）：</IfShow></td>
-            <td><IfShow cond={record.type !== '盘点' || !!record.inStock}>{content.inLabel}（签名）：</IfShow></td>
+            <td>
+              <IfShow cond={record.type !== '盘点' || !!record.outStock}>
+                {content.outLabel}（签名）：
+              </IfShow>
+            </td>
+            <td>
+              <IfShow cond={record.type !== '盘点' || !!record.inStock}>
+                {content.inLabel}（签名）：
+              </IfShow>
+            </td>
           </tr>
         </tbody>
       </table>

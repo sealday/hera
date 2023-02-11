@@ -5,6 +5,7 @@ import { Button, Space, Tag, message, ConfigProvider } from 'antd'
 import { useNavigate } from 'utils/hooks'
 import { Error, Link, Loading, PageHeader, PopconfirmButton, ResultTable } from '../../../components'
 import heraApi from '../../../api'
+import ColorTag from 'components/tag/color.tag'
 
 const ContractDeleteButton = ({ record }) => {
   const [deleteContract, deleteResult] = heraApi.useDeleteContractMutation()
@@ -52,6 +53,15 @@ export default () => {
   }
   const columns = [
     { title: "名称", key: "name", dataIndex: "name" },
+    { title: "关联标签", key: "tags", dataIndex: "tags",render(tags) {
+    
+        return (
+          tags.length > 0 ?  <ColorTag tags={ tags } />:null
+         
+        )
+        
+      }
+    },
     { title: "编号", key: "code", dataIndex: "code" },
     { title: "日期", key: "date", dataIndex: "date", render(date) { return moment(date).format('YYYY-MM-DD') } },
     { title: "地址", key: "address", dataIndex: "address" },
