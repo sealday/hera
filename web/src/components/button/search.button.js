@@ -15,9 +15,10 @@ const SearchButton = ({
       type="primary"
       onClick={onClick}
       icon={<SearchOutlined />}
-      children="查询"
       {...otherProps}
-    />
+    >
+      查询
+    </Button>
   )
 }
 

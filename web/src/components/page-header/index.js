@@ -3,7 +3,7 @@ import { PageHeaderComponent } from './page-header.component'
 
 export default props => {
   const { title, subTitle, children } = props
-  const tabButton = useTab({ title, subTitle })
+  const [tabButtonType, tabButtonComponent] = useTab({ title, subTitle })
   return (
     <>
       <div
@@ -18,7 +18,9 @@ export default props => {
         <PageHeaderComponent {...props} />
       </div>
       {children ? (
-        <div style={{ padding: tabButton === 'modal' ? 0 : '0 8px 8px 8px' }}>
+        <div
+          style={{ padding: tabButtonType === 'modal' ? 0 : '0 8px 8px 8px' }}
+        >
           {children}
         </div>
       ) : (

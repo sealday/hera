@@ -20,7 +20,7 @@ import {
   Row,
   Space,
 } from 'antd'
-import _, { rest } from 'lodash'
+import _ from 'lodash'
 import React, { useState } from 'react'
 import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
@@ -31,6 +31,7 @@ import ModalFormButton from '../button/modal-form.button'
 import ModalPrintPreviewButton from '../button/modal-print-preview.button'
 import { Helmet } from 'react-helmet-async'
 import { useNavigate } from '../../utils/hooks'
+import SearchButton from 'components/button/search.button'
 
 export const PageHeaderComponent = ({
   title,
@@ -38,7 +39,6 @@ export const PageHeaderComponent = ({
   onCreate,
   onCreateMenu,
   onEdit,
-  children,
   onPrintPreview,
   onPrint,
   searchInfo,
@@ -57,7 +57,7 @@ export const PageHeaderComponent = ({
   }))
   const navigate = useNavigate()
   const [form] = Form.useForm()
-  const tabButton = useTab({ title, subTitle })
+  const [tabButtonType, tabButtonComponent] = useTab({ title, subTitle })
   const recentItems = []
   const actions = []
 
@@ -69,8 +69,8 @@ export const PageHeaderComponent = ({
     }
   }, [search, search?.schema])
 
-  if (tabButton && tabButton !== 'modal') {
-    actions.push(tabButton)
+  if (tabButtonType !== 'modal' && tabButtonComponent) {
+    actions.push(tabButtonComponent)
   }
   if (extra) {
     actions.push(...extra)
@@ -236,16 +236,7 @@ export const PageHeaderComponent = ({
         </Button>
       )
     }
-    actions.push(
-      <Button
-        key="onSearch"
-        type="primary"
-        onClick={() => mSearchForm.current.submit()}
-        icon={<SearchOutlined />}
-      >
-        查询
-      </Button>
-    )
+    actions.push(<SearchButton onClick={() => mSearchForm.current.submit()} />)
     forms.push(
       <searchForm.Form
         key="searchForm"
@@ -279,7 +270,7 @@ export const PageHeaderComponent = ({
   }
   return (
     <>
-      {tabButton === 'modal' ? (
+      {tabButtonType === 'modal' ? (
         <>
           {search && searchMeta ? (
             <Form
@@ -318,6 +309,31 @@ export const PageHeaderComponent = ({
           subTitle={subTitle}
           ghost={false}
           extra={<Space>{actions}</Space>}
+          // extra={
+          //   <Space>
+          //     {actions.map(
+          //       ({
+          //         key,
+          //         type,
+          //         onClick,
+          //         iconButton,
+          //         buttonName,
+          //         nodeComponent,
+          //       }) =>
+          //         nodeComponent ? (
+          //           nodeComponent
+          //         ) : (
+          //           <Button
+          //             key={key}
+          //             type={type}
+          //             onClick={onClick}
+          //             icon={iconButton}
+          //             children={buttonName}
+          //           />
+          //         )
+          //     )}
+          //   </Space>
+          // }
         >
           <Helmet>
             <title>

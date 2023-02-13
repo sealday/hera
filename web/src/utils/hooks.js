@@ -63,9 +63,10 @@ export const useTab = ({ title, subTitle }) => {
   // 关闭或者返回键
   switch (true) {
     case modalContext.has:
-      return 'modal'
+      return ['modal', null]
     case tabContext.has:
-      return (
+      return [
+        'tab',
         <>
           <Button
             key="close"
@@ -75,10 +76,11 @@ export const useTab = ({ title, subTitle }) => {
           >
             关闭
           </Button>
-        </>
-      )
+        </>,
+      ]
     case canGoBack():
-      return (
+      return [
+        'tab',
         <Button
           key="goBack"
           type="default"
@@ -86,10 +88,10 @@ export const useTab = ({ title, subTitle }) => {
           icon={<ArrowLeftOutlined />}
         >
           返回
-        </Button>
-      )
+        </Button>,
+      ]
     default:
-      return null
+      return ['tab', null]
   }
 };
 
