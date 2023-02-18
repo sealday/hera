@@ -36,13 +36,28 @@ const RecordPreview = () => {
   const extra = [
     <Popover key='printSettings' trigger='click' content={content}><Button icon={<SettingOutlined />}>打印设置</Button></Popover>,
   ]
-  return <PageHeader title='打印预览' onPrint={() => printFrame.current.print()} extra={extra}>
-    <Card bordered={false}>
-      <PrintFrame ref={printFrame}>
-        <PrintContent record={recordResult.data} columnStyle={columnStyle} selectedTitle={selectedTitle} />
-      </PrintFrame>
-    </Card>
-  </PageHeader>
+  console.log(
+    '%c Line:43 🥐 recordResult.data',
+    'font-size:18px;color:#2eafb0;background:#3f7cff',
+    recordResult.data
+  )
+  return (
+    <PageHeader
+      title="打印预览"
+      onPrint={() => printFrame.current.print()}
+      extra={extra}
+    >
+      <Card bordered={false}>
+        <PrintFrame ref={printFrame}>
+          <PrintContent
+            record={recordResult.data}
+            columnStyle={columnStyle}
+            selectedTitle={selectedTitle}
+          />
+        </PrintFrame>
+      </Card>
+    </PageHeader>
+  )
 }
 
 export default RecordPreview
