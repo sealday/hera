@@ -34,20 +34,56 @@ const formatDate = (fmt, timeStamp) => {
     return fmt.replace(/yyyy|MM|dd|hh|mm|ss/gi, replaceFunc);
 }
 
-module.exports = {
-    updateVersionTime: () => {
-        const versionNumber = packageConfig?.version
-        const versionTime = formatDate("yyyy-MM-dd hh:mm:ss")
-        const versionInfo = {  
-            versionNumber,
-            versionTime
-        };
-        const data = JSON.stringify(versionInfo)
-        fs.writeFile('./src/version.json', data, (err) => {
-            if (err) {
-                throw err;
-            }
-            console.log("版本信息更新成功!!!", versionNumber, versionTime)
-        });
+// 版本号自动加一
+const updateVersionNumber = (prevVersion = '1.0.0') => {
+  // 校验形如“3.0.1”的正则表达式
+  const versionRegexpPattern =
+    /^(([0-9]|([1-9]([0-9]*))).){2}([0-9]|([1-9]([0-9]*)))([-](([0-9A-Za-z]|([1-9A-Za-z]([0-9A-Za-z]*)))[.]){0,}([0-9A-Za-z]|([1-9A-Za-z]([0-9A-Za-z]*)))){0,1}([+](([0-9A-Za-z]{1,})[.]){0,}([0-9A-Za-z]{1,})){0,1}$/
+
+  if (versionRegexpPattern.test(prevVersion)) {
+    let [majorNumber, minorNumber, patchNumber] = prevVersion
+      .split('.')
+      .map(num => +num)
+
+    if (patchNumber < 99) {
+      patchNumber++
+    } else if (minorNumber < 99) {
+      minorNumber++
+    } else {
+      majorNumber++
     }
-};
+
+    return `${majorNumber}.${minorNumber}.${patchNumber}`
+  } else {
+    return '1.0.0'
+  }
+}
+
+module.exports = {
+  updateVersionTime: () => {
+    // 小版本号自动加1
+    const versionNumber = updateVersionNumber(packageConfig?.version)
+    const versionTime = formatDate('yyyy-MM-dd hh:mm:ss')
+    const versionInfo = {
+      versionNumber,
+      versionTime,
+    }
+    const versionData = JSON.stringify(versionInfo, null, '\t')
+    fs.writeFile('./src/version.json', versionData, err => {
+      if (err) {
+        throw err
+      }
+    })
+
+    // 同步更新 package.json 里的版本信息
+    packageConfig.version = versionNumber
+    const packageConfigData = JSON.stringify(packageConfig, '', '  ')
+    fs.writeFile('../package.json', packageConfigData, err => {
+      if (err) {
+        throw err
+      }
+    })
+
+    console.log('版本信息更新成功!!!', versionNumber, versionTime)
+  },
+}
