@@ -516,6 +516,9 @@ export const rentExcelExport = (XLSX, rent, name) => {
   //   ['备注', ''],
   // ]
   const json = [
+    ['华东公司料具租赁站'],
+    ['料具租赁费用结算单'],
+    [`结算时段:${''}`, '', '', '', `工程名称:${''}`],
     [
       '料具名称',
       '起租日期',
@@ -581,6 +584,13 @@ export const rentExcelExport = (XLSX, rent, name) => {
       null,
     ])
   }
+
+  // 表尾
+  json.push(
+    ['总计：', '', '', '', '', '', '', '金额占位'],
+    [`大写总计：${'金额占位'}`],
+    ['供方签章', '', '供方经办', '', '需方经办', '', '需方签章']
+  )
 
   const sheet = XLSX.utils.aoa_to_sheet(json)
   const range = XLSX.utils.decode_range(sheet['!ref'])
