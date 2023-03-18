@@ -169,7 +169,7 @@ export const PageHeaderComponent = ({
           menu={{ items: onEdit.slice(1) }}
         >
           <EditOutlined />
-          编辑
+          {onEdit[0].label || '编辑'}
         </Dropdown.Button>
       )
     } else if (Array.isArray(onEdit)) {

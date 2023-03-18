@@ -1,5 +1,5 @@
 const quickMapping = {
-  TRANSFER: '调拨'
+  TRANSFER: '租赁'
 }
 
 export { quickMapping }
