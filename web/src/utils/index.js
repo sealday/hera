@@ -502,6 +502,8 @@ table {
 	border: 1px solid black;
 }
 `
+
+// 使用同目录下的excel.js中的新方法rentExcelExportNew作为替代方法
 export const rentExcelExport = (XLSX, rent, name) => {
   const wb = XLSX.utils.book_new()
   // const jsonConfigArr = [
@@ -518,7 +520,7 @@ export const rentExcelExport = (XLSX, rent, name) => {
   const json = [
     ['华东公司料具租赁站'],
     ['料具租赁费用结算单'],
-    [`结算时段:${''}`, '', '', '', `工程名称:${''}`],
+    [`结算时段:${'金额占位'}`, '', '', '', `工程名称:${'金额占位'}`],
     [
       '料具名称',
       '起租日期',

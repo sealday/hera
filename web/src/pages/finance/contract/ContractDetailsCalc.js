@@ -4,12 +4,13 @@ import moment from 'moment'
 import { Button, Card, Tag, Descriptions } from 'antd'
 import { connect, useDispatch, useSelector } from 'react-redux'
 import { CONTRACT_DETAILS, queryContractDetails } from '../../../actions'
-import { percentFormat, rentExcelExport } from '../../../utils'
+import { percentFormat } from '../../../utils'
 import RentCalcTable from '../RentCalcTable'
 import { useParams } from 'utils/hooks'
 import { ModalPrintPreviewButton, PageHeader } from '../../../components'
 import _ from 'lodash'
 import heraApi from 'api'
+import { rentExcelExportNew } from 'utils/excel'
 
 const ProjectLabel = connect(state => ({
   projects: state.system.projects,
@@ -83,7 +84,11 @@ const ContractDetailsCalc = () => {
         <ModalPrintPreviewButton key='printPreview' pdf={`/api/contract/${id}/calc/${calcId}/preview`}>打印预览</ModalPrintPreviewButton>,
         <Button type='primary' key='excel' onClick={() => {
           import('xlsx').then(XLSX => {
-            rentExcelExport(XLSX, currentCalc, currentCalc.name + '-' + projectName)
+            rentExcelExportNew(
+              XLSX,
+              currentCalc,
+              currentCalc.name + '-' + projectName
+            )
           }).catch(() => {
             alert('加载 Excel 控件失败，请重试')
           })
