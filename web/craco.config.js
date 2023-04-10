@@ -1,5 +1,5 @@
 const CracoLessPlugin = require('craco-less');
-const updateVersion = require("./update-version")
+const updateVersion = require('./update-version')
 // 构建时期,额外操作, 自动更新版本时间
 updateVersion.updateVersionTime()
 
@@ -16,6 +16,18 @@ module.exports = {
       },
     },
   ],
-};
+  webpack: {
+    configure: webpackConfig => {
+      webpackConfig.resolve = {
+        ...webpackConfig.resolve,
+        fallback: {
+          fs: false,
+          crypto: false,
+        },
+      }
+      return webpackConfig
+    },
+  },
+}
 
 

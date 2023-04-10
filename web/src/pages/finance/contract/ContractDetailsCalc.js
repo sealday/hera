@@ -83,15 +83,17 @@ const ContractDetailsCalc = () => {
         }}>重新计算</Button>,
         <ModalPrintPreviewButton key='printPreview' pdf={`/api/contract/${id}/calc/${calcId}/preview`}>打印预览</ModalPrintPreviewButton>,
         <Button type='primary' key='excel' onClick={() => {
-          import('xlsx').then(XLSX => {
-            rentExcelExportNew(
-              XLSX,
-              currentCalc,
-              currentCalc.name + '-' + projectName
-            )
-          }).catch(() => {
-            alert('加载 Excel 控件失败，请重试')
-          })
+          import('xlsx-style-medalsoft')
+            .then(XLSX => {
+              rentExcelExportNew(
+                XLSX,
+                currentCalc,
+                currentCalc.name + '-' + projectName
+              )
+            })
+            .catch(() => {
+              alert('加载 Excel 控件失败，请重试')
+            })
         }}>导出 EXCEL</Button>,
       ]}
     >
