@@ -1,7 +1,8 @@
 import { dateFormat } from 'hera-core'
 import { saveAs } from 'file-saver'
-
-export const rentExcelExportNew = (XLSX, rent, name) => {
+// 使用前端库 SheetJS-xlsx导出excel文件
+// 文档地址：https://docs.sheetjs.com/docs/
+export const rentExcelExportNewFunc = (XLSX, rent, name) => { 
   const wb = XLSX.utils.book_new()
   // const jsonConfigArr = [
   //   ['料具名称', 'name'],
@@ -129,7 +130,120 @@ export const rentExcelExportNew = (XLSX, rent, name) => {
     }
   }
   XLSX.utils.book_append_sheet(wb, sheet, '结算表')
+
   const out = XLSX.write(wb, {
+    bookType: 'xlsx',
+    bookSST: false,
+    type: 'binary',
+    compression: true,
+  })
+  const s2ab = s => {
+    const buf = new ArrayBuffer(s.length)
+    const view = new Uint8Array(buf)
+    for (let i = 0; i !== s.length; ++i) {
+      view[i] = s.charCodeAt(i) & 0xff
+    }
+    return buf
+  }
+  saveAs(
+    new Blob([s2ab(out)], { type: 'application/octet-stream' }),
+    name + '.xlsx'
+  )
+}
+
+// 导出excel表格
+export const rentExcelExportNew = (XLSX, data, name) => {
+  // 获取创建好的电子表格对象，已经设置好单元格样式，字体样式等细化配置
+  const worksheet = configWorkSheetFunc(XLSX, data)
+  // 创建工作簿对象并添加电子表格
+  const workbook = XLSX.utils.book_new()
+  XLSX.utils.book_append_sheet(workbook, worksheet, '结算表')
+  // 将工作簿对象导出为Excel文件
+  XLSX.writeFile(workbook, `${name}.xlsx`)
+}
+
+// 配置excel表格
+const configWorkSheetFunc = (XLSX, rawData) => {
+  // 构建表头数据
+  const header = [
+    ['华东公司料具租赁站'],
+    ['料具租赁费用结算单'],
+    
+  ]
+  // 将表头插入到第一二行
+  const worksheet = XLSX.utils.aoa_to_sheet(header)
+  // 合并单元格
+  if (!worksheet['!merges']) worksheet['!merges'] = []
+  worksheet['!merges'].push(
+    XLSX.utils.decode_range('A1:L1'),
+    XLSX.utils.decode_range('A2:L2'),
+    XLSX.utils.decode_range('A3:F3'),
+    XLSX.utils.decode_range('G3:L3')
+  )
+  XLSX.utils.sheet_add_aoa(worksheet, [[`结算时段:${'金额占位'}`]], { origin: { r: 2, c: 0 } })
+  XLSX.utils.sheet_add_aoa(worksheet, [[`工程名称:${'金额占位'}`]], { origin: { r: 2, c: 6 } })
+
+  // 获取表格主要内容数据
+  const data = getRegularData(rawData)
+  XLSX.utils.sheet_add_aoa(worksheet, data, { origin: { r: 3, c: 0 } })
+  // 将表尾插入到最后一行
+  // XLSX.utils.sheet_add_aoa(worksheet, [footer], { origin: -1 })
+
+  return worksheet
+}
+
+// 获取表格内容数据，将原始数据转换为二维数组，js对象形式有问题
+const getRegularData = rawData => {
+  // 表格属性名称
+  const headers = [
+    '料具名称',
+    '料具规格',
+    '类别',
+    '起租日期',
+    '结算日期',
+    '数量',
+    '单位',
+    '单价(元)',
+    '天数',
+    '金额(元)',
+    '同类累计金额',
+    '备注',
+  ]
+  const data = [
+    ...(rawData?.history || []).map(item => [
+      item.name, // 料具名称
+      null,
+      null,
+      dateFormat(rawData?.start), // 起租日期
+      dateFormat(rawData?.end), // 结算日期
+      item.count,
+      item.unit,
+      item.unitPrice,
+      item.days,
+      item.price,
+      null,
+      null,
+    ]),
+    ...(rawData?.list || []).map(item => [
+      item.name, // 料具名称
+      null,
+      null,
+      dateFormat(item.inOut === '入库' ? rawData?.start : item.outDate), // 起租日期
+      dateFormat(item.inOut === '入库' ? item.outDate : rawData?.end), // 结算日期
+      item.count,
+      item.unit,
+      item.unitPrice,
+      item.days,
+      item.price,
+      null,
+      null,
+    ]),
+  ]
+  return [headers, ...data]
+}
+
+const writeFunc = (XLSX, workbook, { name }) => {
+  const out = XLSX.write(workbook, {
     bookType: 'xlsx',
     bookSST: false,
     type: 'binary',
