@@ -10,7 +10,7 @@ import { useParams } from 'utils/hooks'
 import { ModalPrintPreviewButton, PageHeader } from '../../../components'
 import _ from 'lodash'
 import heraApi from 'api'
-import { rentExcelExportNew } from 'utils/excel'
+import { exportExcel } from 'utils/excel'
 
 const ProjectLabel = connect(state => ({
   projects: state.system.projects,
@@ -20,6 +20,24 @@ const ProjectLabel = connect(state => ({
   }
   return <>projectId</>
 })
+
+const ButtonReCalc = props => {
+  const { restartCal, id, calcId, currentCalc } = props
+  return (
+    <Button
+      key="reCalc"
+      onClick={() => {
+        restartCal({
+          id,
+          calcId,
+          calc: _.omit(currentCalc, ['list', 'history', 'group', 'nameGroup']),
+        })
+      }}
+    >
+      重新计算
+    </Button>
+  )
+}
 
 const ContractDetailsCalc = () => {
   const dispatch = useDispatch()
@@ -54,18 +72,27 @@ const ContractDetailsCalc = () => {
   }
 
   const descriptions = [
-    { label: '项目部', children: <ProjectLabel projectId={contract.project} /> },
+    {
+      label: '项目部',
+      children: <ProjectLabel projectId={contract.project} />,
+    },
     { label: '状态', children: <Tag color="green">{contract.status}</Tag> },
-    { label: "签约时间", children: moment(contract.date).format('YYYY-MM-DD') },
-    { label: "结算名称", children: currentCalc.name },
-    { label: "结算开始日期", children: moment(currentCalc.start).format('YYYY-MM-DD') },
-    { label: "结算结束日期", children: moment(currentCalc.end).format('YYYY-MM-DD') },
+    { label: '签约时间', children: moment(contract.date).format('YYYY-MM-DD') },
+    { label: '结算名称', children: currentCalc.name },
+    {
+      label: '结算开始日期',
+      children: moment(currentCalc.start).format('YYYY-MM-DD'),
+    },
+    {
+      label: '结算结束日期',
+      children: moment(currentCalc.end).format('YYYY-MM-DD'),
+    },
     { label: '税率', children: percentFormat(currentCalc.taxRate, 0) },
     {
       label: '合同费用规则是否已含税',
       children: <Tag>{currentCalc.includesTax ? '已含' : '不含'}</Tag>,
     },
-    { label: "备注", children: contract.comments },
+    { label: '备注', children: contract.comments },
   ]
 
   return (
@@ -74,32 +101,35 @@ const ContractDetailsCalc = () => {
       subTitle={contract.code}
       descriptions={descriptions}
       extra={[
-        <Button key='reCalc' onClick={() => {
-          restartCal({
-            id,
-            calcId,
-            calc: _.omit(currentCalc, ['list', 'history', 'group', 'nameGroup']),
-          })
-        }}>重新计算</Button>,
-        <ModalPrintPreviewButton key='printPreview' pdf={`/api/contract/${id}/calc/${calcId}/preview`}>打印预览</ModalPrintPreviewButton>,
-        <Button type='primary' key='excel' onClick={() => {
-          import('xlsx-style-medalsoft')
-            .then(XLSX => {
-              rentExcelExportNew(
-                XLSX,
-                currentCalc,
-                currentCalc.name + '-' + projectName
-              )
-            })
-            .catch(() => {
-              alert('加载 Excel 控件失败，请重试')
-            })
-        }}>导出 EXCEL</Button>,
+        <ButtonReCalc {...{ restartCal, id, calcId, currentCalc }} />,
+        <ModalPrintPreviewButton
+          key="printPreview"
+          pdf={`/api/contract/${id}/calc/${calcId}/preview`}
+        >
+          打印预览
+        </ModalPrintPreviewButton>,
+        <Button
+          type="primary"
+          key="excel"
+          onClick={() => {
+            import('xlsx')
+              .then(XLSX => {
+                exportExcel(
+                  XLSX,
+                  currentCalc,
+                  currentCalc.name + '-' + projectName
+                )
+              })
+              .catch(e => {
+                alert('加载 Excel 控件失败，请重试', e)
+              })
+          }}
+        >
+          导出 EXCEL
+        </Button>,
       ]}
     >
-      <Card>
-        {currentCalc && <RentCalcTable rent={currentCalc} />}
-      </Card>
+      <Card>{currentCalc && <RentCalcTable rent={currentCalc} />}</Card>
     </PageHeader>
   )
 }
