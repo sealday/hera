@@ -1,4 +1,4 @@
-const CracoLessPlugin = require('craco-less');
+const CracoLessPlugin = require('craco-less')
 const updateVersion = require('./update-version')
 const Dotenv = require('dotenv-webpack')
 
@@ -35,6 +35,9 @@ module.exports = {
       ],
     },
     configure: webpackConfig => {
+      if (!isProduction) {
+        webpackConfig.devtool = 'eval-cheap-module-source-map'
+      }
       webpackConfig.resolve = {
         ...webpackConfig.resolve,
         fallback: {
