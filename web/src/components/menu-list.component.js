@@ -170,20 +170,25 @@ const allMenu = [
 
 
 const MenuList = ({ user, store}) => {
-  const [openKeys, setOpenKeys] = useState(['/dashboard']);
+  const [openKeys, setOpenKeys] = useState(['/dashboard'])
   const navigate = useNavigate()
   const location = useLocation()
 
-  const getFilteredMenu = (menu) => {
+  const getFilteredMenu = menu => {
     return menu.filter(menuItem => {
       if (menuItem.roles && menuItem.roles.indexOf(user.role) === -1) {
         return false
       } else {
         if (menuItem.isInsertable && !menuItem.isInsertable(store, user)) {
-          return false;
+          return false
         }
         if (menuItem.children) {
-          menuItem.children = menuItem.children.filter(subMenuItem => !(subMenuItem.roles && subMenuItem.roles.indexOf(user.role) === -1))
+          menuItem.children = menuItem.children.filter(
+            subMenuItem =>
+              !(
+                subMenuItem.roles && subMenuItem.roles.indexOf(user.role) === -1
+              )
+          )
         }
         return true
       }
@@ -192,36 +197,48 @@ const MenuList = ({ user, store}) => {
   const menu = getFilteredMenu(allMenu)
 
   const items = menu.map(item => {
-    const children = item.children ? item.children.map(subItem => ({ label: subItem.name, key: subItem.path })) : null
+    const children = item.children
+      ? item.children.map(subItem => ({
+          label: subItem.name,
+          key: subItem.path,
+        }))
+      : null
     const key = item.children ? item.name : item.path
-    return ({ ...item, label: item.name, key, icon: item.icon, children })
+    return { ...item, label: item.name, key, icon: item.icon, children }
   })
-  const rootSubmenuKeys = menu.filter(item => item.children).map(item => item.name)
-  const childMap = _.extend({}, ...menu
+  const rootSubmenuKeys = menu
     .filter(item => item.children)
-    .map(item => item.children.map(childItem => [childItem.path, item.name]))
-    .map(_.fromPairs))
+    .map(item => item.name)
+  const childMap = _.extend(
+    {},
+    ...menu
+      .filter(item => item.children)
+      .map(item => item.children.map(childItem => [childItem.path, item.name]))
+      .map(_.fromPairs)
+  )
 
-  const onOpenChange = (keys) => {
-    const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
+  const onOpenChange = keys => {
+    const latestOpenKey = keys.find(key => openKeys.indexOf(key) === -1)
     if (rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
-      setOpenKeys(keys);
+      setOpenKeys(keys)
     } else {
-      setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
+      setOpenKeys(latestOpenKey ? [latestOpenKey] : [])
     }
-  };
+  }
   useEffect(() => {
     setOpenKeys([childMap[location.pathname + location.search]])
   }, [location.pathname, location.search])
 
-  return <Menu
-    items={items}
-    mode='inline'
-    defaultSelectedKeys={[location.pathname + location.search]}
-    onOpenChange={onOpenChange}
-    openKeys={openKeys}
-    onSelect={v => navigate(v.key)}
-  />
+  return (
+    <Menu
+      items={items}
+      mode="inline"
+      defaultSelectedKeys={[location.pathname + location.search]}
+      onOpenChange={onOpenChange}
+      openKeys={openKeys}
+      onSelect={v => navigate(v.key)}
+    />
+  )
 }
 
 export default MenuList
