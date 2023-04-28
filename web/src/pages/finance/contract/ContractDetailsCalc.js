@@ -101,7 +101,10 @@ const ContractDetailsCalc = () => {
       subTitle={contract.code}
       descriptions={descriptions}
       extra={[
-        <ButtonReCalc {...{ restartCal, id, calcId, currentCalc }} />,
+        <ButtonReCalc
+          key="buttonReCalc"
+          {...{ restartCal, id, calcId, currentCalc }}
+        />,
         <ModalPrintPreviewButton
           key="printPreview"
           pdf={`/api/contract/${id}/calc/${calcId}/preview`}
