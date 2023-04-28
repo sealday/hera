@@ -18,7 +18,7 @@ import {
   Form,
   Input,
   Menu,
-  PageHeader,
+  PageHeader as PageHeaderAntd,
   Row,
   Space,
 } from 'antd'
@@ -306,7 +306,7 @@ export const PageHeaderComponent = ({
           {forms}
         </>
       ) : (
-        <PageHeader
+        <PageHeaderAntd
           title={title}
           subTitle={subTitle}
           ghost={false}
@@ -374,7 +374,7 @@ export const PageHeaderComponent = ({
             </Descriptions>
           ) : null}
           {forms}
-        </PageHeader>
+        </PageHeaderAntd>
       )}
       {searchInfo ? (
         <Card bordered={false}>
