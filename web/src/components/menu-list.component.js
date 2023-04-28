@@ -18,7 +18,7 @@ const allMenu = [
     icon: <ShopOutlined />,
     roles: ['项目部管理员', '系统管理员', '基地仓库管理员'],
     // TODO 解决这个权限特殊处理
-    isInsertable: canInsert,
+    // isInsertable: canInsert,
     children: [
       {
         name: '采购入库',
@@ -51,7 +51,7 @@ const allMenu = [
         path: '/record/create/check/in',
         roles: ['系统管理员', '基地仓库管理员'],
       },
-    ]
+    ],
   },
   {
     name: '仓库查询',
@@ -72,8 +72,8 @@ const allMenu = [
       {
         name: '明细查询',
         path: '/detail_search',
-      }
-    ]
+      },
+    ],
   },
   {
     name: '项目管理',
@@ -96,7 +96,7 @@ const allMenu = [
         name: '员工考勤',
         path: '/attendance',
       },
-    ]
+    ],
   },
   {
     name: '财务',
@@ -122,7 +122,7 @@ const allMenu = [
       },
       {
         name: '贷款管理',
-        path: '/loan'
+        path: '/loan',
       },
       {
         name: '凭证录入',
@@ -132,7 +132,7 @@ const allMenu = [
         name: '科目设定',
         path: '/subject',
       },
-    ]
+    ],
   },
   {
     name: '系统信息',
@@ -164,12 +164,11 @@ const allMenu = [
         name: '客户列表',
         path: '/project',
       },
-    ]
+    ],
   },
-];
+]
 
-
-const MenuList = ({ user, store}) => {
+const MenuList = ({ user, store }) => {
   const [openKeys, setOpenKeys] = useState(['/dashboard'])
   const navigate = useNavigate()
   const location = useLocation()
@@ -179,7 +178,7 @@ const MenuList = ({ user, store}) => {
       if (menuItem.roles && menuItem.roles.indexOf(user.role) === -1) {
         return false
       } else {
-        if (menuItem.isInsertable && !menuItem.isInsertable(store, user)) {
+        if (menuItem.name === '仓库管理' && !canInsert(store, user)) {
           return false
         }
         if (menuItem.children) {
