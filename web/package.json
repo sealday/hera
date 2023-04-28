@@ -3,6 +3,8 @@
   "version": "3.1.3",
   "private": true,
   "devDependencies": {
+    "dotenv": "^16.0.3",
+    "dotenv-webpack": "^8.0.1",
     "eslint": "^8.28"
   },
   "dependencies": {
@@ -53,8 +55,6 @@
   },
   "scripts": {
     "start": "craco start",
-    "start:dev3000": "craco start --proxy=http://58.34.1.199:3000/",
-    "start:dev4002": "craco start --proxy=http://58.34.1.199:4002/",
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject"
