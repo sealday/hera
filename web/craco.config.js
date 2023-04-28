@@ -1,7 +1,11 @@
 const CracoLessPlugin = require('craco-less');
 const updateVersion = require('./update-version')
-// 构建时期,额外操作, 自动更新版本时间
-updateVersion.updateVersionTime()
+
+const isProduction = process.env.NODE_ENV === 'production'
+// 构建时期,额外操作,生产环境会自动更新版本时间
+if (isProduction) {
+  updateVersion.updateVersionTime()
+}
 
 module.exports = {
   plugins: [
