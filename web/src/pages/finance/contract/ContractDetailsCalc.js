@@ -7,7 +7,7 @@ import { CONTRACT_DETAILS, queryContractDetails } from '../../../actions'
 import { percentFormat } from '../../../utils'
 import RentCalcTable from '../RentCalcTable'
 import { useParams } from 'utils/hooks'
-import { ModalPrintPreviewButton, PageHeader } from '../../../components'
+import { ModalPrintPreviewButton, PageHeaderConfig } from '../../../components'
 import _ from 'lodash'
 import heraApi from 'api'
 import { exportExcel } from 'utils/excel'
@@ -96,7 +96,7 @@ const ContractDetailsCalc = () => {
   ]
 
   return (
-    <PageHeader
+    <PageHeaderConfig
       title={`${contract.name}结算表`}
       subTitle={contract.code}
       descriptions={descriptions}
@@ -130,7 +130,7 @@ const ContractDetailsCalc = () => {
       ]}
     >
       <Card>{currentCalc && <RentCalcTable rent={currentCalc} />}</Card>
-    </PageHeader>
+    </PageHeaderConfig>
   )
 }
 

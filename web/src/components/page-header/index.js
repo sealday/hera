@@ -1,7 +1,7 @@
 import { useTab } from 'utils/hooks'
 import { PageHeaderComponent } from './page-header.component'
 
-export default props => {
+const PageHeaderConfig = props => {
   const { title, subTitle, children } = props
   const [tabButtonType, tabButtonComponent] = useTab({ title, subTitle })
   return (
@@ -29,3 +29,5 @@ export default props => {
     </>
   )
 }
+
+export default PageHeaderConfig
