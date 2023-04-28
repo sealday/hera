@@ -61,7 +61,7 @@ const rtkQueryErrorLogger = (api) => (next) => (action) => {
         message.loading({ content: '执行操作中...', key: requestId })
       }
     }
-    console.log('isPeding', action)
+    // console.log('isPeding', action)
   }
   
   if (isFulfilled(action)) {
