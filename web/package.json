@@ -51,7 +51,8 @@
     "scroll-polyfill": "^1.0.1",
     "shortid": "^2.2.16",
     "socket.io-client": "^4.5.3",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "xlsx-style-hzx": "^1.0.8"
   },
   "scripts": {
     "start": "craco start",

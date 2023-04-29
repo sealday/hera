@@ -1,17 +1,12 @@
 import { dateFormat } from 'hera-core'
 import { saveAs } from 'file-saver'
-// import XLSX_STYLE from 'xlsx'
+// import XLSX_STYLE from 'xlsx-style-hzx'
 // 使用前端库 SheetJS-xlsx导出excel文件
 // 文档地址：https://docs.sheetjs.com/docs/
 // 为了定制样式，参考 https://juejin.cn/post/6903820868859002888#heading-8 改造导出excel的方法
 // 导出excel表格
-export const exportExcel = (XLSX, data, name) => {
-  console.log(
-    '%c Line:158 🍬 XLSX',
-    'font-size:18px;color:#4fff4B;background:#6ec1c2',
-    XLSX
-  )
-
+// 最终选中 xlsx-style-hzx 为导出库，基于 xlsx-style， xlsx-style又基于 xlsx 开发。
+export const exportExcel = ({ XLSX, XLSX_STYLE }, data, name) => {
   // 创建 workbook 对象
   const workbook = XLSX.utils.book_new()
 
@@ -22,20 +17,50 @@ export const exportExcel = (XLSX, data, name) => {
   XLSX.utils.book_append_sheet(workbook, worksheet, '结算表')
 
   // 导出 Excel
-  XLSX.writeFile(workbook, `${name}.xlsx`)
+  // XLSX.writeFile(workbook, `${name}.xlsx`, {
+  //   bookType: 'xlsx',
+  //   type: 'binary',
+  //   compression: true,
+  //   cellStyles: true,
+  // })
+  // console.log(
+  //   '%c Line:32 🥚 workbook',
+  //   'font-size:18px;color:#ffdd4d;background:#33a5ff',
+  //   workbook
+  // )
+
   // 将工作簿对象导出为Excel文件
-  // downLoadExcel(workbook, name)
+  // workbook.Sheets['结算表']['!important'] = {
+  //   /* 样式表内容 */
+  //   font: {
+  //     //字体
+  //     name: '宋体',
+  //     sz: 16,
+  //     bold: true,
+  //     italic: false,
+  //     color: { auto: 1 },
+  //   },
+  //   alignment: {
+  //     // 对齐方式，居中
+  //     horizontal: 'center',
+  //     vertical: 'center',
+  //     wrapText: true,
+  //   },
+  // }
+  downLoadExcel(XLSX_STYLE, workbook, name)
 }
 
 // 配置excel表格样式
-const getWorksheetWithStyle = (XLSX, rawData) => {
+const getWorksheetWithStyle = (XLSX, data) => {
   // 构建表头数据
   const header = [['华东公司料具租赁站'], ['料具租赁费用结算单']]
-  // 创建 worksheet 对象
-  // 将表头插入到第一二行
+
+  // 创建 worksheet 对象, 将表头插入到第一二行
   const worksheet = XLSX.utils.aoa_to_sheet(header)
+
   // 合并单元格
   mergeCells(XLSX, worksheet)
+
   XLSX.utils.sheet_add_aoa(worksheet, [[`结算时段:${'金额占位'}`]], {
     origin: { r: 2, c: 0 },
   })
@@ -44,8 +69,8 @@ const getWorksheetWithStyle = (XLSX, rawData) => {
   })
 
   // 获取表格主要内容数据
-  const data = getRegularAoaData(rawData)
-  XLSX.utils.sheet_add_aoa(worksheet, data, { origin: { r: 3, c: 0 } })
+  const cookedData = getRegularAoaData(data)
+  XLSX.utils.sheet_add_aoa(worksheet, cookedData, { origin: { r: 3, c: 0 } })
   // 将表尾插入到最后一行
   XLSX.utils.sheet_add_aoa(
     worksheet,
@@ -53,6 +78,87 @@ const getWorksheetWithStyle = (XLSX, rawData) => {
     { origin: -1 }
   )
 
+  // 定制样式
+  setExcelWithStyle(XLSX, worksheet)
+  return worksheet
+}
+
+// 合并单元格
+const mergeCells = (XLSX, worksheet) => {
+  if (!worksheet['!merges']) worksheet['!merges'] = []
+  worksheet['!merges'].push(
+    XLSX.utils.decode_range('A1:L1'),
+    XLSX.utils.decode_range('A2:L2'),
+    XLSX.utils.decode_range('A3:F3'),
+    XLSX.utils.decode_range('G3:L3')
+  )
+}
+// 设置样式
+const setExcelWithStyle = (XLSX, ws) => {
+  // 设置表头样式
+  const styleHeader = {
+    border: {
+      //边框
+      bottom: { style: 'thin', color: 'FFd4d4d4' },
+      left: { style: 'thin', color: '00D4D4D4' },
+      top: { style: 'thin', color: '00D4D4D4' },
+      right: { style: 'thin', color: 'FFD4D4D4' },
+    },
+    font: {
+      //字体
+      name: '宋体',
+      sz: 16,
+      bold: true,
+      italic: false,
+      color: { auto: 1 },
+    },
+    alignment: {
+      // 对齐方式，居中
+      horizontal: 'center',
+      vertical: 'center',
+      wrapText: true,
+    },
+    fill: {
+      //填充
+      fgColor: { rgb: 'FFFFFFFF' },
+    },
+
+    // alignCenter: {
+    //   horizontal: 'center',
+    //   vertical: 'middle',
+    //   wrapText: true,
+    // },
+  }
+  // const cellHeader = ws[XLSX.utils.encode_cell({ r: 0, c: 0 })]
+  // cellHeader.s = styleHeader
+
+  // 给单元格添加样式
+  ws['A1'].s = styleHeader
+  ws['D4'].s = styleHeader
+  ws['A6'].s = styleHeader
+  // console.log(
+  //   '%c Line:101 🥥 cellHeader',
+  //   'font-size:18px;color:#fca650;background:#42b983',
+  //   cellHeader
+  // )
+  // const range = XLSX.utils.decode_range(ws['!ref'])
+  // console.log(
+  //   '%c Line:82 🍇 range',
+  //   'font-size:18px;color:#b03734;background:#93c0a4',
+  //   range
+  // )
+  // const cell = ws[XLSX.utils.encode_cell({ r: 4, c: 9 })]
+  // console.log(
+  //   '%c Line:89 🍺 cell',
+  //   'font-size:18px;color:#7f2b82;background:#33a5ff',
+  //   cell
+  // )
+  // for (let r = range.s.r; r <= range.e.r; r++) {
+  //   for (let c = range.s.c; c <= range.e.c; c++) {
+  //     const cell = ws[XLSX.utils.encode_cell({ r: r, c: c })]
+  //     cell.s = style
+  //   }
+  // }
   // Object.keys(worksheet).forEach(key => {
   //   worksheet[key].s = {
   //     border: {
@@ -82,25 +188,6 @@ const getWorksheetWithStyle = (XLSX, rawData) => {
   //     },
   //   }
   // })
-  console.log(
-    '%c Line:240 🥐 worksheet',
-    'font-size:18px;color:#2eafb0;background:#ffdd4d',
-    worksheet
-  )
-
-  return worksheet
-}
-
-// 合并单元格
-const mergeCells = (XLSX,worksheet) => {
-  if (!worksheet['!merges']) worksheet['!merges'] = []
-  worksheet['!merges'].push(
-    XLSX.utils.decode_range('A1:L1'),
-    XLSX.utils.decode_range('A2:L2'),
-    XLSX.utils.decode_range('A3:F3'),
-    XLSX.utils.decode_range('G3:L3')
-  )
-
 }
 
 // 获取表格内容数据，将原始数据转换为二维数组，js对象形式有问题
@@ -302,8 +389,6 @@ export const rentExcelExportNewFunc = (XLSX, rent, name) => {
   )
 }
 
-
-
 export const exportExcelFunc = (XLSX, data, name) => {
   // 获取工作表对象，已经设置好单元格样式，字体样式等细化配置
   const worksheet = getWorksheetWithStyle(XLSX, data)
@@ -365,25 +450,32 @@ const sheetToWorkBook = (XLSX, { worksheet, sheetName }, isMultiple) => {
 }
 
 // FQ: 根据 workbook 导出 excel
-// const downLoadExcel = (wb, name) => {
-//   const out = XLSX_STYLE.write(wb, {
-//     bookType: 'xlsx',
-//     bookSST: false,
-//     type: 'binary',
-//     compression: true,
-//   })
-//   const blobData = s2ab(out)
-//   saveAs(
-//     new Blob([blobData], { type: 'application/octet-stream' }),
-//     name + '.xlsx'
-//   )
+const downLoadExcel = (XLSX_STYLE, wb, name) => {
+  // console.log(
+  //   '%c Line:466 🥖 XLSX_STYLE',
+  //   'font-size:18px;color:#3f7cff;background:#465975',
+  //   XLSX_STYLE
+  // )
 
-//   // 创建工作簿对象并添加电子表格
-//   // const workbook = XLSX_STYLE.utils.book_new()
-//   // XLSX_STYLE.utils.book_append_sheet(workbook, worksheet, '结算表')
-//   // 将工作簿对象导出为Excel文件
-//   // XLSX_STYLE.writeFile(wb, `${name}.xlsx`)
-// }
+  const out = XLSX_STYLE.write(wb, {
+    bookType: 'xlsx',
+    bookSST: false,
+    type: 'binary',
+    compression: true,
+    cellStyles: true,
+  })
+  const blobData = s2ab(out)
+  saveAs(
+    new Blob([blobData], { type: 'application/octet-stream' }),
+    name + '.xlsx'
+  )
+
+  // 创建工作簿对象并添加电子表格
+  // const workbook = XLSX_STYLE.utils.book_new()
+  // XLSX_STYLE.utils.book_append_sheet(workbook, worksheet, '结算表')
+  // 将工作簿对象导出为Excel文件
+  // XLSX_STYLE.writeFile(wb, `${name}.xlsx`)
+}
 
 // FQ: 构建数据
 const s2ab = s => {

@@ -115,10 +115,10 @@ const ContractDetailsCalc = () => {
           type="primary"
           key="excel"
           onClick={() => {
-            import('xlsx')
-              .then(XLSX => {
+            Promise.all([import('xlsx'), import('xlsx-style-hzx')])
+              .then(([XLSX, XLSX_STYLE]) => {
                 exportExcel(
-                  XLSX,
+                  { XLSX, XLSX_STYLE },
                   currentCalc,
                   currentCalc.name + '-' + projectName
                 )
