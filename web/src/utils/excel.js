@@ -7,6 +7,16 @@ import { saveAs } from 'file-saver'
 // 导出excel表格
 // 最终选中 xlsx-style-hzx 为导出库，基于 xlsx-style， xlsx-style又基于 xlsx 开发。
 export const exportExcel = ({ XLSX, XLSX_STYLE }, data, name) => {
+  console.log(
+    '%c Line:10 🍡 XLSX',
+    'font-size:18px;color:#fca650;background:#42b983',
+    XLSX
+  )
+  console.log(
+    '%c Line:10 🥖 XLSX_STYLE',
+    'font-size:18px;color:#6ec1c2;background:#e41a6a',
+    XLSX_STYLE
+  )
   // 创建 workbook 对象
   const workbook = XLSX.utils.book_new()
 
@@ -15,42 +25,17 @@ export const exportExcel = ({ XLSX, XLSX_STYLE }, data, name) => {
 
   // 创建工作簿对象并添加电子表格
   XLSX.utils.book_append_sheet(workbook, worksheet, '结算表')
+  console.log(
+    '%c Line:28 🍿 worksheet',
+    'font-size:18px;color:#4fff4B;background:#ed9ec7',
+    worksheet
+  )
 
   // 导出 Excel
-  // XLSX.writeFile(workbook, `${name}.xlsx`, {
-  //   bookType: 'xlsx',
-  //   type: 'binary',
-  //   compression: true,
-  //   cellStyles: true,
-  // })
-  // console.log(
-  //   '%c Line:32 🥚 workbook',
-  //   'font-size:18px;color:#ffdd4d;background:#33a5ff',
-  //   workbook
-  // )
-
-  // 将工作簿对象导出为Excel文件
-  // workbook.Sheets['结算表']['!important'] = {
-  //   /* 样式表内容 */
-  //   font: {
-  //     //字体
-  //     name: '宋体',
-  //     sz: 16,
-  //     bold: true,
-  //     italic: false,
-  //     color: { auto: 1 },
-  //   },
-  //   alignment: {
-  //     // 对齐方式，居中
-  //     horizontal: 'center',
-  //     vertical: 'center',
-  //     wrapText: true,
-  //   },
-  // }
   downLoadExcel(XLSX_STYLE, workbook, name)
 }
 
-// 配置excel表格样式
+// 配置excel表格样式，业务强相关
 const getWorksheetWithStyle = (XLSX, data) => {
   // 构建表头数据
   const header = [['华东公司料具租赁站'], ['料具租赁费用结算单']]
@@ -70,6 +55,14 @@ const getWorksheetWithStyle = (XLSX, data) => {
 
   // 获取表格主要内容数据
   const cookedData = getRegularAoaData(data)
+  // 解析工作表的数据范围，获取当前的行列数
+  const range = XLSX.utils.decode_range(worksheet['!ref'])
+  // for (let r = range.s.r; r <= range.e.r; r++) {
+  //   for (let c = range.s.c; c <= range.e.c; c++) {
+  //     const cell = ws[XLSX.utils.encode_cell({ r: r, c: c })];
+  //     cell.s = style;
+  //   }
+  // }
   XLSX.utils.sheet_add_aoa(worksheet, cookedData, { origin: { r: 3, c: 0 } })
   // 将表尾插入到最后一行
   XLSX.utils.sheet_add_aoa(
@@ -79,7 +72,27 @@ const getWorksheetWithStyle = (XLSX, data) => {
   )
 
   // 定制样式
-  setExcelWithStyle(XLSX, worksheet)
+  // 设置默认列宽和行高
+  worksheet['!cols'] = [{ wch: 20 }, { wch: 20 }, { wch: 20 }]
+  worksheet['!rows'] = [
+    { hpt: 50, hpx: 50 },
+    { hpt: 25, hpx: 25 },
+    { hpt: 25, hpx: 25 },
+    { hpt: 25, hpx: 25 },
+    { hpt: 25, hpx: 25 },
+    { hpt: 25, hpx: 25 },
+    { hpt: 25, hpx: 25 },
+    { hpt: 25, hpx: 25 },
+
+    { hpt: 25 },
+    { hpt: 25 },
+    { hpt: 25 },
+    { hpt: 25 },
+    { hpt: 25 },
+    { hpt: 25 },
+  ]
+  setExcelWithStyle(XLSX, worksheet, range)
+
   return worksheet
 }
 
@@ -93,19 +106,19 @@ const mergeCells = (XLSX, worksheet) => {
     XLSX.utils.decode_range('G3:L3')
   )
 }
-// 设置样式
-const setExcelWithStyle = (XLSX, ws) => {
-  // 设置表头样式
-  const styleHeader = {
-    border: {
-      //边框
-      bottom: { style: 'thin', color: 'FFd4d4d4' },
-      left: { style: 'thin', color: '00D4D4D4' },
-      top: { style: 'thin', color: '00D4D4D4' },
-      right: { style: 'thin', color: 'FFD4D4D4' },
-    },
+// 设置样式, 业务强相关
+const setExcelWithStyle = (XLSX, ws, range) => {
+  // 设置一些基础样式
+  const alignmentCenter = {
+    // 对齐方式，居中
+    horizontal: 'center',
+    vertical: 'center',
+    wrapText: true,
+  }
+  // 给单元格添加样式
+  // 设置表头样式, "华东公司料具租赁站"
+  ws['A1'].s = {
     font: {
-      //字体
       name: '宋体',
       sz: 16,
       bold: true,
@@ -118,47 +131,34 @@ const setExcelWithStyle = (XLSX, ws) => {
       vertical: 'center',
       wrapText: true,
     },
-    fill: {
-      //填充
-      fgColor: { rgb: 'FFFFFFFF' },
-    },
-
-    // alignCenter: {
-    //   horizontal: 'center',
-    //   vertical: 'middle',
-    //   wrapText: true,
-    // },
   }
-  // const cellHeader = ws[XLSX.utils.encode_cell({ r: 0, c: 0 })]
-  // cellHeader.s = styleHeader
 
-  // 给单元格添加样式
-  ws['A1'].s = styleHeader
-  ws['D4'].s = styleHeader
-  ws['A6'].s = styleHeader
-  // console.log(
-  //   '%c Line:101 🥥 cellHeader',
-  //   'font-size:18px;color:#fca650;background:#42b983',
-  //   cellHeader
-  // )
-  // const range = XLSX.utils.decode_range(ws['!ref'])
-  // console.log(
-  //   '%c Line:82 🍇 range',
-  //   'font-size:18px;color:#b03734;background:#93c0a4',
-  //   range
-  // )
-  // const cell = ws[XLSX.utils.encode_cell({ r: 4, c: 9 })]
-  // console.log(
-  //   '%c Line:89 🍺 cell',
-  //   'font-size:18px;color:#7f2b82;background:#33a5ff',
-  //   cell
-  // )
-  // for (let r = range.s.r; r <= range.e.r; r++) {
-  //   for (let c = range.s.c; c <= range.e.c; c++) {
-  //     const cell = ws[XLSX.utils.encode_cell({ r: r, c: c })]
-  //     cell.s = style
-  //   }
-  // }
+  // "料具租赁费用结算单"
+  ws['A2'].s = {
+    font: {
+      name: '宋体',
+      sz: 11,
+      bold: false,
+      italic: false,
+      color: { auto: 1 },
+    },
+    alignment: alignmentCenter,
+  }
+
+  const headerTips = ['A3', 'G3']
+  headerTips.forEach(item => {
+    ws[item].s = {
+      font: {
+        name: 'Arial',
+        sz: 12,
+        bold: false,
+        italic: false,
+        color: { auto: 1 },
+      },
+      alignment: { ...alignmentCenter, horizontal: 'left' },
+    }
+  })
+
   // Object.keys(worksheet).forEach(key => {
   //   worksheet[key].s = {
   //     border: {
@@ -451,18 +451,11 @@ const sheetToWorkBook = (XLSX, { worksheet, sheetName }, isMultiple) => {
 
 // FQ: 根据 workbook 导出 excel
 const downLoadExcel = (XLSX_STYLE, wb, name) => {
-  // console.log(
-  //   '%c Line:466 🥖 XLSX_STYLE',
-  //   'font-size:18px;color:#3f7cff;background:#465975',
-  //   XLSX_STYLE
-  // )
-
   const out = XLSX_STYLE.write(wb, {
     bookType: 'xlsx',
     bookSST: false,
     type: 'binary',
     compression: true,
-    cellStyles: true,
   })
   const blobData = s2ab(out)
   saveAs(
