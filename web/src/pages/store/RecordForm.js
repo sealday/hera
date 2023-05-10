@@ -115,6 +115,17 @@ export default ({ form, initialValues, onSubmit }) => {
           </Col>
         </Row>
       </Card>
+      <Card bordered={false} title="过磅信息" style={styles.keepSpace}>
+        <Row>
+          <Col span={24}>
+            <Form.List name="entries">
+              {(fields, operation, meta) => (
+                <EntryForm fields={fields} operation={operation} meta={meta} />
+              )}
+            </Form.List>
+          </Col>
+        </Row>
+      </Card>
       <Card bordered={false} title="赔偿维修信息" style={styles.keepSpace}>
         <Row>
           <Col span={24}>

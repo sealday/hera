@@ -147,16 +147,26 @@ export default ({ fields, operation, meta }) => {
   const settings = useContext(SettingContext)
   const columns = []
   columns.push({
+    key: 'index',
+    title: '序号',
+    width: 50,
+    render: (_, field) => +field.key + 1,
+  })
+  columns.push({
     key: 'product',
     title: '产品',
     width: 300,
     render: (_, field) => (
       <RefCascader
         noStyle
-        item={{ required: true, name: [field.name, 'product'], option: { ref: 'product' } }}
+        item={{
+          required: true,
+          name: [field.name, 'product'],
+          option: { ref: 'product' },
+        }}
         customBuild={data => buildProductTree(data).children}
       />
-    )
+    ),
   })
   columns.push({
     key: 'count',
@@ -166,7 +176,7 @@ export default ({ fields, operation, meta }) => {
       <Form.Item name={[field.name, 'count']} rules={rules}>
         <Input style={styles.block} />
       </Form.Item>
-    )
+    ),
   })
   columns.push({
     key: 'total',
