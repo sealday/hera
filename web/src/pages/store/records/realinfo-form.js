@@ -27,11 +27,10 @@ const RealinfoForm = ({ fields, operation }) => {
       title: '单位',
       align: 'center',
       render: (_, field, index) => (
-        <Form.Item name={[field.name, 'unit']}>
+        <Form.Item name={[field.name, 'unit']} initialValue={'千克'}>
           <Radio.Group
             key={field?.name || index}
             options={['克', '千克', '吨']}
-            defaultValue={'千克'}
             optionType="button"
             buttonStyle="solid"
           />
