@@ -1,6 +1,6 @@
 import { PlusCircleOutlined, MinusCircleOutlined } from '@ant-design/icons'
 import { Checkbox, Radio, Button, Form, Input, Table, Space } from 'antd'
-import React, { useState } from 'react'
+import React from 'react'
 
 const styles = {
   block: { width: '100%' },
@@ -10,35 +10,32 @@ const rules = [{ required: true }]
 const RealinfoForm = ({ fields, operation }) => {
   const form = Form.useFormInstance()
   const entriesValues = Form.useWatch('entries', form)
-  const [unitValue, setUnitValue] = useState('千克')
-  const onUnitValueChange = ({ target: { value } }) => {
-    setUnitValue(value)
-  }
   const columns = [
     {
       key: 'productGroups',
       title: '产品分组',
-      render: () => {
-        return (
+      render: (_, field) => (
+        <Form.Item name={[field.name, 'productGroups']}>
           <Checkbox.Group
             options={(entriesValues || []).map((_, index) => index + 1)}
           />
-        )
-      },
+        </Form.Item>
+      ),
     },
     {
       key: 'unit',
       title: '单位',
       align: 'center',
       render: (_, field, index) => (
-        <Radio.Group
-          key={field?.name || index}
-          options={['克', '千克', '吨']}
-          onChange={onUnitValueChange}
-          value={unitValue}
-          optionType="button"
-          buttonStyle="solid"
-        />
+        <Form.Item name={[field.name, 'unit']}>
+          <Radio.Group
+            key={field?.name || index}
+            options={['克', '千克', '吨']}
+            defaultValue={'千克'}
+            optionType="button"
+            buttonStyle="solid"
+          />
+        </Form.Item>
       ),
     },
     {
