@@ -9,7 +9,7 @@ import ComplementForm from "./records/complement.form"
 import { SettingContext } from "./records"
 import { CAR_NUMBERS } from "../../constants"
 import AdditionalForm from "./records/additional.form"
-
+import RealinfoForm from './records/realinfo-form'
 const styles = {
   block: { width: '100%' },
   keepSpace: { marginTop: '8px' },
@@ -19,13 +19,21 @@ const rules = [{ required: true }]
 export default ({ form, initialValues, onSubmit }) => {
   const settings = useContext(SettingContext)
   const type = Form.useWatch('type', form)
+
   const projectItem = {
-    label: '仓库', name: 'projectId', type: 'text', required: true,
+    label: '仓库',
+    name: 'projectId',
+    type: 'text',
+    required: true,
     option: {
-      type: 'ref', ref: 'project', label: 'name', value: '_id',
+      type: 'ref',
+      ref: 'project',
+      label: 'name',
+      value: '_id',
     },
     filter: {
-      key: 'type', value: type,
+      key: 'type',
+      value: type,
     },
   }
   return (
@@ -115,12 +123,16 @@ export default ({ form, initialValues, onSubmit }) => {
           </Col>
         </Row>
       </Card>
-      <Card bordered={false} title="过磅信息" style={styles.keepSpace}>
+      <Card bordered={false} title="过磅明细信息" style={styles.keepSpace}>
         <Row>
           <Col span={24}>
-            <Form.List name="entries">
+            <Form.List name="realinfos">
               {(fields, operation, meta) => (
-                <EntryForm fields={fields} operation={operation} meta={meta} />
+                <RealinfoForm
+                  fields={fields}
+                  operation={operation}
+                  meta={meta}
+                />
               )}
             </Form.List>
           </Col>
