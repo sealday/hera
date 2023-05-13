@@ -123,7 +123,7 @@ export default ({ form, initialValues, onSubmit }) => {
           </Col>
         </Row>
       </Card>
-      <Card bordered={false} title="过磅明细信息" style={styles.keepSpace}>
+      <Card bordered={false} title="过磅信息" style={styles.keepSpace}>
         <Row>
           <Col span={24}>
             <Form.List name="realinfos">

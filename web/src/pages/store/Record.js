@@ -216,6 +216,11 @@ const Record = ({ isFinance = false }) => {
     ),
   })
   descriptions.push({ label: '备注', children: record.comments })
+  console.log(
+    '%c Line:219 🍕 record',
+    'font-size:18px;color:#7f2b82;background:#3f7cff',
+    record
+  )
 
   return (
     <PageHeader
@@ -238,6 +243,18 @@ const Record = ({ isFinance = false }) => {
                   dataSource={record.entries}
                   footer={() => <Summary entries={record.entries} />}
                   rowKey="_id"
+                />
+              ),
+            },
+            {
+              label: '过磅信息',
+              key: '过磅信息',
+              children: (
+                <Table
+                  columns={columns}
+                  dataSource={record.entries}
+                  rowKey="_id"
+                  pagination={false}
                 />
               ),
             },
