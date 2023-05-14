@@ -21,7 +21,9 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
   const store = useSelector(state => state.system.store)
   const config = useSelector(state => state.system.config)
   const products = useSelector(state => state.system.products)
-  const articles = useSelector(state => state.system.articles.valueSeq().toArray())
+  const articles = useSelector(state =>
+    state.system.articles.valueSeq().toArray()
+  )
   const [orderTitle, setOrderTitle] = useState(config.externalNames[0])
   const content = {
     orderName: record.type + '单',
@@ -42,7 +44,7 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
     content.partB = record.inStock.company + record.inStock.name
   }
 
-  const isStore = (stock) => store._id === _.get(stock, '_id')
+  const isStore = stock => store._id === _.get(stock, '_id')
 
   // 出入库判断
   // TODO 对于采购单，如果出现直接采购送往对应项目，那么单据的内容标签是否不合适
@@ -111,14 +113,12 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
   }
 
   const isRent = () => record.type === strings.quickMapping.TRANSFER
-  const getProject = () => isStore(record.inStock)
-    ? record.outStock
-    : record.inStock
+  const getProject = () =>
+    isStore(record.inStock) ? record.outStock : record.inStock
   const getContract = () => {
     const project = getProject()
     return contracts.data.find(item => item.project === project._id)
   }
-  
 
   content.explain = `说明：如供需双方未签正式合同，本${content.orderName}经供需双方代表签字确认后，
   将作为合同及发生业务往来的有效凭证，如已签合同，则成为该合同的组成部分。${content.signer}须核对
@@ -127,7 +127,6 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
   if (record.type === '盘点') {
     content.explain = '说明：盘点单用于清算仓库盈亏盈余。'
   }
-
 
   // 关联公司来确认标题名称
   useEffect(() => {
@@ -142,7 +141,7 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
   if (contracts.isLoading || getOtherList.isLoading) {
     return <Loading />
   }
-  
+
   // 补充信息处理
   const associatedMap = {}
   const unconnected = []
@@ -201,7 +200,7 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
   each(entries, (v, name) => {
     entries[name].forEach(entry => {
       printEntries.push([
-        { colSpan: 2, children: entry.name + '[' + entry.size + ']'},
+        { colSpan: 2, children: entry.name + '[' + entry.size + ']' },
         { hidden: true, children: '' },
         entry.count + ' ' + productTypeMap[name].countUnit,
         fixed(entry.subtotal) + ' ' + entry.unit,
@@ -210,15 +209,22 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
         entry.comments,
       ])
       if (associatedMap[`${entry.type}|${entry.name}|${entry.size}`]) {
-        associatedMap[`${entry.type}|${entry.name}|${entry.size}`].forEach(item => {
-          const product = _.find(getOtherList.data, other => other.id === _.last(item.product))
-          const associatedLabel = {
-            colSpan: 2,
-            children: _.get(product, 'display', <RefCascaderLabel item={productItem} value={item.product} />)
-          }
-          if (product.isAssociated) {
-            const associatedEntry =
-              [
+        associatedMap[`${entry.type}|${entry.name}|${entry.size}`].forEach(
+          item => {
+            const product = _.find(
+              getOtherList.data,
+              other => other.id === _.last(item.product)
+            )
+            const associatedLabel = {
+              colSpan: 2,
+              children: _.get(
+                product,
+                'display',
+                <RefCascaderLabel item={productItem} value={item.product} />
+              ),
+            }
+            if (product.isAssociated) {
+              const associatedEntry = [
                 associatedLabel,
                 item.count + ' ' + getUnit(productTypeMap[name]),
                 '',
@@ -227,10 +233,9 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
                 '',
                 item.comments,
               ]
-            printEntries.push(associatedEntry)
-          } else {
-            const associatedEntry =
-              [
+              printEntries.push(associatedEntry)
+            } else {
+              const associatedEntry = [
                 associatedLabel,
                 item.count + ' ' + product.unit,
                 '',
@@ -239,58 +244,91 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
                 '',
                 item.comments,
               ]
-            printEntries.push(associatedEntry)
+              printEntries.push(associatedEntry)
+            }
           }
-        })
+        )
       }
     })
     amount += sum[name] // 计算总金额
-    printEntries.push(
-      [
-        { colSpan: 2, children: name + '[小计]' },
-        { hidden: true, children: '' },
-        { hidden: true, children: '' },
-        { colSpan: 2, children: fixed(total[name]) + ' ' + totalUnit[name] },
-        '',
-        '￥' + fixed(sum[name]),
-        '',
-      ]
-    )
+    printEntries.push([
+      { colSpan: 2, children: name + '[小计]' },
+      { hidden: true, children: '' },
+      { hidden: true, children: '' },
+      { colSpan: 2, children: fixed(total[name]) + ' ' + totalUnit[name] },
+      '',
+      '￥' + fixed(sum[name]),
+      '',
+    ])
+  })
+  // 过磅信息表格内容
+  const printRealInfos = (record.realinfos || []).map(item => {
+    return [
+      {
+        children: (item.productGroups || []).reduce(
+          (acc, str) => acc + str,
+          ''
+        ),
+        colSpan: 8,
+        align: 'right',
+      },
+      {
+        children: item.realWeight,
+        colSpan: 2,
+      },
+      {
+        children: item.unit,
+        colSpan: 2,
+        align: 'right',
+      },
+      {
+        children: item.comments || '',
+        colSpan: 4,
+      },
+    ]
   })
   // 额外信息
   if (_.size(record.additionals) > 0) {
     printEntries.push([{ colSpan: 5, children: '补充信息', align: 'center' }])
-    const associatedEntry =
-      [
-        { colSpan: 2, children: '摘要' },
-        '计费项目',
-        '金额（元）',
-        '备注',
-        '',
-        '',
-      ]
+    const associatedEntry = [
+      { colSpan: 2, children: '摘要' },
+      '计费项目',
+      '金额（元）',
+      '备注',
+      '',
+      '',
+    ]
     printEntries.push(associatedEntry)
     _.forEach(record.additionals, item => {
-      const product = _.find(getOtherList.data, other => other.id === _.last(item.product))
-      const associatedEntry =
-        [
+      const product = _.find(
+        getOtherList.data,
+        other => other.id === _.last(item.product)
+      )
+      const associatedEntry = [
         { colSpan: 2, children: item.content },
-          product.name,
-          item.amount + ' 元',
-          '',
-          '',
-          item.comments,
-        ]
+        product.name,
+        item.amount + ' 元',
+        '',
+        '',
+        item.comments,
+      ]
       printEntries.push(associatedEntry)
     })
   }
   // 关联购销单
   if (record.associatedRecords) {
-    record.associatedRecords.forEach((record) => {
-      const title = getDirection(store, record) === 'in' ? '采购入库物料明细' : '销售出库物料明细'
+    record.associatedRecords.forEach(record => {
+      const title =
+        getDirection(store, record) === 'in'
+          ? '采购入库物料明细'
+          : '销售出库物料明细'
       printEntries.push([{ colSpan: 5, children: title, align: 'center' }])
       printEntries.push([
-        { style: { fontWeight: 500 }, align: 'center', children: '物料名称及规格' },
+        {
+          style: { fontWeight: 500 },
+          align: 'center',
+          children: '物料名称及规格',
+        },
         { style: { fontWeight: 500 }, align: 'center', children: '数量' },
         { style: { fontWeight: 500 }, align: 'center', children: '小计' },
         { style: { fontWeight: 500 }, align: 'center', children: '金额' },
@@ -311,15 +349,7 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
           item.comments,
         ])
       })
-      printEntries.push([
-        '合计',
-        '',
-        '',
-        fixed(sum) + ' 元',
-        '',
-        '',
-        '',
-      ])
+      printEntries.push(['合计', '', '', fixed(sum) + ' 元', '', '', ''])
     })
   }
 
@@ -350,10 +380,27 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
     }
   }
   // 标题数量，单栏一倍，双栏两倍
-  const columnNames = [{ children: '物料名称及规格', colSpan: 2 }, { children: '', hidden: true }, '数量', '小计', '单价', '金额', '备注']
+  const columnNames = [
+    { children: '物料名称及规格', colSpan: 2 },
+    { children: '', hidden: true },
+    '数量',
+    '小计',
+    '单价',
+    '金额',
+    '备注',
+  ]
+
+  // 过磅信息标题
+  const realInfosColumnNames = [
+    { children: '物料分组', colSpan: 8 },
+    { children: '重量', colSpan: 2 },
+    { children: '单位', colSpan: 2 },
+    { children: '备注', colSpan: 4 },
+  ]
   if (columnStyle === 'double') {
     columnNames.push(...columnNames)
   }
+
   return (
     <div
       style={{ position: 'relative', paddingRight: '1.2em', minHeight: '30em' }}
@@ -507,9 +554,64 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
                 ))}
             </tr>
           ))}
-          <tr>
+          {/* <tr>
             <td colSpan={leftSlice}>{content.explain}</td>
             <td colSpan={slice - leftSlice}>备注：{record.comments}</td>
+          </tr> */}
+        </tbody>
+      </table>
+      <table
+        className="table table-bordered table--tight"
+        style={{
+          tableLayout: 'fixed',
+          fontSize: '11px',
+          marginBottom: '0',
+          marginTop: '50px',
+          width: '100%',
+        }}
+      >
+        <thead>
+          <tr>
+            {realInfosColumnNames.map((col, index) => (
+              <th
+                key={index}
+                style={_.get(col, 'hidden', false) ? { display: 'none' } : {}}
+                colSpan={_.get(col, 'colSpan', 1)}
+              >
+                {_.get(col, 'children', col)}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {printRealInfos.map((realinfoItem, index) => {
+            console.log(
+              '%c Line:569 🥥 realinfoItem',
+              'font-size:18px;color:#42b983;background:#7f2b82',
+              realinfoItem
+            )
+            return (
+              <tr className="text-right" key={index}>
+                {realinfoItem.map((col, index) => (
+                  <td
+                    key={index}
+                    align={_.get(col, 'align', 'center')}
+                    style={
+                      _.get(col, 'hidden', false)
+                        ? { display: 'none', ..._.get(col, 'style', {}) }
+                        : _.get(col, 'style', {})
+                    }
+                    colSpan={_.get(col, 'colSpan', 1)}
+                  >
+                    {_.get(col, 'children', col)}
+                  </td>
+                ))}
+              </tr>
+            )
+          })}
+          <tr>
+            <td colSpan={8}>{content.explain}</td>
+            <td colSpan={8}>备注：{record.comments}</td>
           </tr>
         </tbody>
       </table>
