@@ -58,7 +58,16 @@ const Summary = ({ entries }) => {
 const entriesSchema = recordSchema.find(item => item.name === 'entries')
 const realinfosSchema = recordSchema.find(item => item.name === 'realinfos')
 const columns = genTableColumn(entriesSchema.form)
-const realinfosColumns = genTableColumn(realinfosSchema.form)
+const realinfosColumns = genTableColumn(realinfosSchema.form).map(item => {
+  if (item.dataIndex === 'productNameGroups') {
+    return {
+      ...item,
+      render: text => text.reduce((acc, str) => `${acc}, ${str}`),
+    }
+  } else {
+    return item
+  }
+})
 const complementSchema = recordSchema.find(
   item => item.name === 'complements'
 ).schema
@@ -87,13 +96,6 @@ const Record = ({ isFinance = false }) => {
   const config = useSelector(state => state.system.config)
   const counterfoilUsers = config.counterfoilUsers || []
   const receiptUsers = config.receiptUsers || []
-  const realinfosDataSource = (record?.realinfos || []).map(item => ({
-    productNameGroups: item.productGroups.map(id => {
-      const tempTarget = (record?.entries).find(item => item._id === id)
-      return `${tempTarget.name}  `
-    }),
-    ...item,
-  }))
   if (error) {
     return <Error />
   }
@@ -255,7 +257,7 @@ const Record = ({ isFinance = false }) => {
               children: (
                 <Table
                   columns={realinfosColumns}
-                  dataSource={realinfosDataSource}
+                  dataSource={record.realinfos}
                   rowKey="_id"
                   pagination={false}
                 />

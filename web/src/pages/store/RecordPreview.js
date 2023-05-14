@@ -34,13 +34,10 @@ const RecordPreview = () => {
   </div>
 
   const extra = [
-    <Popover key='printSettings' trigger='click' content={content}><Button icon={<SettingOutlined />}>打印设置</Button></Popover>,
+    <Popover key="printSettings" trigger="click" content={content}>
+      <Button icon={<SettingOutlined />}>打印设置</Button>
+    </Popover>,
   ]
-  console.log(
-    '%c Line:43 🥐 recordResult.data',
-    'font-size:18px;color:#2eafb0;background:#3f7cff',
-    recordResult.data
-  )
   return (
     <PageHeader
       title="打印预览"

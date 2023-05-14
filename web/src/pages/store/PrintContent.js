@@ -265,9 +265,8 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
   const printRealInfos = (record.realinfos || []).map(item => {
     return [
       {
-        children: (item.productGroups || []).reduce(
-          (acc, str) => acc + str,
-          ''
+        children: (item.productNameGroups || []).reduce(
+          (acc, str) => `${acc}, ${str}`
         ),
         colSpan: 8,
         align: 'right',
@@ -584,31 +583,24 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
           </tr>
         </thead>
         <tbody>
-          {printRealInfos.map((realinfoItem, index) => {
-            console.log(
-              '%c Line:569 🥥 realinfoItem',
-              'font-size:18px;color:#42b983;background:#7f2b82',
-              realinfoItem
-            )
-            return (
-              <tr className="text-right" key={index}>
-                {realinfoItem.map((col, index) => (
-                  <td
-                    key={index}
-                    align={_.get(col, 'align', 'center')}
-                    style={
-                      _.get(col, 'hidden', false)
-                        ? { display: 'none', ..._.get(col, 'style', {}) }
-                        : _.get(col, 'style', {})
-                    }
-                    colSpan={_.get(col, 'colSpan', 1)}
-                  >
-                    {_.get(col, 'children', col)}
-                  </td>
-                ))}
-              </tr>
-            )
-          })}
+          {printRealInfos.map((realinfoItem, index) => (
+            <tr className="text-right" key={index}>
+              {(realinfoItem || []).map((col, index) => (
+                <td
+                  key={index}
+                  align={_.get(col, 'align', 'center')}
+                  style={
+                    _.get(col, 'hidden', false)
+                      ? { display: 'none', ..._.get(col, 'style', {}) }
+                      : _.get(col, 'style', {})
+                  }
+                  colSpan={_.get(col, 'colSpan', 1)}
+                >
+                  {_.get(col, 'children', '')}
+                </td>
+              ))}
+            </tr>
+          ))}
           <tr>
             <td colSpan={8}>{content.explain}</td>
             <td colSpan={8}>备注：{record.comments}</td>
