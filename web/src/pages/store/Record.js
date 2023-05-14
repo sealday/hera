@@ -56,7 +56,9 @@ const Summary = ({ entries }) => {
 }
 
 const entriesSchema = recordSchema.find(item => item.name === 'entries')
+const realinfosSchema = recordSchema.find(item => item.name === 'realinfos')
 const columns = genTableColumn(entriesSchema.form)
+const realinfosColumns = genTableColumn(realinfosSchema.form)
 const complementSchema = recordSchema.find(
   item => item.name === 'complements'
 ).schema
@@ -85,7 +87,13 @@ const Record = ({ isFinance = false }) => {
   const config = useSelector(state => state.system.config)
   const counterfoilUsers = config.counterfoilUsers || []
   const receiptUsers = config.receiptUsers || []
-
+  const realinfosDataSource = (record?.realinfos || []).map(item => ({
+    productNameGroups: item.productGroups.map(id => {
+      const tempTarget = (record?.entries).find(item => item._id === id)
+      return `${tempTarget.name}  `
+    }),
+    ...item,
+  }))
   if (error) {
     return <Error />
   }
@@ -216,11 +224,6 @@ const Record = ({ isFinance = false }) => {
     ),
   })
   descriptions.push({ label: '备注', children: record.comments })
-  console.log(
-    '%c Line:219 🍕 record',
-    'font-size:18px;color:#7f2b82;background:#3f7cff',
-    record
-  )
 
   return (
     <PageHeader
@@ -251,8 +254,8 @@ const Record = ({ isFinance = false }) => {
               key: '过磅信息',
               children: (
                 <Table
-                  columns={columns}
-                  dataSource={record.entries}
+                  columns={realinfosColumns}
+                  dataSource={realinfosDataSource}
                   rowKey="_id"
                   pagination={false}
                 />
