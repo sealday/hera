@@ -44,6 +44,12 @@ export const RecordSchema = new mongoose.Schema({
       default: 'L'
     }, // 模式，
   }], // 订单项
+  realinfos: [{
+    productGroups: [Number],
+    unit: String,
+    realWeight: Number,
+    comments: String,
+  }],
   outDate: Date, // 出库时间
   fee: {
     car: Number, // 车费

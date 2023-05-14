@@ -1,5 +1,6 @@
 import { Injectable, ShutdownSignal } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { head } from 'lodash';
 import _ = require('lodash');
 import moment = require('moment');
 import { Model, Types } from 'mongoose';
@@ -117,6 +118,7 @@ export class RecordService {
         $set: {
           complements: null,
           entries: null,
+          realinfos: null,
         }
       }
     ])
@@ -501,7 +503,18 @@ export class RecordService {
       }
     }
 
-    const result = _.assign({}, record.toObject(), header[0], { entries, complements })
+    const resultRecord = record.toObject()
+    // 关联实际重量
+    _.forEach(resultRecord.realinfos, item => {
+      const productGroups = []
+      _.forEach(item.productGroups, subItem => {
+        const subItemId = _.get(record, 'entries.' + (subItem - 1) + '._id', null)
+        productGroups.push(subItemId)
+      })
+      item.productGroups = productGroups
+    })
+    
+    const result = _.assign({}, resultRecord, header[0], { entries, complements, realinfos: resultRecord.realinfos })
     return result
   }
 
