@@ -509,7 +509,9 @@ export class RecordService {
       const productGroups = []
       _.forEach(item.productGroups, subItem => {
         const subItemId = _.get(record, 'entries.' + (subItem - 1) + '._id', null)
-        productGroups.push(subItemId)
+        if (subItemId) {
+          productGroups.push(subItemId)
+        }
       })
       item.productGroups = productGroups
     })
