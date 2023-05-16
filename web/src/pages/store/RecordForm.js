@@ -1,14 +1,26 @@
-import { AutoComplete, Card, Checkbox, Col, DatePicker, Form, Input, Row, Select, Switch } from "antd"
-import _ from "lodash"
-import moment from "moment"
-import { RefSelect } from "../../components"
-import { RECORD_CLIENT_TYPES } from "../../utils"
-import React, { useContext } from 'react';
-import EntryForm from "./records/entry.form"
-import ComplementForm from "./records/complement.form"
-import { SettingContext } from "./records"
-import { CAR_NUMBERS } from "../../constants"
-import AdditionalForm from "./records/additional.form"
+import {
+  Radio,
+  AutoComplete,
+  Card,
+  Checkbox,
+  Col,
+  DatePicker,
+  Form,
+  Input,
+  Row,
+  Select,
+  Switch,
+} from 'antd'
+import _ from 'lodash'
+import moment from 'moment'
+import { RefSelect } from '../../components'
+import { RECORD_CLIENT_TYPES } from '../../utils'
+import React, { useContext, useState } from 'react'
+import EntryForm from './records/entry.form'
+import ComplementForm from './records/complement.form'
+import { SettingContext } from './records'
+import { CAR_NUMBERS } from '../../constants'
+import AdditionalForm from './records/additional.form'
 import RealinfoForm from './records/realinfo-form'
 const styles = {
   block: { width: '100%' },
@@ -19,7 +31,10 @@ const rules = [{ required: true }]
 export default ({ form, initialValues, onSubmit }) => {
   const settings = useContext(SettingContext)
   const type = Form.useWatch('type', form)
-
+  const [switchShow, setSwitchShow] = useState('序号')
+  const onChangeSwitchShow = ({ target: { value } }) => {
+    setSwitchShow(value)
+  }
   const projectItem = {
     label: '仓库',
     name: 'projectId',
@@ -125,6 +140,16 @@ export default ({ form, initialValues, onSubmit }) => {
       </Card>
       <Card bordered={false} title="过磅信息" style={styles.keepSpace}>
         <Row>
+          <Radio.Group
+            key={'选择切换器'}
+            options={['序号', '序号+简化名称', '全名称']}
+            value={switchShow}
+            onChange={onChangeSwitchShow}
+            optionType="button"
+            buttonStyle="solid"
+          />
+        </Row>
+        <Row>
           <Col span={24}>
             <Form.List name="realinfos">
               {(fields, operation, meta) => (
@@ -132,6 +157,7 @@ export default ({ form, initialValues, onSubmit }) => {
                   fields={fields}
                   operation={operation}
                   meta={meta}
+                  switchShow={switchShow}
                 />
               )}
             </Form.List>

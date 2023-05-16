@@ -1,24 +1,53 @@
 import { PlusCircleOutlined, MinusCircleOutlined } from '@ant-design/icons'
-import { Checkbox, Radio, Button, Form, Input, Table, Space } from 'antd'
-import React from 'react'
+import { Checkbox, Text, Radio, Button, Form, Input, Table, Space } from 'antd'
+import React, { Fragment } from 'react'
 
 const styles = {
   block: { width: '100%' },
 }
 const rules = [{ required: true }]
 
-const RealinfoForm = ({ fields, operation }) => {
+const simplifyString = str => {
+  const strArr = [...str.join('')]
+  const simplifyStr = strArr
+    .slice(0, 4)
+    .concat(['...'])
+    .concat(strArr.slice(-3))
+  return simplifyStr.join('')
+}
+
+const RealinfoForm = ({ fields, operation, switchShow }) => {
   const form = Form.useFormInstance()
   const entriesValues = Form.useWatch('entries', form)
+
+  const checkOpthions = (entriesValues || []).map((item, index) => {
+    const options = {
+      label: `${index + 1}`,
+      value: `${index + 1}`,
+    }
+
+    if (switchShow === '序号') {
+      return options
+    }
+
+    if (item?.product?.length > 0) {
+      if (switchShow === '序号+简化名称') {
+        options.label = `${index + 1}---${simplifyString(item.product)}`
+      } else {
+        options.label = `${item.product.join()}`
+      }
+    }
+
+    return options
+  })
+
   const columns = [
     {
       key: 'productGroups',
-      title: '产品分组',
+      title: '产品分组-(表示明细信息的序号顺序)',
       render: (_, field) => (
         <Form.Item name={[field.name, 'productGroups']}>
-          <Checkbox.Group
-            options={(entriesValues || []).map((_, index) => index + 1)}
-          />
+          <Checkbox.Group options={checkOpthions} />
         </Form.Item>
       ),
     },
