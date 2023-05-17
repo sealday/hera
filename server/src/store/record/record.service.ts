@@ -516,7 +516,7 @@ export class RecordService {
           productGroups.push(subItemName)
         }
         if (subItemId) {
-          productGroups.push({
+          products.push({
             id: subItemId,
             name: subItemName,
             size: subItemSize,
