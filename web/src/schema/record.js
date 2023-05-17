@@ -102,7 +102,7 @@ export default [
     type: 'form',
     form: [
       {
-        name: 'productNameGroups',
+        name: 'productGroups',
         label: '产品分组',
         type: 'text',
       },

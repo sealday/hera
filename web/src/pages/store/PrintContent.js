@@ -265,7 +265,7 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
   const printRealInfos = (record.realinfos || []).map(item => {
     return [
       {
-        children: (item.productNameGroups || []).reduce(
+        children: (item.productGroups || []).reduce(
           (acc, str) => `${acc}, ${str}`
         ),
         colSpan: 8,

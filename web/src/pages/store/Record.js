@@ -59,7 +59,7 @@ const entriesSchema = recordSchema.find(item => item.name === 'entries')
 const realinfosSchema = recordSchema.find(item => item.name === 'realinfos')
 const columns = genTableColumn(entriesSchema.form)
 const realinfosColumns = genTableColumn(realinfosSchema.form).map(item => {
-  if (item.dataIndex === 'productNameGroups') {
+  if (item.dataIndex === 'productGroups') {
     return {
       ...item,
       render: text => text.reduce((acc, str) => `${acc}, ${str}`),
