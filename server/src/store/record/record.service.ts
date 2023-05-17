@@ -506,19 +506,25 @@ export class RecordService {
     const resultRecord = record.toObject()
     // 关联实际重量
     _.forEach(resultRecord.realinfos, item => {
+      const products = []
       const productGroups = []
-      const productNameGroups = []
       _.forEach(item.productGroups, subItem => {
         const subItemId = _.get(record, 'entries.' + (subItem - 1) + '._id', null)
         const subItemName = _.get(record, 'entries.' + (subItem - 1) + '.name', null)
         const subItemSize = _.get(record, 'entries.' + (subItem - 1) + '.size', null)
+        if (subItemName && !productGroups.includes(subItemName)) {
+          productGroups.push(subItemName)
+        }
         if (subItemId) {
-          productGroups.push(subItemId)
-          productNameGroups.push(`${subItemName}[${subItemSize}]`)
+          productGroups.push({
+            id: subItemId,
+            name: subItemName,
+            size: subItemSize,
+          })
         }
       })
+      item.products = products
       item.productGroups = productGroups
-      item.productNameGroups = productNameGroups
     })
     
     const result = _.assign({}, resultRecord, header[0], { entries, complements, realinfos: resultRecord.realinfos })
