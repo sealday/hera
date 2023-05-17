@@ -10,7 +10,9 @@ import {
   Row,
   Select,
   Switch,
+  Button,
 } from 'antd'
+import { PlusCircleOutlined } from '@ant-design/icons'
 import _ from 'lodash'
 import moment from 'moment'
 import { RefSelect } from '../../components'
@@ -22,6 +24,7 @@ import { SettingContext } from './records'
 import { CAR_NUMBERS } from '../../constants'
 import AdditionalForm from './records/additional.form'
 import RealinfoForm from './records/realinfo-form'
+import DetailInfoForm from './records/detailInfo.form'
 const styles = {
   block: { width: '100%' },
   keepSpace: { marginTop: '8px' },
@@ -124,6 +127,35 @@ export default ({ form, initialValues, onSubmit }) => {
             <Form.Item label="备注" name="comments">
               <Input.TextArea rows={2} />
             </Form.Item>
+          </Col>
+        </Row>
+      </Card>
+      <Card
+        bordered={false}
+        title="过磅明细信息"
+        style={styles.keepSpace}
+        extra={
+          <Button
+            type="primary"
+            // onClick={() => operation.add()}
+            icon={<PlusCircleOutlined />}
+          >
+            增加分组
+          </Button>
+        }
+      >
+        <Row>
+          <Col span={24}>
+            <Form.List name="realinfos">
+              {(fields, operation, meta) => (
+                <DetailInfoForm
+                  fields={fields}
+                  operation={operation}
+                  meta={meta}
+                  switchShow={switchShow}
+                />
+              )}
+            </Form.List>
           </Col>
         </Row>
       </Card>
