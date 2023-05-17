@@ -1,11 +1,10 @@
 import { PlusCircleOutlined, MinusCircleOutlined } from '@ant-design/icons'
-import { Checkbox, Text, Radio, Button, Form, Input, Table, Space } from 'antd'
-import React, { Fragment } from 'react'
+import { Checkbox, Radio, Button, Form, Input, Table, Space } from 'antd'
+import React from 'react'
 
 const styles = {
   block: { width: '100%' },
 }
-const rules = [{ required: true }]
 
 const simplifyString = str => {
   const strArr = [...str.join('')]
