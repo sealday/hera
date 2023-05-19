@@ -48,7 +48,7 @@ export default ({ form, initialValues, onSubmit }) => {
         settings={settings}
         projectItem={projectItem}
       />
-      <DetailInfoCard title="过磅明细信息" />
+      <DetailInfoCard title="明细信息" />
       <ExtraInfoCard title="赔偿维修信息" />
       <ExtraInfoCard title="额外信息" />
     </Form>
