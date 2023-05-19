@@ -18,13 +18,13 @@ import moment from 'moment'
 import { RefSelect } from '../../components'
 import { RECORD_CLIENT_TYPES } from '../../utils'
 import React, { useContext, useState } from 'react'
-import EntryForm from './records/entry.form'
-import ComplementForm from './records/complement.form'
+import EntryForm from './records/entry.form.old'
+import ComplementForm from './records/complement.form.old'
 import { SettingContext } from './records'
 import { CAR_NUMBERS } from '../../constants'
-import AdditionalForm from './records/additional.form'
-import RealinfoForm from './records/realinfo-form'
-import DetailInfoForm from './records/detailInfo.form'
+import AdditionalForm from './records/additional.form.old'
+import RealinfoForm from './records/realinfo-form.old'
+import DetailInfoForm from './records/detailInfo.form.old'
 const styles = {
   block: { width: '100%' },
   keepSpace: { marginTop: '8px' },

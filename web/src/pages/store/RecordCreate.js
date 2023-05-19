@@ -8,7 +8,7 @@ import { useCreateRecordMutation } from "../../api"
 import { Error, PageHeader } from "../../components"
 import { ModalContext, RECORD_TYPE_MAP } from "../../globalConfigs"
 import { createModal, DEFAULT_STORE_TYPE } from "../../utils"
-import RecordForm from "./RecordForm"
+import RecordForm from './RecordForm/index'
 import { SettingContext } from "./records"
 import { useParams } from 'utils/hooks'
 import { useForm } from 'antd/lib/form/Form'

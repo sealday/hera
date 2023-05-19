@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { useNavigate, useParams } from "utils/hooks"
 import heraApi, { useGetRecordQuery, useUpdateRecordMutation } from "../../api"
 import { Error, Loading, PageHeader } from "../../components"
-import RecordForm from "./RecordForm"
+import RecordForm from './RecordForm/index'
 import { SettingContext } from "./records"
 import { useDirection } from './Record'
 import { strings } from 'hera-core'
