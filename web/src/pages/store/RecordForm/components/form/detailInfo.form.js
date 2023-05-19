@@ -1,60 +1,51 @@
 import React from 'react'
-import { Radio, Button, Form, Input, InputNumber, Table, Space } from 'antd'
+import {
+  Radio,
+  Tag,
+  Button,
+  Form,
+  Input,
+  InputNumber,
+  Table,
+  Space,
+} from 'antd'
 import { PlusCircleTwoTone, MinusCircleTwoTone } from '@ant-design/icons'
 
 import EntryForm from './entry.form'
 import { styles } from '../../utils/constants'
+import { getRandomColor } from '../../utils/color'
 
-const expandIcon = ({ expanded, onExpand, record }) =>
-  expanded ? (
-    <MinusCircleTwoTone onClick={e => onExpand(record, e)} />
-  ) : (
-    <PlusCircleTwoTone onClick={e => onExpand(record, e)} />
-  )
-
-const expandedRowRender = record => (
-  <Form.List name={[record.name, 'entries']}>
-    {(formFields, formOperation) => (
-      <EntryForm fields={formFields} operation={formOperation} />
-    )}
-  </Form.List>
-)
+const colors = []
 
 const DetailInfoForm = ({ fields, operation }) => {
+  colors.push(getRandomColor())
   const columns = [
     {
       key: 'productGroups',
       title: '产品分组',
       width: 250,
       align: 'center',
-      render: (_, field) => {
-        return (
-          <Form.Item
-            name={[field.name, 'productGroups']}
-            style={styles.textColor}
-          >{`分组${field.name + 1}`}</Form.Item>
-        )
-      },
+      render: (_, field) => (
+        <Tag color={colors[field.key]}>{`分组${field.name + 1}`}</Tag>
+      ),
     },
     {
       key: 'realWeight',
       title: '过磅重量',
       align: 'center',
       width: 250,
-      render: (_, field) => {
-        return (
-          <Form.Item name={[field.name, 'realWeight']}>
-            <InputNumber min={0} max={10000} style={styles.block} />
-          </Form.Item>
-        )
-      },
+      render: (_, field) => (
+        <Form.Item name={[field.name, 'realWeight']}>
+          <InputNumber min={0} max={10000} style={styles.block} />
+        </Form.Item>
+      ),
     },
     {
       key: 'realUnit',
       title: '单位',
       align: 'center',
       render: (_, field, index) => (
-        <Form.Item name={[field.name, 'unit']} initialValue={'吨'}>
+        <Form.Item name={[field.name, 'realUnit']} initialValue={'吨'}>
           <Radio.Group key={field?.name || index} options={['千克', '吨']} />
         </Form.Item>
       ),
@@ -65,7 +56,7 @@ const DetailInfoForm = ({ fields, operation }) => {
       title: '备注',
       width: 250,
       render: (_, field) => (
-        <Form.Item name={[field.name, 'comments']}>
+        <Form.Item name={[field.name, 'realComments']}>
           <Input style={styles.block} />
         </Form.Item>
       ),
@@ -73,7 +64,7 @@ const DetailInfoForm = ({ fields, operation }) => {
     {
       key: 'action',
       width: 88,
-      render: (_text, field, i) => (
+      render: (_text, field) => (
         <Space>
           <Button
             type="link"
@@ -94,8 +85,19 @@ const DetailInfoForm = ({ fields, operation }) => {
       pagination={false}
       size="small"
       expandable={{
-        expandedRowRender,
-        expandIcon,
+        expandedRowRender: record => (
+          <Form.List name={[record.name, 'entries']}>
+            {(formFields, formOperation) => (
+              <EntryForm fields={formFields} operation={formOperation} />
+            )}
+          </Form.List>
+        ),
+        expandIcon: ({ expanded, onExpand, record }) =>
+          expanded ? (
+            <MinusCircleTwoTone onClick={e => onExpand(record, e)} />
+          ) : (
+            <PlusCircleTwoTone onClick={e => onExpand(record, e)} />
+          ),
       }}
     />
   )
