@@ -1,16 +1,24 @@
 import React from 'react'
-import {
-  Checkbox,
-  Radio,
-  Button,
-  Form,
-  Input,
-  InputNumber,
-  Table,
-  Space,
-} from 'antd'
+import { Radio, Button, Form, Input, InputNumber, Table, Space } from 'antd'
+import { PlusCircleTwoTone, MinusCircleTwoTone } from '@ant-design/icons'
+
 import EntryForm from './entry.form'
 import { styles } from '../../utils/constants'
+
+const expandIcon = ({ expanded, onExpand, record }) =>
+  expanded ? (
+    <MinusCircleTwoTone onClick={e => onExpand(record, e)} />
+  ) : (
+    <PlusCircleTwoTone onClick={e => onExpand(record, e)} />
+  )
+
+const expandedRowRender = record => (
+  <Form.List name={[record.name, 'entries']}>
+    {(formFields, formOperation) => (
+      <EntryForm fields={formFields} operation={formOperation} />
+    )}
+  </Form.List>
+)
 
 const DetailInfoForm = ({ fields, operation }) => {
   const columns = [
@@ -24,7 +32,7 @@ const DetailInfoForm = ({ fields, operation }) => {
           <Form.Item
             name={[field.name, 'productGroups']}
             style={styles.textColor}
-          >{`分组${field.key + 1}`}</Form.Item>
+          >{`分组${field.name + 1}`}</Form.Item>
         )
       },
     },
@@ -86,16 +94,12 @@ const DetailInfoForm = ({ fields, operation }) => {
       pagination={false}
       size="small"
       expandable={{
-        expandedRowRender: record => (
-          <Form.List name={[record.name, 'entries']}>
-            {(formFields, formOperation) => (
-              <EntryForm fields={formFields} operation={formOperation} />
-            )}
-          </Form.List>
-        ),
+        expandedRowRender,
+        expandIcon,
       }}
     />
   )
 }
+
 
 export default DetailInfoForm
