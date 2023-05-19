@@ -6,6 +6,7 @@ import { SettingContext } from '../records'
 import BaseInfoCard from './components/baseInfo.card'
 import DetailInfoCard from './components/detailInfo.card'
 import ExtraInfoCard from './components/extraInfo.card'
+import { convertValues } from './utils/convert.js'
 
 export default ({ form, initialValues, onSubmit }) => {
   const settings = useContext(SettingContext)
@@ -26,9 +27,16 @@ export default ({ form, initialValues, onSubmit }) => {
       value: type,
     },
   }
+
+  const onFinish = values => {
+    // 此处做了个数据转换处理，为了适应原来的老数据结构，等之后对整体系统数据熟悉后，可以重构这里的数据传递方式
+    const cookedValues = convertValues(values)
+    onSubmit(cookedValues)
+  }
+
   return (
     <Form
-      onFinish={onSubmit}
+      onFinish={onFinish}
       form={form}
       colon={false}
       labelCol={{ flex: '5em' }}

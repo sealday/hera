@@ -41,22 +41,22 @@ const DetailInfoForm = ({ fields, operation }) => {
       ),
     },
     {
-      key: 'realUnit',
+      key: 'unit',
       title: '单位',
       align: 'center',
       render: (_, field, index) => (
-        <Form.Item name={[field.name, 'realUnit']} initialValue={'吨'}>
+        <Form.Item name={[field.name, 'unit']} initialValue={'吨'}>
           <Radio.Group key={field?.name || index} options={['千克', '吨']} />
         </Form.Item>
       ),
     },
 
     {
-      key: 'realComments',
+      key: 'comments',
       title: '备注',
       width: 250,
       render: (_, field) => (
-        <Form.Item name={[field.name, 'realComments']}>
+        <Form.Item name={[field.name, 'comments']}>
           <Input style={styles.block} />
         </Form.Item>
       ),
