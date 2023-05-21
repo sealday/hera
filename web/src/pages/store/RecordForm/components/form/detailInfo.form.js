@@ -85,10 +85,14 @@ const DetailInfoForm = ({ fields, operation }) => {
       pagination={false}
       size="small"
       expandable={{
-        expandedRowRender: record => (
+        expandedRowRender: (record, index) => (
           <Form.List name={[record.name, 'entries']}>
             {(formFields, formOperation) => (
-              <EntryForm fields={formFields} operation={formOperation} />
+              <EntryForm
+                fields={formFields}
+                operation={formOperation}
+                groupsIndex={index}
+              />
             )}
           </Form.List>
         ),

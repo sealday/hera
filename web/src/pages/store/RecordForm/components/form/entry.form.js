@@ -19,9 +19,12 @@ const styles = {
 }
 const rules = [{ required: true }]
 
-export const UnitLabel = ({ field }) => {
+export const UnitLabel = ({ field, groupsIndex }) => {
   const form = Form.useFormInstance()
-  const product = Form.useWatch(['entries', field.name, 'product'], form)
+  const product = Form.useWatch(
+    ['detailInfos', groupsIndex, 'entries', field.name, 'product'],
+    form
+  )
   const result = heraApi.useGetProductListQuery()
   if (result.isError || result.isLoading || _.isEmpty(product)) {
     return ''
@@ -43,10 +46,16 @@ export const UnitLabel = ({ field }) => {
   }
 }
 
-const TotalLabel = ({ field }) => {
+const TotalLabel = ({ field, groupsIndex }) => {
   const form = Form.useFormInstance()
-  const product = Form.useWatch(['entries', field.name, 'product'], form)
-  const count = Form.useWatch(['entries', field.name, 'count'], form)
+  const product = Form.useWatch(
+    ['detailInfos', groupsIndex, 'entries', field.name, 'product'],
+    form
+  )
+  const count = Form.useWatch(
+    ['detailInfos', groupsIndex, 'entries', field.name, 'count'],
+    form
+  )
   const result = heraApi.useGetProductListQuery()
   if (
     result.isError ||
@@ -71,11 +80,20 @@ const TotalLabel = ({ field }) => {
   }
 }
 
-const SumLabel = ({ field }) => {
+const SumLabel = ({ field, groupsIndex }) => {
   const form = Form.useFormInstance()
-  const product = Form.useWatch(['entries', field.name, 'product'], form)
-  const count = Form.useWatch(['entries', field.name, 'count'], form)
-  const price = Form.useWatch(['entries', field.name, 'price'], form)
+  const product = Form.useWatch(
+    ['detailInfos', groupsIndex, 'entries', field.name, 'product'],
+    form
+  )
+  const count = Form.useWatch(
+    ['detailInfos', groupsIndex, 'entries', field.name, 'count'],
+    form
+  )
+  const price = Form.useWatch(
+    ['detailInfos', groupsIndex, 'entries', field.name, 'price'],
+    form
+  )
   const result = heraApi.useGetProductListQuery()
   if (
     result.isError ||
@@ -107,10 +125,16 @@ const SumLabel = ({ field }) => {
   }
 }
 
-export const WeightLabel = ({ field }) => {
+export const WeightLabel = ({ field, groupsIndex }) => {
   const form = Form.useFormInstance()
-  const product = Form.useWatch(['entries', field.name, 'product'], form)
-  const count = Form.useWatch(['entries', field.name, 'count'], form)
+  const product = Form.useWatch(
+    ['detailInfos', groupsIndex, 'entries', field.name, 'product'],
+    form
+  )
+  const count = Form.useWatch(
+    ['detailInfos', groupsIndex, 'entries', field.name, 'count'],
+    form
+  )
   const result = heraApi.useGetProductListQuery()
   if (
     result.isError ||
@@ -135,10 +159,10 @@ export const WeightLabel = ({ field }) => {
   }
 }
 
-export const Summary = () => {
+export const Summary = ({ groupsIndex }) => {
   const form = Form.useFormInstance()
   const settings = useContext(SettingContext)
-  const entries = Form.useWatch('entries', form)
+  const entries = Form.useWatch(['detailInfos', groupsIndex, 'entries'], form)
   const result = heraApi.useGetProductListQuery()
   if (_.isUndefined(entries)) {
     return ''
@@ -206,7 +230,7 @@ export const Summary = () => {
   return <Descriptions title="小结">{items}</Descriptions>
 }
 
-export default ({ fields, operation }) => {
+export default ({ fields, operation, groupsIndex }) => {
   const form = Form.useFormInstance()
   const settings = useContext(SettingContext)
   const columns = []
@@ -242,21 +266,25 @@ export default ({ fields, operation }) => {
     title: '小计',
     width: 44,
     align: 'center',
-    render: (_, field) => <TotalLabel field={field} />,
+    render: (_, field) => (
+      <TotalLabel field={field} groupsIndex={groupsIndex} />
+    ),
   })
   columns.push({
     key: 'unit',
     title: '单位',
     width: 44,
     align: 'center',
-    render: (_, field) => <UnitLabel field={field} />,
+    render: (_, field) => <UnitLabel field={field} groupsIndex={groupsIndex} />,
   })
   columns.push({
     key: 'weight',
     title: '重量',
     width: 44,
     align: 'center',
-    render: (_, field) => <WeightLabel field={field} />,
+    render: (_, field) => (
+      <WeightLabel field={field} groupsIndex={groupsIndex} />
+    ),
   })
   if (settings.price) {
     columns.push({
@@ -274,7 +302,9 @@ export default ({ fields, operation }) => {
       title: '金额',
       width: 100,
       align: 'center',
-      render: (_, field) => <SumLabel field={field} />,
+      render: (_, field) => (
+        <SumLabel field={field} groupsIndex={groupsIndex} />
+      ),
     })
   }
   columns.push({
@@ -334,7 +364,7 @@ export default ({ fields, operation }) => {
         dataSource={fields}
         pagination={false}
         size="small"
-        footer={Summary}
+        footer={() => Summary({ groupsIndex })}
       />
       <Button
         type="dashed"

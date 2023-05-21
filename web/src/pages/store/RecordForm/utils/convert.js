@@ -6,8 +6,7 @@ const getCountArr = (count, end) => {
   return resultArr
 }
 
-export const convertValues = values => {
-  const { detailInfos = [], ...rest } = values
+export const convertDetailInfos = (detailInfos = []) => {
   const entries = []
   const realinfos = []
 
@@ -34,6 +33,15 @@ export const convertValues = values => {
     count = curCount
   }
 
+  return {
+    entries,
+    realinfos,
+  }
+}
+
+export const convertValues = values => {
+  const { detailInfos = [], ...rest } = values
+  const { entries, realinfos } = convertDetailInfos(detailInfos)
   return {
     ...rest,
     entries,

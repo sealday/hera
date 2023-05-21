@@ -8,7 +8,7 @@ import _ from 'lodash'
 import { RefCascader } from '../../../components'
 import React from 'react'
 import heraApi from '../../../api'
-
+import { convertDetailInfos } from '../../utils/convert'
 const styles = {
   block: { width: '100%' },
 }
@@ -60,7 +60,9 @@ const UnitLabel = ({ field }) => {
 
 const ComplementForm = ({ fields, operation, meta }) => {
   const form = Form.useFormInstance()
-  const entries = Form.useWatch(['entries'])
+  // const entries = Form.useWatch(['entries'])
+  const detailInfos = Form.useWatch(['detailInfos'])
+  const entries = convertDetailInfos(detailInfos)
   const associateOptions = _.chain(entries)
     .filter(entry => !_.isEmpty(entry) && !_.isEmpty(entry.product))
     .map(entry => ({
