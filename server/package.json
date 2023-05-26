@@ -32,6 +32,7 @@
     "@nestjs/platform-socket.io": "^9.2.1",
     "@nestjs/schedule": "^2.1.0",
     "@nestjs/serve-static": "^3.0.0",
+    "@nestjs/swagger": "^6.3.0",
     "@nestjs/websockets": "^9.2.1",
     "@react-pdf/renderer": "^3.0.1",
     "@types/deep-diff": "^1.0.1",
@@ -73,6 +74,7 @@
     "eslint": "^8.28.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
+    "hera-core": "*",
     "jest": "^29.3.1",
     "prettier": "^2.8.0",
     "supertest": "^6.3.1",
@@ -80,7 +82,6 @@
     "ts-loader": "^9.4.2",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.1.1",
-    "hera-core": "*",
     "typescript": "^4.9.3"
   },
   "jest": {

@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { Font } from '@react-pdf/renderer';
 import * as compression from 'compression';
 import * as moment from 'moment';
@@ -17,7 +18,17 @@ Font.registerHyphenationCallback((word) =>
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  const config = new DocumentBuilder()
+    .setTitle('赫拉管理系统')
+    .setDescription('赫拉管理系统API')
+    .setVersion('3.0.0')
+    .addTag('hera')
+    .build()
   app.setGlobalPrefix('api');
+  // 需要配置在 global prefix 下面才能感知这个选项
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api-docs', app, document);
   app.use(compression());
   logger.token('log-time', () => moment().format('MM-DD HH:mm:ss'));
   app.use(logger('[:method] (:log-time) :url :status :remote-addr :response-time ms'));
