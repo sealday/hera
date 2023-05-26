@@ -3,9 +3,20 @@ import { InjectModel } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
 import { Model } from 'mongoose';
 import { Socket } from 'socket.io';
+import { Express } from 'express';
 import { LoggerService } from 'src/app/logger/logger.service';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
-export type User = any;
+export class User implements Express.User {
+  @ApiProperty()
+  username?: string
+  @ApiProperty()
+  password?: string
+  @ApiPropertyOptional()
+  profile?: {
+    name: string
+  }
+}
 
 @Injectable()
 export class UsersService {

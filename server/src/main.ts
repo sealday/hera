@@ -23,7 +23,16 @@ async function bootstrap() {
     .setTitle('赫拉管理系统')
     .setDescription('赫拉管理系统API')
     .setVersion('3.0.0')
+    .addBearerAuth({
+      type: 'apiKey',
+      in: 'query',
+      name: 'token',
+    })
+    // 这里对 api 的 tag 做排序
+    .addTag('login')
+    .addTag('init')
     .addTag('hera')
+    .addTag('default')
     .build()
   app.setGlobalPrefix('api');
   // 需要配置在 global prefix 下面才能感知这个选项
@@ -33,7 +42,7 @@ async function bootstrap() {
   logger.token('log-time', () => moment().format('MM-DD HH:mm:ss'));
   app.use(logger('[:method] (:log-time) :url :status :remote-addr :response-time ms'));
   if (process.env.IS_DEV === 'true') {
-    await app.listen(3000, '0.0.0.0');
+    await app.listen(process.env.PORT || 3000, '0.0.0.0');
   } else {
     await app.listen(process.env.PORT || 3000);
   }

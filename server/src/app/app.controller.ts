@@ -5,7 +5,10 @@ import { AppService } from './app.service';
 import { Express } from 'express';
 import { createReadStream } from 'fs';
 import { join } from 'path';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('init')
 @Controller()
 @UseGuards(JwtAuthGuard)
 export class AppController {
