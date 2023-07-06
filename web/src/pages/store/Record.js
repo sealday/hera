@@ -203,7 +203,7 @@ const Record = ({ isFinance = false }) => {
   descriptions.push({ label: '车号', children: record.carNumber })
   descriptions.push({
     label: '实际重量',
-    children: record.weight ? record.weight + '吨' : '',
+    children: record.weight ? fixed(record.weight, 3)  + '吨' : '',
   })
   descriptions.push({
     label: '合同运费',
