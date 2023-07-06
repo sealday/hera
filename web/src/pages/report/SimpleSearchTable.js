@@ -6,6 +6,7 @@ import { Map } from 'immutable'
 import { total_, toFixedWithoutTrailingZero } from '../../utils'
 import { ResultTable, Link } from '../../components'
 import { Tag } from 'antd'
+import _ from 'lodash'
 
 export default ({ search, isCompany }) => {
 
@@ -56,6 +57,11 @@ export default ({ search, isCompany }) => {
           }
         }
       })
+      if (_.isNumber(entry.weight)) {
+        totals.push(
+          '实际重量：' + toFixedWithoutTrailingZero(entry.weight, 3) + '吨'
+        )
+      }
 
       entry.totalString = totals.join(' ')
     })
