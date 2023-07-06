@@ -40,6 +40,8 @@ export class Setting {
   @Prop()
   counterfoilTimeout: number;
 
+  @Prop()
+  byCreatedTime: boolean;
 }
 
 export const SettingSchema = SchemaFactory.createForClass(Setting)

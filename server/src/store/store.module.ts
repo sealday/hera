@@ -22,6 +22,7 @@ import { RecordController } from './record/record.controller';
 import { RecordService } from './record/record.service';
 import { StoreController } from './store.controller';
 import { StoreService } from './store.service';
+import { Setting, SettingSchema } from 'src/schemas/setting.schema';
 
 @Module({
   imports: [
