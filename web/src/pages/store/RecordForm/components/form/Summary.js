@@ -9,20 +9,10 @@ import { convertDetailInfos } from '../../utils/convert'
 export const Summary = () => {
   const form = Form.useFormInstance()
   const settings = useContext(SettingContext)
-  // const entries = Form.useWatch(['detailInfos', groupsIndex, 'entries'], form)
-  const detailInfos = form.getFieldValue('detailInfos')
-  console.log(
-    '%c Line:171 🍭 detailInfos',
-    'font-size:18px;color:#2eafb0;background:#ea7e5c',
-    detailInfos
-  )
 
+  const detailInfos = form.getFieldValue('detailInfos')
   const { entries } = convertDetailInfos(detailInfos)
-  console.log(
-    '%c Line:173 🥤 entries',
-    'font-size:18px;color:#ffdd4d;background:#4fff4B',
-    entries
-  )
+
   const result = heraApi.useGetProductListQuery()
   if (_.isUndefined(entries)) {
     return ''
