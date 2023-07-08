@@ -307,7 +307,19 @@ const genTableColumn = schema => {
   schema.forEach(item => {
     if (item.hidden) return;
     if (item.type === 'text') {
-      const column = { title: item.label, dataIndex: item.name, key: item.name }
+      const column = {
+        title: item.label,
+        dataIndex: item.name,
+        key: item.name,
+        onCell: rowData => {
+          const { isFirstRow, mergeRowNumber } = rowData
+          if (!isFirstRow) {
+            return { rowSpan: 0 }
+          } else {
+            return { rowSpan: mergeRowNumber }
+          }
+        },
+      }
       if (item.option) {
         if (item.option.type === 'ref') {
           if (item.option.select === 'cascader') {
@@ -333,7 +345,20 @@ const genTableColumn = schema => {
       columns.push({ title: item.label, dataIndex: item.name, key: item.name, render(v) { return v ? '是' : '否' } })
     } else if (item.type === 'number') {
       if (item.format === 'fixed') {
-        columns.push({ title: item.label, dataIndex: item.name, key: item.name, render: v => toFixedWithoutTrailingZero(v) })
+        columns.push({
+          title: item.label,
+          dataIndex: item.name,
+          key: item.name,
+          render: v => toFixedWithoutTrailingZero(v),
+          onCell: rowData => {
+            const { isFirstRow, mergeRowNumber } = rowData
+            if (!isFirstRow) {
+              return { rowSpan: 0 }
+            } else {
+              return { rowSpan: mergeRowNumber }
+            }
+          },
+        })
       } else {
         columns.push({ title: item.label, dataIndex: item.name, key: item.name })
       }
