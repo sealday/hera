@@ -343,13 +343,40 @@ const genTableColumn = schema => {
         return
       }
       const column = {
-        title: item.label, dataIndex: item.name, key: item.name, render(list) {
+        title: item.label,
+        dataIndex: item.name,
+        key: item.name,
+        render: list => {
           if (_.get(item, ['column', 'link'])) {
             const toLink = item.column.link
-            return <Space direction="vertical">{_.map(_.uniq(list), item => <Tag key={item}><Link to={toLink(item)}>{item}</Link></Tag>)}</Space>
+            if (Array.isArray(list)) {
+              return (
+                <Space direction="vertical">
+                  {_.map(_.uniq(list), item => (
+                    <Tag key={item}>
+                      <Link to={toLink(item)}>{item}</Link>
+                    </Tag>
+                  ))}
+                </Space>
+              )
+            } else {
+              return (
+                <Space direction="vertical">
+                  <Tag key={list}>
+                    <Link to={toLink(list)}>{list}</Link>
+                  </Tag>
+                </Space>
+              )
+            }
           }
-          return <Space direction="vertical">{_.map(_.uniq(list), item => <Tag key={item}>{item}</Tag>)}</Space>
-        }
+          return (
+            <Space direction="vertical">
+              {_.map(_.uniq(list), item => (
+                <Tag key={item}>{item}</Tag>
+              ))}
+            </Space>
+          )
+        },
       }
       if (_.get(item, ['column', 'width'])) {
         column.width = item.column.width
