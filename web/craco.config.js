@@ -35,9 +35,9 @@ module.exports = {
       ],
     },
     configure: webpackConfig => {
-      if (!isProduction) {
-        webpackConfig.devtool = 'eval-cheap-module-source-map'
-      }
+      // if (!isProduction) {
+      //   webpackConfig.devtool = 'eval-cheap-module-source-map'
+      // }
       webpackConfig.resolve = {
         ...webpackConfig.resolve,
         fallback: {
