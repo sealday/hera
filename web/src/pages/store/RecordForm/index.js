@@ -5,6 +5,7 @@ import _ from 'lodash'
 import { SettingContext } from '../records'
 import BaseInfoCard from './components/baseInfo.card'
 import DetailInfoCard from './components/detailInfo.card'
+import RepairInfoCard from './components/repairInfo.card'
 import ExtraInfoCard from './components/extraInfo.card'
 import { convertValues } from './utils/convert.js'
 
@@ -49,7 +50,7 @@ export default ({ form, initialValues, onSubmit }) => {
         projectItem={projectItem}
       />
       <DetailInfoCard title="明细信息" />
-      <ExtraInfoCard title="赔偿维修信息" />
+      <RepairInfoCard title="赔偿维修信息" />
       <ExtraInfoCard title="额外信息" />
     </Form>
   )

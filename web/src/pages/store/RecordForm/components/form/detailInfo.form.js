@@ -14,6 +14,7 @@ import { PlusCircleTwoTone, MinusCircleTwoTone } from '@ant-design/icons'
 import EntryForm from './entry.form'
 import { styles } from '../../utils/constants'
 import { getRandomColor } from '../../utils/color'
+import { Summary } from './entry.form'
 
 const colors = []
 
@@ -103,6 +104,7 @@ const DetailInfoForm = ({ fields, operation }) => {
             <PlusCircleTwoTone onClick={e => onExpand(record, e)} />
           ),
       }}
+      footer={Summary}
     />
   )
 }

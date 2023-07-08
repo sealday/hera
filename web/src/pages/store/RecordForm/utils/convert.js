@@ -11,26 +11,28 @@ export const convertDetailInfos = (detailInfos = []) => {
   const realinfos = []
 
   for (let i = 0, count = 0; i < detailInfos.length; i++) {
-    const {
-      entries: itemEntries = [],
-      realWeight,
-      unit,
-      comments,
-    } = detailInfos[i]
+    if (detailInfos[i]) {
+      const {
+        entries: itemEntries = [],
+        realWeight,
+        unit,
+        comments,
+      } = detailInfos[i]
 
-    let curCount = count + itemEntries.length
+      let curCount = count + itemEntries.length
 
-    const realInfo = {
-      realWeight,
-      unit,
-      comments,
-      productGroups: getCountArr(curCount, count),
+      const realInfo = {
+        realWeight,
+        unit,
+        comments,
+        productGroups: getCountArr(curCount, count),
+      }
+
+      entries.push(...itemEntries)
+      realinfos.push(realInfo)
+
+      count = curCount
     }
-
-    entries.push(...itemEntries)
-    realinfos.push(realInfo)
-
-    count = curCount
   }
 
   return {

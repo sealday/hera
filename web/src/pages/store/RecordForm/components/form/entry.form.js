@@ -9,10 +9,11 @@ import { RefCascader } from '../../../../../components'
 import {
   buildProductTree,
   toFixedWithoutTrailingZero as fixed,
-} from '../../../../../utils'
+} from '../../../../../utils/index'
 import React, { useContext } from 'react'
 import { SettingContext } from '../../../records/index'
 import heraApi from '../../../../../api'
+import { convertDetailInfos } from '../../utils/convert'
 
 const styles = {
   block: { width: '100%' },
@@ -21,6 +22,7 @@ const rules = [{ required: true }]
 
 export const UnitLabel = ({ field, groupsIndex }) => {
   const form = Form.useFormInstance()
+
   const product = Form.useWatch(
     ['detailInfos', groupsIndex, 'entries', field.name, 'product'],
     form
@@ -135,6 +137,7 @@ export const WeightLabel = ({ field, groupsIndex }) => {
     ['detailInfos', groupsIndex, 'entries', field.name, 'count'],
     form
   )
+
   const result = heraApi.useGetProductListQuery()
   if (
     result.isError ||
@@ -152,17 +155,20 @@ export const WeightLabel = ({ field, groupsIndex }) => {
       item.name === product[1] &&
       item.size === product[2]
   )
-  if (fetchResult.length > 0) {
+
+  if (fetchResult?.[0]?.weight) {
     return fixed((fetchResult[0].weight * count) / 1000) + 't'
   } else {
     return ''
   }
 }
 
-export const Summary = ({ groupsIndex }) => {
+export const Summary = () => {
   const form = Form.useFormInstance()
   const settings = useContext(SettingContext)
-  const entries = Form.useWatch(['detailInfos', groupsIndex, 'entries'], form)
+  // const entries = Form.useWatch(['detailInfos', groupsIndex, 'entries'], form)
+  const detailInfos = form.getFieldValue('detailInfos')
+  const { entries } = convertDetailInfos(detailInfos)
   const result = heraApi.useGetProductListQuery()
   if (_.isUndefined(entries)) {
     return ''
@@ -322,7 +328,6 @@ export default ({ fields, operation, groupsIndex }) => {
     key: 'action',
     title: '组内操作',
     width: 88,
-    // width: 200,
     align: 'center',
     render: (_text, field, i) => (
       <Space>
@@ -336,13 +341,17 @@ export default ({ fields, operation, groupsIndex }) => {
             icon={<PaperClipOutlined />}
             type="text"
             onClick={() => {
-              const product = form.getFieldValue('entries')[i].product
+              const detailInfos = form.getFieldValue('detailInfos')
+              const entries = detailInfos?.[groupsIndex]?.entries
+              const product = entries[i].product
+
               if (_.isEmpty(product)) return
               const complement = {
                 level: 'associated',
                 associate: JSON.stringify(product),
                 direction: '无',
               }
+
               if (typeof form.getFieldValue('complements') === 'undefined') {
                 form.setFieldValue('complements', [complement])
               } else {
