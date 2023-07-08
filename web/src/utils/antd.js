@@ -312,11 +312,13 @@ const genTableColumn = schema => {
         dataIndex: item.name,
         key: item.name,
         onCell: rowData => {
-          const { isFirstRow, mergeRowNumber } = rowData
-          if (!isFirstRow) {
-            return { rowSpan: 0 }
-          } else {
-            return { rowSpan: mergeRowNumber }
+          const { isFirstRow, mergeRowNumber, isDetailSearch } = rowData
+          if (isDetailSearch) {
+            if (!isFirstRow) {
+              return { rowSpan: 0 }
+            } else {
+              return { rowSpan: mergeRowNumber }
+            }
           }
         },
       }
@@ -351,11 +353,13 @@ const genTableColumn = schema => {
           key: item.name,
           render: v => toFixedWithoutTrailingZero(v),
           onCell: rowData => {
-            const { isFirstRow, mergeRowNumber } = rowData
-            if (!isFirstRow) {
-              return { rowSpan: 0 }
-            } else {
-              return { rowSpan: mergeRowNumber }
+            const { isFirstRow, mergeRowNumber, isDetailSearch } = rowData
+            if (isDetailSearch) {
+              if (!isFirstRow) {
+                return { rowSpan: 0 }
+              } else {
+                return { rowSpan: mergeRowNumber }
+              }
             }
           },
         })

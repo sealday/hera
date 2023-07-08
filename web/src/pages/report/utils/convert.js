@@ -35,6 +35,7 @@ export const convertSubCount = datas => {
         total: tempObject[targetName].total,
         isFirstRow,
         mergeRowNumber: tempObject[targetName].repeatNumber,
+        isDetailSearch: true, // 特殊标价，标记是为明细查询的数据信息
       }
     })
 
