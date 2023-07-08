@@ -14,7 +14,7 @@ import { PlusCircleTwoTone, MinusCircleTwoTone } from '@ant-design/icons'
 import EntryForm from './entry.form'
 import { styles } from '../../utils/constants'
 import { getRandomColor } from '../../utils/color'
-import { Summary } from './entry.form'
+import { Summary } from './Summary'
 
 const colors = []
 
@@ -78,7 +78,6 @@ const DetailInfoForm = ({ fields, operation }) => {
       ),
     },
   ]
-
   return (
     <Table
       columns={columns}
@@ -108,6 +107,5 @@ const DetailInfoForm = ({ fields, operation }) => {
     />
   )
 }
-
 
 export default DetailInfoForm

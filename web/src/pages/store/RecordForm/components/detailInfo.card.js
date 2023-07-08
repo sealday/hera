@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useMemo } from 'react'
 import { Card, Col, Form, Row, Button } from 'antd'
 import { PlusCircleOutlined } from '@ant-design/icons'
 import DetailInfoForm from './form/detailInfo.form'
