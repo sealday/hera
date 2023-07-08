@@ -2626,6 +2626,7 @@ export class StoreService {
         number: '$number',
         projectId: '$projectId',
         count: '$entries.count',
+        outDate: '$outDate',
         in: {
           $cond: {
             if: { $eq: ['$inStock', new Types.ObjectId(condition.storeId)] },
@@ -2686,42 +2687,42 @@ export class StoreService {
         }
       }
     })
-    // 汇总结果
-    pipeline.push({
-      $group: {
-        _id: {
-          projectId: '$projectId',
-          type: '$type',
-          name: '$name',
-          size: '$size',
-          productNumber: '$productNumber',
-        },
-        in: { $sum: '$in' },
-        out: { $sum: '$out' },
-        total: { $sum: '$total' },
-        unit: { $first: '$unit' },
-        numbers: { $push: '$number' },
-      }
-    })
+    // // 汇总结果
+    // pipeline.push({
+    //   $group: {
+    //     _id: {
+    //       projectId: '$projectId',
+    //       type: '$type',
+    //       name: '$name',
+    //       size: '$size',
+    //       productNumber: '$productNumber',
+    //     },
+    //     in: { $sum: '$in' },
+    //     out: { $sum: '$out' },
+    //     total: { $sum: '$total' },
+    //     unit: { $first: '$unit' },
+    //     numbers: { $push: '$number' },
+    //   }
+    // })
     pipeline.push({
       $sort: {
-        '_id.productNumber': 1
+        'productNumber': 1
       }
     })
-    // 字段映射
-    pipeline.push({
-      $project: {
-        projectId: '$_id.projectId',
-        type: '$_id.type',
-        name: '$_id.name',
-        size: '$_id.size',
-        in: '$in',
-        out: '$out',
-        total: '$total',
-        unit: '$unit',
-        numbers: '$numbers',
-      }
-    })
+    // // 字段映射
+    // pipeline.push({
+    //   $project: {
+    //     projectId: '$_id.projectId',
+    //     type: '$_id.type',
+    //     name: '$_id.name',
+    //     size: '$_id.size',
+    //     in: '$in',
+    //     out: '$out',
+    //     total: '$total',
+    //     unit: '$unit',
+    //     numbers: '$numbers',
+    //   }
+    // })
     const result = await this.recordModel.aggregate(pipeline)
     return result
   }
