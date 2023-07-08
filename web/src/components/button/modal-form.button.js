@@ -20,7 +20,8 @@ export default ({ onSubmit, title, schema, initialValues, children, ...btnProps 
     })
   }
 
-  const formContent = genFormContent(schema, 2, form)
+  const isScaled = Form.useWatch(['isScaled'], form)
+  const formContent = genFormContent(schema, 2, form, {}, { isScaled })
   return (
     <>
       <Button {...btnProps} onClick={showModal}>

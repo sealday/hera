@@ -27,135 +27,260 @@ const ListTable = ({ fields, operation, meta, item, form }) => {
   )
 }
 
-const genFormContent = (schema, cols = 0, form = null, initialValues = {}) => {
+const genFormContent = (
+  schema,
+  cols = 0,
+  form = null,
+  initialValues = {},
+  otherInfo = {}
+) => {
   const formItems = []
   schema.forEach(item => {
+    // 特殊逻辑： 根据是否换算决定换算单位和换算比例是否必填
+    let isRequired = false
+    if ((item.requiredDepends || []).includes('isScaled')) {
+      isRequired = otherInfo?.isScaled
+    }
     if (item.default) {
       initialValues[item.name] = item.default
     }
     if (item.option) {
       if (item.option.type === 'static_value_only') {
-        formItems.push((
-          <Form.Item key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
+        formItems.push(
+          <Form.Item
+            key={item.name}
+            name={item.name}
+            label={item.label}
+            required={item.required}
+            hidden={item.hidden}
+            rules={[{ required: item.required }]}
+          >
             <ReduxSelect values={item.option.values} disabled={item.disabled} />
           </Form.Item>
-        ))
+        )
       } else if (item.option.type === 'static') {
         const options = _.zip(item.option.labels, item.option.values)
         if (options.length < 5) {
           // 少于 5 个直接显示
-          formItems.push((
-            <Form.Item key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
+          formItems.push(
+            <Form.Item
+              key={item.name}
+              name={item.name}
+              label={item.label}
+              required={item.required}
+              hidden={item.hidden}
+              rules={[{ required: item.required }]}
+            >
               <Radio.Group disabled={item.disabled}>
-                {options.map(([label, value]) => <Radio key={value} value={value}>{label}</Radio>)}
+                {options.map(([label, value]) => (
+                  <Radio key={value} value={value}>
+                    {label}
+                  </Radio>
+                ))}
               </Radio.Group>
             </Form.Item>
-          ))
+          )
         } else {
           // 多于 5 个下拉框显示
-          formItems.push((
-            <Form.Item key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
+          formItems.push(
+            <Form.Item
+              key={item.name}
+              name={item.name}
+              label={item.label}
+              required={item.required}
+              hidden={item.hidden}
+              rules={[{ required: item.required }]}
+            >
               <Select disabled={item.disabled}>
-                {options.map(([label, value]) => <Select.Option key={value} value={value}>{label}</Select.Option>)}
+                {options.map(([label, value]) => (
+                  <Select.Option key={value} value={value}>
+                    {label}
+                  </Select.Option>
+                ))}
               </Select>
             </Form.Item>
-          ))
+          )
         }
       } else if (item.option.type === 'ref') {
         if (item.option.select === 'cascader') {
-          formItems.push((
-            <RefCascader item={item} key={item.name} />
-          ))
+          formItems.push(<RefCascader item={item} key={item.name} />)
         } else {
           if (item.type === 'tags') {
-            formItems.push((
-              <RefSelect item={item} key={item.name} form={form} mode='tags' />
-            ))
+            formItems.push(
+              <RefSelect item={item} key={item.name} form={form} mode="tags" />
+            )
           } else {
-            formItems.push((
+            formItems.push(
               <RefSelect item={item} key={item.name} form={form} />
-            ))
+            )
           }
         }
       }
     } else if (item.type === 'boolean') {
-      formItems.push((
-        <Form.Item key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
+      formItems.push(
+        <Form.Item
+          key={item.name}
+          name={item.name}
+          label={item.label}
+          required={item.required}
+          hidden={item.hidden}
+          rules={[{ required: item.required }]}
+        >
           <Radio.Group disabled={item.disabled}>
-            <Radio key='是' value={true}>是</Radio>
-            <Radio key='否' value={false}>否</Radio>
+            <Radio key="是" value={true}>
+              是
+            </Radio>
+            <Radio key="否" value={false}>
+              否
+            </Radio>
           </Radio.Group>
         </Form.Item>
-      ))
+      )
     } else if (item.type === 'date') {
-      formItems.push((
-        <Form.Item key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
+      formItems.push(
+        <Form.Item
+          key={item.name}
+          name={item.name}
+          label={item.label}
+          required={item.required}
+          hidden={item.hidden}
+          rules={[{ required: item.required }]}
+        >
           <DatePicker style={{ width: '100%' }} disabled={item.disabled} />
         </Form.Item>
-      ))
+      )
     } else if (item.type === 'dateRange') {
-      formItems.push((
-        <Form.Item key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
-          <DatePicker.RangePicker style={{ width: '100%' }} disabled={item.disabled}
+      formItems.push(
+        <Form.Item
+          key={item.name}
+          name={item.name}
+          label={item.label}
+          required={item.required}
+          hidden={item.hidden}
+          rules={[{ required: item.required }]}
+        >
+          <DatePicker.RangePicker
+            style={{ width: '100%' }}
+            disabled={item.disabled}
             renderExtraFooter={() => <DateRangeFooter namepath={item.name} />}
           />
         </Form.Item>
-      ))
+      )
     } else if (item.type === 'list') {
-      formItems.push((
-        <Form.List key={item.name} name={item.name} rules={[{ required: item.required }]} noStyle>
-          {(fields, operation, meta) => <ListTable fields={fields} operation={operation} meta={meta} item={item} form={form} />}
+      formItems.push(
+        <Form.List
+          key={item.name}
+          name={item.name}
+          rules={[{ required: item.required }]}
+          noStyle
+        >
+          {(fields, operation, meta) => (
+            <ListTable
+              fields={fields}
+              operation={operation}
+              meta={meta}
+              item={item}
+              form={form}
+            />
+          )}
         </Form.List>
-      ))
+      )
     } else if (item.type === 'number') {
-      formItems.push((
-        <Form.Item key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
-          <InputNumber addonAfter={item.suffix ? item.suffix : null} disabled={item.disabled}
+      formItems.push(
+        <Form.Item
+          key={item.name}
+          name={item.name}
+          label={item.label}
+          required={item.required}
+          hidden={item.hidden}
+          rules={[{ required: item.required || isRequired }]}
+        >
+          <InputNumber
+            addonAfter={item.suffix ? item.suffix : null}
+            disabled={item.disabled}
             min={item.min}
             max={item.max}
           />
         </Form.Item>
-      ))
+      )
     } else if (item.type === 'tags') {
       if (_.get(item, 'option.type') === 'ref') {
-        formItems.push((
-          <RefSelect item={item} key={item.name} form={form} mode='tags' />
-        ))
+        formItems.push(
+          <RefSelect item={item} key={item.name} form={form} mode="tags" />
+        )
       } else {
-        formItems.push((
-          <Form.Item key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
+        formItems.push(
+          <Form.Item
+            key={item.name}
+            name={item.name}
+            label={item.label}
+            required={item.required}
+            hidden={item.hidden}
+            rules={[{ required: item.required }]}
+          >
             <EditableTagGroup />
           </Form.Item>
-        ))
+        )
       }
     } else {
       if (item.rows) {
-        formItems.push((
-          <Form.Item key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
+        formItems.push(
+          <Form.Item
+            key={item.name}
+            name={item.name}
+            label={item.label}
+            required={item.required}
+            hidden={item.hidden}
+            rules={[{ required: item.required }]}
+          >
             <Input.TextArea disabled={item.disabled} rows={item.rows} />
           </Form.Item>
-        ))
+        )
       } else if (item.mask) {
-        formItems.push(<Form.Item key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
-          <ReactMaskedInput
-            guide={false}
-            mask={item.mask}
-            render={(ref, props) => (
-              <Input addonAfter={item.suffix ? item.suffix : null} disabled={item.disabled} {...props} ref={ref} />
-            )}
-          />
-        </Form.Item>)
-      } else {
-        formItems.push((
-          <Form.Item key={item.name} name={item.name} label={item.label} required={item.required} hidden={item.hidden} rules={[{ required: item.required }]}>
-            <Input addonAfter={item.suffix ? item.suffix : null} disabled={item.disabled} />
+        formItems.push(
+          <Form.Item
+            key={item.name}
+            name={item.name}
+            label={item.label}
+            required={item.required}
+            hidden={item.hidden}
+            rules={[{ required: item.required }]}
+          >
+            <ReactMaskedInput
+              guide={false}
+              mask={item.mask}
+              render={(ref, props) => (
+                <Input
+                  addonAfter={item.suffix ? item.suffix : null}
+                  disabled={item.disabled}
+                  {...props}
+                  ref={ref}
+                />
+              )}
+            />
           </Form.Item>
-        ))
+        )
+      } else {
+        formItems.push(
+          <Form.Item
+            key={item.name}
+            name={item.name}
+            label={item.label}
+            required={item.required}
+            hidden={item.hidden}
+            rules={[{ required: item.required || isRequired }]}
+          >
+            <Input
+              addonAfter={item.suffix ? item.suffix : null}
+              disabled={item.disabled}
+            />
+          </Form.Item>
+        )
       }
     }
   })
 
-  const isFullwidth = (item) => {
+  const isFullwidth = item => {
     const schemaItem = schema.find(schemaItem => schemaItem.name === item.key)
     return schemaItem.col === 'fullwidth' || schemaItem.type === 'list'
   }
@@ -165,13 +290,11 @@ const genFormContent = (schema, cols = 0, form = null, initialValues = {}) => {
     const colSpan = 24 / cols
     return (
       <Row gutter={24}>
-        {
-          formItems.map((item, i) => (
-            <Col span={isFullwidth(item) ? 24 : colSpan} key={item.key}>
-              {item}
-            </Col>
-          ))
-        }
+        {formItems.map((item, i) => (
+          <Col span={isFullwidth(item) ? 24 : colSpan} key={item.key}>
+            {item}
+          </Col>
+        ))}
       </Row>
     )
   }
