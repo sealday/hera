@@ -465,7 +465,7 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
                 <td>原始单号：{record.originalOrder}</td>
               </tr>
               <tr>
-                {record.weight && <td>实际重量：{fixed(record.weight)}吨</td>}
+                {record.weight && <td>实际重量：{fixed(record.weight, 3)}吨</td>}
               </tr>
               <tr>
                 <td>经办人及电话：</td>
@@ -502,7 +502,7 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
                 {record?.entries?.[0]?.weight && (
                   <td>理论重量：{fixed(record?.entries?.[0]?.weight)}吨</td>
                 )}
-                {record.weight && <td>实际重量：{fixed(record.weight)}吨</td>}
+                {record.weight && <td>实际重量：{fixed(record.weight, 3)}吨</td>}
               </tr>
             </>
           )}

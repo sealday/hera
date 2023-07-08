@@ -73,6 +73,6 @@ import { Notification, NotificationSchema } from 'src/schemas/notification.schem
   ],
   controllers: [AppController, UsersController, SettingsController, HookController],
   providers: [AppService, LoggerService, SettingsService, StoreService],
-  exports: [AppService, LoggerService],
+  exports: [AppService, LoggerService, SettingsService],
 })
 export class AppModule {}

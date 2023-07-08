@@ -7,6 +7,10 @@ import { Setting } from 'src/schemas/setting.schema';
 export class SettingsService {
   constructor(@InjectModel(Setting.name) private settingModel: Model<Setting>) { }
 
+  async getSetting() {
+    return await this.settingModel.findOne({}).sort({_id: -1})
+  }
+
   async getLatestSettings() {
     const settings = await this.settingModel.findOne({}).sort({_id: -1})
     if (!settings) {

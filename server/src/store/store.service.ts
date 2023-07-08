@@ -7,11 +7,14 @@ import { LoggerService } from 'src/app/logger/logger.service';
 import { User } from 'src/users/users.service';
 import moment = require('moment');
 import { strings } from 'hera-core'
+import { Setting } from 'src/schemas/setting.schema';
+import { SettingsService } from 'src/app/settings/settings.service';
 
 @Injectable()
 export class StoreService {
   constructor(
     private loggerService: LoggerService,
+    private settingService: SettingsService,
     @InjectModel('Record') private recordModel: Model<Record>,
   ) { }
 
@@ -104,6 +107,7 @@ export class StoreService {
    * @param user 搜索用户
    */
   async search(condition: any, user: User) {
+    const setting = await this.settingService.getSetting()
     this.loggerService.logInfo(user, '查询', { message: '查询出入库信息' })
     let match: any = {
       outDate: {
@@ -113,6 +117,15 @@ export class StoreService {
       valid: true,
       flowStatus: 'finished',
     }
+    // 根据录入时间
+    if (setting.byCreatedTime) {
+      delete match.outDate
+      match.createdAt = {
+        $gte: new Date(condition.startDate),
+        $lt: new Date(condition.endDate)
+      }
+    }
+
     // 是否查询无效单
     if (_.isBoolean(condition.valid)) {
       match['valid'] = condition.valid

@@ -63,6 +63,11 @@ const settingSchema = [
     type: 'number',
     min: 0,
   },
+  {
+    name: 'byCreatedTime',
+    label: '按录单时间查询出入库',
+    type: 'boolean',
+  }
 ]
 
 export default settingSchema
