@@ -39,15 +39,18 @@ export default [
     label: '换算单位',
     name: 'unit',
     type: 'text',
+    requiredDepends: ['isScaled'],
   },
   {
     label: '换算比例',
     name: 'scale',
     type: 'number',
+    requiredDepends: ['isScaled'],
   },
   {
     label: '是否需要换算',
     name: 'isScaled',
     type: 'boolean',
+    required: true,
   },
 ]

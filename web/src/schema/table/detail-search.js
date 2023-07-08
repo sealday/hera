@@ -1,19 +1,33 @@
 
 export default [
   {
-    name: "name",
-    label: "产品",
-    type: "text",
+    name: 'outDate',
+    label: '日期',
+    type: 'date',
   },
   {
-    name: "size",
-    label: "规格",
-    type: "text",
+    name: 'number',
+    label: '单号',
+    type: 'list',
+    column: {
+      link: v => `/record/${v}`,
+      width: '100px',
+    },
   },
   {
-    name: "projectId",
-    label: "仓库/项目",
-    type: "text",
+    name: 'name',
+    label: '产品',
+    type: 'text',
+  },
+  {
+    name: 'size',
+    label: '规格',
+    type: 'text',
+  },
+  {
+    name: 'projectId',
+    label: '仓库/项目',
+    type: 'text',
     option: {
       type: 'ref',
       ref: 'project',
@@ -22,14 +36,14 @@ export default [
     },
   },
   {
-    name: "in",
-    label: "入库数量",
-    type: "number",
+    name: 'in',
+    label: '入库数量',
+    type: 'number',
   },
   {
-    name: "out",
-    label: "出库数量",
-    type: "number",
+    name: 'out',
+    label: '出库数量',
+    type: 'number',
   },
   {
     name: 'total',
@@ -42,13 +56,4 @@ export default [
     label: '单位',
     type: 'text',
   },
-  {
-    name: 'numbers',
-    label: '单号',
-    type: 'list',
-    column: {
-      link: v => `/record/${v}`,
-      width: '100px',
-    }
-  }
 ]
