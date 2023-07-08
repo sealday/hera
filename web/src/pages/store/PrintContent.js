@@ -15,7 +15,13 @@ import {
 import { getDirection } from './Record'
 
 // 表格内容
-const PrintContent = ({ record, columnStyle, selectedTitle }) => {
+const PrintContent = ({
+  record,
+  columnStyle,
+  isNeedShowWeight,
+  isNeedShowSubCount,
+  selectedTitle,
+}) => {
   const contracts = heraApi.useGetContractListQuery()
   const getOtherList = heraApi.useGetOtherListQuery()
   const store = useSelector(state => state.system.store)
@@ -164,6 +170,7 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
   const totalUnit = {} // 单位
   const sum = {} // 金额
   let amount = 0 // 总金额
+
   record.entries.forEach(entry => {
     if (entry.name in entries) {
       entries[entry.name].push(entry)
@@ -197,6 +204,14 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
     type: 'text',
   }
   const printEntries = []
+  // 物料分组序号信息数组
+  const indexRealWeightInfoArr = record?.realinfos.map(
+    item => item.products.length
+  )
+
+  let indexOfPrint = 0
+  let groupIndexPrint = 0
+  let indexSubCount = indexRealWeightInfoArr?.[groupIndexPrint] || 0
   each(entries, (v, name) => {
     entries[name].forEach(entry => {
       printEntries.push([
@@ -249,43 +264,65 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
           }
         )
       }
+      // 插入分组过磅重量信息相关计数
+      indexOfPrint++
     })
+
     amount += sum[name] // 计算总金额
-    printEntries.push([
-      { colSpan: 2, children: name + '[小计]' },
-      { hidden: true, children: '' },
-      { hidden: true, children: '' },
-      { colSpan: 2, children: fixed(total[name]) + ' ' + totalUnit[name] },
-      '',
-      '￥' + fixed(sum[name]),
-      '',
-    ])
+
+    // 物料小计信息
+    if (entries[name].length > 1 || isNeedShowSubCount) {
+      printEntries.push([
+        { colSpan: 2, children: name + '[小计]' },
+        { hidden: true, children: '' },
+        { hidden: true, children: '' },
+        { colSpan: 2, children: fixed(total[name]) + ' ' + totalUnit[name] },
+        '',
+        '￥' + fixed(sum[name]),
+        '',
+      ])
+    }
+    // 插入分组过磅重量信息
+    if (isNeedShowWeight && indexOfPrint === indexSubCount) {
+      const groupProductInfo = record?.realinfos?.[groupIndexPrint]
+      printEntries.push([
+        {
+          children: `以上为分组${groupIndexPrint + 1}，其过磅重量为: ${
+            groupProductInfo?.realWeight
+          }${groupProductInfo?.unit}`,
+          colSpan: 5,
+          align: 'center',
+        },
+      ])
+      groupIndexPrint++
+      indexSubCount += indexRealWeightInfoArr?.[groupIndexPrint] || 0
+    }
   })
   // 过磅信息表格内容
-  const printRealInfos = (record.realinfos || []).map(item => {
-    return [
-      {
-        children: (item.productGroups || []).reduce(
-          (acc, str) => `${acc}, ${str}`
-        ),
-        colSpan: 8,
-        align: 'right',
-      },
-      {
-        children: item.realWeight,
-        colSpan: 2,
-      },
-      {
-        children: item.unit,
-        colSpan: 2,
-        align: 'right',
-      },
-      {
-        children: item.comments || '',
-        colSpan: 4,
-      },
-    ]
-  })
+  // const printRealInfos = (record.realinfos || []).map(item => {
+  //   return [
+  //     {
+  //       children: (item.productGroups || []).reduce(
+  //         (acc, str) => `${acc}, ${str}`
+  //       ),
+  //       colSpan: 8,
+  //       align: 'right',
+  //     },
+  //     {
+  //       children: item.realWeight,
+  //       colSpan: 2,
+  //     },
+  //     {
+  //       children: item.unit,
+  //       colSpan: 2,
+  //       align: 'right',
+  //     },
+  //     {
+  //       children: item.comments || '',
+  //       colSpan: 4,
+  //     },
+  //   ]
+  // })
   // 额外信息
   if (_.size(record.additionals) > 0) {
     printEntries.push([{ colSpan: 5, children: '补充信息', align: 'center' }])
@@ -390,12 +427,13 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
   ]
 
   // 过磅信息标题
-  const realInfosColumnNames = [
-    { children: '物料分组', colSpan: 8 },
-    { children: '重量', colSpan: 2 },
-    { children: '单位', colSpan: 2 },
-    { children: '备注', colSpan: 4 },
-  ]
+  // const realInfosColumnNames = [
+  //   { children: '物料分组', colSpan: 8 },
+  //   { children: '重量', colSpan: 2 },
+  //   { children: '单位', colSpan: 2 },
+  //   { children: '备注', colSpan: 4 },
+  // ]
+
   if (columnStyle === 'double') {
     columnNames.push(...columnNames)
   }
@@ -465,7 +503,9 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
                 <td>原始单号：{record.originalOrder}</td>
               </tr>
               <tr>
-                {record.weight && <td>实际重量：{fixed(record.weight, 3)}吨</td>}
+                {record.weight && (
+                  <td>实际重量：{fixed(record.weight, 3)}吨</td>
+                )}
               </tr>
               <tr>
                 <td>经办人及电话：</td>
@@ -502,7 +542,9 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
                 {record?.entries?.[0]?.weight && (
                   <td>理论重量：{fixed(record?.entries?.[0]?.weight)}吨</td>
                 )}
-                {record.weight && <td>实际重量：{fixed(record.weight, 3)}吨</td>}
+                {record.weight && (
+                  <td>实际重量：{fixed(record.weight, 3)}吨</td>
+                )}
               </tr>
             </>
           )}
@@ -553,13 +595,13 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
                 ))}
             </tr>
           ))}
-          {/* <tr>
+          <tr>
             <td colSpan={leftSlice}>{content.explain}</td>
             <td colSpan={slice - leftSlice}>备注：{record.comments}</td>
-          </tr> */}
+          </tr>
         </tbody>
       </table>
-      <table
+      {/* <table
         className="table table-bordered table--tight"
         style={{
           tableLayout: 'fixed',
@@ -606,7 +648,7 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
             <td colSpan={8}>备注：{record.comments}</td>
           </tr>
         </tbody>
-      </table>
+      </table> */}
       <table style={{ tableLayout: 'fixed', fontSize: '11px', width: '100%' }}>
         <tbody>
           <tr>
