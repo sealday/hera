@@ -2706,7 +2706,8 @@ export class StoreService {
     // })
     pipeline.push({
       $sort: {
-        'productNumber': 1
+        'productNumber': 1,
+        'projectId': 1,
       }
     })
     // // 字段映射
