@@ -6,6 +6,7 @@ const getCountArr = (count, end) => {
   return resultArr
 }
 
+// 保存后转换时，转换数据结构
 export const convertDetailInfos = (detailInfos = []) => {
   const entries = []
   const realinfos = []
@@ -38,6 +39,32 @@ export const convertDetailInfos = (detailInfos = []) => {
   return {
     entries,
     realinfos,
+  }
+}
+
+// 编辑展示数据初始化展示时转换数据结构
+export const convertRealValues = (initialValues = {}) => {
+  const { entries, realinfos = [] } = initialValues
+  const detailInfos = realinfos.map(item => {
+    const { unit, realWeight, products, ...rest } = item
+    const ids = products.map(({ id }) => id)
+    const subEntries = ids.map(targetId => {
+      const targetProduct = entries.find(({ _id }) => _id === targetId)
+      return {
+        ...targetProduct,
+      }
+    })
+    return {
+      ...rest,
+      unit,
+      realWeight,
+      entries: subEntries,
+    }
+  })
+
+  return {
+    ...initialValues,
+    detailInfos,
   }
 }
 

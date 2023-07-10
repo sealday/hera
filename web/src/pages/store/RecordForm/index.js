@@ -7,7 +7,7 @@ import BaseInfoCard from './components/baseInfo.card'
 import DetailInfoCard from './components/detailInfo.card'
 import RepairInfoCard from './components/repairInfo.card'
 import ExtraInfoCard from './components/extraInfo.card'
-import { convertValues } from './utils/convert.js'
+import { convertValues, convertRealValues } from './utils/convert.js'
 
 export default ({ form, initialValues, onSubmit }) => {
   const settings = useContext(SettingContext)
@@ -35,6 +35,7 @@ export default ({ form, initialValues, onSubmit }) => {
     onSubmit(cookedValues)
   }
 
+  const realInitialValues = convertRealValues(initialValues)
   return (
     <Form
       onFinish={onFinish}
@@ -42,7 +43,7 @@ export default ({ form, initialValues, onSubmit }) => {
       colon={false}
       labelCol={{ flex: '5em' }}
       labelWrap
-      initialValues={initialValues}
+      initialValues={realInitialValues}
     >
       <BaseInfoCard
         title="基础信息"
