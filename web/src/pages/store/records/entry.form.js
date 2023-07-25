@@ -109,7 +109,7 @@ const Summary = () => {
   // 计算结果
   const calculatedEntries = equippedEntries.map(item => ({
     ...item,
-    total: item.isScaled ? item.count * item.scale : item.count,
+    total: item.isScaled ? item.count * item.scale : Number(item.count),
     sum: (item.isScaled ? item.count * item.scale : item.count) * item.price,
     weight: item.count * item.weight / 1000,
   }))
