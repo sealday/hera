@@ -534,7 +534,7 @@ export class StoreService {
                 },
                 {
                   case: { $eq: ['$rentRule.items.countType', '实际重量'] },
-                  then: { $multiply: ['$actualWeight', '$rentRule.items.unitPrice', '$days', '$inOut'] },
+                  then: { $multiply: ['$actualWeight', '$rentRule.items.unitPrice', '$days', '$inOut', 1000] },
                 },
               ],
               default: 0
