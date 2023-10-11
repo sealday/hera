@@ -35,7 +35,7 @@ export class StoreController {
   async summary(
     @Param('id') projectId: string, 
     @Query('condition') condition: string,
-    @Auth() user: User,
+    @Auth() user: User,               
   ) {
     // TODO 参数校验
     const params = JSON.parse(condition)

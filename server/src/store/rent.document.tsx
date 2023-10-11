@@ -392,7 +392,7 @@ const PreviewDocument = ({
               </Text>
             </View>
             <View style={styles.sign}>
-              <Text style={styles.signPart}>制表人：</Text>
+              <Text style={styles.signPart}>制表人：   </Text>
               <Text style={styles.signPart}>审核人：</Text>
               <Text style={styles.signPart}>验收：</Text>
             </View>

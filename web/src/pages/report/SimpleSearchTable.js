@@ -2,10 +2,10 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import moment from 'moment'
 import { Map } from 'immutable'
-
 import { total_, toFixedWithoutTrailingZero } from '../../utils'
 import { ResultTable, Link } from '../../components'
 import { Tag } from 'antd'
+import TablePrice from './SimpleSearchTablePrice'
 
 export default ({ search, isCompany }) => {
 
@@ -15,6 +15,9 @@ export default ({ search, isCompany }) => {
     store: state.system.store,
   }))
 
+
+
+  
   const getDirection = entry => entry.inStock === store._id ? '入库' : '出库'
 
   const getOtherSize = entry => {
@@ -89,6 +92,11 @@ export default ({ search, isCompany }) => {
       ? { key: 'inStock', title: '入库', dataIndex: 'inStock', render: projectId => getProjectName(projectId) }
       : { key: 'direction', title: '出入库', render: (_, entry) => getDirection(entry), width: '58px' },
     { key: 'totalString', title: '内容', dataIndex: 'totalString'},
+    { key: 'price', title: '总价', render:(_,record)=>(
+        <>
+          {record.entries.length ? <TablePrice id={record._id}></TablePrice> : '0.0元'}
+        </>
+    )},
       { key: 'action', title: '操作', render: (_, entry) => {
         return isCompany
           ? <Link to={`/company_record/${entry._id}`}>详情</Link>
