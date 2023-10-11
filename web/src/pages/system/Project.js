@@ -80,7 +80,6 @@ export default () => {
   return (
     <PageHeader
       title='客户管理'
-      searchInfo={true}
       onCreate={() => { navigate('/project/create') }}
     >
       <ResultTable columns={columns} rowKey='_id' dataSource={getProjectList.data} pagination={{ pageSize: 30 }} />
