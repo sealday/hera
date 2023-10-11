@@ -36,7 +36,6 @@ export default () => {
 
   const nameArticleMap = transformArticle(articles.valueSeq().toArray()).nameArticleMap
 
- 
   if (!record.hasTransport) {
     return (
       <PageHeader title="运输单" onEdit={handleEdit}>

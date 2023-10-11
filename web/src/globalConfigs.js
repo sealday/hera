@@ -37,18 +37,18 @@ const rtkQueryErrorLogger = (api) => (next) => (action) => {
     return next(action)
   }
   // RTK Query uses `createAsyncThunk` from redux-toolkit under the hood, so we're able to utilize these matchers!
-  // if (isRejectedWithValue(action)) {
-  //   console.warn('We got a rejected action!')
-  //   console.warn('isRejected', action)
-  //   const requestId = _.get(action, 'meta.requestId')
-  //   if (requestId) {
-  //     if (_.includes(action.type, 'executeQuery')) {
-  //       message.error({ content: '查询失败！', key: requestId }) 
-  //     } else if (_.includes(action.type, 'executeMutation')) {
-  //       message.error({ content: '操作失败！', key: requestId })
-  //     }
-  //   }
-  // }
+  if (isRejectedWithValue(action)) {
+    console.warn('We got a rejected action!')
+    console.warn('isRejected', action)
+    const requestId = _.get(action, 'meta.requestId')
+    if (requestId) {
+      if (_.includes(action.type, 'executeQuery')) {
+        message.error({ content: '查询失败！', key: requestId }) 
+      } else if (_.includes(action.type, 'executeMutation')) {
+        message.error({ content: '操作失败！', key: requestId })
+      }
+    }
+  }
 
   // if (isPending(action)) {
   //   // TODO 这里可以记录请求记录

@@ -35,7 +35,6 @@ class SimpleSearchTable extends React.Component {
     let store = new Map()
 
     if (search) {
-      // console.log(search)
       search.forEach(entry => {
         let totals = []
         getTotal(entry.entries).forEach((v, k) => {
@@ -67,7 +66,7 @@ class SimpleSearchTable extends React.Component {
     { key: 'project', title: '项目部', render: (_, entry) => getDirection(entry) === '出库' ? getProjectName(entry.inStock) : getProjectName(entry.outStock) || entry.vendor },
     { key: 'direction', title: '出入库', render: (_, entry) => getDirection(entry), width: '58px' },
     { key: 'totalString', title: '内容', dataIndex: 'totalString'},
-    { key: 'price', title: '总价', dataIndex:'price'},
+    { key: 'price', title: '金额', dataIndex:'price'},
     { key: 'action', title: '操作', render: (_, entry) => <Link to={`/transport/${entry._id}`}>详情</Link>, width: '44px' },
   ]
 

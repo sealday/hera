@@ -43,7 +43,7 @@ export default({id})=>{
         
 
     return (
-        <>{amount.toFixed(1)}元</>
+        <>{amount.toFixed(2)}元</>
     )
 
 }
