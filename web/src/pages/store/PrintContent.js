@@ -164,7 +164,6 @@ const PrintContent = ({ record, columnStyle, selectedTitle }) => {
   const totalUnit = {} // 单位
   const sum = {} // 金额
   let amount = 0 // 总金额
-  // console.log(record)
   record.entries.forEach(entry => {
     if (entry.name in entries) {
       entries[entry.name].push(entry)
