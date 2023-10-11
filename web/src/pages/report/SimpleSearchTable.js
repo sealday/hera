@@ -94,7 +94,7 @@ export default ({ search, isCompany }) => {
     { key: 'totalString', title: '内容', dataIndex: 'totalString'},
     { key: 'price', title: '总价', render:(_,record)=>(
         <>
-          {record.entries.length ? <TablePrice id={record._id}></TablePrice> : ''}
+          {record.entries.length ? <TablePrice id={record._id}></TablePrice> : '-'}
         </>
     )},
       { key: 'action', title: '操作', render: (_, entry) => {
