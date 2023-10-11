@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import { Map } from 'immutable'
-
+import _ from 'lodash'
 import { total_, toFixedWithoutTrailingZero } from '../../utils'
 import { Link, ResultTable } from 'components'
 
@@ -35,6 +35,7 @@ class SimpleSearchTable extends React.Component {
     let store = new Map()
 
     if (search) {
+      // console.log(search)
       search.forEach(entry => {
         let totals = []
         getTotal(entry.entries).forEach((v, k) => {
@@ -50,8 +51,13 @@ class SimpleSearchTable extends React.Component {
         })
 
         entry.totalString = totals.join(' ')
+        //计算价格
+        const transport=entry.transport
+        entry['price']=toFixedWithoutTrailingZero(transport.price * transport.weight + _.toNumber(transport.extraPrice ? transport.extraPrice : 0))+'元'
+        
       })
     }
+
 
   const columns = [
     { key: 'outDate', title: '日期', dataIndex: 'outDate', render: (date) => moment(date).format('YYYY-MM-DD'), width: '114px' },
@@ -61,6 +67,7 @@ class SimpleSearchTable extends React.Component {
     { key: 'project', title: '项目部', render: (_, entry) => getDirection(entry) === '出库' ? getProjectName(entry.inStock) : getProjectName(entry.outStock) || entry.vendor },
     { key: 'direction', title: '出入库', render: (_, entry) => getDirection(entry), width: '58px' },
     { key: 'totalString', title: '内容', dataIndex: 'totalString'},
+    { key: 'price', title: '总价', dataIndex:'price'},
     { key: 'action', title: '操作', render: (_, entry) => <Link to={`/transport/${entry._id}`}>详情</Link>, width: '44px' },
   ]
 
