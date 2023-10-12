@@ -189,7 +189,6 @@ export default ({ search, isCompany, onLoad }) => {
     { key: 'in', title: '入库数量', dataIndex: 'in' },
     { key: 'total', title: '小计', dataIndex: 'total' },
   ]
-
   return (
     <div>
       <ResultTable
@@ -197,7 +196,7 @@ export default ({ search, isCompany, onLoad }) => {
         columns={columns}
         summaryColumns={summaryColumns}
         summaryDataSource={storeRows}
-        onLoad={table => onLoad(table)}
+        onLoad={(table)=>{onLoad(table)}}
       />
     </div>
   )
