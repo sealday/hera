@@ -76,7 +76,6 @@ const ContractEditModal = ({
           label="租金计算"
           name="rentCalculation"
         >
-          {/* <Input /> */}
           <Select showSearch>
             {rentCalculation.map(p => (
               <Select.Option key={p.state} value={p.state} pinyin={p.pinyin}>
