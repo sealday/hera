@@ -6,34 +6,37 @@ import { total_, toFixedWithoutTrailingZero } from '../../utils'
 import { ResultTable, Link } from '../../components'
 import { Tag } from 'antd'
 import TablePrice from './SimpleSearchTablePrice'
+import { useState } from 'react'
 
-export default ({ search, isCompany }) => {
-
-  const { projects, products, store } = useSelector(state => ({
+export default ({ search, isCompany, onLoad }) => {
+  const { projects, products, store, form } = useSelector(state => ({
     projects: state.system.rawProjects,
     products: state.system.products,
     store: state.system.store,
+    form: state.form.SimpleSearchForm,
   }))
 
-
-
-  
-  const getDirection = entry => entry.inStock === store._id ? '入库' : '出库'
+  const getDirection = entry => (entry.inStock === store._id ? '入库' : '出库')
 
   const getOtherSize = entry => {
-    return getDirection(entry) === '出库' ? getProjectName(entry.inStock) : getProjectName(entry.outStock)
+    return getDirection(entry) === '出库'
+      ? getProjectName(entry.inStock)
+      : getProjectName(entry.outStock)
   }
 
   const getProjectName = id => {
     const project = projects.get(id)
-    return project ? project.company + project.name : '';
+    return project ? project.company + project.name : ''
   }
 
-  const getTotal = (entries) => {
-
+  const getTotal = entries => {
     let names = new Map()
     entries.forEach(entry => {
-      names = names.update(entry.name, 0, total => total + total_(entry, products))
+      names = names.update(
+        entry.name,
+        0,
+        total => total + total_(entry, products)
+      )
     })
 
     return names
@@ -77,31 +80,107 @@ export default ({ search, isCompany }) => {
     })
   }
 
+  //返回列表的内容
+  const formType = record => {
+    if (record.type === '调拨') {
+      if ('weight' in record) {
+        return record.weight
+      } else {
+        return '-'
+      }
+    } else if (record.type === '购销') {
+      return record.entries.length ? (
+        <TablePrice id={record._id}></TablePrice>
+      ) : (
+        '-'
+      )
+    }
+  }
+  //返回列表的title
+  const formTitle = type => {
+    if (type === '调拨') {
+      return '实际重量'
+    } else if (type === '购销') {
+      return '合计'
+    }
+  }
+
   const columns = [
     { key: 'type', title: '类别', dataIndex: 'type', width: '80px' },
-    { key: 'receipt', title: '回单联', dataIndex: 'receipt', width: '80px', render: (text) => text ? <Tag color='green'>已签收</Tag> : <Tag color='red'>未签收</Tag> },
-    { key: 'counterfoil', title: '存根联', dataIndex: 'counterfoil', width: '80px', render: (text) => text ? <Tag color='green'>已签收</Tag> : <Tag color='red'>未签收</Tag> },
-    { key: 'outDate', title: '日期', dataIndex: 'outDate', render: (date) => moment(date).format('YYYY-MM-DD'), width: '114px' },
+    {
+      key: 'receipt',
+      title: '回单联',
+      dataIndex: 'receipt',
+      width: '80px',
+      render: text =>
+        text ? <Tag color="green">已签收</Tag> : <Tag color="red">未签收</Tag>,
+    },
+    {
+      key: 'counterfoil',
+      title: '存根联',
+      dataIndex: 'counterfoil',
+      width: '80px',
+      render: text =>
+        text ? <Tag color="green">已签收</Tag> : <Tag color="red">未签收</Tag>,
+    },
+    {
+      key: 'outDate',
+      title: '日期',
+      dataIndex: 'outDate',
+      render: date => moment(date).format('YYYY-MM-DD'),
+      width: '114px',
+    },
     { key: 'carNumber', title: '车号', dataIndex: 'carNumber', width: '100px' },
     { key: 'number', title: '单号', dataIndex: 'number', width: '80px' },
-    { key: 'originalOrder', title: '原始单号', dataIndex: 'originalOrder', width: '100px' },
+    {
+      key: 'originalOrder',
+      title: '原始单号',
+      dataIndex: 'originalOrder',
+      width: '100px',
+    },
     isCompany
-      ? { key: 'outStock', title: '出库', dataIndex: 'outStock', render: projectId => getProjectName(projectId) }
-      : { key: 'project', title: '项目部', render: (_, entry) => getOtherSize(entry) },
+      ? {
+          key: 'outStock',
+          title: '出库',
+          dataIndex: 'outStock',
+          render: projectId => getProjectName(projectId),
+        }
+      : {
+          key: 'project',
+          title: '项目部',
+          render: (_, entry) => getOtherSize(entry),
+        },
     isCompany
-      ? { key: 'inStock', title: '入库', dataIndex: 'inStock', render: projectId => getProjectName(projectId) }
-      : { key: 'direction', title: '出入库', render: (_, entry) => getDirection(entry), width: '58px' },
-    { key: 'totalString', title: '内容', dataIndex: 'totalString'},
-    { key: 'price', title: '总价', render:(_,record)=>(
-        <>
-          {record.entries.length ? <TablePrice id={record._id}></TablePrice> : ''}
-        </>
-    )},
-      { key: 'action', title: '操作', render: (_, entry) => {
-        return isCompany
-          ? <Link to={`/company_record/${entry._id}`}>详情</Link>
-          : <Link to={`/record/${entry._id}`}>详情</Link>
-      }, width: '44px' },
+      ? {
+          key: 'inStock',
+          title: '入库',
+          dataIndex: 'inStock',
+          render: projectId => getProjectName(projectId),
+        }
+      : {
+          key: 'direction',
+          title: '出入库',
+          render: (_, entry) => getDirection(entry),
+          width: '58px',
+        },
+    { key: 'totalString', title: '内容', dataIndex: 'totalString' },
+    {
+      key: 'price',
+      title: formTitle(form.values.type),
+      render: (_, record) => <>{formType(record)}</>,
+    },
+    {
+      key: 'action',
+      title: '操作',
+      render: (_, entry) => {
+        return isCompany ? (
+          <Link to={`/company_record/${entry._id}`}>详情</Link>
+        ) : (
+          <Link to={`/record/${entry._id}`}>详情</Link>
+        )
+      },
+      width: '44px',
+    },
   ]
 
   const summaryColumns = [
@@ -118,6 +197,7 @@ export default ({ search, isCompany }) => {
         columns={columns}
         summaryColumns={summaryColumns}
         summaryDataSource={storeRows}
+        onLoad={table => onLoad(table)}
       />
     </div>
   )
