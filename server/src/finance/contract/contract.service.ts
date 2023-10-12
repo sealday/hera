@@ -109,7 +109,8 @@ export class ContractService {
       rules: rules,
       user: user,
       project: contract.project,
-    }) 
+      rentCalculation:contract.rentCalculation,
+    })
     calc.taxRate = contract.taxRate
     calc.includesTax = contract.includesTax
     calc.history = rent.history

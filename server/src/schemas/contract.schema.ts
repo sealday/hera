@@ -107,6 +107,15 @@ export class Contract {
 
   @Prop()
   scheduledAt: number;
+
+  /**
+   * 租金天数计算方式
+   * 0：正常结束时间减去开始时间
+   * 1：记头记尾
+   * 2：不记头不记尾
+   */
+  @Prop({ default: 0 })
+  rentCalculation: number;
 }
 
 export const ContractSchema = SchemaFactory.createForClass(Contract)

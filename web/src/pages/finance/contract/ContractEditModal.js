@@ -9,6 +9,7 @@ const ContractEditModal = ({
   onClose,
 }) => {
   const [form] = Form.useForm()
+  const rentCalculation = [{lable:'不记头记尾/记头不记尾',state:0},{lable:'记头记尾',state:1},{lable:'不记头不记尾',state:2}]
   return (
     <Modal
       title="合同基础信息编辑"
@@ -70,6 +71,18 @@ const ContractEditModal = ({
             parser={v => v / 100}
             formatter={v => v * 100}
           />
+        </Form.Item>
+        <Form.Item
+          label="租金计算"
+          name="rentCalculation"
+        >
+          <Select showSearch>
+            {rentCalculation.map(p => (
+              <Select.Option key={p.state} value={p.state} pinyin={p.pinyin}>
+                {p.lable}
+              </Select.Option>
+            ))}
+          </Select>
         </Form.Item>
         <Form.Item
           label="合同费用规则是否已含税"

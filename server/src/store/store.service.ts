@@ -228,8 +228,12 @@ export class StoreService {
    * 计算租金信息
    * @param param0 
    */
-  async calculate({ startDate, endDate, project, user, rules }) {
+  async calculate({ startDate, endDate, project, user, rules, rentCalculation }) {
     this.loggerService.logInfo(user, '查询', { message: '计算租金信息' })
+    // 计算days使用结束时间
+    // 在原有endDate上进行加一天，减去一天
+    // 0 不用处理，1 则在endDate上加一天时间， 2 则在endDate上减去一天的时间
+    const endStateDate = rentCalculation ? rentCalculation === 1 ? new Date(new Date(endDate).getTime() + 24 * 60 * 60 * 1000) : new Date(new Date(endDate).getTime() - 24 * 60 * 60 * 1000) : endDate  
     const commonPart = [
       {
         // 关联调拨单
@@ -381,7 +385,7 @@ export class StoreService {
           days: {
             $ceil: {
               $divide: [{
-                $subtract: [endDate, '$outDate']
+                $subtract: [endStateDate, '$outDate']
               }, 24 * 60 * 60 * 1000]
             }
           },

@@ -104,7 +104,7 @@ const ContractDetails = connect(mapStateToProps)(({ projects, dispatch, plans })
       descriptions={descriptions}
 
       onEdit={() => {
-        const initialValues = pick(contract, ['name', 'code', 'project', 'address', 'comments', 'taxRate', 'includesTax', 'isScheduled', 'scheduledAt'])
+        const initialValues = pick(contract, ['name', 'code', 'project', 'address', 'comments', 'taxRate', 'includesTax', 'isScheduled', 'scheduledAt', 'rentCalculation'])
         // TODO 统一日期处理在接口层，转换成 moment 对象
         if (contract.date) {
           initialValues.date = moment(contract.date)
