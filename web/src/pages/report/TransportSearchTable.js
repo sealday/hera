@@ -15,16 +15,20 @@ class SimpleSearchTable extends React.Component {
 
     const getProjectName = id => {
       const project = projects.get(id)
-      return project ? project.company + project.name : '';
+      return project ? project.company + project.name : ''
     }
 
-    const getDirection = entry => entry.inStock === this.props.store._id ? '入库' : '出库'
+    const getDirection = entry =>
+      entry.inStock === this.props.store._id ? '入库' : '出库'
 
-    const getTotal = (entries) => {
-
+    const getTotal = entries => {
       let names = new Map()
       entries.forEach(entry => {
-        names = names.update(entry.name, 0, total => total + total_(entry, this.props.products))
+        names = names.update(
+          entry.name,
+          0,
+          total => total + total_(entry, this.props.products)
+        )
       })
 
       return names
@@ -51,24 +55,59 @@ class SimpleSearchTable extends React.Component {
 
         entry.totalString = totals.join(' ')
         //计算价格
-        const transport=entry.transport
-        entry['price']=toFixedWithoutTrailingZero(transport.price * transport.weight + _.toNumber(transport.extraPrice ? transport.extraPrice : 0))+'元'
-        
+        const transport = entry.transport
+        entry['price'] =
+          toFixedWithoutTrailingZero(
+            transport.price * transport.weight +
+              _.toNumber(transport.extraPrice ? transport.extraPrice : 0)
+          ) + '元'
       })
     }
 
-
-  const columns = [
-    { key: 'outDate', title: '日期', dataIndex: 'outDate', render: (date) => moment(date).format('YYYY-MM-DD'), width: '114px' },
-    { key: 'carNumber', title: '车号', dataIndex: 'carNumber', width: '100px' },
-    { key: 'number', title: '单号', dataIndex: 'number', width: '58px' },
-    { key: 'originalOrder', title: '原始单号', dataIndex: 'originalOrder', width: '100px' },
-    { key: 'project', title: '项目部', render: (_, entry) => getDirection(entry) === '出库' ? getProjectName(entry.inStock) : getProjectName(entry.outStock) || entry.vendor },
-    { key: 'direction', title: '出入库', render: (_, entry) => getDirection(entry), width: '58px' },
-    { key: 'totalString', title: '内容', dataIndex: 'totalString'},
-    { key: 'price', title: '金额', dataIndex:'price'},
-    { key: 'action', title: '操作', render: (_, entry) => <Link to={`/transport/${entry._id}`}>详情</Link>, width: '44px' },
-  ]
+    const columns = [
+      {
+        key: 'outDate',
+        title: '日期',
+        dataIndex: 'outDate',
+        render: date => moment(date).format('YYYY-MM-DD'),
+        width: '114px',
+      },
+      {
+        key: 'carNumber',
+        title: '车号',
+        dataIndex: 'carNumber',
+        width: '100px',
+      },
+      { key: 'number', title: '单号', dataIndex: 'number', width: '58px' },
+      {
+        key: 'originalOrder',
+        title: '原始单号',
+        dataIndex: 'originalOrder',
+        width: '100px',
+      },
+      {
+        key: 'project',
+        title: '项目部',
+        render: (_, entry) =>
+          getDirection(entry) === '出库'
+            ? getProjectName(entry.inStock)
+            : getProjectName(entry.outStock) || entry.vendor,
+      },
+      {
+        key: 'direction',
+        title: '出入库',
+        render: (_, entry) => getDirection(entry),
+        width: '58px',
+      },
+      { key: 'totalString', title: '内容', dataIndex: 'totalString' },
+      { key: 'price', title: '金额', dataIndex: 'price' },
+      {
+        key: 'action',
+        title: '操作',
+        render: (_, entry) => <Link to={`/transport/${entry._id}`}>详情</Link>,
+        width: '44px',
+      },
+    ]
 
     const storeRows = []
     store.forEach((v, k) => {
