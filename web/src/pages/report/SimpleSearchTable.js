@@ -8,7 +8,7 @@ import { Tag } from 'antd'
 import TablePrice from './SimpleSearchTablePrice'
 import { useState } from 'react'
 
-export default ({ search, isCompany }) => {
+export default ({ search, isCompany,onLoad }) => {
 
   const { projects, products, store, form } = useSelector(state => ({
     projects: state.system.rawProjects,
@@ -142,6 +142,7 @@ export default ({ search, isCompany }) => {
         columns={columns}
         summaryColumns={summaryColumns}
         summaryDataSource={storeRows}
+        onLoad={(table) => onLoad(table)}
       />
     </div>
   )
