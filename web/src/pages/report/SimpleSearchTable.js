@@ -6,13 +6,15 @@ import { total_, toFixedWithoutTrailingZero } from '../../utils'
 import { ResultTable, Link } from '../../components'
 import { Tag } from 'antd'
 import TablePrice from './SimpleSearchTablePrice'
+import { useState } from 'react'
 
 export default ({ search, isCompany }) => {
 
-  const { projects, products, store } = useSelector(state => ({
+  const { projects, products, store, form } = useSelector(state => ({
     projects: state.system.rawProjects,
     products: state.system.products,
     store: state.system.store,
+    form: state.form.SimpleSearchForm,
   }))
 
 
@@ -77,6 +79,28 @@ export default ({ search, isCompany }) => {
     })
   }
 
+  //返回列表的内容
+  const formType=record=>{
+      if(record.type==='调拨'){
+         if('weight' in record){
+            return record.weight
+         }else{
+          return '-'
+         }
+        
+      }else if(record.type==='购销'){
+        return record.entries.length ? <TablePrice id={record._id}></TablePrice> : '-'
+      }
+  }
+  //返回列表的title
+  const formTitle=type=>{
+     if(type === '调拨'){
+        return '实际重量'
+     }else if(type==='购销'){
+        return '合计'
+     }
+  }
+  
   const columns = [
     { key: 'type', title: '类别', dataIndex: 'type', width: '80px' },
     { key: 'receipt', title: '回单联', dataIndex: 'receipt', width: '80px', render: (text) => text ? <Tag color='green'>已签收</Tag> : <Tag color='red'>未签收</Tag> },
@@ -92,9 +116,9 @@ export default ({ search, isCompany }) => {
       ? { key: 'inStock', title: '入库', dataIndex: 'inStock', render: projectId => getProjectName(projectId) }
       : { key: 'direction', title: '出入库', render: (_, entry) => getDirection(entry), width: '58px' },
     { key: 'totalString', title: '内容', dataIndex: 'totalString'},
-    { key: 'price', title: '总价', render:(_,record)=>(
-        <>
-          {record.entries.length ? <TablePrice id={record._id}></TablePrice> : '-'}
+    { key: 'price', title: formTitle(form.values.type), render:(_,record)=>(
+        <> 
+          {formType(record)}
         </>
     )},
       { key: 'action', title: '操作', render: (_, entry) => {
