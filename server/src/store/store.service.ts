@@ -1,17 +1,21 @@
 import * as _ from 'lodash';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Record } from 'src/app/app.service';
 import { LoggerService } from 'src/app/logger/logger.service';
 import { User } from 'src/users/users.service';
 import moment = require('moment');
+import SimpleSearchTablePrice from './utils/SimpleSearchTablePrice';
+import { ContractService } from 'src/finance/contract/contract.service';
 
 @Injectable()
 export class StoreService {
   constructor(
-    private loggerService: LoggerService,
     @InjectModel('Record') private recordModel: Model<Record>,
+    private loggerService: LoggerService,
+    @Inject(forwardRef(() => ContractService))
+    private readonly contractService: ContractService,
   ) { }
 
   /**
@@ -97,6 +101,13 @@ export class StoreService {
     return { inRecords, outRecords }
   }
 
+
+  inRange(ruleStart: string, ruleEnd: string, date: string) {
+    const l = moment(ruleStart).startOf('day')
+    const r = moment(ruleEnd).add(1, 'day').startOf('day')
+    const cur = moment(date)
+    return l <= cur && cur < r
+  }
   /**
    * 出入库查询
    * @param condition 搜索条件
@@ -222,6 +233,227 @@ export class StoreService {
         $match: match
       }
     ])
+    //查询合同
+    for (const item of search) {
+      const contract = await this.contractService.findProbablyContract(item)
+    }
+
+    for (const item of search) {
+      const contract = await this.contractService.findProbablyContract(item)
+      const rule = _.find(_.reverse([..._.get(contract, 'items', [])]),
+        j => j.category === '租金' && this.inRange(j.start, j.end, item.outDate))
+      const entries = await this.recordModel.aggregate([
+        // 1)展开
+        {
+          $match: {
+            _id: item._id,
+          },
+        },
+        {
+          $unwind: {
+            path: '$entries',
+          }
+        },
+        {
+          $project: {
+            id: '$entries._id',
+            type: '$entries.type',
+            name: '$entries.name',
+            size: '$entries.size',
+            count: '$entries.count',
+            comments: '$entries.comments',
+            price: '$entries.price',
+          }
+        },
+        // 2) 关联产品表
+        {
+          $lookup: {
+            from: 'products',
+            let: { productType: '$type', productName: '$name', productSize: '$size' },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $and: [
+                      { $eq: ['$type', '$$productType'] },
+                      { $eq: ['$name', '$$productName'] },
+                      { $eq: ['$size', '$$productSize'] },
+                    ]
+                  }
+                }
+              }
+            ],
+            as: 'product',
+          }
+        },
+        {
+          $unwind: {
+            path: '$product',
+            preserveNullAndEmptyArrays: true,
+          }
+        },
+        // 3) 关联租金表
+        {
+          $lookup: {
+            from: 'rules',
+            let: { productType: '$type', productName: '$name', productSize: '$size' },
+            pipeline: [
+              {
+                $match: { _id: _.get(rule, 'plan') }
+              },
+              {
+                $unwind: '$items'
+              },
+              {
+                $match: {
+                  $expr: {
+                    $cond: {
+                      if: {
+                        $eq: ['$items.level', '产品']
+                      },
+                      then: {
+                        $and: [
+                          { $eq: ['$items.product.type', '$$productType'] },
+                          { $eq: ['$items.product.name', '$$productName'] },
+                        ]
+                      },
+                      else: {
+                        $and: [
+                          { $eq: ['$items.product.type', '$$productType'] },
+                          { $eq: ['$items.product.name', '$$productName'] },
+                          { $eq: ['$items.product.size', '$$productSize'] },
+                        ]
+                      }
+                    },
+                  }
+                }
+              }
+            ],
+            as: 'rentRule'
+          }
+        },
+        {
+          $unwind: {
+            path: '$rentRule',
+            preserveNullAndEmptyArrays: true,
+          }
+        },
+        // 4) 关联重量表
+        {
+          $lookup: {
+            from: 'rules',
+            let: { productType: '$type', productName: '$name', productSize: '$size' },
+            pipeline: [
+              {
+                $match: { _id: _.get(rule, 'weight') },
+              },
+              {
+                $unwind: '$items',
+              },
+              {
+                $match: {
+                  $expr: {
+                    $cond: {
+                      if: {
+                        $eq: ['$items.level', '产品']
+                      },
+                      then: {
+                        $and: [
+                          { $eq: ['$items.product.type', '$$productType'] },
+                          { $eq: ['$items.product.name', '$$productName'] },
+                        ]
+                      },
+                      else: {
+                        $and: [
+                          { $eq: ['$items.product.type', '$$productType'] },
+                          { $eq: ['$items.product.name', '$$productName'] },
+                          { $eq: ['$items.product.size', '$$productSize'] },
+                        ]
+                      }
+                    },
+                  }
+                }
+              }
+            ],
+            as: 'weightRule',
+          }
+        },
+        {
+          $unwind: {
+            path: '$weightRule',
+            preserveNullAndEmptyArrays: true,
+          }
+        },
+        // 5) 组装结果
+        {
+          $project: {
+            _id: '$id',
+            price: '$price',
+            subtotal: {
+              $switch: {
+                branches: [
+                  { case: { $eq: ['$rentRule.items.countType', '重量'] }, then: 'weight' },
+                  { case: { $eq: ['$rentRule.items.countType', '数量'] }, then: 'count' },
+                  { case: { $eq: ['$rentRule.items.countType', '换算数量'] }, then: 'scale' },
+                  { case: '$product.isScaled', then: 'scale' },
+                ],
+                default: 'count'
+              }
+            },
+            type: '$type',
+            name: '$name',
+            size: '$size',
+            scale: '$product.scale',
+            count: '$count',
+            countUnit: '$product.countUnit',
+            comments: '$comments',
+            weight: {
+              $multiply: [
+                '$count',
+                0.001,
+                { $ifNull: ['$weightRule.items.weight', '$product.weight'] },
+                {
+                  $cond: {
+                    if: {
+                      $eq: ['$weightRule.items.countType', '换算数量'],
+                    },
+                    then: '$product.scale',
+                    else: 1,
+                  }
+                }
+              ]
+            },
+            unit: {
+              $switch: {
+                branches: [
+                  { case: { $eq: ['$rentRule.items.countType', '重量'] }, then: '吨' },
+                  { case: { $eq: ['$rentRule.items.countType', '数量'] }, then: '$product.countUnit' },
+                  { case: { $eq: ['$rentRule.items.countType', '换算数量'] }, then: '$product.unit' },
+                  { case: '$product.isScaled', then: '$product.unit' },
+                ],
+                default: '$product.countUnit'
+              }
+            }
+          }
+        },
+        {
+          $set: {
+            subtotal: {
+              $switch: {
+                branches: [
+                  { case: { $eq: ['$subtotal', 'weight'] }, then: '$weight' },
+                  { case: { $eq: ['$subtotal', 'count'] }, then: '$count' },
+                  { case: { $eq: ['$subtotal', 'scale'] }, then: { $multiply: ['$count', '$scale'] } },
+                ],
+                default: 0
+              }
+            },
+          }
+        },
+      ])
+      const totalPrice = SimpleSearchTablePrice(entries)
+      item.amount = totalPrice
+    }
     return search;
   }
   /**
