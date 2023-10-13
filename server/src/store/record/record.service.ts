@@ -8,6 +8,7 @@ import { LoggerService } from 'src/app/logger/logger.service';
 import { ContractService } from 'src/finance/contract/contract.service';
 import { User } from 'src/users/users.service';
 import { convert } from 'src/utils/pinyin';
+import SimpleSearchTablePrice from '../utils/SimpleSearchTablePrice';
 
 @Injectable()
 export class RecordService {
@@ -502,6 +503,7 @@ export class RecordService {
     }
 
     const result = _.assign({}, record.toObject(), header[0], { entries, complements })
+    result.amount = SimpleSearchTablePrice(result.entries)
     return result
   }
 
