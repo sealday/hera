@@ -3,17 +3,19 @@ import { InjectModel } from '@nestjs/mongoose';
 import _ = require('lodash');
 import moment = require('moment');
 import { Model, Types } from 'mongoose';
-import { AppService, Record } from 'src/app/app.service';
+import { AppService, Record, Project } from 'src/app/app.service';
 import { LoggerService } from 'src/app/logger/logger.service';
 import { ContractService } from 'src/finance/contract/contract.service';
 import { User } from 'src/users/users.service';
 import { convert } from 'src/utils/pinyin';
 import SimpleSearchTablePrice from '../utils/SimpleSearchTablePrice';
+import { renderIt } from './outboundOrder.document'
 
 @Injectable()
 export class RecordService {
   constructor(
     @InjectModel('Record') private recordModel: Model<Record>,
+    @InjectModel('Project') private projectModel: Model<Project>,
     private loggerService: LoggerService,
     private appService: AppService,
     private contractService: ContractService,
@@ -561,5 +563,22 @@ export class RecordService {
       { _id: recordId, 'appendix.filename': appendix.filename },
       { $pull: { appendix: { filename: appendix.filename } } }
     )
+  }
+
+  async getOutboundOrderPdf(query: {recordId: string, isDouble: Number}, user :User, res) {
+    // 记录表数据/订单
+    const record = await this.findById(query.recordId)
+    try {
+      const contract = await this.contractService.findProbablyContract(record)
+      const project = await this.projectModel.findOne({_id: contract.project})
+      // 需要记录表数据，合同数据，项目数据（客户）
+      const isDouble = query.isDouble
+      const pdf = await renderIt({record, contract, project, isDouble})
+      pdf.pipe(res)
+      return pdf || ''
+    } catch (error) {
+      this.loggerService.logInfo(user,'pdf',`出库单pdf预览错误，recordId：${query.recordId} 错误信息：${error}`)
+      throw new Error('预览错误')
+    }
   }
 }

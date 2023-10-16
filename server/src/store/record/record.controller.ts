@@ -1,4 +1,4 @@
-import { Controller, UseGuards, Body, Post, Param, Get, UseInterceptors, Res, Delete } from '@nestjs/common';
+import { Controller, UseGuards, Body, Post, Param, Get, UseInterceptors, Res, Delete, Query } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { RecordService } from './record.service';
 import { WrapperInterceptor } from 'src/app/wrapper.interceptor';
@@ -99,5 +99,15 @@ export class RecordController {
       throw new Error('没有找到记录')
     }
     return { record }
+  }
+
+  /**
+   * 出库单pdf生成
+   * @return reactDomCode
+   */
+  @Get(':record_id/pdf')
+  async reqGetOutboundOrderPdf(@Param('record_id') recordId: string, @Query('is_double') isDouble: number, @Auth() user: User, @Res() res: Response) {
+    const query = {recordId, isDouble}
+    return await this.recordService.getOutboundOrderPdf(query, user, res)
   }
 }
