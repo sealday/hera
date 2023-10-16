@@ -5,8 +5,7 @@ import { Map } from 'immutable'
 import { total_, toFixedWithoutTrailingZero } from '../../utils'
 import { ResultTable, Link } from '../../components'
 import { Tag } from 'antd'
-import TablePrice from './SimpleSearchTablePrice'
-import { useState } from 'react'
+import record from 'schema/record'
 
 export default ({ search, isCompany, onLoad }) => {
   const { projects, products, store, form } = useSelector(state => ({
@@ -79,29 +78,22 @@ export default ({ search, isCompany, onLoad }) => {
       })
     })
   }
-
-  //返回列表的内容
-  const formType = record => {
-    if (record.type === '调拨') {
-      if ('weight' in record) {
-        return record.weight
-      } else {
-        return '-'
-      }
-    } else if (record.type === '购销') {
-      return record.entries.length ? (
-        <TablePrice id={record._id}></TablePrice>
-      ) : (
-        '-'
-      )
+  //处理实际重量
+  const formWeight = record => {
+    if ('weight' in record) {
+      return record.weight ? record.weight : '-'
+    } else {
+      return '-'
     }
   }
-  //返回列表的title
-  const formTitle = type => {
-    if (type === '调拨') {
-      return '实际重量'
-    } else if (type === '购销') {
-      return '合计'
+
+  //处理总价
+  const formAmount = record => {
+    if ('amount' in record) {
+      console.log(record)
+      return record.amount ? record.amount : '-'
+    } else {
+      return '-'
     }
   }
 
@@ -165,9 +157,14 @@ export default ({ search, isCompany, onLoad }) => {
         },
     { key: 'totalString', title: '内容', dataIndex: 'totalString' },
     {
-      key: 'price',
-      title: formTitle(form.values.type),
-      render: (_, record) => <>{formType(record)}</>,
+      key: 'weight',
+      title: '实际重量',
+      render: (_, record) => <>{formWeight(record)}</>,
+    },
+    {
+      key: 'amount',
+      title: '总价',
+      render: (_, record) => <>{formAmount(record)}</>,
     },
     {
       key: 'action',
@@ -196,7 +193,9 @@ export default ({ search, isCompany, onLoad }) => {
         columns={columns}
         summaryColumns={summaryColumns}
         summaryDataSource={storeRows}
-        onLoad={(table)=>{onLoad(table)}}
+        onLoad={table => {
+          onLoad(table)
+        }}
       />
     </div>
   )
