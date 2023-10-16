@@ -5,7 +5,6 @@ import { Map } from 'immutable'
 import { total_, toFixedWithoutTrailingZero } from '../../utils'
 import { ResultTable, Link } from '../../components'
 import { Tag } from 'antd'
-import record from 'schema/record'
 
 export default ({ search, isCompany, onLoad }) => {
   const { projects, products, store, form } = useSelector(state => ({
@@ -163,7 +162,7 @@ export default ({ search, isCompany, onLoad }) => {
     },
     {
       key: 'amount',
-      title: '总价',
+      title: '总价',  
       render: (_, record) => <>{formAmount(record)}</>,
     },
     {
