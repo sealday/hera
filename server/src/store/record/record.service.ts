@@ -565,7 +565,7 @@ export class RecordService {
     )
   }
 
-  async getOutboundOrderPdf(query: {recordId: string, isDouble: Boolean}, user :User, res) {
+  async getOutboundOrderPdf(query: {recordId: string, isDouble: Number}, user :User, res) {
     // 记录表数据/订单
     const record = await this.findById(query.recordId)
     try {

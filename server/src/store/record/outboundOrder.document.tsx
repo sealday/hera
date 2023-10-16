@@ -9,15 +9,11 @@ import {
   renderToStream,
 } from '@react-pdf/renderer'
 import * as QRCode from 'qrcode'
-import { Calc, Contract } from 'src/schemas/contract.schema'
+import { Contract } from 'src/schemas/contract.schema'
 import { Record } from 'src/app/app.service'
 import {
-  currencyFormat,
   dateFormat,
-  numberFormat,
-  percentFormat,
 } from 'hera-core'
-import moment = require('moment')
 import { Project } from 'src/app/app.service'
 import _ = require('lodash')
 
@@ -183,19 +179,23 @@ const styles = StyleSheet.create({
     flex: 2,
   },
 })
-
+/**
+ * 
+ * @param isDouble 0为单列，1为双列 
+ * @returns 
+ */
 const PreviewDocument = ({
   imageUrl,
   record,
   project,
   contract,
-  isDouble = true
+  isDouble = 1
 }: {
   imageUrl: string
   record: Record
   project: Project
   contract: Contract
-  isDouble: Boolean
+  isDouble: Number
 }) => {
   // 汇总物料总weight
   const entrieWeight = {}
@@ -226,8 +226,9 @@ const PreviewDocument = ({
         right = Object.fromEntries(
           Object.entries(rightData[index]).map(([key, value]) => ['right_' + key, value])
         )   
+      } else {
+        right = {right_name:'', right_size:'',right_count:'',right_weight:0,right_unit:'',right_comments:''}
       }
-        
       const result = {...left, ...right}
       dobuleData.push(result)
     }
@@ -309,7 +310,7 @@ const PreviewDocument = ({
                 <Text style={styles.tableCellLast}>{item.left_comments || ''}</Text>
                 <Text style={styles.tableCell2}>{`${item.right_name}[${item.right_size}]`}</Text>
                 <Text style={styles.tableCell}>{item.right_count}</Text>
-                <Text style={styles.tableCell}>{`${item.right_weight.toFixed(2)} ${item.right_unit}`}</Text>
+                <Text style={styles.tableCell}>{`${item.right_weight.toFixed(2) === '0.00'? '': item.right_weight.toFixed(2)} ${item.right_unit}`}</Text>
                 <Text style={styles.tableCellLast}>{item.right_comments || ''}</Text>
               </View>
             ))}
@@ -338,7 +339,7 @@ export const renderIt = async (rent: {
   record: Record
   contract: Contract
   project: Project
-  isDouble: Boolean
+  isDouble: Number
 }) => {
   const url = 'http://985.so/bpw6g'
   const imageUrl = await QRCode.toDataURL(url)
