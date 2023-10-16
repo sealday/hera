@@ -100,4 +100,13 @@ export class RecordController {
     }
     return { record }
   }
+
+  /**
+   * 出库单pdf生成
+   * @return reactDomCode
+   */
+  @Post('/outboundOrder')
+  async reqGetOutboundOrderPdf(@Body() query: {recordId: string, isDouble: Boolean}, @Auth() user: User, @Res() res: Response) {
+    return await this.recordService.getOutboundOrderPdf(query, user, res)
+  }
 }
