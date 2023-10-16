@@ -21,7 +21,8 @@ const RefSelectComponent = ({ item, noStyle, mode }) => {
           const filters = _.map(item.option.filters, item => ({ name: item.name, value: form.getFieldValue(item.value) }))
           let data = _.chain(result.data)
           // TODO 对 any 逻辑特殊处理
-          data = data.filter(record => _.every(filters, filter => filter.value === '__ANY__' ? true : record[filter.name] === filter.value))
+          data = data.filter(record => _.every(filters, filter =>
+            filter.value === '__ANY__' ? true : record[filter.name] === filter.value))
           data = data.uniqBy(value)
           // 转换
           data = data.map(item => ({ label: item[label], value: item[value], pinyin: item.pinyin }))
@@ -50,7 +51,11 @@ const RefSelectComponent = ({ item, noStyle, mode }) => {
     }
     data = data.uniqBy(value)
     // 转换
-    data = data.map(item => ({ label: item[label], value: item[value], pinyin: item.pinyin }))
+    data = data.map(item => ({
+      label: item.completeName,
+      value: item[value],
+      pinyin: item.pinyin,
+    }))
     const options = data.value()
     return (
       <Form.Item noStyle={noStyle} key={item.name} name={item.name} label={item.label} hidden={item.hidden} rules={[{ required: item.required }]}>
