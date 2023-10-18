@@ -234,9 +234,6 @@ export class StoreService {
       }
     ])
     //查询合同
-    for (const item of search) {
-      const contract = await this.contractService.findProbablyContract(item)
-    }
 
     for (const item of search) {
       const contract = await this.contractService.findProbablyContract(item)
