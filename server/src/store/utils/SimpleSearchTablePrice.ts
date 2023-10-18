@@ -19,12 +19,12 @@ const SimpleSearchTablePrice = (e :any): String => {
         entries[entry.name].push(entry)
         total[entry.name] += entry.subtotal
         totalUnit[entry.name] = entry.unit
-        sum[entry.name] += entry.price ? entry.subtotal * entry.price : 0
+        sum[entry.name] += entry.price ? entry.unit === '吨' ? entry.subtotal * entry.price * 1000  : entry.subtotal * entry.price : 0
       } else {
         entries[entry.name] = [entry]
         total[entry.name] = entry.subtotal
         totalUnit[entry.name] = entry.unit
-        sum[entry.name] = entry.price ? entry.subtotal * entry.price : 0
+        sum[entry.name] = entry.price ? entry.unit === '吨' ? entry.subtotal * entry.price * 1000  : entry.subtotal * entry.price : 0
       }
     })
     each(entries, (v, name) => {

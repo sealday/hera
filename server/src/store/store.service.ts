@@ -236,7 +236,8 @@ export class StoreService {
     //查询合同
 
     for (const item of search) {
-      const contract = await this.contractService.findProbablyContract(item)
+      if (item.type === '购销') {
+        const contract = await this.contractService.findProbablyContract(item)
       const rule = _.find(_.reverse([..._.get(contract, 'items', [])]),
         j => j.category === '租金' && this.inRange(j.start, j.end, item.outDate))
       const entries = await this.recordModel.aggregate([
@@ -450,6 +451,7 @@ export class StoreService {
       ])
       const totalPrice = SimpleSearchTablePrice(entries)
       item.amount = totalPrice
+      }
     }
     return search;
   }
