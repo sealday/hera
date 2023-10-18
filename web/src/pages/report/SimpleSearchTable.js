@@ -89,7 +89,6 @@ export default ({ search, isCompany, onLoad }) => {
   //处理总价
   const formAmount = record => {
     if ('amount' in record) {
-      console.log(record)
       return record.amount ? record.amount : '-'
     } else {
       return '-'
