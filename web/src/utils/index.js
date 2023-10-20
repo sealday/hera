@@ -12,7 +12,7 @@ export {
   currencyFormat,
   dateFormat,
   formatNumber,
-  numberFormat
+  numberFormat,
 } from 'hera-core'
 
 /**
@@ -20,7 +20,7 @@ export {
  * @param product
  * @returns {number}
  */
-export const getScale = (product) => {
+export const getScale = product => {
   return product.isScaled ? product.scale : 1
 }
 
@@ -46,7 +46,7 @@ export function calWeight(entry, products) {
  */
 export function toFixedWithoutTrailingZero(num, last) {
   const lead = last || 2
-  return Number(Number(num).toFixed(lead)).toString();
+  return Number(Number(num).toFixed(lead)).toString()
 }
 
 /**
@@ -56,7 +56,11 @@ export function toFixedWithoutTrailingZero(num, last) {
  * @returns {string}
  */
 export function getShortOrder(id) {
-  return Number.parseInt(id.slice(4, 8), 16) + '-' + Number.parseInt(id.slice(22, 24), 16)
+  return (
+    Number.parseInt(id.slice(4, 8), 16) +
+    '-' +
+    Number.parseInt(id.slice(22, 24), 16)
+  )
 }
 
 /**
@@ -90,11 +94,11 @@ export async function ajax(url, settings = {}) {
  * @returns {*}
  */
 export function makeKeyFromNameSize(name, size) {
-  return `${ name }|${ typeof size === 'undefined' ? '' : size }`
+  return `${name}|${typeof size === 'undefined' ? '' : size}`
 }
 
 export const updateEntry = (record, products) => {
-  record.entries.forEach((entry) => {
+  record.entries.forEach(entry => {
     entry.number = products[makeKeyFromNameSize(entry.name, entry.size)].number
   })
 }
@@ -125,7 +129,7 @@ export function transformArticle(articles) {
 
   return {
     typeNameMap,
-    nameArticleMap
+    nameArticleMap,
   }
 }
 
@@ -152,30 +156,29 @@ export function transformArticle(articles) {
  *     }
  *   ]
  * }
- * @param {*} products 
+ * @param {*} products
  */
-export function buildProductTree(products, keepSize=true) {
+export function buildProductTree(products, keepSize = true) {
   const root = {
     value: 'root',
     label: 'root',
-    children: []
+    children: [],
   }
   const remind = {}
   products.forEach(product => {
     // 类型
     if (!(product.type in remind)) {
       remind[product.type] = root.children.length
-      root
-        .children.push({
-          value: product.type,
-          label: product.type,
-          children: [],
-        })
+      root.children.push({
+        value: product.type,
+        label: product.type,
+        children: [],
+      })
     }
     // 名称
     if (!(`${product.name}@${product.type}` in remind)) {
-      remind[`${product.name}@${product.type}`]
-        = root.children[remind[product.type]].children.length
+      remind[`${product.name}@${product.type}`] =
+        root.children[remind[product.type]].children.length
       const child = {
         value: product.name,
         label: product.name,
@@ -183,33 +186,30 @@ export function buildProductTree(products, keepSize=true) {
       if (keepSize) {
         child.children = []
       }
-      root
-        .children[remind[product.type]]
-        .children.push(child)
+      root.children[remind[product.type]].children.push(child)
     }
     if (keepSize) {
       // 规格
-      root
-        .children[remind[product.type]]
-        .children[remind[`${product.name}@${product.type}`]]
-        .children.push({
-          value: product.size,
-          label: product.size,
-        })
+      root.children[remind[product.type]].children[
+        remind[`${product.name}@${product.type}`]
+      ].children.push({
+        value: product.size,
+        label: product.size,
+      })
     }
   })
   return root
 }
 
 /**
- * 
- * @param {*} products 
- * @returns 
+ *
+ * @param {*} products
+ * @returns
  */
-export const oldProductStructure = (products) => {
+export const oldProductStructure = products => {
   const names = {}
   const results = []
-  products.forEach((product) => {
+  products.forEach(product => {
     if (!names[product.name]) {
       names[product.name] = product
       results.push(product)
@@ -225,7 +225,7 @@ export const oldProductStructure = (products) => {
  * @param product
  * @returns {string}
  */
-export const getUnit = (product) => {
+export const getUnit = product => {
   return product.isScaled ? product.unit : product.countUnit
 }
 
@@ -240,20 +240,24 @@ export const parseMode = mode => {
 }
 
 export const filterOption = (filter, option) => {
-  return fuzzysearch(filter, option.props.pinyin) || fuzzysearch(filter, option.props.label)
+  return (
+    fuzzysearch(filter, option.props.pinyin) ||
+    fuzzysearch(filter, option.props.label)
+  )
 }
 
-export const total = (count, product) => toFixedWithoutTrailingZero(count * getScale(product))
+export const total = (count, product) =>
+  toFixedWithoutTrailingZero(count * getScale(product))
 
 /**
  * 返回为数字的total，且传入的参数形式是对象，这个方法理应更经常使用
  */
-export const total_ = ({count, size, name}, products) => {
+export const total_ = ({ count, size, name }, products) => {
   const product = products[makeKeyFromNameSize(name, size)]
   if (product) {
     return count * getScale(products[makeKeyFromNameSize(name, size)])
   } else {
-    return count;
+    return count
   }
 }
 
@@ -261,53 +265,65 @@ export { validator, createModal }
 
 export const isUpdatable = (store, user) => {
   if (user.role === '系统管理员') {
-    return true;
+    return true
   }
   for (let i = 0; i < user.perms.length; i++) {
     const perm = user.perms[i]
     if (perm.projectId === store._id) {
-      return perm.update;
+      return perm.update
     }
   }
-  return false;
+  return false
 }
 
 export const canInsert = (store, user) => {
   if (user.role === '系统管理员') {
-    return true;
+    return true
   }
   for (let i = 0; i < user.perms.length; i++) {
     const perm = user.perms[i]
     if (perm.projectId === store._id) {
-      return perm.insert;
+      return perm.insert
     }
   }
-  return false;
+  return false
 }
 
-const PROJECT_TYPE_SET = new Set(['基地仓库', '同行客户', '项目仓库', '租赁客户'])
+const PROJECT_TYPE_SET = new Set([
+  '基地仓库',
+  '同行客户',
+  '项目仓库',
+  '租赁客户'
+])
 /**
  * 筛选仓库列表
  * @param projects
  * @returns {*}
  */
-export const getProjects = projects => projects.filter(project => PROJECT_TYPE_SET.has(project.type))
+export const getProjects = projects =>
+  projects.filter(project => PROJECT_TYPE_SET.has(project.type))
 
 /**
  * 筛选供应商列表
  * @param projects
  * @returns {*}
  */
-const VENDOR_TYPE_SET = new Set(['基地仓库', '同行客户', '项目仓库', '租赁客户', '供应商'])
-export const getVendors = projects => projects.filter(project => VENDOR_TYPE_SET.has(project.type))
-
+const VENDOR_TYPE_SET = new Set([
+  '基地仓库',
+  '同行客户',
+  '项目仓库',
+  '租赁客户',
+  '供应商',
+])
+export const getVendors = projects =>
+  projects.filter(project => VENDOR_TYPE_SET.has(project.type))
 
 /**
  * 包装 HOC
  * @param fns
  * @returns {*}
  */
-export const wrapper = (fns) => {
+export const wrapper = fns => {
   if (fns.length < 2) {
     throw new Error('函数列表个数不得少于 2 个')
   }
@@ -347,7 +363,14 @@ export const isCurrentUserPermit = (user, roles) => {
 /**
  * 支持仓库类型、客户类型
  */
-export const TAB2TYPE = ['基地仓库', '项目仓库', '租赁客户', '同行客户', '供应商', '承运商']
+export const TAB2TYPE = [
+  '基地仓库',
+  '项目仓库',
+  '租赁客户',
+  '同行客户',
+  '供应商',
+  '承运商',
+]
 
 /**
  * 默认仓库类型
@@ -362,7 +385,7 @@ export const DEFAULT_TAB_INDEX = TAB2TYPE.indexOf(DEFAULT_STORE_TYPE)
 /**
  * 支持仓库类型
  */
-export const STORE2TYPE = ['基地仓库', '项目仓库', '租赁客户', '同行客户']
+export const STORE2TYPE = ['基地仓库', '项目仓库', '租赁客户', '同行客户','供应商']
 
 /**
  * 支持合同仓库
@@ -372,17 +395,36 @@ export const CONTRACT_TYPES = ['项目仓库', '租赁客户', '同行客户']
 /**
  * 采购支持客户类型
  */
-export const PURCHASING_CLIENT_TYPES = ['项目仓库', '租赁客户', '同行客户', '基地仓库', '供应商']
+export const PURCHASING_CLIENT_TYPES = [
+  '项目仓库',
+  '租赁客户',
+  '同行客户',
+  '基地仓库',
+  '供应商',
+]
 
 /**
  * 订单仓库类型
  */
-export const RECORD_CLIENT_TYPES = ['项目仓库', '租赁客户', '同行客户', '基地仓库', '供应商']
+export const RECORD_CLIENT_TYPES = [
+  '项目仓库',
+  '租赁客户',
+  '同行客户',
+  '基地仓库',
+  '供应商',
+]
 
 /**
  * 产品类型
  */
-export const PRODUCT_TYPES = ['租赁类', '损耗类', '工具类', '配件类', '维修类', '费用类']
+export const PRODUCT_TYPES = [
+  '租赁类',
+  '损耗类',
+  '工具类',
+  '配件类',
+  '维修类',
+  '费用类',
+]
 
 /**
  * 支持的订单类型
@@ -392,7 +434,11 @@ export const RECORD_TYPES = ['购销', '调拨', '暂存', '盘点']
 /**
  * 订单类型的路径映射
  */
-export const RECORD_TYPE2URL_PART = { '调拨': 'transfer', '购销': 'purchase', '暂存': 'transfer_free' }
+export const RECORD_TYPE2URL_PART = {
+  调拨: 'transfer',
+  购销: 'purchase',
+  暂存: 'transfer_free',
+}
 
 export const DEFAULT_QUERY_TYPE = '调拨'
 
@@ -505,19 +551,46 @@ table {
 export const rentExcelExport = (XLSX, rent, name) => {
   const wb = XLSX.utils.book_new()
 
-  const json = [[
-    '日期', '出入库', '名称', '类别', '单位', '数量', '单价', '天数', '金额', '运费'
-  ]]
+  const json = [
+    [
+      '日期',
+      '出入库',
+      '名称',
+      '类别',
+      '单位',
+      '数量',
+      '单价',
+      '天数',
+      '金额',
+      '运费',
+    ],
+  ]
   for (const item of rent.history) {
     json.push([
-      '上期结存', null, item.name, item.category, item.unit,
-      item.count, item.unitPrice || 0, item.days, item.price, 0
+      '上期结存',
+      null,
+      item.name,
+      item.category,
+      item.unit,
+      item.count,
+      item.unitPrice || 0,
+      item.days,
+      item.price,
+      0,
     ])
   }
   for (const item of rent.list) {
     json.push([
-      dateFormat(item.outDate), item.inOut, item.name, item.category, item.unit,
-      item.count, item.unitPrice || 0, item.days, item.price, item.freight || 0
+      dateFormat(item.outDate),
+      item.inOut,
+      item.name,
+      item.category,
+      item.unit,
+      item.count,
+      item.unitPrice || 0,
+      item.days,
+      item.price,
+      item.freight || 0,
     ])
   }
   const sheet = XLSX.utils.aoa_to_sheet(json)
@@ -550,46 +623,56 @@ export const rentExcelExport = (XLSX, rent, name) => {
       const cell_address = { c: C, r: R }
       const cell_ref = XLSX.utils.encode_cell(cell_address)
       if (sheet[cell_ref]) {
-        sheet[cell_ref] = XLSX.utils.cell_set_number_format(sheet[cell_ref], format)
+        sheet[cell_ref] = XLSX.utils.cell_set_number_format(
+          sheet[cell_ref],
+          format
+        )
       }
     }
   }
   XLSX.utils.book_append_sheet(wb, sheet, '结算表')
-  const out = XLSX.write(wb, { bookType: 'xlsx', bookSST: false, type: 'binary', compression: true })
-  const s2ab = (s) => {
+  const out = XLSX.write(wb, {
+    bookType: 'xlsx',
+    bookSST: false,
+    type: 'binary',
+    compression: true,
+  })
+  const s2ab = s => {
     const buf = new ArrayBuffer(s.length)
     const view = new Uint8Array(buf)
     for (let i = 0; i !== s.length; ++i) {
-      view[i] = s.charCodeAt(i) & 0xFF
+      view[i] = s.charCodeAt(i) & 0xff
     }
     return buf
   }
-  saveAs(new Blob([s2ab(out)], { type: "application/octet-stream" }), name + ".xlsx")
+  saveAs(
+    new Blob([s2ab(out)], { type: 'application/octet-stream' }),
+    name + '.xlsx'
+  )
 }
 
 export const enableFilters = [
   {
-    'text': '在用',
-    'value': 'enable'
+    text: '在用',
+    value: 'enable',
   },
   {
-    'text': '禁用',
-    'value': 'disabled',
+    text: '禁用',
+    value: 'disabled',
   },
 ]
 
-export const shouldShow = (condition, view) => condition ? view : null
-
+export const shouldShow = (condition, view) => (condition ? view : null)
 
 /**
- * @param {[{id, parentId}]} flatItems 
- * @returns 
+ * @param {[{id, parentId}]} flatItems
+ * @returns
  */
-export const buildTree = (flatItems) => {
+export const buildTree = flatItems => {
   // 复制并初始化，不影响原来的数据
   const items = flatItems.map(item => ({ ...item }))
   const treeLikeItems = []
-  forEach(items, item=> {
+  forEach(items, item => {
     if (item.parentId === '-1') {
       treeLikeItems.push(item)
     } else {
@@ -607,36 +690,38 @@ export const buildTree = (flatItems) => {
 }
 
 /**
- * 
- * @param {*} product 
+ *
+ * @param {*} product
  * @param {*} condition 是否需要规格
- * @returns 
+ * @returns
  */
-export const product2array = (product, condition = true) => condition
-  ? [product.type, product.name, product.size]
-  : [product.type, product.name]
+export const product2array = (product, condition = true) =>
+  condition
+    ? [product.type, product.name, product.size]
+    : [product.type, product.name]
 
 /**
- * 
- * @param {[]} array 
- * @param {*} condition 
- * @returns 
+ *
+ * @param {[]} array
+ * @param {*} condition
+ * @returns
  */
-export const array2product = (array, condition = true) => condition
-  ? ({ type: array[0], name: array[1], size: array[2] })
-  : ({ type: array[0], name: array[1] })
+export const array2product = (array, condition = true) =>
+  condition
+    ? { type: array[0], name: array[1], size: array[2] }
+    : { type: array[0], name: array[1] }
 
 /**
- * 
- * @param {*} projects 
- * @param {*} user 
+ *
+ * @param {*} projects
+ * @param {*} user
  * @returns
  */
 export const filterProjects = (projects, user) => {
   if (user.role === '项目部管理员' || user.role === '基地仓库管理员') {
-    const perms = user.perms || [];
-    const userProjects = perms.filter((p) => p.query).map((p) => p.projectId);
-    return projects.filter((project) => userProjects.indexOf(project._id) !== -1);
+    const perms = user.perms || []
+    const userProjects = perms.filter(p => p.query).map(p => p.projectId)
+    return projects.filter(project => userProjects.indexOf(project._id) !== -1)
   } else {
     return projects
   }
