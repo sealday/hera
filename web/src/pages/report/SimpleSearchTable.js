@@ -80,7 +80,7 @@ export default ({ search, isCompany, onLoad }) => {
   //处理实际重量
   const formWeight = record => {
     if ('weight' in record) {
-      return record.weight ? record.weight : '-'
+      return record.weight ? record.weight + '吨' : '-'
     } else {
       return '-'
     }
@@ -89,7 +89,7 @@ export default ({ search, isCompany, onLoad }) => {
   //处理总价
   const formAmount = record => {
     if ('amount' in record) {
-      return record.amount ? record.amount : '-'
+      return record.amount ? record.amount + '元' : '-'
     } else {
       return '-'
     }
@@ -161,7 +161,7 @@ export default ({ search, isCompany, onLoad }) => {
     },
     {
       key: 'amount',
-      title: '总价',  
+      title: '总价',
       render: (_, record) => <>{formAmount(record)}</>,
     },
     {
